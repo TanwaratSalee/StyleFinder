@@ -6,9 +6,33 @@ import 'package:flutter_finalproject/consts/lists.dart';
 import 'package:flutter_finalproject/controllers/home_controller.dart';
 import 'package:flutter_finalproject/services/firestore_services.dart';
 import 'package:get/get.dart';
+import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 
+// โมเดลใน Product //
+class Product {
+  final String id;
+  final List<String> imageUrls; // ต้องเก็บ URL รูปภาพเป็น List
 
-// test
+  Product({required this.id, required this.imageUrls});
+
+  factory Product.fromFirestore(DocumentSnapshot doc) {
+    Map data = doc.data() as Map;
+    List<String> imageUrls = List<String>.from(data['p_imgs'] ?? []);
+    return Product(
+      id: doc.id,
+      imageUrls: imageUrls,
+    );
+  }
+}
+
+// ดึงข้อมูลจาก Firebase //
+Future<List<Product>> fetchProducts() async {
+  QuerySnapshot snapshot =
+      await FirebaseFirestore.instance.collection('products').get();
+
+  return snapshot.docs.map((doc) => Product.fromFirestore(doc)).toList();
+}
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -19,53 +43,48 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final HomeController controller = Get.put(HomeController());
 
- @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // ใช้ Colors.white หรือตัวแปรที่นิยามสีขาว
+      backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.only(
-          top: 10, left: 20, right: 20,
-        ), // แก้ไขที่นี่
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height / 1.4,
-          width: MediaQuery.of(context).size.width,
-          child: Stack(
-            children: [
-              Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(card1),
+        padding: const EdgeInsets.only(top: 10, left: 20, right: 20),
+        child: FutureBuilder<List<Product>>(
+          future: fetchProducts(), // ตรวจสอบว่าได้เรียกใช้ฟังก์ชันที่ถูกต้อง
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
+
+            if (snapshot.error != null) {
+              // แสดงข้อความข้อผิดพลาด
+              return Center(
+                  child: Text('An error occurred: ${snapshot.error}'));
+            }
+
+            if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return Center(child: Text('No data available'));
+            }
+
+            List<Product> products = snapshot.data!;
+            // ใช้ Swiper จาก flutter_card_swiper
+            return CardSwiper(
+              cardsCount: products.length,
+              cardBuilder: (BuildContext context, int index) {
+                Product product = products[index];
+                return Image.network(
+                  product.imageUrls.isNotEmpty
+                      ? product.imageUrls[0]
+                      : 'URL_ของรูปภาพ_placeholder',
                   fit: BoxFit.cover,
-                ),
-                borderRadius: BorderRadius. circular (8.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 4,
-                    blurRadius: 4,
-                    offset: Offset (3, 3),)
-                ]
-              ),
-            ),
-            Container(
-              decoration:
-              BoxDecoration(
-              borderRadius: BorderRadius.circular (5.0), 
-              gradient: LinearGradient(
-              colors: [
-                Color. fromARGB(200, 0, 0, 0), 
-                Color. fromARGB(0, 0, 0, 0),
-                ], 
-                begin: Alignment.bottomCenter, 
-                end: Alignment. topCenter,
-              ),
-              ),
-            )
-            ],
-          ),
+                );
+              },
+              pagination: SwiperPagination(),
+              control: SwiperControl(),
+            );
+          },
         ),
-      ), // แก้ไขที่นี่
+      ),
     );
   }
 }
