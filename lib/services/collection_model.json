@@ -1,0 +1,84 @@
+{
+    "collections": [
+        {
+            "name": "Summer Collections",
+            "subcollection": [
+                "All",
+                "Shirts",
+                "Tops",
+                "T-shirts",
+                "Bottoms",
+                "Co-ords & Jumpsuits",
+                "Knitwear",
+                "Sweatshirts",
+                "Outwear",
+                "Suits",
+                "Maternity Clothing"
+            ]
+        },
+        {
+            "name": "Winter Collections",
+            "subcollection": [
+                "All",
+                "Shirts",
+                "Tops",
+                "T-shirts",
+                "Bottoms",
+                "Co-ords & Jumpsuits",
+                "Knitwear",
+                "Sweatshirts",
+                "Outwear",
+                "Suits",
+                "Maternity Clothing"
+            ]
+        },
+        {
+            "name": "Autumn Collections",
+            "subcollection": [
+                "All",
+                "Shirts",
+                "Tops",
+                "T-shirts",
+                "Bottoms",
+                "Co-ords & Jumpsuits",
+                "Knitwear",
+                "Sweatshirts",
+                "Outwear",
+                "Suits",
+                "Maternity Clothing"
+            ]
+        },
+        {
+            "name": "Gala Dinner Collections",
+            "subcollection": [
+                "All",
+                "Shirts",
+                "Tops",
+                "T-shirts",
+                "Bottoms",
+                "Co-ords & Jumpsuits",
+                "Knitwear",
+                "Sweatshirts",
+                "Outwear",
+                "Suits",
+                "Maternity Clothing"
+            ]
+        },
+        {
+            "name": "Bridesmaid Collections",
+            "subcollection": [
+                "All",
+                "Shirts",
+                "Tops",
+                "T-shirts",
+                "Bottoms",
+                "Co-ords & Jumpsuits",
+                "Knitwear",
+                "Sweatshirts",
+                "Outwear",
+                "Suits",
+                "Maternity Clothing"
+            ]
+        }
+    ]
+}
