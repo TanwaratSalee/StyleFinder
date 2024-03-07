@@ -29,7 +29,7 @@ const String icMatch = "assets/icons/iconsNavbar/match.png";
 const String icPerson = "assets/icons/iconsNavbar/person.png";
 
 //other
-const String icLogoApp = "assets/icons/LogoOnApp.jpg";
+const String icLogoApp = "assets/icons/LogoOnApp.png";
 const String bgLogin = "assets/icons/loginBG.png";
 
 // ----------------------------------------------- Home Screen -----------------------------------------------
