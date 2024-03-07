@@ -6,7 +6,6 @@ import 'package:flutter_finalproject/consts/lists.dart';
 import 'package:flutter_finalproject/controllers/home_controller.dart';
 import 'package:flutter_finalproject/services/firestore_services.dart';
 import 'package:get/get.dart';
-import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 
 // โมเดลใน Product //
 class Product {
