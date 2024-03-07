@@ -129,7 +129,7 @@ class ProfileScreen extends StatelessWidget {
                             onTap: () {
                               switch (index) {
                                 case 0:
-                                controller.nameController.text = data['name'];
+                                  controller.nameController.text = data['name'];
                                   Get.to(() => EditProfileScreen(data: data));
                                   break;
                                 case 1:
@@ -151,14 +151,15 @@ class ProfileScreen extends StatelessWidget {
                             trailing: Icon(Icons.arrow_forward_ios, size: 16),
                           );
                         },
-                      ).box
+                      )
+                          .box
                           // .white
                           // .rounded
                           .margin(const EdgeInsets.all(12))
                           // .padding(const EdgeInsets.symmetric(horizontal: 16))
                           // .shadowSm
-                          .make(), 
-                          //.box.color(primaryApp).make(),
+                          .make(),
+                      //.box.color(primaryApp).make(),
                       // 20.heightBox,
 
                       OutlinedButton(

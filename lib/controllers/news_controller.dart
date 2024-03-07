@@ -17,12 +17,19 @@ class NewsController extends GetxController {
   var searchController = TextEditingController();
 
   getUsername() async {
-    var n = await firestore.collection(usersCollection).where('id', isEqualTo: currentUser!.uid).get().then((value) {
+    var n = await firestore
+        .collection(usersCollection)
+        .where('id', isEqualTo: currentUser!.uid)
+        .get()
+        .then((value) {
       if (value.docs.isNotEmpty) {
-        return value.docs.single['name'];
+        // ตรวจสอบว่าชื่อไม่เป็น null ก่อนการกำหนดค่า
+        return value.docs.single['name'] ??
+            ''; // ให้ค่าเริ่มต้นเป็นสตริงว่างหากชื่อเป็น null
       }
+      return ''; // คืนค่าสตริงว่างหากไม่พบเอกสาร
     });
 
-      username = n;
+    username = n ?? ''; // ให้ค่าเริ่มต้นเป็นสตริงว่างหาก n เป็น null
   }
 }
