@@ -10,23 +10,32 @@ const String icGmail = "assets/icons/iconsOtherApp/gmail-icon.png";
 
 
 //icon nav bar top
-const IconData icNotification = IconData(0xe451, fontFamily: 'MaterialIcons');
-const String logoAppOntop = "assets/icons/iconsNavbar/LogoOnApp.jpg";
-const IconData icsearch = IconData(0xe567, fontFamily: 'MaterialIcons');
-const IconData iccart = IconData(0xf37d, fontFamily: 'MaterialIcons');
+// const IconData icNotification = IconData(0xe451, fontFamily: 'MaterialIcons');
+// const String logoAppOntop = "assets/icons/iconsNavbar/LogoOnApp.jpg";
+// const IconData icsearch = IconData(0xe567, fontFamily: 'MaterialIcons');
+// const IconData iccart = IconData(0xf37d, fontFamily: 'MaterialIcons');
 
 //icon nav bar top
-const String icNoti = "assets/icons/iconsNavbar/notification.png";
-const String icLogoOnTop = "assets/icons/LogoOnTop.png";
-const String icSearch = "assets/icons/iconsNavbar/search.png";
-const String icCart = "assets/icons/iconsNavbar/cart.png";
+// const String icNoti = "assets/icons/iconsNavbarinapp/notification.png";
+const String icLogoOnTop = "assets/icons/iconsNavbarinapp/logoOfApp.png";
+const String icSearch = "assets/icons/iconsNavbarinapp/Search.png";
+const String icCart = "assets/icons/iconsNavbarinapp/cart.png";
+
 
 //icon nav bar bottom
-const String icHome = "assets/icons/iconsNavbar/home.png";
-const String icCollection = "assets/icons/iconsNavbar/collection.png";
-const String icNews = "assets/icons/iconsNavbar/news.png";
-const String icMatch = "assets/icons/iconsNavbar/match.png";
-const String icPerson = "assets/icons/iconsNavbar/person.png";
+const String icHome = "assets/icons/iconsNavbarinapp/Home.png";
+// const String icCollection = "assets/icons/iconsNavbarinapp/collection.png";
+const String icNews = "assets/icons/iconsNavbarinapp/News.png";
+const String icMatch = "assets/icons/iconsNavbarinapp/match.png";
+const String icPerson = "assets/icons/iconsNavbarinapp/me.png";
+
+//Selected icon navbarbottom
+const String icHomeSelected = "assets/icons/iconsNavbarinapp/icHomeSelected.png";
+// const String icCollection = "assets/icons/iconsNavbarinapp/collection.png";
+const String icNewsSelected = "assets/icons/iconsNavbarinapp/icNewsSelected.png";
+const String icMatchSelected = "assets/icons/iconsNavbarinapp/icMatchSelected.png";
+const String icPersonSelected = "assets/icons/iconsNavbarinapp/icPersonSelected.png";
+
 
 //other
 const String icLogoApp = "assets/icons/LogoOnApp.png";
@@ -39,6 +48,10 @@ const String card3 = "assets/images/card3.png";
 const String card4 = "assets/images/card4.png";
 const String card5 = "assets/images/card5.png";
 const String card6 = "assets/images/card6.png";
+
+const String icDislikeButton = "assets/icons/icHomePage/dislikeButton.png";
+const String icLikeButton = "assets/icons/icHomePage/likeButton.png";
+const String icViewMoreButton = "assets/icons/icHomePage/viewMoreButton.png";
 
 // ----------------------------------------------- Collecttion Screen -----------------------------------------------
 const String collect1 = "assets/images/SummerCollections.png";

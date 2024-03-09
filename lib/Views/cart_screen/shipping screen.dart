@@ -1,4 +1,6 @@
 
+// ignore_for_file: file_names
+
 import 'package:flutter_finalproject/Views/cart_screen/payment_method.dart';
 import 'package:flutter_finalproject/Views/widgets_common/custom_textfield.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';

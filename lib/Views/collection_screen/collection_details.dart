@@ -1,3 +1,5 @@
+// ignore_for_file: use_super_parameters
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/collection_screen/item_details.dart';

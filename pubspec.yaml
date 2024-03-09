@@ -73,9 +73,11 @@ flutter:
     - assets/images/
     - assets/images/payment/
     - assets/icons/
+    - assets/icons/iconsAccount/
     - assets/icons/iconsOtherApp/
     - assets/icons/iconsNavbar/
-    - assets/icons/iconsAccount/
+    - assets/icons/icHomePage/
+    - assets/icons/iconsNavbarinapp/
     - lib/services/collection_model.json
 
   # An image asset can refer to one or more resolution-specific "variants", see

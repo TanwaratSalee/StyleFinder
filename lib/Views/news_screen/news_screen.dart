@@ -284,7 +284,7 @@ class NewsScreen extends StatelessWidget {
                     shrinkWrap: true,
                     itemCount: allproductsdata.length,
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2, mainAxisSpacing: 8, crossAxisSpacing:8, mainAxisExtent: 300),
+                        crossAxisCount: 2, mainAxisSpacing: 8, crossAxisSpacing:8, mainAxisExtent: 310),
                       itemBuilder: (context, index) {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -313,7 +313,7 @@ class NewsScreen extends StatelessWidget {
                                         .box
                                         .white
                                         .margin(
-                                            const EdgeInsets.symmetric(horizontal: 4))
+                                            const EdgeInsets.symmetric(horizontal: 2))
                                         .rounded
                                         .padding(const EdgeInsets.all(12))
                                         .make().onTap(() {

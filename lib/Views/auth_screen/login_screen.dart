@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/auth_screen/signup_screen.dart';
-import 'package:flutter_finalproject/Views/home_screen/mainNavigationBar.dart';
+import 'package:flutter_finalproject/Views/home_screen/navigationBar.dart';
 import 'package:flutter_finalproject/Views/widgets_common/custom_textfield.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 import 'package:flutter_finalproject/consts/colors.dart';

@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages, use_super_parameters
 
 import 'package:flutter_finalproject/Views/orders_screen/component/order_place_details.dart';
 import 'package:flutter_finalproject/Views/orders_screen/component/orders_status.dart';
@@ -27,7 +27,7 @@ class OrdersDetails extends StatelessWidget {
               orderStatus(color: Colors.yellow, icon: Icons.car_crash, title: "On Delivery", showDone: data['order_on_delivery']),
               orderStatus(color: Colors.purple, icon: Icons.done_all_rounded, title: "Delivered", showDone: data['order_delivered']),
           
-              Divider(),
+              const Divider(),
               10.heightBox,
               Column(
             children: [

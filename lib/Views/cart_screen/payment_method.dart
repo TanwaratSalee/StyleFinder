@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
@@ -8,7 +10,7 @@ import 'package:flutter_finalproject/controllers/cart_controller.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-import '../home_screen/mainNavigationBar.dart';
+import '../home_screen/navigationBar.dart';
 
 class PaymentMethods extends StatelessWidget {
   const PaymentMethods({super.key});

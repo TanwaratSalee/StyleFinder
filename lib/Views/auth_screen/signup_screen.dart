@@ -1,5 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
-import 'package:flutter_finalproject/Views/home_screen/mainNavigationBar.dart';
+import 'package:flutter_finalproject/Views/home_screen/navigationBar.dart';
 import 'package:flutter_finalproject/Views/widgets_common/custom_textfield.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
@@ -35,22 +35,22 @@ class _SignupScreenState extends State<SignupScreen> {
       ),
       backgroundColor: whiteColor,
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(10),
         child: Obx(() => Column(
             mainAxisSize: MainAxisSize.max,
             children: [
               customTextField(
                   label: username, controller: nameController, isPass: false, readOnly: false,),
-              const SizedBox(height: 5),
+              const SizedBox(height: 1),
               customTextField(
                   label: email, controller: emailController, isPass: false, readOnly: false,),
-              const SizedBox(height: 5),
+              const SizedBox(height: 1),
               customTextField(
                   label: password, controller: passwordController, isPass: true, readOnly: false,),
-              const SizedBox(height: 5),
+              const SizedBox(height: 1),
               customTextField(
                   label: confirmPassword, controller: passwordRetypeController, isPass: true, readOnly: false,),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
 
               Row(
                 children: [
@@ -98,7 +98,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ])))
                 ],
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 8),
               controller.isloading.value
               ? const CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation(primaryApp),) : 

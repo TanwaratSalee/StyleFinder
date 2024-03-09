@@ -10,3 +10,5 @@ const Color fontBlack = Color.fromARGB(255, 24, 24, 24);
 const Color whiteColor = Color.fromARGB(255, 255, 255, 255);
 const Color golden = Color.fromARGB(255, 246, 177, 38);
 const Color red = Color.fromARGB(255, 249, 87, 89);
+const Color backGround = Color.fromARGB(242, 242, 242, 242);
+

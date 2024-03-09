@@ -50,38 +50,57 @@ class ProfileScreen extends StatelessWidget {
                         // }),
                       ),
 
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Row(
-                          children: [
-                            data['imageUrl'] == ''
-                                ? Image.asset(
-                                    imProfile,
-                                    width: 130,
-                                    fit: BoxFit.cover,
-                                  ).box.roundedFull.clip(Clip.antiAlias).make()
-                                : Image.network(
-                                    data['imageUrl'],
-                                    width: 130,
-                                  ).box.roundedFull.clip(Clip.antiAlias).make(),
-                            20.widthBox,
-                            Expanded(
-                                child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                "${data['name']}"
-                                    .text
-                                    .fontFamily(semibold)
-                                    .black
-                                    .make(),
-                                "${data['email']}".text.black.make(),
+                                data['imageUrl'] == ''
+                                    ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(
+                                            100), // Makes image rounded
+                                        child: Image.asset(
+                                          imProfile,
+                                          width: 120,
+                                          height:
+                                              120, // Specify height to ensure the box is fully rounded
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                    : ClipRRect(
+                                        borderRadius: BorderRadius.circular(
+                                            100), // Makes image rounded
+                                        child: Image.network(
+                                          data['imageUrl'],
+                                          width: 120,
+                                          height:
+                                              120, // Specify height to ensure the box is fully rounded
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                // SizedBox(
+                                //   width: 20,
+                                //   height: 20,
+                                // ),
+                                Text(
+                                  data['name'],
+                                  style: TextStyle(
+                                      fontSize: 24,
+                                      color: fontBlack),
+                                ),
+                                Text(
+                                  data['email'],
+                                  style: TextStyle(
+                                      fontSize: 12, color: fontGrey),
+                                ),
                               ],
-                            )),
-                          ],
+                            ),
+                          ),
                         ),
                       ),
-
-                      20.heightBox,
 
                       FutureBuilder(
                           future: FirestoreServices.getCounts(),
@@ -97,20 +116,20 @@ class ProfileScreen extends StatelessWidget {
                               return Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
-                                // children: [
-                                //   detailsCard(
-                                //       count: countData[0].toString(),
-                                //       title: "in your cart",
-                                //       width: context.screenWidth / 3.4),
-                                //   detailsCard(
-                                //       count: countData[1].toString(),
-                                //       title: "in your wishlist",
-                                //       width: context.screenWidth / 3.2),
-                                //   detailsCard(
-                                //       count: countData[2].toString(),
-                                //       title: "your order",
-                                //       width: context.screenWidth / 3.4)
-                                // ],
+                                children: [
+                                  detailsCard(
+                                      count: countData[0].toString(),
+                                      title: "in your cart",
+                                      width: context.screenWidth / 3.4),
+                                  detailsCard(
+                                      count: countData[1].toString(),
+                                      title: "in your wishlist",
+                                      width: context.screenWidth / 3.2),
+                                  detailsCard(
+                                      count: countData[2].toString(),
+                                      title: "your order",
+                                      width: context.screenWidth / 3.4)
+                                ],
                               );
                             }
                           }),
@@ -129,7 +148,7 @@ class ProfileScreen extends StatelessWidget {
                             onTap: () {
                               switch (index) {
                                 case 0:
-                                  controller.nameController.text = data['name'];
+                                controller.nameController.text = data['name'];
                                   Get.to(() => EditProfileScreen(data: data));
                                   break;
                                 case 1:
@@ -151,15 +170,14 @@ class ProfileScreen extends StatelessWidget {
                             trailing: Icon(Icons.arrow_forward_ios, size: 16),
                           );
                         },
-                      )
-                          .box
+                      ).box
                           // .white
                           // .rounded
-                          .margin(const EdgeInsets.all(12))
-                          // .padding(const EdgeInsets.symmetric(horizontal: 16))
+                          // .margin(const EdgeInsets.all(12))
+                          .padding(const EdgeInsets.symmetric(horizontal: 16))
                           // .shadowSm
-                          .make(),
-                      //.box.color(primaryApp).make(),
+                          .make(), 
+                          //.box.color(primaryApp).make(),
                       // 20.heightBox,
 
                       OutlinedButton(

@@ -1,28 +1,24 @@
+// ignore_for_file: unnecessary_import, library_private_types_in_public_api
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
-import 'package:flutter_finalproject/consts/images.dart';
-import 'package:flutter_finalproject/consts/lists.dart';
 import 'package:flutter_finalproject/controllers/home_controller.dart';
-import 'package:flutter_finalproject/services/firestore_services.dart';
-import 'package:flutter_finalproject/controllers/product_controller.dart';
 import 'package:get/get.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
-import 'package:flutter_finalproject/models/collection_model.dart';
 import 'package:flutter/services.dart';
 
-// โมเดลใน Product //
 class Product {
   final String id;
-  final String name;
   final String price;
+  final String name;
+  final String aboutP;
   final List<String> imageUrls;
   final dynamic wishlist;
 
   Product(
       {required this.id,
       required this.name,
+      required this.aboutP,
       required this.price,
       required this.imageUrls,
       required this.wishlist});
@@ -33,6 +29,7 @@ class Product {
     return Product(
       id: doc.id,
       name: data['p_name'] ?? '',
+      aboutP: data['p_aboutProduct'] ?? '',
       price: data['p_price'] ?? '',
       imageUrls: imageUrls,
       wishlist: data['p_wishlist'] ?? false,
@@ -40,7 +37,6 @@ class Product {
   }
 }
 
-// ดึงข้อมูลจาก Firebase //
 Future<List<Product>> fetchProducts() async {
   QuerySnapshot snapshot =
       await FirebaseFirestore.instance.collection('products').get();
@@ -61,24 +57,23 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: backGround,
       body: Padding(
-        padding: const EdgeInsets.only(top: 10, left: 20, right: 20),
+        padding: const EdgeInsets.only(top: 0, left: 0, right: 0),
         child: FutureBuilder<List<Product>>(
-          future: fetchProducts(), // ตรวจสอบว่าได้เรียกใช้ฟังก์ชันที่ถูกต้อง
+          future: fetchProducts(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
 
             if (snapshot.error != null) {
-              // แสดงข้อความข้อผิดพลาด
               return Center(
                   child: Text('An error occurred: ${snapshot.error}'));
             }
 
             if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Center(child: Text('No data available'));
+              return const Center(child: Text('No data available'));
             }
 
             List<Product> products = snapshot.data!;
@@ -89,61 +84,117 @@ class _HomeScreenState extends State<HomeScreen> {
               cardBuilder: (BuildContext context, int index,
                   int percentThresholdX, int percentThresholdY) {
                 Product product = products[index];
-                return Container(
-                  width: 390,
-                  height: 586,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.white, // กำหนดสีขอบเป็นสีขาว
-                      width: 30, // ความกว้างขอบ
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5), // สีเงา
-                        spreadRadius: 5, // รัศมีการกระจาย
-                        blurRadius: 7, // รัศมีการเบลอ
-                        offset: Offset(0, 3), // ตำแหน่งเงา
-                      ),
-                    ],
-                    borderRadius: BorderRadius.circular(10), // ใส่รัศมีกรอบ
-                  ),
-                  child: Stack(
-                    children: [
-                      Image.network(
-                        product.imageUrls.isNotEmpty
-                            ? product.imageUrls[0]
-                            : 'URL_ของรูปภาพ_placeholder',
-                        height: 486, // กำหนดความสูงของรูปภาพเป็นค่าคงที่ 200
-                        width: 369, // กำหนดความกว้างของรูปภาพเป็นค่าคงที่ 200
-                        fit: BoxFit
-                            .cover, // กำหนดให้รูปภาพปรับขนาดให้เต็มพื้นที่และตัวอักษรไม่ถูกตัดออก
-                      ),
-                      Positioned(
-                        left: 10, // ตำแหน่งซ้ายของ Container
-                        bottom: 10, // ตำแหน่งด้านล่างของ Container
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              product.name, // ชื่อสินค้า
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              'Price: \$${product.price}', // แสดงราคาพร้อมกับเครื่องหมายดอลลาร์และทศนิยม 2 ตำแหน่ง
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
+                return Column(
+                  children: [
+                    Container(
+                      width: 450,
+                      height: 505,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.white,
+                          width: 15,
                         ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                    ],
-                  ),
+                      child: Stack(
+                        children: [
+                          Image.network(
+                            product.imageUrls.isNotEmpty
+                                ? product.imageUrls[0]
+                                : 'URL_ของรูปภาพ_placeholder',
+                            height: 400,
+                            width: 360,
+                            fit: BoxFit.cover,
+                          ),
+                          Positioned(
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            child: Container(
+                              // ใส่ Container สำหรับข้อความ
+                              padding: const EdgeInsets.all(5),
+                              decoration: const BoxDecoration(
+                                color: whiteColor,
+                                // borderRadius: BorderRadius.only(
+                                //   bottomLeft: Radius.circular(10),
+                                //   bottomRight: Radius.circular(10),
+                                // ),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    product.name,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 5,),
+                                  Text(
+                                    'Price: ${product.aboutP} Bath',
+                                    style: const TextStyle(
+                                      color: fontGrey,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                  Text(
+                                    '${product.price} Bath',
+                                    style: const TextStyle(
+                                      color: fontGreyDark,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 5.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        IconButton(
+                          icon: Image.asset(
+                            icDislikeButton,
+                            width: 67,
+                          ),
+                          onPressed: () {
+                            // ระบบสำหรับการคลิก Dislike
+                          },
+                        ),
+                        IconButton(
+                          icon: Image.asset(
+                            icViewMoreButton,
+                            width: 67,
+                          ),
+                          onPressed: () {
+                            // ระบบสำหรับการคลิก Like
+                          },
+                        ),
+                        IconButton(
+                          icon: Image.asset(
+                            icLikeButton,
+                            width: 67,
+                          ),
+                          onPressed: () {
+                            // ระบบสำหรับการคลิก View More
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
                 );
               },
             );

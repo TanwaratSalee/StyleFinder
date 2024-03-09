@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, use_super_parameters
 
 import 'dart:io';
 
@@ -31,7 +31,7 @@ class EditProfileScreen extends StatelessWidget {
           TextButton(
             onPressed: () async {
               if (controller.isloading.isTrue) {
-                CircularProgressIndicator(
+                const CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation(primaryApp),
                 );
               }

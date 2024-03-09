@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/collection_screen/collection_details.dart';
-import 'package:flutter_finalproject/Views/collection_screen/testcollection.dart';
 import 'package:flutter_finalproject/consts/colors.dart';
 import 'package:flutter_finalproject/consts/styles.dart';
 import 'package:get/get.dart';

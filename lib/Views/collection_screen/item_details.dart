@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use, use_super_parameters
+
 import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/chat_screen/chat_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';

@@ -1,10 +1,9 @@
+// ignore_for_file: use_super_parameters
+
 import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/collection_screen/collection_details.dart';
-import 'package:flutter_finalproject/Views/collection_screen/testcollection.dart';
 import 'package:flutter_finalproject/consts/colors.dart';
 import 'package:flutter_finalproject/consts/lists.dart';
-import 'package:flutter_finalproject/consts/strings.dart';
-import 'package:flutter_finalproject/consts/styles.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -18,7 +17,7 @@ class CollectionScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: collection.text.fontFamily(bold).black.make(),
+        // title: collection.text.fontFamily(bold).black.make(),
         automaticallyImplyLeading: false,
       ),
       backgroundColor: whiteColor,

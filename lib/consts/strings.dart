@@ -24,7 +24,7 @@ const woman = "Woman";
 
 // icon nav bar bottom
 const home = "Home",
-    collection = "Collection",
+    // collection = "Collection",
     news = "News",
     match = "Match",
     person = "Me";
