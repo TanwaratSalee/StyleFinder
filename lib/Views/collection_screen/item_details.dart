@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/chat_screen/chat_screen.dart';
+import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 import 'package:flutter_finalproject/consts/colors.dart';
 import 'package:flutter_finalproject/consts/images.dart';
@@ -141,11 +142,13 @@ class ItemDetails extends StatelessWidget {
                     Row(
                       children: [
                         Expanded(
-                            child: Column(
+                            child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             "Seller".text.fontFamily(semibold).make(),
+                            
+                            
                             5.heightBox,
                             "${data['p_seller']}"
                                 .text
@@ -168,11 +171,11 @@ class ItemDetails extends StatelessWidget {
                         GestureDetector(
                           onTap: () {
                             Get.to(
-                              () => const ChatScreen(),
-                              arguments: {
-                                'seller': data['p_seller'],
-                                'vendor_id': data['vendor_id']
-                              },
+                              () => const StoreScreen(),
+                              // arguments: {
+                              //   'seller': data['p_seller'],
+                              //   'vendor_id': data['vendor_id']
+                              // },
                             );
                           },
                           child: Container(
@@ -187,9 +190,7 @@ class ItemDetails extends StatelessWidget {
                               'See Store',
                               style: TextStyle(
                                 color: Colors.white, // สีข้อความในปุ่ม
-                                fontWeight:
-                                    FontWeight.bold, // หนาขึ้นถ้าต้องการ
-                                // คุณสามารถเพิ่ม fontFamily หรือขนาดข้อความได้
+                                fontFamily: semibold
                               ),
                             ),
                           ),
@@ -202,6 +203,7 @@ class ItemDetails extends StatelessWidget {
                         .color(fontLightGrey)
                         .make(),
                     20.heightBox,
+                    
                     Obx(
                       () => Column(
                         children: [

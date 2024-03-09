@@ -105,4 +105,12 @@ class FirestoreServices {
   static searchProducts(title) {
     return firestore.collection(productsCollection).get();
   }
+
+  //get vendors
+  static getVendor(uid) {
+    return firestore
+        .collection(vendorsCollection)
+        .where('id', isEqualTo: uid)
+        .snapshots();
+  }
 }
