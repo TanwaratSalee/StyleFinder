@@ -5,7 +5,6 @@ import 'package:flutter_finalproject/Views/chat_screen/chat_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 import 'package:flutter_finalproject/consts/colors.dart';
 import 'package:flutter_finalproject/consts/images.dart';
-import 'package:flutter_finalproject/consts/lists.dart';
 import 'package:flutter_finalproject/consts/strings.dart';
 import 'package:flutter_finalproject/consts/styles.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
@@ -37,23 +36,23 @@ class ItemDetails extends StatelessWidget {
                 controller.resetValues();
                 Get.back();
               },
-              icon: const Icon(Icons.arrow_back)),
+              icon: const Icon(Icons.arrow_back_ios)),
           title: title!.text.color(fontGreyDark).fontFamily(bold).make(),
           actions: [
-            IconButton(onPressed: () {}, icon: const Icon(Icons.share)),
-            Obx(
-              () => IconButton(
-                  onPressed: () {
-                    if (controller.isFav.value) {
-                      controller.removeFromWishlist(data.id, context);
-                    } else {
-                      controller.addToWishlist(data.id, context);
-                    }
-                  },
-                  icon: Icon(Icons.favorite_outline,
-                      color:
-                          controller.isFav.value ? primaryApp : fontGreyDark)),
-            ),
+            // IconButton(onPressed: () {}, icon: const Icon(Icons.share)),
+            // Obx(
+            //   () => IconButton(
+            //       onPressed: () {
+            //         if (controller.isFav.value) {
+            //           controller.removeFromWishlist(data.id, context);
+            //         } else {
+            //           controller.addToWishlist(data.id, context);
+            //         }
+            //       },
+            //       icon: Icon(Icons.favorite_outline,
+            //           color:
+            //               controller.isFav.value ? primaryApp : fontGreyDark)),
+            // ),
           ],
         ),
         body: Column(
@@ -81,12 +80,38 @@ class ItemDetails extends StatelessWidget {
                     ),
 
                     10.heightBox,
-                    title!.text
-                        .size(16)
-                        .color(fontBlack)
-                        .fontFamily(semibold)
-                        .make(),
-                    10.heightBox,
+                    Row(
+                      children: [
+                        //
+                        Text(
+                          title ?? '',
+                          style: TextStyle(
+                            fontSize: 25,
+                            color: Colors.black,
+                            fontFamily: 'Semibold',
+                          ),
+                        ),
+                        Spacer(),
+                        Obx(
+                          () => IconButton(
+                            onPressed: () {
+                              if (controller.isFav.value) {
+                                controller.removeFromWishlist(data.id, context);
+                              } else {
+                                controller.addToWishlist(data.id, context);
+                              }
+                              controller.isFav.toggle();
+                            },
+                            icon: controller.isFav.value
+                                ? Image.asset(icFav)
+                                : Image.asset(icClickFav),
+                            iconSize: 20,
+                          ),
+                        )
+                      ],
+                    ),
+
+                    2.heightBox,
                     VxRating(
                       isSelectable: false,
                       value: double.parse(data["p_rating"]),
@@ -97,15 +122,21 @@ class ItemDetails extends StatelessWidget {
                       size: 25,
                       maxRating: 5,
                     ),
-                    10.heightBox,
+                    5.heightBox,
+                    "${data['p_aboutProduct']}"
+                        .text
+                        .color(fontGrey)
+                        .size(16)
+                        .make(),
+                    // 10.heightBox,
                     "${data['p_price']}"
                         .numCurrency
                         .text
                         .color(primaryApp)
                         .fontFamily(bold)
-                        .size(18)
+                        .size(22)
                         .make(),
-                    10.heightBox,
+                    20.heightBox,
 
                     Row(
                       children: [
@@ -125,20 +156,50 @@ class ItemDetails extends StatelessWidget {
                           ],
                         )),
                         const CircleAvatar(
-                          backgroundColor: Colors.white,
-                          child: Icon(Icons.message_rounded, color: fontBlack),
+                          backgroundColor: primaryApp,
+                          child: Icon(Icons.message_rounded, color: whiteColor),
                         ).onTap(() {
                           Get.to(
                             () => const ChatScreen(),
                             arguments: [data['p_seller'], data['vendor_id']],
                           );
                         }),
+                        10.widthBox,
+                        GestureDetector(
+                          onTap: () {
+                            Get.to(
+                              () => const ChatScreen(),
+                              arguments: {
+                                'seller': data['p_seller'],
+                                'vendor_id': data['vendor_id']
+                              },
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 10), // ปรับค่าตามต้องการ
+                            decoration: BoxDecoration(
+                              color: primaryApp, // สีพื้นหลังของปุ่ม
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text(
+                              'See Store',
+                              style: TextStyle(
+                                color: Colors.white, // สีข้อความในปุ่ม
+                                fontWeight:
+                                    FontWeight.bold, // หนาขึ้นถ้าต้องการ
+                                // คุณสามารถเพิ่ม fontFamily หรือขนาดข้อความได้
+                              ),
+                            ),
+                          ),
+                        )
                       ],
                     )
                         .box
                         .height(60)
                         .padding(const EdgeInsets.symmetric(horizontal: 16))
-                        .color(fontGrey)
+                        .color(fontLightGrey)
                         .make(),
                     20.heightBox,
                     Obx(
@@ -259,29 +320,41 @@ class ItemDetails extends StatelessWidget {
                     "Description"
                         .text
                         .color(fontBlack)
-                        .fontFamily(semibold)
+                        .size(16)
+                        .fontFamily(bold)
                         .make(),
-                    10.heightBox,
-                    "${data['p_desc']}".text.color(fontBlack).make(),
+                    5.heightBox,
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Text(
+                        data['p_desc'],
+                        style: TextStyle(
+                          color:
+                              fontBlack, // สมมติว่า fontBlack คือตัวแปรที่เก็บค่าสี
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
 
                     //buttons sections
                     10.heightBox,
 
-                    ListView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      children: List.generate(
-                          itemDetailButtonsList.length,
-                          (index) => ListTile(
-                                title: itemDetailButtonsList[index]
-                                    .text
-                                    .fontFamily(semibold)
-                                    .color(fontBlack)
-                                    .make(),
-                                trailing: const Icon(Icons.arrow_forward),
-                              )),
-                    ),
-                    20.heightBox,
+                    // ListView(
+                    //   physics: const NeverScrollableScrollPhysics(),
+                    //   shrinkWrap: true,
+                    //   children: List.generate(
+                    //       itemDetailButtonsList.length,
+                    //       (index) => ListTile(
+                    //             title: itemDetailButtonsList[index]
+                    //                 .text
+                    //                 .fontFamily(semibold)
+                    //                 .color(fontBlack)
+                    //                 .make(),
+                    //             trailing: const Icon(Icons.arrow_forward),
+                    //           )),
+                    // ),
+                    // 20.heightBox,
 
                     productsyoumaylike.text
                         .fontFamily(bold)

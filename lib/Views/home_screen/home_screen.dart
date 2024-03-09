@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_import, library_private_types_in_public_api
+// ignore_for_file: unnecessary_import, library_private_types_in_public_api, prefer_interpolation_to_compose_strings
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
@@ -6,6 +6,7 @@ import 'package:flutter_finalproject/controllers/home_controller.dart';
 import 'package:get/get.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 class Product {
   final String id;
@@ -135,7 +136,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     product.name,
                                     style: const TextStyle(
                                       color: Colors.black,
-                                      fontSize: 20,
+                                      fontSize: 22,
+                                      fontFamily: bold,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -144,14 +146,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                     'Price: ${product.aboutP} Bath',
                                     style: const TextStyle(
                                       color: fontGrey,
+                                      fontFamily: light,
                                       fontSize: 12,
                                     ),
                                   ),
+                                  const SizedBox(height: 2),
                                   Text(
-                                    '${product.price} Bath',
+                                    NumberFormat('#,##0.00').format(double.parse(product.price)) + ' Bath',
                                     style: const TextStyle(
                                       color: fontGreyDark,
-                                      fontSize: 14,
+                                      fontFamily: semibold,
+                                      fontSize: 16,
                                     ),
                                   ),
                                 ],

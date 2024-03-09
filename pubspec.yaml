@@ -73,6 +73,7 @@ flutter:
     - assets/images/
     - assets/images/payment/
     - assets/icons/
+    - assets/icons/icNormal/
     - assets/icons/iconsAccount/
     - assets/icons/iconsOtherApp/
     - assets/icons/iconsNavbar/
@@ -91,6 +92,24 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+  fonts:
+    - family: Urbanist-Light
+      fonts:
+        - asset: assets/fonts/Urbanist-Light.ttf
+
+    - family: Urbanist-Medium
+      fonts:
+        - asset: assets/fonts/Urbanist-Medium.ttf
+
+    - family: Urbanist-Bold
+      fonts:
+        - asset: assets/fonts/Urbanist-Bold.ttf
+
+    - family: Urbanist-ExtraBold
+      fonts:
+        - asset: assets/fonts/Urbanist-ExtraBold.ttf
+        
+
   # fonts:
   #   - family: Schyler
   #     fonts:

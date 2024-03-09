@@ -139,132 +139,132 @@ class NewsScreen extends StatelessWidget {
                   ),
 
                   20.heightBox,
-                  Align(
-                      alignment: Alignment.centerLeft,
-                      child: featuredCategories.text
-                          .color(fontBlack)
-                          .size(18)
-                          .fontFamily(semibold)
-                          .make()),
-                  20.heightBox,
+                  // Align(
+                  //     alignment: Alignment.centerLeft,
+                  //     child: featuredCategories.text
+                  //         .color(fontBlack)
+                  //         .size(18)
+                  //         .fontFamily(semibold)
+                  //         .make()),
+                  // 20.heightBox,
 
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: List.generate(
-                          3,
-                          (index) => Column(
-                                children: [
-                                  featuredButton(
-                                      icon: featuredImages1[index],
-                                      title: freaturedTitles1[index]),
-                                  10.heightBox,
-                                  featuredButton(
-                                      icon: featuredImages2[index],
-                                      title: freaturedTitles2[index]),
-                                ],
-                              )),
-                    ),
-                  ),
+                  // SingleChildScrollView(
+                  //   scrollDirection: Axis.horizontal,
+                  //   child: Row(
+                  //     children: List.generate(
+                  //         3,
+                  //         (index) => Column(
+                  //               children: [
+                  //                 featuredButton(
+                  //                     icon: featuredImages1[index],
+                  //                     title: freaturedTitles1[index]),
+                  //                 10.heightBox,
+                  //                 featuredButton(
+                  //                     icon: featuredImages2[index],
+                  //                     title: freaturedTitles2[index]),
+                  //               ],
+                  //             )),
+                  //   ),
+                  // ),
 
-                  20.heightBox,
+                  // 20.heightBox,
 
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    width: double.infinity,
-                    color: primaryApp,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        featuredProduct.text.white
-                            .fontFamily(bold)
-                            .size(18)
-                            .make(),
-                        10.heightBox,
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: FutureBuilder(
-                            future: FirestoreServices.getFeaturedProducts(),
-                            builder: (context,AsyncSnapshot<QuerySnapshot> snapshot) {
+                  // Container(
+                  //   padding: const EdgeInsets.all(12),
+                  //   width: double.infinity,
+                  //   color: primaryApp,
+                  //   child: Column(
+                  //     crossAxisAlignment: CrossAxisAlignment.start,
+                  //     children: [
+                  //       featuredProduct.text.white
+                  //           .fontFamily(bold)
+                  //           .size(18)
+                  //           .make(),
+                  //       10.heightBox,
+                  //       SingleChildScrollView(
+                  //         scrollDirection: Axis.horizontal,
+                  //         child: FutureBuilder(
+                  //           future: FirestoreServices.getFeaturedProducts(),
+                  //           builder: (context,AsyncSnapshot<QuerySnapshot> snapshot) {
 
-                              if(!snapshot.hasData) {
-                                return Center(
-                                  child: loadingIndcator(),
-                                );
-                              } else if (snapshot.data!.docs.isEmpty) {
-                                return "No featured products".text.white.makeCentered();
-                              } else {
+                  //             if(!snapshot.hasData) {
+                  //               return Center(
+                  //                 child: loadingIndcator(),
+                  //               );
+                  //             } else if (snapshot.data!.docs.isEmpty) {
+                  //               return "No featured products".text.white.makeCentered();
+                  //             } else {
 
-                                var featuredData = snapshot.data!.docs;
+                  //               var featuredData = snapshot.data!.docs;
 
-                                return Row(
-                                children: List.generate( 
-                                  featuredData.length,
-                                  (index) => Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Image.network(
-                                            featuredData[index]['p_imgs'][0],
-                                            width: 140,
-                                            height: 195,
-                                            fit: BoxFit.cover,
-                                          ),
-                                          10.heightBox,
-                                          "${ featuredData[index]['p_name']}"
-                                              .text
-                                              .fontFamily(semibold)
-                                              .color(fontBlack)
-                                              .make(),
-                                          5.heightBox,
-                                          "${featuredData[index]['p_price']}"
-                                              .numCurrency
-                                              .text
-                                              .color(primaryApp)
-                                              .fontFamily(bold)
-                                              .size(16)
-                                              .make()
-                                        ],
-                                      )
-                                          .box
-                                          .white
-                                          .margin(
-                                              const EdgeInsets.symmetric(horizontal: 4))
-                                          .rounded
-                                          .padding(const EdgeInsets.all(8))
-                                          .make()
-                                          .onTap(() {
-                                            Get.to(() => ItemDetails(title: "${featuredData[index]['p_name']}",
-                                            data: featuredData[index],));
-                                          })),
-                                );
-                              }
-                            },
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
+                  //               return Row(
+                  //               children: List.generate( 
+                  //                 featuredData.length,
+                  //                 (index) => Column(
+                  //                   crossAxisAlignment: CrossAxisAlignment.start,
+                  //                       children: [
+                  //                         Image.network(
+                  //                           featuredData[index]['p_imgs'][0],
+                  //                           width: 140,
+                  //                           height: 195,
+                  //                           fit: BoxFit.cover,
+                  //                         ),
+                  //                         10.heightBox,
+                  //                         "${ featuredData[index]['p_name']}"
+                  //                             .text
+                  //                             .fontFamily(semibold)
+                  //                             .color(fontBlack)
+                  //                             .make(),
+                  //                         5.heightBox,
+                  //                         "${featuredData[index]['p_price']}"
+                  //                             .numCurrency
+                  //                             .text
+                  //                             .color(primaryApp)
+                  //                             .fontFamily(bold)
+                  //                             .size(16)
+                  //                             .make()
+                  //                       ],
+                  //                     )
+                  //                         .box
+                  //                         .white
+                  //                         .margin(
+                  //                             const EdgeInsets.symmetric(horizontal: 4))
+                  //                         .rounded
+                  //                         .padding(const EdgeInsets.all(8))
+                  //                         .make()
+                  //                         .onTap(() {
+                  //                           Get.to(() => ItemDetails(title: "${featuredData[index]['p_name']}",
+                  //                           data: featuredData[index],));
+                  //                         })),
+                  //               );
+                  //             }
+                  //           },
+                  //         ),
+                  //       )
+                  //     ],
+                  //   ),
+                  // ),
 
-                  20.heightBox,
+                  // 20.heightBox,
 
                   // 3nd swiper
-                  VxSwiper.builder(
-                      aspectRatio: 16 / 9,
-                      autoPlay: true,
-                      height: 170,
-                      enlargeCenterPage: true,
-                      itemCount: secondSlidersList.length,
-                      itemBuilder: (context, index) {
-                        return Image.asset(
-                          secondSlidersList[index],
-                          fit: BoxFit.fill,
-                        )
-                            .box
-                            .rounded
-                            .clip(Clip.antiAlias)
-                            .margin(const EdgeInsets.symmetric(horizontal: 8))
-                            .make();
-                      }),
+                  // VxSwiper.builder(
+                  //     aspectRatio: 16 / 9,
+                  //     autoPlay: true,
+                  //     height: 170,
+                  //     enlargeCenterPage: true,
+                  //     itemCount: secondSlidersList.length,
+                  //     itemBuilder: (context, index) {
+                  //       return Image.asset(
+                  //         secondSlidersList[index],
+                  //         fit: BoxFit.fill,
+                  //       )
+                  //           .box
+                  //           .rounded
+                  //           .clip(Clip.antiAlias)
+                  //           .margin(const EdgeInsets.symmetric(horizontal: 8))
+                  //           .make();
+                  //     }),
 
                   20.heightBox,
                   Align(
@@ -298,14 +298,16 @@ class NewsScreen extends StatelessWidget {
                                         const Spacer(),
                                         "${allproductsdata[index]['p_name']}"
                                             .text
-                                            .fontFamily(semibold)
+                                            .fontFamily(bold)
+                                            .size(14)
                                             .color(fontBlack)
                                             .make(),
+                                            
                                         "${allproductsdata[index]['p_price']}"
                                             .text
                                             .color(primaryApp)
-                                            .fontFamily(bold)
-                                            .size(16)
+                                            .fontFamily(semibold)
+                                            .size(14)
                                             .make(),
                                             10.heightBox,
                                       ],

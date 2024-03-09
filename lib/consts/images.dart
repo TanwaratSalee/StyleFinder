@@ -104,3 +104,9 @@ const String icMessagse = "assets/icons/iconsAccount/Message.png";
 const String imgCash = "assets/images/payment/cashOnDelivery.png";
 const String imgPromptpay = "assets/images/payment/Promptpay.png";
 const String imgVisa = "assets/images/payment/visa.png";
+
+// ----------------------------------------------- item Screen -----------------------------------------------
+const String icFav = "assets/icons/icNormal/buttonFavourite.png";
+const String icClickFav = "assets/icons/icNormal/ckickbuttonFavourite.png";
+
+
