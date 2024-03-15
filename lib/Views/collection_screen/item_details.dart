@@ -39,22 +39,6 @@ class ItemDetails extends StatelessWidget {
               },
               icon: const Icon(Icons.arrow_back_ios)),
           title: title!.text.color(fontGreyDark).fontFamily(bold).make(),
-          actions: [
-            // IconButton(onPressed: () {}, icon: const Icon(Icons.share)),
-            // Obx(
-            //   () => IconButton(
-            //       onPressed: () {
-            //         if (controller.isFav.value) {
-            //           controller.removeFromWishlist(data.id, context);
-            //         } else {
-            //           controller.addToWishlist(data.id, context);
-            //         }
-            //       },
-            //       icon: Icon(Icons.favorite_outline,
-            //           color:
-            //               controller.isFav.value ? primaryApp : fontGreyDark)),
-            // ),
-          ],
         ),
         body: Column(
           children: [
@@ -86,13 +70,13 @@ class ItemDetails extends StatelessWidget {
                         //
                         Text(
                           title ?? '',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 25,
                             color: Colors.black,
                             fontFamily: 'Semibold',
                           ),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         Obx(
                           () => IconButton(
                             onPressed: () {
@@ -104,8 +88,8 @@ class ItemDetails extends StatelessWidget {
                               controller.isFav.toggle();
                             },
                             icon: controller.isFav.value
-                                ? Image.asset(icFav)
-                                : Image.asset(icClickFav),
+                                ? Icon(Icons.favorite, color: redColor)
+                                : Icon(Icons.favorite_outline),
                             iconSize: 20,
                           ),
                         )
@@ -171,7 +155,7 @@ class ItemDetails extends StatelessWidget {
                         GestureDetector(
                           onTap: () {
                             Get.to(
-                              () => const StoreScreen(),
+                              () =>  StoreScreen(),
                               // arguments: {
                               //   'seller': data['p_seller'],
                               //   'vendor_id': data['vendor_id']

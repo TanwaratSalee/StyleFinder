@@ -32,28 +32,28 @@ class NewsScreen extends StatelessWidget {
       child: SafeArea(
           child: Column(
         children: [
-          Container(
-            alignment: Alignment.center,
-            height: 60,
-            color: bgGreylight,
-            child: TextFormField(
-              controller: controller.searchController,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                suffixIcon: const Icon(Icons.search).onTap(() {
-                  if (controller.searchController.text.isNotEmptyAndNotNull){
-                    Get.to(() => SearchScreen(
-                      title: controller.searchController.text,
-                  ));
-                  }
-                }),
-                filled: true,
-                fillColor: whiteColor,
-                hintText: searchanything,
-                hintStyle: const TextStyle(color: fontGrey),
-              ),
-            ),
-          ),
+          // Container(
+          //   alignment: Alignment.center,
+          //   height: 60,
+          //   color: bgGreylight,
+          //   child: TextFormField(
+          //     controller: controller.searchController,
+          //     decoration: InputDecoration(
+          //       border: InputBorder.none,
+          //       suffixIcon: const Icon(Icons.search).onTap(() {
+          //         if (controller.searchController.text.isNotEmptyAndNotNull){
+          //           Get.to(() => SearchScreen(
+          //             title: controller.searchController.text,
+          //         ));
+          //         }
+          //       }),
+          //       filled: true,
+          //       fillColor: whiteColor,
+          //       hintText: searchanything,
+          //       hintStyle: const TextStyle(color: fontGrey),
+          //     ),
+          //   ),
+          // ),
 
           // 1nd swiper
           Expanded(

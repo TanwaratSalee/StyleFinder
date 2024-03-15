@@ -1,59 +1,62 @@
-// ignore_for_file: unnecessary_import, library_private_types_in_public_api, prefer_interpolation_to_compose_strings
+// ignore_for_file: unnecessary_import, library_private_types_in_public_api
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/home_controller.dart';
 import 'package:get/get.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_finalproject/Views/collection_screen/item_details.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Product {
-  final String id;
-  final String price;
-  final String name;
-  final String aboutP;
-  final List<String> imageUrls;
-  final dynamic wishlist;
-
-  Product(
-      {required this.id,
-      required this.name,
-      required this.aboutP,
-      required this.price,
-      required this.imageUrls,
-      required this.wishlist});
-
-  factory Product.fromFirestore(DocumentSnapshot doc) {
-    Map data = doc.data() as Map;
-    List<String> imageUrls = List<String>.from(data['p_imgs'] ?? []);
-    return Product(
-      id: doc.id,
-      name: data['p_name'] ?? '',
-      aboutP: data['p_aboutProduct'] ?? '',
-      price: data['p_price'] ?? '',
-      imageUrls: imageUrls,
-      wishlist: data['p_wishlist'] ?? false,
-    );
+class FirestoreServices {
+  static Future<List<Map<String, dynamic>>> getFeaturedProducts() async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot =
+          await FirebaseFirestore.instance.collection(productsCollection).get();
+      return snapshot.docs.map((doc) => doc.data()).toList();
+    } catch (e) {
+      print("Error fetching featured products: $e");
+      return [];
+    }
   }
 }
 
-Future<List<Product>> fetchProducts() async {
-  QuerySnapshot snapshot =
-      await FirebaseFirestore.instance.collection('products').get();
-
-  return snapshot.docs.map((doc) => Product.fromFirestore(doc)).toList();
-}
-
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final dynamic data;
+  const HomeScreen({super.key, this.data});
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _HomeScreenState createState() => _HomeScreenState(data);
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final HomeController homeController = Get.put(HomeController());
+  var controller = Get.put(HomeController());
+  final dynamic data;
+  var isFav = false.obs;
+  
+  _HomeScreenState(this.data);
+
+  // void RemoveWishlist(Map<String, dynamic> product) {
+  //   FirebaseFirestore.instance
+  //       .collection(productsCollection)
+  //       .where('p_name', isEqualTo: product['p_name'])
+  //       .get()
+  //       .then((QuerySnapshot querySnapshot) {
+  //     if (querySnapshot.docs.isNotEmpty) {
+  //       DocumentSnapshot doc = querySnapshot.docs.first;
+  //       List<dynamic> wishlist = doc['p_wishlist'];
+  //       if (!wishlist.contains(currentUser!.uid)) {
+  //         doc.reference.update({
+  //           'p_wishlist': FieldValue.arrayRemove([currentUser!.uid])
+  //         }).then((value) {
+  //           VxToast.show(context, msg: "Removed from Favorite");
+  //         }).catchError((error) {
+  //           print('Error adding ${product['p_name']} to Favorite: $error');
+  //         });
+  //       }
+  //     }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: backGround,
       body: Padding(
         padding: const EdgeInsets.only(top: 0, left: 0, right: 0),
-        child: FutureBuilder<List<Product>>(
+        child: FutureBuilder<List<Map<String, dynamic>>>(
           future: fetchProducts(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -77,14 +80,15 @@ class _HomeScreenState extends State<HomeScreen> {
               return const Center(child: Text('No data available'));
             }
 
-            List<Product> products = snapshot.data!;
+            List<Map<String, dynamic>> products = snapshot.data!;
+
             return CardSwiper(
               scale: 0.5,
               isLoop: true,
               cardsCount: products.length,
               cardBuilder: (BuildContext context, int index,
                   int percentThresholdX, int percentThresholdY) {
-                Product product = products[index];
+                Map<String, dynamic> product = products[index];
                 return Column(
                   children: [
                     Container(
@@ -108,9 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Stack(
                         children: [
                           Image.network(
-                            product.imageUrls.isNotEmpty
-                                ? product.imageUrls[0]
-                                : 'URL_ของรูปภาพ_placeholder',
+                            product['p_imgs'][0],
                             height: 400,
                             width: 360,
                             fit: BoxFit.cover,
@@ -120,43 +122,36 @@ class _HomeScreenState extends State<HomeScreen> {
                             right: 0,
                             bottom: 0,
                             child: Container(
-                              // ใส่ Container สำหรับข้อความ
                               padding: const EdgeInsets.all(5),
                               decoration: const BoxDecoration(
                                 color: whiteColor,
-                                // borderRadius: BorderRadius.only(
-                                //   bottomLeft: Radius.circular(10),
-                                //   bottomRight: Radius.circular(10),
-                                // ),
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    product.name,
+                                    product['p_name'],
                                     style: const TextStyle(
                                       color: Colors.black,
-                                      fontSize: 22,
-                                      fontFamily: bold,
+                                      fontSize: 20,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  const SizedBox(height: 5,),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
                                   Text(
-                                    'Price: ${product.aboutP} Bath',
+                                    product['p_aboutProduct'],
                                     style: const TextStyle(
                                       color: fontGrey,
-                                      fontFamily: light,
                                       fontSize: 12,
                                     ),
                                   ),
-                                  const SizedBox(height: 2),
                                   Text(
-                                    NumberFormat('#,##0.00').format(double.parse(product.price)) + ' Bath',
+                                    product['p_price'],
                                     style: const TextStyle(
                                       color: fontGreyDark,
-                                      fontFamily: semibold,
-                                      fontSize: 16,
+                                      fontSize: 14,
                                     ),
                                   ),
                                 ],
@@ -185,7 +180,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             width: 67,
                           ),
                           onPressed: () {
-                            // ระบบสำหรับการคลิก Like
+                            Get.to(() => ItemDetails(
+                                  title: product['p_name'],
+                                  data: product,
+                                ));
                           },
                         ),
                         IconButton(
@@ -194,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             width: 67,
                           ),
                           onPressed: () {
-                            // ระบบสำหรับการคลิก View More
+                            controller.addToWishlist(product);
                           },
                         ),
                       ],
@@ -208,4 +206,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+}
+
+Future<List<Map<String, dynamic>>> fetchProducts() async {
+  return FirestoreServices.getFeaturedProducts();
 }

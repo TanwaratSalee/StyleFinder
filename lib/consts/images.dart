@@ -42,7 +42,7 @@ const String icLogoApp = "assets/icons/LogoOnApp.png";
 const String bgLogin = "assets/icons/loginBG.png";
 
 // ----------------------------------------------- Home Screen -----------------------------------------------
-const String card1 = "assets/images/card1.png";
+const String card1 = "assets/images/image_90.png";
 const String card2 = "assets/images/card2.png";
 const String card3 = "assets/images/card3.png";
 const String card4 = "assets/images/card4.png";

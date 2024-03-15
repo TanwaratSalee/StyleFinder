@@ -3,8 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
 import 'package:flutter_finalproject/Views/match_screen/match_screen.dart';
+import 'package:flutter_finalproject/Views/news_screen/component/search_screen.dart';
 import 'package:flutter_finalproject/Views/news_screen/news_screen.dart';
 import 'package:flutter_finalproject/Views/profile_screen/profile_screen.dart';
+import 'package:flutter_finalproject/Views/search_screen/search_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/exit_dialog.dart';
 import 'package:flutter_finalproject/consts/colors.dart';
 import 'package:flutter_finalproject/consts/images.dart';
@@ -15,8 +17,6 @@ import 'package:get/get.dart';
 import '../../consts/styles.dart';
 
 class MainNavigationBar extends StatefulWidget {
-  
-  
   @override
   State<MainNavigationBar> createState() => _MainNavigationBarState();
 }
@@ -78,9 +78,9 @@ class _MainNavigationBarState extends State<MainNavigationBar> {
             child: IconButton(
               icon: Image.asset(
                 icSearch,
-                width: 25,
+                width: 23,
               ),
-              onPressed: () {},
+              onPressed: () {Get.to(() => SearchScreenPage());},
             ),
           ),
           title: Center(
@@ -92,7 +92,7 @@ class _MainNavigationBarState extends State<MainNavigationBar> {
               child: IconButton(
                 icon: Image.asset(
                   icCart,
-                  width: 24,
+                  width: 21,
                 ),
                 onPressed: () {
                   Get.to(() => const CartScreen());
@@ -104,12 +104,14 @@ class _MainNavigationBarState extends State<MainNavigationBar> {
         body: Column(
           children: [
             Expanded(
-              child: navBody[_selectedIndex], // ใช้ _selectedIndex เพื่อแสดงหน้าที่ถูกเลือก
+              child: navBody[
+                  _selectedIndex], // ใช้ _selectedIndex เพื่อแสดงหน้าที่ถูกเลือก
             ),
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _selectedIndex, // ใช้ _selectedIndex เพื่อเลือกไอคอนที่ถูกเลือก
+          currentIndex:
+              _selectedIndex, // ใช้ _selectedIndex เพื่อเลือกไอคอนที่ถูกเลือก
           selectedItemColor: primaryApp,
           selectedLabelStyle: const TextStyle(fontFamily: semibold),
           type: BottomNavigationBarType.fixed,
