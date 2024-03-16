@@ -32,7 +32,7 @@ class NewsScreen extends StatelessWidget {
                 filled: true,
                 fillColor: whiteColor,
                 hintText: searchanything,
-                hintStyle: TextStyle(color: fontGrey),
+                // hintStyle: TextStyle(color: fontGrey),
               ),
             ),
           ),
@@ -126,7 +126,7 @@ class NewsScreen extends StatelessWidget {
                       child: featuredCategories.text
                           .color(fontBlack)
                           .size(18)
-                          .fontFamily(semibold)
+                          .fontFamily(regular)
                           .make()),
                   20.heightBox,
 
@@ -178,7 +178,7 @@ class NewsScreen extends StatelessWidget {
                                         10.heightBox,
                                         "Dress"
                                             .text
-                                            .fontFamily(semibold)
+                                            .fontFamily(regular)
                                             .color(fontBlack)
                                             .make(),
                                         10.heightBox,
@@ -244,7 +244,7 @@ class NewsScreen extends StatelessWidget {
                                         const Spacer(),
                                         "Dress"
                                             .text
-                                            .fontFamily(semibold)
+                                            .fontFamily(regular)
                                             .color(fontBlack)
                                             .make(),
                                         "\$600"

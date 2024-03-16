@@ -13,7 +13,7 @@ class OrdersScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: "My Order".text.color(fontGreyDark).fontFamily(semibold).make(),
+        title: "My Order".text.color(fontGreyDark).fontFamily(regular).make(),
       ),
       body: StreamBuilder(
           stream: FirestoreServices.getAllOrders(),
@@ -42,7 +42,7 @@ class OrdersScreen extends StatelessWidget {
                           .toString()
                           .text
                           .color(primaryApp)
-                          .fontFamily(semibold)
+                          .fontFamily(regular)
                           .make(),
                       // subtitle: (data[index]['total_amount'] as num?)?.numCurrency.text.fontFamily(bold).make() ?? 'No amount'.text.make(),
                       subtitle: data[index]['total_amount']

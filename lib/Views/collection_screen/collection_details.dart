@@ -58,7 +58,7 @@ class _CollectionDetailsState extends State<CollectionDetails> {
                   controller.subcat.length,
                   (index) => "${controller.subcat[index]}"
                           .text
-                          .fontFamily(semibold)
+                          .fontFamily(regular)
                           .color(whiteColor)
                           .makeCentered()
                           .box
@@ -118,7 +118,7 @@ class _CollectionDetailsState extends State<CollectionDetails> {
                             const Spacer(),
                             "${data[index]['p_name']}"
                                 .text
-                                .fontFamily(semibold)
+                                .fontFamily(regular)
                                 .color(fontBlack)
                                 .make(),
                             "${data[index]['p_price']}"

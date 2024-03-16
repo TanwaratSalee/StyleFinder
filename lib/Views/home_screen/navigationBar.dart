@@ -1,9 +1,8 @@
-// ignore_for_file: deprecated_member_use, use_key_in_widget_constructors, file_names, unused_local_variable
+
 
 import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
 import 'package:flutter_finalproject/Views/match_screen/match_screen.dart';
-import 'package:flutter_finalproject/Views/news_screen/component/search_screen.dart';
 import 'package:flutter_finalproject/Views/news_screen/news_screen.dart';
 import 'package:flutter_finalproject/Views/profile_screen/profile_screen.dart';
 import 'package:flutter_finalproject/Views/search_screen/search_screen.dart';
@@ -22,7 +21,7 @@ class MainNavigationBar extends StatefulWidget {
 }
 
 class _MainNavigationBarState extends State<MainNavigationBar> {
-  int _selectedIndex = 0; // เพิ่มตัวแปร _selectedIndex ใน State
+  int _selectedIndex = 0; 
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +79,43 @@ class _MainNavigationBarState extends State<MainNavigationBar> {
                 icSearch,
                 width: 23,
               ),
-              onPressed: () {Get.to(() => SearchScreenPage());},
+              onPressed: () {
+                showGeneralDialog(
+                  barrierLabel: "Barrier",
+                  barrierDismissible: true,
+                  barrierColor: Colors.black.withOpacity(0.5),
+                  transitionDuration: Duration(milliseconds: 300),
+                  context: context,
+                  pageBuilder: (_, __, ___) {
+                    return Align(
+                      alignment:
+                          Alignment.topCenter, 
+                      child: Container(
+                        height: MediaQuery.of(context).size.height *
+                            0.6, 
+                        width: MediaQuery.of(context).size.width,
+                        child:
+                            SearchScreenPage(), 
+                        decoration: const BoxDecoration(
+                          color: whiteColor,
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(18),
+                            bottomRight: Radius.circular(18),
+                          ),
+                        ),
+                        padding: const EdgeInsets.all(20),
+                      ),
+                    );
+                  },
+                  transitionBuilder: (context, anim1, anim2, child) {
+                    return SlideTransition(
+                      position: Tween(begin: Offset(0, -1), end: Offset(0, 0))
+                          .animate(anim1),
+                      child: child,
+                    );
+                  },
+                );
+              },
             ),
           ),
           title: Center(
@@ -105,21 +140,21 @@ class _MainNavigationBarState extends State<MainNavigationBar> {
           children: [
             Expanded(
               child: navBody[
-                  _selectedIndex], // ใช้ _selectedIndex เพื่อแสดงหน้าที่ถูกเลือก
+                  _selectedIndex], 
             ),
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex:
-              _selectedIndex, // ใช้ _selectedIndex เพื่อเลือกไอคอนที่ถูกเลือก
+              _selectedIndex, 
           selectedItemColor: primaryApp,
-          selectedLabelStyle: const TextStyle(fontFamily: semibold),
+          selectedLabelStyle: const TextStyle(fontFamily: regular),
           type: BottomNavigationBarType.fixed,
           backgroundColor: whiteColor,
           items: navbarItem,
           onTap: (value) {
             setState(() {
-              _selectedIndex = value; // อัปเดต _selectedIndex เมื่อคลิก
+              _selectedIndex = value; 
             });
           },
         ),

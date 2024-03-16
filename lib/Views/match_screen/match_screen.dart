@@ -13,6 +13,6 @@ class MatchScreen extends StatelessWidget {
           await Get.put(AuthController()).signoutMethod(context);
           Get.offAll(() => const LoginScreen());
         },
-        child: logout.text.fontFamily(semibold).black.make());
+        child: logout.text.fontFamily(regular).black.make());
   }
 }

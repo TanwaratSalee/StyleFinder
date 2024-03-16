@@ -186,7 +186,7 @@ class ProfileScreen extends StatelessWidget {
                                 .signoutMethod(context);
                             Get.offAll(() => const LoginScreen());
                           },
-                          child: logout.text.fontFamily(semibold).black.make())
+                          child: logout.text.fontFamily(regular).black.make())
                     ],
                   ),
                 );

@@ -9,7 +9,7 @@ Widget homeButtons({width, height,required IconData icon, /* other parameters */
     children: [
       Icon(icon,  size: 26),
       10.heightBox,
-      title!.text.fontFamily(semibold).color(fontGreyDark).make(),
+      title!.text.fontFamily(regular).color(fontGreyDark).make(),
     ],
   ).box.rounded.white.size(width, height).shadowSm.make(); 
 }

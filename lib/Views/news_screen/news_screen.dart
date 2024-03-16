@@ -1,8 +1,9 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/collection_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
-import 'package:flutter_finalproject/Views/news_screen/component/featured_button.dart';
 import 'package:flutter_finalproject/Views/news_screen/component/search_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/home_buttons.dart';
 import 'package:flutter_finalproject/consts/colors.dart';
@@ -48,9 +49,9 @@ class NewsScreen extends StatelessWidget {
           //         }
           //       }),
           //       filled: true,
-          //       fillColor: whiteColor,
+          //       fillColor: fontGrey,
           //       hintText: searchanything,
-          //       hintStyle: const TextStyle(color: fontGrey),
+          //       // hintStyle: const TextStyle(color: fontGrey),
           //     ),
           //   ),
           // ),
@@ -144,7 +145,7 @@ class NewsScreen extends StatelessWidget {
                   //     child: featuredCategories.text
                   //         .color(fontBlack)
                   //         .size(18)
-                  //         .fontFamily(semibold)
+                  //         .fontFamily(regular)
                   //         .make()),
                   // 20.heightBox,
 
@@ -212,7 +213,7 @@ class NewsScreen extends StatelessWidget {
                   //                         10.heightBox,
                   //                         "${ featuredData[index]['p_name']}"
                   //                             .text
-                  //                             .fontFamily(semibold)
+                  //                             .fontFamily(regular)
                   //                             .color(fontBlack)
                   //                             .make(),
                   //                         5.heightBox,
@@ -269,7 +270,7 @@ class NewsScreen extends StatelessWidget {
                   20.heightBox,
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: allproducts.text.fontFamily(semibold).color(fontGreyDark).size(18).make()),
+                    child: allproducts.text.fontFamily(regular).color(fontGreyDark).size(18).make()),
                   20.heightBox,
 
                   StreamBuilder(
@@ -306,7 +307,7 @@ class NewsScreen extends StatelessWidget {
                                         "${allproductsdata[index]['p_price']}"
                                             .text
                                             .color(primaryApp)
-                                            .fontFamily(semibold)
+                                            .fontFamily(regular)
                                             .size(14)
                                             .make(),
                                             10.heightBox,

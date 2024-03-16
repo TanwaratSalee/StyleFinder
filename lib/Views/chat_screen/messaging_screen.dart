@@ -13,7 +13,7 @@ class MessagesScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: "My Orders".text.color(fontGreyDark).fontFamily(semibold).make(),
+        title: "My Orders".text.color(fontGreyDark).fontFamily(regular).make(),
       ),
       body: StreamBuilder(stream: FirestoreServices.getAllMessages(), 
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
@@ -45,7 +45,7 @@ class MessagesScreen extends StatelessWidget {
                         backgroundColor: primaryApp,
                         child: Icon(Icons.person, color: whiteColor,),
                       ),
-                        title: "${data[index]['friend_name']}".text.fontFamily(semibold).color(fontBlack).make(),
+                        title: "${data[index]['friend_name']}".text.fontFamily(regular).color(fontBlack).make(),
                         subtitle: "${data[index]['last_msg']}".text.make( ),
                       ),
                     );

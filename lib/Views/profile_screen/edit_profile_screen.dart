@@ -26,7 +26,7 @@ class EditProfileScreen extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title:
-            "Edit Profile".text.fontFamily(semibold).color(fontGreyDark).make(),
+            "Edit Profile".text.fontFamily(regular).color(fontGreyDark).make(),
         actions: [
           TextButton(
             onPressed: () async {

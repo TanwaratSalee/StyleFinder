@@ -52,7 +52,7 @@ class ItemDetails extends StatelessWidget {
                     VxSwiper.builder(
                       autoPlay: true,
                       height: 420,
-                      itemCount: data['p_imgs'].length,
+                      itemCount: data['p_imgs'].length ?? 0,
                       aspectRatio: 16 / 9,
                       viewportFraction: 1.0,
                       itemBuilder: (context, index) {
@@ -73,7 +73,7 @@ class ItemDetails extends StatelessWidget {
                           style: const TextStyle(
                             fontSize: 25,
                             color: Colors.black,
-                            fontFamily: 'Semibold',
+                            fontFamily: 'regular',
                           ),
                         ),
                         const Spacer(),
@@ -130,13 +130,13 @@ class ItemDetails extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            "Seller".text.fontFamily(semibold).make(),
+                            "Seller".text.fontFamily(regular).make(),
                             
                             
                             5.heightBox,
                             "${data['p_seller']}"
                                 .text
-                                .fontFamily(semibold)
+                                .fontFamily(regular)
                                 .color(fontBlack)
                                 .size(16)
                                 .make(),
@@ -174,7 +174,7 @@ class ItemDetails extends StatelessWidget {
                               'See Store',
                               style: TextStyle(
                                 color: Colors.white, // สีข้อความในปุ่ม
-                                fontFamily: semibold
+                                fontFamily: regular
                               ),
                             ),
                           ),
@@ -334,7 +334,7 @@ class ItemDetails extends StatelessWidget {
                     //       (index) => ListTile(
                     //             title: itemDetailButtonsList[index]
                     //                 .text
-                    //                 .fontFamily(semibold)
+                    //                 .fontFamily(regular)
                     //                 .color(fontBlack)
                     //                 .make(),
                     //             trailing: const Icon(Icons.arrow_forward),
@@ -365,7 +365,7 @@ class ItemDetails extends StatelessWidget {
                                     10.heightBox,
                                     "Dress"
                                         .text
-                                        .fontFamily(semibold)
+                                        .fontFamily(regular)
                                         .color(fontBlack)
                                         .make(),
                                     10.heightBox,

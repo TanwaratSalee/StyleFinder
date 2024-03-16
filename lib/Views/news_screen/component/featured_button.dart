@@ -12,7 +12,7 @@ Widget featuredButton({String? title, icon}) {
 
       10.widthBox,
       
-      title!.text.fontFamily(semibold).color(fontBlack).make(),
+      title!.text.fontFamily(regular).color(fontBlack).make(),
     ],
   )
       .box

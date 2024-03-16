@@ -14,7 +14,7 @@ class OrdersDetails extends StatelessWidget {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: "Order Details".text.fontFamily(semibold).color(fontGreyDark).make(),
+        title: "Order Details".text.fontFamily(regular).color(fontGreyDark).make(),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -57,7 +57,7 @@ class OrdersDetails extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        "Shipping Address".text.fontFamily(semibold).make(),
+                        "Shipping Address".text.fontFamily(regular).make(),
                         "${data['order_by_name']}".text.make(),
                         "${data['order_by_email']}".text.make(),
                         "${data['order_by_address']}".text.make(),
@@ -73,7 +73,7 @@ class OrdersDetails extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start, 
                         children: [
-                          "Total Amount".text.fontFamily(semibold).make(),
+                          "Total Amount".text.fontFamily(regular).make(),
                           "${data['total_amount']}".text.color(primaryApp).fontFamily(bold).make()
                         ],
                       ),
@@ -85,7 +85,7 @@ class OrdersDetails extends StatelessWidget {
               ).box.outerShadowMd.white.make(),
               const Divider(),
               10.heightBox,
-              "Ordered Product".text.size(16).color(fontGreyDark).fontFamily(semibold).makeCentered(),
+              "Ordered Product".text.size(16).color(fontGreyDark).fontFamily(regular).makeCentered(),
               10.heightBox,
               ListView(
                 physics: const NeverScrollableScrollPhysics(),

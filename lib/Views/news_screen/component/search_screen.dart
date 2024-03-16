@@ -58,7 +58,7 @@ class SearchScreen extends StatelessWidget {
                             const Spacer(),
                             "${filtered[index]['p_name']}"
                                 .text
-                                .fontFamily(semibold)
+                                .fontFamily(regular)
                                 .color(fontGreyDark)
                                 .make(),
                             5.heightBox,

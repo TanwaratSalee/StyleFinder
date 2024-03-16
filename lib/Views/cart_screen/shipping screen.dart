@@ -17,7 +17,7 @@ class ShippingDetails extends StatelessWidget {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: "Shipping Info".text.fontFamily(semibold).color(fontGreyDark).make(),
+        title: "Shipping Info".text.fontFamily(regular).color(fontGreyDark).make(),
       ),
       bottomNavigationBar: SizedBox(
         height: 70,

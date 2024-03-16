@@ -9,8 +9,8 @@ Widget orderPlaceDetails({title1, title2, d1, d2}) {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            "$title1".text.fontFamily(semibold).make(),
-            "$d1".text.color(primaryApp).fontFamily(semibold).make()
+            "$title1".text.fontFamily(regular).make(),
+            "$d1".text.color(primaryApp).fontFamily(regular).make()
             ],
         ),
         SizedBox(
@@ -18,7 +18,7 @@ Widget orderPlaceDetails({title1, title2, d1, d2}) {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              "$title2".text.fontFamily(semibold).make(),
+              "$title2".text.fontFamily(regular).make(),
               "$d2".text.make(),
             ],
           ),

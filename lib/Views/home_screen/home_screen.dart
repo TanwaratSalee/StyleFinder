@@ -133,22 +133,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                     product['p_name'],
                                     style: const TextStyle(
                                       color: Colors.black,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
+                                      fontSize: 24,
+                                      fontFamily: bold,
                                     ),
                                   ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
+                                  const SizedBox( height: 2),
                                   Text(
                                     product['p_aboutProduct'],
                                     style: const TextStyle(
                                       color: fontGrey,
-                                      fontSize: 12,
+                                      fontSize: 14,
+                                      fontFamily: light,
                                     ),
                                   ),
                                   Text(
-                                    product['p_price'],
+                                    "product['p_price'] Bath",
                                     style: const TextStyle(
                                       color: fontGreyDark,
                                       fontSize: 14,

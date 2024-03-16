@@ -31,7 +31,7 @@ class CartScreen extends StatelessWidget {
         appBar: AppBar(
           // automaticallyImplyLeading: false,
           title:
-              "shopping Cart".text.color(fontGreyDark).fontFamily(semibold).make(),
+              "shopping Cart".text.color(fontGreyDark).fontFamily(regular).make(),
         ),
         body: StreamBuilder(
           stream: FirestoreServices.getCart(currentUser!.uid),
@@ -67,14 +67,14 @@ class CartScreen extends StatelessWidget {
                                 title:
                                     "${data[index]['title']} (x ${data[index]['qty']})"
                                         .text
-                                        .fontFamily(semibold)
+                                        .fontFamily(regular)
                                         .size(16)
                                         .make(),
                                 subtitle: "${data[index]['tprice']}"
                                     .numCurrency
                                     .text
                                     .color(primaryApp)
-                                    .fontFamily(semibold)
+                                    .fontFamily(regular)
                                     .make(),
                                 trailing:
                                     const Icon(Icons.delete, color: primaryApp)
@@ -89,14 +89,14 @@ class CartScreen extends StatelessWidget {
                       children: [
                         "Total price"
                             .text
-                            .fontFamily(semibold)
+                            .fontFamily(regular)
                             .color(fontGreyDark)
                             .make(),
                         Obx(
                           () => "${controller.totalP.value}"
                               .numCurrency
                               .text
-                              .fontFamily(semibold)
+                              .fontFamily(regular)
                               .color(fontBlack)
                               .make(),
                         ),

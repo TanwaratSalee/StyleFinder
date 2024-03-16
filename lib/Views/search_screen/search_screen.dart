@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_finalproject/Views/collection_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/news_screen/component/search_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
-import '../../controllers/search_controller.dart'; // Assuming this is where your SearchPageController is
+import '../../controllers/search_controller.dart';
 
 class SearchScreenPage extends StatelessWidget {
-  final String? title; // Added to accept a title if needed
+  final String? title;
 
   const SearchScreenPage({super.key, this.title});
 
@@ -14,31 +15,36 @@ class SearchScreenPage extends StatelessWidget {
     final SearchPageController controller = Get.put(SearchPageController());
 
     return Scaffold(
-      backgroundColor: bgGreylight,
+      backgroundColor: whiteColor,
       appBar: AppBar(
-        title: Text(title ?? 'Search'), // Use title if provided
+        title: Text(title ?? 'Search'),
       ),
       body: Column(
         children: [
           Container(
             alignment: Alignment.center,
-            margin: const EdgeInsets.symmetric(horizontal: 10),
+            margin: const EdgeInsets.all(15),
             height: 60,
-            color: bgGreylight,
             child: TextFormField(
               controller: controller.searchController,
               decoration: InputDecoration(
-                border: InputBorder.none,
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: bgGreylight),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: fontGrey),
+                  borderRadius: BorderRadius.circular(8),
+                ),
                 suffixIcon: Icon(Icons.search).onTap(() {
                   final searchQuery = controller.searchController.text;
                   if (searchQuery.isNotEmpty) {
                     controller.addToSearchHistory(searchQuery);
-                    // ทำการเปลี่ยนหน้าไปยังหน้าแสดงผลลัพธ์การค้นหาทันที
                     Get.to(() => SearchScreen(title: searchQuery));
                   }
                 }),
                 filled: true,
-                fillColor: whiteColor,
+                fillColor: bgGreylight,
                 hintText: searchanything,
                 hintStyle: const TextStyle(color: fontGrey),
               ),
@@ -46,15 +52,12 @@ class SearchScreenPage extends StatelessWidget {
           ),
           Obx(() {
             if (controller.searchInProgress.isTrue) {
-              // Show a loading spinner or similar if you have a long-running search operation
-              return CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator());
             } else if (controller.searchHistory.isEmpty) {
-              // Show "not found" message if there are no search results and search was performed
               return controller.searchPerformed.isTrue
-                  ? Center(child: Text('Product not found'))
+                  ? Center(child: Text('No results found'))
                   : SizedBox.shrink();
             } else {
-              // Show search history or results
               return Expanded(
                 child: ListView.builder(
                   itemCount: controller.searchHistory.length,
@@ -63,15 +66,13 @@ class SearchScreenPage extends StatelessWidget {
                       title: Text(controller.searchHistory[index]),
                       leading: Icon(Icons.history),
                       onTap: () {
-                        // Use the search query again
-                        Get.to(() => SearchScreen(
+                        Get.to(() => ItemDetails(
                               title: controller.searchHistory[index],
                             ));
                       },
                       trailing: IconButton(
                         icon: Icon(Icons.clear),
                         onPressed: () {
-                          // Remove a single entry from the history
                           controller.searchHistory.removeAt(index);
                         },
                       ),

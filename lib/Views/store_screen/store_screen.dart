@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_finalproject/Views/profile_screen/profile_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 
@@ -68,9 +65,9 @@ class StoreScreen extends StatelessWidget {
                 children: [
                   const Icon(Icons.star, color: Colors.amber, size: 24),
                   const SizedBox(width: 8),
-                  Text(
+                  const Text(
                     '4.9/5.0',
-                    style: const TextStyle(fontSize: 14, fontFamily: semibold),
+                    style: TextStyle(fontSize: 14, fontFamily: regular),
                   ),
                   Spacer(), 
                   TextButton(
