@@ -4,6 +4,7 @@ import 'package:flutter_finalproject/Views/home_screen/navigationBar.dart';
 import 'package:flutter_finalproject/Views/widgets_common/custom_textfield.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 import 'package:flutter_finalproject/consts/colors.dart';
+import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/consts/images.dart';
 import 'package:flutter_finalproject/consts/lists.dart';
 import 'package:flutter_finalproject/consts/strings.dart';
@@ -165,6 +166,7 @@ class LoginScreen extends StatelessWidget {
                       "Don’t have an account? ",
                       style: TextStyle(
                         fontSize: 16,
+                        fontFamily: regular,
                         color: Colors.white,
                       ),
                     ),
@@ -173,6 +175,7 @@ class LoginScreen extends StatelessWidget {
                         'Sign Up',
                         style: TextStyle(
                           fontSize: 16,
+                          fontFamily: bold,
                           color: primaryApp,
                           fontWeight: FontWeight.bold,
                         ),

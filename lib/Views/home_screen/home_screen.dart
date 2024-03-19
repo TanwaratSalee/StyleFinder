@@ -30,10 +30,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final CardSwiperController controllercard = CardSwiperController();
   var controller = Get.put(HomeController());
   final dynamic data;
   var isFav = false.obs;
-  
+  Map<String, dynamic>? selectedProduct;
+  Map<String, dynamic>? previousSwipedProduct;
+
   _HomeScreenState(this.data);
 
   // void RemoveWishlist(Map<String, dynamic> product) {
@@ -59,6 +62,19 @@ class _HomeScreenState extends State<HomeScreen> {
   // }
 
   @override
+  void initState() {
+    super.initState();
+    // Initialize controllercard here
+  }
+
+  @override
+  void dispose() {
+    controllercard.dispose();
+    super.dispose();
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backGround,
@@ -81,13 +97,15 @@ class _HomeScreenState extends State<HomeScreen> {
             }
 
             List<Map<String, dynamic>> products = snapshot.data!;
-
             return CardSwiper(
               scale: 0.5,
-              isLoop: true,
+              isLoop: false,
+              controller: controllercard,
               cardsCount: products.length,
               cardBuilder: (BuildContext context, int index,
                   int percentThresholdX, int percentThresholdY) {
+                previousSwipedProduct = selectedProduct;
+                selectedProduct = products[index];
                 Map<String, dynamic> product = products[index];
                 return Column(
                   children: [
@@ -147,7 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                   Text(
-                                    "product['p_price'] Bath",
+                                    product['p_price'],
                                     style: const TextStyle(
                                       color: fontGreyDark,
                                       fontSize: 14,
@@ -169,9 +187,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             icDislikeButton,
                             width: 67,
                           ),
-                          onPressed: () {
-                            // ระบบสำหรับการคลิก Dislike
-                          },
+                          onPressed: ()
+                            => controllercard.swipe(CardSwiperDirection.left),
                         ),
                         IconButton(
                           icon: Image.asset(
@@ -190,15 +207,32 @@ class _HomeScreenState extends State<HomeScreen> {
                             icLikeButton,
                             width: 67,
                           ),
-                          onPressed: () {
-                            controller.addToWishlist(product);
-                          },
+                        onPressed: () => [
+                          controllercard.swipe(CardSwiperDirection.right),
+                          controller.addToWishlist(product),
+                        ],
                         ),
                       ],
                     ),
                   ],
                 );
               },
+              onSwipe: (previousIndex, currentIndex, direction){
+                if(direction==CardSwiperDirection.right){
+                  controller.addToWishlist(previousSwipedProduct!);
+                }
+                else if(direction==CardSwiperDirection.left){
+                  //
+                }
+                else if(direction==CardSwiperDirection.top){
+                  Get.to(() => ItemDetails(
+                    title: previousSwipedProduct!['p_name'],
+                    data: previousSwipedProduct!,
+                ));
+                }
+                return true;
+              },
+              
             );
           },
         ),
@@ -206,7 +240,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
 Future<List<Map<String, dynamic>>> fetchProducts() async {
   return FirestoreServices.getFeaturedProducts();
 }

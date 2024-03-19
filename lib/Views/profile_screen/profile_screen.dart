@@ -155,7 +155,7 @@ class ProfileScreen extends StatelessWidget {
                                   Get.to(() => const OrdersScreen());
                                   break;
                                 case 2:
-                                  Get.to(() => const WishlistScreen());
+                                  Get.to(() => WishlistScreen());
                                   break;
                                 case 3:
                                   Get.to(() => const MessagesScreen());

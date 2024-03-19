@@ -1,99 +1,133 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_finalproject/Views/collection_screen/item_details.dart';
-import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
-import 'package:flutter_finalproject/consts/consts.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/services/firestore_services.dart';
+import 'package:flutter_finalproject/consts/consts.dart';
+import 'package:flutter_finalproject/views/collection_screen/item_details.dart';
 
 class WishlistScreen extends StatelessWidget {
-  final dynamic data;
-  const WishlistScreen({super.key, this.data});
+  const WishlistScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: bgGreylight,
+      backgroundColor:
+          whiteColor, // Ensure whiteColor is correctly defined in consts.dart
       appBar: AppBar(
-        title: "Favourite"
-            .text
-            .color(fontGreyDark)
-            .size(28)
-            .fontFamily(bold)
-            .make(),
-      ),
-      body: StreamBuilder(
-          stream: FirestoreServices.getWishlists(),
-          builder:
-              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (!snapshot.hasData) {
-              return Center(
-                child: loadingIndcator(),
-              );
-            } else if (snapshot.data!.docs.isEmpty) {
-              return "No orders yet!".text.color(fontGreyDark).makeCentered();
-            } else {
-              var data = snapshot.data!.docs;
-              return Column(
-                children: [
-                  Expanded(
-                    child: ListView.builder(
-  shrinkWrap: true,
-  itemCount: data.length,
-  itemBuilder: (BuildContext context, int index) {
-    return GestureDetector( 
-      onTap: () {
-   Navigator.push(
-  context,
-  MaterialPageRoute(
-    builder: (context) => ItemDetails(
-      title: data[index]['p_name'], 
-      data: data[index], 
-    ),
-  ),
-);
-
-  },
-      child: Container(
-        margin: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-        decoration: BoxDecoration(
-          color: whiteColor, 
-          borderRadius: BorderRadius.circular(8), 
-        ),
-        child: ListTile(
-          leading: Image.network(
-            "${data[index]['p_imgs'][0]}",
-            height: 350,
-            fit: BoxFit.cover,
+        title: const Text(
+          "Favourite",
+          style: TextStyle(
+            color:
+                fontGreyDark, // Ensure fontGreyDark is correctly defined in consts.dart
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
           ),
-          title: "${data[index]['p_name']}"
-              .text
-              .fontFamily(regular)
-              .size(16)
-              .make(),
-          subtitle: "${data[index]['p_price']}"
-              .numCurrency
-              .text
-              .color(primaryApp)
-              .fontFamily(regular)
-              .make(),
-          trailing: const Icon(Icons.favorite, color: redColor).onTap(() async {
-            await firestore
-                .collection(productsCollection)
-                .doc(data[index].id)
-                .set({
-              'p_wishlist': FieldValue.arrayRemove([currentUser!.uid])
-            }, SetOptions(merge: true));
-          }),
         ),
       ),
-    );
-  },
-),
-
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirestoreServices.getWishlists(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          final data = snapshot.data!.docs;
+          if (data.isEmpty) {
+            return const Center(
+                child: Text("No orders yet!",
+                    style: TextStyle(color: fontGreyDark)));
+          }
+          return ListView.separated(
+            itemCount: data.length,
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ItemDetails(
+                        title: data[index]['p_name'],
+                        data: data[index],
+                      ),
+                    ),
+                  );
+                },
+                child: Container(
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  decoration: BoxDecoration(
+                    color:
+                        whiteColor, // Ensure whiteColor is correctly defined in consts.dart
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                ],
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.network(
+                            data[index]['p_imgs'][0],
+                            height: 80,
+                            width: 70,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                data[index]['p_name'],
+                                style: const TextStyle(
+                                  fontSize: 22,
+                                  fontFamily: regular,
+                                ),
+                              ),
+                              Text(
+                                "${data[index]['p_price']}",
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: light,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.favorite, color: Colors.red),
+                        onPressed: () async {
+                          await FirebaseFirestore.instance
+                              .collection(productsCollection)
+                              .doc(data[index].id)
+                              .update({
+                            'p_wishlist': FieldValue.arrayRemove(
+                                [FirebaseAuth.instance.currentUser!.uid])
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
               );
-            }
-          }),
+            },
+            separatorBuilder: (context, index) => Padding(
+              padding: const EdgeInsets.symmetric(
+                  horizontal:
+                      10), // ปรับระยะห่างของเส้นคั่นจากขอบด้านซ้ายและขวา
+              child: Divider(
+                color: Colors.grey[
+                    200], // ปรับให้เป็นสีเทาอ่อนกว่า คุณสามารถเปลี่ยนเป็น [300], [200] หรือค่าอื่นๆ เพื่อปรับความเข้มของสี
+                thickness: 1, // สามารถปรับความหนาของเส้นคั่นได้ตามต้องการ
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }
