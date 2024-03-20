@@ -8,6 +8,8 @@ import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/profile_controller.dart';
 import 'package:get/get.dart';
 
+import '../collection_screen/address_controller.dart';
+
 class EditProfileScreen extends StatelessWidget {
   final dynamic data;
 
@@ -102,6 +104,21 @@ class EditProfileScreen extends StatelessWidget {
                     },
                     textColor: primaryApp,
                     title: "Edit Picture")),
+            SizedBox(
+                width: context.screenWidth - 260,
+                height: context.screenWidth - 360,
+                child: ourButton(
+                    color: whiteColor,
+                    onPress: () {
+          // เมื่อกดปุ่ม ให้ใช้ Navigator เพื่อเปลี่ยนหน้าไปยังหน้า address controller
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddressForm()),
+          );
+        },
+
+                    textColor: primaryApp,
+                    title: "Edit Address")),
 
             10.heightBox,
             // const Divider(),
@@ -127,7 +144,6 @@ class EditProfileScreen extends StatelessWidget {
                 label: newpass,
                 isPass: true,
                 readOnly: false),
-
             30.heightBox,
 
             // controller.isloading.value

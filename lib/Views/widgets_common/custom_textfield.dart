@@ -17,7 +17,7 @@ Widget customTextField(
         readOnly: readOnly,
         decoration: InputDecoration(
           isDense: true,
-          label: normalText(text: label, color: fontGreyDark,),
+          label: boldText(text: label, color: fontGreyDark, size: 16),
           // hintText: hint,
           hintStyle: const TextStyle(
             color: fontGreyDark, 
@@ -32,7 +32,7 @@ Widget customTextField(
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
-            borderSide: const BorderSide(color: fontGrey),
+            borderSide: const BorderSide(color: fontGreyDark),
           ),
         ),
       ),

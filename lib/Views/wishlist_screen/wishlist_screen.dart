@@ -19,8 +19,8 @@ class WishlistScreen extends StatelessWidget {
           style: TextStyle(
             color:
                 fontGreyDark, // Ensure fontGreyDark is correctly defined in consts.dart
-            fontSize: 28,
-            fontWeight: FontWeight.bold,
+            fontSize: 24,
+            fontFamily: bold,
           ),
         ),
       ),
@@ -68,8 +68,8 @@ class WishlistScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                           child: Image.network(
                             data[index]['p_imgs'][0],
-                            height: 80,
-                            width: 70,
+                            height: 75,
+                            width: 65,
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -83,14 +83,14 @@ class WishlistScreen extends StatelessWidget {
                               Text(
                                 data[index]['p_name'],
                                 style: const TextStyle(
-                                  fontSize: 22,
+                                  fontSize: 16,
                                   fontFamily: regular,
                                 ),
                               ),
                               Text(
                                 "${data[index]['p_price']}",
                                 style: const TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 14,
                                   fontFamily: light,
                                 ),
                               ),

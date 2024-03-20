@@ -1,14 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_finalproject/Views/auth_screen/login_screen.dart';
+import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
 import 'package:flutter_finalproject/Views/chat_screen/messaging_screen.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/orders_screen/orders_screen.dart';
 import 'package:flutter_finalproject/Views/profile_screen/component/detail_card.dart';
 import 'package:flutter_finalproject/Views/profile_screen/edit_profile_screen.dart';
+import 'package:flutter_finalproject/Views/profile_screen/menu_setting_screen.dart';
+import 'package:flutter_finalproject/Views/search_screen/search_screen.dart';
 import 'package:flutter_finalproject/Views/wishlist_screen/wishlist_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/consts/lists.dart';
-import 'package:flutter_finalproject/controllers/auth_controller.dart';
 import 'package:flutter_finalproject/controllers/profile_controller.dart';
 import 'package:flutter_finalproject/services/firestore_services.dart';
 import 'package:get/get.dart';
@@ -21,12 +24,40 @@ class ProfileScreen extends StatelessWidget {
     var controller = Get.put(ProfileController());
 
     return Scaffold(
-        backgroundColor: bgGreylight,
+        appBar: AppBar(
+          backgroundColor: whiteColor,
+          automaticallyImplyLeading: false,
+          title: Text(
+            'Profile',
+            textAlign: TextAlign
+                .center, // This centers the title in the space available.
+            style: TextStyle(
+              color: fontBlack,
+              fontSize: 26,
+              fontFamily: 'regular',
+            ),
+          ),
+          actions: <Widget>[
+            // Use IconButton for actions items on the AppBar
+            IconButton(
+              icon: Icon(
+                Icons.menu, // Icon for the menu (3 lines)
+                color: fontBlack, // Specify the icon color if needed
+              ),
+              onPressed: () {
+                Get.to(() => MenuSettingScreen());
+              },
+            ),
+          ],
+          centerTitle: true, // This is the key property to make the title centered
+        ),
+        backgroundColor: whiteColor,
         body: StreamBuilder(
             stream: FirestoreServices.getUser(currentUser!.uid),
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (!snapshot.hasData) {
+              if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                // ตรวจสอบว่ามีข้อมูลและลิสต์ docs ไม่ว่างเปล่า
                 return const Center(
                   child: CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation(primaryApp),
@@ -60,42 +91,38 @@ class ProfileScreen extends StatelessWidget {
                               children: [
                                 data['imageUrl'] == ''
                                     ? ClipRRect(
-                                        borderRadius: BorderRadius.circular(
-                                            100), // Makes image rounded
+                                        borderRadius:
+                                            BorderRadius.circular(100),
                                         child: Image.asset(
                                           imProfile,
                                           width: 120,
-                                          height:
-                                              120, // Specify height to ensure the box is fully rounded
+                                          height: 120,
                                           fit: BoxFit.cover,
                                         ),
                                       )
                                     : ClipRRect(
-                                        borderRadius: BorderRadius.circular(
-                                            100), // Makes image rounded
+                                        borderRadius:
+                                            BorderRadius.circular(100),
                                         child: Image.network(
                                           data['imageUrl'],
                                           width: 120,
-                                          height:
-                                              120, // Specify height to ensure the box is fully rounded
+                                          height: 120,
                                           fit: BoxFit.cover,
                                         ),
                                       ),
-                                // SizedBox(
-                                //   width: 20,
-                                //   height: 20,
-                                // ),
+                                const SizedBox(height: 5),
                                 Text(
-                                  data['name'],
-                                  style: TextStyle(
+                                  data['name'][0].toUpperCase() +
+                                      data['name'].substring(1),
+                                  style: const TextStyle(
                                       fontSize: 24,
-                                      color: fontBlack),
+                                      color: fontBlack,
+                                      fontFamily: regular),
                                 ),
-                                Text(
-                                  data['email'],
-                                  style: TextStyle(
-                                      fontSize: 12, color: fontGrey),
-                                ),
+                                // Text(
+                                //   data['email'][0].toUpperCase() + data['email'].substring(1),
+                                //   style: const TextStyle(fontSize: 12, color: fontGrey, fontFamily: regular),
+                                // ),
                               ],
                             ),
                           ),
@@ -116,21 +143,21 @@ class ProfileScreen extends StatelessWidget {
                               return Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  detailsCard(
-                                      count: countData[0].toString(),
-                                      title: "in your cart",
-                                      width: context.screenWidth / 3.4),
-                                  detailsCard(
-                                      count: countData[1].toString(),
-                                      title: "in your wishlist",
-                                      width: context.screenWidth / 3.2),
-                                  detailsCard(
-                                      count: countData[2].toString(),
-                                      title: "your order",
-                                      width: context.screenWidth / 3.4)
-                                ],
-                              );
+                                // children: [
+                                //   detailsCard(
+                                //     count: countData[0].toString(),
+                                //     title: "Cart",
+                                //   ),
+                                //   detailsCard(
+                                //     count: countData[1].toString(),
+                                //     title: "Favorite",
+                                //   ),
+                                //   detailsCard(
+                                //     count: countData[2].toString(),
+                                //     title: "Order",
+                                //   )
+                                // ],
+                              ).box.color(fontLightGrey).make();
                             }
                           }),
 
@@ -148,7 +175,7 @@ class ProfileScreen extends StatelessWidget {
                             onTap: () {
                               switch (index) {
                                 case 0:
-                                controller.nameController.text = data['name'];
+                                  controller.nameController.text = data['name'];
                                   Get.to(() => EditProfileScreen(data: data));
                                   break;
                                 case 1:
@@ -170,20 +197,20 @@ class ProfileScreen extends StatelessWidget {
                             trailing: Icon(Icons.arrow_forward_ios, size: 16),
                           );
                         },
-                      ).box
-                          // .white
-                          // .rounded
-                          // .margin(const EdgeInsets.all(12))
-                          .padding(const EdgeInsets.symmetric(horizontal: 16))
-                          // .shadowSm
-                          .make(), 
-                          //.box.color(primaryApp).make(),
-                      // 20.heightBox,
+                      )
+                      .box
+                      // .white
+                      // .rounded
+                      // .margin(const EdgeInsets.all(12))
+                      .padding(const EdgeInsets.symmetric(horizontal: 16))
+                      // .shadowSm
+                      .make(),
+                      // .box.color(primaryApp).make(),
+                      20.heightBox,
 
                       OutlinedButton(
                           onPressed: () async {
-                            await Get.put(AuthController())
-                                .signoutMethod(context);
+                            await FirebaseAuth.instance.signOut();
                             Get.offAll(() => const LoginScreen());
                           },
                           child: logout.text.fontFamily(regular).black.make())

@@ -86,7 +86,7 @@ const String logoBrand5 = "assets/images/gucciLogo.png";
 const String logoBrand6 = "assets/images/coachLogo.png";
 const String logoBrand7 = "assets/images/balencigaLogo.png";
 const String logoBrand8 = "assets/images/burberryLogo.png";
-//Featured Product
+//Featured Productf
 const String product1 = "assets/images/product1.png";
 const String product2 = "assets/images/product2.png";
 const String product3 = "assets/images/product3.png";
@@ -104,6 +104,10 @@ const String icMessagse = "assets/icons/iconsAccount/Message.png";
 const String imgCash = "assets/images/payment/cashOnDelivery.png";
 const String imgPromptpay = "assets/images/payment/Promptpay.png";
 const String imgVisa = "assets/images/payment/visa.png";
+
+const String icCash = "assets/images/payment/card.png";
+const String icPromptpay = "assets/images/payment/qr.png";
+const String icVisa = "assets/images/payment/card.png";
 
 // ----------------------------------------------- item Screen -----------------------------------------------
 const String icFav = "assets/icons/icNormal/buttonFavourite.png";

@@ -135,12 +135,3 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 }
-
-class InformationScreen extends StatelessWidget {
-  const InformationScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}

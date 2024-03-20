@@ -19,27 +19,30 @@ class PaymentMethods extends StatelessWidget {
   Widget build(BuildContext context) {
     var controller = Get.find<CartController>();
 
-    return Obx(() =>  Scaffold(
+    return Obx(
+      () => Scaffold(
         backgroundColor: whiteColor,
         bottomNavigationBar: SizedBox(
           height: 70,
-          child: controller.placingOrder.value ? Center(
-            child: loadingIndcator(),
-          ) : ourButton(
-              onPress: () async {
-                await controller.placeMyOrder(
-                  orderPaymentMethod: paymentMethods[controller.paymentIndex.value],
-                  totalAmount: controller.totalP.value
-                ); 
+          child: controller.placingOrder.value
+              ? Center(
+                  child: loadingIndcator(),
+                )
+              : ourButton(
+                  onPress: () async {
+                    await controller.placeMyOrder(
+                        orderPaymentMethod:
+                        paymentMethods[controller.paymentIndex.value],
+                        totalAmount: controller.totalP.value);
 
-                await controller.clearCart();
-                VxToast.show(context, msg: "Order placed successfully");
+                    await controller.clearCart();
+                    VxToast.show(context, msg: "Order placed successfully");
 
-                Get.offAll(MainNavigationBar());
-              },
-              color: primaryApp,
-              textColor: whiteColor,
-              title: "Place my order"),
+                    Get.offAll(MainNavigationBar());
+                  },
+                  color: primaryApp,
+                  textColor: whiteColor,
+                  title: "Place my order"),
         ),
         appBar: AppBar(
           title: "Choose Payment Method"
@@ -76,8 +79,13 @@ class PaymentMethods extends StatelessWidget {
                         Image.asset(paymentMethodsImg[index],
                             width: double.infinity,
                             height: 120,
-                            colorBlendMode: controller.paymentIndex.value == index ? BlendMode.darken : BlendMode.color,
-                            color: controller.paymentIndex.value == index ? Colors.black.withOpacity(0.4) : Colors.transparent,
+                            colorBlendMode:
+                                controller.paymentIndex.value == index
+                                    ? BlendMode.darken
+                                    : BlendMode.color,
+                            color: controller.paymentIndex.value == index
+                                ? Colors.black.withOpacity(0.4)
+                                : Colors.transparent,
                             fit: BoxFit.cover),
                         controller.paymentIndex.value == index
                             ? Transform.scale(
@@ -92,10 +100,16 @@ class PaymentMethods extends StatelessWidget {
                                 ),
                               )
                             : Container(),
-                            Positioned( 
-                              bottom: 10, 
-                              right: 10, 
-                              child: paymentMethods[index].text.white.fontFamily(bold).size(16).make(),)
+                        Positioned(
+                          bottom: 10,
+                          right: 10,
+                          child: paymentMethods[index]
+                              .text
+                              .white
+                              .fontFamily(bold)
+                              .size(16)
+                              .make(),
+                        )
                       ],
                     ),
                   ),

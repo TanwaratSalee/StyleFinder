@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_finalproject/Views/auth_screen/login_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 
@@ -46,7 +47,7 @@ storeUserData({required String name, required String email, required String pass
     await store.set({
       'name': name, 'email': email, 'password': password, 'imageUrl': '',
       'id': currentUser?.uid,
-      'day': day, 'month': month, 'year': year, 
+      // 'day': day, 'month': month, 'year': year, 
       'cart_count' : "0",
       'wishlist_count': "0",
       'order_count' : "0"
@@ -58,7 +59,8 @@ storeUserData({required String name, required String email, required String pass
   //Signout method
   signoutMethod(context) async {
     try {
-      await auth.signOut();
+      await FirebaseAuth.instance.signOut();
+        Get.offAll(() => const LoginScreen());
     } catch (e) {
       VxToast.show(context, msg: e.toString());
     }

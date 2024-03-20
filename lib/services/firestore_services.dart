@@ -29,6 +29,15 @@ class FirestoreServices {
         .snapshots();
   }
 
+  //get address
+    static getAddress(uid) {
+    return firestore
+        .collection(usersCollection)
+        .where('address', isEqualTo: uid)
+        .snapshots();
+  }
+
+
   // delete document
   static deleteDocument(docId) {
     return firestore.collection(cartCollection).doc(docId).delete();

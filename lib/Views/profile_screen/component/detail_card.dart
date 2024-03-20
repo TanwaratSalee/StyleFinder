@@ -4,12 +4,12 @@ import 'package:flutter_finalproject/consts/styles.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 Widget detailsCard({width,String? count, String? title}) {
-  return Column(
+  return Row(
     mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        count!.text.fontFamily(bold).color(fontBlack).size(16).make(),
-        5.heightBox,
-        title!.text.color(fontBlack).make()
+        title!.text.color(fontBlack).make(),
+        5.widthBox,
+        "($count)".text.fontFamily('bold').color(fontBlack).size(14).make(),
       ],
-    ).box.color(primaryApp).rounded.width(width).height(80).padding(const EdgeInsets.all(4)).make();
+    ).box.width(100).height(40).padding(const EdgeInsets.all(4)).make();
 }

@@ -1,7 +1,7 @@
 // ignore_for_file: use_super_parameters
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_finalproject/Views/collection_screen/item_details.dart';
+import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/services/firestore_services.dart';

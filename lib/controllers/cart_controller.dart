@@ -34,13 +34,12 @@ class CartController extends GetxController {
 
   placeMyOrder({required orderPaymentMethod,required totalAmount}) async {
     placingOrder(true);
-
     await getProductDetails();
     await firestore.collection(ordersCollection).doc().set({
       'order_code': "233981237",
       'order_date': FieldValue.serverTimestamp(),
       'order_by': currentUser!.uid,
-      'order_by_name': Get. find<NewsController>().username,
+      'order_by_name': Get.find<NewsController>().username,
       'order_by_email': currentUser!.email,
       'order_by_address': addressController.text,
       'order_by_state': stateController.text,
@@ -55,7 +54,7 @@ class CartController extends GetxController {
       'order_on_delivery': false,
       'total_amount': totalAmount,
       'orders': FieldValue.arrayUnion(products),
-      'vendors' : FieldValue.arrayUnion([vendors])
+      'vendors' : FieldValue.arrayUnion(vendors)
     });
     placingOrder(false); 
   }

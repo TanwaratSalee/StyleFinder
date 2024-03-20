@@ -1,7 +1,7 @@
 // ignore_for_file: use_super_parameters
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_finalproject/Views/cart_screen/shipping%20screen.dart';
+import 'package:flutter_finalproject/Views/cart_screen/shipping_screen.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 import 'package:flutter_finalproject/consts/consts.dart';

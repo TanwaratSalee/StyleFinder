@@ -1,11 +1,13 @@
 // ignore_for_file: unnecessary_import, library_private_types_in_public_api
 
+import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
+import 'package:flutter_finalproject/Views/search_screen/search_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/home_controller.dart';
 import 'package:get/get.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_finalproject/Views/collection_screen/item_details.dart';
+import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirestoreServices {
@@ -78,6 +80,71 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backGround,
+      appBar: AppBar(
+          backgroundColor: whiteColor,
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 15.0),
+            child: IconButton(
+              icon: Image.asset(
+                icSearch,
+                width: 23,
+              ),
+              onPressed: () {
+                showGeneralDialog(
+                  barrierLabel: "Barrier",
+                  barrierDismissible: true,
+                  barrierColor: Colors.black.withOpacity(0.5),
+                  transitionDuration: Duration(milliseconds: 300),
+                  context: context,
+                  pageBuilder: (_, __, ___) {
+                    return Align(
+                      alignment:
+                          Alignment.topCenter, 
+                      child: Container(
+                        height: MediaQuery.of(context).size.height *
+                            0.6, 
+                        width: MediaQuery.of(context).size.width,
+                        child: SearchScreenPage(), 
+                        decoration: const BoxDecoration(
+                          color: whiteColor,
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(18),
+                            bottomRight: Radius.circular(18),
+                          ),
+                        ),
+                        padding: const EdgeInsets.all(20),
+                      ),
+                    );
+                  },
+                  transitionBuilder: (context, anim1, anim2, child) {
+                    return SlideTransition(
+                      position: Tween(begin: Offset(0, -1), end: Offset(0, 0))
+                          .animate(anim1),
+                      child: child,
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+          title: Center(
+            child: Image.asset(icLogoOnTop, height: 40),
+          ),
+          actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(right: 15.0),
+              child: IconButton(
+                icon: Image.asset(
+                  icCart,
+                  width: 21,
+                ),
+                onPressed: () {
+                  Get.to(() => const CartScreen());
+                },
+              ),
+            ),
+          ],
+        ),
       body: Padding(
         padding: const EdgeInsets.only(top: 0, left: 0, right: 0),
         child: FutureBuilder<List<Map<String, dynamic>>>(
@@ -131,7 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           Image.network(
                             product['p_imgs'][0],
-                            height: 400,
+                            height: 410,
                             width: 360,
                             fit: BoxFit.cover,
                           ),
@@ -151,24 +218,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                     product['p_name'],
                                     style: const TextStyle(
                                       color: Colors.black,
-                                      fontSize: 24,
+                                      fontSize: 20,
                                       fontFamily: bold,
                                     ),
                                   ),
                                   const SizedBox( height: 2),
-                                  Text(
-                                    product['p_aboutProduct'],
-                                    style: const TextStyle(
-                                      color: fontGrey,
-                                      fontSize: 14,
-                                      fontFamily: light,
-                                    ),
-                                  ),
+                                  // Text(
+                                  //   product['p_aboutProduct'],
+                                  //   style: const TextStyle(
+                                  //     color: fontGrey,
+                                  //     fontSize: 14,
+                                  //     fontFamily: light,
+                                  //   ),
+                                  // ),
                                   Text(
                                     product['p_price'],
                                     style: const TextStyle(
                                       color: fontGreyDark,
-                                      fontSize: 14,
+                                      fontSize: 18,
                                     ),
                                   ),
                                 ],
