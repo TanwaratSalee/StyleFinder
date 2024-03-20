@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-import 'package:flutter_finalproject/Views/auth_screen/detail_user_screen.dart';
 import 'package:flutter_finalproject/Views/home_screen/navigationBar.dart';
 import 'package:flutter_finalproject/Views/widgets_common/custom_textfield.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
@@ -7,14 +6,14 @@ import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 import '../../controllers/auth_controller.dart';
 
-class SignupScreen extends StatefulWidget {
-  const SignupScreen({super.key});
+class DetailUserScreen extends StatefulWidget {
+  const DetailUserScreen({super.key});
 
   @override
-  State<SignupScreen> createState() => _SignupScreenState();
+  State<DetailUserScreen> createState() => _DetailUserScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> {
+class _DetailUserScreenState extends State<DetailUserScreen> {
   bool? isCheck = false;
   var controller = Get.put(AuthController());
 
@@ -36,19 +35,19 @@ class _SignupScreenState extends State<SignupScreen> {
       ),
       backgroundColor: whiteColor,
       body: Padding(
-        padding: const EdgeInsets.all(10),
+        padding:  const EdgeInsets.all(15),
         child: Obx(() => Column(
             mainAxisSize: MainAxisSize.max,
             children: [
               customTextField(
                   label: username, controller: nameController, isPass: false, readOnly: false,),
-              const SizedBox(height: 1),
+              const SizedBox(height: 3),
               customTextField(
                   label: email, controller: emailController, isPass: false, readOnly: false,),
-              const SizedBox(height: 1),
+              const SizedBox(height: 3),
               customTextField(
                   label: password, controller: passwordController, isPass: true, readOnly: false,),
-              const SizedBox(height: 1),
+              const SizedBox(height: 3),
               customTextField(
                   label: confirmPassword, controller: passwordRetypeController, isPass: true, readOnly: false,),
               const SizedBox(height: 10),
@@ -99,7 +98,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ])))
                 ],
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 10),
               controller.isloading.value
               ? const CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation(primaryApp),) : 
@@ -117,7 +116,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         return controller.storeUserData(name: nameController.text, email: emailController.text, password: passwordController.text);
                       }).then((value) {
                         VxToast. show(context, msg: successfully);
-                        Get.offAll(() => DetailUserScreen());
+                        Get.offAll(() => MainNavigationBar());
                       });
                     } catch (e) {
                       auth.signOut();
@@ -131,9 +130,7 @@ class _SignupScreenState extends State<SignupScreen> {
               const Spacer(),
             ],
           ),
-        ),
-      ),
+      ),)
     );
   }
 }
-
