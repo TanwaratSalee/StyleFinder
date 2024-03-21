@@ -1,136 +1,272 @@
-// ignore_for_file: use_build_context_synchronously
-import 'package:flutter_finalproject/Views/home_screen/navigationBar.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/widgets_common/custom_textfield.dart';
-import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
+import 'package:flutter_finalproject/controllers/auth_controller.dart';
 import 'package:get/get.dart';
-import '../../controllers/auth_controller.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class DetailUserScreen extends StatefulWidget {
-  const DetailUserScreen({super.key});
-
   @override
-  State<DetailUserScreen> createState() => _DetailUserScreenState();
+  _DetailUserScreenState createState() => _DetailUserScreenState();
 }
 
 class _DetailUserScreenState extends State<DetailUserScreen> {
-  bool? isCheck = false;
   var controller = Get.put(AuthController());
 
-  var nameController = TextEditingController();
-  var emailController = TextEditingController();
-  var passwordController = TextEditingController();
-  var passwordRetypeController = TextEditingController();
+  var userHeightController = TextEditingController();
+  var userWeightController = TextEditingController();
 
-  var birthDayController = TextEditingController();
-  var birthMonthController = TextEditingController();
-  var birthYearController = TextEditingController();
+  DateTime selectedDate = DateTime.now();
+  String selectedSex = 'Man';
+
+  final List<Color> skinTones = [
+    Color.fromRGBO(233, 228, 222, 1), // Light skin tone
+    Color.fromRGBO(251, 211, 159, 1), // Medium-light skin tone
+    Color.fromRGBO(185, 135, 98, 1), // Medium skin tone
+    Color.fromRGBO(116, 78, 60, 1), // Dark skin tone
+  ];
+  late Color selectedSkinTone; // Declare as late
+
+  @override
+  void initState() {
+    super.initState();
+    initializeDateFormatting('en_US', null);
+    selectedSkinTone = skinTones[0]; // Initialize here
+  }
+
+  void _showDatePicker(ctx) {
+    showCupertinoModalPopup(
+        context: ctx,
+        builder: (_) => Container(
+              height: 300,
+              color: Colors.white,
+              child: Column(
+                children: [
+                  Container(
+                    height: 200,
+                    child: CupertinoDatePicker(
+                        initialDateTime: selectedDate,
+                        mode: CupertinoDatePickerMode.date,
+                        onDateTimeChanged: (val) {
+                          setState(() {
+                            selectedDate = val;
+                          });
+                        }),
+                  ),
+                  CupertinoButton(
+                    child: Text('OK'),
+                    onPressed: () => Navigator.of(ctx).pop(),
+                  )
+                ],
+              ),
+            ));
+  }
+
+  String _formatDate(DateTime date) {
+    final DateFormat formatter = DateFormat('EEEE, MMMM d, yyyy', 'en_US');
+    return formatter.format(date);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        leading: const BackButton(),
-        title: const Text('Create Account'),
+        title: Text(
+          'Create Account',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),
+        ),
+        centerTitle: true,
       ),
-      backgroundColor: whiteColor,
       body: Padding(
-        padding:  const EdgeInsets.all(15),
-        child: Obx(() => Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              customTextField(
-                  label: username, controller: nameController, isPass: false, readOnly: false,),
-              const SizedBox(height: 3),
-              customTextField(
-                  label: email, controller: emailController, isPass: false, readOnly: false,),
-              const SizedBox(height: 3),
-              customTextField(
-                  label: password, controller: passwordController, isPass: true, readOnly: false,),
-              const SizedBox(height: 3),
-              customTextField(
-                  label: confirmPassword, controller: passwordRetypeController, isPass: true, readOnly: false,),
-              const SizedBox(height: 10),
-
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(2),
-                    child: Checkbox(
-                      activeColor: primaryApp,
-                      checkColor: whiteColor,
-                      value: isCheck,
-                      onChanged: (bool? newValue) {
-                        setState(() {
-                          isCheck = newValue;
-                        });
-                      },
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(height: 25),
+            Text(
+              'Select your birthday',
+              style: TextStyle(
+                  fontSize: 16, color: Colors.black, fontFamily: regular),
+            ),
+            SizedBox(height: 5),
+            Center(
+              child: Container(
+                decoration: BoxDecoration(
+                  color:
+                      bgGreylight, // Use the actual color code or variable here for light grey
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: CupertinoButton(
+                  onPressed: () => _showDatePicker(context),
+                  child: Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 16.0, vertical: 3.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Text(
+                          _formatDate(selectedDate),
+                          style: TextStyle(fontSize: 16, color: Colors.black),
+                        ),
+                        SizedBox(width: 70), // Space between the text and icon
+                        Icon(
+                          Icons.calendar_today,
+                          size: 24.0,
+                          color: fontGreyDark,
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                      child: RichText(
-                          text: const TextSpan(children: [
-                    TextSpan(
-                        text: "I agree to the ",
-                        style: TextStyle(
-                          color: fontGreyDark,
-                          fontWeight: FontWeight.bold,
-                        )),
-                    TextSpan(
-                        text: termAndCond,
-                        style: TextStyle(
-                          color: primaryApp,
-                          fontWeight: FontWeight.bold,
-                        )),
-                    TextSpan(
-                        text: " & ",
-                        style: TextStyle(
-                          color: fontGreyDark,
-                          fontWeight: FontWeight.bold,
-                        )),
-                    TextSpan(
-                        text: privacyPolicy,
-                        style: TextStyle(
-                          color: primaryApp,
-                          fontWeight: FontWeight.bold,
-                        ))
-                  ])))
-                ],
+                ),
               ),
-              const SizedBox(height: 10),
-              controller.isloading.value
-              ? const CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation(primaryApp),) : 
-                ourButton(
-                color: isCheck == true ? primaryApp : fontGrey,
-                title: 'Next',
-                textColor: whiteColor,
-                onPress: () async {
-                  if (isCheck != false) {
-                    controller.isloading(true);
-                    try {
-                      await controller.signupMethod(
-                        context: context, email: emailController.text, password: passwordController.text
-                      ).then((value) {
-                        return controller.storeUserData(name: nameController.text, email: emailController.text, password: passwordController.text);
-                      }).then((value) {
-                        VxToast. show(context, msg: successfully);
-                        Get.offAll(() => MainNavigationBar());
-                      });
-                    } catch (e) {
-                      auth.signOut();
-                      VxToast.show(context, msg: e.toString());
-                      controller.isloading(false);
-                    }
-                  }
-                },
-              ),
-              //.box.width(context.screenWidth - 50).make(),
-              const Spacer(),
-            ],
-          ),
-      ),)
+            ),
+            SizedBox(height: 20),
+            Text(
+              'Sex',
+              style: TextStyle(
+                  fontSize: 16, color: Colors.black, fontFamily: regular),
+            ),
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisSize:
+                  MainAxisSize.max, // Row takes up all the horizontal space
+              children: <String>['Man', 'Woman', 'Other']
+                  .asMap()
+                  .entries
+                  .map((entry) {
+                int idx = entry.key;
+                String sex = entry.value;
+
+                return Flexible(
+                  fit: FlexFit.tight, // Each child fills the available space
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        left: idx != 0 ? 6.0 : 0,
+                        right: idx != 2
+                            ? 6.0
+                            : 0), // Add spacing on the left and right except for the first and last item
+                    child: ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          selectedSex = sex;
+                        });
+                      },
+                      child: Text(
+                        sex,
+                        style: TextStyle(
+                          fontFamily: regular,
+                          fontSize: 16,
+                          color: selectedSex == sex ? primaryApp : Colors.grey,
+                        ),
+                      ),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            selectedSex == sex ? thinPrimaryApp : bgGreylight),
+                        foregroundColor: MaterialStateProperty.all<Color>(
+                            selectedSex == sex ? primaryApp : whiteColor),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            side: BorderSide(
+                                color: selectedSex == sex
+                                    ? Colors.teal
+                                    : Colors.grey),
+                          ),
+                        ),
+                        elevation: MaterialStateProperty.all<double>(0),
+                        padding: MaterialStateProperty.all<EdgeInsets>(
+                          EdgeInsets.symmetric(
+                              vertical: 15.0, horizontal: 25.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+            SizedBox(height: 20),
+            Text(
+              'Shape',
+              style: TextStyle(
+                  fontSize: 16, color: Colors.black, fontFamily: regular),
+            ),
+            Row(
+              children: <Widget>[
+                SizedBox(width: 20),
+                Expanded(
+                  // Use Expanded to fill the available horizontal space
+                  child: customTextField(
+                    label: 'Height',
+                    controller: userHeightController,
+                    isPass: false,
+                    readOnly: false,
+                  ),
+                ),
+                SizedBox(
+                    width: 20), // Add horizontal space between the text fields
+                Expanded(
+                  // Use another Expanded for the second text field
+                  child: customTextField(
+                    label: 'Weight',
+                    controller: userWeightController,
+                    isPass: false,
+                    readOnly: false,
+                  ),
+                ),
+                SizedBox(width: 20),
+              ],
+            ),
+
+            SizedBox(height: 20),
+            Text(
+                    'Skin',
+                    style: TextStyle(
+                  fontSize: 16, color: Colors.black, fontFamily: regular),
+                  ),
+                  Column(
+              children: [
+                
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: skinTones.map((tone) {
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedSkinTone = tone;
+                        });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: tone,
+                          border: Border.all(
+                            color: selectedSkinTone == tone
+                                ? primaryApp
+                                : Colors
+                                    .transparent, // Highlight the selected tone
+                            width: 3,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        width: 50, // Width of the color choice
+                        height: 50, // Height of the color choice
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
     );
   }
 }

@@ -134,11 +134,11 @@ void saveAddressToFirestore() {
         padding: const EdgeInsets.all(12.0),
         child: Column(
   children: [
-    customTextField(label: "Address", isPass: false, readOnly: false, title: "Address", controller: _addressController),
-    customTextField(label: "City", isPass: false, readOnly: false, title: "City", controller: _cityController),
-    customTextField(label: "State", isPass: false, readOnly: false, title: "State", controller: _stateController),
-    customTextField(label: "Postal Code", isPass: false, readOnly: false, title: "Postal Code", controller: _postalCodeController),
-    customTextField(label: "Phone", isPass: false, readOnly: false, title: "Phone", controller: _phoneController),
+    customTextField(label: "Address", isPass: false, readOnly: false, controller: _addressController),
+    customTextField(label: "City", isPass: false, readOnly: false, controller: _cityController),
+    customTextField(label: "State", isPass: false, readOnly: false, controller: _stateController),
+    customTextField(label: "Postal Code", isPass: false, readOnly: false, controller: _postalCodeController),
+    customTextField(label: "Phone", isPass: false, readOnly: false, controller: _phoneController),
     SizedBox(height: 20),
     _currentAddress.isNotEmpty
         ? Container(

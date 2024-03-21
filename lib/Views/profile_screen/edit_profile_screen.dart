@@ -24,7 +24,7 @@ class EditProfileScreen extends StatelessWidget {
     // controller.old Controller.text = data['pass'];
 
     return Scaffold(
-      backgroundColor: bgGreylight,
+      backgroundColor: whiteColor,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title:

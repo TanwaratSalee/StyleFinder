@@ -1,6 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-import 'package:flutter_finalproject/Views/auth_screen/detail_user_screen.dart';
-import 'package:flutter_finalproject/Views/home_screen/navigationBar.dart';
 import 'package:flutter_finalproject/Views/widgets_common/custom_textfield.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
@@ -14,6 +12,29 @@ class SignupScreen extends StatefulWidget {
   State<SignupScreen> createState() => _SignupScreenState();
 }
 
+void validateAndSubmit() {
+    Get.dialog(
+      AlertDialog(
+        title: Text("Missing Information"),
+        content: Text("Please fill out all the fields."),
+        actions: [
+          TextButton(
+            child: Text("OK"),
+            onPressed: () {
+              Get.back(); // ปิด dialog
+            },
+          ),
+        ],
+      ),
+    );
+    return; // หยุดการทำงานของฟังก์ชันเพื่อไม่ให้ดำเนินการต่อหากข้อมูลไม่ครบ
+  }
+
+  // โค้ดสำหรับบันทึกข้อมูลหากข้อมูลครบถ้วน
+  // saveDataToFirebase();
+
+
+
 class _SignupScreenState extends State<SignupScreen> {
   bool? isCheck = false;
   var controller = Get.put(AuthController());
@@ -22,10 +43,6 @@ class _SignupScreenState extends State<SignupScreen> {
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
   var passwordRetypeController = TextEditingController();
-
-  var birthDayController = TextEditingController();
-  var birthMonthController = TextEditingController();
-  var birthYearController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -36,19 +53,19 @@ class _SignupScreenState extends State<SignupScreen> {
       ),
       backgroundColor: whiteColor,
       body: Padding(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(15),
         child: Obx(() => Column(
             mainAxisSize: MainAxisSize.max,
             children: [
               customTextField(
                   label: username, controller: nameController, isPass: false, readOnly: false,),
-              const SizedBox(height: 1),
+              const SizedBox(height: 3),
               customTextField(
                   label: email, controller: emailController, isPass: false, readOnly: false,),
-              const SizedBox(height: 1),
+              const SizedBox(height: 3),
               customTextField(
                   label: password, controller: passwordController, isPass: true, readOnly: false,),
-              const SizedBox(height: 1),
+              const SizedBox(height: 3),
               customTextField(
                   label: confirmPassword, controller: passwordRetypeController, isPass: true, readOnly: false,),
               const SizedBox(height: 10),
@@ -76,13 +93,13 @@ class _SignupScreenState extends State<SignupScreen> {
                         text: "I agree to the ",
                         style: TextStyle(
                           color: fontGreyDark,
-                          fontWeight: FontWeight.bold,
+                          fontFamily: bold
                         )),
                     TextSpan(
                         text: termAndCond,
                         style: TextStyle(
                           color: primaryApp,
-                          fontWeight: FontWeight.bold,
+                          fontFamily: bold
                         )),
                     TextSpan(
                         text: " & ",
@@ -99,7 +116,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ])))
                 ],
               ),
-              const SizedBox(height: 8),
+              // const SizedBox(height: 5),
               controller.isloading.value
               ? const CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation(primaryApp),) : 
@@ -135,5 +152,8 @@ class _SignupScreenState extends State<SignupScreen> {
       ),
     );
   }
+}
+
+class DetailUserScreen {
 }
 
