@@ -29,9 +29,8 @@ class _VisaCardScreenState extends State<VisaCardScreen> {
   String cardHolderName = 'Card owner\'s name';
   String cardNumber = '1234 5678 9876 5432';
 
-   void _updateCardHolderName(String newName) {
+  void _updateCardHolderName(String newName) {
     setState(() {
-      // Ensure the first letter of the name is capitalized
       cardHolderName = newName.isNotEmpty
           ? newName[0].toUpperCase() + newName.substring(1)
           : newName;
@@ -40,30 +39,32 @@ class _VisaCardScreenState extends State<VisaCardScreen> {
 
   void _updateCardNumber(String newNumber) {
     setState(() {
-      // Mask all but the last four digits of the card number
       if (newNumber.length <= 4) {
         cardNumber = 'XXXX XXXX XXXX ' + newNumber.padLeft(4, 'X');
       } else {
-        String masked = newNumber.substring(0, newNumber.length - 4).replaceAll(RegExp(r'\d'), 'X');
+        String masked = newNumber
+            .substring(0, newNumber.length - 4)
+            .replaceAll(RegExp(r'\d'), 'X');
         String visibleDigits = newNumber.substring(newNumber.length - 4);
         cardNumber = masked.padLeft(16, 'X') + visibleDigits;
       }
-      // Format the display with spaces every 4 characters
-      cardNumber = cardNumber.replaceAllMapped(RegExp(r".{4}"), (match) => "${match.group(0)} ");
+
+      cardNumber = cardNumber.replaceAllMapped(
+          RegExp(r".{4}"), (match) => "${match.group(0)} ");
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200], // Replace with your bgGreylight
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         title: Text(
           "Visa Card",
           style: TextStyle(
             fontSize: 20,
-            fontFamily: 'Bold', // Replace with your font family
-            color: Colors.grey[900], // Replace with your fontGreyDark
+            fontFamily: 'Bold',
+            color: Colors.grey[900],
           ),
         ),
       ),
@@ -93,9 +94,7 @@ class _VisaCardScreenState extends State<VisaCardScreen> {
           SizedBox(height: 24),
           ElevatedButton(
             child: Text('Confirm'),
-            onPressed: () {
-              // Handle confirm button press
-            },
+            onPressed: () {},
           ),
         ],
       ),
@@ -110,7 +109,7 @@ class _VisaCardScreenState extends State<VisaCardScreen> {
         padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.purple[300]!, Colors.purple[700]!], // Replace with your colors
+            colors: [Colors.purple[300]!, Colors.purple[700]!],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -119,9 +118,14 @@ class _VisaCardScreenState extends State<VisaCardScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text('VISA', style: TextStyle(color: Colors.white, fontSize: 24, fontFamily: 'Bold')), // Replace with your font family
-            Text(cardNumber, style: TextStyle(color: Colors.white, fontSize: 21)),
-            Text(cardHolderName, style: TextStyle(color: Colors.white, fontSize: 18, fontFamily: 'Regular')), // Replace with your font family
+            Text('VISA',
+                style: TextStyle(
+                    color: Colors.white, fontSize: 24, fontFamily: 'Bold')),
+            Text(cardNumber,
+                style: TextStyle(color: Colors.white, fontSize: 21)),
+            Text(cardHolderName,
+                style: TextStyle(
+                    color: Colors.white, fontSize: 18, fontFamily: 'Regular')),
           ],
         ),
       ),

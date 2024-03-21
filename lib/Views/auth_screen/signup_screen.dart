@@ -134,7 +134,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         return controller.storeUserData(name: nameController.text, email: emailController.text, password: passwordController.text);
                       }).then((value) {
                         VxToast. show(context, msg: successfully);
-                        Get.offAll(() => MainNavigationBar());
+                        Get.offAll(() => DetailUserScreen());
                       });
                     } catch (e) {
                       auth.signOut();

@@ -26,30 +26,29 @@ class PaymentMethods extends StatelessWidget {
           height: 70,
           child: controller.placingOrder.value
               ? Center(
-                  child: loadingIndcator(), // Make sure this function name matches your implementation
+                  child: loadingIndcator(),
                 )
               : ourButton(
                   onPress: () async {
-                    String selectedPaymentMethod = paymentMethods[controller.paymentIndex.value];
+                    String selectedPaymentMethod =
+                        paymentMethods[controller.paymentIndex.value];
 
                     if (selectedPaymentMethod == 'QR Promptly') {
-                      // Navigate to QRScreen
-                      Get.to(() => QRScreen()); // Make sure this matches your QRScreen class constructor
+                      Get.to(() => const QRScreen());
                     } else if (selectedPaymentMethod == 'Visa') {
-                      // Navigate to VisaCardScreen
-                      Get.to(() => VisaCardScreen()); // Make sure this matches your VisaCardScreen class constructor
+                      Get.to(() => const VisaCardScreen());
                     } else if (selectedPaymentMethod == 'Cash on Delivery') {
-                      // Existing logic for placing an order
                       await controller.placeMyOrder(
                           orderPaymentMethod: selectedPaymentMethod,
                           totalAmount: controller.totalP.value);
-                      
+
                       await controller.clearCart();
                       VxToast.show(context, msg: "Order placed successfully");
-                      
-                      Get.offAll(() => MainNavigationBar()); // Make sure this matches your MainNavigationBar class constructor
+
+                      Get.offAll(() => MainNavigationBar());
                     } else {
-                      VxToast.show(context, msg: "Selected payment method is not supported yet.");
+                      VxToast.show(context,
+                          msg: "Selected payment method is not supported yet.");
                     }
                   },
                   color: primaryApp,
