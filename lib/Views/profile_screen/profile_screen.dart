@@ -164,47 +164,47 @@ class ProfileScreen extends StatelessWidget {
                       //button section
                       20.heightBox,
 
-                      ListView.separated(
-                        shrinkWrap: true,
-                        separatorBuilder: (context, index) {
-                          return Container();
-                        },
-                        itemCount: profileButtonsList.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return ListTile(
-                            onTap: () {
-                              switch (index) {
-                                case 0:
-                                  controller.nameController.text = data['name'];
-                                  Get.to(() => EditProfileScreen(data: data));
-                                  break;
-                                case 1:
-                                  Get.to(() => const OrdersScreen());
-                                  break;
-                                case 2:
-                                  Get.to(() => WishlistScreen());
-                                  break;
-                                case 3:
-                                  Get.to(() => const MessagesScreen());
-                                  break;
-                              }
-                            },
-                            leading: Image.asset(
-                              profileButtonsIcon[index],
-                              width: 22,
-                            ),
-                            title: profileButtonsList[index].text.make(),
-                            trailing: Icon(Icons.arrow_forward_ios, size: 16),
-                          );
-                        },
-                      )
-                      .box
+                      // ListView.separated(
+                      //   shrinkWrap: true,
+                      //   separatorBuilder: (context, index) {
+                      //     return Container();
+                      //   },
+                      //   itemCount: profileButtonsList.length,
+                      //   itemBuilder: (BuildContext context, int index) {
+                      //     return ListTile(
+                      //       onTap: () {
+                      //         switch (index) {
+                      //           case 0:
+                      //             controller.nameController.text = data['name'];
+                      //             Get.to(() => EditProfileScreen(data: data));
+                      //             break;
+                      //           case 1:
+                      //             Get.to(() => const OrdersScreen());
+                      //             break;
+                      //           case 2:
+                      //             Get.to(() => WishlistScreen());
+                      //             break;
+                      //           case 3:
+                      //             Get.to(() => const MessagesScreen());
+                      //             break;
+                      //         }
+                      //       },
+                      //       leading: Image.asset(
+                      //         profileButtonsIcon[index],
+                      //         width: 22,
+                      //       ),
+                      //       title: profileButtonsList[index].text.make(),
+                      //       trailing: Icon(Icons.arrow_forward_ios, size: 16),
+                      //     );
+                      //   },
+                      // )
+                      // .box
                       // .white
                       // .rounded
                       // .margin(const EdgeInsets.all(12))
-                      .padding(const EdgeInsets.symmetric(horizontal: 16))
+                      // .padding(const EdgeInsets.symmetric(horizontal: 16))
                       // .shadowSm
-                      .make(),
+                      // .make(),
                       // .box.color(primaryApp).make(),
                       20.heightBox,
 

@@ -95,10 +95,11 @@ const String product5 = "assets/images/product5.png";
 
 // Profile Screen
 const String imProfile = "assets/images/Profile.png";
-const String icAccount = "assets/icons/iconsAccount/Account.png";
-const String icOrders = "assets/icons/iconsAccount/Order.png";
-const String icWishlist = "assets/icons/iconsAccount/like.png";
-const String icMessagse = "assets/icons/iconsAccount/Message.png";
+const String icAccount = "assets/icons/iconsAccount/profile.png";
+const String icOrders = "assets/icons/iconsAccount/status.png";
+const String icMessage = "assets/icons/iconsAccount/message.png";
+const String icAddress = "assets/icons/iconsAccount/map.png";
+const String icPassword = "assets/icons/iconsAccount/password.png";
 
 // Paymet
 const String imgCash = "assets/images/payment/cashOnDelivery.png";

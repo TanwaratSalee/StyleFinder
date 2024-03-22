@@ -74,7 +74,9 @@ class LoginScreen extends StatelessWidget {
                                         child: forgetPass.text
                                             .color(fontBlack)
                                             .make(),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          
+                                        },
                                       ),
                                     ),
                                     const SizedBox(height: 10),

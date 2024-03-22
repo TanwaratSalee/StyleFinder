@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_finalproject/Views/auth_screen/login_screen.dart';
+import 'package:flutter_finalproject/Views/cart_screen/address_screen.dart';
 import 'package:flutter_finalproject/Views/chat_screen/messaging_screen.dart';
 import 'package:flutter_finalproject/Views/orders_screen/orders_screen.dart';
 import 'package:flutter_finalproject/Views/profile_screen/edit_profile_screen.dart';
+import 'package:flutter_finalproject/Views/profile_screen/resetPassword_screen.dart';
 import 'package:flutter_finalproject/Views/wishlist_screen/wishlist_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/consts/lists.dart';
@@ -77,12 +79,15 @@ class MenuSettingScreen extends StatelessWidget {
                                   Get.to(() => EditProfileScreen(data: data));
                                   break;
                                 case 1:
-                                  Get.to(() => const OrdersScreen());
+                                  Get.to(() => const PasswordScreen());
                                   break;
                                 case 2:
-                                  Get.to(() => WishlistScreen());
+                                  Get.to(() => const AddressScreen());
                                   break;
                                 case 3:
+                                  Get.to(() => const OrdersScreen());
+                                  break;
+                                case 4:
                                   Get.to(() => const MessagesScreen());
                                   break;
                               }

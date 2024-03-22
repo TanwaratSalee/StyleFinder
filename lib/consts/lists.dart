@@ -30,8 +30,8 @@ const collectionTitles2 = [collect5, collect6];
 const itemDetailButtonsList = [video, reviews, privacyPolicy, returnpolity, supportPolicyl];
 
 // ---------------------------------  Profile Account ---------------------------------
-const profileButtonsList = [account, orders, wishlist, messagse];
-const profileButtonsIcon = [icAccount,icOrders,icWishlist,icMessagse];
+const profileButtonsList = [account ,resetPassword ,address ,orders ,messagse ];
+const profileButtonsIcon = [icAccount,icPassword,icAddress,icOrders,icMessage];
 
 //Payment
 const paymentMethodsImg = [ imgPromptpay, imgVisa , imgCash];

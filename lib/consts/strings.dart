@@ -66,7 +66,9 @@ const video = "Video",
 
 const logout = "Log Out";
 const wishlist = "Favorite",
-    account = "Account",
+    account = "Edit Account",
+    resetPassword = "Password",
+    address = "Address",
     orders = "Status your order",
     messagse = "Messages",
     oldpass = "Old password",
