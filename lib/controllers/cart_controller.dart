@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/news_controller.dart';
 import 'package:get/get.dart';
+import 'dart:math';
 
 class CartController extends GetxController {
   var totalP = 0.obs;
@@ -35,8 +36,9 @@ class CartController extends GetxController {
   placeMyOrder({required orderPaymentMethod,required totalAmount}) async {
     placingOrder(true);
     await getProductDetails();
+    String orderCode = generateRandomOrderCode(8);
     await firestore.collection(ordersCollection).doc().set({
-      'order_code': "233981237",
+      'order_code': orderCode,
       'order_date': FieldValue.serverTimestamp(),
       'order_by': currentUser!.uid,
       'order_by_name': Get.find<NewsController>().username,
@@ -81,4 +83,12 @@ class CartController extends GetxController {
       firestore.collection(cartCollection).doc(productSnapshot[i].id).delete();
     }
   }
+}
+
+String generateRandomOrderCode(int length) {
+  final Random _random = Random();
+  const String _availableChars = '0123456789';
+  final String _randomString = List.generate(length, (_) => _availableChars[_random.nextInt(_availableChars.length)]).join();
+  
+  return _randomString;
 }
