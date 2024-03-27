@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/news_screen/component/search_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
@@ -29,14 +28,14 @@ class SearchScreenPage extends StatelessWidget {
               controller: controller.searchController,
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: bgGreylight),
+                  borderSide: const BorderSide(color: bgGreylight),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: fontGrey),
+                  borderSide: const BorderSide(color: fontGrey),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                suffixIcon: Icon(Icons.search).onTap(() {
+                suffixIcon: const Icon(Icons.search).onTap(() {
                   final searchQuery = controller.searchController.text;
                   if (searchQuery.isNotEmpty) {
                     controller.addToSearchHistory(searchQuery);
@@ -52,11 +51,11 @@ class SearchScreenPage extends StatelessWidget {
           ),
           Obx(() {
             if (controller.searchInProgress.isTrue) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             } else if (controller.searchHistory.isEmpty) {
               return controller.searchPerformed.isTrue
-                  ? Center(child: Text('No results found'))
-                  : SizedBox.shrink();
+                  ? const Center(child: Text('No results found'))
+                  : const SizedBox.shrink();
             } else {
               return Expanded(
                 child: ListView.builder(
@@ -64,14 +63,14 @@ class SearchScreenPage extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return ListTile(
                       title: Text(controller.searchHistory[index]),
-                      leading: Icon(Icons.history),
+                      leading: const Icon(Icons.history),
                       onTap: () {
                         Get.to(() => ItemDetails(
                               title: controller.searchHistory[index],
                             ));
                       },
                       trailing: IconButton(
-                        icon: Icon(Icons.clear),
+                        icon: const Icon(Icons.clear),
                         onPressed: () {
                           controller.searchHistory.removeAt(index);
                         },

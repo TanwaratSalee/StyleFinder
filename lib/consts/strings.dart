@@ -9,11 +9,13 @@ const login = "Log In";
 const signup = "Sign up";
 const createNewAccount = "Don’t have an account? ";
 const loginWith = "Log in with";
-const username = "Username";
+const fullname = "Fullname";
 const privacyPolicy = "Privacy Policy";
 const termAndCond = "Term And Conditions";
 const successfully = "Successfully";
 const loggedout = "Logged out successfully";
+const height = "Height";
+const weight = "Weight";
 
 const month = "Month";
 const day = "Day";

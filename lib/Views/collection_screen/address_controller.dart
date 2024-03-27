@@ -1,9 +1,8 @@
-import 'package:flutter_finalproject/Views/cart_screen/payment_method.dart';
+// ignore_for_file: avoid_print
+
 import 'package:flutter_finalproject/Views/widgets_common/custom_textfield.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
-import 'package:flutter_finalproject/controllers/cart_controller.dart';
-import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirebaseService {
@@ -139,11 +138,11 @@ void saveAddressToFirestore() {
     customTextField(label: "State", isPass: false, readOnly: false, controller: _stateController),
     customTextField(label: "Postal Code", isPass: false, readOnly: false, controller: _postalCodeController),
     customTextField(label: "Phone", isPass: false, readOnly: false, controller: _phoneController),
-    SizedBox(height: 20),
+    const SizedBox(height: 20),
     _currentAddress.isNotEmpty
         ? Container(
-            padding: EdgeInsets.all(10),
-            margin: EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.all(10),
+            margin: const EdgeInsets.symmetric(vertical: 10),
             decoration: BoxDecoration(
               color: Colors.grey[200],
               border: Border.all(color: Colors.grey[400]!),
@@ -153,13 +152,13 @@ void saveAddressToFirestore() {
                   color: Colors.grey.withOpacity(0.5),
                   spreadRadius: 2,
                   blurRadius: 7,
-                  offset: Offset(0, 3),
+                  offset: const Offset(0, 3),
                 ),
               ],
             ),
             child: Text(
               'Current Address : $_currentAddress',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           )
         : Container(),

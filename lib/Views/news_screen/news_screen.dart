@@ -1,11 +1,10 @@
-// ignore_for_file: unused_local_variable
+// ignore_for_file: unused_local_variable, sort_child_properties_last
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
-import 'package:flutter_finalproject/Views/news_screen/component/search_screen.dart';
 import 'package:flutter_finalproject/Views/search_screen/search_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/home_buttons.dart';
 import 'package:flutter_finalproject/consts/colors.dart';
@@ -42,7 +41,7 @@ class NewsScreen extends StatelessWidget {
                   barrierLabel: "Barrier",
                   barrierDismissible: true,
                   barrierColor: Colors.black.withOpacity(0.5),
-                  transitionDuration: Duration(milliseconds: 300),
+                  transitionDuration: const Duration(milliseconds: 300),
                   context: context,
                   pageBuilder: (_, __, ___) {
                     return Align(
@@ -52,7 +51,7 @@ class NewsScreen extends StatelessWidget {
                         height: MediaQuery.of(context).size.height *
                             0.6, 
                         width: MediaQuery.of(context).size.width,
-                        child: SearchScreenPage(), 
+                        child: const SearchScreenPage(), 
                         decoration: const BoxDecoration(
                           color: whiteColor,
                           borderRadius: BorderRadius.only(
@@ -66,7 +65,7 @@ class NewsScreen extends StatelessWidget {
                   },
                   transitionBuilder: (context, anim1, anim2, child) {
                     return SlideTransition(
-                      position: Tween(begin: Offset(0, -1), end: Offset(0, 0))
+                      position: Tween(begin: const Offset(0, -1), end: const Offset(0, 0))
                           .animate(anim1),
                       child: child,
                     );

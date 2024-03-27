@@ -1,7 +1,11 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_finalproject/Views/store_screen/match_detail_screen.dart';
+import 'package:flutter_finalproject/Views/store_screen/reviews_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
+
 
 class StoreScreen extends StatelessWidget {
   const StoreScreen({super.key});
@@ -23,9 +27,9 @@ class StoreScreen extends StatelessWidget {
         child: Column(
           children: <Widget>[
             _buildLogoAndRatingSection(context),
-            // _buildReviewHighlights(),
+             _buildReviewHighlights(),
              _buildProductMatchTabs(context), 
-             _buildCategoryTabs(context),
+            
           ],
         ),
       ),
@@ -37,13 +41,13 @@ class StoreScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 6.0),
       child: Column(
         children: <Widget>[
-          _buildRatingSection(),
+          _buildRatingSection( context),
         ],
       ),
     );
   }
 
-  Widget _buildRatingSection() {
+  Widget _buildRatingSection(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 1.0),
       child: Row(
@@ -74,9 +78,14 @@ class StoreScreen extends StatelessWidget {
                     ),
                     Spacer(),
                     TextButton(
-                      onPressed: () {},
-                      child: const Text('All Reviews >>>'),
-                    ),
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ReviewScreen()),
+    );
+  },
+  child: const Text('All Reviews >>>'),
+),
                   ],
                 ),
               ],
@@ -87,60 +96,111 @@ class StoreScreen extends StatelessWidget {
     );
   }
 
-  // Widget _buildReviewHighlights() {
-  //   return Container(
-  //     height: 120,
-  //     child: ListView.builder(
-  //       scrollDirection: Axis.horizontal,
-  //       itemCount: 3,
-  //       itemBuilder: (context, index) {
-  //         return _buildReviewCard();
-  //       },
-  //     ),
-  //   );
-  // }
+  Widget _buildReviewHighlights() {
+    return Container(
+      height: 120,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: 3,
+        itemBuilder: (context, index) {
+          return _buildReviewCard();
+        },
+      ),
+    );
+  }
 
-  // Widget _buildReviewCard() {
-  //   return Container(
-  //     width: 200,
-  //     margin: EdgeInsets.all(5.0),
-  //     padding: EdgeInsets.all(10.0),
-  //     decoration: BoxDecoration(
-  //       color: whiteColor,
-  //       borderRadius: BorderRadius.circular(8),
-  //       boxShadow: [
-  //         BoxShadow(
-  //           color: fontGrey,
-  //           blurRadius: 4,
-  //           offset: Offset(0, 2),
-  //         ),
-  //       ],
-  //     ),
-  //     child: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         Text('Reviewer Name',
-  //             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-  //         Row(
-  //           children: List.generate(5, (index) {
-  //             return Icon(
-  //               index < 4 ? Icons.star : Icons.star_border,
-  //               color: Colors.amber,
-  //               size: 20,
-  //             );
-  //           }),
-  //         ),
-  //         Text(
-  //           'The review text goes here...',
-  //           style: TextStyle(fontSize: 14),
-  //           maxLines: 2,
-  //           overflow: TextOverflow.ellipsis,
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
+  Widget _buildReviewCard() {
+    return Container(
+      width: 200,
+      margin: EdgeInsets.all(5.0),
+      padding: EdgeInsets.all(10.0),
+      decoration: BoxDecoration(
+        color: whiteColor,
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+            color: fontGrey,
+            blurRadius: 4,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Reviewer Name',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          Row(
+            children: List.generate(5, (index) {
+              return Icon(
+                index < 4 ? Icons.star : Icons.star_border,
+                color: Colors.amber,
+                size: 20,
+              );
+            }),
+          ),
+          Text(
+            'The review text goes here...',
+            style: TextStyle(fontSize: 14),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
+    );
+  }
+Widget _buildProductMatchTabs(BuildContext context) {
+    return  DefaultTabController(
+      length: 2, // มีแท็บทั้งหมด 2 แท็บ
+      child: Column(
+        children: <Widget>[
+          TabBar(
+            tabs: [
+              Tab(text: 'Product'),
+              Tab(text: 'Match'),
+            ],
+          ),
+          Container(
+            height: MediaQuery.of(context).size.height * 0.9,
+            child: TabBarView(
+              children: [
+               _buildProductTab(context),
+               _buildMatchTab(context),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  Widget _buildProductTab(BuildContext context) {
+  return Column(
+    children: <Widget>[
+      Padding(
+        padding: const EdgeInsets.all(5),
+        child: _buildCategoryTabs(context),
+      ),
+      Expanded(
+        child: Container(),
+      ),
+    ],
+  );
+}
 
+Widget _buildMatchTab(BuildContext context) {
+  
+  return  Column(
+    children: <Widget>[
+      Padding(
+        padding: const EdgeInsets.all(5),
+        child: _buildCategoryMath(context),
+      ),
+      Expanded(
+        child: Container(),
+      ),
+    ],
+  );
+}
   Widget _buildCategoryTabs(BuildContext context) {
     return DefaultTabController(
       length: 5,
@@ -175,16 +235,54 @@ class StoreScreen extends StatelessWidget {
   }
 
   
-
+Widget _buildCategoryMath(BuildContext context) {
+    return DefaultTabController(
+      length: 5,
+      child: Column(
+        children: <Widget>[
+          const TabBar(
+            isScrollable: true,
+            indicatorColor: primaryApp,
+            tabs: [
+              Tab(text: 'All'),
+              Tab(text: 'Outer'),
+              Tab(text: 'Dress'),
+              Tab(text: 'Blouse/Shirt'),
+              Tab(text: 'T-Shirt'),
+            ],
+          ),
+          Container(
+            height: MediaQuery.of(context).size.height * 0.9,
+            child: TabBarView(
+              children: [
+                _buildProductMathGrids('All'),
+                _buildProductMathGrids('Outer'),
+               _buildProductMathGrids('Dress'),
+               _buildProductMathGrids('Blouse/Shirt'),
+                _buildProductMathGrids('T-Shirt'),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
   Widget _buildProductGrid(String category) {
     return GridView.builder(
       padding: const EdgeInsets.all(8.0),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: 1 / 1.5,
+        childAspectRatio: 1 / 2,
       ),
       itemBuilder: (BuildContext context, int index) {
-        return Card(
+       return GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MatchDetailScreen()), // Ensure you have a class named ItemMatching
+          );
+        },
+        child:  Card(
           clipBehavior: Clip.antiAlias,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -213,61 +311,111 @@ class StoreScreen extends StatelessWidget {
               ),
             ],
           ),
+        ),
         );
       },
-      itemCount: 10,
+      itemCount: 50,
     );
   }
+Widget _buildProductMathGrids(String category) {
+  return GridView.builder(
+    padding: EdgeInsets.all(2),
+    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: 2,
+      childAspectRatio: 1 / 2,
+    ),
+    itemBuilder: (BuildContext context, int index) {
+      
+      String productName1 = "Product $index A";
+      double price1 = 100.0; 
+      String productName2 = "Product $index B";
+      double price2 = 150.0; 
+      double totalPrice = price1 + price2;
+ return GestureDetector(
+        onTap: () {
+          // Add navigation to ItemMatching page here
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MatchDetailScreen()), // Ensure you have a class named ItemMatching
+          );
+        },
+        child: Card(
+        clipBehavior: Clip.antiAlias,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              children: [
+                
+                Column(
+                  children: [
+                    Image.asset(
+                      card1,
+                      width: 80,
+                      height: 80,
+                    ),
+                    Image.asset(
+                      card2,
+                      width: 80,
+                      height: 80,
+                    ),
+                  ],
+                ),
+                
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(height: 2,),
+                        Text(
+                          productName1, 
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          'Price: \$${price1.toString()}', 
+                          style: TextStyle(
+                            color: Colors.grey,
+                          ),
+                        ),
+                        SizedBox(height: 20,),
+                        Text(
+                          productName2, 
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          'Price: \$${price2.toString()}', 
+                          style: TextStyle(
+                            color: Colors.grey,
+                          ),
+                        ),
+                       
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 8),
+            //   child: Text(
+            //     'Total Price: \$${totalPrice.toString()}', 
+            //     style: TextStyle(
+            //       color: Colors.black,
+            //       fontWeight: FontWeight.bold,
+            //     ),
+            //   ),
+            // ),
+          ],
+        ),
+      ),);
+    },
+    itemCount: 50,
+  );
 }
-
-Widget _buildProductMatchTabs(BuildContext context) {
-    return const DefaultTabController(
-      length: 2, // มีแท็บทั้งหมด 2 แท็บ
-      child: Column(
-        children: <Widget>[
-          TabBar(
-            tabs: [
-              Tab(text: 'Product'),
-              Tab(text: 'Match'),
-            ],
-          ),
-          
-        ],
-      ),
-    );
-  }
-
-
-Widget _buildMatchView() {
-  // ตัวอย่าง: สามารถเป็น ListView, GridView หรือโครงสร้างอื่นที่แสดงการจับคู่
-  return DefaultTabController(
-      length: 5,
-      child: Column(
-        children: <Widget>[
-          const TabBar(
-            isScrollable: true,
-            indicatorColor: primaryApp,
-            tabs: [
-              Tab(text: 'All'),
-              Tab(text: 'Outer'),
-              Tab(text: 'Dress'),
-              Tab(text: 'Blouse/Shirt'),
-              Tab(text: 'T-Shirt'),
-            ],
-          ),
-           Container(
-          //   height: MediaQuery.of(context).size.height * 0.9,
-             child: TabBarView(
-               children: [
-                // Center(child: Text('Content for All')),
-                // Center(child: Text('Content for Outer')),
-                // Center(child: Text('Content for Dress')),
-                // Center(child: Text('Content for Blouse/Shirt')),
-                // Center(child: Text('Content for T-Shirt')),
-               ],
-             ),
-           ),
-        ],
-      ),
-    );
 }

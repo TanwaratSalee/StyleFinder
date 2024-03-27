@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/cart_screen/qr_screen.dart';
 import 'package:flutter_finalproject/Views/cart_screen/visa_screen.dart';

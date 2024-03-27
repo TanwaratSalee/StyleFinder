@@ -1,17 +1,11 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_finalproject/Views/auth_screen/login_screen.dart';
-import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
-import 'package:flutter_finalproject/Views/chat_screen/messaging_screen.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
-import 'package:flutter_finalproject/Views/orders_screen/orders_screen.dart';
-import 'package:flutter_finalproject/Views/profile_screen/component/detail_card.dart';
-import 'package:flutter_finalproject/Views/profile_screen/edit_profile_screen.dart';
 import 'package:flutter_finalproject/Views/profile_screen/menu_setting_screen.dart';
-import 'package:flutter_finalproject/Views/search_screen/search_screen.dart';
-import 'package:flutter_finalproject/Views/wishlist_screen/wishlist_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
-import 'package:flutter_finalproject/consts/lists.dart';
 import 'package:flutter_finalproject/controllers/profile_controller.dart';
 import 'package:flutter_finalproject/services/firestore_services.dart';
 import 'package:get/get.dart';
@@ -27,7 +21,7 @@ class ProfileScreen extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: whiteColor,
           automaticallyImplyLeading: false,
-          title: Text(
+          title: const Text(
             'Profile',
             textAlign: TextAlign
                 .center, // This centers the title in the space available.
@@ -40,12 +34,12 @@ class ProfileScreen extends StatelessWidget {
           actions: <Widget>[
             // Use IconButton for actions items on the AppBar
             IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.menu, // Icon for the menu (3 lines)
                 color: fontBlack, // Specify the icon color if needed
               ),
               onPressed: () {
-                Get.to(() => MenuSettingScreen());
+                Get.to(() => const MenuSettingScreen());
               },
             ),
           ],
@@ -69,8 +63,8 @@ class ProfileScreen extends StatelessWidget {
                 return SafeArea(
                   child: Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8),
+                      const Padding(
+                        padding: EdgeInsets.all(8),
                         // child: const Align(
                         //   alignment: Alignment.topRight,
                         //   child: Icon(Icons.edit, color: fontBlack),
@@ -140,7 +134,7 @@ class ProfileScreen extends StatelessWidget {
                             } else {
                               var countData = snapshot.data;
 
-                              return Row(
+                              return const Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 // children: [

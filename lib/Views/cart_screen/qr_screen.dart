@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 
 class QRScreen extends StatelessWidget {
