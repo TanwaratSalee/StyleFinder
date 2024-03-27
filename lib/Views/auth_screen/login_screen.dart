@@ -1,16 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/auth_screen/signup_screen.dart';
 import 'package:flutter_finalproject/Views/home_screen/navigationBar.dart';
 import 'package:flutter_finalproject/Views/widgets_common/custom_textfield.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
-import 'package:flutter_finalproject/consts/colors.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
-import 'package:flutter_finalproject/consts/images.dart';
 import 'package:flutter_finalproject/consts/lists.dart';
-import 'package:flutter_finalproject/consts/strings.dart';
 import 'package:flutter_finalproject/controllers/auth_controller.dart';
 import 'package:get/get.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -185,7 +180,7 @@ class LoginScreen extends StatelessWidget {
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                              builder: (context) => const SignupScreen()),
+                              builder: (context) => const AccountCreationScreen()),
                         );
                       },
                     ),

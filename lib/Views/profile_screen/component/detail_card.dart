@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/consts/colors.dart';
-import 'package:flutter_finalproject/consts/styles.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 Widget detailsCard({width,String? count, String? title}) {

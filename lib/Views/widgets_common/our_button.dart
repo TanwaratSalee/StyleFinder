@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 Widget ourButton({VoidCallback? onPress, Color? color, Color? textColor, String? title}) {
   return ElevatedButton(

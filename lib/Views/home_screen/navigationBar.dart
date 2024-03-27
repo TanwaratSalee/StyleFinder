@@ -1,9 +1,9 @@
+// ignore_for_file: unused_local_variable, deprecated_member_use
+
 import 'package:flutter/material.dart';
-import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
 import 'package:flutter_finalproject/Views/match_screen/match_screen.dart';
 import 'package:flutter_finalproject/Views/news_screen/news_screen.dart';
 import 'package:flutter_finalproject/Views/profile_screen/profile_screen.dart';
-import 'package:flutter_finalproject/Views/search_screen/search_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/exit_dialog.dart';
 import 'package:flutter_finalproject/consts/colors.dart';
 import 'package:flutter_finalproject/consts/images.dart';

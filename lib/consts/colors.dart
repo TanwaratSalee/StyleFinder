@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const Color thinPrimaryApp = Color.fromARGB(255, 191, 219, 219);
+const Color thinPrimaryApp = Color.fromARGB(255, 218, 255, 255);
 const Color primaryApp = Color. fromRGBO(53, 194, 193, 1);
 const Color bgGreylight = Color.fromRGBO(240, 244, 248, 1);
 const Color fontLightGrey = Color.fromRGBO(232, 230, 230, 1);

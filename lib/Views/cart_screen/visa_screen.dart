@@ -1,3 +1,5 @@
+// ignore_for_file: use_key_in_widget_constructors, library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -13,7 +15,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: VisaCardScreen(),
+      home: const VisaCardScreen(),
     );
   }
 }
@@ -69,10 +71,10 @@ class _VisaCardScreenState extends State<VisaCardScreen> {
         ),
       ),
       body: ListView(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         children: <Widget>[
           _buildCardDetail(),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           _buildTextField(
             label: 'Name',
             onChanged: (newName) {
@@ -81,19 +83,19 @@ class _VisaCardScreenState extends State<VisaCardScreen> {
               });
             },
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           _buildTextField(label: 'Card number'),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Row(
             children: <Widget>[
               Expanded(child: _buildTextField(label: 'Expiry date')),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Expanded(child: _buildTextField(label: 'VCC')),
             ],
           ),
-          SizedBox(height: 24),
+          const SizedBox(height: 24),
           ElevatedButton(
-            child: Text('Confirm'),
+            child: const Text('Confirm'),
             onPressed: () {},
           ),
         ],
@@ -106,7 +108,7 @@ class _VisaCardScreenState extends State<VisaCardScreen> {
       elevation: 4,
       child: Container(
         height: 200,
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [Colors.purple[300]!, Colors.purple[700]!],
@@ -118,13 +120,13 @@ class _VisaCardScreenState extends State<VisaCardScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text('VISA',
+            const Text('VISA',
                 style: TextStyle(
                     color: Colors.white, fontSize: 24, fontFamily: 'Bold')),
             Text(cardNumber,
-                style: TextStyle(color: Colors.white, fontSize: 21)),
+                style: const TextStyle(color: Colors.white, fontSize: 21)),
             Text(cardHolderName,
-                style: TextStyle(
+                style: const TextStyle(
                     color: Colors.white, fontSize: 18, fontFamily: 'Regular')),
           ],
         ),
@@ -135,7 +137,7 @@ class _VisaCardScreenState extends State<VisaCardScreen> {
   Widget _buildTextField({required String label, Function(String)? onChanged}) {
     return TextField(
       decoration: InputDecoration(
-        border: OutlineInputBorder(),
+        border: const OutlineInputBorder(),
         labelText: label,
       ),
       onChanged: onChanged,

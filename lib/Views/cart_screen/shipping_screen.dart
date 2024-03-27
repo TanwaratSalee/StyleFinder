@@ -1,5 +1,5 @@
 
-// ignore_for_file: file_names
+// ignore_for_file: file_names, use_rethrow_when_possible, library_private_types_in_public_api, avoid_print
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/Views/cart_screen/payment_method.dart';
@@ -91,7 +91,7 @@ class _ShippingDetailsState extends State<ShippingDetails> {
         child: Column(
           children: [
                 Text(_currentAddress ?? 'Loading...',
-      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
     ),
             customTextField(label: "Address", isPass: false, readOnly: false, /*title: "Address",*/ controller: controller.addressController),
             customTextField(label: "City", isPass: false, readOnly: false, /*title: "City",*/ controller: controller.cityController),

@@ -5,7 +5,6 @@ import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 
 class AuthController extends GetxController {
-
   var isloading = false.obs;
 
   //textcontrollers
@@ -27,12 +26,12 @@ class AuthController extends GetxController {
 
   //signup method
 
-  Future<UserCredential?> signupMethod(
-      { email, password, context}) async {
+  Future<UserCredential?> signupMethod({email, password, context}) async {
     UserCredential? userCredential;
 
     try {
-      userCredential = await auth.createUserWithEmailAndPassword(email: email, password: password);
+      userCredential = await auth.createUserWithEmailAndPassword(
+          email: email, password: password);
     } on FirebaseAuthException catch (e) {
       VxToast.show(context, msg: e.toString());
     }
@@ -40,27 +39,65 @@ class AuthController extends GetxController {
   }
 
   // Storing data method
-storeUserData({required String name, required String email, required String password}) async {
-  try {
-    DocumentReference store =
-        firestore.collection(usersCollection).doc(currentUser!.uid);
-    await store.set({
-      'name': name, 'email': email, 'password': password, 'imageUrl': '',
-      'id': currentUser?.uid,
-      // 'day': day, 'month': month, 'year': year, 
-      'cart_count' : "0",
-      'wishlist_count': "0",
-      'order_count' : "0"
-    });
-  } catch (e) {
-    // Handle errors here, e.g., unable to store data
+//   Future<void> storeUserData({required String name,required String email,required String password,required String birthday,
+// }) async {
+//   try {
+//     DocumentReference store = firestore.collection(usersCollection).doc(currentUser!.uid);
+//     await store.set({
+//       'name': name,
+//       'email': email,
+//       'password': password,
+//       'imageUrl': '',
+//       'birthday': birthday,
+//       'id': currentUser?.uid,
+//       'cart_count': "0",
+//       'wishlist_count': "0",
+//       'order_count': "0"
+//     });
+//   } catch (e) {
+
+// }
+// }
+
+  storeUserData(
+      {required String name,
+      required String email,
+      required String password,
+      required String birthday,
+      required String sex,
+      required String uHeight,
+      required String uWeigh,
+      required String skin,
+      }) async {
+    print("กำลังเก็บเพศเป็น: $sex");
+    try {
+      DocumentReference store =
+          firestore.collection(usersCollection).doc(currentUser!.uid);
+      await store.set({
+        'name': name,
+        'email': email,
+        'password': password,
+        'imageUrl': '',
+        'birthday': birthday,
+        'sex': sex,
+        'height': height,
+        'weight': weight,
+        'skin': skin,
+        'id': currentUser?.uid,
+        'cart_count': "0",
+        'wishlist_count': "0",
+        'order_count': "0"
+      });
+    } catch (e) {
+      // Handle errors here, e.g., unable to store data
+    }
   }
-}
+
   //Signout method
   signoutMethod(context) async {
     try {
       await FirebaseAuth.instance.signOut();
-        Get.offAll(() => const LoginScreen());
+      Get.offAll(() => const LoginScreen());
     } catch (e) {
       VxToast.show(context, msg: e.toString());
     }

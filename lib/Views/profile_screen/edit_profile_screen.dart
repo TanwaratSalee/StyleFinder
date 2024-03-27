@@ -8,8 +8,6 @@ import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/profile_controller.dart';
 import 'package:get/get.dart';
 
-import '../collection_screen/address_controller.dart';
-
 class EditProfileScreen extends StatelessWidget {
   final dynamic data;
 
@@ -47,23 +45,23 @@ class EditProfileScreen extends StatelessWidget {
               }
 
               //if old password matches data
-              if (data['password'] == controller.oldpassController.text) {
-                await controller.changeAuthPassword(
-                    email: data['email'],
-                    password: controller.oldpassController.text,
-                    newpassword: controller.newpassController.text);
+              // if (data['password'] == controller.oldpassController.text) {
+              //   await controller.changeAuthPassword(
+              //       email: data['email'],
+              //       password: controller.oldpassController.text,
+              //       newpassword: controller.newpassController.text);
 
-                await controller.updateProfile(
-                    imgUrl: controller.profileImageLink,
-                    name: controller.nameController.text,
-                    password: controller.newpassController.text);
-                VxToast.show(context, msg: "Updates");
-              } else {
-                VxToast.show(context, msg: "Wrong old password");
-                controller.isloading(false);
-              }
+              //   await controller.updateProfile(
+              //       imgUrl: controller.profileImageLink,
+              //       name: controller.nameController.text,
+              //       password: controller.newpassController.text);
+              //   VxToast.show(context, msg: "Updates");
+              // } else {
+              //   VxToast.show(context, msg: "Wrong old password");
+              //   controller.isloading(false);
+              // }
             },
-            child: "Save".text.color(primaryApp).make(),
+            child: "Save".text.color(primaryApp).fontFamily(regular).size(18).make(),
           ),
         ],
       ),
@@ -104,28 +102,13 @@ class EditProfileScreen extends StatelessWidget {
                     },
                     textColor: primaryApp,
                     title: "Edit Picture")),
-            SizedBox(
-                width: context.screenWidth - 260,
-                height: context.screenWidth - 360,
-                child: ourButton(
-                    color: whiteColor,
-                    onPress: () {
-          // เมื่อกดปุ่ม ให้ใช้ Navigator เพื่อเปลี่ยนหน้าไปยังหน้า address controller
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => AddressForm()),
-          );
-        },
-
-                    textColor: primaryApp,
-                    title: "Edit Address")),
-
+           
             10.heightBox,
             // const Divider(),
             20.heightBox,
             customTextField(
               controller: controller.nameController,
-              label: username,
+              label: fullname,
               isPass: false,
               readOnly: false,
             ),
@@ -134,17 +117,17 @@ class EditProfileScreen extends StatelessWidget {
                 label: email,
                 isPass: false,
                 readOnly: true),
-            customTextField(
-                controller: controller.oldpassController,
-                label: oldpass,
-                isPass: true,
-                readOnly: false),
-            customTextField(
-                controller: controller.newpassController,
-                label: newpass,
-                isPass: true,
-                readOnly: false),
-            30.heightBox,
+            // customTextField(
+            //     controller: controller.oldpassController,
+            //     label: oldpass,
+            //     isPass: true,
+            //     readOnly: false),
+            // customTextField(
+            //     controller: controller.newpassController,
+            //     label: newpass,
+            //     isPass: true,
+            //     readOnly: false),
+            // 30.heightBox,
 
             // controller.isloading.value
             //     ? const CircularProgressIndicator(
