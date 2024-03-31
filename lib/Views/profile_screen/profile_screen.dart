@@ -1,11 +1,11 @@
 // ignore_for_file: unused_local_variable
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_finalproject/Views/auth_screen/login_screen.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/profile_screen/menu_setting_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
+import 'package:flutter_finalproject/controllers/auth_controller.dart';
 import 'package:flutter_finalproject/controllers/profile_controller.dart';
 import 'package:flutter_finalproject/services/firestore_services.dart';
 import 'package:get/get.dart';
@@ -24,7 +24,7 @@ class ProfileScreen extends StatelessWidget {
           title: const Text(
             'Profile',
             textAlign: TextAlign
-                .center, // This centers the title in the space available.
+                .center, 
             style: TextStyle(
               color: fontBlack,
               fontSize: 26,
@@ -32,18 +32,19 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
           actions: <Widget>[
-            // Use IconButton for actions items on the AppBar
+            
             IconButton(
               icon: const Icon(
-                Icons.menu, // Icon for the menu (3 lines)
-                color: fontBlack, // Specify the icon color if needed
+                Icons.menu, 
+                color: fontBlack, 
               ),
               onPressed: () {
                 Get.to(() => const MenuSettingScreen());
               },
             ),
           ],
-          centerTitle: true, // This is the key property to make the title centered
+          centerTitle:
+              true, 
         ),
         backgroundColor: whiteColor,
         body: StreamBuilder(
@@ -51,7 +52,7 @@ class ProfileScreen extends StatelessWidget {
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                // ตรวจสอบว่ามีข้อมูลและลิสต์ docs ไม่ว่างเปล่า
+                
                 return const Center(
                   child: CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation(primaryApp),
@@ -156,7 +157,6 @@ class ProfileScreen extends StatelessWidget {
                           }),
 
                       //button section
-                      20.heightBox,
 
                       // ListView.separated(
                       //   shrinkWrap: true,
@@ -202,12 +202,17 @@ class ProfileScreen extends StatelessWidget {
                       // .box.color(primaryApp).make(),
                       20.heightBox,
 
-                      OutlinedButton(
-                          onPressed: () async {
-                            await FirebaseAuth.instance.signOut();
-                            Get.offAll(() => const LoginScreen());
-                          },
-                          child: logout.text.fontFamily(regular).black.make())
+                     OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                      side: const BorderSide(
+                      color: whiteColor)),
+                      onPressed: () async {
+                        await Get.put (AuthController()).signoutMethod(context);
+                        Get.offAll(() => LoginScreen);
+                      },
+                      child: loggedout.text.fontFamily(regular).color(primaryApp).make(),
+                     )
+
                     ],
                   ),
                 );

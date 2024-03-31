@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/cart_screen/qr_screen.dart';
 import 'package:flutter_finalproject/Views/cart_screen/visa_screen.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
+import 'package:flutter_finalproject/Views/home_screen/mainHome.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 import 'package:flutter_finalproject/consts/colors.dart';
 import 'package:flutter_finalproject/consts/lists.dart';
@@ -11,8 +12,6 @@ import 'package:flutter_finalproject/consts/styles.dart';
 import 'package:flutter_finalproject/controllers/cart_controller.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
-
-import '../home_screen/navigationBar.dart';
 
 class PaymentMethods extends StatelessWidget {
   const PaymentMethods({super.key});
@@ -47,7 +46,7 @@ class PaymentMethods extends StatelessWidget {
                       await controller.clearCart();
                       VxToast.show(context, msg: "Order placed successfully");
 
-                      Get.offAll(() => MainNavigationBar());
+                      Get.offAll(() => MainHome());
                     } else {
                       VxToast.show(context,
                           msg: "Selected payment method is not supported yet.");

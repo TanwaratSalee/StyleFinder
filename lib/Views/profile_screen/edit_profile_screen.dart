@@ -18,6 +18,8 @@ class EditProfileScreen extends StatelessWidget {
     var controller = Get.find<ProfileController>();
     controller.nameController.text = data['name'];
     controller.emailController.text = data['email'];
+    controller.heightController.text = data['height'];
+    controller.weightController.text = data['weight'];
 
     // controller.old Controller.text = data['pass'];
 
@@ -43,23 +45,6 @@ class EditProfileScreen extends StatelessWidget {
               } else {
                 controller.profileImageLink = data['imageUrl'];
               }
-
-              //if old password matches data
-              // if (data['password'] == controller.oldpassController.text) {
-              //   await controller.changeAuthPassword(
-              //       email: data['email'],
-              //       password: controller.oldpassController.text,
-              //       newpassword: controller.newpassController.text);
-
-              //   await controller.updateProfile(
-              //       imgUrl: controller.profileImageLink,
-              //       name: controller.nameController.text,
-              //       password: controller.newpassController.text);
-              //   VxToast.show(context, msg: "Updates");
-              // } else {
-              //   VxToast.show(context, msg: "Wrong old password");
-              //   controller.isloading(false);
-              // }
             },
             child: "Save".text.color(primaryApp).fontFamily(regular).size(18).make(),
           ),
@@ -117,6 +102,26 @@ class EditProfileScreen extends StatelessWidget {
                 label: email,
                 isPass: false,
                 readOnly: true),
+
+            customTextField(
+              controller: controller.heightController,
+              label: 'Height',
+              isPass: false,
+              readOnly: false,
+            ),    
+
+            customTextField(
+              controller: controller.heightController,
+              label: 'Height',
+              isPass: false,
+              readOnly: false,
+            ),
+
+            customTextField(
+                controller: controller.weightController,
+                label: 'Weight',
+                isPass: false,
+                readOnly: true),    
             // customTextField(
             //     controller: controller.oldpassController,
             //     label: oldpass,

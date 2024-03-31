@@ -76,7 +76,7 @@ class StoreScreen extends StatelessWidget {
                       '4.9/5.0',
                       style: TextStyle(fontSize: 14, fontFamily: regular),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     TextButton(
   onPressed: () {
     Navigator.push(
@@ -112,12 +112,12 @@ class StoreScreen extends StatelessWidget {
   Widget _buildReviewCard() {
     return Container(
       width: 200,
-      margin: EdgeInsets.all(5.0),
-      padding: EdgeInsets.all(10.0),
+      margin: const EdgeInsets.all(5.0),
+      padding: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
         color: whiteColor,
         borderRadius: BorderRadius.circular(8),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: fontGrey,
             blurRadius: 4,
@@ -128,7 +128,7 @@ class StoreScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Reviewer Name',
+          const Text('Reviewer Name',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           Row(
             children: List.generate(5, (index) {
@@ -139,7 +139,7 @@ class StoreScreen extends StatelessWidget {
               );
             }),
           ),
-          Text(
+          const Text(
             'The review text goes here...',
             style: TextStyle(fontSize: 14),
             maxLines: 2,
@@ -154,7 +154,7 @@ Widget _buildProductMatchTabs(BuildContext context) {
       length: 2, // มีแท็บทั้งหมด 2 แท็บ
       child: Column(
         children: <Widget>[
-          TabBar(
+          const TabBar(
             tabs: [
               Tab(text: 'Product'),
               Tab(text: 'Match'),
@@ -270,7 +270,7 @@ Widget _buildCategoryMath(BuildContext context) {
   Widget _buildProductGrid(String category) {
     return GridView.builder(
       padding: const EdgeInsets.all(8.0),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         childAspectRatio: 1 / 2,
       ),
@@ -279,7 +279,7 @@ Widget _buildCategoryMath(BuildContext context) {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => MatchDetailScreen()), // Ensure you have a class named ItemMatching
+            MaterialPageRoute(builder: (context) => const MatchDetailScreen()), // Ensure you have a class named ItemMatching
           );
         },
         child:  Card(
@@ -319,8 +319,8 @@ Widget _buildCategoryMath(BuildContext context) {
   }
 Widget _buildProductMathGrids(String category) {
   return GridView.builder(
-    padding: EdgeInsets.all(2),
-    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+    padding: const EdgeInsets.all(2),
+    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: 2,
       childAspectRatio: 1 / 2,
     ),
@@ -336,7 +336,7 @@ Widget _buildProductMathGrids(String category) {
           // Add navigation to ItemMatching page here
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => MatchDetailScreen()), // Ensure you have a class named ItemMatching
+            MaterialPageRoute(builder: (context) => const MatchDetailScreen()), // Ensure you have a class named ItemMatching
           );
         },
         child: Card(
@@ -368,29 +368,29 @@ Widget _buildProductMathGrids(String category) {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        SizedBox(height: 2,),
+                        const SizedBox(height: 2,),
                         Text(
                           productName1, 
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
                           'Price: \$${price1.toString()}', 
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.grey,
                           ),
                         ),
-                        SizedBox(height: 20,),
+                        const SizedBox(height: 20,),
                         Text(
                           productName2, 
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
                           'Price: \$${price2.toString()}', 
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.grey,
                           ),
                         ),

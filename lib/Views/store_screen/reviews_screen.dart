@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: unnecessary_const
+
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 
@@ -27,7 +28,7 @@ class _ReviewScreenState extends State<ReviewScreen> with SingleTickerProviderSt
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Reviews',
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -39,10 +40,10 @@ class _ReviewScreenState extends State<ReviewScreen> with SingleTickerProviderSt
           onPressed: () => Get.back(),
         ),
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(50.0), // ปรับความสูงเพื่อรองรับ TabBar
+          preferredSize: const Size.fromHeight(50.0), // ปรับความสูงเพื่อรองรับ TabBar
           child: TabBar(
             controller: _tabController,
-            tabs: [
+            tabs: const [
               Tab(text: 'Shop'),
               Tab(text: 'Product'),
             ],
@@ -99,12 +100,12 @@ Widget _buildReviewHighlights() {
 Widget _buildReviewCard() {
     return Container(
       width: 200,
-      margin: EdgeInsets.all(5.0),
-      padding: EdgeInsets.all(10.0),
+      margin: const EdgeInsets.all(5.0),
+      padding: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
         color: whiteColor,
         borderRadius: BorderRadius.circular(8),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: fontGrey,
             blurRadius: 4,
@@ -115,8 +116,8 @@ Widget _buildReviewCard() {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Reviewer Name',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          const Text('Reviewer Name',
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           Row(
             children: List.generate(5, (index) {
               return Icon(
@@ -126,7 +127,7 @@ Widget _buildReviewCard() {
               );
             }),
           ),
-          Text(
+          const Text(
             'The review text goes here...',
             style: TextStyle(fontSize: 14),
             maxLines: 2,

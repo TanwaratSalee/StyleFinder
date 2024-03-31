@@ -21,6 +21,9 @@ class ProfileController extends GetxController {
   var nameController = TextEditingController();
   var emailController = TextEditingController();
 
+  var heightController = TextEditingController();
+  var weightController = TextEditingController();
+
   var oldpassController = TextEditingController();
   var newpassController = TextEditingController();
 
@@ -64,6 +67,7 @@ class ProfileController extends GetxController {
   //     print(error.toString());
   //   });
   // }
+
   Future<bool> changeAuthPassword(
       {required String oldPassword, required String newPassword}) async {
     final credential =
