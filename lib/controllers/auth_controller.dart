@@ -95,50 +95,54 @@ class AuthController extends GetxController {
   //     // Handle errors here, e.g., unable to store data
   //   }
   // }
+
   Future<void> saveUserData({
-  required String name,
-  required String email,
-  required String password,
-  required DateTime birthday,
-  required String sex,
-  required String uHeight,
-  required String uWeight,
-  required Color skin,
-}) async {
-  try {
-    final UserCredential currentUser =
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+    required String name,
+    required String email,
+    required String password,
+    required DateTime birthday,
+    required String sex,
+    required String uHeight,
+    required String uWeight,
+    required Color skin,
+  }) async {
+    try {
+      final UserCredential currentUser =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
-    // จัดรูปแบบวันที่เพื่อรวมชื่อวันในสัปดาห์
-    String formattedDateWithDay = DateFormat('EEEE, dd/MM/yyyy').format(birthday);
-    
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(currentUser.user!.uid)
-        .set({
-      'email': email,
-      'name': name,
-      'password': password,
-      'imageUrl': '',
-      'id': currentUser.user!.uid,
-      'birthday': formattedDateWithDay, // ใช้วันที่ที่จัดรูปแบบแล้ว
-      'sex': sex,
-      'height': uHeight,
-      'weight': uWeight,
-      'skinTone': skin.value,
-    });
+      // จัดรูปแบบวันที่เพื่อรวมชื่อวันในสัปดาห์
+      String formattedDateWithDay =
+          DateFormat('EEEE, dd/MM/yyyy').format(birthday);
 
-    Get.snackbar('Success', 'Login successful!');
-    Get.offAll(() => MainHome());
-  } catch (e) {
-    print("Failed to upload user data: $e");
-    Get.snackbar('Error', 'Failed to upload user data: $e');
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser.user!.uid)
+          .set({
+        'email': email,
+        'name': name,
+        // 'password': password,
+        'imageUrl': '',
+        'id': currentUser.user!.uid,
+        'birthday': formattedDateWithDay,
+        'sex': sex,
+        'height': uHeight,
+        'weight': uWeight,
+        'skinTone': skin.value,
+        'cart_count': "0",
+        'wishlist_count': "0",
+        'order_count': "0"
+      });
+
+      Get.snackbar('Success', 'Login successful!');
+      Get.offAll(() => MainHome());
+    } catch (e) {
+      print("Failed to upload user data: $e");
+      Get.snackbar('Error', 'Failed to upload user data: $e');
+    }
   }
-}
-
 
   //Signout method
   signoutMethod(context) async {

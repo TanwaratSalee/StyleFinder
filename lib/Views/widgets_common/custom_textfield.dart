@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_finalproject/Views/widgets_common/text_style.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 
 Widget customTextField({
@@ -8,6 +6,7 @@ Widget customTextField({
   TextEditingController? controller,
   bool isPass = false, 
   bool readOnly = false, 
+  VoidCallback? onTap,
 }) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,

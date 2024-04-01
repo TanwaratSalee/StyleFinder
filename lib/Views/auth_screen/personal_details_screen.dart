@@ -1,4 +1,4 @@
-// ignore_for_file: use_super_parameters, library_private_types_in_public_api
+// ignore_for_file: use_super_parameters, library_private_types_in_public_api, sort_child_properties_last
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_finalproject/Views/widgets_common/custom_textfield.dart';
@@ -95,10 +95,14 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            const Text(
-              'Sex',
-              style: TextStyle(
-                  fontSize: 16, color: Colors.black, fontFamily: regular),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: const Text('Gender')
+                  .text
+                  .size(14)
+                  .fontFamily(regular)
+                  .color(fontGreyDark)
+                  .make(),
             ),
             const SizedBox(height: 10),
             Row(
@@ -110,6 +114,19 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   .map((entry) {
                 int idx = entry.key;
                 String sex = entry.value;
+
+                // สร้าง Icon ตามเพศ
+                IconData iconData;
+                switch (sex) {
+                  case 'Man':
+                    iconData = Icons.male;
+                    break;
+                  case 'Woman':
+                    iconData = Icons.female;
+                    break;
+                  default:
+                    iconData = Icons.perm_identity;
+                }
 
                 return Flexible(
                   fit: FlexFit.tight,
@@ -124,15 +141,27 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                               });
                             }
                           : null,
-                      child: Text(
-                        sex,
-                        style: TextStyle(
-                          fontFamily: regular,
-                          fontSize: 16,
-                          color: isSelectable && selectedSex == sex
-                              ? primaryApp
-                              : Colors.grey,
-                        ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Icon(
+                            iconData,
+                            color: isSelectable && selectedSex == sex
+                                ? primaryApp 
+                                : greyColor, 
+                            size: 24.0,
+                          ),
+                          Text(
+                            sex,
+                            style: TextStyle(
+                              fontFamily: regular,
+                              fontSize: 16,
+                              color: isSelectable && selectedSex == sex
+                                  ? primaryApp
+                                  : greyColor,
+                            ),
+                          ),
+                        ],
                       ),
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
@@ -160,6 +189,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 );
               }).toList(),
             ),
+
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -232,8 +262,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
             ourButton(
               title: 'Done',
               onPress: () async {
-
-                print("Dated is: $selectedDate");
+                print("Selected is: $selectedDate");
 
                 print("Selected is: $selectedSex");
                 // print("Selected height is: ${heightController.text}");

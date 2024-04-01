@@ -304,7 +304,7 @@ Widget _buildCategoryMath(BuildContext context) {
                         )),
                     Text('Price',
                         style: TextStyle(
-                          color: Colors.grey,
+                          color:greyColor,
                         )),
                   ],
                 ),
@@ -378,7 +378,7 @@ Widget _buildProductMathGrids(String category) {
                         Text(
                           'Price: \$${price1.toString()}', 
                           style: const TextStyle(
-                            color: Colors.grey,
+                            color:greyColor,
                           ),
                         ),
                         const SizedBox(height: 20,),
@@ -391,7 +391,7 @@ Widget _buildProductMathGrids(String category) {
                         Text(
                           'Price: \$${price2.toString()}', 
                           style: const TextStyle(
-                            color: Colors.grey,
+                            color:greyColor,
                           ),
                         ),
                        

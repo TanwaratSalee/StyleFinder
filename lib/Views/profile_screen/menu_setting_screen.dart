@@ -37,8 +37,8 @@ class MenuSettingScreen extends StatelessWidget {
                 .center, // This centers the title in the space available.
             style: TextStyle(
               color: fontBlack,
-              fontSize: 26,
-              fontFamily: 'regular',
+              fontSize: 24,
+              fontFamily: medium,
             ),
           ),
         ),
@@ -164,6 +164,7 @@ class MenuSettingScreen extends StatelessWidget {
                                 const Text('Logout',
                                     style: TextStyle(
                                         fontFamily: regular,
+                                        fontSize: 16,
                                         color: fontGrey)).text
                                 .color(fontGrey)
                                 .fontFamily(regular)
