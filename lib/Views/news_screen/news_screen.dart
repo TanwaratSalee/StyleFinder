@@ -344,7 +344,7 @@ class NewsScreen extends StatelessWidget {
                       stream: FirestoreServices.allproducts(), 
                       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
                         if(!snapshot.hasData){
-                          return loadingIndcator();
+                          return loadingIndicator();
                         } else {
                           var allproductsdata = snapshot.data!.docs;
                           return GridView.builder(

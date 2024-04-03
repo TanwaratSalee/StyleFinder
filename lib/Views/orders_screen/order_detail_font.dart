@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_finalproject/consts/consts.dart';
 
 
 class OrderDetailFont extends StatelessWidget {
@@ -10,13 +11,7 @@ class OrderDetailFont extends StatelessWidget {
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: const Text(
-              'My Order',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
-            ),
+            title: "My Order".text.color(fontGreyDark).fontFamily(medium).size(24).make(),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {

@@ -27,7 +27,7 @@ class PaymentMethods extends StatelessWidget {
           height: 70,
           child: controller.placingOrder.value
               ? Center(
-                  child: loadingIndcator(),
+                  child: loadingIndicator(),
                 )
               : ourButton(
                   onPress: () async {

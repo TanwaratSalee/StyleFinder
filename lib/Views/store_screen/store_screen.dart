@@ -1,11 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_finalproject/Views/store_screen/match_detail_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/reviews_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
-
 
 class StoreScreen extends StatelessWidget {
   const StoreScreen({super.key});
@@ -27,9 +25,8 @@ class StoreScreen extends StatelessWidget {
         child: Column(
           children: <Widget>[
             _buildLogoAndRatingSection(context),
-             _buildReviewHighlights(),
-             _buildProductMatchTabs(context), 
-            
+            _buildReviewHighlights(),
+            _buildProductMatchTabs(context),
           ],
         ),
       ),
@@ -41,7 +38,7 @@ class StoreScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 6.0),
       child: Column(
         children: <Widget>[
-          _buildRatingSection( context),
+          _buildRatingSection(context),
         ],
       ),
     );
@@ -78,14 +75,15 @@ class StoreScreen extends StatelessWidget {
                     ),
                     const Spacer(),
                     TextButton(
-  onPressed: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => ReviewScreen()),
-    );
-  },
-  child: const Text('All Reviews >>>'),
-),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ReviewScreen()),
+                        );
+                      },
+                      child: const Text('All Reviews >>>'),
+                    ),
                   ],
                 ),
               ],
@@ -117,8 +115,8 @@ class StoreScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: whiteColor,
         borderRadius: BorderRadius.circular(8),
-        boxShadow: const [
-          BoxShadow(
+        boxShadow: [
+          const BoxShadow(
             color: fontGrey,
             blurRadius: 4,
             offset: Offset(0, 2),
@@ -149,9 +147,10 @@ class StoreScreen extends StatelessWidget {
       ),
     );
   }
-Widget _buildProductMatchTabs(BuildContext context) {
-    return  DefaultTabController(
-      length: 2, // มีแท็บทั้งหมด 2 แท็บ
+
+  Widget _buildProductMatchTabs(BuildContext context) {
+    return DefaultTabController(
+      length: 2, 
       child: Column(
         children: <Widget>[
           const TabBar(
@@ -164,8 +163,8 @@ Widget _buildProductMatchTabs(BuildContext context) {
             height: MediaQuery.of(context).size.height * 0.9,
             child: TabBarView(
               children: [
-               _buildProductTab(context),
-               _buildMatchTab(context),
+                _buildProductTab(context),
+                _buildMatchTab(context),
               ],
             ),
           ),
@@ -173,34 +172,35 @@ Widget _buildProductMatchTabs(BuildContext context) {
       ),
     );
   }
-  Widget _buildProductTab(BuildContext context) {
-  return Column(
-    children: <Widget>[
-      Padding(
-        padding: const EdgeInsets.all(5),
-        child: _buildCategoryTabs(context),
-      ),
-      Expanded(
-        child: Container(),
-      ),
-    ],
-  );
-}
 
-Widget _buildMatchTab(BuildContext context) {
-  
-  return  Column(
-    children: <Widget>[
-      Padding(
-        padding: const EdgeInsets.all(5),
-        child: _buildCategoryMath(context),
-      ),
-      Expanded(
-        child: Container(),
-      ),
-    ],
-  );
-}
+  Widget _buildProductTab(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(5),
+          child: _buildCategoryTabs(context),
+        ),
+        Expanded(
+          child: Container(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMatchTab(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(5),
+          child: _buildCategoryMath(context),
+        ),
+        Expanded(
+          child: Container(),
+        ),
+      ],
+    );
+  }
+
   Widget _buildCategoryTabs(BuildContext context) {
     return DefaultTabController(
       length: 5,
@@ -234,8 +234,7 @@ Widget _buildMatchTab(BuildContext context) {
     );
   }
 
-  
-Widget _buildCategoryMath(BuildContext context) {
+  Widget _buildCategoryMath(BuildContext context) {
     return DefaultTabController(
       length: 5,
       child: Column(
@@ -257,8 +256,8 @@ Widget _buildCategoryMath(BuildContext context) {
               children: [
                 _buildProductMathGrids('All'),
                 _buildProductMathGrids('Outer'),
-               _buildProductMathGrids('Dress'),
-               _buildProductMathGrids('Blouse/Shirt'),
+                _buildProductMathGrids('Dress'),
+                _buildProductMathGrids('Blouse/Shirt'),
                 _buildProductMathGrids('T-Shirt'),
               ],
             ),
@@ -267,155 +266,164 @@ Widget _buildCategoryMath(BuildContext context) {
       ),
     );
   }
+
   Widget _buildProductGrid(String category) {
     return GridView.builder(
       padding: const EdgeInsets.all(8.0),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: 1 / 2,
+        childAspectRatio: 1 / 1.1,
       ),
       itemBuilder: (BuildContext context, int index) {
-       return GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const MatchDetailScreen()), // Ensure you have a class named ItemMatching
-          );
-        },
-        child:  Card(
-          clipBehavior: Clip.antiAlias,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Image.asset(
-                card1,
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: 210,
-              ),
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text('Product Title',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        )),
-                    Text('Price',
-                        style: TextStyle(
-                          color:greyColor,
-                        )),
-                  ],
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      const MatchDetailScreen()), 
+            );
+          },
+          child: Card(
+            clipBehavior: Clip.antiAlias,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Image.asset(
+                  card1,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: 150,
                 ),
-              ),
-            ],
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text('Product Title',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          )),
+                      Text('Price',
+                          style: TextStyle(
+                            color: Colors.grey,
+                          )),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
         );
       },
       itemCount: 50,
     );
   }
-Widget _buildProductMathGrids(String category) {
-  return GridView.builder(
-    padding: const EdgeInsets.all(2),
-    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-      crossAxisCount: 2,
-      childAspectRatio: 1 / 2,
-    ),
-    itemBuilder: (BuildContext context, int index) {
-      
-      String productName1 = "Product $index A";
-      double price1 = 100.0; 
-      String productName2 = "Product $index B";
-      double price2 = 150.0; 
-      double totalPrice = price1 + price2;
- return GestureDetector(
-        onTap: () {
-          // Add navigation to ItemMatching page here
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const MatchDetailScreen()), // Ensure you have a class named ItemMatching
-          );
-        },
-        child: Card(
-        clipBehavior: Clip.antiAlias,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              children: [
-                
-                Column(
+
+  Widget _buildProductMathGrids(String category) {
+    return GridView.builder(
+      padding: const EdgeInsets.all(2),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 1 / 1,
+      ),
+      itemBuilder: (BuildContext context, int index) {
+        String productName1 = "Product $index A";
+        double price1 = 100.0;
+        String productName2 = "Product $index B";
+        double price2 = 150.0;
+        double totalPrice = price1 + price2;
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      const MatchDetailScreen()), 
+            );
+          },
+          child: Card(
+            clipBehavior: Clip.antiAlias,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
                   children: [
-                    Image.asset(
-                      card1,
-                      width: 80,
-                      height: 80,
+                    Column(
+                      children: [
+                        Image.asset(
+                          card1,
+                          width: 80,
+                          height: 80,
+                        ),
+                        Image.asset(
+                          card2,
+                          width: 80,
+                          height: 80,
+                        ),
+                      ],
                     ),
-                    Image.asset(
-                      card2,
-                      width: 80,
-                      height: 80,
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            const SizedBox(
+                              height: 2,
+                            ),
+                            Text(
+                              productName1,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              'Price: \$${price1.toString()}',
+                              style: const TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Text(
+                              productName2,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              'Price: \$${price2.toString()}',
+                              style: const TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
-                
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        const SizedBox(height: 2,),
-                        Text(
-                          productName1, 
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          'Price: \$${price1.toString()}', 
-                          style: const TextStyle(
-                            color:greyColor,
-                          ),
-                        ),
-                        const SizedBox(height: 20,),
-                        Text(
-                          productName2, 
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          'Price: \$${price2.toString()}', 
-                          style: const TextStyle(
-                            color:greyColor,
-                          ),
-                        ),
-                       
-                      ],
+                const SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Text(
+                    'Total Price: \$${totalPrice.toString()}',
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
               ],
             ),
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(horizontal: 8),
-            //   child: Text(
-            //     'Total Price: \$${totalPrice.toString()}', 
-            //     style: TextStyle(
-            //       color: Colors.black,
-            //       fontWeight: FontWeight.bold,
-            //     ),
-            //   ),
-            // ),
-          ],
-        ),
-      ),);
-    },
-    itemCount: 50,
-  );
-}
+          ),
+        );
+      },
+      itemCount: 50,
+    );
+  }
 }

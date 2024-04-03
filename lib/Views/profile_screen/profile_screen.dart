@@ -130,7 +130,7 @@ class ProfileScreen extends StatelessWidget {
                               (BuildContext context, AsyncSnapshot snapshot) {
                             if (!snapshot.hasData) {
                               return Center(
-                                child: loadingIndcator(),
+                                child: loadingIndicator(),
                               );
                             } else {
                               var countData = snapshot.data;

@@ -80,7 +80,7 @@ class _CollectionDetailsState extends State<CollectionDetails> {
                   AsyncSnapshot<QuerySnapshot> snapshots) {
                 if (!snapshots.hasData) {
                   return Expanded(
-                    child: loadingIndcator(),
+                    child: loadingIndicator(),
                   );
                 } else if (snapshots.data!.docs.isEmpty) {
                   return Expanded(

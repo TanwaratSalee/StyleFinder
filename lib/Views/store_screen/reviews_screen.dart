@@ -1,5 +1,5 @@
-// ignore_for_file: unnecessary_const
-
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 
@@ -8,18 +8,20 @@ class ReviewScreen extends StatefulWidget {
   _ReviewScreenState createState() => _ReviewScreenState();
 }
 
-class _ReviewScreenState extends State<ReviewScreen> with SingleTickerProviderStateMixin {
+class _ReviewScreenState extends State<ReviewScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this); // กำหนดจำนวน tabs และ vsync
+    _tabController =
+        TabController(length: 2, vsync: this); 
   }
 
   @override
   void dispose() {
-    _tabController.dispose(); // ทำลาย controller เมื่อไม่ใช้งาน
+    _tabController.dispose(); 
     super.dispose();
   }
 
@@ -40,43 +42,72 @@ class _ReviewScreenState extends State<ReviewScreen> with SingleTickerProviderSt
           onPressed: () => Get.back(),
         ),
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(50.0), // ปรับความสูงเพื่อรองรับ TabBar
+          preferredSize: const Size.fromHeight(50.0), 
           child: TabBar(
             controller: _tabController,
-            tabs: const [
-              Tab(text: 'Shop'),
-              Tab(text: 'Product'),
+            tabs: [
+              const Tab(text: 'Shop'),
+              const Tab(text: 'Product'),
             ],
           ),
         ),
       ),
-      body: TabBarView(
-        controller: _tabController,
-        children: <Widget>[
-         _buildReviewShop(context),       
-         
-         
-         
+      body: Expanded(
+        child: TabBarView(
+          controller: _tabController,
+          children: <Widget>[
+            _buildReviewShop(context),
+            _buildReviewProduct(context)
           ],
+        ),
       ),
     );
   }
 }
 
 Widget _buildReviewProduct(BuildContext context) {
-  
-  return  Column(
-    children: <Widget>[
-      Padding(
-        padding: const EdgeInsets.all(5),
-        child: _buildReviewProduct(context),
-      ),
-    ],
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Column(
+      children: <Widget>[
+        YourWidget(),
+        Padding(
+          padding: const EdgeInsets.all(5),
+          child: _buildReviewHigh(),
+        ),
+      ],
+    ),
   );
 }
+
+Widget _botton(BuildContext context) {
+  return Container(
+      alignment: Alignment.centerRight, 
+      margin: const EdgeInsets.only(right: 20.0), 
+      child: Container(
+        height: 28,
+        width: 70,
+        margin: const EdgeInsets.only(top: 5),
+        
+        
+        decoration: BoxDecoration(
+          color: whiteColor,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            const BoxShadow(
+              color: fontGrey,
+              blurRadius: 4,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+      ));
+}
+
 Widget _buildReviewShop(BuildContext context) {
   return Column(
     children: <Widget>[
+      YourWidget(),
       Padding(
         padding: const EdgeInsets.all(5),
         child: _buildReviewHighlights(),
@@ -84,56 +115,204 @@ Widget _buildReviewShop(BuildContext context) {
     ],
   );
 }
+
 Widget _buildReviewHighlights() {
-    return Container(
-      height: 100,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: 5,
-        itemBuilder: (context, index) {
-          return _buildReviewCard();
-        },
-      ),
-    );
-  }
+  return Container(
+    height: 750,
+    margin: const EdgeInsets.only(top: 0.5),
+    child: ListView.builder(
+      itemCount: 10,
+      itemBuilder: (context, index) {
+        return _buildReviewCard();
+      },
+    ),
+  );
+}
+
+Widget _buildReviewHigh() {
+  return Container(
+    height: 750,
+    margin: const EdgeInsets.only(top: 0.5),
+    child: ListView.builder(
+      itemCount: 10,
+      itemBuilder: (context, index) {
+        return _buildReviewProductCard();
+      },
+    ),
+  );
+}
 
 Widget _buildReviewCard() {
+  return Container(
+    height: 142,
+    width: 387,
+    margin: const EdgeInsets.all(5.0),
+    padding: const EdgeInsets.all(10.0),
+    decoration: BoxDecoration(
+      color: whiteColor,
+      borderRadius: BorderRadius.circular(8),
+      boxShadow: [
+        const BoxShadow(
+          color: fontGrey,
+          blurRadius: 4,
+          offset: Offset(0, 2),
+        ),
+      ],
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Row(
+          children: [
+            CircleAvatar(
+              radius: 20,
+              backgroundImage: NetworkImage('your_image_url_here'),
+            ),
+            SizedBox(width: 10),
+            Text('Reviewer Name',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          ],
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Row(
+          children: List.generate(5, (index) {
+            return Icon(
+              index < 4 ? Icons.star : Icons.star_border,
+              color: Colors.amber,
+              size: 20,
+            );
+          }),
+        ),
+        const Text(
+          'The review text goes here...',
+          style: TextStyle(fontSize: 14),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _buildReviewProductCard() {
+  return Container(
+    height: 142,
+    width: 387,
+    margin: const EdgeInsets.all(5.0),
+    padding: const EdgeInsets.all(10.0),
+    decoration: BoxDecoration(
+      color: whiteColor,
+      borderRadius: BorderRadius.circular(8),
+      boxShadow: [
+        const BoxShadow(
+          color: fontGrey,
+          blurRadius: 4,
+          offset: Offset(0, 2),
+        ),
+      ],
+    ),
+    child: Row(
+      
+      children: [
+        Container(
+          
+          height: 122, 
+          width: 122, 
+          decoration: BoxDecoration(
+            color: Colors.grey[200], 
+            borderRadius:
+                BorderRadius.circular(8), 
+          ),
+          
+          child: Icon(Icons.photo, color: Colors.grey[500]), 
+        ),
+        Expanded(
+          
+          child: Padding(
+            padding:
+                const EdgeInsets.only(left: 10.0), 
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center, 
+              crossAxisAlignment:
+                  CrossAxisAlignment.start, 
+              children: [
+                const Text('Reviewer Name',
+                    style:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment:
+                      MainAxisAlignment.start, 
+                  children: List.generate(5, (index) {
+                    return Icon(
+                      index < 4 ? Icons.star : Icons.star_border,
+                      color: Colors.amber,
+                      size: 20,
+                    );
+                  }),
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  'The review text goes here...',
+                  style: TextStyle(fontSize: 14),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+class YourWidget extends StatefulWidget {
+  @override
+  _YourWidgetState createState() => _YourWidgetState();
+}
+
+class _YourWidgetState extends State<YourWidget> {
+  String buttonText = 'New'; 
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      width: 200,
-      margin: const EdgeInsets.all(5.0),
-      padding: const EdgeInsets.all(10.0),
-      decoration: BoxDecoration(
-        color: whiteColor,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: const [
-          BoxShadow(
-            color: fontGrey,
-            blurRadius: 4,
-            offset: Offset(0, 2),
+      alignment: Alignment.centerRight, 
+      margin: const EdgeInsets.fromLTRB(0, 10, 10, 0),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          foregroundColor: Colors.grey,
+          backgroundColor:
+              Colors.white, 
+          shadowColor: Colors.grey, 
+          elevation: 4, 
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8), 
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('Reviewer Name',
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          Row(
-            children: List.generate(5, (index) {
-              return Icon(
-                index < 4 ? Icons.star : Icons.star_border,
-                color: Colors.amber,
-                size: 20,
-              );
-            }),
-          ),
-          const Text(
-            'The review text goes here...',
-            style: TextStyle(fontSize: 14),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
+          fixedSize:
+              const Size(110, 28), 
+        ),
+        onPressed: () {
+          setState(() {
+            buttonText = buttonText == 'New' ? 'Oldest' : 'New';
+          });
+        },
+        child: Row(
+          mainAxisSize: MainAxisSize.min, 
+          children: [
+            Icon(
+              buttonText == 'New' ? Icons.arrow_upward : Icons.arrow_downward,
+              size: 16, 
+              color: Colors.grey, 
+            ),
+            const SizedBox(width: 4), 
+            Text(buttonText),
+          ],
+        ),
       ),
     );
   }
+}
