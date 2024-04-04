@@ -15,12 +15,13 @@ class _ReviewScreenState extends State<ReviewScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this); // กำหนดจำนวน tabs และ vsync
+    _tabController =
+        TabController(length: 2, vsync: this); // กำหนดจำนวน tabs และ vsync
   }
 
   @override
   void dispose() {
-    _tabController.dispose(); 
+    _tabController.dispose();
     super.dispose();
   }
 
@@ -41,7 +42,7 @@ class _ReviewScreenState extends State<ReviewScreen>
           onPressed: () => Get.back(),
         ),
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(50.0), 
+          preferredSize: const Size.fromHeight(50.0),
           child: TabBar(
             controller: _tabController,
             tabs: [
@@ -65,8 +66,7 @@ class _ReviewScreenState extends State<ReviewScreen>
 }
 
 Widget _buildReviewProduct(BuildContext context) {
-  
-  return  Column(
+  return Column(
     children: <Widget>[
       Padding(
         padding: const EdgeInsets.all(5),
@@ -88,55 +88,55 @@ Widget _buildReviewShop(BuildContext context) {
 }
 
 Widget _buildReviewHighlights() {
-    return Container(
-      height: 100,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: 5,
-        itemBuilder: (context, index) {
-          return _buildReviewCard();
-        },
-      ),
-    );
-  }
+  return Container(
+    height: 100,
+    child: ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: 5,
+      itemBuilder: (context, index) {
+        return _buildReviewCard();
+      },
+    ),
+  );
+}
 
 Widget _buildReviewCard() {
-    return Container(
-      width: 200,
-      margin: EdgeInsets.all(5.0),
-      padding: EdgeInsets.all(10.0),
-      decoration: BoxDecoration(
-        color: whiteColor,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: fontGrey,
-            blurRadius: 4,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Reviewer Name',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          Row(
-            children: List.generate(5, (index) {
-              return Icon(
-                index < 4 ? Icons.star : Icons.star_border,
-                color: Colors.amber,
-                size: 20,
-              );
-            }),
-          ),
-          Text(
-            'The review text goes here...',
-            style: TextStyle(fontSize: 14),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-      ),
-    );
-  }
+  return Container(
+    width: 200,
+    margin: EdgeInsets.all(5.0),
+    padding: EdgeInsets.all(10.0),
+    decoration: BoxDecoration(
+      color: whiteColor,
+      borderRadius: BorderRadius.circular(8),
+      boxShadow: [
+        BoxShadow(
+          color: fontGrey,
+          blurRadius: 4,
+          offset: Offset(0, 2),
+        ),
+      ],
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Reviewer Name',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+        Row(
+          children: List.generate(5, (index) {
+            return Icon(
+              index < 4 ? Icons.star : Icons.star_border,
+              color: Colors.amber,
+              size: 20,
+            );
+          }),
+        ),
+        Text(
+          'The review text goes here...',
+          style: TextStyle(fontSize: 14),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ],
+    ),
+  );
+}

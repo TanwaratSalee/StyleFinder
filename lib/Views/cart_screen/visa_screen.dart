@@ -83,11 +83,11 @@ void _showSuccessDialog() {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('ชำระเงินเสร็จสิ้น'),
-        content: Text('การชำระเงินของคุณเสร็จสิ้นแล้ว'),
+        title: Text('Payment completed'),
+        content: Text('Your payment has been completed.'),
         actions: <Widget>[
           ElevatedButton(
-            child: Text('ตกลง'),
+            child: Text('Done'),
             onPressed: () {
               Navigator.of(context).pop(); // ปิด dialog
             },
