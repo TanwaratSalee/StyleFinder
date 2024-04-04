@@ -88,8 +88,8 @@ class ItemDetails extends StatelessWidget {
                               controller.isFav.toggle();
                             },
                             icon: controller.isFav.value
-                                ? const Icon(Icons.favorite, color: redColor)
-                                : const Icon(Icons.favorite_outline),
+                                ? Icon(Icons.favorite, color: redColor)
+                                : Icon(Icons.favorite_outline),
                             iconSize: 20,
                           ),
                         )
@@ -155,7 +155,7 @@ class ItemDetails extends StatelessWidget {
                         GestureDetector(
                           onTap: () {
                             Get.to(
-                              () =>  const StoreScreen(),
+                              () =>  StoreScreen(),
                               // arguments: {
                               //   'seller': data['p_seller'],
                               //   'vendor_id': data['vendor_id']
@@ -170,7 +170,7 @@ class ItemDetails extends StatelessWidget {
                               color: primaryApp, // สีพื้นหลังของปุ่ม
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            child: const Text(
+                            child: Text(
                               'See Store',
                               style: TextStyle(
                                 color: Colors.white, // สีข้อความในปุ่ม
@@ -315,9 +315,9 @@ class ItemDetails extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: Text(
                         data['p_desc'],
-                        style: const TextStyle(
+                        style: TextStyle(
                           color:
-                              fontBlack, 
+                              fontBlack, // สมมติว่า fontBlack คือตัวแปรที่เก็บค่าสี
                           fontSize: 14,
                         ),
                       ),
