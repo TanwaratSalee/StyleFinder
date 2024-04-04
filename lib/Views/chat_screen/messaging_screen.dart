@@ -19,7 +19,7 @@ class MessagesScreen extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
         if(!snapshot.hasData){
           return Center(
-            child: loadingIndcator(),
+            child: loadingIndicator(),
           );
         } else if(snapshot.data!.docs.isEmpty){
           return "No messages yet!".text.color(fontGreyDark).makeCentered();

@@ -1,13 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_finalproject/Views/widgets_common/text_style.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 
 Widget customTextField({
   String? title,
   String? label,
   TextEditingController? controller,
-  bool isPass = false, // Default value provided
-  bool readOnly = false, // Default value provided
+  bool isPass = false, 
+  bool readOnly = false, 
+  VoidCallback? onTap,
 }) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -15,8 +14,8 @@ Widget customTextField({
       if (title != null)
         Text(
           title,
-          style: TextStyle(
-            color: fontBlack, // Use your color variable
+          style: const TextStyle(
+            color: fontBlack, 
             fontWeight: FontWeight.bold,
             fontSize: 16,
           ),
@@ -28,22 +27,22 @@ Widget customTextField({
         readOnly: readOnly,
         decoration: InputDecoration(
           isDense: true,
-          labelText: label, // Changed to labelText as label is not a property
-          // hintText: hint, // Uncomment if you have hint text
-          hintStyle: TextStyle(
-            color: fontGrey, // Use your color variable
+          labelText: label, 
+          
+          hintStyle: const TextStyle(
+            color: fontGrey, 
           ),
           filled: true,
-          fillColor: bgGreylight, // Use your color variable
+          fillColor: bgGreylight, 
           contentPadding:
               const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
-            borderSide: BorderSide(color: bgGreylight), // Use your color variable
+            borderSide: const BorderSide(color: bgGreylight), 
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
-            borderSide: BorderSide(color: fontGrey), // Use your color variable
+            borderSide: const BorderSide(color: fontGrey), 
           ),
         ),
       ),

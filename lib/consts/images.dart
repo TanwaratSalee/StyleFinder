@@ -65,18 +65,22 @@ const String collect6 = "assets/images/BridesmaidCollections.png";
 const String imgSlider1 = "assets/images/Dior.png";
 const String imgSlider2 = "assets/images/Parda.png";
 const String imgSlider3 = "assets/images/Chanel.png";
+
 // box first icons
 const IconData icTodaysDeal = IconData(0xf06bb, fontFamily: 'MaterialIcons');
 const IconData icFlashDeal = IconData(0xe293, fontFamily: 'MaterialIcons');
+
 // Slider Second
 const String imgSs1 = "assets/images/ad_1.png";
 const String imgSs2 = "assets/images/ad_2.png";
 const String imgSs3 = "assets/images/ad_3.png";
 const String imgSs4 = "assets/images/ad_4.png";
+
 // box first icons
 const IconData icTopSellers = FontAwesomeIcons.crown;
 const IconData icBrand = Icons.lightbulb;
 const IconData icTopCategories = IconData(0xf4c7, fontFamily: 'MaterialIcons');
+
 //logo brand
 const String logoBrand1 = "assets/images/hermesLogo.png";
 const String logoBrand2 = "assets/images/cdLogo.png";
@@ -86,6 +90,7 @@ const String logoBrand5 = "assets/images/gucciLogo.png";
 const String logoBrand6 = "assets/images/coachLogo.png";
 const String logoBrand7 = "assets/images/balencigaLogo.png";
 const String logoBrand8 = "assets/images/burberryLogo.png";
+
 //Featured Productf
 const String product1 = "assets/images/product1.png";
 const String product2 = "assets/images/product2.png";
@@ -100,6 +105,7 @@ const String icOrders = "assets/icons/iconsAccount/status.png";
 const String icMessage = "assets/icons/iconsAccount/message.png";
 const String icAddress = "assets/icons/iconsAccount/map.png";
 const String icPassword = "assets/icons/iconsAccount/password.png";
+const String icLogout = "assets/icons/iconsAccount/logout.png";
 
 // Paymet
 const String imgCash = "assets/images/payment/cashOnDelivery.png";

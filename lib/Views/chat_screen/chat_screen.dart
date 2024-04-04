@@ -24,14 +24,14 @@ class ChatScreen extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Obx(() => controller.isLoading.value ? Center(child: loadingIndcator(),) :
+            Obx(() => controller.isLoading.value ? Center(child: loadingIndicator(),) :
             Expanded(
               child: StreamBuilder(
                 stream: FirestoreServices.getChatMessages(controller.chatDocId.toString()), 
                 builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
                   if(!snapshot.hasData){
                     return Center(
-                      child: loadingIndcator(),
+                      child: loadingIndicator(),
                     );
                   } else if(snapshot.data!.docs.isEmpty) {
                     return Center(

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 
 class FirestoreServices {
@@ -120,6 +121,34 @@ class FirestoreServices {
     return firestore
         .collection(vendorsCollection)
         .where('id', isEqualTo: uid)
+        .snapshots();
+  }
+
+  static Stream<QuerySnapshot> getOrders() {
+    return firestore
+        .collection(ordersCollection)
+        .where('order_on_delivery', isEqualTo: false)
+        .where('order_delivered', isEqualTo: false)
+        .where('order_by', isEqualTo: currentUser!.uid) // If you want to filter by the current user
+        .snapshots();
+  }
+
+  // Fetch orders that are currently on delivery
+  static Stream<QuerySnapshot> getDeliveryOrders() {
+    return firestore
+        .collection(ordersCollection)
+        .where('order_on_delivery', isEqualTo: true)
+        .where('order_delivered', isEqualTo: false) // Ensuring it's not yet delivered
+        .where('order_by', isEqualTo: currentUser!.uid) // If you want to filter by the current user
+        .snapshots();
+  }
+
+  // Fetch orders that have been delivered (for History)
+  static Stream<QuerySnapshot> getOrderHistory() {
+    return firestore
+        .collection(ordersCollection)
+        .where('order_delivered', isEqualTo: true)
+        .where('order_by', isEqualTo: currentUser!.uid) // If you want to filter by the current user
         .snapshots();
   }
 }

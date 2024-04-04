@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/cart_screen/qr_screen.dart';
 import 'package:flutter_finalproject/Views/cart_screen/visa_screen.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
+import 'package:flutter_finalproject/Views/home_screen/mainHome.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 import 'package:flutter_finalproject/consts/colors.dart';
 import 'package:flutter_finalproject/consts/lists.dart';
@@ -11,8 +12,6 @@ import 'package:flutter_finalproject/consts/styles.dart';
 import 'package:flutter_finalproject/controllers/cart_controller.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
-
-import '../home_screen/navigationBar.dart';
 
 class PaymentMethods extends StatelessWidget {
   const PaymentMethods({super.key});
@@ -28,18 +27,21 @@ class PaymentMethods extends StatelessWidget {
           height: 70,
           child: controller.placingOrder.value
               ? Center(
-                  child: loadingIndcator(),
+                  child: loadingIndicator(),
                 )
               : ourButton(
                   onPress: () async {
                     String selectedPaymentMethod =
                         paymentMethods[controller.paymentIndex.value];
 
-                    if (selectedPaymentMethod == 'QR Promptly') {
+                    if (selectedPaymentMethod == 'QR Promptpay') {
+                      print('Selected Payment Method: $selectedPaymentMethod');
                       Get.to(() => const QRScreen());
                     } else if (selectedPaymentMethod == 'Visa') {
+                      print('Selected Payment Method: $selectedPaymentMethod');
                       Get.to(() => const VisaCardScreen());
-                    } else if (selectedPaymentMethod == 'Cash on Delivery') {
+                    } else if (selectedPaymentMethod == 'Cash On Delivery') {
+                      print('Selected Payment Method: $selectedPaymentMethod');
                       await controller.placeMyOrder(
                           orderPaymentMethod: selectedPaymentMethod,
                           totalAmount: controller.totalP.value);
@@ -47,7 +49,7 @@ class PaymentMethods extends StatelessWidget {
                       await controller.clearCart();
                       VxToast.show(context, msg: "Order placed successfully");
 
-                      Get.offAll(() => MainNavigationBar());
+                      Get.offAll(() => MainHome());
                     } else {
                       VxToast.show(context,
                           msg: "Selected payment method is not supported yet.");

@@ -1,10 +1,8 @@
 // ignore_for_file: use_key_in_widget_constructors, library_private_types_in_public_api
 
-import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/collection_screen/address_controller.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 void main() {
   runApp(MyApp());
