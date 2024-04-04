@@ -21,9 +21,21 @@ class ProfileController extends GetxController {
   var nameController = TextEditingController();
   var emailController = TextEditingController();
 
+  var heightController = TextEditingController();
+  var weightController = TextEditingController();
+
   var oldpassController = TextEditingController();
   var newpassController = TextEditingController();
 
+  var birthdayController = TextEditingController();
+  var sexController = TextEditingController();
+  var selectedGender = ''.obs;
+
+  void selectGender(String gender) {
+    selectedGender.value = gender; 
+    sexController.text = gender; 
+  }
+  
   // Select a photo from the user's gallery. /ImagePicker to open a gallery. / 70% to reduce file size.
   changeImage(context) async {
     try {
@@ -45,37 +57,53 @@ class ProfileController extends GetxController {
     profileImageLink = await ref.getDownloadURL();
   }
 
-  // Uused to update Firebase Firestore profile information.
-  updateProfile({name, password, imgUrl}) async {
-    var store = firestore.collection(usersCollection).doc(currentUser!.uid);
-    store.set({'name': name, 'password': password, 'imageUrl': imgUrl},
-        SetOptions(merge: true));
-    isloading(false);
-  }
-
-  // Change password
-  // changeAuthPassword({email,password,newpassword}) async {
-  //   final card = EmailAuthProvider.credential(email: email, password: password);
-
-  //   await currentUser!.reauthenticateWithCredential(card).then((value) {
-  //     currentUser!.updatePassword(newpassword);
-  //   }).catchError((error){
-  //     // ignore: avoid_print
-  //     print(error.toString());
-  //   });
-  // }
-  Future<bool> changeAuthPassword(
-      {required String oldPassword, required String newPassword}) async {
-    final credential =
-        EmailAuthProvider.credential(email: email, password: oldPassword);
-
+  Future<void> updateProfile({
+    String? name,
+    String? height,
+    String? weight,
+    String? imgUrl,
+    String? birthday,
+    String? sex,
+  }) async {
     try {
-      await currentUser!.reauthenticateWithCredential(credential);
-      await currentUser!.updatePassword(newPassword);
-      return true; // Return true if password change is successful
-    } catch (error) {
-      print(error.toString());
-      return false; // Return false if there's an error
+      isloading(true);
+
+      Map<String, dynamic> dataToUpdate = {};
+      if (name != null) dataToUpdate['name'] = name;
+      if (height != null) dataToUpdate['height'] = height;
+      if (weight != null) dataToUpdate['weight'] = weight;
+      if (imgUrl != null) dataToUpdate['imageUrl'] = imgUrl;
+      if (birthday != null) dataToUpdate['birthday'] = birthday;
+      if (sex != null) dataToUpdate['sex'] = sex;
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .update(dataToUpdate);
+
+      isloading(false);
+    } catch (e) {
+      print(e.toString());
+      isloading(false);
     }
   }
+
+  Future<bool> changeAuthPassword({
+    required String oldPassword, required String newPassword}) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    String email = user!.email!; 
+
+    try {
+      AuthCredential credential = EmailAuthProvider.credential(email: email, password: oldPassword);
+
+      await user.reauthenticateWithCredential(credential);
+
+      await user.updatePassword(newPassword);
+      return true; // คืนค่า true หากการเปลี่ยนรหัสผ่านสำเร็จ
+    } catch (error) {
+      print(error.toString());
+      return false; // คืนค่า false หากมีข้อผิดพลาด
+    }
+  }
+
 }

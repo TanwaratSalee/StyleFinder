@@ -39,7 +39,7 @@ class CartScreen extends StatelessWidget {
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (!snapshot.hasData) {
               return Center(
-                child: loadingIndcator(),
+                child: loadingIndicator(),
               );
             } else if (snapshot.data!.docs.isEmpty) {
               return Center(

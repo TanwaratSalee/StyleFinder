@@ -38,7 +38,7 @@ class _MatchScreenState extends State<MatchScreen> {
                 barrierLabel: "Barrier",
                 barrierDismissible: true,
                 barrierColor: Colors.black.withOpacity(0.5),
-                transitionDuration: Duration(milliseconds: 300),
+                transitionDuration: const Duration(milliseconds: 300),
                 context: context,
                 pageBuilder: (_, __, ___) {
                   return Align(
@@ -46,7 +46,7 @@ class _MatchScreenState extends State<MatchScreen> {
                     child: Container(
                       height: MediaQuery.of(context).size.height * 0.6, 
                       width: MediaQuery.of(context).size.width,
-                      child: SearchScreenPage(), 
+                      child: const SearchScreenPage(), 
                       decoration: const BoxDecoration(
                         color: whiteColor,
                         borderRadius: BorderRadius.only(
@@ -60,7 +60,7 @@ class _MatchScreenState extends State<MatchScreen> {
                 },
                 transitionBuilder: (context, anim1, anim2, child) {
                   return SlideTransition(
-                    position: Tween(begin: Offset(0, -1), end: Offset(0, 0))
+                    position: Tween(begin: const Offset(0, -1), end: const Offset(0, 0))
                         .animate(anim1),
                     child: child,
                   );

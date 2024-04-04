@@ -348,7 +348,7 @@ class NewsScreen extends StatelessWidget {
                             AsyncSnapshot<QuerySnapshot> snapshot) {
                           if (!snapshot.hasData) {
                             return Center(
-                              child: loadingIndcator(),
+                              child: loadingIndicator(),
                             );
                           } else {
                             var allproductsdata = snapshot.data!.docs;
@@ -406,6 +406,61 @@ class NewsScreen extends StatelessWidget {
                                 });
                           }
                         }),
+ StreamBuilder(
+                      stream: FirestoreServices.allproducts(), 
+                      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
+                        if(!snapshot.hasData){
+                          return loadingIndicator();
+                        } else {
+                          var allproductsdata = snapshot.data!.docs;
+                          return GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: allproductsdata.length,
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2, mainAxisSpacing: 8, crossAxisSpacing:8, mainAxisExtent: 310),
+                        itemBuilder: (context, index) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Image.network(
+                                            allproductsdata[index]['p_imgs'][0],
+                                            width: 170,
+                                            height: 210,
+                                            fit: BoxFit.cover,
+                                          ),
+                                          const Spacer(),
+                                          "${allproductsdata[index]['p_name']}"
+                                              .text
+                                              .fontFamily(bold)
+                                              .size(14)
+                                              .color(fontBlack)
+                                              .make(),
+                                              
+                                          "${allproductsdata[index]['p_price']}"
+                                              .text
+                                              .color(primaryApp)
+                                              .fontFamily(regular)
+                                              .size(14)
+                                              .make(),
+                                              10.heightBox,
+                                        ],
+                                      )
+                                          .box
+                                          .white
+                                          .margin(
+                                              const EdgeInsets.symmetric(horizontal: 2))
+                                          .rounded
+                                          .padding(const EdgeInsets.all(12))
+                                          .make().onTap(() {
+                                            Get.to(( )=> ItemDetails(
+                                              title: "${allproductsdata[index]['p_name']}",
+                                              data: allproductsdata[index],
+                                              ));
+                                          });
+                        });
+                        }
+                      }),
                   ],
                 ),
               ),

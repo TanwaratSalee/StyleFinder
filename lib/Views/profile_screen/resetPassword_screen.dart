@@ -1,6 +1,4 @@
-// password_screen.dart
-// ignore_for_file: use_build_context_synchronously, use_super_parameters, file_names
-
+import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/widgets_common/custom_textfield.dart';
 import 'package:get/get.dart';
 import 'package:flutter_finalproject/controllers/profile_controller.dart';
@@ -9,6 +7,7 @@ import 'package:flutter_finalproject/consts/consts.dart'; // Ensure this file ex
 class PasswordScreen extends StatelessWidget {
   final oldpassController = TextEditingController();
   final newpassController = TextEditingController();
+  final confirmNewPassController = TextEditingController(); // ตัวควบคุมสำหรับการยืนยันรหัสผ่านใหม่
 
   PasswordScreen({Key? key}) : super(key: key);
 
@@ -20,8 +19,7 @@ class PasswordScreen extends StatelessWidget {
       backgroundColor: whiteColor, // Ensure this constant is defined
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text("Edit Profile",
-            style: TextStyle(fontFamily: 'Regular', color: Colors.black)),
+        title: const Text("Reset Password", style: TextStyle(fontFamily: medium, fontSize: 24, color: Colors.black)),
         actions: [
           Obx(() {
             if (controller.isloading.isTrue) {
@@ -29,20 +27,26 @@ class PasswordScreen extends StatelessWidget {
             }
             return TextButton(
               onPressed: () async {
-                controller.isloading(true);
+                // ตรวจสอบว่า New Password กับ Confirm New Password ตรงกันหรือไม่
+                if (newpassController.text == confirmNewPassController.text) {
+                  controller.isloading(true);
 
-                final result = await controller.changeAuthPassword(
-                  oldPassword: oldpassController.text,
-                  newPassword: newpassController.text,
-                );
+                  final result = await controller.changeAuthPassword(
+                    oldPassword: oldpassController.text,
+                    newPassword: newpassController.text,
+                  );
 
-                if (result) {
-                  VxToast.show(context, msg: "Password updated successfully");
+                  if (result) {
+                    VxToast.show(context, msg: "Password updated successfully");
+                  } else {
+                    VxToast.show(context, msg: "Failed to update password");
+                  }
+
+                  controller.isloading(false);
                 } else {
-                  VxToast.show(context, msg: "Failed to update password");
+                  // แสดงข้อความแจ้งเตือนหากรหัสผ่านใหม่และการยืนยันไม่ตรงกัน
+                  VxToast.show(context, msg: "New password and confirmation do not match");
                 }
-
-                controller.isloading(false);
               },
               child: "Save".text.color(Colors.blue).make(),
             );
@@ -50,24 +54,34 @@ class PasswordScreen extends StatelessWidget {
         ],
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            customTextField(
-              label: "Old Password",
-              controller: oldpassController,
-              isPass: true,
-              readOnly: false,
-            ).p16(),
+        child: Padding(
+           padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8.0),
+          child: Column(
+            children: [
+              customTextField(
+                label: "Old Password",
+                controller: oldpassController,
+                isPass: true,
+                readOnly: false,
+              ).p2(),
 
-            customTextField(
-              label: "New Password",
-              controller: newpassController,
-              isPass: true,
-              readOnly: false,
-            ).p16(),
-
-            // Add other widgets as needed
-          ],
+              const SizedBox(height: 15),
+          
+              customTextField(
+                label: "New Password",
+                controller: newpassController,
+                isPass: true,
+                readOnly: false,
+              ).p2(),
+          
+              customTextField(
+                label: "Confirm New Password", // เพิ่ม TextField สำหรับการยืนยันรหัสผ่านใหม่
+                controller: confirmNewPassController,
+                isPass: true,
+                readOnly: false,
+              ).p2(),
+            ],
+          ),
         ),
       ),
     );

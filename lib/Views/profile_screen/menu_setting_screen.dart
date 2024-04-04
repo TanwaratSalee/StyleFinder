@@ -1,7 +1,6 @@
 // ignore_for_file: library_prefixes
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_finalproject/Views/auth_screen/login_screen.dart';
 import 'package:flutter_finalproject/Views/cart_screen/address_screen.dart';
 import 'package:flutter_finalproject/Views/chat_screen/messaging_screen.dart';
@@ -9,11 +8,12 @@ import 'package:flutter_finalproject/Views/orders_screen/orders_screen.dart';
 import 'package:flutter_finalproject/Views/profile_screen/edit_profile_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/consts/lists.dart';
+import 'package:flutter_finalproject/controllers/auth_controller.dart';
 import 'package:flutter_finalproject/services/firestore_services.dart';
-import 'package:flutter_finalproject/controllers/profile_controller.dart' as profileCtrl;
+import 'package:flutter_finalproject/controllers/profile_controller.dart'
+    as profileCtrl;
 
 // Then, when you want to use ProfileController, you prefix it like this:
-
 
 import 'package:get/get.dart';
 
@@ -25,24 +25,23 @@ class MenuSettingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // var controller = Get.put(ProfileController());
-var controller = Get.put(profileCtrl.ProfileController());
-
+    var controller = Get.put(profileCtrl.ProfileController());
 
     return Scaffold(
         appBar: AppBar(
-  backgroundColor: whiteColor,
-  title: const Text(
-    'Setting',
-    textAlign: TextAlign.center, // This centers the title in the space available.
-    style: TextStyle(
-      color: fontBlack, 
-      fontSize: 26,
-      fontFamily: 'regular',
-    ),
-  ),
-),
-
-        backgroundColor: bgGreylight,
+          backgroundColor: whiteColor,
+          title: const Text(
+            'Setting',
+            textAlign: TextAlign
+                .center, // This centers the title in the space available.
+            style: TextStyle(
+              color: fontBlack,
+              fontSize: 24,
+              fontFamily: medium,
+            ),
+          ),
+        ),
+        backgroundColor: whiteColor,
         body: StreamBuilder(
             stream: FirestoreServices.getUser(currentUser!.uid),
             builder:
@@ -62,14 +61,18 @@ var controller = Get.put(profileCtrl.ProfileController());
                     children: [
                       const Padding(
                         padding: EdgeInsets.all(8),
-                        // child: const Align(
-                        //   alignment: Alignment.topRight,
-                        //   child: Icon(Icons.edit, color: fontBlack),
-                        // ).onTap(() {
-                        //   controller.nameController.text = data['name'];
+                      ),
 
-                        //   Get.to(() => EditProfileScreen(data: data));
-                        // }),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 30),
+                          child: Text('Account')
+                              .text
+                              .size(20)
+                              .fontFamily(medium)
+                              .make(),
+                        ),
                       ),
 
                       ListView.separated(
@@ -90,10 +93,10 @@ var controller = Get.put(profileCtrl.ProfileController());
                                   Get.to(() => PasswordScreen());
                                   break;
                                 case 2:
-                                  Get.to(() =>  AddressScreen());
+                                  Get.to(() => AddressScreen());
                                   break;
                                 case 3:
-                                  Get.to(() => const OrdersScreen());
+                                  Get.to(() =>  OrdersScreen());
                                   break;
                                 case 4:
                                   Get.to(() => const MessagesScreen());
@@ -104,27 +107,78 @@ var controller = Get.put(profileCtrl.ProfileController());
                               profileButtonsIcon[index],
                               width: 22,
                             ),
-                            title: profileButtonsList[index].text.make(),
-                            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                            title: profileButtonsList[index]
+                                .text
+                                .color(fontGrey)
+                                .fontFamily(regular)
+                                .make(),
+                            trailing:
+                                const Icon(Icons.arrow_forward_ios, size: 16),
                           );
                         },
                       )
                           .box
-                          // .white
-                          // .rounded
-                          // .margin(const EdgeInsets.all(12))
+                          .color(thinPrimaryApp)
+                          .rounded
+                          .margin(const EdgeInsets.symmetric(horizontal: 18, vertical: 8))
                           .padding(const EdgeInsets.symmetric(horizontal: 16))
                           // .shadowSm
                           .make(),
                       //.box.color(primaryApp).make(),
-                      // 20.heightBox,
+                      20.heightBox,
 
-                      OutlinedButton(
-                          onPressed: () async {
-                            await FirebaseAuth.instance.signOut();
-                            Get.offAll(() => const LoginScreen());
-                          },
-                          child: logout.text.fontFamily(regular).black.make())
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 30),
+                          child: Text('Actions')
+                              .text
+                              .size(20)
+                              .fontFamily(medium)
+                              .make(),
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              side: const BorderSide(
+                                  color: Colors.transparent), 
+                            ),
+                            onPressed: () async {
+                              await Get.put(AuthController())
+                                  .signoutMethod(context);
+                              Get.offAll(() => LoginScreen());
+                            },
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min, 
+                              children: [
+                                Image.asset(
+                                  icLogout, 
+                                  width: 30, 
+                                ),
+                                const SizedBox(
+                                    width:
+                                        8), 
+                                const Text('Logout',
+                                    style: TextStyle(
+                                        fontFamily: regular,
+                                        fontSize: 16,
+                                        color: fontGrey)).text
+                                .color(fontGrey)
+                                .fontFamily(regular)
+                                .make(), 
+                              ],
+                            ),
+                          )
+                        ],
+                      ).box
+                          .color(thinPrimaryApp)
+                          .rounded
+                          .margin(const EdgeInsets.symmetric(horizontal: 18, vertical: 8))
+                          .padding(const EdgeInsets.symmetric(horizontal: 8))
+                          // .shadowSm
+                          .make(),
                     ],
                   ),
                 );

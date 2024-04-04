@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_finalproject/consts/consts.dart';
 
 
 class OrderDetailFont extends StatelessWidget {
@@ -10,20 +11,14 @@ class OrderDetailFont extends StatelessWidget {
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: Text(
-              'My Order',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
-            ),
+            title: "My Order".text.color(fontGreyDark).fontFamily(medium).size(24).make(),
             leading: IconButton(
-              icon: Icon(Icons.arrow_back),
+              icon: const Icon(Icons.arrow_back),
               onPressed: () {
                 Navigator.maybePop(context);
               },
             ),
-            bottom: TabBar(
+            bottom: const TabBar(
               tabs: [
                 Tab(text: 'Delivery'),
                 Tab(text: 'Done'),
@@ -35,7 +30,7 @@ class OrderDetailFont extends StatelessWidget {
             children: [
               DeliveryContentPage(), // Placeholder for actual content
               DoneContentPage(), // Content for Done tab
-              Center(
+              const Center(
                   child: Text(
                       'Order History Content')), // Placeholder for actual content
             ],
@@ -81,9 +76,9 @@ class DeliveryContentPage extends StatelessWidget {
                   imageAssetPath: item['image']!,
                 ))
             .toList(),
-        Divider(),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
+        const Divider(),
+        const Padding(
+          padding: EdgeInsets.all(16.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -98,22 +93,22 @@ class DeliveryContentPage extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: ElevatedButton(
             onPressed: () {
               // โค้ดสำหรับฟังก์ชันการเขียนรีวิว
             },
-            child: Text('Write product review'),
+            child: const Text('Write product review'),
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.white,
               backgroundColor: Colors.teal,
-              minimumSize: Size(double.infinity, 50),
+              minimumSize: const Size(double.infinity, 50),
             ),
           ),
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
       ],
     );
   }
@@ -145,14 +140,14 @@ class ItemTile extends StatelessWidget {
             width: 100,
             height: 100,
           ),
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
                   title,
-                  style: TextStyle(fontSize: 16.0),
+                  style: const TextStyle(fontSize: 16.0),
                 ),
                 Text(
                   'Quantity: $quantity',
@@ -160,7 +155,7 @@ class ItemTile extends StatelessWidget {
                 ),
                 Text(
                   price,
-                  style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -205,9 +200,9 @@ class DoneContentPage extends StatelessWidget {
                   imageAssetPath: item['image']!,
                 ))
             .toList(),
-        Divider(),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
+        const Divider(),
+        const Padding(
+          padding: EdgeInsets.all(16.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -222,22 +217,22 @@ class DoneContentPage extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: ElevatedButton(
             onPressed: () {
               // Implement the review writing functionality here
             },
-            child: Text('Write product review'),
+            child: const Text('Write product review'),
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.white,
               backgroundColor: Colors.teal,
-              minimumSize: Size(double.infinity, 50),
+              minimumSize: const Size(double.infinity, 50),
             ),
           ),
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
       ],
     );
   }

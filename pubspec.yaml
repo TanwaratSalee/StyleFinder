@@ -44,6 +44,8 @@ dependencies:
   omise_flutter : ^0.1.6
   flutter_credit_card : ^4.0.1
   intl: ^0.18.1
+  http: ^0.13.6
+  flutter_svg: ^2.0.9
   
 
 dev_dependencies:
@@ -108,8 +110,11 @@ flutter:
 
     - family: Roboto-Black
       fonts:
-        - asset: assets/fonts/Roboto-Black.ttf
+        - asset: assets/fonts/Roboto-Black.ttf 
         
+    - family: Roboto-Medium
+      fonts:
+        - asset: assets/fonts/Roboto-Medium.ttf     
 
   # fonts:
   #   - family: Schyler

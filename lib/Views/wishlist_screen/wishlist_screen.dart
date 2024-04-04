@@ -11,13 +11,13 @@ class WishlistScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor:
-          whiteColor, // Ensure whiteColor is correctly defined in consts.dart
+          whiteColor, 
       appBar: AppBar(
         title: const Text(
           "Favourite",
           style: TextStyle(
             color:
-                fontGreyDark, // Ensure fontGreyDark is correctly defined in consts.dart
+                fontGreyDark, 
             fontSize: 24,
             fontFamily: bold,
           ),
@@ -55,7 +55,7 @@ class WishlistScreen extends StatelessWidget {
                       const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   decoration: BoxDecoration(
                     color:
-                        whiteColor, // Ensure whiteColor is correctly defined in consts.dart
+                        whiteColor, 
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
@@ -117,11 +117,10 @@ class WishlistScreen extends StatelessWidget {
             separatorBuilder: (context, index) => Padding(
               padding: const EdgeInsets.symmetric(
                   horizontal:
-                      10), // ปรับระยะห่างของเส้นคั่นจากขอบด้านซ้ายและขวา
+                      10), 
               child: Divider(
-                color: Colors.grey[
-                    200], // ปรับให้เป็นสีเทาอ่อนกว่า คุณสามารถเปลี่ยนเป็น [300], [200] หรือค่าอื่นๆ เพื่อปรับความเข้มของสี
-                thickness: 1, // สามารถปรับความหนาของเส้นคั่นได้ตามต้องการ
+                color: Colors.grey[200], 
+                thickness: 1, 
               ),
             ),
           );
