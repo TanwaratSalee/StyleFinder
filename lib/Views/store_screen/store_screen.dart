@@ -1,11 +1,9 @@
-
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/store_screen/match_detail_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/reviews_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
-
 
 class StoreScreen extends StatelessWidget {
   const StoreScreen({super.key});
@@ -27,9 +25,8 @@ class StoreScreen extends StatelessWidget {
         child: Column(
           children: <Widget>[
             _buildLogoAndRatingSection(context),
-             _buildReviewHighlights(),
-             _buildProductMatchTabs(context), 
-            
+            // _buildReviewHighlights(),
+            _buildProductMatchTabs(context),
           ],
         ),
       ),
@@ -41,7 +38,7 @@ class StoreScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 6.0),
       child: Column(
         children: <Widget>[
-          _buildRatingSection( context),
+          _buildRatingSection(context),
         ],
       ),
     );
@@ -76,16 +73,17 @@ class StoreScreen extends StatelessWidget {
                       '4.9/5.0',
                       style: TextStyle(fontSize: 14, fontFamily: regular),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     TextButton(
-  onPressed: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => ReviewScreen()),
-    );
-  },
-  child: const Text('All Reviews >>>'),
-),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ReviewScreen()),
+                        );
+                      },
+                      child: const Text('All Reviews >>>'),
+                    ),
                   ],
                 ),
               ],
@@ -96,29 +94,29 @@ class StoreScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildReviewHighlights() {
-    return Container(
-      height: 120,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: 3,
-        itemBuilder: (context, index) {
-          return _buildReviewCard();
-        },
-      ),
-    );
-  }
+  // Widget _buildReviewHighlights() {
+  //   return Container(
+  //     height: 120,
+  //     child: ListView.builder(
+  //       scrollDirection: Axis.horizontal,
+  //       itemCount: 3,
+  //       itemBuilder: (context, index) {
+  //         return _buildReviewCard();
+  //       },
+  //     ),
+  //   );
+  // }
 
   Widget _buildReviewCard() {
     return Container(
       width: 200,
-      margin: EdgeInsets.all(5.0),
-      padding: EdgeInsets.all(10.0),
+      margin: const EdgeInsets.all(5.0),
+      padding: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
         color: whiteColor,
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
-          BoxShadow(
+          const BoxShadow(
             color: fontGrey,
             blurRadius: 4,
             offset: Offset(0, 2),
@@ -128,7 +126,7 @@ class StoreScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Reviewer Name',
+          const Text('Reviewer Name',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           Row(
             children: List.generate(5, (index) {
@@ -139,7 +137,7 @@ class StoreScreen extends StatelessWidget {
               );
             }),
           ),
-          Text(
+          const Text(
             'The review text goes here...',
             style: TextStyle(fontSize: 14),
             maxLines: 2,
@@ -149,12 +147,13 @@ class StoreScreen extends StatelessWidget {
       ),
     );
   }
-Widget _buildProductMatchTabs(BuildContext context) {
-    return  DefaultTabController(
+
+  Widget _buildProductMatchTabs(BuildContext context) {
+    return DefaultTabController(
       length: 2, // มีแท็บทั้งหมด 2 แท็บ
       child: Column(
         children: <Widget>[
-          TabBar(
+          const TabBar(
             tabs: [
               Tab(text: 'Product'),
               Tab(text: 'Match'),
@@ -164,8 +163,8 @@ Widget _buildProductMatchTabs(BuildContext context) {
             height: MediaQuery.of(context).size.height * 0.9,
             child: TabBarView(
               children: [
-               _buildProductTab(context),
-               _buildMatchTab(context),
+                _buildProductTab(context),
+                _buildMatchTab(context),
               ],
             ),
           ),
@@ -173,34 +172,35 @@ Widget _buildProductMatchTabs(BuildContext context) {
       ),
     );
   }
-  Widget _buildProductTab(BuildContext context) {
-  return Column(
-    children: <Widget>[
-      Padding(
-        padding: const EdgeInsets.all(5),
-        child: _buildCategoryTabs(context),
-      ),
-      Expanded(
-        child: Container(),
-      ),
-    ],
-  );
-}
 
-Widget _buildMatchTab(BuildContext context) {
-  
-  return  Column(
-    children: <Widget>[
-      Padding(
-        padding: const EdgeInsets.all(5),
-        child: _buildCategoryMath(context),
-      ),
-      Expanded(
-        child: Container(),
-      ),
-    ],
-  );
-}
+  Widget _buildProductTab(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(5),
+          child: _buildCategoryTabs(context),
+        ),
+        Expanded(
+          child: Container(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMatchTab(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(5),
+          child: _buildCategoryMath(context),
+        ),
+        Expanded(
+          child: Container(),
+        ),
+      ],
+    );
+  }
+
   Widget _buildCategoryTabs(BuildContext context) {
     return DefaultTabController(
       length: 5,
@@ -213,8 +213,8 @@ Widget _buildMatchTab(BuildContext context) {
               Tab(text: 'All'),
               Tab(text: 'Outer'),
               Tab(text: 'Dress'),
-              Tab(text: 'Blouse/Shirt'),
-              Tab(text: 'T-Shirt'),
+              Tab(text: 'Bottoms'),
+              Tab(text: 'T-shirts'),
             ],
           ),
           Container(
@@ -224,8 +224,8 @@ Widget _buildMatchTab(BuildContext context) {
                 _buildProductGrid('All'),
                 _buildProductGrid('Outer'),
                 _buildProductGrid('Dress'),
-                _buildProductGrid('Blouse/Shirt'),
-                _buildProductGrid('T-Shirt'),
+                _buildProductGrid('Bottoms'),
+                _buildProductGrid('T-shirts'),
               ],
             ),
           ),
@@ -234,8 +234,92 @@ Widget _buildMatchTab(BuildContext context) {
     );
   }
 
-  
-Widget _buildCategoryMath(BuildContext context) {
+  Widget _buildProductGrid(String category) {
+    return FutureBuilder<QuerySnapshot>(
+      future: FirebaseFirestore.instance.collection('products').get(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: loadingIndcator(),
+          );
+        }
+        if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        }
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return const Text('No data available');
+        }
+
+        return GridView.builder(
+          padding: const EdgeInsets.all(8.0),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 1 / 1.29,
+          ),
+          itemCount: snapshot.data!.docs.length,
+          itemBuilder: (BuildContext context, int index) {
+            var product = snapshot.data!.docs[index];
+            String productName = product.get('p_name');
+            String price = product.get('p_price');
+            String productImage = product.get('p_imgs')[0];
+            String subcollection = product.get('p_subcollection');
+
+            if (category == 'All' || subcollection == category) {
+              print('Subcollection: $subcollection');
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const MatchDetailScreen(),
+                    ),
+                  );
+                },
+                child: Card(
+                  clipBehavior: Clip.antiAlias,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Image.network(
+                        productImage,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: 150,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              productName,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              'Price: $price',
+                              style: const TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            } else {
+              return const SizedBox();
+            }
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildCategoryMath(BuildContext context) {
     return DefaultTabController(
       length: 5,
       child: Column(
@@ -257,9 +341,9 @@ Widget _buildCategoryMath(BuildContext context) {
               children: [
                 _buildProductMathGrids('All'),
                 _buildProductMathGrids('Outer'),
-               _buildProductMathGrids('Dress'),
-               _buildProductMathGrids('Blouse/Shirt'),
-                _buildProductMathGrids('T-Shirt'),
+                _buildProductMathGrids('Dress'),
+                _buildProductMathGrids('Bottoms'),
+                _buildProductMathGrids('T-shirts'),
               ],
             ),
           ),
@@ -267,155 +351,141 @@ Widget _buildCategoryMath(BuildContext context) {
       ),
     );
   }
-  Widget _buildProductGrid(String category) {
-    return GridView.builder(
-      padding: const EdgeInsets.all(8.0),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 1 / 2,
-      ),
-      itemBuilder: (BuildContext context, int index) {
-       return GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => MatchDetailScreen()), // Ensure you have a class named ItemMatching
-          );
-        },
-        child:  Card(
-          clipBehavior: Clip.antiAlias,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Image.asset(
-                card1,
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: 210,
-              ),
-              const Padding(
-                padding: EdgeInsets.all(8.0),
+
+  Widget _buildProductMathGrids(String category) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance.collection('products').snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (!snapshot.hasData) {
+          return loadingIndcator();
+        }
+
+        List<String> mixMatchList = [];
+        snapshot.data!.docs.forEach((doc) {
+          Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+          if (data.containsKey('p_mixmatch')) {
+            String currentMixMatch = data['p_mixmatch'];
+            if (!mixMatchList.contains(currentMixMatch)) {
+              mixMatchList.add(currentMixMatch);
+            }
+          }
+        });
+
+        // แสดงข้อมูลที่ได้จากการตรวจสอบ p_mixmatch ใน console
+        print('MixMatch List: $mixMatchList');
+
+        return GridView.builder(
+          padding: const EdgeInsets.all(2),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 1 / 1,
+          ),
+          itemBuilder: (BuildContext context, int index) {
+            int actualIndex = index * 2;
+
+            String price1 = snapshot.data!.docs[actualIndex].get('p_price');
+            String price2 = snapshot.data!.docs[actualIndex + 1].get('p_price');
+
+            String totalPrice =
+                (int.parse(price1) + int.parse(price2)).toString();
+
+            String productName1 =
+                snapshot.data!.docs[actualIndex].get('p_name');
+            String productName2 =
+                snapshot.data!.docs[actualIndex + 1].get('p_name');
+
+            String productImage1 =
+                snapshot.data!.docs[actualIndex].get('p_imgs')[0];
+            String productImage2 =
+                snapshot.data!.docs[actualIndex + 1].get('p_imgs')[0];
+
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MatchDetailScreen(
+                      price1: price1,
+                      price2: price2,
+                      productName1: productName1,
+                      productName2: productName2,
+                      productImage1: productImage1,
+                      productImage2: productImage2,
+                      totalPrice: totalPrice,
+                    ),
+                  ),
+                );
+              },
+              child: Card(
+                clipBehavior: Clip.antiAlias,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text('Product Title',
-                        style: TextStyle(
+                    Row(
+                      children: [
+                        Column(
+                          children: [
+                            Image.network(
+                              productImage1,
+                              width: 80,
+                              height: 80,
+                            ),
+                            Image.network(
+                              productImage2,
+                              width: 80,
+                              height: 80,
+                            ),
+                          ],
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                const SizedBox(height: 2),
+                                Text(
+                                  productName1,
+                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  'Price: \$${price1.toString()}',
+                                  style: const TextStyle(color: Colors.grey),
+                                ),
+                                const SizedBox(height: 20),
+                                Text(
+                                  productName2,
+                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  'Price: \$${price2.toString()}',
+                                  style: const TextStyle(color: Colors.grey),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Text(
+                        'Total Price: \$${totalPrice.toString()}',
+                        style: const TextStyle(
+                          color: Colors.black,
                           fontWeight: FontWeight.bold,
-                        )),
-                    Text('Price',
-                        style: TextStyle(
-                          color: Colors.grey,
-                        )),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
+            );
+          },
+          itemCount: (mixMatchList.length).ceil(),
         );
       },
-      itemCount: 50,
     );
   }
-Widget _buildProductMathGrids(String category) {
-  return GridView.builder(
-    padding: EdgeInsets.all(2),
-    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-      crossAxisCount: 2,
-      childAspectRatio: 1 / 2,
-    ),
-    itemBuilder: (BuildContext context, int index) {
-      
-      String productName1 = "Product $index A";
-      double price1 = 100.0; 
-      String productName2 = "Product $index B";
-      double price2 = 150.0; 
-      double totalPrice = price1 + price2;
- return GestureDetector(
-        onTap: () {
-          // Add navigation to ItemMatching page here
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => MatchDetailScreen()), // Ensure you have a class named ItemMatching
-          );
-        },
-        child: Card(
-        clipBehavior: Clip.antiAlias,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              children: [
-                
-                Column(
-                  children: [
-                    Image.asset(
-                      card1,
-                      width: 80,
-                      height: 80,
-                    ),
-                    Image.asset(
-                      card2,
-                      width: 80,
-                      height: 80,
-                    ),
-                  ],
-                ),
-                
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        SizedBox(height: 2,),
-                        Text(
-                          productName1, 
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          'Price: \$${price1.toString()}', 
-                          style: TextStyle(
-                            color: Colors.grey,
-                          ),
-                        ),
-                        SizedBox(height: 20,),
-                        Text(
-                          productName2, 
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          'Price: \$${price2.toString()}', 
-                          style: TextStyle(
-                            color: Colors.grey,
-                          ),
-                        ),
-                       
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(horizontal: 8),
-            //   child: Text(
-            //     'Total Price: \$${totalPrice.toString()}', 
-            //     style: TextStyle(
-            //       color: Colors.black,
-            //       fontWeight: FontWeight.bold,
-            //     ),
-            //   ),
-            // ),
-          ],
-        ),
-      ),);
-    },
-    itemCount: 50,
-  );
-}
 }

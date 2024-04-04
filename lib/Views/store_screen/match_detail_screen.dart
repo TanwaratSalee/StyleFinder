@@ -2,7 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MatchDetailScreen extends StatefulWidget {
-  const MatchDetailScreen({Key? key}) : super(key: key);
+  final String productName1;
+  final String productName2;
+  final String price1;
+  final String price2;
+  final String productImage1;
+  final String productImage2;
+  final String totalPrice;
+
+  const MatchDetailScreen({
+    this.productName1 = '',
+    this.productName2 = '',
+    this.price1 = '',
+    this.price2 = '',
+    this.productImage1 = '',
+    this.productImage2 = '',
+    this.totalPrice = '',
+  });
 
   @override
   _MatchDetailScreenState createState() => _MatchDetailScreenState();
@@ -63,7 +79,6 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // สำหรับรูปภาพแรกและข้อมูล
                       Column(
                         children: [
                           Container(
@@ -74,16 +89,21 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                               border: Border.all(color: Colors.black),
                             ),
                             child: Center(
-                              child: Text('Image 1'), // ตรงนี้ควรเป็น Image widget
+                              child: Image.network(
+                                widget.productImage1,
+                                width: 120,
+                                height: 120,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                           SizedBox(
                             height: 10,
                           ),
-                          Text('Product Name 1',
+                          Text(widget.productName1,
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold)),
-                          Text('฿999',
+                          Text('฿${widget.price1}',
                               style: TextStyle(fontSize: 14, color: Colors.black)),
                         ],
                       ),
@@ -119,16 +139,21 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                               border: Border.all(color: Colors.black),
                             ),
                             child: Center(
-                              child: Text('Image 2'), // ตรงนี้ควรเป็น Image widget
+                              child: Image.network(
+                              widget.productImage2,
+                              width: 120,
+                              height: 120,
+                              fit: BoxFit.cover,
+                            ),
                             ),
                           ),
                           SizedBox(
                             height: 10,
                           ),
-                          Text('Product Name 2',
+                          Text(widget.productName2,
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold)),
-                          Text('฿999',
+                          Text('฿${widget.price2}',
                               style: TextStyle(fontSize: 14, color: Colors.black)),
                         ],
                       ),
