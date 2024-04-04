@@ -31,7 +31,7 @@ class MenuSettingScreen extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: whiteColor,
           title: const Text(
-            'Setting',
+            'Setting11111',
             textAlign: TextAlign
                 .center, // This centers the title in the space available.
             style: TextStyle(
