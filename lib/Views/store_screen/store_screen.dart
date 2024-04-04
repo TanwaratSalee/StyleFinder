@@ -235,91 +235,90 @@ class StoreScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildProductGrid(String category) {
+    return FutureBuilder<QuerySnapshot>(
+      future: FirebaseFirestore.instance.collection('products').get(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        }
+        if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        }
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return Text('No data available');
+        }
 
-Widget _buildProductGrid(String category) {
-  return FutureBuilder<QuerySnapshot>(
-    future: FirebaseFirestore.instance.collection('products').get(),
-    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return CircularProgressIndicator();
-      }
-      if (snapshot.hasError) {
-        return Text('Error: ${snapshot.error}');
-      }
-      if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-        return Text('No data available');
-      }
+        return GridView.builder(
+          padding: EdgeInsets.all(8.0),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 1 / 1.1,
+          ),
+          itemCount: snapshot.data!.docs.length,
+          itemBuilder: (BuildContext context, int index) {
+            var product = snapshot.data!.docs[index];
+            String productName = product.get('p_name');
+            String price = product.get('p_price');
+            String productImage = product.get('p_imgs')[0];
+            String subcollection = product.get('p_subcollection');
 
-      return GridView.builder(
-        padding: EdgeInsets.all(8.0),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 1 / 1.1,
-        ),
-        itemCount: snapshot.data!.docs.length,
-        itemBuilder: (BuildContext context, int index) {
-          var product = snapshot.data!.docs[index];
-          String productName = product.get('p_name');
-          String price = product.get('p_price');
-          String productImage = product.get('p_imgs')[0];
-          String subcollection = product.get('p_subcollection');
-
-          if (category == 'All' || subcollection == category) {
-            print('Subcollection: $subcollection');
-            return GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MatchDetailScreen(),
-                  ),
-                );
-              },
-              child: Card(
-                clipBehavior: Clip.antiAlias,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Image.network(
-                      productImage,
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: 150,
+            if (category == 'All' || subcollection == category) {
+              print('Subcollection: $subcollection');
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MatchDetailScreen(),
                     ),
-                    Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            productName,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            'Price: $price',
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
+                  );
+                },
+                child: Card(
+                  clipBehavior: Clip.antiAlias,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Image.network(
+                        productImage,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: 150,
                       ),
-                    ),
-                  ],
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              productName,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              'Price: $price',
+                              style: TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          } else {
-            return SizedBox();
-          }
-        },
-      );
-    },
-  );
-}
+              );
+            } else {
+              return SizedBox();
+            }
+          },
+        );
+      },
+    );
+  }
 
-Widget _buildCategoryMath(BuildContext context) {
+  Widget _buildCategoryMath(BuildContext context) {
     return DefaultTabController(
       length: 5,
       child: Column(
@@ -352,137 +351,140 @@ Widget _buildCategoryMath(BuildContext context) {
     );
   }
 
-Widget _buildProductMathGrids(String category) {
-  return StreamBuilder<QuerySnapshot>(
-    stream: FirebaseFirestore.instance.collection('products').snapshots(),
-    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-      if (!snapshot.hasData) {
-        return CircularProgressIndicator();
-      }
-
-    List<String> mixMatchList = [];
-    snapshot.data!.docs.forEach((doc) {
-      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-      if (data.containsKey('p_mixmatch')) {
-        String currentMixMatch = data['p_mixmatch'];
-        if (!mixMatchList.contains(currentMixMatch)) {
-          mixMatchList.add(currentMixMatch);
+  Widget _buildProductMathGrids(String category) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance.collection('products').snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (!snapshot.hasData) {
+          return CircularProgressIndicator();
         }
-      }
-    });
 
-      // แสดงข้อมูลที่ได้จากการตรวจสอบ p_mixmatch ใน console
-      print('MixMatch List: $mixMatchList');
+        List<String> mixMatchList = [];
+        snapshot.data!.docs.forEach((doc) {
+          Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+          if (data.containsKey('p_mixmatch')) {
+            String currentMixMatch = data['p_mixmatch'];
+            if (!mixMatchList.contains(currentMixMatch)) {
+              mixMatchList.add(currentMixMatch);
+            }
+          }
+        });
 
+        // แสดงข้อมูลที่ได้จากการตรวจสอบ p_mixmatch ใน console
+        print('MixMatch List: $mixMatchList');
 
-      return GridView.builder(
-        padding: EdgeInsets.all(2),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 1 / 1,
-        ),
-        itemBuilder: (BuildContext context, int index) {
-          int actualIndex = index * 2;
+        return GridView.builder(
+          padding: EdgeInsets.all(2),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 1 / 1,
+          ),
+          itemBuilder: (BuildContext context, int index) {
+            int actualIndex = index * 2;
 
-          String price1 = snapshot.data!.docs[actualIndex].get('p_price');
-          String price2 = snapshot.data!.docs[actualIndex + 1].get('p_price');
+            String price1 = snapshot.data!.docs[actualIndex].get('p_price');
+            String price2 = snapshot.data!.docs[actualIndex + 1].get('p_price');
 
-          String totalPrice = (int.parse(price1) + int.parse(price2)).toString();
+            String totalPrice =
+                (int.parse(price1) + int.parse(price2)).toString();
 
-          String productName1 = snapshot.data!.docs[actualIndex].get('p_name');
-          String productName2 = snapshot.data!.docs[actualIndex + 1].get('p_name');
+            String productName1 =
+                snapshot.data!.docs[actualIndex].get('p_name');
+            String productName2 =
+                snapshot.data!.docs[actualIndex + 1].get('p_name');
 
-          String productImage1 = snapshot.data!.docs[actualIndex].get('p_imgs')[0];
-          String productImage2 = snapshot.data!.docs[actualIndex + 1].get('p_imgs')[0];
+            String productImage1 =
+                snapshot.data!.docs[actualIndex].get('p_imgs')[0];
+            String productImage2 =
+                snapshot.data!.docs[actualIndex + 1].get('p_imgs')[0];
 
-          return GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MatchDetailScreen(
-                    price1: price1,
-                    price2: price2,
-                    productName1: productName1,
-                    productName2: productName2,
-                    productImage1: productImage1,
-                    productImage2: productImage2,
-                    totalPrice: totalPrice,
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MatchDetailScreen(
+                      price1: price1,
+                      price2: price2,
+                      productName1: productName1,
+                      productName2: productName2,
+                      productImage1: productImage1,
+                      productImage2: productImage2,
+                      totalPrice: totalPrice,
+                    ),
+                  ),
+                );
+              },
+              child: Card(
+                clipBehavior: Clip.antiAlias,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      children: [
+                        Column(
+                          children: [
+                            Image.network(
+                              productImage1,
+                              width: 80,
+                              height: 80,
+                            ),
+                            Image.network(
+                              productImage2,
+                              width: 80,
+                              height: 80,
+                            ),
+                          ],
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                SizedBox(height: 2),
+                                Text(
+                                  productName1,
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  'Price: \$${price1.toString()}',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                                SizedBox(height: 20),
+                                Text(
+                                  productName2,
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  'Price: \$${price2.toString()}',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Text(
+                        'Total Price: \$${totalPrice.toString()}',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             );
           },
-            child: Card(
-              clipBehavior: Clip.antiAlias,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Row(
-                    children: [
-                      Column(
-                        children: [
-                          Image.network(
-                            productImage1,
-                            width: 80,
-                            height: 80,
-                          ),
-                          Image.network(
-                            productImage2,
-                            width: 80,
-                            height: 80,
-                          ),
-                        ],
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              SizedBox(height: 2),
-                              Text(
-                                productName1,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                'Price: \$${price1.toString()}',
-                                style: TextStyle(color: Colors.grey),
-                              ),
-                              SizedBox(height: 20),
-                              Text(
-                                productName2,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                'Price: \$${price2.toString()}',
-                                style: TextStyle(color: Colors.grey),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Text(
-                      'Total Price: \$${totalPrice.toString()}',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-        itemCount: (mixMatchList.length).ceil(),
-      );
-    },
-  );
-}
-
+          itemCount: (mixMatchList.length).ceil(),
+        );
+      },
+    );
+  }
 }
