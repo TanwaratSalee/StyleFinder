@@ -26,7 +26,7 @@ class StoreScreen extends StatelessWidget {
         child: Column(
           children: <Widget>[
             _buildLogoAndRatingSection(context),
-             _buildReviewHighlights(),
+            //  _buildReviewHighlights(),
              _buildProductMatchTabs(context), 
             
           ],

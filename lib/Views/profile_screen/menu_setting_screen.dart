@@ -1,7 +1,6 @@
 // ignore_for_file: library_prefixes
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_finalproject/Views/auth_screen/login_screen.dart';
 import 'package:flutter_finalproject/Views/cart_screen/address_screen.dart';
 import 'package:flutter_finalproject/Views/chat_screen/messaging_screen.dart';

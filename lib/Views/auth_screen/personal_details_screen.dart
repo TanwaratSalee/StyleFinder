@@ -77,7 +77,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: whiteColor,
-      appBar: AppBar(title: const Text('Personal Details')),
+      appBar: AppBar(title: const Text('Personal Details').text.fontFamily(medium).size(20).make()),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(15),
         child: Column(

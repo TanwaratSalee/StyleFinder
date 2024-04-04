@@ -406,7 +406,7 @@ class NewsScreen extends StatelessWidget {
                                 });
                           }
                         }),
-                        
+ StreamBuilder(
                       stream: FirestoreServices.allproducts(), 
                       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
                         if(!snapshot.hasData){
@@ -461,7 +461,6 @@ class NewsScreen extends StatelessWidget {
                         });
                         }
                       }),
->>>>>>> 85963a20f35b736fa1cf31648a320052bd8be019
                   ],
                 ),
               ),

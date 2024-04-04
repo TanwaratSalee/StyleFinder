@@ -79,7 +79,6 @@ Widget _buildReviewProduct(BuildContext context) {
 Widget _buildReviewShop(BuildContext context) {
   return Column(
     children: <Widget>[
-      YourWidget(),
       Padding(
         padding: const EdgeInsets.all(5),
         child: _buildReviewHighlights(),
