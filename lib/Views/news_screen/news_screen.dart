@@ -147,39 +147,39 @@ class NewsScreen extends StatelessWidget {
 
                     10.heightBox,
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: List.generate(
-                        2,
-                        (index) => homeButtons(
-                          height: context.screenHeight * 0.1,
-                          width: context.screenWidth / 2.3,
-                          icon: index == 0 ? icTodaysDeal : icFlashDeal,
-                          title: index == 0 ? todayDeal : flashsale,
-                        ),
-                      ),
-                    ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    //   children: List.generate(
+                    //     2,
+                    //     (index) => homeButtons(
+                    //       height: context.screenHeight * 0.1,
+                    //       width: context.screenWidth / 2.3,
+                    //       icon: index == 0 ? icTodaysDeal : icFlashDeal,
+                    //       title: index == 0 ? todayDeal : flashsale,
+                    //     ),
+                    //   ),
+                    // ),
 
-                    10.heightBox,
+                    // 10.heightBox,
 
                     // 2nd swiper
-                    VxSwiper.builder(
-                        aspectRatio: 16 / 9,
-                        autoPlay: true,
-                        height: 170,
-                        enlargeCenterPage: true,
-                        itemCount: secondSlidersList.length,
-                        itemBuilder: (context, index) {
-                          return Image.asset(
-                            secondSlidersList[index],
-                            fit: BoxFit.fill,
-                          )
-                              .box
-                              .rounded
-                              .clip(Clip.antiAlias)
-                              .margin(const EdgeInsets.symmetric(horizontal: 8))
-                              .make();
-                        }),
+                    // VxSwiper.builder(
+                    //     aspectRatio: 16 / 9,
+                    //     autoPlay: true,
+                    //     height: 170,
+                    //     enlargeCenterPage: true,
+                    //     itemCount: secondSlidersList.length,
+                    //     itemBuilder: (context, index) {
+                    //       return Image.asset(
+                    //         secondSlidersList[index],
+                    //         fit: BoxFit.fill,
+                    //       )
+                    //           .box
+                    //           .rounded
+                    //           .clip(Clip.antiAlias)
+                    //           .margin(const EdgeInsets.symmetric(horizontal: 8))
+                    //           .make();
+                    //     }),
 
                     10.heightBox,
 
@@ -204,7 +204,7 @@ class NewsScreen extends StatelessWidget {
                       ),
                     ),
 
-                    20.heightBox,
+                    // 20.heightBox,
                     // Align(
                     //     alignment: Alignment.centerLeft,
                     //     child: featuredCategories.text
@@ -332,7 +332,7 @@ class NewsScreen extends StatelessWidget {
                     //           .make();
                     //     }),
 
-                    20.heightBox,
+                    // 20.heightBox,
                     Align(
                         alignment: Alignment.centerLeft,
                         child: allproducts.text
@@ -340,7 +340,7 @@ class NewsScreen extends StatelessWidget {
                             .color(fontGreyDark)
                             .size(18)
                             .make()),
-                    20.heightBox,
+                    // 20.heightBox,
 
                     StreamBuilder(
                         stream: FirestoreServices.allproducts(),

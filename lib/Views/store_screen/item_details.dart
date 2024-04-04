@@ -38,8 +38,7 @@ class ItemDetails extends StatelessWidget {
                 Get.back();
               },
               icon: const Icon(Icons.arrow_back_ios)),
-          title:
-              title!.text.color(fontGreyDark).fontFamily(bold).size(18).make(),
+          title: title!.text.color(fontGreyDark).fontFamily(bold).size(18).make(),
         ),
         body: Column(
           children: [
@@ -60,6 +59,7 @@ class ItemDetails extends StatelessWidget {
                         return Image.network(
                           data['p_imgs'][index],
                           width: double.infinity,
+
                           fit: BoxFit.cover,
                         );
                       },
@@ -131,6 +131,8 @@ class ItemDetails extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             "Seller".text.fontFamily(regular).make(),
+                            
+                            
                             5.heightBox,
                             "${data['p_seller']}"
                                 .text
@@ -153,7 +155,7 @@ class ItemDetails extends StatelessWidget {
                         GestureDetector(
                           onTap: () {
                             Get.to(
-                              () => StoreScreen(),
+                              () =>  StoreScreen(),
                               // arguments: {
                               //   'seller': data['p_seller'],
                               //   'vendor_id': data['vendor_id']
@@ -171,8 +173,9 @@ class ItemDetails extends StatelessWidget {
                             child: Text(
                               'See Store',
                               style: TextStyle(
-                                  color: Colors.white, // สีข้อความในปุ่ม
-                                  fontFamily: regular),
+                                color: Colors.white, // สีข้อความในปุ่ม
+                                fontFamily: regular
+                              ),
                             ),
                           ),
                         )
@@ -184,7 +187,7 @@ class ItemDetails extends StatelessWidget {
                         .color(fontLightGrey)
                         .make(),
                     20.heightBox,
-
+                    
                     Obx(
                       () => Column(
                         children: [
