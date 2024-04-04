@@ -33,7 +33,7 @@ class CartController extends GetxController {
     paymentIndex.value = index;
   }
 
-  placeMyOrder({required orderPaymentMethod,required totalAmount}) async {
+  placeMyOrder({required orderPaymentMethod, required totalAmount}) async {
     placingOrder(true);
     await getProductDetails();
     String orderCode = generateRandomOrderCode(8);
@@ -56,30 +56,29 @@ class CartController extends GetxController {
       'order_on_delivery': false,
       'total_amount': totalAmount,
       'orders': FieldValue.arrayUnion(products),
-      'vendors' : FieldValue.arrayUnion(vendors)
+      'vendors': FieldValue.arrayUnion(vendors)
     });
-    placingOrder(false); 
+    placingOrder(false);
   }
 
   getProductDetails() {
-    products.clear(); 
+    products.clear();
     vendors.clear();
-    for(var i = 0; i < productSnapshot.length; i++) {
+    for (var i = 0; i < productSnapshot.length; i++) {
       products.add({
-        'color' : productSnapshot[i]['color'],
-        'img' : productSnapshot[i]['img'],
+        'color': productSnapshot[i]['color'],
+        'img': productSnapshot[i]['img'],
         'vendor_id': productSnapshot[i]['vendor_id'],
         'price': productSnapshot[i]['tprice'],
-        'qty' : productSnapshot[i]['qty'],
-        'title' : productSnapshot[i]['title']
+        'qty': productSnapshot[i]['qty'],
+        'title': productSnapshot[i]['title']
       });
       vendors.add(productSnapshot[i]['vendor_id']);
     }
   }
-  
 
-  clearCart(){
-    for(var i = 0; i < productSnapshot.length; i++) {
+  clearCart() {
+    for (var i = 0; i < productSnapshot.length; i++) {
       firestore.collection(cartCollection).doc(productSnapshot[i].id).delete();
     }
   }
@@ -88,7 +87,8 @@ class CartController extends GetxController {
 String generateRandomOrderCode(int length) {
   final Random _random = Random();
   const String _availableChars = '0123456789';
-  final String _randomString = List.generate(length, (_) => _availableChars[_random.nextInt(_availableChars.length)]).join();
-  
+  final String _randomString = List.generate(length,
+      (_) => _availableChars[_random.nextInt(_availableChars.length)]).join();
+
   return _randomString;
 }

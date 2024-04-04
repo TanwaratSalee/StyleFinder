@@ -18,8 +18,11 @@ class FirestoreServices {
         .snapshots();
   }
 
-  static getSubCollectionProducts(title){
-    return firestore.collection(productsCollection).where('p_subcollection', isEqualTo: title).snapshots();
+  static getSubCollectionProducts(title) {
+    return firestore
+        .collection(productsCollection)
+        .where('p_subcollection', isEqualTo: title)
+        .snapshots();
   }
 
   //get cart
@@ -31,13 +34,12 @@ class FirestoreServices {
   }
 
   //get address
-    static getAddress(uid) {
+  static getAddress(uid) {
     return firestore
         .collection(usersCollection)
         .where('address', isEqualTo: uid)
         .snapshots();
   }
-
 
   // delete document
   static deleteDocument(docId) {
@@ -129,7 +131,9 @@ class FirestoreServices {
         .collection(ordersCollection)
         .where('order_on_delivery', isEqualTo: false)
         .where('order_delivered', isEqualTo: false)
-        .where('order_by', isEqualTo: currentUser!.uid) // If you want to filter by the current user
+        .where('order_by',
+            isEqualTo:
+                currentUser!.uid) // If you want to filter by the current user
         .snapshots();
   }
 
@@ -138,8 +142,11 @@ class FirestoreServices {
     return firestore
         .collection(ordersCollection)
         .where('order_on_delivery', isEqualTo: true)
-        .where('order_delivered', isEqualTo: false) // Ensuring it's not yet delivered
-        .where('order_by', isEqualTo: currentUser!.uid) // If you want to filter by the current user
+        .where('order_delivered',
+            isEqualTo: false) // Ensuring it's not yet delivered
+        .where('order_by',
+            isEqualTo:
+                currentUser!.uid) // If you want to filter by the current user
         .snapshots();
   }
 
@@ -148,7 +155,9 @@ class FirestoreServices {
     return firestore
         .collection(ordersCollection)
         .where('order_delivered', isEqualTo: true)
-        .where('order_by', isEqualTo: currentUser!.uid) // If you want to filter by the current user
+        .where('order_by',
+            isEqualTo:
+                currentUser!.uid) // If you want to filter by the current user
         .snapshots();
   }
 }

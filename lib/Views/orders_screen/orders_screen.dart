@@ -69,8 +69,8 @@ class _OrdersScreenState extends State<OrdersScreen>
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(
-                child: loadingIndicator(),
-              );
+            child: loadingIndicator(),
+          );
         } else if (snapshot.data!.docs.isEmpty) {
           return const Center(
               child: Text("No orders yet!",
@@ -89,17 +89,26 @@ class _OrdersScreenState extends State<OrdersScreen>
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Center(child: Text('x${product['qty']}',style: const TextStyle(fontSize: 12,color: fontGreyDark,fontFamily: regular),
+                      Center(
+                        child: Text(
+                          'x${product['qty']}',
+                          style: const TextStyle(
+                              fontSize: 12,
+                              color: fontGreyDark,
+                              fontFamily: regular),
                         ),
                       ),
-                      const SizedBox(width:5), 
-                      Image.network(product['img'],width: 70, height: 60, fit: BoxFit.cover), 
-                      const SizedBox(width:5), 
+                      const SizedBox(width: 5),
+                      Image.network(product['img'],
+                          width: 70, height: 60, fit: BoxFit.cover),
+                      const SizedBox(width: 5),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(product['title'],style: const TextStyle(fontFamily: regular, fontSize: 14)),
+                            Text(product['title'],
+                                style: const TextStyle(
+                                    fontFamily: regular, fontSize: 14)),
                             Text('${product['price']} Bath',
                                 style: const TextStyle(color: fontGreyDark)),
                           ],
@@ -120,7 +129,9 @@ class _OrdersScreenState extends State<OrdersScreen>
                     children: [
                       Text("Order code ${orderData['order_code']}",
                           style: const TextStyle(
-                              color: fontGreyDark, fontFamily: medium, fontSize: 16)),
+                              color: fontGreyDark,
+                              fontFamily: medium,
+                              fontSize: 16)),
                       const SizedBox(height: 10),
                       ...productDetailWidgets,
                       const SizedBox(height: 10),
@@ -140,7 +151,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                                     fontSize: 20,
                                     fontFamily: regular,
                                     color: fontGreyDark)),
-                                    const TextSpan(
+                            const TextSpan(
                                 text: '   Bath',
                                 style: TextStyle(
                                     fontSize: 14,
@@ -152,7 +163,14 @@ class _OrdersScreenState extends State<OrdersScreen>
                     ],
                   ),
                 ),
-              ).box.color(whiteColor).roundedSM.shadowSm.margin(const EdgeInsets.all(12)).p12.make();
+              )
+                  .box
+                  .color(whiteColor)
+                  .roundedSM
+                  .shadowSm
+                  .margin(const EdgeInsets.all(12))
+                  .p12
+                  .make();
             },
           );
         }

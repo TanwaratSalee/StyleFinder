@@ -96,7 +96,7 @@ class MenuSettingScreen extends StatelessWidget {
                                   Get.to(() => AddressScreen());
                                   break;
                                 case 3:
-                                  Get.to(() =>  OrdersScreen());
+                                  Get.to(() => OrdersScreen());
                                   break;
                                 case 4:
                                   Get.to(() => const MessagesScreen());
@@ -120,7 +120,8 @@ class MenuSettingScreen extends StatelessWidget {
                           .box
                           .color(thinPrimaryApp)
                           .rounded
-                          .margin(const EdgeInsets.symmetric(horizontal: 18, vertical: 8))
+                          .margin(const EdgeInsets.symmetric(
+                              horizontal: 18, vertical: 8))
                           .padding(const EdgeInsets.symmetric(horizontal: 16))
                           // .shadowSm
                           .make(),
@@ -142,8 +143,7 @@ class MenuSettingScreen extends StatelessWidget {
                         children: [
                           OutlinedButton(
                             style: OutlinedButton.styleFrom(
-                              side: const BorderSide(
-                                  color: Colors.transparent), 
+                              side: const BorderSide(color: Colors.transparent),
                             ),
                             onPressed: () async {
                               await Get.put(AuthController())
@@ -151,31 +151,32 @@ class MenuSettingScreen extends StatelessWidget {
                               Get.offAll(() => LoginScreen());
                             },
                             child: Row(
-                              mainAxisSize: MainAxisSize.min, 
+                              mainAxisSize: MainAxisSize.min,
                               children: [
                                 Image.asset(
-                                  icLogout, 
-                                  width: 30, 
+                                  icLogout,
+                                  width: 30,
                                 ),
-                                const SizedBox(
-                                    width:
-                                        8), 
+                                const SizedBox(width: 8),
                                 const Text('Logout',
-                                    style: TextStyle(
-                                        fontFamily: regular,
-                                        fontSize: 16,
-                                        color: fontGrey)).text
-                                .color(fontGrey)
-                                .fontFamily(regular)
-                                .make(), 
+                                        style: TextStyle(
+                                            fontFamily: regular,
+                                            fontSize: 16,
+                                            color: fontGrey))
+                                    .text
+                                    .color(fontGrey)
+                                    .fontFamily(regular)
+                                    .make(),
                               ],
                             ),
                           )
                         ],
-                      ).box
+                      )
+                          .box
                           .color(thinPrimaryApp)
                           .rounded
-                          .margin(const EdgeInsets.symmetric(horizontal: 18, vertical: 8))
+                          .margin(const EdgeInsets.symmetric(
+                              horizontal: 18, vertical: 8))
                           .padding(const EdgeInsets.symmetric(horizontal: 8))
                           // .shadowSm
                           .make(),

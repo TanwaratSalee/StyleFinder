@@ -26,18 +26,38 @@ class CollectionScreen extends StatelessWidget {
         child: GridView.builder(
             shrinkWrap: true,
             itemCount: 5,
-            gridDelegate:
-                const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 1, mainAxisSpacing: 8,crossAxisSpacing:8, mainAxisExtent: 200),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 1,
+                mainAxisSpacing: 8,
+                crossAxisSpacing: 8,
+                mainAxisExtent: 200),
             itemBuilder: (context, index) {
               return Column(
                 children: [
-                  Image.asset(collectionImages[index],height: 183,width: 320, fit:BoxFit.fill,),
-                  collectionList[index].text.size(2).color(whiteColor).align(TextAlign.center).make(),
+                  Image.asset(
+                    collectionImages[index],
+                    height: 183,
+                    width: 320,
+                    fit: BoxFit.fill,
+                  ),
+                  collectionList[index]
+                      .text
+                      .size(2)
+                      .color(whiteColor)
+                      .align(TextAlign.center)
+                      .make(),
                 ],
-              ).box.rounded.clip(Clip.antiAlias).color(whiteColor).outerShadowSm.make().onTap(() {
+              )
+                  .box
+                  .rounded
+                  .clip(Clip.antiAlias)
+                  .color(whiteColor)
+                  .outerShadowSm
+                  .make()
+                  .onTap(() {
                 controller.getSubCollection(collectionList[index]);
                 Get.to(() => CollectionDetails(title: collectionList[index]));
-              }); 
+              });
             }),
       ),
     );

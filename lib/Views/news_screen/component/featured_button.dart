@@ -9,9 +9,7 @@ Widget featuredButton({String? title, icon}) {
   return Row(
     children: [
       Image.asset(icon, width: 60, fit: BoxFit.fill),
-
       10.widthBox,
-      
       title!.text.fontFamily(regular).color(fontBlack).make(),
     ],
   )
@@ -24,6 +22,6 @@ Widget featuredButton({String? title, icon}) {
       .outerShadowSm
       .make()
       .onTap(() {
-        Get.to(() => CollectionDetails(title: title));
-      });
+    Get.to(() => CollectionDetails(title: title));
+  });
 }

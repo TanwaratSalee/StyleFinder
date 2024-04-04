@@ -8,12 +8,14 @@ import 'package:flutter_finalproject/controllers/cart_controller.dart';
 import 'package:get/get.dart';
 
 class FirebaseService {
-  final CollectionReference usersCollection = FirebaseFirestore.instance.collection('users');
+  final CollectionReference usersCollection =
+      FirebaseFirestore.instance.collection('users');
 
   Future<DocumentSnapshot> getCurrentUserAddress() async {
     try {
       String userId = currentUser!.uid;
-      DocumentSnapshot documentSnapshot = await usersCollection.doc(userId).get();
+      DocumentSnapshot documentSnapshot =
+          await usersCollection.doc(userId).get();
       return documentSnapshot;
     } catch (error) {
       throw error;
@@ -40,13 +42,16 @@ class _ShippingDetailsState extends State<ShippingDetails> {
 
   Future<void> loadCurrentUserAddress() async {
     try {
-      DocumentSnapshot documentSnapshot = await FirebaseService().getCurrentUserAddress();
+      DocumentSnapshot documentSnapshot =
+          await FirebaseService().getCurrentUserAddress();
       if (documentSnapshot.exists) {
-        Map<String, dynamic>? userData = documentSnapshot.data() as Map<String, dynamic>?;
+        Map<String, dynamic>? userData =
+            documentSnapshot.data() as Map<String, dynamic>?;
         if (userData != null && userData.containsKey('address')) {
           Map<String, dynamic> addressData = userData['address'];
           setState(() {
-            _currentAddress = '${addressData['address']}, ${addressData['city']}, ${addressData['state']}, ${addressData['postalCode']}, ${addressData['phone']}';
+            _currentAddress =
+                '${addressData['address']}, ${addressData['city']}, ${addressData['state']}, ${addressData['postalCode']}, ${addressData['phone']}';
           });
         }
       }
@@ -65,13 +70,18 @@ class _ShippingDetailsState extends State<ShippingDetails> {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: Text("Shipping Info").text.fontFamily(regular).color(fontGreyDark).make(),
+        title: Text("Shipping Info")
+            .text
+            .fontFamily(regular)
+            .color(fontGreyDark)
+            .make(),
       ),
       bottomNavigationBar: SizedBox(
         height: 70,
         child: ourButton(
           onPress: () {
-            if (_useExistingAddress || controller.addressController.text.length > 10) {
+            if (_useExistingAddress ||
+                controller.addressController.text.length > 10) {
               // Here, add logic to save or use the existing/new address as needed
               Get.to(() => const PaymentMethods());
             } else {
@@ -97,17 +107,38 @@ class _ShippingDetailsState extends State<ShippingDetails> {
               },
             ),
             if (_useExistingAddress)
-              Text(_currentAddress ?? 'No Address in Data',
+              Text(
+                _currentAddress ?? 'No Address in Data',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               )
             else
               Column(
                 children: [
-                  customTextField(label: "Address", isPass: false, readOnly: false, controller: controller.addressController),
-                  customTextField(label: "City", isPass: false, readOnly: false, controller: controller.cityController),
-                  customTextField(label: "State", isPass: false, readOnly: false, controller: controller.stateController),
-                  customTextField(label: "Postal Code", isPass: false, readOnly: false, controller: controller.postalcodeController),
-                  customTextField(label: "Phone", isPass: false, readOnly: false, controller: controller.phoneController),
+                  customTextField(
+                      label: "Address",
+                      isPass: false,
+                      readOnly: false,
+                      controller: controller.addressController),
+                  customTextField(
+                      label: "City",
+                      isPass: false,
+                      readOnly: false,
+                      controller: controller.cityController),
+                  customTextField(
+                      label: "State",
+                      isPass: false,
+                      readOnly: false,
+                      controller: controller.stateController),
+                  customTextField(
+                      label: "Postal Code",
+                      isPass: false,
+                      readOnly: false,
+                      controller: controller.postalcodeController),
+                  customTextField(
+                      label: "Phone",
+                      isPass: false,
+                      readOnly: false,
+                      controller: controller.phoneController),
                 ],
               ),
           ],

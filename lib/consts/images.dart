@@ -8,7 +8,6 @@ const String icFacebook = "assets/icons/iconsOtherApp/facebook-icon.png";
 const String icApple = "assets/icons/iconsOtherApp/apple-icon.png";
 const String icGmail = "assets/icons/iconsOtherApp/gmail-icon.png";
 
-
 //icon nav bar top
 // const IconData icNotification = IconData(0xe451, fontFamily: 'MaterialIcons');
 // const String logoAppOntop = "assets/icons/iconsNavbar/LogoOnApp.jpg";
@@ -21,7 +20,6 @@ const String icLogoOnTop = "assets/icons/iconsNavbarinapp/logoOfApp.png";
 const String icSearch = "assets/icons/iconsNavbarinapp/Search.png";
 const String icCart = "assets/icons/iconsNavbarinapp/cart.png";
 
-
 //icon nav bar bottom
 const String icHome = "assets/icons/iconsNavbarinapp/Home.png";
 // const String icCollection = "assets/icons/iconsNavbarinapp/collection.png";
@@ -30,12 +28,15 @@ const String icMatch = "assets/icons/iconsNavbarinapp/match.png";
 const String icPerson = "assets/icons/iconsNavbarinapp/me.png";
 
 //Selected icon navbarbottom
-const String icHomeSelected = "assets/icons/iconsNavbarinapp/icHomeSelected.png";
+const String icHomeSelected =
+    "assets/icons/iconsNavbarinapp/icHomeSelected.png";
 // const String icCollection = "assets/icons/iconsNavbarinapp/collection.png";
-const String icNewsSelected = "assets/icons/iconsNavbarinapp/icNewsSelected.png";
-const String icMatchSelected = "assets/icons/iconsNavbarinapp/icMatchSelected.png";
-const String icPersonSelected = "assets/icons/iconsNavbarinapp/icPersonSelected.png";
-
+const String icNewsSelected =
+    "assets/icons/iconsNavbarinapp/icNewsSelected.png";
+const String icMatchSelected =
+    "assets/icons/iconsNavbarinapp/icMatchSelected.png";
+const String icPersonSelected =
+    "assets/icons/iconsNavbarinapp/icPersonSelected.png";
 
 //other
 const String icLogoApp = "assets/icons/LogoOnApp.png";
@@ -119,5 +120,3 @@ const String icVisa = "assets/images/payment/card.png";
 // ----------------------------------------------- item Screen -----------------------------------------------
 const String icFav = "assets/icons/icNormal/buttonFavourite.png";
 const String icClickFav = "assets/icons/icNormal/ckickbuttonFavourite.png";
-
-

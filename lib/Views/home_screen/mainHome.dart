@@ -19,7 +19,7 @@ class MainHome extends StatefulWidget {
 }
 
 class _MainHomeState extends State<MainHome> {
-  int _selectedIndex = 0; 
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -71,14 +71,12 @@ class _MainHomeState extends State<MainHome> {
         body: Column(
           children: [
             Expanded(
-              child: navBody[
-                  _selectedIndex], 
+              child: navBody[_selectedIndex],
             ),
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
-          currentIndex:
-              _selectedIndex, 
+          currentIndex: _selectedIndex,
           selectedItemColor: primaryApp,
           selectedLabelStyle: const TextStyle(fontFamily: regular),
           type: BottomNavigationBarType.fixed,
@@ -86,7 +84,7 @@ class _MainHomeState extends State<MainHome> {
           items: navbarItem,
           onTap: (value) {
             setState(() {
-              _selectedIndex = value; 
+              _selectedIndex = value;
             });
           },
         ),

@@ -13,24 +13,22 @@ Widget exitDialog(context) {
         "Are your sure you want to exit?".text.size(16).color(fontBlack).make(),
         10.heightBox,
         Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             ourButton(
-              color: primaryApp,
-              onPress: () {
-                SystemNavigator.pop();
-              },
-              textColor: whiteColor,
-              title: "Yes"
-            ),
+                color: primaryApp,
+                onPress: () {
+                  SystemNavigator.pop();
+                },
+                textColor: whiteColor,
+                title: "Yes"),
             ourButton(
-              color: primaryApp,
-              onPress: () {
-                Navigator.pop(context);
-              },
-              textColor: whiteColor,
-              title: "No"
-            ),
+                color: primaryApp,
+                onPress: () {
+                  Navigator.pop(context);
+                },
+                textColor: whiteColor,
+                title: "No"),
           ],
         )
       ],

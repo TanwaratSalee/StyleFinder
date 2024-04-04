@@ -23,7 +23,6 @@ const year = "Year";
 const man = "Man";
 const woman = "Woman";
 
-
 // icon nav bar bottom
 const home = "Home",
     // collection = "Collection",
@@ -77,4 +76,6 @@ const wishlist = "Favorite",
     newpass = "New password";
 
 //---------------------------------- Payment ----------------------------------
-const  promptpay = "QR Promptpay", visaCard = "Visa", cashOnDelivery = "Cash On Delivery";
+const promptpay = "QR Promptpay",
+    visaCard = "Visa",
+    cashOnDelivery = "Cash On Delivery";

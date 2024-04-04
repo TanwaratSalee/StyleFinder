@@ -4,7 +4,6 @@ import 'package:flutter_finalproject/Views/home_screen/mainHome.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 
-
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -13,8 +12,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
-  changeScreen(){
+  changeScreen() {
     Future.delayed(const Duration(seconds: 3), () {
       // Get.to(() => const LoginScreen());
 
@@ -47,7 +45,8 @@ class _SplashScreenState extends State<SplashScreen> {
               Image.asset(icLogoApp),
               const Padding(
                 padding: EdgeInsets.only(top: 5.0),
-                child: Text( appversion,
+                child: Text(
+                  appversion,
                   style: TextStyle(
                     color: Colors.grey,
                   ),

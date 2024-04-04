@@ -6,11 +6,9 @@ import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-  options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
@@ -22,13 +20,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       // title: appname,
       theme: ThemeData(
-        scaffoldBackgroundColor: Colors.transparent,
-        appBarTheme: const AppBarTheme(
-          iconTheme: IconThemeData(color: fontBlack),
-          elevation: 0.0,
-          backgroundColor: Colors.transparent),
-          fontFamily: light
-      ),
+          scaffoldBackgroundColor: Colors.transparent,
+          appBarTheme: const AppBarTheme(
+              iconTheme: IconThemeData(color: fontBlack),
+              elevation: 0.0,
+              backgroundColor: Colors.transparent),
+          fontFamily: light),
       home: const SplashScreen(),
     );
   }

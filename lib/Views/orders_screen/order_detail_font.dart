@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 
-
 class OrderDetailFont extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -11,7 +10,12 @@ class OrderDetailFont extends StatelessWidget {
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: "My Order".text.color(fontGreyDark).fontFamily(medium).size(24).make(),
+            title: "My Order"
+                .text
+                .color(fontGreyDark)
+                .fontFamily(medium)
+                .size(24)
+                .make(),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
@@ -155,7 +159,8 @@ class ItemTile extends StatelessWidget {
                 ),
                 Text(
                   price,
-                  style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 16.0, fontWeight: FontWeight.bold),
                 ),
               ],
             ),

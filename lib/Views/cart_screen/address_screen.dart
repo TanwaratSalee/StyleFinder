@@ -53,7 +53,7 @@ class _AddressScreenState extends State<AddressScreen> {
               leading: const Icon(Icons.add),
               title: const Text('Add new address'),
               onTap: () async {
-                Get.to(()=> AddressForm());
+                Get.to(() => AddressForm());
               },
             );
           } else {

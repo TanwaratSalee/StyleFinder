@@ -3,11 +3,11 @@ import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/news_controller.dart';
 import 'package:get/get.dart';
 
-class  ChatsController extends GetxController {
+class ChatsController extends GetxController {
   @override
-  void onInit(){
+  void onInit() {
     getChatId();
-    super.onInit(); 
+    super.onInit();
   }
 
   var chats = firestore.collection(chatsCollection);
@@ -25,7 +25,6 @@ class  ChatsController extends GetxController {
   var isLoading = false.obs;
 
   getChatId() async {
-
     isLoading(true);
 
     await chats
@@ -49,7 +48,7 @@ class  ChatsController extends GetxController {
             });
           }
         });
-        isLoading(false);
+    isLoading(false);
   }
 
   sendMsg(String msg) async {

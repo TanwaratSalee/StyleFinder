@@ -4,8 +4,8 @@ Widget customTextField({
   String? title,
   String? label,
   TextEditingController? controller,
-  bool isPass = false, 
-  bool readOnly = false, 
+  bool isPass = false,
+  bool readOnly = false,
   VoidCallback? onTap,
 }) {
   return Column(
@@ -15,7 +15,7 @@ Widget customTextField({
         Text(
           title,
           style: const TextStyle(
-            color: fontBlack, 
+            color: fontBlack,
             fontWeight: FontWeight.bold,
             fontSize: 16,
           ),
@@ -27,22 +27,21 @@ Widget customTextField({
         readOnly: readOnly,
         decoration: InputDecoration(
           isDense: true,
-          labelText: label, 
-          
+          labelText: label,
           hintStyle: const TextStyle(
-            color: fontGrey, 
+            color: fontGrey,
           ),
           filled: true,
-          fillColor: bgGreylight, 
+          fillColor: bgGreylight,
           contentPadding:
               const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
-            borderSide: const BorderSide(color: bgGreylight), 
+            borderSide: const BorderSide(color: bgGreylight),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
-            borderSide: const BorderSide(color: fontGrey), 
+            borderSide: const BorderSide(color: fontGrey),
           ),
         ),
       ),

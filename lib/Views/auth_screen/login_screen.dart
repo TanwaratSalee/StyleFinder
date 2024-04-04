@@ -23,7 +23,8 @@ class LoginScreen extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        child: Obx(() => Column(
+        child: Obx(
+          () => Column(
             children: <Widget>[
               Expanded(
                 child: SingleChildScrollView(
@@ -69,29 +70,28 @@ class LoginScreen extends StatelessWidget {
                                         child: forgetPass.text
                                             .color(fontBlack)
                                             .make(),
-                                        onPressed: () {
-                                          
-                                        },
+                                        onPressed: () {},
                                       ),
                                     ),
                                     const SizedBox(height: 10),
                                     controller.isloading.value
                                         ? const CircularProgressIndicator(
-                                          valueColor: AlwaysStoppedAnimation(primaryApp),
-                                        )
+                                            valueColor: AlwaysStoppedAnimation(
+                                                primaryApp),
+                                          )
                                         : ourButton(
                                             color: primaryApp,
                                             title: 'Login',
                                             textColor: whiteColor,
                                             onPress: () async {
-
-                                              controller.isloading (true);
+                                              controller.isloading(true);
 
                                               await controller
                                                   .loginMethod(context: context)
                                                   .then((value) {
                                                 if (value != null) {
-                                                  VxToast.show(context, msg: successfully);
+                                                  VxToast.show(context,
+                                                      msg: successfully);
                                                   Get.offAll(() => MainHome());
                                                 } else {
                                                   controller.isloading(false);

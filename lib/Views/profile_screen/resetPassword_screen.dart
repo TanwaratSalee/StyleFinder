@@ -7,7 +7,8 @@ import 'package:flutter_finalproject/consts/consts.dart'; // Ensure this file ex
 class PasswordScreen extends StatelessWidget {
   final oldpassController = TextEditingController();
   final newpassController = TextEditingController();
-  final confirmNewPassController = TextEditingController(); // ตัวควบคุมสำหรับการยืนยันรหัสผ่านใหม่
+  final confirmNewPassController =
+      TextEditingController(); // ตัวควบคุมสำหรับการยืนยันรหัสผ่านใหม่
 
   PasswordScreen({Key? key}) : super(key: key);
 
@@ -19,7 +20,9 @@ class PasswordScreen extends StatelessWidget {
       backgroundColor: whiteColor, // Ensure this constant is defined
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text("Reset Password", style: TextStyle(fontFamily: medium, fontSize: 24, color: Colors.black)),
+        title: const Text("Reset Password",
+            style: TextStyle(
+                fontFamily: medium, fontSize: 24, color: Colors.black)),
         actions: [
           Obx(() {
             if (controller.isloading.isTrue) {
@@ -45,7 +48,8 @@ class PasswordScreen extends StatelessWidget {
                   controller.isloading(false);
                 } else {
                   // แสดงข้อความแจ้งเตือนหากรหัสผ่านใหม่และการยืนยันไม่ตรงกัน
-                  VxToast.show(context, msg: "New password and confirmation do not match");
+                  VxToast.show(context,
+                      msg: "New password and confirmation do not match");
                 }
               },
               child: "Save".text.color(Colors.blue).make(),
@@ -55,7 +59,7 @@ class PasswordScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Padding(
-           padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8.0),
           child: Column(
             children: [
               customTextField(
@@ -64,18 +68,16 @@ class PasswordScreen extends StatelessWidget {
                 isPass: true,
                 readOnly: false,
               ).p2(),
-
               const SizedBox(height: 15),
-          
               customTextField(
                 label: "New Password",
                 controller: newpassController,
                 isPass: true,
                 readOnly: false,
               ).p2(),
-          
               customTextField(
-                label: "Confirm New Password", // เพิ่ม TextField สำหรับการยืนยันรหัสผ่านใหม่
+                label:
+                    "Confirm New Password", // เพิ่ม TextField สำหรับการยืนยันรหัสผ่านใหม่
                 controller: confirmNewPassController,
                 isPass: true,
                 readOnly: false,

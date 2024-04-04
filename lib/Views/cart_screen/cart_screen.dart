@@ -30,8 +30,11 @@ class CartScreen extends StatelessWidget {
         ),
         appBar: AppBar(
           // automaticallyImplyLeading: false,
-          title:
-              "shopping Cart".text.color(fontGreyDark).fontFamily(regular).make(),
+          title: "shopping Cart"
+              .text
+              .color(fontGreyDark)
+              .fontFamily(regular)
+              .make(),
         ),
         body: StreamBuilder(
           stream: FirestoreServices.getCart(currentUser!.uid),

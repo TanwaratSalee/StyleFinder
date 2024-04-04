@@ -10,14 +10,12 @@ class WishlistScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          whiteColor, 
+      backgroundColor: whiteColor,
       appBar: AppBar(
         title: const Text(
           "Favourite",
           style: TextStyle(
-            color:
-                fontGreyDark, 
+            color: fontGreyDark,
             fontSize: 24,
             fontFamily: bold,
           ),
@@ -54,8 +52,7 @@ class WishlistScreen extends StatelessWidget {
                   margin:
                       const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   decoration: BoxDecoration(
-                    color:
-                        whiteColor, 
+                    color: whiteColor,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
@@ -115,12 +112,10 @@ class WishlistScreen extends StatelessWidget {
               );
             },
             separatorBuilder: (context, index) => Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal:
-                      10), 
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Divider(
-                color: Colors.grey[200], 
-                thickness: 1, 
+                color: Colors.grey[200],
+                thickness: 1,
               ),
             ),
           );

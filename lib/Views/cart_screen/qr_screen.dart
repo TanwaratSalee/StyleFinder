@@ -25,44 +25,49 @@ class _QRScreenState extends State<QRScreen> {
     createChargeWithPromptPay();
   }
 
-
   createChargeWithPromptPay() async {
     String secretKey = 'skey_test_5yzhwpoh5cu85yb4qrr'; // ใช้ Secret Key ของคุณ
     String urlAPI = 'https://api.omise.co/charges';
 
     String basicAuth = 'Basic ' + base64Encode(utf8.encode('$secretKey:'));
 
-      Map<String, String> headerMap = {};
-      headerMap['authorization'] = basicAuth;
-      headerMap['Cache-Control'] = 'no-cache';
-      headerMap['Content-Type'] = 'application/x-www-form-urlencoded';
+    Map<String, String> headerMap = {};
+    headerMap['authorization'] = basicAuth;
+    headerMap['Cache-Control'] = 'no-cache';
+    headerMap['Content-Type'] = 'application/x-www-form-urlencoded';
 
-      Map<String, dynamic> data = {};
-      data['amount'] = controller.totalP.value.toString();
-      data['currency'] = 'thb';
-      data['source[type]'] = 'promptpay';
+    Map<String, dynamic> data = {};
+    data['amount'] = controller.totalP.value.toString();
+    data['currency'] = 'thb';
+    data['source[type]'] = 'promptpay';
 
     Uri uri = Uri.parse(urlAPI);
 
-    http.Response response = await http.post(uri,headers: headerMap, body: data,);
+    http.Response response = await http.post(
+      uri,
+      headers: headerMap,
+      body: data,
+    );
 
     if (response.statusCode == 200) {
       final resultCharge = jsonDecode(response.body);
       print('Charge created: ${resultCharge['id']}');
 
-    // ตรวจสอบและเข้าถึง download_uri
-    downloadUri = resultCharge['source']?['scannable_code']?['image']?['download_uri'];
-    if (downloadUri != null) {
-      setState(() {
-        downloadUri = resultCharge['source']['scannable_code']['image']['download_uri'];
-        print('Dddddddddd: $downloadUri');
+      // ตรวจสอบและเข้าถึง download_uri
+      downloadUri =
+          resultCharge['source']?['scannable_code']?['image']?['download_uri'];
+      if (downloadUri != null) {
+        setState(() {
+          downloadUri =
+              resultCharge['source']['scannable_code']['image']['download_uri'];
+          print('Dddddddddd: $downloadUri');
         });
+      } else {
+        print('Download URI not found');
+      }
     } else {
-      print('Download URI not found');
+      print('Failed to create charge: ${response.body}');
     }
-  } else {
-    print('Failed to create charge: ${response.body}');
-  }
   }
 
   @override
@@ -73,12 +78,11 @@ class _QRScreenState extends State<QRScreen> {
         backgroundColor: whiteColor,
       ),
       body: Center(
-        child: Container(
-                width: 200,
-                height: 200,
-                child: Text(downloadUri ?? "no imgs"),
-              )
-      ),
+          child: Container(
+        width: 200,
+        height: 200,
+        child: Text(downloadUri ?? "no imgs"),
+      )),
     );
   }
 }

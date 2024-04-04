@@ -233,7 +233,7 @@ class EditProfileScreen extends StatelessWidget {
                           fit: BoxFit.cover,
                         ).box.roundedFull.clip(Clip.antiAlias).make(),
               // Image.asset(imProfile, width: 150,).box.roundedFull.clip(Clip.antiAlias).make(),
-        
+
               10.heightBox,
               SizedBox(
                   width: context.screenWidth - 260,
@@ -245,9 +245,9 @@ class EditProfileScreen extends StatelessWidget {
                       },
                       textColor: primaryApp,
                       title: "Edit Picture")),
-        
+
               10.heightBox,
-        
+
               20.heightBox,
               Align(
                 alignment: Alignment.centerLeft,
@@ -262,7 +262,7 @@ class EditProfileScreen extends StatelessWidget {
                 color: fontLightGrey,
               ),
               5.heightBox,
-        
+
               editTextField(
                 controller: controller.nameController,
                 label: fullname,
@@ -275,7 +275,7 @@ class EditProfileScreen extends StatelessWidget {
                   isPass: false,
                   readOnly: true),
               20.heightBox,
-        
+
               Align(
                 alignment: Alignment.centerLeft,
                 child: const Text('About you')
@@ -289,7 +289,7 @@ class EditProfileScreen extends StatelessWidget {
                 color: fontLightGrey,
               ),
               10.heightBox,
-        
+
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -324,9 +324,9 @@ class EditProfileScreen extends StatelessWidget {
                   ),
                 ],
               ),
-        
+
               const SizedBox(height: 10),
-        
+
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -364,14 +364,14 @@ class EditProfileScreen extends StatelessWidget {
                   ),
                 ],
               ),
-        
+
               editTextField(
                 controller: controller.heightController,
                 label: 'Height',
                 isPass: false,
                 readOnly: false,
               ),
-        
+
               editTextField(
                   controller: controller.weightController,
                   label: 'Weight',

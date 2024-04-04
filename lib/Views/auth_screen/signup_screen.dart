@@ -11,7 +11,6 @@ import 'package:get/get.dart';
 import '../../consts/styles.dart';
 import '../../controllers/auth_controller.dart';
 
-
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
 
@@ -24,13 +23,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController passwordRetypeController = TextEditingController();
+  final TextEditingController passwordRetypeController =
+      TextEditingController();
 
   String capitalizeFirstLetter(String text) {
-  if (text.isEmpty) return "";
-  return text[0].toUpperCase() + text.substring(1);
-}
-
+    if (text.isEmpty) return "";
+    return text[0].toUpperCase() + text.substring(1);
+  }
 
   bool validateInput() {
     if (emailController.text.isNotEmpty &&

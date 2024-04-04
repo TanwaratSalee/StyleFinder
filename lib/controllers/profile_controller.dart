@@ -32,10 +32,10 @@ class ProfileController extends GetxController {
   var selectedGender = ''.obs;
 
   void selectGender(String gender) {
-    selectedGender.value = gender; 
-    sexController.text = gender; 
+    selectedGender.value = gender;
+    sexController.text = gender;
   }
-  
+
   // Select a photo from the user's gallery. /ImagePicker to open a gallery. / 70% to reduce file size.
   changeImage(context) async {
     try {
@@ -88,13 +88,14 @@ class ProfileController extends GetxController {
     }
   }
 
-  Future<bool> changeAuthPassword({
-    required String oldPassword, required String newPassword}) async {
+  Future<bool> changeAuthPassword(
+      {required String oldPassword, required String newPassword}) async {
     User? user = FirebaseAuth.instance.currentUser;
-    String email = user!.email!; 
+    String email = user!.email!;
 
     try {
-      AuthCredential credential = EmailAuthProvider.credential(email: email, password: oldPassword);
+      AuthCredential credential =
+          EmailAuthProvider.credential(email: email, password: oldPassword);
 
       await user.reauthenticateWithCredential(credential);
 
@@ -105,5 +106,4 @@ class ProfileController extends GetxController {
       return false; // คืนค่า false หากมีข้อผิดพลาด
     }
   }
-
 }

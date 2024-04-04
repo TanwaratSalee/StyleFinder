@@ -6,11 +6,9 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import '../cart_screen/cart_screen.dart';
 
-
-
 class MatchScreen extends StatefulWidget {
   const MatchScreen({Key? key}) : super(key: key);
-  
+
   @override
   _MatchScreenState createState() => _MatchScreenState();
 }
@@ -19,7 +17,8 @@ class _MatchScreenState extends State<MatchScreen> {
   int selectedCardIndex = 0; // เก็บ index ของการ์ดที่ถูกเลือก
   double initialX = 0.0;
   double updatedX = 0.0;
-  bool isFirstCardActive = true; // ตัวแปรเพื่อตรวจสอบว่าชุดการ์ดที่หนึ่งเปิดใช้งานหรือไม่
+  bool isFirstCardActive =
+      true; // ตัวแปรเพื่อตรวจสอบว่าชุดการ์ดที่หนึ่งเปิดใช้งานหรือไม่
 
   @override
   Widget build(BuildContext context) {
@@ -42,11 +41,11 @@ class _MatchScreenState extends State<MatchScreen> {
                 context: context,
                 pageBuilder: (_, __, ___) {
                   return Align(
-                    alignment: Alignment.topCenter, 
+                    alignment: Alignment.topCenter,
                     child: Container(
-                      height: MediaQuery.of(context).size.height * 0.6, 
+                      height: MediaQuery.of(context).size.height * 0.6,
                       width: MediaQuery.of(context).size.width,
-                      child: const SearchScreenPage(), 
+                      child: const SearchScreenPage(),
                       decoration: const BoxDecoration(
                         color: whiteColor,
                         borderRadius: BorderRadius.only(
@@ -60,7 +59,8 @@ class _MatchScreenState extends State<MatchScreen> {
                 },
                 transitionBuilder: (context, anim1, anim2, child) {
                   return SlideTransition(
-                    position: Tween(begin: const Offset(0, -1), end: const Offset(0, 0))
+                    position: Tween(
+                            begin: const Offset(0, -1), end: const Offset(0, 0))
                         .animate(anim1),
                     child: child,
                   );
@@ -117,15 +117,19 @@ class _MatchScreenState extends State<MatchScreen> {
               child: Stack(
                 children: List.generate(10, (index) {
                   return Positioned(
-                    left: MediaQuery.of(context).size.width / 2 - 135 + (selectedCardIndex - index) * 300,
+                    left: MediaQuery.of(context).size.width / 2 -
+                        135 +
+                        (selectedCardIndex - index) * 300,
                     child: Padding(
                       padding: EdgeInsets.zero, // ลดช่องว่างรอบการ์ดเป็นศูนย์
                       child: Card(
-                        elevation: selectedCardIndex == index && isFirstCardActive ? 5 : 0,
+                        elevation:
+                            selectedCardIndex == index && isFirstCardActive
+                                ? 5
+                                : 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        
                         child: Container(
                           width: 300.0,
                           height: 230.0,
@@ -140,7 +144,6 @@ class _MatchScreenState extends State<MatchScreen> {
                             ),
                           ),
                         ),
-
                       ),
                     ),
                   );
@@ -175,17 +178,22 @@ class _MatchScreenState extends State<MatchScreen> {
               child: Stack(
                 children: List.generate(10, (index) {
                   return Positioned(
-                    left: MediaQuery.of(context).size.width / 2 + 135 + (index - selectedCardIndex) * 300,
+                    left: MediaQuery.of(context).size.width / 2 +
+                        135 +
+                        (index - selectedCardIndex) * 300,
                     child: Padding(
                       padding: EdgeInsets.zero, // ลดช่องว่างรอบการ์ดเป็นศูนย์
                       child: Card(
-                        elevation: selectedCardIndex == index && !isFirstCardActive ? 5 : 0,
+                        elevation:
+                            selectedCardIndex == index && !isFirstCardActive
+                                ? 5
+                                : 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Container(
                           width: 290.0,
-                          height:230.0,
+                          height: 230.0,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                           ),
@@ -209,4 +217,3 @@ class _MatchScreenState extends State<MatchScreen> {
     );
   }
 }
- 

@@ -4,11 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 
-
 class HomeController extends GetxController {
   var isFav = false.obs;
 
-  
   void addToWishlist(Map<String, dynamic> product) {
     FirebaseFirestore.instance
         .collection(productsCollection)
@@ -30,6 +28,4 @@ class HomeController extends GetxController {
       }
     });
   }
-  
-
 }

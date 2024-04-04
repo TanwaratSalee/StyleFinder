@@ -75,77 +75,74 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backGround,
       appBar: AppBar(
-          backgroundColor: whiteColor,
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 15.0),
+        backgroundColor: whiteColor,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 15.0),
+          child: IconButton(
+            icon: Image.asset(
+              icSearch,
+              width: 23,
+            ),
+            onPressed: () {
+              showGeneralDialog(
+                barrierLabel: "Barrier",
+                barrierDismissible: true,
+                barrierColor: Colors.black.withOpacity(0.5),
+                transitionDuration: const Duration(milliseconds: 300),
+                context: context,
+                pageBuilder: (_, __, ___) {
+                  return Align(
+                    alignment: Alignment.topCenter,
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * 0.6,
+                      width: MediaQuery.of(context).size.width,
+                      child: const SearchScreenPage(),
+                      decoration: const BoxDecoration(
+                        color: whiteColor,
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(18),
+                          bottomRight: Radius.circular(18),
+                        ),
+                      ),
+                      padding: const EdgeInsets.all(20),
+                    ),
+                  );
+                },
+                transitionBuilder: (context, anim1, anim2, child) {
+                  return SlideTransition(
+                    position: Tween(
+                            begin: const Offset(0, -1), end: const Offset(0, 0))
+                        .animate(anim1),
+                    child: child,
+                  );
+                },
+              );
+            },
+          ),
+        ),
+        title: Center(
+          child: Image.asset(icLogoOnTop, height: 40),
+        ),
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(right: 15.0),
             child: IconButton(
               icon: Image.asset(
-                icSearch,
-                width: 23,
+                icCart,
+                width: 21,
               ),
               onPressed: () {
-                showGeneralDialog(
-                  barrierLabel: "Barrier",
-                  barrierDismissible: true,
-                  barrierColor: Colors.black.withOpacity(0.5),
-                  transitionDuration: const Duration(milliseconds: 300),
-                  context: context,
-                  pageBuilder: (_, __, ___) {
-                    return Align(
-                      alignment:
-                          Alignment.topCenter, 
-                      child: Container(
-                        height: MediaQuery.of(context).size.height *
-                            0.6, 
-                        width: MediaQuery.of(context).size.width,
-                        child: const SearchScreenPage(), 
-                        decoration: const BoxDecoration(
-                          color: whiteColor,
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(18),
-                            bottomRight: Radius.circular(18),
-                          ),
-                        ),
-                        padding: const EdgeInsets.all(20),
-                      ),
-                    );
-                  },
-                  transitionBuilder: (context, anim1, anim2, child) {
-                    return SlideTransition(
-                      position: Tween(begin: const Offset(0, -1), end: const Offset(0, 0))
-                          .animate(anim1),
-                      child: child,
-                    );
-                  },
-                );
+                Get.to(() => const CartScreen());
               },
             ),
           ),
-          title: Center(
-            child: Image.asset(icLogoOnTop, height: 40),
-          ),
-          actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(right: 15.0),
-              child: IconButton(
-                icon: Image.asset(
-                  icCart,
-                  width: 21,
-                ),
-                onPressed: () {
-                  Get.to(() => const CartScreen());
-                },
-              ),
-            ),
-          ],
-        ),
-      
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.only(top: 0, left: 0, right: 0),
         child: FutureBuilder<List<Map<String, dynamic>>>(
@@ -223,7 +220,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       fontFamily: bold,
                                     ),
                                   ),
-                                  const SizedBox( height: 2),
+                                  const SizedBox(height: 2),
                                   // Text(
                                   //   product['p_aboutProduct'],
                                   //   style: const TextStyle(
@@ -255,8 +252,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             icDislikeButton,
                             width: 67,
                           ),
-                          onPressed: ()
-                            => controllercard.swipe(CardSwiperDirection.left),
+                          onPressed: () =>
+                              controllercard.swipe(CardSwiperDirection.left),
                         ),
                         IconButton(
                           icon: Image.asset(
@@ -275,32 +272,29 @@ class _HomeScreenState extends State<HomeScreen> {
                             icLikeButton,
                             width: 67,
                           ),
-                        onPressed: () => [
-                          controllercard.swipe(CardSwiperDirection.right),
-                          controller.addToWishlist(product),
-                        ],
+                          onPressed: () => [
+                            controllercard.swipe(CardSwiperDirection.right),
+                            controller.addToWishlist(product),
+                          ],
                         ),
                       ],
                     ),
                   ],
                 );
               },
-              onSwipe: (previousIndex, currentIndex, direction){
-                if(direction==CardSwiperDirection.right){
+              onSwipe: (previousIndex, currentIndex, direction) {
+                if (direction == CardSwiperDirection.right) {
                   controller.addToWishlist(previousSwipedProduct!);
-                }
-                else if(direction==CardSwiperDirection.left){
+                } else if (direction == CardSwiperDirection.left) {
                   //
-                }
-                else if(direction==CardSwiperDirection.top){
+                } else if (direction == CardSwiperDirection.top) {
                   Get.to(() => ItemDetails(
-                    title: previousSwipedProduct!['p_name'],
-                    data: previousSwipedProduct!,
-                ));
+                        title: previousSwipedProduct!['p_name'],
+                        data: previousSwipedProduct!,
+                      ));
                 }
                 return true;
               },
-              
             );
           },
         ),
@@ -308,6 +302,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
 Future<List<Map<String, dynamic>>> fetchProducts() async {
   return FirestoreServices.getFeaturedProducts();
 }

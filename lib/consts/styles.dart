@@ -4,4 +4,3 @@ const regular = "Roboto-Regular";
 const medium = "Roboto-Medium";
 const bold = "Roboto-Bold";
 const black = "Roboto-Black";
-

@@ -23,8 +23,7 @@ class ProfileScreen extends StatelessWidget {
           automaticallyImplyLeading: false,
           title: const Text(
             'Profile',
-            textAlign: TextAlign
-                .center, 
+            textAlign: TextAlign.center,
             style: TextStyle(
               color: fontBlack,
               fontSize: 26,
@@ -32,19 +31,17 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
           actions: <Widget>[
-            
             IconButton(
               icon: const Icon(
-                Icons.menu, 
-                color: fontBlack, 
+                Icons.menu,
+                color: fontBlack,
               ),
               onPressed: () {
                 Get.to(() => const MenuSettingScreen());
               },
             ),
           ],
-          centerTitle:
-              true, 
+          centerTitle: true,
         ),
         backgroundColor: whiteColor,
         body: StreamBuilder(
@@ -52,7 +49,6 @@ class ProfileScreen extends StatelessWidget {
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                
                 return const Center(
                   child: CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation(primaryApp),
@@ -202,17 +198,19 @@ class ProfileScreen extends StatelessWidget {
                       // .box.color(primaryApp).make(),
                       20.heightBox,
 
-                     OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                      side: const BorderSide(
-                      color: whiteColor)),
-                      onPressed: () async {
-                        await Get.put (AuthController()).signoutMethod(context);
-                        Get.offAll(() => LoginScreen);
-                      },
-                      child: loggedout.text.fontFamily(regular).color(primaryApp).make(),
-                     )
-
+                      OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                            side: const BorderSide(color: whiteColor)),
+                        onPressed: () async {
+                          await Get.put(AuthController())
+                              .signoutMethod(context);
+                          Get.offAll(() => LoginScreen);
+                        },
+                        child: loggedout.text
+                            .fontFamily(regular)
+                            .color(primaryApp)
+                            .make(),
+                      )
                     ],
                   ),
                 );
