@@ -76,7 +76,6 @@ class LoginScreen extends StatelessWidget {
                                             .make(),
                                         onPressed: () {
                                           Get.to(() => ForgotScreen());
-
                                         },
                                       ),
                                     ),
@@ -127,63 +126,65 @@ class LoginScreen extends StatelessWidget {
                                       ],
                                     ),
                                     const SizedBox(height: 24),
+                                    // Row(
+                                    //   mainAxisAlignment:
+                                    //       MainAxisAlignment.spaceEvenly,
+                                    //   children: List.generate(
+                                    //       socialIconList.length,
+                                    //       (index) => Container(
+                                    //             padding:
+                                    //                 const EdgeInsets.fromLTRB(
+                                    //                     50, 15, 50, 15),
+                                    //             decoration: BoxDecoration(
+                                    //               borderRadius:
+                                    //                   BorderRadius.circular(8),
+                                    //               border: Border.all(
+                                    //                 color: fontLightGrey,
+                                    //                 width: 1,
+                                    //               ),
+                                    //             ),
+                                    //             child: Image.asset(
+                                    //                 socialIconList[index],
+                                    //                 width: 24,
+                                    //                 height: 24),
+                                    //           )),
+                                    // ),
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
                                       children: List.generate(
-                                          socialIconList.length,
-                                          (index) => Container(
-                                                padding:
-                                                    const EdgeInsets.fromLTRB(
-                                                        50, 15, 50, 15),
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                  border: Border.all(
-                                                    color: fontLightGrey,
-                                                    width: 1,
-                                                  ),
-                                                ),
-                                                child: Image.asset(
-                                                    socialIconList[index],
-                                                    width: 24,
-                                                    height: 24),
-                                              )),
+                                        socialIconList.length,
+                                        (index) => GestureDetector(
+                                          onTap: () {
+                                            switch (index) {
+                                              case 0: // Google
+                                                signInWithGoogle();
+                                                break;
+                                              case 1: // Facebook
+                                                signInWithFacebook();
+                                                break;
+                                              // เพิ่มเติมตามลำดับของไอคอนโซเชียลอื่น ๆ ตามต้องการได้เลย
+                                            }
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.fromLTRB(50, 15, 50, 15),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              border: Border.all(
+                                                color: fontLightGrey,
+                                                width: 1,
+                                              ),
+                                            ),
+                                            child: Image.asset(
+                                              socialIconList[index],
+                                              width: 24,
+                                              height: 24,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
                                     ),
-Row(
-  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  children: List.generate(
-    socialIconList.length,
-    (index) => GestureDetector(
-      onTap: () {
-        switch (index) {
-          case 0: // Google
-            signInWithGoogle();
-            break;
-          case 1: // Facebook
-            signInWithFacebook();
-            break;
-          // เพิ่มเติมตามลำดับของไอคอนโซเชียลอื่น ๆ ตามต้องการได้เลย
-        }
-      },
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(30, 15, 30, 15),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: fontLightGrey,
-            width: 1,
-          ),
-        ),
-        child: Image.asset(
-          socialIconList[index],
-          width: 24,
-          height: 24,
-        ),
-      ),
-    ),
-  ),
-),
                                   ],
                                 ),
                               ),
@@ -234,49 +235,51 @@ Row(
       ),
     );
   }
-  
-Future<void> signInWithGoogle() async {
-  try {
-    // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+  Future<void> signInWithGoogle() async {
+    try {
+      // Trigger the authentication flow
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
 
-    // Once signed in, return the UserCredential
-    final UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
 
-    // Navigate to MainHome() page
-    Get.offAll(() => MainHome());
-  } catch (e) {
-    print("Error signing in with Google: $e");
-    // Handle error
+      // Once signed in, return the UserCredential
+      final UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      // Navigate to MainHome() page
+      Get.offAll(() => MainHome());
+    } catch (e) {
+      print("Error signing in with Google: $e");
+      // Handle error
+    }
   }
-}
 
-Future<UserCredential?> signInWithFacebook() async {
-  // Trigger the sign-in flow
-  final LoginResult loginResult = await FacebookAuth.instance.login();
+  Future<UserCredential?> signInWithFacebook() async {
+    // Trigger the sign-in flow
+    final LoginResult loginResult = await FacebookAuth.instance.login();
 
-  // Check if loginResult.accessToken is not null
-  if (loginResult.accessToken != null) {
-    // Create a credential from the access token
-    final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
+    // Check if loginResult.accessToken is not null
+    if (loginResult.accessToken != null) {
+      // Create a credential from the access token
+      final OAuthCredential facebookAuthCredential =
+          FacebookAuthProvider.credential(loginResult.accessToken!.token);
 
-    // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-  } else {
-    // Handle the case when accessToken is null
-    print('Error: Access token is null');
-    return null; // or throw an error, depending on your requirement
+      // Once signed in, return the UserCredential
+      return await FirebaseAuth.instance
+          .signInWithCredential(facebookAuthCredential);
+    } else {
+      // Handle the case when accessToken is null
+      print('Error: Access token is null');
+      return null; // or throw an error, depending on your requirement
+    }
   }
-}
-
-
 }
