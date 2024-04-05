@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/search_screen/search_screen.dart';
+import 'package:flutter_finalproject/Views/widgets_common/appbar_ontop.dart';
 import 'package:flutter_finalproject/consts/colors.dart';
 import 'package:flutter_finalproject/consts/images.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import '../cart_screen/cart_screen.dart';
-import '../widgets_common/appbar_ontop.dart';
 
 class MatchScreen extends StatefulWidget {
   const MatchScreen({Key? key}) : super(key: key);
@@ -15,16 +14,14 @@ class MatchScreen extends StatefulWidget {
 }
 
 class _MatchScreenState extends State<MatchScreen> {
-  int selectedCardIndex = 0; 
-  double initialX = 0.0;
-  double updatedX = 0.0;
-  bool isFirstCardActive =
-      true; 
+  int selectedCardIndex = 0; // เก็บ index ของการ์ดที่ถูกเลือก
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: whiteColor,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: whiteColor,
         title: appbarField(),
         actions: <Widget>[
@@ -42,133 +39,133 @@ class _MatchScreenState extends State<MatchScreen> {
           ),
         ],
       ),
-      backgroundColor: Colors.grey[100],
-      body: Column(
-        children: [
-          Expanded(
-            child: GestureDetector(
-              onHorizontalDragStart: (details) {
-                initialX = details.globalPosition.dx;
-                isFirstCardActive = true; 
-              },
-              onHorizontalDragUpdate: (details) {
-                updatedX = details.globalPosition.dx;
-              },
-              onHorizontalDragEnd: (details) {
-                if (initialX < updatedX) {
-                  if (selectedCardIndex > 0) {
-                    setState(() {
-                      selectedCardIndex -= 1;
-                    });
-                  }
-                } else if (initialX > updatedX) {
-                  if (selectedCardIndex < 9) {
-                    setState(() {
-                      selectedCardIndex += 1;
-                    });
-                  }
-                }
-              },
-              child: Stack(
-                children: List.generate(10, (index) {
-                  return Positioned(
-                    left: MediaQuery.of(context).size.width / 2 -
-                        135 +
-                        (selectedCardIndex - index) * 300,
-                    child: Padding(
-                      padding: EdgeInsets.zero, 
-                      child: Card(
-                        elevation:
-                            selectedCardIndex == index && isFirstCardActive
-                                ? 5
-                                : 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Container(
-                          width: 300.0,
-                          height: 230.0,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Image.asset(
-                              'assets/images/product${index % 3 + 1}.png',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverToBoxAdapter(
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: 75,
+                ),
+                buildCardSetTop(),
+                SizedBox(height: 5),
+                buildCardSetBottom(),
+                SizedBox(height: 10),
+                Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    // เพิ่ม `child:` ก่อน Row เพื่อให้เป็น child ของ Container
+                    mainAxisAlignment: MainAxisAlignment
+                        .center, // ใช้เพื่อจัดกึ่งกลางของแถว, คุณสามารถปรับเปลี่ยนได้ตามความต้องการ
+                    children: <Widget>[
+                      Text(
+                        'Match with you',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
                         ),
                       ),
-                    ),
-                  );
-                }),
-              ),
-            ),
-          ),
-          Expanded(
-            child: GestureDetector(
-              onHorizontalDragStart: (details) {
-                initialX = details.globalPosition.dx;
-                isFirstCardActive = false; 
-              },
-              onHorizontalDragUpdate: (details) {
-                updatedX = details.globalPosition.dx;
-              },
-              onHorizontalDragEnd: (details) {
-                if (initialX < updatedX) {
-                  if (selectedCardIndex > 0) {
-                    setState(() {
-                      selectedCardIndex -= 1;
-                    });
-                  }
-                } else if (initialX > updatedX) {
-                  if (selectedCardIndex < 9) {
-                    setState(() {
-                      selectedCardIndex += 1;
-                    });
-                  }
-                }
-              },
-              child: Stack(
-                children: List.generate(10, (index) {
-                  return Positioned(
-                    left: MediaQuery.of(context).size.width / 2 +
-                        135 +
-                        (index - selectedCardIndex) * 300,
-                    child: Padding(
-                      padding: EdgeInsets.zero, 
-                      child: Card(
-                        elevation:
-                            selectedCardIndex == index && !isFirstCardActive
-                                ? 5
-                                : 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+                      IconButton(
+                        icon: Image.asset(
+                          icLikeButton,
+                          width: 67,
                         ),
-                        child: Container(
-                          width: 290.0,
-                          height: 230.0,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Image.asset(
-                              'assets/images/product${index % 3 + 1}.png',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
+                        onPressed: () {},
                       ),
-                    ),
-                  );
-                }),
-              ),
+                    ],
+                  ),
+                )
+              ],
             ),
           ),
         ],
       ),
     );
   }
+
+  Widget buildCardSetTop() {
+    return Container(
+      height: 250.0,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: 10, // จำนวนการ์ด
+        itemBuilder: (context, index) {
+          return Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Container(
+              width: 300.0,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image.asset(
+                  'assets/images/product${index % 3 + 1}.png',
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+Widget buildCardSetBottom() {
+  return Container(
+    height: 250.0, // กำหนดความสูงของ container ที่มีการ์ด
+    child: ListView.builder(
+      scrollDirection: Axis.horizontal, // ให้การ์ดเลื่อนได้ในแนวนอน
+      itemCount: 10, // จำนวนการ์ด
+      itemBuilder: (context, index) {
+        return Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Container(
+            width: 300.0,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image.asset(
+                'assets/images/product${index % 3 + 1}.png',
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        );
+      },
+    ),
+  );
+}
+
+Widget buildheart() {
+  return Container(
+    height: 100.0, // กำหนดความสูงของ container ที่มีการ์ด
+    child: ListView.builder(
+      scrollDirection: Axis.horizontal, // ให้การ์ดเลื่อนได้ในแนวนอน
+      itemCount: 10, // จำนวนการ์ด
+      itemBuilder: (context, index) {
+        return Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Container(
+            width: 100.0,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image.asset(
+                'assets/images/product${index % 3 + 1}.png',
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        );
+      },
+    ),
+  );
 }

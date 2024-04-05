@@ -82,6 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: bgGreylight,
       appBar: AppBar(
         backgroundColor: whiteColor,
+        automaticallyImplyLeading: false,
         title: appbarField(),
         actions: <Widget>[
           Padding(

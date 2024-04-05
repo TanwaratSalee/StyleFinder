@@ -13,7 +13,6 @@ import 'package:get/get.dart';
 
 import 'dart:math' as math;
 
-import '../store_screen/product_screen.dart';
 import '../widgets_common/appbar_ontop.dart';
 
 class NewsScreen extends StatelessWidget {
@@ -27,7 +26,22 @@ class NewsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: whiteColor,
+          automaticallyImplyLeading: false,
         title: appbarField(),
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(right: 15.0),
+            child: IconButton(
+              icon: Image.asset(
+                icCart,
+                width: 21,
+              ),
+              onPressed: () {
+                Get.to(() => const CartScreen());
+              },
+            ),
+          ),
+        ],
       ),
       body: Container(
         padding: const EdgeInsets.all(12),
