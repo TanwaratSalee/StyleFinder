@@ -23,8 +23,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController passwordRetypeController =
-      TextEditingController();
+  final TextEditingController passwordRetypeController = TextEditingController();
 
   String capitalizeFirstLetter(String text) {
     if (text.isEmpty) return "";

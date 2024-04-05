@@ -25,16 +25,21 @@ class EditProfileScreen extends StatelessWidget {
     controller.heightController.text = data['height'];
     controller.weightController.text = data['weight'];
     controller.birthdayController.text = data['birthday'];
-    controller.sexController.text = data['sex'];
+    controller.genderController.text = data['gender'];
 
-    DateTime selectedDate =
-        DateFormat('EEEE, dd/MM/yyyy').parse(data['birthday']);
+    if (data['gender'] != null) {
+      controller.selectGender(data['gender']);
+      controller.genderController.text = data['gender'];
+    } else {
+      controller.selectGender(''); 
+    }
+
+    DateTime selectedDate = DateFormat('EEEE, dd/MM/yyyy').parse(data['birthday']);
 
     String dateString = data['birthday'];
     List<String> dateParts = dateString.split(', ');
     String formattedDateString = dateParts[1];
-    DateTime initialBirthday =
-        DateFormat('dd/MM/yyyy').parse(formattedDateString);
+    DateTime initialBirthday = DateFormat('dd/MM/yyyy').parse(formattedDateString);
 
     void _showDatePicker() {
       showCupertinoModalPopup(
@@ -53,7 +58,7 @@ class EditProfileScreen extends StatelessWidget {
                     selectedDate = val;
                     // Update the birthdayController with the new date
                     controller.birthdayController.text =
-                        DateFormat('EEEE, dd/MM/yyyy').format(val);
+                        DateFormat('EEEE, dd/MM/yyyy', 'en').format(val);
                   },
                 ),
               ),
@@ -62,7 +67,7 @@ class EditProfileScreen extends StatelessWidget {
                 onPressed: () {
                   // Force UI update if necessary
                   controller.birthdayController.text =
-                      DateFormat('EEEE, dd/MM/yyyy').format(selectedDate);
+                      DateFormat('EEEE, dd/MM/yyyy', 'en').format(selectedDate);
                   Navigator.of(context).pop();
                 },
               ),
@@ -185,7 +190,7 @@ class EditProfileScreen extends StatelessWidget {
                   weight: controller.weightController.text,
                   imgUrl: imgUrl,
                   birthday: controller.birthdayController.text,
-                  sex: controller.sexController.text,
+                  gender: controller.genderController.text,
                 );
 
                 controller.isloading(false);
@@ -251,7 +256,7 @@ class EditProfileScreen extends StatelessWidget {
               20.heightBox,
               Align(
                 alignment: Alignment.centerLeft,
-                child: const Text('About account')
+                child: const Text('About Account')
                     .text
                     .size(16)
                     .fontFamily(medium)
@@ -278,7 +283,7 @@ class EditProfileScreen extends StatelessWidget {
 
               Align(
                 alignment: Alignment.centerLeft,
-                child: const Text('About you')
+                child: const Text('About You')
                     .text
                     .size(16)
                     .fontFamily(medium)
@@ -325,8 +330,6 @@ class EditProfileScreen extends StatelessWidget {
                 ],
               ),
 
-              const SizedBox(height: 10),
-
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -347,13 +350,11 @@ class EditProfileScreen extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
                         child: Obx(
                           () => Text(
-                            controller.selectedGender.value.isEmpty
-                                ? 'Select Gender'
-                                : controller.selectedGender.value,
+                            controller.selectedGender
+                                .value, 
                             style: TextStyle(
-                              color: controller.selectedGender.value.isEmpty
-                                  ? fontBlack
-                                  : fontGrey,
+                              color:
+                                  fontGrey, 
                               fontFamily: regular,
                               fontSize: 16,
                             ),
@@ -364,7 +365,6 @@ class EditProfileScreen extends StatelessWidget {
                   ),
                 ],
               ),
-
               editTextField(
                 controller: controller.heightController,
                 label: 'Height',

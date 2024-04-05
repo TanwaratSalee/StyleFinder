@@ -32,7 +32,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
 
   DateTime selectedDate = DateTime.now();
 
-  String? selectedSex;
+  String? selectedGender;
   Color? selectedSkinTone;
   bool canSelectSkin = true;
 
@@ -118,11 +118,11 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   .entries
                   .map((entry) {
                 int idx = entry.key;
-                String sex = entry.value;
+                String gender = entry.value;
 
                 // สร้าง Icon ตามเพศ
                 IconData iconData;
-                switch (sex) {
+                switch (gender) {
                   case 'Man':
                     iconData = Icons.male;
                     break;
@@ -142,7 +142,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                       onPressed: isSelectable
                           ? () {
                               setState(() {
-                                selectedSex = sex;
+                                selectedGender = gender;
                               });
                             }
                           : null,
@@ -151,17 +151,17 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                         children: <Widget>[
                           Icon(
                             iconData,
-                            color: isSelectable && selectedSex == sex
+                            color: isSelectable && selectedGender == gender
                                 ? primaryApp
                                 : greyColor,
                             size: 24.0,
                           ),
                           Text(
-                            sex,
+                            gender,
                             style: TextStyle(
                               fontFamily: regular,
                               fontSize: 16,
-                              color: isSelectable && selectedSex == sex
+                              color: isSelectable && selectedGender == gender
                                   ? primaryApp
                                   : greyColor,
                             ),
@@ -170,15 +170,15 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                       ),
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
-                            selectedSex == sex ? thinPrimaryApp : bgGreylight),
+                            selectedGender == gender ? thinPrimaryApp : bgGreylight),
                         foregroundColor: MaterialStateProperty.all<Color>(
-                            selectedSex == sex ? primaryApp : whiteColor),
+                            selectedGender == gender ? primaryApp : whiteColor),
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0),
                             side: BorderSide(
-                                color: selectedSex == sex
+                                color: selectedGender == gender
                                     ? Colors.teal
                                     : whiteColor),
                           ),
@@ -269,7 +269,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
               onPress: () async {
                 print("Selected is: $selectedDate");
 
-                print("Selected is: $selectedSex");
+                print("Selected is: $selectedGender");
                 // print("Selected height is: ${heightController.text}");
                 // print("Selected weight is: ${weightController.text}");
                 // print("Selected is: $selectedSkinTone");
@@ -279,7 +279,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   email: widget.email,
                   password: widget.password,
                   birthday: selectedDate,
-                  sex: selectedSex!,
+                  gender: selectedGender!,
                   uHeight: heightController.text,
                   uWeight: weightController.text,
                   skin: selectedSkinTone!,

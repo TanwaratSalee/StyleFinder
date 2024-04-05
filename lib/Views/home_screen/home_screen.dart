@@ -10,6 +10,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../widgets_common/appbar_ontop.dart';
+
 class FirestoreServices {
   static Future<List<Map<String, dynamic>>> getFeaturedProducts() async {
     try {
@@ -66,7 +68,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // Initialize controllercard here
   }
 
   @override
@@ -78,56 +79,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backGround,
+      backgroundColor: bgGreylight,
       appBar: AppBar(
         backgroundColor: whiteColor,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 15.0),
-          child: IconButton(
-            icon: Image.asset(
-              icSearch,
-              width: 23,
-            ),
-            onPressed: () {
-              showGeneralDialog(
-                barrierLabel: "Barrier",
-                barrierDismissible: true,
-                barrierColor: Colors.black.withOpacity(0.5),
-                transitionDuration: const Duration(milliseconds: 300),
-                context: context,
-                pageBuilder: (_, __, ___) {
-                  return Align(
-                    alignment: Alignment.topCenter,
-                    child: Container(
-                      height: MediaQuery.of(context).size.height * 0.6,
-                      width: MediaQuery.of(context).size.width,
-                      child: const SearchScreenPage(),
-                      decoration: const BoxDecoration(
-                        color: whiteColor,
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(18),
-                          bottomRight: Radius.circular(18),
-                        ),
-                      ),
-                      padding: const EdgeInsets.all(20),
-                    ),
-                  );
-                },
-                transitionBuilder: (context, anim1, anim2, child) {
-                  return SlideTransition(
-                    position: Tween(
-                            begin: const Offset(0, -1), end: const Offset(0, 0))
-                        .animate(anim1),
-                    child: child,
-                  );
-                },
-              );
-            },
-          ),
-        ),
-        title: Center(
-          child: Image.asset(icLogoOnTop, height: 40),
-        ),
+        title: appbarField(),
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right: 15.0),

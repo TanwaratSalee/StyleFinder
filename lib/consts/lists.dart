@@ -2,7 +2,7 @@ import 'package:flutter_finalproject/consts/images.dart';
 import 'package:flutter_finalproject/consts/strings.dart';
 
 // login page
-const socialIconList = [icFacebook, icGmail, icApple];
+const socialIconList = [icFacebook, icGmail];
 
 // --------------------------------- Home ---------------------------------
 const cardsImages = [card1, card2, card3, card4, card5, card6];

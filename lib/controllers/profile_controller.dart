@@ -28,15 +28,14 @@ class ProfileController extends GetxController {
   var newpassController = TextEditingController();
 
   var birthdayController = TextEditingController();
-  var sexController = TextEditingController();
+  var genderController = TextEditingController();
   var selectedGender = ''.obs;
 
   void selectGender(String gender) {
-    selectedGender.value = gender;
-    sexController.text = gender;
-  }
+  selectedGender.value = gender;
+  genderController.text = gender; // ตรวจสอบว่ามีการตั้งค่านี้
+}
 
-  // Select a photo from the user's gallery. /ImagePicker to open a gallery. / 70% to reduce file size.
   changeImage(context) async {
     try {
       final img = await ImagePicker()
@@ -63,7 +62,7 @@ class ProfileController extends GetxController {
     String? weight,
     String? imgUrl,
     String? birthday,
-    String? sex,
+    String? gender,
   }) async {
     try {
       isloading(true);
@@ -74,7 +73,7 @@ class ProfileController extends GetxController {
       if (weight != null) dataToUpdate['weight'] = weight;
       if (imgUrl != null) dataToUpdate['imageUrl'] = imgUrl;
       if (birthday != null) dataToUpdate['birthday'] = birthday;
-      if (sex != null) dataToUpdate['sex'] = sex;
+      if (gender != null) dataToUpdate['gender'] = gender;
 
       await FirebaseFirestore.instance
           .collection('users')

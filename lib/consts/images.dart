@@ -108,6 +108,10 @@ const String icAddress = "assets/icons/iconsAccount/map.png";
 const String icPassword = "assets/icons/iconsAccount/password.png";
 const String icLogout = "assets/icons/iconsAccount/logout.png";
 
+// News Screen
+const String icNext = "assets/icons/icNormal/Iconnext.png";
+const String icUndertext = "assets/icons/icNormal/undertext.png";
+
 // Paymet
 const String imgCash = "assets/images/payment/cashOnDelivery.png";
 const String imgPromptpay = "assets/images/payment/Promptpay.png";

@@ -56,7 +56,7 @@ class _MainHomeState extends State<MainHome> {
       const HomeScreen(),
       const NewsScreen(),
       const MatchScreen(),
-      const ProfileScreen(),
+       ProfileScreen(),
     ];
 
     return WillPopScope(

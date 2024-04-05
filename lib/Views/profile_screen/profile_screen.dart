@@ -1,40 +1,55 @@
-// ignore_for_file: unused_local_variable
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_finalproject/Views/auth_screen/login_screen.dart';
-import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/profile_screen/menu_setting_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
-import 'package:flutter_finalproject/controllers/auth_controller.dart';
 import 'package:flutter_finalproject/controllers/profile_controller.dart';
-import 'package:flutter_finalproject/services/firestore_services.dart';
 import 'package:get/get.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_finalproject/services/firestore_services.dart';
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({Key? key}) : super(key: key);
+  
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderStateMixin {
+  late TabController _tabController; 
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     var controller = Get.put(ProfileController());
-
+    
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: whiteColor,
-          automaticallyImplyLeading: false,
-          title: const Text(
+      backgroundColor: whiteColor, // Replace with your actual color
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: const Text(
             'Profile',
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: fontBlack,
+              color: fontBlack, // Replace with your actual color
               fontSize: 26,
-              fontFamily: 'regular',
+              fontFamily: 'regular', // Replace with your actual font
             ),
           ),
-          actions: <Widget>[
+        actions: <Widget>[
             IconButton(
               icon: const Icon(
                 Icons.menu,
-                color: fontBlack,
+                color: fontBlack, // Replace with your actual color
               ),
               onPressed: () {
                 Get.to(() => const MenuSettingScreen());
@@ -42,9 +57,37 @@ class ProfileScreen extends StatelessWidget {
             ),
           ],
           centerTitle: true,
+      ),
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                _buildProductTab(),
+                _buildMatchTab(),
+              ],
+            ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: Container(
+        color: Theme.of(context).appBarTheme.backgroundColor,
+        child: TabBar(
+          controller: _tabController,
+          labelColor: fontBlack, // Replace with your actual color
+          unselectedLabelColor: Colors.grey, // Or any other color for unselected text
+          tabs: const [
+            Tab(text: 'Product'),
+            Tab(text: 'Match'),
+          ],
         ),
-        backgroundColor: whiteColor,
-        body: StreamBuilder(
+      ),
+    );
+  }
+
+  Widget _buildProfileHeader() {
+  return StreamBuilder(
             stream: FirestoreServices.getUser(currentUser!.uid),
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -60,18 +103,6 @@ class ProfileScreen extends StatelessWidget {
                 return SafeArea(
                   child: Column(
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.all(8),
-                        // child: const Align(
-                        //   alignment: Alignment.topRight,
-                        //   child: Icon(Icons.edit, color: fontBlack),
-                        // ).onTap(() {
-                        //   controller.nameController.text = data['name'];
-
-                        //   Get.to(() => EditProfileScreen(data: data));
-                        // }),
-                      ),
-
                       Center(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -110,111 +141,91 @@ class ProfileScreen extends StatelessWidget {
                                       color: fontBlack,
                                       fontFamily: regular),
                                 ),
-                                // Text(
-                                //   data['email'][0].toUpperCase() + data['email'].substring(1),
-                                //   style: const TextStyle(fontSize: 12, color: fontGrey, fontFamily: regular),
-                                // ),
                               ],
                             ),
                           ),
                         ),
                       ),
-
-                      FutureBuilder(
-                          future: FirestoreServices.getCounts(),
-                          builder:
-                              (BuildContext context, AsyncSnapshot snapshot) {
-                            if (!snapshot.hasData) {
-                              return Center(
-                                child: loadingIndicator(),
-                              );
-                            } else {
-                              var countData = snapshot.data;
-
-                              return const Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                // children: [
-                                //   detailsCard(
-                                //     count: countData[0].toString(),
-                                //     title: "Cart",
-                                //   ),
-                                //   detailsCard(
-                                //     count: countData[1].toString(),
-                                //     title: "Favorite",
-                                //   ),
-                                //   detailsCard(
-                                //     count: countData[2].toString(),
-                                //     title: "Order",
-                                //   )
-                                // ],
-                              ).box.color(fontLightGrey).make();
-                            }
-                          }),
-
-                      //button section
-
-                      // ListView.separated(
-                      //   shrinkWrap: true,
-                      //   separatorBuilder: (context, index) {
-                      //     return Container();
-                      //   },
-                      //   itemCount: profileButtonsList.length,
-                      //   itemBuilder: (BuildContext context, int index) {
-                      //     return ListTile(
-                      //       onTap: () {
-                      //         switch (index) {
-                      //           case 0:
-                      //             controller.nameController.text = data['name'];
-                      //             Get.to(() => EditProfileScreen(data: data));
-                      //             break;
-                      //           case 1:
-                      //             Get.to(() => const OrdersScreen());
-                      //             break;
-                      //           case 2:
-                      //             Get.to(() => WishlistScreen());
-                      //             break;
-                      //           case 3:
-                      //             Get.to(() => const MessagesScreen());
-                      //             break;
-                      //         }
-                      //       },
-                      //       leading: Image.asset(
-                      //         profileButtonsIcon[index],
-                      //         width: 22,
-                      //       ),
-                      //       title: profileButtonsList[index].text.make(),
-                      //       trailing: Icon(Icons.arrow_forward_ios, size: 16),
-                      //     );
-                      //   },
-                      // )
-                      // .box
-                      // .white
-                      // .rounded
-                      // .margin(const EdgeInsets.all(12))
-                      // .padding(const EdgeInsets.symmetric(horizontal: 16))
-                      // .shadowSm
-                      // .make(),
-                      // .box.color(primaryApp).make(),
-                      20.heightBox,
-
-                      OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                            side: const BorderSide(color: whiteColor)),
-                        onPressed: () async {
-                          await Get.put(AuthController())
-                              .signoutMethod(context);
-                          Get.offAll(() => LoginScreen);
-                        },
-                        child: loggedout.text
-                            .fontFamily(regular)
-                            .color(primaryApp)
-                            .make(),
-                      )
+                      const TabBar(
+                        tabs: [
+                          Tab(text: 'Product'),
+                          Tab(text: 'Match'),
+                        ],
+                      ),
                     ],
                   ),
                 );
               }
-            }));
-  }
+            });
+}
+
+
+  Widget _buildProductTab() {
+  return SingleChildScrollView(
+    child: Column(
+      children: <Widget>[
+        _buildProfileHeader(),
+        // Placeholder for actual product list - replace this with your own data fetching and rendering logic
+        ListTile(
+          leading: Icon(Icons.shopping_bag),
+          title: Text('Product 1'),
+          subtitle: Text('Price: 1,000.00 Bath'),
+          trailing: IconButton(
+            icon: Icon(Icons.favorite, color: Colors.red),
+            onPressed: () {
+              // Handle the favorite button tap
+            },
+          ),
+        ),
+        ListTile(
+          leading: Icon(Icons.shopping_bag),
+          title: Text('Product 2'),
+          subtitle: Text('Price: 2,000.00 Bath'),
+          trailing: IconButton(
+            icon: Icon(Icons.favorite_border),
+            onPressed: () {
+              // Handle the favorite button tap
+            },
+          ),
+        ),
+        // ... More ListTiles for each product ...
+      ],
+    ),
+  );
+}
+
+Widget _buildMatchTab() {
+  return SingleChildScrollView(
+    child: Column(
+      children: <Widget>[
+        _buildProfileHeader(),
+        // Placeholder for actual match list - replace this with your own data fetching and rendering logic
+        ListTile(
+          leading: Icon(Icons.check_circle_outline),
+          title: Text('Match 1'),
+          subtitle: Text('Compatibility: 90%'),
+          trailing: IconButton(
+            icon: Icon(Icons.favorite, color: Colors.red),
+            onPressed: () {
+              // Handle the favorite button tap
+            },
+          ),
+        ),
+        ListTile(
+          leading: Icon(Icons.check_circle_outline),
+          title: Text('Match 2'),
+          subtitle: Text('Compatibility: 85%'),
+          trailing: IconButton(
+            icon: Icon(Icons.favorite_border),
+            onPressed: () {
+              // Handle the favorite button tap
+            },
+          ),
+        ),
+        // ... More ListTiles for each match ...
+      ],
+    ),
+  );
+}
+
 }
