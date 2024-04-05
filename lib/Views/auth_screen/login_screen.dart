@@ -1,4 +1,6 @@
 import 'package:flutter_finalproject/Views/auth_screen/forgot_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_finalproject/Views/auth_screen/signup_screen.dart';
 import 'package:flutter_finalproject/Views/home_screen/mainHome.dart';
 import 'package:flutter_finalproject/Views/widgets_common/custom_textfield.dart';
@@ -7,6 +9,7 @@ import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/consts/lists.dart';
 import 'package:flutter_finalproject/controllers/auth_controller.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -73,6 +76,7 @@ class LoginScreen extends StatelessWidget {
                                             .make(),
                                         onPressed: () {
                                           Get.to(() => ForgotScreen());
+
                                         },
                                       ),
                                     ),
@@ -146,6 +150,40 @@ class LoginScreen extends StatelessWidget {
                                                     height: 24),
                                               )),
                                     ),
+Row(
+  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  children: List.generate(
+    socialIconList.length,
+    (index) => GestureDetector(
+      onTap: () {
+        switch (index) {
+          case 0: // Google
+            signInWithGoogle();
+            break;
+          case 1: // Facebook
+            signInWithFacebook();
+            break;
+          // เพิ่มเติมตามลำดับของไอคอนโซเชียลอื่น ๆ ตามต้องการได้เลย
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(30, 15, 30, 15),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: fontLightGrey,
+            width: 1,
+          ),
+        ),
+        child: Image.asset(
+          socialIconList[index],
+          width: 24,
+          height: 24,
+        ),
+      ),
+    ),
+  ),
+),
                                   ],
                                 ),
                               ),
@@ -196,4 +234,49 @@ class LoginScreen extends StatelessWidget {
       ),
     );
   }
+  
+Future<void> signInWithGoogle() async {
+  try {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    final UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+
+    // Navigate to MainHome() page
+    Get.offAll(() => MainHome());
+  } catch (e) {
+    print("Error signing in with Google: $e");
+    // Handle error
+  }
+}
+
+Future<UserCredential?> signInWithFacebook() async {
+  // Trigger the sign-in flow
+  final LoginResult loginResult = await FacebookAuth.instance.login();
+
+  // Check if loginResult.accessToken is not null
+  if (loginResult.accessToken != null) {
+    // Create a credential from the access token
+    final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+  } else {
+    // Handle the case when accessToken is null
+    print('Error: Access token is null');
+    return null; // or throw an error, depending on your requirement
+  }
+}
+
+
 }

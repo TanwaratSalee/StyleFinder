@@ -46,6 +46,8 @@ dependencies:
   intl: ^0.18.1
   http: ^0.13.6
   flutter_svg: ^2.0.9
+  google_sign_in: ^6.2.1
+  flutter_facebook_auth: ^6.0.4
   
 
 dev_dependencies:
