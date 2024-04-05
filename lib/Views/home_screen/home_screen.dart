@@ -84,20 +84,20 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: whiteColor,
         automaticallyImplyLeading: false,
         title: appbarField(),
-        actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(right: 15.0),
-            child: IconButton(
-              icon: Image.asset(
-                icCart,
-                width: 21,
-              ),
-              onPressed: () {
-                Get.to(() => const CartScreen());
-              },
-            ),
-          ),
-        ],
+        // actions: <Widget>[
+        //   Padding(
+        //     padding: const EdgeInsets.only(right: 15.0),
+        //     child: IconButton(
+        //       icon: Image.asset(
+        //         icCart,
+        //         width: 21,
+        //       ),
+        //       onPressed: () {
+        //         Get.to(() => const CartScreen());
+        //       },
+        //     ),
+        //   ),
+        // ],
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 0, left: 0, right: 0),

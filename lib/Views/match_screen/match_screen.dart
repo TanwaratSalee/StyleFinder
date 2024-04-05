@@ -24,20 +24,20 @@ class _MatchScreenState extends State<MatchScreen> {
         automaticallyImplyLeading: false,
         backgroundColor: whiteColor,
         title: appbarField(),
-        actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(right: 15.0),
-            child: IconButton(
-              icon: Image.asset(
-                icCart,
-                width: 21,
-              ),
-              onPressed: () {
-                Get.to(() => const CartScreen());
-              },
-            ),
-          ),
-        ],
+        // actions: <Widget>[
+        //   Padding(
+        //     padding: const EdgeInsets.only(right: 15.0),
+        //     child: IconButton(
+        //       icon: Image.asset(
+        //         icCart,
+        //         width: 21,
+        //       ),
+        //       onPressed: () {
+        //         Get.to(() => const CartScreen());
+        //       },
+        //     ),
+        //   ),
+        // ],
       ),
       body: CustomScrollView(
         slivers: <Widget>[

@@ -28,20 +28,20 @@ class NewsScreen extends StatelessWidget {
         backgroundColor: whiteColor,
           automaticallyImplyLeading: false,
         title: appbarField(),
-        actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(right: 15.0),
-            child: IconButton(
-              icon: Image.asset(
-                icCart,
-                width: 21,
-              ),
-              onPressed: () {
-                Get.to(() => const CartScreen());
-              },
-            ),
-          ),
-        ],
+        // actions: <Widget>[
+        //   Padding(
+        //     padding: const EdgeInsets.only(right: 15.0),
+        //     child: IconButton(
+        //       icon: Image.asset(
+        //         icCart,
+        //         width: 21,
+        //       ),
+        //       onPressed: () {
+        //         Get.to(() => const CartScreen());
+        //       },
+        //     ),
+        //   ),
+        // ],
       ),
       body: Container(
         padding: const EdgeInsets.all(12),
