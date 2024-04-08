@@ -100,7 +100,7 @@ class CartScreen extends StatelessWidget {
                               .numCurrency
                               .text
                               .fontFamily(regular)
-                              .color(fontBlack)
+                              .color(blackColor)
                               .make(),
                         ),
                       ],

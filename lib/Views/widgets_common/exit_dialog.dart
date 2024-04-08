@@ -7,10 +7,10 @@ Widget exitDialog(context) {
     child: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        "Confirm".text.fontFamily(bold).size(18).color(fontBlack).make(),
+        "Confirm".text.fontFamily(bold).size(18).color(blackColor).make(),
         const Divider(),
         10.heightBox,
-        "Are your sure you want to exit?".text.size(16).color(fontBlack).make(),
+        "Are your sure you want to exit?".text.size(16).color(blackColor).make(),
         10.heightBox,
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,

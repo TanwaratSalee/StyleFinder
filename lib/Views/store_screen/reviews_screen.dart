@@ -118,7 +118,7 @@ Widget _buildReviewShop(BuildContext context) {
 
 Widget _buildReviewHighlights() {
   return Container(
-    height: 750,
+    height: 600,
     margin: EdgeInsets.only(top: 0.5),
     child: ListView.builder(
       itemCount: 10,
@@ -131,7 +131,7 @@ Widget _buildReviewHighlights() {
 
 Widget _buildReviewHigh() {
   return Container(
-    height: 750,
+    height: 600,
     margin: EdgeInsets.only(top: 0.5),
     child: ListView.builder(
       itemCount: 10,

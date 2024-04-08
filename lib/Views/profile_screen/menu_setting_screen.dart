@@ -35,7 +35,7 @@ class MenuSettingScreen extends StatelessWidget {
             'Setting',
             textAlign: TextAlign.center, // This centers the title in the space available.
             style: TextStyle(
-              color: fontBlack,
+              color: blackColor,
               fontSize: 24,
               fontFamily: medium,
             ),
@@ -99,7 +99,7 @@ class MenuSettingScreen extends StatelessWidget {
                                   Get.to(() => OrdersScreen());
                                   break;
                                 case 4:
-                                  Get.to(() => const WishlistScreen());
+                                  Get.to(() => const MessagesScreen());
                                   break;
                               }
                             },

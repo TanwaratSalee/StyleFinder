@@ -15,7 +15,7 @@ Widget customTextField({
         Text(
           title,
           style: const TextStyle(
-            color: fontBlack,
+            color: blackColor,
             fontWeight: FontWeight.bold,
             fontSize: 16,
           ),

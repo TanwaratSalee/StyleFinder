@@ -1,7 +1,6 @@
 // ignore_for_file: unused_local_variable, sort_child_properties_last
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/widgets_common/home_buttons.dart';
@@ -161,7 +160,7 @@ class NewsScreen extends StatelessWidget {
                     // Align(
                     //     alignment: Alignment.centerLeft,
                     //     child: featuredCategories.text
-                    //         .color(fontBlack)
+                    //         .color(blackColor)
                     //         .size(18)
                     //         .fontFamily(regular)
                     //         .make()),
@@ -232,7 +231,7 @@ class NewsScreen extends StatelessWidget {
                     //                         "${ featuredData[index]['p_name']}"
                     //                             .text
                     //                             .fontFamily(regular)
-                    //                             .color(fontBlack)
+                    //                             .color(blackColor)
                     //                             .make(),
                     //                         5.heightBox,
                     //                         "${featuredData[index]['p_price']}"
@@ -295,6 +294,32 @@ class NewsScreen extends StatelessWidget {
                     //         .size(18)
                     //         .make()),
                     30.heightBox,
+
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment
+                          .center, // Ensure alignment if needed
+                      children: [
+                        'MATCH'
+                            .text
+                            .fontFamily(medium)
+                            .color(fontGreyDark)
+                            .size(22)
+                            .make(),
+                        Container(
+                          child: GestureDetector(
+                            child: Image.asset(
+                              icUndertext,
+                              width: 170,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    30.heightBox,
+
+                    
 
                     Column(
                       mainAxisSize: MainAxisSize.min,

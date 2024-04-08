@@ -16,7 +16,7 @@ Widget editTextField({
         Text(
           title,
           style: const TextStyle(
-            color: fontBlack,
+            color: blackColor,
             fontFamily: medium,
             fontSize: 16,
           ),
@@ -29,7 +29,7 @@ Widget editTextField({
             Text(
               label,
               style: const TextStyle(
-                color: fontBlack,
+                color: blackColor,
                 fontSize: 14,
                 fontFamily: 'Regular',
               ),

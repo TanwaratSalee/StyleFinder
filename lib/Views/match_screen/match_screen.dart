@@ -1,10 +1,27 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_finalproject/Views/auth_screen/login_screen.dart';
 import 'package:flutter_finalproject/Views/search_screen/search_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/appbar_ontop.dart';
 import 'package:flutter_finalproject/consts/colors.dart';
+import 'package:flutter_finalproject/consts/firebase_consts.dart';
 import 'package:flutter_finalproject/consts/images.dart';
+import 'package:flutter_finalproject/controllers/auth_controller.dart';
 import 'package:get/get.dart';
 import '../cart_screen/cart_screen.dart';
+
+class FirestoreServices {
+  static Future<List<Map<String, dynamic>>> getFeaturedProducts() async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot =
+          await FirebaseFirestore.instance.collection(productsCollection).get();
+      return snapshot.docs.map((doc) => doc.data()).toList();
+    } catch (e) {
+      print("Error fetching featured products: $e");
+      return [];
+    }
+  }
+}
 
 class MatchScreen extends StatefulWidget {
   const MatchScreen({Key? key}) : super(key: key);
@@ -75,7 +92,11 @@ class _MatchScreenState extends State<MatchScreen> {
                           icLikeButton,
                           width: 67,
                         ),
-                        onPressed: () {},
+                            onPressed: () async {
+                              await Get.put(AuthController())
+                                  .signoutMethod(context);
+                              Get.offAll(() => LoginScreen());
+                            },
                       ),
                     ],
                   ),
@@ -88,13 +109,30 @@ class _MatchScreenState extends State<MatchScreen> {
     );
   }
 
-  Widget buildCardSetTop() {
-    return Container(
+Widget buildCardSetTop() {
+  return FutureBuilder<List<Map<String, dynamic>>>(
+    future: fetchProducts(),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const Center(child: CircularProgressIndicator());
+      }
+
+      if (snapshot.error != null) {
+        return Center(
+            child: Text('An error occurred: ${snapshot.error}'));
+      }
+
+      if (!snapshot.hasData || snapshot.data!.isEmpty) {
+        return const Center(child: Text('No data available'));
+      }
+      final products = snapshot.data!;
+      return Container(
       height: 250.0,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: 10, // จำนวนการ์ด
+        itemCount: products.length,
         itemBuilder: (context, index) {
+          final product = products[index];
           return Card(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
@@ -103,9 +141,9 @@ class _MatchScreenState extends State<MatchScreen> {
               width: 300.0,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
-                child: Image.asset(
-                  'assets/images/product${index % 3 + 1}.png',
-                  fit: BoxFit.cover,
+                  child: Image.network(
+                    product['p_imgs'][0],
+                    fit: BoxFit.cover,
                 ),
               ),
             ),
@@ -113,34 +151,52 @@ class _MatchScreenState extends State<MatchScreen> {
         },
       ),
     );
-  }
+  });
 }
 
 Widget buildCardSetBottom() {
+  return FutureBuilder<List<Map<String, dynamic>>>(
+    future: fetchProducts(),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const Center(child: CircularProgressIndicator());
+      }
+
+      if (snapshot.error != null) {
+        return Center(
+            child: Text('An error occurred: ${snapshot.error}'));
+      }
+
+      if (!snapshot.hasData || snapshot.data!.isEmpty) {
+        return const Center(child: Text('No data available'));
+      }
+      final products = snapshot.data!;
   return Container(
-    height: 250.0, // กำหนดความสูงของ container ที่มีการ์ด
+    height: 250.0,
     child: ListView.builder(
-      scrollDirection: Axis.horizontal, // ให้การ์ดเลื่อนได้ในแนวนอน
-      itemCount: 10, // จำนวนการ์ด
-      itemBuilder: (context, index) {
+      scrollDirection: Axis.horizontal,
+        itemCount: products.length,
+        itemBuilder: (context, index) {
+          final product = products[index];
         return Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          child: Container(
-            width: 300.0,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Image.asset(
-                'assets/images/product${index % 3 + 1}.png',
-                fit: BoxFit.cover,
-              ),
+            child: Container(
+              width: 300.0,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                  child: Image.network(
+                    product['p_imgs'][0],
+                    fit: BoxFit.cover,
+                ),
             ),
           ),
         );
       },
     ),
   );
+});
 }
 
 Widget buildheart() {
@@ -168,4 +224,9 @@ Widget buildheart() {
       },
     ),
   );
+}
+
+Future<List<Map<String, dynamic>>> fetchProducts() async {
+  return FirestoreServices.getFeaturedProducts();
+}
 }

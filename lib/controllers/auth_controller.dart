@@ -144,6 +144,57 @@ class AuthController extends GetxController {
     }
   }
 
+  Future<void> saveUserDataGoogle({
+  required UserCredential currentUser,
+  required String name,
+  required DateTime birthday,
+  required String gender,
+  required String uHeight,
+  required String uWeight,
+  required Color skin,
+  }) async {
+  try {
+    String formattedDateWithDay = DateFormat('EEEE, dd/MM/yyyy').format(birthday);
+
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(currentUser.user!.uid)
+        .set({
+      'email': currentUser.user!.email, // ใช้ email จาก currentUser
+      'name': name,
+      'imageUrl': currentUser.user!.photoURL ?? '', // ใช้ URL รูปภาพจาก currentUser (ถ้ามี)
+      'id': currentUser.user!.uid,
+      'birthday': formattedDateWithDay,
+      'gender': gender,
+      'height': uHeight,
+      'weight': uWeight,
+      'skinTone': skin.value,
+      'cart_count': "0",
+      'wishlist_count': "0",
+      'order_count': "0"
+    });
+
+    Get.snackbar('Success', 'User data saved successfully!');
+    Get.offAll(() => MainHome());
+  } catch (e) {
+    print("Failed to upload user data: $e");
+    Get.snackbar('Error', 'Failed to upload user data: $e');
+  }
+  }
+
+  Future<void> sendPasswordResetEmail(String email, BuildContext context) async {
+  try {
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Password reset email has been sent.')),
+    );
+  } on FirebaseAuthException catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error: ${e.message}')),
+    );
+  }
+}
+
   //Signout method
   signoutMethod(context) async {
     print('Starting to logout...');

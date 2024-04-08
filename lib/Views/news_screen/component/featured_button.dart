@@ -10,7 +10,7 @@ Widget featuredButton({String? title, icon}) {
     children: [
       Image.asset(icon, width: 60, fit: BoxFit.fill),
       10.widthBox,
-      title!.text.fontFamily(regular).color(fontBlack).make(),
+      title!.text.fontFamily(regular).color(blackColor).make(),
     ],
   )
       .box

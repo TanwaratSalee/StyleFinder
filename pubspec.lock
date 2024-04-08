@@ -294,6 +294,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.1"
+  flutter_marquee:
+    dependency: "direct main"
+    description:
+      name: flutter_marquee
+      sha256: "9cdf9504bfb2745b46c5bfc871b4a56e4f32d82e62b931eebad77bf9af240023"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:

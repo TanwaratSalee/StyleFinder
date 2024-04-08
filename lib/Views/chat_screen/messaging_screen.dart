@@ -54,7 +54,7 @@ class MessagesScreen extends StatelessWidget {
                                   title: "${data[index]['friend_name']}"
                                       .text
                                       .fontFamily(regular)
-                                      .color(fontBlack)
+                                      .color(blackColor)
                                       .make(),
                                   subtitle:
                                       "${data[index]['last_msg']}".text.make(),

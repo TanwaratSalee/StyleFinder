@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/Views/auth_screen/forgot_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:flutter_finalproject/Views/auth_screen/personal_details_screen_google.dart';
 import 'package:flutter_finalproject/Views/auth_screen/signup_screen.dart';
 import 'package:flutter_finalproject/Views/home_screen/mainHome.dart';
 import 'package:flutter_finalproject/Views/widgets_common/custom_textfield.dart';
@@ -72,7 +74,7 @@ class LoginScreen extends StatelessWidget {
                                       alignment: Alignment.centerRight,
                                       child: TextButton(
                                         child: forgotPass.text
-                                            .color(fontBlack)
+                                            .color(blackColor)
                                             .make(),
                                         onPressed: () {
                                           Get.to(() => ForgotScreen());
@@ -158,7 +160,7 @@ class LoginScreen extends StatelessWidget {
                                           onTap: () {
                                             switch (index) {
                                               case 0: // Google
-                                                signInWithGoogle();
+                                                signInWithGoogle(context);
                                                 break;
                                               case 1: // Facebook
                                                 signInWithFacebook();
@@ -236,32 +238,48 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Future<void> signInWithGoogle() async {
-    try {
-      // Trigger the authentication flow
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+Future<void> signInWithGoogle(BuildContext context) async {
+  try {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+    final OAuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+    final UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
 
-      // Obtain the auth details from the request
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
+    final String email = userCredential.user?.email ?? "No Email";
+    final String name = userCredential.user?.displayName ?? "No Name";
+    final String uid = userCredential.user?.uid ?? "";
 
-      // Create a new credential
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
+    // Check if the user's uid exists in Firestore
+    final DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+
+    if (userDoc.exists) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => MainHome()),
+        (Route<dynamic> route) => false,
       );
-
-      // Once signed in, return the UserCredential
-      final UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-
-      // Navigate to MainHome() page
-      Get.offAll(() => MainHome());
-    } catch (e) {
-      print("Error signing in with Google: $e");
-      // Handle error
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PersonalDetailsScreenGoogle(
+            email: email,
+            name: name,
+            password: "Not Available",
+            userCredential: userCredential,
+          ),
+        ),
+      );
     }
+  } catch (e) {
+    print("Error signing in with Google: $e");
+    // Handle error appropriately
   }
+}
 
   Future<UserCredential?> signInWithFacebook() async {
     // Trigger the sign-in flow

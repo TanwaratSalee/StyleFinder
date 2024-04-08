@@ -40,30 +40,9 @@ class _HomeScreenState extends State<HomeScreen> {
   var isFav = false.obs;
   Map<String, dynamic>? selectedProduct;
   Map<String, dynamic>? previousSwipedProduct;
+  late List<Map<String, dynamic>> productsToShow;
 
   _HomeScreenState(this.data);
-
-  // void RemoveWishlist(Map<String, dynamic> product) {
-  //   FirebaseFirestore.instance
-  //       .collection(productsCollection)
-  //       .where('p_name', isEqualTo: product['p_name'])
-  //       .get()
-  //       .then((QuerySnapshot querySnapshot) {
-  //     if (querySnapshot.docs.isNotEmpty) {
-  //       DocumentSnapshot doc = querySnapshot.docs.first;
-  //       List<dynamic> wishlist = doc['p_wishlist'];
-  //       if (!wishlist.contains(currentUser!.uid)) {
-  //         doc.reference.update({
-  //           'p_wishlist': FieldValue.arrayRemove([currentUser!.uid])
-  //         }).then((value) {
-  //           VxToast.show(context, msg: "Removed from Favorite");
-  //         }).catchError((error) {
-  //           print('Error adding ${product['p_name']} to Favorite: $error');
-  //         });
-  //       }
-  //     }
-  //   });
-  // }
 
   @override
   void initState() {
@@ -118,17 +97,19 @@ class _HomeScreenState extends State<HomeScreen> {
             }
 
             List<Map<String, dynamic>> products = snapshot.data!;
+            productsToShow = products.where((product) => !isInWishlist(product, currentUser!.uid)).toList();
+
             return CardSwiper(
               scale: 0.5,
               isLoop: false,
               controller: controllercard,
-              cardsCount: products.length,
+              cardsCount: productsToShow.length,
               cardBuilder: (BuildContext context, int index,
                   int percentThresholdX, int percentThresholdY) {
                 previousSwipedProduct = selectedProduct;
-                selectedProduct = products[index];
-                Map<String, dynamic> product = products[index];
-                return Column(
+                selectedProduct = productsToShow[index];
+                Map<String, dynamic> product = productsToShow[index];
+                  return Column(
                   children: [
                     Container(
                       width: 450,
@@ -261,4 +242,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
 Future<List<Map<String, dynamic>>> fetchProducts() async {
   return FirestoreServices.getFeaturedProducts();
+}
+
+bool isInWishlist(Map<String, dynamic> product, String currentUid) {
+  List<dynamic> wishlist = product['p_wishlist'];
+  return wishlist.contains(currentUid);
 }

@@ -76,6 +76,52 @@ class ProductController extends GetxController {
     VxToast.show(context, msg: "Added to wishlist");
   }
 
+  void addToWishlistDetail(Map<String, dynamic> product, context) {
+    FirebaseFirestore.instance
+        .collection(productsCollection)
+        .where('p_name', isEqualTo: product['p_name'])
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      if (querySnapshot.docs.isNotEmpty) {
+        DocumentSnapshot doc = querySnapshot.docs.first;
+        List<dynamic> wishlist = doc['p_wishlist'];
+        if (!wishlist.contains(currentUser!.uid)) {
+          doc.reference.update({
+            'p_wishlist': FieldValue.arrayUnion([currentUser!.uid])
+          }).then((value) {
+                isFav(true);
+                VxToast.show(context, msg: "Added from wishlist");
+          }).catchError((error) {
+            print('Error adding ${product['p_name']} to Favorite: $error');
+          });
+        }
+      }
+    });
+  }
+
+  void RemoveToWishlistDetail(Map<String, dynamic> product, context) {
+    FirebaseFirestore.instance
+        .collection(productsCollection)
+        .where('p_name', isEqualTo: product['p_name'])
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      if (querySnapshot.docs.isNotEmpty) {
+        DocumentSnapshot doc = querySnapshot.docs.first;
+        List<dynamic> wishlist = doc['p_wishlist'];
+        if (!wishlist.contains(currentUser!.uid)) {
+          doc.reference.update({
+            'p_wishlist': FieldValue.arrayRemove([currentUser!.uid])
+          }).then((value) {
+                isFav(false);
+                VxToast.show(context, msg: "Removed from wishlist");
+          }).catchError((error) {
+            print('Error adding ${product['p_name']} to Favorite: $error');
+          });
+        }
+      }
+    });
+  }
+
   removeFromWishlist(docId, context) async {
     await firestore.collection(productsCollection).doc(docId).set({
       'p_wishlist': FieldValue.arrayRemove([currentUser!.uid])

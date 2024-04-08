@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/store_screen/match_detail_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/reviews_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
@@ -12,7 +11,7 @@ class StoreScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: bgGreylight,
+      backgroundColor: whiteColor,
       appBar: AppBar(
         title: const Text('DIOR'),
         centerTitle: true,
@@ -26,7 +25,7 @@ class StoreScreen extends StatelessWidget {
         child: Column(
           children: <Widget>[
             _buildLogoAndRatingSection(context),
-            _buildReviewHighlights(),
+            // _buildReviewHighlights(),
             _buildProductMatchTabs(context),
           ],
         ),
@@ -74,7 +73,7 @@ class StoreScreen extends StatelessWidget {
                       '4.9/5.0',
                       style: TextStyle(fontSize: 14, fontFamily: regular),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     TextButton(
                       onPressed: () {
                         Navigator.push(
@@ -95,29 +94,29 @@ class StoreScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildReviewHighlights() {
-    return Container(
-      height: 120,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: 3,
-        itemBuilder: (context, index) {
-          return _buildReviewCard();
-        },
-      ),
-    );
-  }
+  // Widget _buildReviewHighlights() {
+  //   return Container(
+  //     height: 120,
+  //     child: ListView.builder(
+  //       scrollDirection: Axis.horizontal,
+  //       itemCount: 3,
+  //       itemBuilder: (context, index) {
+  //         return _buildReviewCard();
+  //       },
+  //     ),
+  //   );
+  // }
 
   Widget _buildReviewCard() {
     return Container(
       width: 200,
-      margin: EdgeInsets.all(5.0),
-      padding: EdgeInsets.all(10.0),
+      margin: const EdgeInsets.all(5.0),
+      padding: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
         color: whiteColor,
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
-          BoxShadow(
+          const BoxShadow(
             color: fontGrey,
             blurRadius: 4,
             offset: Offset(0, 2),
@@ -127,7 +126,7 @@ class StoreScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Reviewer Name',
+          const Text('Reviewer Name',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           Row(
             children: List.generate(5, (index) {
@@ -138,7 +137,7 @@ class StoreScreen extends StatelessWidget {
               );
             }),
           ),
-          Text(
+          const Text(
             'The review text goes here...',
             style: TextStyle(fontSize: 14),
             maxLines: 2,
@@ -155,10 +154,15 @@ class StoreScreen extends StatelessWidget {
       child: Column(
         children: <Widget>[
           TabBar(
+            labelStyle: const TextStyle(
+                fontSize: 15, fontFamily: regular, color: fontGreyDark),
+            unselectedLabelStyle: const TextStyle(
+                fontSize: 14, fontFamily: regular, color: fontGrey),
             tabs: [
-              Tab(text: 'Product'),
-              Tab(text: 'Match'),
+              const Tab(text: 'Product'),
+              const Tab(text: 'Match'),
             ],
+            indicatorColor: Theme.of(context).primaryColor,
           ),
           Container(
             height: MediaQuery.of(context).size.height * 0.9,
@@ -210,6 +214,10 @@ class StoreScreen extends StatelessWidget {
           const TabBar(
             isScrollable: true,
             indicatorColor: primaryApp,
+            labelStyle: TextStyle(
+                fontSize: 13, fontFamily: regular, color: fontGreyDark),
+            unselectedLabelStyle:
+                TextStyle(fontSize: 12, fontFamily: regular, color: fontGrey),
             tabs: [
               Tab(text: 'All'),
               Tab(text: 'Outer'),
@@ -240,21 +248,21 @@ class StoreScreen extends StatelessWidget {
       future: FirebaseFirestore.instance.collection('products').get(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return Center(
+            child: loadingIndicator(),
+          );
         }
         if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         }
         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-          return Text('No data available');
+          return const Text('No data available');
         }
 
         return GridView.builder(
-          padding: EdgeInsets.all(8.0),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 1 / 1.1,
-          ),
+          padding: const EdgeInsets.all(8.0),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, childAspectRatio: 1 / 1.2),
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (BuildContext context, int index) {
             var product = snapshot.data!.docs[index];
@@ -270,7 +278,7 @@ class StoreScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => MatchDetailScreen(),
+                      builder: (context) => const MatchDetailScreen(),
                     ),
                   );
                 },
@@ -286,31 +294,36 @@ class StoreScreen extends StatelessWidget {
                         height: 150,
                       ),
                       Padding(
-                        padding: EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(8.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
+                            3.heightBox,
                             Text(
                               productName,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
+                              style: const TextStyle(
+                                fontFamily: medium,
+                                fontSize: 16,
                               ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                             Text(
-                              'Price: $price',
-                              style: TextStyle(
-                                color: Colors.grey,
+                              '$price',
+                              style: const TextStyle(
+                                color: greyColor,
+                                fontFamily: regular
                               ),
                             ),
                           ],
                         ),
                       ),
                     ],
-                  ),
+                  ).box.color(whiteColor).make(),
                 ),
               );
             } else {
-              return SizedBox();
+              // return Text('Data not found');
             }
           },
         );
@@ -328,10 +341,6 @@ class StoreScreen extends StatelessWidget {
             indicatorColor: primaryApp,
             tabs: [
               Tab(text: 'All'),
-              Tab(text: 'Outer'),
-              Tab(text: 'Dress'),
-              Tab(text: 'Blouse/Shirt'),
-              Tab(text: 'T-Shirt'),
             ],
           ),
           Container(
@@ -339,10 +348,6 @@ class StoreScreen extends StatelessWidget {
             child: TabBarView(
               children: [
                 _buildProductMathGrids('All'),
-                _buildProductMathGrids('Outer'),
-                _buildProductMathGrids('Dress'),
-                _buildProductMathGrids('Bottoms'),
-                _buildProductMathGrids('T-shirts'),
               ],
             ),
           ),
@@ -356,7 +361,9 @@ class StoreScreen extends StatelessWidget {
       stream: FirebaseFirestore.instance.collection('products').snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) {
-          return CircularProgressIndicator();
+          return Center(
+            child: loadingIndicator(),
+          );
         }
 
         List<String> mixMatchList = [];
@@ -374,10 +381,10 @@ class StoreScreen extends StatelessWidget {
         print('MixMatch List: $mixMatchList');
 
         return GridView.builder(
-          padding: EdgeInsets.all(2),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          padding: const EdgeInsets.all(2),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            childAspectRatio: 1 / 1,
+            childAspectRatio: 1 / 1.3,
           ),
           itemBuilder: (BuildContext context, int index) {
             int actualIndex = index * 2;
@@ -442,23 +449,25 @@ class StoreScreen extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                SizedBox(height: 2),
+                                const SizedBox(height: 2),
                                 Text(
                                   productName1,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 Text(
                                   'Price: \$${price1.toString()}',
-                                  style: TextStyle(color: Colors.grey),
+                                  style: const TextStyle(color: Colors.grey),
                                 ),
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
                                 Text(
                                   productName2,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 Text(
                                   'Price: \$${price2.toString()}',
-                                  style: TextStyle(color: Colors.grey),
+                                  style: const TextStyle(color: Colors.grey),
                                 ),
                               ],
                             ),
@@ -466,12 +475,12 @@ class StoreScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: Text(
                         'Total Price: \$${totalPrice.toString()}',
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),

@@ -1,12 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
-import 'package:flutter_finalproject/Views/search_screen/search_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/appbar_ontop.dart';
-import 'package:flutter_finalproject/Views/widgets_common/home_buttons.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
-import 'package:flutter_finalproject/consts/lists.dart';
 import 'package:flutter_finalproject/controllers/news_controller.dart';
 import 'package:flutter_finalproject/services/firestore_services.dart';
 import 'package:get/get.dart';

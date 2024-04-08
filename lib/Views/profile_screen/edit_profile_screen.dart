@@ -260,7 +260,7 @@ class EditProfileScreen extends StatelessWidget {
                     .text
                     .size(16)
                     .fontFamily(medium)
-                    .color(fontBlack)
+                    .color(blackColor)
                     .make(),
               ),
               const Divider(
@@ -287,7 +287,7 @@ class EditProfileScreen extends StatelessWidget {
                     .text
                     .size(16)
                     .fontFamily(medium)
-                    .color(fontBlack)
+                    .color(blackColor)
                     .make(),
               ),
               const Divider(
@@ -301,7 +301,7 @@ class EditProfileScreen extends StatelessWidget {
                   const Text(
                     'Birthday',
                     style: TextStyle(
-                      color: fontBlack,
+                      color: blackColor,
                       fontSize: 14,
                       fontFamily: 'Regular',
                     ),
@@ -336,7 +336,7 @@ class EditProfileScreen extends StatelessWidget {
                   const Text(
                     'Gender',
                     style: TextStyle(
-                      color: fontBlack,
+                      color: blackColor,
                       fontSize: 14,
                       fontFamily: 'Regular',
                     ),

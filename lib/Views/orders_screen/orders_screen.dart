@@ -45,7 +45,7 @@ class _OrdersScreenState extends State<OrdersScreen>
             Tab(text: 'History'),
           ],
           indicatorColor: primaryApp,
-          labelColor: fontBlack,
+          labelColor: blackColor,
         ),
       ),
       body: TabBarView(

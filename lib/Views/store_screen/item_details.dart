@@ -1,29 +1,55 @@
-// ignore_for_file: deprecated_member_use, use_super_parameters
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_finalproject/Views/chat_screen/chat_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 import 'package:flutter_finalproject/consts/colors.dart';
-import 'package:flutter_finalproject/consts/images.dart';
-import 'package:flutter_finalproject/consts/strings.dart';
+import 'package:flutter_finalproject/consts/firebase_consts.dart';
 import 'package:flutter_finalproject/consts/styles.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-class ItemDetails extends StatelessWidget {
+class ItemDetails extends StatefulWidget {
   final String? title;
   final dynamic data;
+
   const ItemDetails({Key? key, required this.title, this.data})
       : super(key: key);
 
   @override
+  _ItemDetailsState createState() => _ItemDetailsState();
+}
+
+class _ItemDetailsState extends State<ItemDetails> {
+  late final ProductController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.put(ProductController());
+    checkIsInWishlist();
+  }
+
+  Future<void> checkIsInWishlist() async {
+    FirebaseFirestore.instance
+        .collection(productsCollection)
+        .where('p_name', isEqualTo: widget.data['p_name'])
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      if (querySnapshot.docs.isNotEmpty) {
+        DocumentSnapshot doc = querySnapshot.docs.first;
+        List<dynamic> wishlist = doc['p_wishlist'];
+        if (wishlist.contains(currentUser!.uid)) {
+          controller.isFav(true);
+        } else {
+          controller.isFav(false);
+        }
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    var controller = Get.put(ProductController());
-
-    // print(Colors.black.value);
-
     return WillPopScope(
       onWillPop: () async {
         controller.resetValues();
@@ -38,7 +64,11 @@ class ItemDetails extends StatelessWidget {
                 Get.back();
               },
               icon: const Icon(Icons.arrow_back_ios)),
-          title: title!.text.color(fontGreyDark).fontFamily(bold).size(18).make(),
+          title: widget.title!.text
+              .color(fontGreyDark)
+              .fontFamily(bold)
+              .size(18)
+              .make(),
         ),
         body: Column(
           children: [
@@ -52,28 +82,26 @@ class ItemDetails extends StatelessWidget {
                     VxSwiper.builder(
                       autoPlay: true,
                       height: 420,
-                      itemCount: data['p_imgs'].length ?? 0,
+                      itemCount: widget.data['p_imgs'].length ?? 0,
                       aspectRatio: 16 / 9,
                       viewportFraction: 1.0,
                       itemBuilder: (context, index) {
                         return Image.network(
-                          data['p_imgs'][index],
+                          widget.data['p_imgs'][index],
                           width: double.infinity,
-
                           fit: BoxFit.cover,
                         );
                       },
                     ),
-
                     10.heightBox,
                     Row(
                       children: [
-                        //
                         Text(
-                          title ?? '',
+                          widget.title ?? '',
                           style: const TextStyle(
                             color: Colors.black,
-                            fontFamily: 'regular',
+                            fontFamily: medium,
+                            fontSize: 24,
                           ),
                         ),
                         const Spacer(),
@@ -81,25 +109,26 @@ class ItemDetails extends StatelessWidget {
                           () => IconButton(
                             onPressed: () {
                               if (controller.isFav.value) {
-                                controller.removeFromWishlist(data.id, context);
+                                controller.RemoveToWishlistDetail(
+                                    widget.data, context);
                               } else {
-                                controller.addToWishlist(data.id, context);
+                                controller.addToWishlistDetail(
+                                    widget.data, context);
                               }
                               controller.isFav.toggle();
                             },
                             icon: controller.isFav.value
-                                ? Icon(Icons.favorite, color: redColor)
-                                : Icon(Icons.favorite_outline),
+                                ? const Icon(Icons.favorite, color: redColor, weight: 35,)
+                                : const Icon(Icons.favorite_outline, weight: 35,),
                             iconSize: 20,
                           ),
                         )
                       ],
                     ),
-
                     2.heightBox,
                     VxRating(
                       isSelectable: false,
-                      value: double.parse(data["p_rating"]),
+                      value: double.parse(widget.data["p_rating"]),
                       onRatingUpdate: (value) {},
                       normalColor: fontGreyDark,
                       selectionColor: golden,
@@ -108,13 +137,12 @@ class ItemDetails extends StatelessWidget {
                       maxRating: 5,
                     ),
                     5.heightBox,
-                    "${data['p_aboutProduct']}"
+                    "${widget.data['p_aboutProduct']}"
                         .text
                         .color(fontGrey)
                         .size(16)
                         .make(),
-                    // 10.heightBox,
-                    "${data['p_price']}"
+                    "${widget.data['p_price']}"
                         .numCurrency
                         .text
                         .color(primaryApp)
@@ -122,60 +150,39 @@ class ItemDetails extends StatelessWidget {
                         .size(22)
                         .make(),
                     20.heightBox,
-
                     Row(
                       children: [
                         Expanded(
                             child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            "Seller".text.fontFamily(regular).make(),
-                            
-                            
                             5.heightBox,
-                            "${data['p_seller']}"
+                            "${widget.data['p_seller']}"
                                 .text
                                 .fontFamily(regular)
-                                .color(fontBlack)
+                                .color(blackColor)
                                 .size(16)
                                 .make(),
                           ],
                         )),
-                        const CircleAvatar(
-                          backgroundColor: primaryApp,
-                          child: Icon(Icons.message_rounded, color: whiteColor),
-                        ).onTap(() {
-                          Get.to(
-                            () => const ChatScreen(),
-                            arguments: [data['p_seller'], data['vendor_id']],
-                          );
-                        }),
                         10.widthBox,
                         GestureDetector(
                           onTap: () {
                             Get.to(
-                              () =>  StoreScreen(),
-                              // arguments: {
-                              //   'seller': data['p_seller'],
-                              //   'vendor_id': data['vendor_id']
-                              // },
+                              () => const StoreScreen(),
                             );
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 20,
-                                vertical: 10), // ปรับค่าตามต้องการ
+                                horizontal: 20, vertical: 10),
                             decoration: BoxDecoration(
-                              color: primaryApp, // สีพื้นหลังของปุ่ม
+                              color: primaryApp,
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            child: Text(
+                            child: const Text(
                               'See Store',
                               style: TextStyle(
-                                color: Colors.white, // สีข้อความในปุ่ม
-                                fontFamily: regular
-                              ),
+                                  color: Colors.white, fontFamily: regular),
                             ),
                           ),
                         )
@@ -187,209 +194,105 @@ class ItemDetails extends StatelessWidget {
                         .color(fontLightGrey)
                         .make(),
                     20.heightBox,
-                    
-                    Obx(
-                      () => Column(
-                        children: [
-                          // color rows
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: 100,
-                                child:
-                                    "Color: ".text.color(fontGreyDark).make(),
-                              ),
-                              Row(
-                                children: List.generate(
-                                    data['p_colors'].length,
-                                    (index) => Stack(
-                                          alignment: Alignment.center,
-                                          children: [
-                                            VxBox()
-                                                .size(40, 40)
-                                                .roundedFull
-                                                .color(Color(
-                                                        data['p_colors'][index])
-                                                    .withOpacity(1.0))
-                                                .margin(
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 4))
-                                                .make()
-                                                .onTap(() {
-                                              controller
-                                                  .changeColorIndex(index);
-                                            }),
-                                            Visibility(
-                                                visible: index ==
-                                                    controller.colorIndex.value,
-                                                child: const Icon(Icons.done,
-                                                    color: Colors.white))
-                                          ],
-                                        )),
-                              ),
-                            ],
-                          ).box.padding(const EdgeInsets.all(8)).make(),
-
-                          //quantity row
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: 100,
-                                child: "Quantity: "
-                                    .text
-                                    .color(fontGreyDark)
-                                    .make(),
-                              ),
-                              Obx(
-                                () => Row(
-                                  children: [
-                                    IconButton(
-                                        onPressed: () {
-                                          controller.decreaseQuantity();
-                                          controller.calculateTotalPrice(
-                                              int.parse(data['p_price']));
-                                        },
-                                        icon: const Icon(Icons.remove)),
-                                    controller.quantity.value.text
-                                        .size(16)
-                                        .color(fontGreyDark)
-                                        .fontFamily(bold)
-                                        .make(),
-                                    IconButton(
-                                        onPressed: () {
-                                          controller.increaseQuantity(
-                                              int.parse(data['p_quantity']));
-                                          controller.calculateTotalPrice(
-                                              int.parse(data['p_price']));
-                                        },
-                                        icon: const Icon(Icons.add)),
-                                    10.heightBox,
-                                    "(${data['p_quantity']} available)"
-                                        .text
-                                        .color(fontGreyDark)
-                                        .make(),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ).box.padding(const EdgeInsets.all(8)).make(),
-
-                          // total row
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: 100,
-                                child:
-                                    "Totle: ".text.color(fontGreyDark).make(),
-                              ),
-                              Row(
-                                children: [
-                                  "${controller.totalPrice.value}"
-                                      .numCurrency
-                                      .text
-                                      .color(primaryApp)
-                                      .size(16)
-                                      .fontFamily(bold)
-                                      .make(),
-                                ],
-                              ),
-                            ],
-                          ).box.padding(const EdgeInsets.all(8)).make(),
-                        ],
-                      ).box.white.shadowSm.make(),
-                    ),
-
-                    //Description section
-
                     10.heightBox,
-
                     "Description"
                         .text
-                        .color(fontBlack)
+                        .color(blackColor)
                         .size(16)
-                        .fontFamily(bold)
+                        .fontFamily(medium)
                         .make(),
                     5.heightBox,
-
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: Text(
-                        data['p_desc'],
-                        style: TextStyle(
-                          color:
-                              fontBlack, // สมมติว่า fontBlack คือตัวแปรที่เก็บค่าสี
+                        widget.data['p_desc'],
+                        style: const TextStyle(
+                          color: blackColor,
                           fontSize: 14,
                         ),
                       ),
                     ),
-
-                    //buttons sections
                     10.heightBox,
-
-                    // ListView(
-                    //   physics: const NeverScrollableScrollPhysics(),
-                    //   shrinkWrap: true,
-                    //   children: List.generate(
-                    //       itemDetailButtonsList.length,
-                    //       (index) => ListTile(
-                    //             title: itemDetailButtonsList[index]
-                    //                 .text
-                    //                 .fontFamily(regular)
-                    //                 .color(fontBlack)
-                    //                 .make(),
-                    //             trailing: const Icon(Icons.arrow_forward),
-                    //           )),
-                    // ),
-                    // 20.heightBox,
-
-                    productsyoumaylike.text
-                        .fontFamily(bold)
+                    "Siz & Fit"
+                        .text
+                        .color(blackColor)
                         .size(16)
-                        .color(fontBlack)
+                        .fontFamily(medium)
                         .make(),
-                    10.heightBox,
-                    //i copied this widget from home screen featured products
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: List.generate(
-                            6,
-                            (index) => Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Image.asset(
-                                      product1,
-                                      width: 150,
-                                      fit: BoxFit.cover,
-                                    ),
-                                    10.heightBox,
-                                    "Dress"
-                                        .text
-                                        .fontFamily(regular)
-                                        .color(fontBlack)
-                                        .make(),
-                                    10.heightBox,
-                                    "\$600"
-                                        .text
-                                        .color(primaryApp)
-                                        .fontFamily(bold)
-                                        .size(16)
-                                        .make()
-                                  ],
-                                )
-                                    .box
-                                    .white
-                                    .margin(const EdgeInsets.symmetric(
-                                        horizontal: 4))
-                                    .rounded
-                                    .padding(const EdgeInsets.all(8))
-                                    .make()),
+                    5.heightBox,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Text(
+                        widget.data['p_size'],
+                        style: const TextStyle(
+                          color: blackColor,
+                          fontSize: 14,
+                        ),
                       ),
-                    )
+                    ),
+                    10.heightBox,
                   ],
                 ),
               ),
             )),
+            Obx(
+              () => Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                children: [
+                  Row(
+                    children: [
+                      Obx(
+                        () => Row(
+                          children: [
+                            IconButton(
+                                onPressed: () {
+                                  controller.decreaseQuantity();
+                                  controller.calculateTotalPrice(
+                                      int.parse(widget.data['p_price']));
+                                },
+                                icon: const Icon(Icons.remove)),
+                            controller.quantity.value.text
+                                .size(16)
+                                .color(fontGreyDark)
+                                .fontFamily(bold)
+                                .make(),
+                            IconButton(
+                                onPressed: () {
+                                  controller.increaseQuantity(
+                                      int.parse(widget.data['p_quantity']));
+                                  controller.calculateTotalPrice(
+                                      int.parse(widget.data['p_price']));
+                                },
+                                icon: const Icon(Icons.add)),
+                            10.heightBox,
+                          ],
+                        ),
+                      ),
+                    ],
+                  ).box.padding(const EdgeInsets.all(8)).make(),
+                  Row(
+                    children: [
+                      SizedBox(
+                        child: "Totle price ".text.color(blackColor).make(),
+                      ),
+                      10.widthBox,
+                      "${controller.totalPrice.value}"
+                          .numCurrency
+                          .text
+                          .color(blackColor)
+                          .size(20)
+                          .fontFamily(medium)
+                          .make(),
+                      10.widthBox,
+                      SizedBox(
+                        child: "Bath: ".text.color(blackColor).make(),
+                      ),
+                    ],
+                  ).box.padding(const EdgeInsets.all(8)).make(),
+                ],
+              ).box.white.shadowSm.make(),
+            ),
             SizedBox(
               width: double.infinity,
               height: 60,
@@ -398,13 +301,14 @@ class ItemDetails extends StatelessWidget {
                   onPress: () {
                     if (controller.quantity.value > 0) {
                       controller.addToCart(
-                          color: data['p_colors'][controller.colorIndex.value],
+                          color: widget.data['p_colors']
+                              [controller.colorIndex.value],
                           context: context,
-                          vendorID: data['vendor_id'],
-                          img: data['p_imgs'][0],
+                          vendorID: widget.data['vendor_id'],
+                          img: widget.data['p_imgs'][0],
                           qty: controller.quantity.value,
-                          sellername: data['p_seller'],
-                          title: data['p_name'],
+                          sellername: widget.data['p_seller'],
+                          title: widget.data['p_name'],
                           tprice: controller.totalPrice.value);
                       VxToast.show(context, msg: "Added to cart");
                     } else {

@@ -86,7 +86,7 @@ class _CollectionDetailsState extends State<CollectionDetails> {
                   return Expanded(
                     child: "No products found!"
                         .text
-                        .color(fontBlack)
+                        .color(blackColor)
                         .makeCentered(),
                   );
                 } else {
@@ -119,7 +119,7 @@ class _CollectionDetailsState extends State<CollectionDetails> {
                             "${data[index]['p_name']}"
                                 .text
                                 .fontFamily(regular)
-                                .color(fontBlack)
+                                .color(blackColor)
                                 .make(),
                             "${data[index]['p_price']}"
                                 .numCurrency
