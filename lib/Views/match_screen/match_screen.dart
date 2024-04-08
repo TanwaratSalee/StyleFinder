@@ -1,14 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/auth_screen/login_screen.dart';
-import 'package:flutter_finalproject/Views/search_screen/search_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/appbar_ontop.dart';
 import 'package:flutter_finalproject/consts/colors.dart';
 import 'package:flutter_finalproject/consts/firebase_consts.dart';
 import 'package:flutter_finalproject/consts/images.dart';
 import 'package:flutter_finalproject/controllers/auth_controller.dart';
 import 'package:get/get.dart';
-import '../cart_screen/cart_screen.dart';
 
 class FirestoreServices {
   static Future<List<Map<String, dynamic>>> getFeaturedProducts() async {

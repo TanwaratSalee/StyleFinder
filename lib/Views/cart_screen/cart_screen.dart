@@ -9,12 +9,16 @@ import 'package:flutter_finalproject/controllers/cart_controller.dart';
 import 'package:flutter_finalproject/services/firestore_services.dart';
 import 'package:get/get.dart';
 
+
+
 class CartScreen extends StatelessWidget {
   const CartScreen({Key? key}) : super(key: key);
+  
 
   @override
   Widget build(BuildContext context) {
     var controller = Get.put(CartController());
+    bool isCheck = false;
 
     return Scaffold(
         backgroundColor: whiteColor,
@@ -30,7 +34,7 @@ class CartScreen extends StatelessWidget {
         ),
         appBar: AppBar(
           // automaticallyImplyLeading: false,
-          title: "shopping Cart"
+          title: "Cart"
               .text
               .color(fontGreyDark)
               .fontFamily(regular)
@@ -61,31 +65,29 @@ class CartScreen extends StatelessWidget {
                         child: ListView.builder(
                             itemCount: data.length,
                             itemBuilder: (BuildContext context, int index) {
-                              return ListTile(
-                                leading: Image.network(
-                                  "${data[index]['img']}",
-                                  width: 60,
-                                  fit: BoxFit.cover,
-                                ),
-                                title:
-                                    "${data[index]['title']} (x ${data[index]['qty']})"
-                                        .text
-                                        .fontFamily(regular)
-                                        .size(16)
-                                        .make(),
-                                subtitle: "${data[index]['tprice']}"
-                                    .numCurrency
-                                    .text
-                                    .color(primaryApp)
-                                    .fontFamily(regular)
-                                    .make(),
-                                trailing:
-                                    const Icon(Icons.delete, color: primaryApp)
-                                        .onTap(() {
-                                  FirestoreServices.deleteDocument(
-                                      data[index].id);
-                                }),
-                              );
+return ListTile(
+  leading: 
+                    
+                  
+      // Image
+      Image.network(
+        "${data[index]['img']}",
+        width: 60,
+        fit: BoxFit.cover,
+      ),
+    
+  title: Text("${data[index]['title']} (x${data[index]['qty']})",
+              style: TextStyle(fontFamily: 'regular', fontSize: 16)),
+  subtitle: Text("${data[index]['tprice']}", 
+                  style: TextStyle(color: primaryApp, fontFamily: 'regular')),
+  trailing: GestureDetector(
+    onTap: () {
+      FirestoreServices.deleteDocument(data[index].id); // Your method to delete the item
+    },
+    child: const Icon(Icons.delete, color: primaryApp),
+  ),
+);
+
                             })),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
