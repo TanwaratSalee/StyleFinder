@@ -118,8 +118,15 @@ class _ItemDetailsState extends State<ItemDetails> {
                               controller.isFav.toggle();
                             },
                             icon: controller.isFav.value
-                                ? const Icon(Icons.favorite, color: redColor, weight: 35,)
-                                : const Icon(Icons.favorite_outline, weight: 35,),
+                                ? const Icon(
+                                    Icons.favorite,
+                                    color: redColor,
+                                    weight: 35,
+                                  )
+                                : const Icon(
+                                    Icons.favorite_outline,
+                                    weight: 35,
+                                  ),
                             iconSize: 20,
                           ),
                         )
@@ -169,7 +176,8 @@ class _ItemDetailsState extends State<ItemDetails> {
                         GestureDetector(
                           onTap: () {
                             Get.to(
-                              () => const StoreScreen(),
+                              () => StoreScreen(
+                                  vendorId: widget.data['vendor_id']),
                             );
                           },
                           child: Container(
@@ -237,8 +245,7 @@ class _ItemDetailsState extends State<ItemDetails> {
             )),
             Obx(
               () => Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
                     children: [
@@ -274,7 +281,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                   Row(
                     children: [
                       SizedBox(
-                        child: "Totle price ".text.color(blackColor).make(),
+                        child: "Total price ".text.color(blackColor).make(),
                       ),
                       10.widthBox,
                       "${controller.totalPrice.value}"
@@ -286,7 +293,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                           .make(),
                       10.widthBox,
                       SizedBox(
-                        child: "Bath: ".text.color(blackColor).make(),
+                        child: "Baht: ".text.color(blackColor).make(),
                       ),
                     ],
                   ).box.padding(const EdgeInsets.all(8)).make(),

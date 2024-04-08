@@ -22,6 +22,40 @@ class CartController extends GetxController {
 
   var placingOrder = false.obs;
 
+  var selectedItems = RxMap<String, bool>(); // Tracks selected items by ID
+  var selectAll = false.obs; // Tracks the state of the "select all" toggle
+
+  // Toggle individual item selection
+  void toggleItemSelection(String id) {
+    final isSelected = selectedItems[id] ?? false;
+    selectedItems[id] = !isSelected;
+    updateSelectedItems(); // Update select all status based on individual selections
+  }
+
+  // Toggle the selection of all items
+  void toggleSelectAll() {
+    final newState = !selectAll.value;
+    selectAll.value = newState;
+    selectedItems.forEach((key, _) {
+      selectedItems[key] = newState;
+    });
+  }
+
+  // Update the selectAll status based on individual item selections
+  void updateSelectedItems() {
+    if (selectedItems.values.any((isSelected) => !isSelected)) {
+      selectAll.value = false;
+    } else {
+      selectAll.value = true;
+    }
+  }
+
+  // Method to calculate total price (implementation depends on your data structure)
+  double calculateTotalPrice() {
+    // Placeholder calculation, replace with your logic
+    return 0.0;
+  }
+
   calculate(data) {
     totalP.value = 0;
     for (var i = 0; i < data.length; i++) {
@@ -82,6 +116,10 @@ class CartController extends GetxController {
       firestore.collection(cartCollection).doc(productSnapshot[i].id).delete();
     }
   }
+
+  isSelected(String id) {}
+
+  void toggleSelected(String id, bool bool) {}
 }
 
 String generateRandomOrderCode(int length) {
