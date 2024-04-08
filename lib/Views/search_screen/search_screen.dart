@@ -28,7 +28,7 @@ class SearchScreenPage extends StatelessWidget {
               controller: controller.searchController,
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: bgGreylight),
+                  borderSide: const BorderSide(color: whiteColor),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 focusedBorder: OutlineInputBorder(
@@ -43,7 +43,7 @@ class SearchScreenPage extends StatelessWidget {
                   }
                 }),
                 filled: true,
-                fillColor: bgGreylight,
+                fillColor: whiteColor,
                 hintText: searchanything,
                 hintStyle: const TextStyle(color: fontGrey),
               ),

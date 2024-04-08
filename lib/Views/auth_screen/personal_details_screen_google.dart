@@ -24,10 +24,12 @@ class PersonalDetailsScreenGoogle extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _PersonalDetailsScreenGoogleState createState() => _PersonalDetailsScreenGoogleState();
+  _PersonalDetailsScreenGoogleState createState() =>
+      _PersonalDetailsScreenGoogleState();
 }
 
-class _PersonalDetailsScreenGoogleState extends State<PersonalDetailsScreenGoogle> {
+class _PersonalDetailsScreenGoogleState
+    extends State<PersonalDetailsScreenGoogle> {
   var controller = Get.put(AuthController());
   final TextEditingController heightController = TextEditingController();
   final TextEditingController weightController = TextEditingController();
@@ -173,7 +175,9 @@ class _PersonalDetailsScreenGoogleState extends State<PersonalDetailsScreenGoogl
                       ),
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
-                            selectedGender == gender ? thinPrimaryApp : bgGreylight),
+                            selectedGender == gender
+                                ? thinPrimaryApp
+                                : whiteColor),
                         foregroundColor: MaterialStateProperty.all<Color>(
                             selectedGender == gender ? primaryApp : whiteColor),
                         shape:
@@ -276,7 +280,7 @@ class _PersonalDetailsScreenGoogleState extends State<PersonalDetailsScreenGoogl
                 // print("Selected height is: ${heightController.text}");
                 // print("Selected weight is: ${weightController.text}");
                 // print("Selected is: $selectedSkinTone");
-                
+
                 await controller.saveUserDataGoogle(
                   currentUser: widget.userCredential,
                   name: widget.name,

@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
+import 'package:flutter_finalproject/Views/store_screen/match_detail_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/home_buttons.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/consts/lists.dart';
@@ -15,7 +16,9 @@ import 'dart:math' as math;
 import '../widgets_common/appbar_ontop.dart';
 
 class NewsScreen extends StatelessWidget {
-  const NewsScreen({super.key});
+  final String category;
+
+  const NewsScreen({Key? key, required this.category}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +28,7 @@ class NewsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: whiteColor,
-          automaticallyImplyLeading: false,
+        automaticallyImplyLeading: false,
         title: appbarField(),
         // actions: <Widget>[
         //   Padding(
@@ -44,7 +47,7 @@ class NewsScreen extends StatelessWidget {
       ),
       body: Container(
         padding: const EdgeInsets.all(12),
-        color: bgGreylight,
+        color: whiteColor,
         width: context.screenWidth,
         height: context.screenHeight,
         child: SafeArea(
@@ -53,7 +56,7 @@ class NewsScreen extends StatelessWidget {
             // Container(
             //   alignment: Alignment.center,
             //   height: 60,
-            //   color: bgGreylight,
+            //   color: whiteColor,
             //   child: TextFormField(
             //     controller: controller.searchController,
             //     decoration: InputDecoration(
@@ -297,29 +300,29 @@ class NewsScreen extends StatelessWidget {
 
                     Column(
                       mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment
-                          .center, // Ensure alignment if needed
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        SizedBox(height: 20),
                         'MATCH'
                             .text
                             .fontFamily(medium)
                             .color(fontGreyDark)
                             .size(22)
                             .make(),
+                        SizedBox(height: 6),
+                        Image.asset(
+                          icUndertext,
+                          width: 170,
+                        ),
+                        SizedBox(height: 6),
                         Container(
-                          child: GestureDetector(
-                            child: Image.asset(
-                              icUndertext,
-                              width: 170,
-                            ),
-                          ),
+                          height: MediaQuery.of(context).size.height * 0.7,
+                          child: _buildProductMathGrids(category),
                         ),
                       ],
                     ),
 
-                    30.heightBox,
-
-                    
+                    10.heightBox,
 
                     Column(
                       mainAxisSize: MainAxisSize.min,
@@ -432,6 +435,164 @@ class NewsScreen extends StatelessWidget {
           ],
         )),
       ),
+    );
+  }
+
+  Widget _buildProductMathGrids(String category) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance.collection('products').snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (!snapshot.hasData) {
+          return Center(
+            child: loadingIndicator(),
+          );
+        }
+
+        List<String> mixMatchList = [];
+        snapshot.data!.docs.forEach((doc) {
+          Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+          if (data.containsKey('p_mixmatch')) {
+            String currentMixMatch = data['p_mixmatch'];
+            if (!mixMatchList.contains(currentMixMatch)) {
+              mixMatchList.add(currentMixMatch);
+            }
+          }
+        });
+
+        // แสดงข้อมูลที่ได้จากการตรวจสอบ p_mixmatch ใน console
+        print('MixMatch List: $mixMatchList');
+
+        return GridView.builder(
+          padding: const EdgeInsets.all(8),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 0.8, // ปรับความสูงของรายการสินค้า
+            crossAxisSpacing: 8, // เพิ่มระยะห่างระหว่างคอลัมน์
+            mainAxisSpacing: 8, // เพิ่มระยะห่างระหว่างแถว
+          ),
+          itemBuilder: (BuildContext context, int index) {
+            int actualIndex = index * 2;
+
+            String price1 = snapshot.data!.docs[actualIndex].get('p_price');
+            String price2 = snapshot.data!.docs[actualIndex + 1].get('p_price');
+
+            String totalPrice =
+                (int.parse(price1) + int.parse(price2)).toString();
+
+            String productName1 =
+                snapshot.data!.docs[actualIndex].get('p_name');
+            String productName2 =
+                snapshot.data!.docs[actualIndex + 1].get('p_name');
+
+            String productImage1 =
+                snapshot.data!.docs[actualIndex].get('p_imgs')[0];
+            String productImage2 =
+                snapshot.data!.docs[actualIndex + 1].get('p_imgs')[0];
+
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MatchDetailScreen(
+                      price1: price1,
+                      price2: price2,
+                      productName1: productName1,
+                      productName2: productName2,
+                      productImage1: productImage1,
+                      productImage2: productImage2,
+                      totalPrice: totalPrice,
+                    ),
+                  ),
+                );
+              },
+              child: Card(
+                clipBehavior: Clip.antiAlias,
+                elevation: 2, // เพิ่มเงาให้กับการ์ด
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Image.network(
+                            productImage1,
+                            width: double
+                                .infinity, // ทำให้รูปภาพขยายตามขนาดคอลัมน์
+                            height: 120,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Image.network(
+                            productImage2,
+                            width: double
+                                .infinity, // ทำให้รูปภาพขยายตามขนาดคอลัมน์
+                            height: 120,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          const SizedBox(height: 8),
+                          Text(
+                            productName1,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16, // ปรับขนาดตัวอักษร
+                            ),
+                            maxLines: 1,
+                            overflow:
+                                TextOverflow.ellipsis, // ตัดข้อความที่เกิน
+                          ),
+                          Text(
+                            'Price: \$${price1.toString()}',
+                            style: const TextStyle(color: Colors.grey),
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            productName2,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16, // ปรับขนาดตัวอักษร
+                            ),
+                            maxLines: 1,
+                            overflow:
+                                TextOverflow.ellipsis, // ตัดข้อความที่เกิน
+                          ),
+                          Text(
+                            'Price: \$${price2.toString()}',
+                            style: const TextStyle(color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Text(
+                        'Total Price: \$${totalPrice.toString()}',
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16, // ปรับขนาดตัวอักษร
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+          itemCount: (mixMatchList.length).ceil(),
+        );
+      },
     );
   }
 }

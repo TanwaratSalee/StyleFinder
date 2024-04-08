@@ -54,9 +54,11 @@ class _MainHomeState extends State<MainHome> {
 
     var navBody = [
       const HomeScreen(),
-      const NewsScreen(),
+      const NewsScreen(
+        category: '',
+      ),
       const MatchScreen(),
-       ProfileScreen(),
+      ProfileScreen(),
     ];
 
     return WillPopScope(

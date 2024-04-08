@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_finalproject/Views/home_screen/mainHome.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/consts/lists.dart';
@@ -8,20 +9,6 @@ import 'package:flutter_finalproject/controllers/cart_controller.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:omise_flutter/omise_flutter.dart';
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Visa Card Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: VisaCardScreen(),
-    );
-  }
-}
 
 class VisaCardScreen extends StatefulWidget {
   const VisaCardScreen({Key? key}) : super(key: key);
@@ -33,7 +20,233 @@ class VisaCardScreen extends StatefulWidget {
 class _VisaCardScreenState extends State<VisaCardScreen> {
   var controller = Get.find<CartController>();
   String cardHolderName = 'Card owner\'s name';
-  String cardNumber = '1234 5678 9876 5432';
+  TextEditingController cardNumberController = TextEditingController();
+  String cardNumberMasked = '';
+
+  @override
+  void initState() {
+    super.initState();
+    cardNumberController.addListener(updateCardNumberMasked);
+  }
+
+  @override
+  void dispose() {
+    cardNumberController.removeListener(updateCardNumberMasked);
+    cardNumberController.dispose();
+    super.dispose();
+  }
+
+  void updateCardNumberMasked() {
+    String newNumber = cardNumberController.text;
+    setState(() {
+      if (newNumber.length > 12) {
+        // ถ้าหมายเลขที่ป้อนมีความยาวมากกว่า 12 ตัวอักษร
+        String visibleDigits =
+            newNumber.substring(0, 12); // เก็บเฉพาะ 12 ตัวอักษรแรก
+        cardNumberMasked = visibleDigits +
+            'X' * (newNumber.length - 12); // เติม 'X' สำหรับตัวเลขที่เหลือ
+      } else {
+        // ถ้าหมายเลขที่ป้อนมีความยาวน้อยกว่าหรือเท่ากับ 12 ตัวอักษร
+        cardNumberMasked = newNumber;
+      }
+
+      // จัดรูปแบบหมายเลขบัตรให้มีช่องว่างทุก ๆ 4 ตัวอักษร เพื่อความสะดวกในการอ่าน
+      cardNumberMasked = cardNumberMasked
+          .replaceAllMapped(RegExp(r".{4}"), (match) => "${match.group(0)} ")
+          .trim(); // ตัดช่องว่างที่เหลือท้ายสุดออก
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: whiteColor,
+      appBar: AppBar(
+        title: Text(
+          "Card Detail",
+          style: TextStyle(
+            fontSize: 25,
+            fontFamily: 'Bold',
+            color: Colors.grey[900],
+          ),
+        ),
+      ),
+      body: ListView(
+        padding: EdgeInsets.all(16),
+        children: <Widget>[
+          _buildCardDetail(),
+          SizedBox(height: 20),
+          _buildTextField(
+            label: 'Name',
+            onChanged: _updateCardHolderName,
+          ),
+          SizedBox(height: 10),
+          _buildCardNumberTextField(),
+          SizedBox(height: 10),
+          Row(
+            children: <Widget>[
+              Expanded(child: _buildTextField(label: 'MM/YY')),
+              SizedBox(width: 8),
+              Expanded(child: _buildTextField(label: 'VCC')),
+            ],
+          ),
+          SizedBox(height: 24),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(primaryApp),
+              ),
+              onPressed: () {
+                getTokenandSourceTest();
+              },
+              child: Text(
+                'Confirm',
+                style: TextStyle(fontSize: 14),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCardDetail() {
+    return Card(
+      elevation: 6,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Container(
+        height: 240,
+        padding: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          image: DecorationImage(
+            image: AssetImage('assets/images/card.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text('VISA',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontFamily: 'Black',
+                    shadows: [
+                      Shadow(
+                        offset: Offset(2.0, 2.0),
+                        blurRadius: 3.0,
+                        color: Color.fromARGB(128, 0, 0, 0),
+                      ),
+                    ],
+                  )),
+            ),
+            Align(
+              alignment: Alignment.center,
+              child: Text(cardNumberMasked,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 25,
+                    shadows: [
+                      Shadow(
+                        offset: Offset(2.0, 2.0),
+                        blurRadius: 3.0,
+                        color: Color.fromARGB(128, 0, 0, 0),
+                      ),
+                    ],
+                  )),
+            ),
+            Text(cardHolderName,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontFamily: 'Regular',
+                  shadows: [
+                    Shadow(
+                      offset: Offset(2.0, 2.0),
+                      blurRadius: 3.0,
+                      color: Color.fromARGB(128, 0, 0, 0),
+                    ),
+                  ],
+                )),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextField({
+    required String label,
+    Function(String)? onChanged,
+    Widget? suffixIcon,
+  }) {
+    return TextField(
+      controller: label == 'Card number' ? cardNumberController : null,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        labelText: label,
+        fillColor: Color.fromARGB(255, 245, 248, 253),
+        filled: true,
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: greyColor, width: 1.0),
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        suffixIcon: suffixIcon,
+      ),
+      style: TextStyle(),
+      keyboardType: TextInputType.number,
+      inputFormatters: <TextInputFormatter>[
+        FilteringTextInputFormatter.allow(
+            RegExp(r'[0-9]')), // กำหนดให้กรอกได้เฉพาะตัวเลข
+        LengthLimitingTextInputFormatter(16), // กำหนดความยาวสูงสุดของข้อความ
+      ],
+      onChanged: onChanged != null ? onChanged as void Function(String)? : null,
+      maxLines: 1,
+      minLines: 1,
+    );
+  }
+
+  Widget _buildCardNumberTextField() {
+    String determineImageAsset() {
+      if (cardNumberMasked.startsWith('5')) {
+        return 'assets/images/Mastercard-Logo.png';
+      } else if (cardNumberMasked.startsWith('4')) {
+        return 'assets/images/Visa.png';
+      } else {
+        return '';
+      }
+    }
+
+    final String imageAssetPath = determineImageAsset();
+
+    final Widget? suffixIconWidget = imageAssetPath.isNotEmpty
+        ? Image.asset(imageAssetPath, width: 24, height: 24)
+        : null;
+
+    return SizedBox(
+      height: 50,
+      child: _buildTextField(
+        label: 'Card number',
+        suffixIcon: suffixIconWidget,
+      ),
+    );
+  }
+
+  void _updateCardHolderName(String newName) {
+    setState(() {
+      cardHolderName = newName.isNotEmpty
+          ? newName[0].toUpperCase() + newName.substring(1)
+          : newName;
+    });
+  }
 
   getTokenandSourceTest() async {
     OmiseFlutter omise = OmiseFlutter('pkey_test_5yzhwpn9nih3syz8e2v');
@@ -107,120 +320,5 @@ class _VisaCardScreenState extends State<VisaCardScreen> {
 
       Get.offAll(() => MainHome());
     });
-  }
-
-  void _updateCardHolderName(String newName) {
-    setState(() {
-      cardHolderName = newName.isNotEmpty
-          ? newName[0].toUpperCase() + newName.substring(1)
-          : newName;
-    });
-  }
-
-  void _updateCardNumber(String newNumber) {
-    setState(() {
-      if (newNumber.length <= 4) {
-        cardNumber = 'XXXX XXXX XXXX ' + newNumber.padLeft(4, 'X');
-      } else {
-        String masked = newNumber
-            .substring(0, newNumber.length - 4)
-            .replaceAll(RegExp(r'\d'), 'X');
-        String visibleDigits = newNumber.substring(newNumber.length - 4);
-        cardNumber = masked.padLeft(16, 'X') + visibleDigits;
-      }
-
-      cardNumber = cardNumber.replaceAllMapped(
-          RegExp(r".{4}"), (match) => "${match.group(0)} ");
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[200],
-      appBar: AppBar(
-        title: Text(
-          "Visa Card",
-          style: TextStyle(
-            fontSize: 20,
-            fontFamily: 'Bold',
-            color: Colors.grey[900],
-          ),
-        ),
-      ),
-      body: ListView(
-        padding: EdgeInsets.all(16),
-        children: <Widget>[
-          _buildCardDetail(),
-          SizedBox(height: 16),
-          _buildTextField(
-            label: 'Name',
-            onChanged: (newName) {
-              setState(() {
-                cardHolderName = newName;
-              });
-            },
-          ),
-          SizedBox(height: 8),
-          _buildTextField(label: 'Card number'),
-          SizedBox(height: 8),
-          Row(
-            children: <Widget>[
-              Expanded(child: _buildTextField(label: 'Expiry date')),
-              SizedBox(width: 8),
-              Expanded(child: _buildTextField(label: 'VCC')),
-            ],
-          ),
-          SizedBox(height: 24),
-          ElevatedButton(
-            child: Text('Confirm'),
-            onPressed: () {
-              getTokenandSourceTest();
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCardDetail() {
-    return Card(
-      elevation: 4,
-      child: Container(
-        height: 200,
-        padding: EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.purple[300]!, Colors.purple[700]!],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text('VISA',
-                style: TextStyle(
-                    color: Colors.white, fontSize: 24, fontFamily: 'Bold')),
-            Text(cardNumber,
-                style: TextStyle(color: Colors.white, fontSize: 21)),
-            Text(cardHolderName,
-                style: TextStyle(
-                    color: Colors.white, fontSize: 18, fontFamily: 'Regular')),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTextField({required String label, Function(String)? onChanged}) {
-    return TextField(
-      decoration: InputDecoration(
-        border: OutlineInputBorder(),
-        labelText: label,
-      ),
-      onChanged: onChanged,
-    );
   }
 }

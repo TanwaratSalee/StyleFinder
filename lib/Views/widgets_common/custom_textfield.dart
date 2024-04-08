@@ -32,12 +32,12 @@ Widget customTextField({
             color: fontGrey,
           ),
           filled: true,
-          fillColor: bgGreylight,
+          fillColor: whiteColor,
           contentPadding:
               const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
-            borderSide: const BorderSide(color: bgGreylight),
+            borderSide: const BorderSide(color: whiteColor),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),

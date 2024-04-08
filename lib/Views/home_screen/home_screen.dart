@@ -58,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: bgGreylight,
+      backgroundColor: whiteColor,
       appBar: AppBar(
         backgroundColor: whiteColor,
         automaticallyImplyLeading: false,
@@ -97,7 +97,9 @@ class _HomeScreenState extends State<HomeScreen> {
             }
 
             List<Map<String, dynamic>> products = snapshot.data!;
-            productsToShow = products.where((product) => !isInWishlist(product, currentUser!.uid)).toList();
+            productsToShow = products
+                .where((product) => !isInWishlist(product, currentUser!.uid))
+                .toList();
 
             return CardSwiper(
               scale: 0.5,
@@ -109,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 previousSwipedProduct = selectedProduct;
                 selectedProduct = productsToShow[index];
                 Map<String, dynamic> product = productsToShow[index];
-                  return Column(
+                return Column(
                   children: [
                     Container(
                       width: 450,

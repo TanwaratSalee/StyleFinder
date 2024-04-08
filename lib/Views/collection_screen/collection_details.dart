@@ -46,7 +46,7 @@ class _CollectionDetailsState extends State<CollectionDetails> {
             ? widget.title!.text.fontFamily('bold').black.make()
             : const Text('No Title'),
       ),
-      backgroundColor: bgGreylight,
+      backgroundColor: whiteColor,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

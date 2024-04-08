@@ -24,7 +24,7 @@ class ProductScreen extends StatelessWidget {
       ),
       body: Container(
         padding: const EdgeInsets.all(12),
-        color: bgGreylight,
+        color: whiteColor,
         width: context.screenWidth,
         height: context.screenHeight,
         child: SafeArea(

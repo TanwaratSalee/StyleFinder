@@ -170,7 +170,9 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                       ),
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
-                            selectedGender == gender ? thinPrimaryApp : bgGreylight),
+                            selectedGender == gender
+                                ? thinPrimaryApp
+                                : whiteColor),
                         foregroundColor: MaterialStateProperty.all<Color>(
                             selectedGender == gender ? primaryApp : whiteColor),
                         shape:

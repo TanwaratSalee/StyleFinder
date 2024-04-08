@@ -127,7 +127,7 @@
 //                   Container(
 //                     decoration: BoxDecoration(
 //                       color:
-//                           bgGreylight, // Use the actual color code or variable here for light grey
+//                           whiteColor, // Use the actual color code or variable here for light grey
 //                       borderRadius: BorderRadius.circular(8),
 //                     ),
 //                     child: CupertinoButton(
@@ -208,7 +208,7 @@
 //                               backgroundColor: MaterialStateProperty.all<Color>(
 //                                   selectedSex == sex
 //                                       ? thinPrimaryApp
-//                                       : bgGreylight),
+//                                       : whiteColor),
 //                               foregroundColor: MaterialStateProperty.all<Color>(
 //                                   selectedSex == sex ? primaryApp : whiteColor),
 //                               shape: MaterialStateProperty.all<
