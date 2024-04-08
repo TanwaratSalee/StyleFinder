@@ -4,10 +4,6 @@ import 'package:flutter_finalproject/Views/collection_screen/address_controller.
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -28,8 +24,6 @@ class AddressScreen extends StatefulWidget {
 
 class _AddressScreenState extends State<AddressScreen> {
   List<String> addresses = [
-    '7/4 Village No.s Bamroongrat Road,Pibulsongkran Sub-district,Muang District,Bangkok, 10400',
-    '7/4 Village No.s Bamroongrat Road,Pibulsongkran Sub-district,Muang District,Bangkok, 10400',
     '7/4 Village No.s Bamroongrat Road,Pibulsongkran Sub-district,Muang District,Bangkok, 10400',
   ];
 

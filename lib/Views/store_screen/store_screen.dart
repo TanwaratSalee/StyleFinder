@@ -6,30 +6,39 @@ import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 
 class StoreScreen extends StatelessWidget {
-  const StoreScreen({super.key});
+  final String vendorId;
+  const StoreScreen({super.key, required this.vendorId});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: whiteColor,
-      appBar: AppBar(
-        title: const Text('DIOR'),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () => Get.back(),
-        ),
-        elevation: 0,
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            _buildLogoAndRatingSection(context),
-            // _buildReviewHighlights(),
-            _buildProductMatchTabs(context),
-          ],
-        ),
-      ),
+    return FutureBuilder<String>(
+      future: fetchSellerName(vendorId), // ดึงชื่อผู้ขาย
+      builder: (context, snapshot) {
+        // สร้าง AppBar ตามสถานะของ Future
+        String title = snapshot.hasData ? snapshot.data! : 'Loading...';
+        return Scaffold(
+          backgroundColor: whiteColor,
+          appBar: AppBar(
+            title: Text(title),
+            centerTitle: true,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back_ios),
+              onPressed: () => Get.back(),
+            ),
+            elevation: 0,
+          ),
+          body: SingleChildScrollView(
+            child: Column(
+              // แก้ไขในส่วนนี้
+              children: [
+                _buildLogoAndRatingSection(context),
+                // _buildReviewHighlights(),
+                _buildProductMatchTabs(context),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -56,11 +65,36 @@ class StoreScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Center(
-                  child: Image.asset(
-                    imProfile,
-                    width: 120,
-                    height: 120,
-                    fit: BoxFit.cover,
+                  child: FutureBuilder<String>(
+                    future: fetchSellerImgs(
+                        vendorId), // อย่าลืมเปลี่ยนให้ตรงกับการเรียกใช้ของคุณ
+                    builder:
+                        (BuildContext context, AsyncSnapshot<String> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator(); // หรือ widget โหลดแบบอื่นๆ ที่คุณต้องการ
+                      } else if (snapshot.hasError) {
+                        return Image.asset(
+                          imProfile, // รูปภาพหากเกิดข้อผิดพลาด
+                          width: 120,
+                          height: 120,
+                          fit: BoxFit.cover,
+                        );
+                      } else if (snapshot.hasData) {
+                        return Image.network(
+                          snapshot.data!,
+                          width: 120,
+                          height: 120,
+                          fit: BoxFit.cover,
+                        );
+                      } else {
+                        return Image.asset(
+                          imProfile, // รูปภาพเริ่มต้นหรือหากไม่มีข้อมูล
+                          width: 120,
+                          height: 120,
+                          fit: BoxFit.cover,
+                        );
+                      }
+                    },
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -245,7 +279,10 @@ class StoreScreen extends StatelessWidget {
 
   Widget _buildProductGrid(String category) {
     return FutureBuilder<QuerySnapshot>(
-      future: FirebaseFirestore.instance.collection('products').get(),
+      future: FirebaseFirestore.instance
+          .collection('products')
+          .where('vendor_id', isEqualTo: vendorId)
+          .get(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
@@ -311,9 +348,7 @@ class StoreScreen extends StatelessWidget {
                             Text(
                               '$price',
                               style: const TextStyle(
-                                color: greyColor,
-                                fontFamily: regular
-                              ),
+                                  color: greyColor, fontFamily: regular),
                             ),
                           ],
                         ),
@@ -333,7 +368,7 @@ class StoreScreen extends StatelessWidget {
 
   Widget _buildCategoryMath(BuildContext context) {
     return DefaultTabController(
-      length: 5,
+      length: 1,
       child: Column(
         children: <Widget>[
           const TabBar(
@@ -495,5 +530,50 @@ class StoreScreen extends StatelessWidget {
         );
       },
     );
+  }
+
+  Future<String> fetchSellerName(String vendorId) async {
+    // ค้นหาเอกสารใน collection 'products' ที่มี 'vendor_id' ตรงกับ vendorId ที่ให้มา
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('products')
+        .where('vendor_id', isEqualTo: vendorId)
+        .limit(1) // จำกัดผลลัพธ์เพื่อประหยัดทรัพยากร
+        .get();
+
+    // ตรวจสอบว่าพบเอกสารหรือไม่
+    if (querySnapshot.docs.isNotEmpty) {
+      // ดึงข้อมูล 'p_seller' จากเอกสารแรกที่พบ
+      Map<String, dynamic> data =
+          querySnapshot.docs.first.data() as Map<String, dynamic>;
+      return data['p_seller'] ??
+          'Unknown Seller'; // คืนค่า 'p_seller' หรือ 'Unknown Seller' หากไม่พบข้อมูล
+    } else {
+      return 'Unknown Seller'; // คืนค่า 'Unknown Seller' หากไม่พบเอกสารใดๆ
+    }
+  }
+
+  Future<String> fetchSellerImgs(String vendorId) async {
+    try {
+      // ค้นหาเอกสารใน collection 'vendors' ที่มี 'vendor_id' ตรงกับ vendorId ที่ให้มา
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('vendors')
+          .where('vendor_id', isEqualTo: vendorId)
+          .limit(1) // จำกัดผลลัพธ์เพื่อประหยัดทรัพยากร
+          .get();
+
+      // ตรวจสอบว่าพบเอกสารหรือไม่
+      if (querySnapshot.docs.isNotEmpty) {
+        // ดึงข้อมูล 'imageUrl' จากเอกสารแรกที่พบ
+        Map<String, dynamic> data =
+            querySnapshot.docs.first.data() as Map<String, dynamic>;
+        return data['imageUrl'] ?? 'URL รูปภาพเริ่มต้น/คำแนะนำหากไม่พบ';
+      } else {
+        return 'URL รูปภาพเริ่มต้น/คำแนะนำหากไม่พบ'; // คืนค่า URL เริ่มต้นหากไม่พบเอกสารใดๆ
+      }
+    } catch (e) {
+      // จัดการกับข้อผิดพลาดที่อาจเกิดขึ้น
+      print('เกิดข้อผิดพลาดในการดึงข้อมูล: $e');
+      return 'URL รูปภาพเริ่มต้น/คำแนะนำหากเกิดข้อผิดพลาด'; // คืนค่า URL เริ่มต้นหรือคำแนะนำในกรณีเกิดข้อผิดพลาด
+    }
   }
 }

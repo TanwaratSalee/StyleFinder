@@ -89,8 +89,8 @@ class ProductController extends GetxController {
           doc.reference.update({
             'p_wishlist': FieldValue.arrayUnion([currentUser!.uid])
           }).then((value) {
-                isFav(true);
-                VxToast.show(context, msg: "Added from wishlist");
+            isFav(true);
+            VxToast.show(context, msg: "Added from wishlist");
           }).catchError((error) {
             print('Error adding ${product['p_name']} to Favorite: $error');
           });
@@ -112,8 +112,8 @@ class ProductController extends GetxController {
           doc.reference.update({
             'p_wishlist': FieldValue.arrayRemove([currentUser!.uid])
           }).then((value) {
-                isFav(false);
-                VxToast.show(context, msg: "Removed from wishlist");
+            isFav(false);
+            VxToast.show(context, msg: "Removed from wishlist");
           }).catchError((error) {
             print('Error adding ${product['p_name']} to Favorite: $error');
           });
