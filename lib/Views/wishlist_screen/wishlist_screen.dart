@@ -15,7 +15,7 @@ class WishlistScreen extends StatelessWidget {
         title: const Text(
           "Favourite",
           style: TextStyle(
-            color: fontGreyDark,
+            color: greyDarkColor,
             fontSize: 24,
             fontFamily: bold,
           ),
@@ -30,7 +30,7 @@ class WishlistScreen extends StatelessWidget {
           final data = snapshot.data!.docs;
           if (data.isEmpty) {
             return const Center(
-                child: Text("No orders yet!", style: TextStyle(color: fontGreyDark)));
+                child: Text("No orders yet!", style: TextStyle(color: greyDarkColor)));
           }
           return ListView.separated(
             itemCount: data.length,

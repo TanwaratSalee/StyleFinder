@@ -114,7 +114,7 @@
 // //                         if (data.isEmpty) {
 // //                           return const Center(
 // //                             child: Text("No orders yet!",
-// //                                 style: TextStyle(color: fontGreyDark)),
+// //                                 style: TextStyle(color: greyDarkColor)),
 // //                           );
 // //                         }
 // //                         return ListView.separated(
@@ -338,7 +338,7 @@
 //                       //       if (data.isEmpty) {
 //                       //         return const Center(
 //                       //             child: Text("No orders yet!",
-//                       //                 style: TextStyle(color: fontGreyDark)));
+//                       //                 style: TextStyle(color: greyDarkColor)));
 //                       //       }
 //                       //       return ListView.separated(
 //                       //         itemCount: data.length,

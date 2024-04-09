@@ -1,6 +1,7 @@
 // ignore_for_file: use_super_parameters, library_private_types_in_public_api, sort_child_properties_last
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_finalproject/Views/auth_screen/verifyemail_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/custom_textfield.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
@@ -106,7 +107,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   .text
                   .size(14)
                   .fontFamily(regular)
-                  .color(fontGreyDark)
+                  .color(greyDarkColor)
                   .make(),
             ),
             const SizedBox(height: 10),
@@ -269,13 +270,6 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
             ourButton(
               title: 'Done',
               onPress: () async {
-                print("Selected is: $selectedDate");
-
-                print("Selected is: $selectedGender");
-                // print("Selected height is: ${heightController.text}");
-                // print("Selected weight is: ${weightController.text}");
-                // print("Selected is: $selectedSkinTone");
-
                 await controller.saveUserData(
                   name: widget.name,
                   email: widget.email,

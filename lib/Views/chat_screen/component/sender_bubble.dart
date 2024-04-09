@@ -15,7 +15,7 @@ Widget senderBubble(DocumentSnapshot data) {
       padding: const EdgeInsets.all(12),
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
-          color: data['uid'] == currentUser!.uid ? primaryApp : fontGreyDark,
+          color: data['uid'] == currentUser!.uid ? primaryApp : greyDarkColor,
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(20),
             topRight: Radius.circular(20),

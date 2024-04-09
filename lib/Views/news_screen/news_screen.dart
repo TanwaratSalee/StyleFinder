@@ -1,9 +1,12 @@
 // ignore_for_file: unused_local_variable, sort_child_properties_last
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_finalproject/Views/news_screen/component/featured_button.dart';
+import 'package:flutter_finalproject/Views/news_screen/component/search_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/store_screen/match_detail_screen.dart';
+import 'package:flutter_finalproject/Views/store_screen/product_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/home_buttons.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/consts/lists.dart';
@@ -30,20 +33,6 @@ class NewsScreen extends StatelessWidget {
         backgroundColor: whiteColor,
         automaticallyImplyLeading: false,
         title: appbarField(),
-        // actions: <Widget>[
-        //   Padding(
-        //     padding: const EdgeInsets.only(right: 15.0),
-        //     child: IconButton(
-        //       icon: Image.asset(
-        //         icCart,
-        //         width: 21,
-        //       ),
-        //       onPressed: () {
-        //         Get.to(() => const CartScreen());
-        //       },
-        //     ),
-        //   ),
-        // ],
       ),
       body: Container(
         padding: const EdgeInsets.all(12),
@@ -69,9 +58,9 @@ class NewsScreen extends StatelessWidget {
             //         }
             //       }),
             //       filled: true,
-            //       fillColor: fontGrey,
+            //       fillColor: mediumGreyColor,
             //       hintText: searchanything,
-            //       // hintStyle: const TextStyle(color: fontGrey),
+            //       // hintStyle: const TextStyle(color: mediumGreyColor),
             //     ),
             //   ),
             // ),
@@ -102,18 +91,18 @@ class NewsScreen extends StatelessWidget {
 
                     10.heightBox,
 
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    //   children: List.generate(
-                    //     2,
-                    //     (index) => homeButtons(
-                    //       height: context.screenHeight * 0.1,
-                    //       width: context.screenWidth / 2.3,
-                    //       icon: index == 0 ? icTodaysDeal : icFlashDeal,
-                    //       title: index == 0 ? todayDeal : flashsale,
-                    //     ),
-                    //   ),
-                    // ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: List.generate(
+                        2,
+                        (index) => homeButtons(
+                          height: context.screenHeight * 0.1,
+                          width: context.screenWidth / 2.3,
+                          icon: index == 0 ? icTodaysDeal : icFlashDeal,
+                          title: index == 0 ? todayDeal : flashsale,
+                        ),
+                      ),
+                    ),
 
                     // 10.heightBox,
 
@@ -136,7 +125,7 @@ class NewsScreen extends StatelessWidget {
                     //           .make();
                     //     }),
 
-                    10.heightBox,
+                    // 10.heightBox,
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -210,14 +199,12 @@ class NewsScreen extends StatelessWidget {
 
                     //             if(!snapshot.hasData) {
                     //               return Center(
-                    //                 child: loadingIndcator(),
+                    //                 child: loadingIndicator(),
                     //               );
                     //             } else if (snapshot.data!.docs.isEmpty) {
                     //               return "No featured products".text.white.makeCentered();
                     //             } else {
-
                     //               var featuredData = snapshot.data!.docs;
-
                     //               return Row(
                     //               children: List.generate(
                     //                 featuredData.length,
@@ -296,28 +283,51 @@ class NewsScreen extends StatelessWidget {
                     //         .color(redColor)
                     //         .size(18)
                     //         .make()),
-                    30.heightBox,
+                    // 30.heightBox,
 
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         'MATCH'
                             .text
                             .fontFamily(medium)
-                            .color(fontGreyDark)
+                            .color(greyDarkColor)
                             .size(22)
                             .make(),
-                        SizedBox(height: 6),
+                        const SizedBox(height: 6),
                         Image.asset(
                           icUndertext,
                           width: 170,
                         ),
-                        SizedBox(height: 6),
-                        Container(
-                          height: MediaQuery.of(context).size.height * 0.7,
-                          child: _buildProductMathGrids(category),
+                        const SizedBox(height: 60),
+                        GestureDetector(
+                          onTap: () {
+                            // Get.to(() => ProductScreen());
+                          },
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text('Explore More',
+                                      style: TextStyle(
+                                          fontFamily: medium,
+                                          color: greyDarkColor,
+                                          fontSize: 16)),
+                                  const SizedBox(width: 8),
+                                  Image.asset(
+                                    icNext,
+                                    width: 14,
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 40),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -332,7 +342,7 @@ class NewsScreen extends StatelessWidget {
                         'PRODUCT'
                             .text
                             .fontFamily(medium)
-                            .color(fontGreyDark)
+                            .color(greyDarkColor)
                             .size(22)
                             .make(),
                         Container(
@@ -346,7 +356,7 @@ class NewsScreen extends StatelessWidget {
                       ],
                     ),
 
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
 
@@ -372,9 +382,9 @@ class NewsScreen extends StatelessWidget {
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
-                              mainAxisSpacing: 8,
-                              crossAxisSpacing: 8,
-                              mainAxisExtent: 300,
+                              mainAxisSpacing: 18,
+                              crossAxisSpacing: 12,
+                              mainAxisExtent: 270,
                             ),
                             itemBuilder: (context, index) {
                               return Column(
@@ -382,29 +392,43 @@ class NewsScreen extends StatelessWidget {
                                 children: [
                                   Image.network(
                                     allproductsdata[index]['p_imgs'][0],
-                                    width: 170,
+                                    width: 180,
                                     height: 210,
                                     fit: BoxFit.cover,
                                   ),
-                                  const Spacer(),
-                                  Text(
-                                    "${allproductsdata[index]['p_name']}",
-                                    style: TextStyle(
-                                      fontFamily: medium,
-                                      fontSize: 17,
-                                      color: Colors.black,
+                                  // const Spacer(),
+                                  SizedBox(height: 3),
+                                  Padding(
+                                    padding: const EdgeInsets.all(6.0), 
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text(
+                                          "${allproductsdata[index]['p_name']}",
+                                          style: const TextStyle(
+                                            fontFamily:
+                                                'medium', 
+                                            fontSize: 16,
+                                            color: Colors.black,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow
+                                              .ellipsis, 
+                                        ),
+                                        
+                                        "${allproductsdata[index]['p_price']} Bath"
+                                            .text
+                                            .color(Colors
+                                                .grey) 
+                                            .fontFamily(
+                                                'regular') 
+                                            .size(14)
+                                            .make(),
+                                      ],
                                     ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow
-                                        .ellipsis, // ใช้ ellipsis สำหรับข้อความที่เกิน
                                   ),
-                                  "${allproductsdata[index]['p_price']} Bath"
-                                      .text
-                                      .color(fontGrey)
-                                      .fontFamily(regular)
-                                      .size(14)
-                                      .make(),
-                                  10.heightBox,
+                                  // 10.heightBox,
                                 ],
                               )
                                   .box
@@ -412,7 +436,8 @@ class NewsScreen extends StatelessWidget {
                                   .margin(
                                       const EdgeInsets.symmetric(horizontal: 2))
                                   .rounded
-                                  .padding(const EdgeInsets.all(12))
+                                  .shadowSm
+                                  // .padding(const EdgeInsets.all(12))
                                   .make()
                                   .onTap(() {
                                 Get.to(() => ItemDetails(
@@ -427,6 +452,35 @@ class NewsScreen extends StatelessWidget {
                       },
                     ),
 
+                    20.heightBox,
+
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(() => const ProductScreen());
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text('Explore More',
+                                  style: TextStyle(
+                                      fontFamily: medium,
+                                      color: greyDarkColor,
+                                      fontSize: 16)),
+                              const SizedBox(width: 8),
+                              Image.asset(
+                                icNext,
+                                width: 14,
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+
                     const SizedBox(height: 20),
                   ],
                 ),
@@ -435,164 +489,6 @@ class NewsScreen extends StatelessWidget {
           ],
         )),
       ),
-    );
-  }
-
-  Widget _buildProductMathGrids(String category) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('products').snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (!snapshot.hasData) {
-          return Center(
-            child: loadingIndicator(),
-          );
-        }
-
-        List<String> mixMatchList = [];
-        snapshot.data!.docs.forEach((doc) {
-          Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-          if (data.containsKey('p_mixmatch')) {
-            String currentMixMatch = data['p_mixmatch'];
-            if (!mixMatchList.contains(currentMixMatch)) {
-              mixMatchList.add(currentMixMatch);
-            }
-          }
-        });
-
-        // แสดงข้อมูลที่ได้จากการตรวจสอบ p_mixmatch ใน console
-        print('MixMatch List: $mixMatchList');
-
-        return GridView.builder(
-          padding: const EdgeInsets.all(8),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 0.8, // ปรับความสูงของรายการสินค้า
-            crossAxisSpacing: 8, // เพิ่มระยะห่างระหว่างคอลัมน์
-            mainAxisSpacing: 8, // เพิ่มระยะห่างระหว่างแถว
-          ),
-          itemBuilder: (BuildContext context, int index) {
-            int actualIndex = index * 2;
-
-            String price1 = snapshot.data!.docs[actualIndex].get('p_price');
-            String price2 = snapshot.data!.docs[actualIndex + 1].get('p_price');
-
-            String totalPrice =
-                (int.parse(price1) + int.parse(price2)).toString();
-
-            String productName1 =
-                snapshot.data!.docs[actualIndex].get('p_name');
-            String productName2 =
-                snapshot.data!.docs[actualIndex + 1].get('p_name');
-
-            String productImage1 =
-                snapshot.data!.docs[actualIndex].get('p_imgs')[0];
-            String productImage2 =
-                snapshot.data!.docs[actualIndex + 1].get('p_imgs')[0];
-
-            return GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MatchDetailScreen(
-                      price1: price1,
-                      price2: price2,
-                      productName1: productName1,
-                      productName2: productName2,
-                      productImage1: productImage1,
-                      productImage2: productImage2,
-                      totalPrice: totalPrice,
-                    ),
-                  ),
-                );
-              },
-              child: Card(
-                clipBehavior: Clip.antiAlias,
-                elevation: 2, // เพิ่มเงาให้กับการ์ด
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Image.network(
-                            productImage1,
-                            width: double
-                                .infinity, // ทำให้รูปภาพขยายตามขนาดคอลัมน์
-                            height: 120,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Image.network(
-                            productImage2,
-                            width: double
-                                .infinity, // ทำให้รูปภาพขยายตามขนาดคอลัมน์
-                            height: 120,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          const SizedBox(height: 8),
-                          Text(
-                            productName1,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16, // ปรับขนาดตัวอักษร
-                            ),
-                            maxLines: 1,
-                            overflow:
-                                TextOverflow.ellipsis, // ตัดข้อความที่เกิน
-                          ),
-                          Text(
-                            'Price: \$${price1.toString()}',
-                            style: const TextStyle(color: Colors.grey),
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            productName2,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16, // ปรับขนาดตัวอักษร
-                            ),
-                            maxLines: 1,
-                            overflow:
-                                TextOverflow.ellipsis, // ตัดข้อความที่เกิน
-                          ),
-                          Text(
-                            'Price: \$${price2.toString()}',
-                            style: const TextStyle(color: Colors.grey),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Text(
-                        'Total Price: \$${totalPrice.toString()}',
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16, // ปรับขนาดตัวอักษร
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-          itemCount: (mixMatchList.length).ceil(),
-        );
-      },
     );
   }
 }

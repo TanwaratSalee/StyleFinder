@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
-import 'package:flutter_finalproject/Views/widgets_common/appbar_ontop.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/news_controller.dart';
 import 'package:flutter_finalproject/services/firestore_services.dart';
@@ -20,7 +19,7 @@ class ProductScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: whiteColor,
-        title: appbarField(),
+        title: Image.asset(icLogoOnTop, height: 40),
       ),
       body: Container(
         padding: const EdgeInsets.all(12),
@@ -39,7 +38,7 @@ class ProductScreen extends StatelessWidget {
                         alignment: Alignment.centerLeft,
                         child: allproducts.text
                             .fontFamily(regular)
-                            .color(fontGreyDark)
+                            .color(greyDarkColor)
                             .size(18)
                             .make()),
                     StreamBuilder(
@@ -86,7 +85,7 @@ class ProductScreen extends StatelessWidget {
                                   ),
                                   "${allproductsdata[index]['p_price']} Bath"
                                       .text
-                                      .color(fontGrey)
+                                      .color(mediumGreyColor)
                                       .fontFamily(regular)
                                       .size(14)
                                       .make(),
@@ -95,8 +94,8 @@ class ProductScreen extends StatelessWidget {
                               )
                                   .box
                                   .white
-                                  .margin(
-                                      const EdgeInsets.symmetric(horizontal: 2))
+                                  .margin(const EdgeInsets.symmetric(horizontal: 2))
+                                  .shadowSm
                                   .rounded
                                   .padding(const EdgeInsets.all(12))
                                   .make()

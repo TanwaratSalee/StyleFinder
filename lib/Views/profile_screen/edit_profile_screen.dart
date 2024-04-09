@@ -92,14 +92,14 @@ class EditProfileScreen extends StatelessWidget {
                         Icons.male,
                         color: controller.selectedGender.value == 'Man'
                             ? primaryApp
-                            : fontGrey,
+                            : mediumGreyColor,
                       ),
                       title: Text(
                         'Man',
                         style: TextStyle(
                           color: controller.selectedGender.value == 'Man'
                               ? primaryApp
-                              : fontGrey,
+                              : mediumGreyColor,
                           fontWeight: controller.selectedGender.value == 'Man'
                               ? FontWeight.bold
                               : FontWeight.normal,
@@ -115,14 +115,14 @@ class EditProfileScreen extends StatelessWidget {
                         Icons.female,
                         color: controller.selectedGender.value == 'Woman'
                             ? primaryApp
-                            : fontGrey,
+                            : mediumGreyColor,
                       ),
                       title: Text(
                         'Woman',
                         style: TextStyle(
                           color: controller.selectedGender.value == 'Woman'
                               ? primaryApp
-                              : fontGrey,
+                              : mediumGreyColor,
                           fontWeight: controller.selectedGender.value == 'Woman'
                               ? FontWeight.bold
                               : FontWeight.normal,
@@ -138,14 +138,14 @@ class EditProfileScreen extends StatelessWidget {
                         Icons.perm_identity,
                         color: controller.selectedGender.value == 'Other'
                             ? primaryApp
-                            : fontGrey,
+                            : mediumGreyColor,
                       ),
                       title: Text(
                         'Other',
                         style: TextStyle(
                           color: controller.selectedGender.value == 'Other'
                               ? primaryApp
-                              : fontGrey,
+                              : mediumGreyColor,
                           fontWeight: controller.selectedGender.value == 'Other'
                               ? FontWeight.bold
                               : FontWeight.normal,
@@ -170,7 +170,7 @@ class EditProfileScreen extends StatelessWidget {
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title:
-            "Edit Profile".text.fontFamily(regular).color(fontGreyDark).make(),
+            "Edit Profile".text.fontFamily(regular).color(greyDarkColor).make(),
         actions: [
           TextButton(
             onPressed: () async {
@@ -264,7 +264,7 @@ class EditProfileScreen extends StatelessWidget {
                     .make(),
               ),
               const Divider(
-                color: fontLightGrey,
+                color: greyLightColor,
               ),
               5.heightBox,
 
@@ -291,7 +291,7 @@ class EditProfileScreen extends StatelessWidget {
                     .make(),
               ),
               const Divider(
-                color: fontLightGrey,
+                color: greyLightColor,
               ),
               10.heightBox,
 
@@ -314,7 +314,7 @@ class EditProfileScreen extends StatelessWidget {
                       decoration: const InputDecoration(
                         hintText: 'Select birthday',
                         hintStyle: TextStyle(
-                          color: fontGrey,
+                          color: mediumGreyColor,
                         ),
                         contentPadding: EdgeInsets.symmetric(
                             vertical: 15.0, horizontal: 20.0),
@@ -354,7 +354,7 @@ class EditProfileScreen extends StatelessWidget {
                                 .value, 
                             style: TextStyle(
                               color:
-                                  fontGrey, 
+                                  mediumGreyColor, 
                               fontFamily: regular,
                               fontSize: 16,
                             ),

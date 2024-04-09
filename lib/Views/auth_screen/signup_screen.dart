@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/auth_screen/personal_details_screen.dart';
+import 'package:flutter_finalproject/Views/auth_screen/verifyemail_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/custom_textfield.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 import 'package:flutter_finalproject/consts/colors.dart';
@@ -102,14 +103,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         text: const TextSpan(children: [
                   TextSpan(
                       text: "I agree to the ",
-                      style: TextStyle(color: fontGreyDark, fontFamily: bold)),
+                      style: TextStyle(color: greyDarkColor, fontFamily: bold)),
                   TextSpan(
                       text: termAndCond,
                       style: TextStyle(color: primaryApp, fontFamily: bold)),
                   TextSpan(
                       text: " & ",
                       style: TextStyle(
-                        color: fontGreyDark,
+                        color: greyDarkColor,
                         fontWeight: FontWeight.bold,
                       )),
                   TextSpan(
@@ -126,26 +127,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     valueColor: AlwaysStoppedAnimation(primaryApp),
                   )
                 : ourButton(
-                    color: isCheck == true ? primaryApp : fontGrey,
+                    color: isCheck == true ? primaryApp : greyColor,
                     title: 'Next',
                     textColor: whiteColor,
                     onPress: isCheck
-                        ? () {
-                            // ตรวจสอบความถูกต้องของข้อมูลก่อนเปลี่ยนหน้า
-                            if (validateInput()) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => PersonalDetailsScreen(
-                                    email: emailController.text,
-                                    name: nameController.text,
-                                    password: passwordController.text,
-                                  ),
+                      ? () {
+                          // Validate input before changing the screen
+                          if (validateInput()) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PersonalDetailsScreen(
+                                  email: emailController.text,
+                                  name: nameController.text,
+                                  password: passwordController.text,
                                 ),
-                              );
-                            }
+                              ),
+                            );
                           }
-                        : null,
+                        }
+                      : null,
                   ),
           ],
         ),

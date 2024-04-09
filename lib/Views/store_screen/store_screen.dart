@@ -12,9 +12,9 @@ class StoreScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<String>(
-      future: fetchSellerName(vendorId), // ดึงชื่อผู้ขาย
+      future: fetchSellerName(vendorId), 
       builder: (context, snapshot) {
-        // สร้าง AppBar ตามสถานะของ Future
+        
         String title = snapshot.hasData ? snapshot.data! : 'Loading...';
         return Scaffold(
           backgroundColor: whiteColor,
@@ -29,10 +29,10 @@ class StoreScreen extends StatelessWidget {
           ),
           body: SingleChildScrollView(
             child: Column(
-              // แก้ไขในส่วนนี้
+              
               children: [
                 _buildLogoAndRatingSection(context),
-                // _buildReviewHighlights(),
+                
                 _buildProductMatchTabs(context),
               ],
             ),
@@ -67,33 +67,47 @@ class StoreScreen extends StatelessWidget {
                 Center(
                   child: FutureBuilder<String>(
                     future: fetchSellerImgs(
-                        vendorId), // อย่าลืมเปลี่ยนให้ตรงกับการเรียกใช้ของคุณ
+                        vendorId), 
                     builder:
                         (BuildContext context, AsyncSnapshot<String> snapshot) {
+                      Widget imageWidget; 
+
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator(); // หรือ widget โหลดแบบอื่นๆ ที่คุณต้องการ
-                      } else if (snapshot.hasError) {
-                        return Image.asset(
-                          imProfile, // รูปภาพหากเกิดข้อผิดพลาด
-                          width: 120,
-                          height: 120,
-                          fit: BoxFit.cover,
-                        );
-                      } else if (snapshot.hasData) {
-                        return Image.network(
-                          snapshot.data!,
+                        imageWidget =
+                            CircularProgressIndicator(); 
+                      } else if (snapshot.hasError || !snapshot.hasData) {
+                        imageWidget = Image.asset(
+                          imProfile, 
                           width: 120,
                           height: 120,
                           fit: BoxFit.cover,
                         );
                       } else {
-                        return Image.asset(
-                          imProfile, // รูปภาพเริ่มต้นหรือหากไม่มีข้อมูล
+                        imageWidget = Image.network(
+                          snapshot.data!,
                           width: 120,
                           height: 120,
                           fit: BoxFit.cover,
                         );
                       }
+
+                      return Container(
+                        width:
+                            124, 
+                        height: 124,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: greyLightColor, 
+                            width: 2.0, 
+                          ),
+                          borderRadius: BorderRadius.circular(100), 
+                        ),
+                        child: ClipRRect(
+                          
+                          borderRadius: BorderRadius.circular(100),
+                          child: imageWidget,
+                        ),
+                      );
                     },
                   ),
                 ),
@@ -116,7 +130,7 @@ class StoreScreen extends StatelessWidget {
                               builder: (context) => ReviewScreen()),
                         );
                       },
-                      child: const Text('All Reviews >>>'),
+                      child: const Text('All Reviews >>>' ,style: TextStyle(fontSize: 14, fontFamily: regular)),
                     ),
                   ],
                 ),
@@ -128,19 +142,6 @@ class StoreScreen extends StatelessWidget {
     );
   }
 
-  // Widget _buildReviewHighlights() {
-  //   return Container(
-  //     height: 120,
-  //     child: ListView.builder(
-  //       scrollDirection: Axis.horizontal,
-  //       itemCount: 3,
-  //       itemBuilder: (context, index) {
-  //         return _buildReviewCard();
-  //       },
-  //     ),
-  //   );
-  // }
-
   Widget _buildReviewCard() {
     return Container(
       width: 200,
@@ -149,9 +150,9 @@ class StoreScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: whiteColor,
         borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          const BoxShadow(
-            color: fontGrey,
+        boxShadow: const [
+          BoxShadow(
+            color: mediumGreyColor,
             blurRadius: 4,
             offset: Offset(0, 2),
           ),
@@ -189,12 +190,12 @@ class StoreScreen extends StatelessWidget {
         children: <Widget>[
           TabBar(
             labelStyle: const TextStyle(
-                fontSize: 15, fontFamily: regular, color: fontGreyDark),
+                fontSize: 15, fontFamily: regular, color: greyDarkColor),
             unselectedLabelStyle: const TextStyle(
-                fontSize: 14, fontFamily: regular, color: fontGrey),
-            tabs: [
-              const Tab(text: 'Product'),
-              const Tab(text: 'Match'),
+                fontSize: 14, fontFamily: regular, color: mediumGreyColor),
+            tabs: const [
+              Tab(text: 'Product'),
+              Tab(text: 'Match'),
             ],
             indicatorColor: Theme.of(context).primaryColor,
           ),
@@ -216,7 +217,7 @@ class StoreScreen extends StatelessWidget {
     return Column(
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.all(5),
+          padding: const EdgeInsets.all(0),
           child: _buildCategoryTabs(context),
         ),
         Expanded(
@@ -242,33 +243,31 @@ class StoreScreen extends StatelessWidget {
 
   Widget _buildCategoryTabs(BuildContext context) {
     return DefaultTabController(
-      length: 5,
+      length: 4,
       child: Column(
         children: <Widget>[
           const TabBar(
             isScrollable: true,
             indicatorColor: primaryApp,
-            labelStyle: TextStyle(
-                fontSize: 13, fontFamily: regular, color: fontGreyDark),
-            unselectedLabelStyle:
-                TextStyle(fontSize: 12, fontFamily: regular, color: fontGrey),
+            labelStyle: TextStyle(fontSize: 13, fontFamily: regular, color: greyDarkColor),
+            unselectedLabelStyle:TextStyle(fontSize: 12, fontFamily: regular, color: mediumGreyColor),
             tabs: [
               Tab(text: 'All'),
-              Tab(text: 'Outer'),
+              Tab(text: 'T-shirts'),
+              // Tab(text: 'Outer'),
               Tab(text: 'Dress'),
               Tab(text: 'Bottoms'),
-              Tab(text: 'T-shirts'),
             ],
-          ),
+          ).box.color(thinPrimaryApp).make(),
           Container(
             height: MediaQuery.of(context).size.height * 0.9,
             child: TabBarView(
               children: [
                 _buildProductGrid('All'),
-                _buildProductGrid('Outer'),
+                _buildProductGrid('T-shirts'),
+                // _buildProductGrid('Outer'),
                 _buildProductGrid('Dress'),
                 _buildProductGrid('Bottoms'),
-                _buildProductGrid('T-shirts'),
               ],
             ),
           ),

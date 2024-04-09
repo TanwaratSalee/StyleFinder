@@ -12,7 +12,7 @@ class OrderDetailFont extends StatelessWidget {
             centerTitle: true,
             title: "My Order"
                 .text
-                .color(fontGreyDark)
+                .color(greyDarkColor)
                 .fontFamily(medium)
                 .size(24)
                 .make(),

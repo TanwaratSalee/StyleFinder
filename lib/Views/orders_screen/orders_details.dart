@@ -15,7 +15,7 @@ class OrdersDetails extends StatelessWidget {
       backgroundColor: whiteColor,
       appBar: AppBar(
         title:
-            "Order Details".text.fontFamily(regular).color(fontGreyDark).make(),
+            "Order Details".text.fontFamily(regular).color(greyDarkColor).make(),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -111,7 +111,7 @@ class OrdersDetails extends StatelessWidget {
               "Ordered Product"
                   .text
                   .size(16)
-                  .color(fontGreyDark)
+                  .color(greyDarkColor)
                   .fontFamily(regular)
                   .makeCentered(),
               10.heightBox,
