@@ -121,13 +121,13 @@ class _ItemDetailsState extends State<ItemDetails> {
                                 ? const Icon(
                                     Icons.favorite,
                                     color: redColor,
-                                   
+                                    weight: 35,
                                   )
                                 : const Icon(
                                     Icons.favorite_outline,
-                                   
+                                    weight: 35,
                                   ),
-                            iconSize: 25,
+                            iconSize: 20,
                           ),
                         )
                       ],
@@ -146,7 +146,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                     5.heightBox,
                     "${widget.data['p_aboutProduct']}"
                         .text
-                        .color(mediumGreyColor)
+                        .color(greyMediumColor)
                         .size(16)
                         .make(),
                     "${widget.data['p_price']}"
@@ -202,6 +202,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                         .color(greyLightColor)
                         .make(),
                     20.heightBox,
+                    10.heightBox,
                     "Description"
                         .text
                         .color(blackColor)
@@ -219,7 +220,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                         ),
                       ),
                     ),
-                    20.heightBox,
+                    10.heightBox,
                     "Siz & Fit"
                         .text
                         .color(blackColor)

@@ -112,7 +112,7 @@ class LoginScreen extends StatelessWidget {
                                       children: [
                                         const Expanded(
                                           child: Divider(
-                                              color: mediumGreyColor, height: 1),
+                                              color: greyMediumColor, height: 1),
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.symmetric(
@@ -123,7 +123,7 @@ class LoginScreen extends StatelessWidget {
                                         ),
                                         const Expanded(
                                           child: Divider(
-                                              color: mediumGreyColor, height: 1),
+                                              color: greyMediumColor, height: 1),
                                         ),
                                       ],
                                     ),

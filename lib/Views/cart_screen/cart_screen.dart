@@ -109,7 +109,7 @@ return ListTile(
                     )
                         .box
                         .padding(const EdgeInsets.all(12))
-                        .color(mediumGreyColor)
+                        .color(greyMediumColor)
                         .width(context.screenWidth - 60)
                         .roundedSM
                         .make(),

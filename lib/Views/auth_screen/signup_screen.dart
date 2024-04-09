@@ -127,7 +127,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     valueColor: AlwaysStoppedAnimation(primaryApp),
                   )
                 : ourButton(
-                    color: isCheck == true ? primaryApp : greyColor,
+                    color: isCheck == true ? primaryApp : greyMediumColor,
                     title: 'Next',
                     textColor: whiteColor,
                     onPress: isCheck

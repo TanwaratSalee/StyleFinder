@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_finalproject/Views/auth_screen/login_screen.dart';
+import 'package:flutter_finalproject/Views/auth_screen/verifyemail_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -106,6 +107,7 @@ class AuthController extends GetxController {
     required String uWeight,
     required Color skin,
   }) async {
+    isloading(true);
     try {
       final UserCredential currentUser =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -136,11 +138,21 @@ class AuthController extends GetxController {
         'order_count': "0"
       });
 
-      Get.snackbar('Success', 'Login successful!');
-      Get.offAll(() => MainHome());
+      // แสดงข้อความเมื่อบันทึกข้อมูลสำเร็จ
+      Get.snackbar('Success', 'User data saved successfully!');
+
+      // ปรับเปลี่ยนไปใช้ VerifyEmailScreen ก่อนไป MainHome
+      // สำคัญ: ต้องรับ context มาในพารามิเตอร์ของฟังก์ชัน saveUserData หรือใช้ Get.context ถ้าคุณไม่อยากเพิ่ม context เป็นพารามิเตอร์
+      Get.offAll(() => VerifyEmailScreen(
+        email: email,
+        name: name,
+        password: password,
+      ));
     } catch (e) {
       print("Failed to upload user data: $e");
       Get.snackbar('Error', 'Failed to upload user data: $e');
+    } finally {
+      isloading(false);
     }
   }
 

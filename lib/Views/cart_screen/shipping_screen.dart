@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_finalproject/Views/cart_screen/payment_method.dart';
-import 'package:flutter_finalproject/Views/widgets_common/custom_textfield.dart';
-import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
+import 'package:flutter_finalproject/Views/collection_screen/address_controller.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/cart_controller.dart';
 import 'package:get/get.dart';
+import 'package:flutter_finalproject/Views/cart_screen/payment_method.dart';
+import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 
 class FirebaseService {
   final CollectionReference usersCollection =
       FirebaseFirestore.instance.collection('users');
 
-  Future<DocumentSnapshot> getCurrentUserAddress() async {
+  Future<DocumentSnapshot> getCurrentUserAddress(String userId) async {
     try {
-      String userId = currentUser!.uid;
       DocumentSnapshot documentSnapshot =
           await usersCollection.doc(userId).get();
       return documentSnapshot;
@@ -31,8 +30,8 @@ class ShippingDetails extends StatefulWidget {
 }
 
 class _ShippingDetailsState extends State<ShippingDetails> {
-  String? _currentAddress;
-  bool _useExistingAddress = true;
+  List<Map<String, dynamic>> _addresses = [];
+  String? _selectedAddress;
 
   @override
   void initState() {
@@ -41,26 +40,39 @@ class _ShippingDetailsState extends State<ShippingDetails> {
   }
 
   Future<void> loadCurrentUserAddress() async {
+    String userId = currentUser!.uid; // Ensure currentUser is not null
     try {
       DocumentSnapshot documentSnapshot =
-          await FirebaseService().getCurrentUserAddress();
+          await FirebaseService().getCurrentUserAddress(userId);
       if (documentSnapshot.exists) {
-        Map<String, dynamic>? userData =
-            documentSnapshot.data() as Map<String, dynamic>?;
+        Map<String, dynamic>? userData = documentSnapshot.data() as Map<String, dynamic>?;
         if (userData != null && userData.containsKey('address')) {
-          Map<String, dynamic> addressData = userData['address'];
+          List<dynamic> addressesList = userData['address'];
           setState(() {
-            _currentAddress =
-                '${addressData['address']}, ${addressData['city']}, ${addressData['state']}, ${addressData['postalCode']}, ${addressData['phone']}';
+            _addresses = List<Map<String, dynamic>>.from(addressesList);
           });
         }
       }
     } catch (error) {
       print('Failed to load user address: $error');
-      setState(() {
-        _currentAddress = 'Failed to load user address';
-      });
+      // Handle error appropriately
     }
+  }
+
+  void _showAddressDialog(String address) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Selected Address'),
+        content: Text(address),
+        actions: <Widget>[
+          TextButton(
+            child: Text('OK'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -70,22 +82,18 @@ class _ShippingDetailsState extends State<ShippingDetails> {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: Text("Shipping Info")
-            .text
-            .fontFamily(regular)
-            .color(fontGreyDark)
-            .make(),
+        title: Text("Shipping Info"),
+        backgroundColor: primaryApp,
       ),
       bottomNavigationBar: SizedBox(
         height: 70,
         child: ourButton(
           onPress: () {
-            if (_useExistingAddress ||
-                controller.addressController.text.length > 10) {
-              // Here, add logic to save or use the existing/new address as needed
+            if (_selectedAddress != null || controller.addressController.text.isNotEmpty) {
+              // Logic to save or use the existing/new address as needed
               Get.to(() => const PaymentMethods());
             } else {
-              VxToast.show(context, msg: "Please fill the form");
+              // Show toast or another form of error
             }
           },
           color: primaryApp,
@@ -95,52 +103,41 @@ class _ShippingDetailsState extends State<ShippingDetails> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
-        child: ListView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SwitchListTile(
-              title: Text("Use Current Address ?"),
-              value: _useExistingAddress,
-              onChanged: (bool value) {
-                setState(() {
-                  _useExistingAddress = value;
-                });
-              },
-            ),
-            if (_useExistingAddress)
-              Text(
-                _currentAddress ?? 'No Address in Data',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              )
-            else
-              Column(
-                children: [
-                  customTextField(
-                      label: "Address",
-                      isPass: false,
-                      readOnly: false,
-                      controller: controller.addressController),
-                  customTextField(
-                      label: "City",
-                      isPass: false,
-                      readOnly: false,
-                      controller: controller.cityController),
-                  customTextField(
-                      label: "State",
-                      isPass: false,
-                      readOnly: false,
-                      controller: controller.stateController),
-                  customTextField(
-                      label: "Postal Code",
-                      isPass: false,
-                      readOnly: false,
-                      controller: controller.postalcodeController),
-                  customTextField(
-                      label: "Phone",
-                      isPass: false,
-                      readOnly: false,
-                      controller: controller.phoneController),
-                ],
+            // Existing addresses
+            Expanded(
+              child: ListView.builder(
+                itemCount: _addresses.length,
+                itemBuilder: (context, index) {
+                  var address = _addresses[index];
+                  String addressString = '${address['address']}, ${address['city']}, ${address['state']}, ${address['postalCode']}, ${address['phone']}';
+                  return Card(
+                    child: ListTile(
+                      title: Text(addressString),
+                      onTap: () {
+                        setState(() {
+                          _selectedAddress = addressString;
+                        });
+                        _showAddressDialog(addressString);
+                      },
+                    ),
+                  );
+                },
               ),
+            ),
+            SizedBox(height: 16),
+            // Button to add a new address
+            ourButton(
+              onPress: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AddressForm()),
+              ),
+              color: primaryApp,
+              textColor: whiteColor,
+              title: "+ Add a new address",
+            ),
           ],
         ),
       ),

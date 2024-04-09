@@ -72,9 +72,9 @@ class ChatScreen extends StatelessWidget {
                   controller: controller.msgController,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(
-                        borderSide: BorderSide(color: mediumGreyColor)),
+                        borderSide: BorderSide(color: greyMediumColor)),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: mediumGreyColor)),
+                        borderSide: BorderSide(color: greyMediumColor)),
                     hintText: "Type a message...",
                   ),
                 )),

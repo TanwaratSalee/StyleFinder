@@ -354,7 +354,7 @@
 //                           valueColor: AlwaysStoppedAnimation(primaryApp),
 //                         )
 //                       : ourButton(
-//                           color: isCheck == true ? primaryApp : mediumGreyColor,
+//                           color: isCheck == true ? primaryApp : greyMediumColor,
 //                           title: 'Next',
 //                           textColor: whiteColor,
 //                           onPress: () async {

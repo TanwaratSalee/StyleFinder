@@ -64,7 +64,7 @@ class _ProfileScreenState extends State<ProfileScreen>
             unselectedLabelStyle: const TextStyle(
               fontSize: 14,
               fontFamily: regular,
-              color: mediumGreyColor
+              color: greyMediumColor
             ),
             tabs: [
               const Tab(text: 'Product'),

@@ -29,7 +29,7 @@ Widget customTextField({
           isDense: true,
           labelText: label,
           hintStyle: const TextStyle(
-            color: mediumGreyColor,
+            color: greyMediumColor,
           ),
           filled: true,
           fillColor: whiteColor,
@@ -41,7 +41,7 @@ Widget customTextField({
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
-            borderSide: const BorderSide(color: mediumGreyColor),
+            borderSide: const BorderSide(color: greyMediumColor),
           ),
         ),
       ),

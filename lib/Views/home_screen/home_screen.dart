@@ -55,25 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     controllercard.dispose();
-    isEmailVerified();
     super.dispose();
-  }
-
-  Future<bool> isEmailVerified() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    await user?.reload();
-    user = FirebaseAuth.instance.currentUser;
-    if (user != null && user.emailVerified) {
-      return true;
-    } else {
-      Get.off(() => VerifyEmailScreen(
-        email: email,
-        name: '',
-        password: '',
-        
-      ));
-      return false;
-    }
   }
 
   @override
