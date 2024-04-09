@@ -36,7 +36,7 @@ class _OrdersScreenState extends State<OrdersScreen>
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: const Text("My Orders", style: TextStyle(color: greyDarkColor, fontFamily: medium)),
+        title: const Text("My Orders", style: TextStyle(color: fontGreyDark, fontFamily: medium)),
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
@@ -70,7 +70,7 @@ class _OrdersScreenState extends State<OrdersScreen>
         } else if (snapshot.data!.docs.isEmpty) {
           return const Center(
               child: Text("No orders yet!",
-                  style: TextStyle(color: greyDarkColor)));
+                  style: TextStyle(color: fontGreyDark)));
         } else {
           var data = snapshot.data!.docs;
           return ListView.builder(
@@ -91,7 +91,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                       Text(
                         "Order code ${orderData['order_code']}",
                         style: const TextStyle(
-                            color: greyDarkColor,
+                            color: fontGreyDark,
                             fontFamily: 'Medium',
                             fontSize: 20),
                       ),
@@ -119,7 +119,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                       Text('x${product['qty']}',
                           style: const TextStyle(
                               fontSize: 12,
-                              color: greyDarkColor,
+                              color: fontGreyDark,
                               fontFamily: 'Regular')),
                       const SizedBox(width: 5),
                       Image.network(product['img'],
@@ -133,7 +133,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                                 style: const TextStyle(
                                     fontFamily: 'Medium', fontSize: 14)),
                             Text('${product['price']} Bath',
-                                style: const TextStyle(color: greyDarkColor)),
+                                style: const TextStyle(color: fontGreyDark)),
                           ],
                         ),
                       ),

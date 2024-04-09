@@ -59,12 +59,12 @@ class _ProfileScreenState extends State<ProfileScreen>
             labelStyle: const TextStyle(
               fontSize: 15,
               fontFamily: regular,
-              color: greyDarkColor
+              color: fontGreyDark
             ),
             unselectedLabelStyle: const TextStyle(
               fontSize: 14,
               fontFamily: regular,
-              color: greyMediumColor
+              color: fontGrey
             ),
             tabs: [
               const Tab(text: 'Product'),
@@ -166,7 +166,7 @@ class _ProfileScreenState extends State<ProfileScreen>
         if (data.isEmpty) {
           return const Center(
             child:
-                Text("No orders yet!", style: TextStyle(color: greyDarkColor)),
+                Text("No orders yet!", style: TextStyle(color: fontGreyDark)),
           );
         }
         return ListView.separated(

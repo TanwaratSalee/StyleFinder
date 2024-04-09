@@ -32,7 +32,7 @@ class SearchScreenPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: greyMediumColor),
+                  borderSide: const BorderSide(color: fontGrey),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 suffixIcon: const Icon(Icons.search).onTap(() {
@@ -45,7 +45,7 @@ class SearchScreenPage extends StatelessWidget {
                 filled: true,
                 fillColor: whiteColor,
                 hintText: searchanything,
-                hintStyle: const TextStyle(color: greyMediumColor),
+                hintStyle: const TextStyle(color: fontGrey),
               ),
             ),
           ),

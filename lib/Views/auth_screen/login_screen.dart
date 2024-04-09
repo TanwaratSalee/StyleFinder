@@ -112,18 +112,18 @@ class LoginScreen extends StatelessWidget {
                                       children: [
                                         const Expanded(
                                           child: Divider(
-                                              color: greyMediumColor, height: 1),
+                                              color: fontGrey, height: 1),
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 15),
                                           child: loginWith.text
-                                              .color(greyDarkColor)
+                                              .color(fontGreyDark)
                                               .make(),
                                         ),
                                         const Expanded(
                                           child: Divider(
-                                              color: greyMediumColor, height: 1),
+                                              color: fontGrey, height: 1),
                                         ),
                                       ],
                                     ),
@@ -141,7 +141,7 @@ class LoginScreen extends StatelessWidget {
                                     //               borderRadius:
                                     //                   BorderRadius.circular(8),
                                     //               border: Border.all(
-                                    //                 color: greyLightColor,
+                                    //                 color: fontLightGrey,
                                     //                 width: 1,
                                     //               ),
                                     //             ),
@@ -174,7 +174,7 @@ class LoginScreen extends StatelessWidget {
                                               borderRadius:
                                                   BorderRadius.circular(8),
                                               border: Border.all(
-                                                color: greyLightColor,
+                                                color: fontLightGrey,
                                                 width: 1,
                                               ),
                                             ),

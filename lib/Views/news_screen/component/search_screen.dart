@@ -16,7 +16,7 @@ class SearchScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: title!.text.color(greyDarkColor).make(),
+        title: title!.text.color(fontGreyDark).make(),
       ),
       body: FutureBuilder(
         future: FirestoreServices.searchProducts(title),
@@ -59,7 +59,7 @@ class SearchScreen extends StatelessWidget {
                             "${filtered[index]['p_name']}"
                                 .text
                                 .fontFamily(regular)
-                                .color(greyDarkColor)
+                                .color(fontGreyDark)
                                 .make(),
                             5.heightBox,
                             "${filtered[index]['p_price']}"

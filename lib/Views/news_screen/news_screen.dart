@@ -69,9 +69,9 @@ class NewsScreen extends StatelessWidget {
             //         }
             //       }),
             //       filled: true,
-            //       fillColor: greyMediumColor,
+            //       fillColor: fontGrey,
             //       hintText: searchanything,
-            //       // hintStyle: const TextStyle(color: greyMediumColor),
+            //       // hintStyle: const TextStyle(color: fontGrey),
             //     ),
             //   ),
             // ),
@@ -306,7 +306,7 @@ class NewsScreen extends StatelessWidget {
                         'MATCH'
                             .text
                             .fontFamily(medium)
-                            .color(greyDarkColor)
+                            .color(fontGreyDark)
                             .size(22)
                             .make(),
                         SizedBox(height: 6),
@@ -332,7 +332,7 @@ class NewsScreen extends StatelessWidget {
                         'PRODUCT'
                             .text
                             .fontFamily(medium)
-                            .color(greyDarkColor)
+                            .color(fontGreyDark)
                             .size(22)
                             .make(),
                         Container(
@@ -400,7 +400,7 @@ class NewsScreen extends StatelessWidget {
                                   ),
                                   "${allproductsdata[index]['p_price']} Bath"
                                       .text
-                                      .color(greyMediumColor)
+                                      .color(fontGrey)
                                       .fontFamily(regular)
                                       .size(14)
                                       .make(),

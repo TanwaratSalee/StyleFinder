@@ -151,7 +151,7 @@ class StoreScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           const BoxShadow(
-            color: greyMediumColor,
+            color: fontGrey,
             blurRadius: 4,
             offset: Offset(0, 2),
           ),
@@ -189,9 +189,9 @@ class StoreScreen extends StatelessWidget {
         children: <Widget>[
           TabBar(
             labelStyle: const TextStyle(
-                fontSize: 15, fontFamily: regular, color: greyDarkColor),
+                fontSize: 15, fontFamily: regular, color: fontGreyDark),
             unselectedLabelStyle: const TextStyle(
-                fontSize: 14, fontFamily: regular, color: greyMediumColor),
+                fontSize: 14, fontFamily: regular, color: fontGrey),
             tabs: [
               const Tab(text: 'Product'),
               const Tab(text: 'Match'),
@@ -249,9 +249,9 @@ class StoreScreen extends StatelessWidget {
             isScrollable: true,
             indicatorColor: primaryApp,
             labelStyle: TextStyle(
-                fontSize: 13, fontFamily: regular, color: greyDarkColor),
+                fontSize: 13, fontFamily: regular, color: fontGreyDark),
             unselectedLabelStyle:
-                TextStyle(fontSize: 12, fontFamily: regular, color: greyMediumColor),
+                TextStyle(fontSize: 12, fontFamily: regular, color: fontGrey),
             tabs: [
               Tab(text: 'All'),
               Tab(text: 'Outer'),

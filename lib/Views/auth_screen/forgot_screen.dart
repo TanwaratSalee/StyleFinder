@@ -24,7 +24,7 @@ class ForgotScreen extends StatelessWidget {
                   .text
                   .size(26)
                   .fontFamily(bold)
-                  .color(greyDarkColor)
+                  .color(fontGreyDark)
                   .make(),
             ),
             const SizedBox(height: 15),
@@ -34,7 +34,7 @@ class ForgotScreen extends StatelessWidget {
                   .text
                   .size(14)
                   .fontFamily(regular)
-                  .color(greyDarkColor)
+                  .color(fontGreyDark)
                   .make(),
             ),
             const SizedBox(height: 20),

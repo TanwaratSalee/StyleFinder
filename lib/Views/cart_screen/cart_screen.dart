@@ -36,7 +36,7 @@ class CartScreen extends StatelessWidget {
           // automaticallyImplyLeading: false,
           title: "Cart"
               .text
-              .color(greyDarkColor)
+              .color(fontGreyDark)
               .fontFamily(regular)
               .make(),
         ),
@@ -50,7 +50,7 @@ class CartScreen extends StatelessWidget {
               );
             } else if (snapshot.data!.docs.isEmpty) {
               return Center(
-                child: "Cart is empty".text.color(greyDarkColor).make(),
+                child: "Cart is empty".text.color(fontGreyDark).make(),
               );
             } else {
               var data = snapshot.data!.docs;
@@ -95,7 +95,7 @@ return ListTile(
                         "Total price"
                             .text
                             .fontFamily(regular)
-                            .color(greyDarkColor)
+                            .color(fontGreyDark)
                             .make(),
                         Obx(
                           () => "${controller.totalP.value}"
@@ -109,7 +109,7 @@ return ListTile(
                     )
                         .box
                         .padding(const EdgeInsets.all(12))
-                        .color(greyMediumColor)
+                        .color(fontGrey)
                         .width(context.screenWidth - 60)
                         .roundedSM
                         .make(),

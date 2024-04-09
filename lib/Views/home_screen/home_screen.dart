@@ -11,7 +11,6 @@ import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
 
 import '../widgets_common/appbar_ontop.dart';
 
@@ -55,7 +54,25 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     controllercard.dispose();
+    isEmailVerified();
     super.dispose();
+  }
+
+  Future<bool> isEmailVerified() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    await user?.reload();
+    user = FirebaseAuth.instance.currentUser;
+    if (user != null && user.emailVerified) {
+      return true;
+    } else {
+      Get.off(() => VerifyEmailScreen(
+        email: email,
+        name: '',
+        password: '',
+        
+      ));
+      return false;
+    }
   }
 
   @override
@@ -166,20 +183,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                   // Text(
                                   //   product['p_aboutProduct'],
                                   //   style: const TextStyle(
-                                  //     color: mediumGreyColor,
+                                  //     color: fontGrey,
                                   //     fontSize: 14,
                                   //     fontFamily: light,
                                   //   ),
                                   // ),
                                   Text(
-                                    "${NumberFormat("#,##0").format(int.parse(product['p_price']))} Bath",
+                                    product['p_price'],
                                     style: const TextStyle(
-                                      color: greyDarkColor,
-                                      fontFamily:
-                                          'regular', // ตรวจสอบชื่อ fontFamily ว่าถูกต้อง
+                                      color: fontGreyDark,
                                       fontSize: 18,
                                     ),
-                                  )
+                                  ),
                                 ],
                               ),
                             ),
@@ -195,7 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           icon: Image.asset(
                             icDislikeButton,
                             width: 67,
-                          ).box.roundedFull.shadowSm.make(),
+                          ),
                           onPressed: () =>
                               controllercard.swipe(CardSwiperDirection.left),
                         ),
@@ -203,7 +218,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           icon: Image.asset(
                             icViewMoreButton,
                             width: 67,
-                          ).box.roundedFull.shadowSm.make(),
+                          ),
                           onPressed: () {
                             Get.to(() => ItemDetails(
                                   title: product['p_name'],
@@ -215,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           icon: Image.asset(
                             icLikeButton,
                             width: 67,
-                          ).box.roundedFull.shadowSm.make(),
+                          ),
                           onPressed: () => [
                             controllercard.swipe(CardSwiperDirection.right),
                             controller.addToWishlist(product),

@@ -107,7 +107,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   .text
                   .size(14)
                   .fontFamily(regular)
-                  .color(greyDarkColor)
+                  .color(fontGreyDark)
                   .make(),
             ),
             const SizedBox(height: 10),
