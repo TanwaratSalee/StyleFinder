@@ -36,7 +36,7 @@ class CartScreen extends StatelessWidget {
           // automaticallyImplyLeading: false,
           title: "Cart"
               .text
-              .color(fontGreyDark)
+              .color(fontGreyDark2)
               .fontFamily(regular)
               .make(),
         ),
@@ -50,7 +50,7 @@ class CartScreen extends StatelessWidget {
               );
             } else if (snapshot.data!.docs.isEmpty) {
               return Center(
-                child: "Cart is empty".text.color(fontGreyDark).make(),
+                child: "Cart is empty".text.color(fontGreyDark2).make(),
               );
             } else {
               var data = snapshot.data!.docs;
@@ -77,9 +77,9 @@ return ListTile(
       ),
     
   title: Text("${data[index]['title']} (x${data[index]['qty']})",
-              style: TextStyle(fontFamily: 'regular', fontSize: 16)),
+              style: TextStyle(fontFamily: regular, fontSize: 16)),
   subtitle: Text("${data[index]['tprice']}", 
-                  style: TextStyle(color: primaryApp, fontFamily: 'regular')),
+                  style: TextStyle(color: primaryApp, fontFamily: regular)),
   trailing: GestureDetector(
     onTap: () {
       FirestoreServices.deleteDocument(data[index].id); // Your method to delete the item
@@ -95,7 +95,7 @@ return ListTile(
                         "Total price"
                             .text
                             .fontFamily(regular)
-                            .color(fontGreyDark)
+                            .color(fontGreyDark2)
                             .make(),
                         Obx(
                           () => "${controller.totalP.value}"
@@ -109,7 +109,7 @@ return ListTile(
                     )
                         .box
                         .padding(const EdgeInsets.all(12))
-                        .color(fontGrey)
+                        .color(fontGreyDark1)
                         .width(context.screenWidth - 60)
                         .roundedSM
                         .make(),

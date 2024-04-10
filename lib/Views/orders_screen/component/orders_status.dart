@@ -1,28 +1,29 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 
-Widget orderStatus({icon, color, title, showDone}) {
+Widget orderStatus({String? icon, Color? color, String? title, bool? showDone}) {
   return ListTile(
-    leading: Icon(icon, color: color)
-        .box
-        .border(color: color)
-        .roundedSM
-        .padding(const EdgeInsets.all(4))
-        .make(),
-    trailing: SizedBox(
-      height: 100,
-      width: 120,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          "$title".text.color(fontGreyDark).make(),
-          showDone
-              ? const Icon(
-                  Icons.done,
-                  color: primaryApp,
-                )
-              : Container(),
-        ],
-      ),
+    contentPadding: EdgeInsets.zero,
+    title: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Image.asset(
+          icon ?? "", // Ensure icon is not null
+          color: color,
+          width: 25, // Adjust width as needed
+          height: 25, // Adjust height as needed
+        ),
+        SizedBox(height: 8), // Adjust as needed for spacing between icon and title
+        Text(
+          title ?? "", // Ensure title is not null
+          style: TextStyle(color: fontGreyDark2),
+        ),
+        if (showDone ?? false)
+          Icon(
+            Icons.done,
+            color: primaryApp,
+          )
+      ],
     ),
   );
 }

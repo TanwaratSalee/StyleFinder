@@ -6,7 +6,7 @@ import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/services/firestore_services.dart';
 import 'package:get/get.dart';
-import 'package:velocity_x/velocity_x.dart'; // ต้องเพิ่ม dependency สำหรับ velocity_x ใน pubspec.yaml
+import 'package:velocity_x/velocity_x.dart';
 
 class OrdersScreen extends StatefulWidget {
   const OrdersScreen({Key? key}) : super(key: key);
@@ -36,7 +36,7 @@ class _OrdersScreenState extends State<OrdersScreen>
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: const Text("My Orders", style: TextStyle(color: fontGreyDark, fontFamily: medium)),
+        title: const Text("My Orders", style: TextStyle(color: fontGreyDark2, fontFamily: medium, fontSize: 22)),
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
@@ -53,15 +53,13 @@ class _OrdersScreenState extends State<OrdersScreen>
         children: [
           buildOrdersList(FirestoreServices.getOrders()),
           buildOrdersList(FirestoreServices.getDeliveryOrders()),
-          buildOrdersList(FirestoreServices.getOrderHistory(),
-              showReviewButton: true), // แสดงปุ่มในแท็บ History
+          buildOrdersList(FirestoreServices.getOrderHistory(), showReviewButton: true),
         ],
       ),
     );
   }
 
-  Widget buildOrdersList(Stream<QuerySnapshot> stream,
-      {bool showReviewButton = false}) {
+  Widget buildOrdersList(Stream<QuerySnapshot> stream, {bool showReviewButton = false}) {
     return StreamBuilder<QuerySnapshot>(
       stream: stream,
       builder: (context, snapshot) {
@@ -69,8 +67,7 @@ class _OrdersScreenState extends State<OrdersScreen>
           return Center(child: loadingIndicator());
         } else if (snapshot.data!.docs.isEmpty) {
           return const Center(
-              child: Text("No orders yet!",
-                  style: TextStyle(color: fontGreyDark)));
+              child: Text("No orders yet!", style: TextStyle(color: fontGreyDark2)));
         } else {
           var data = snapshot.data!.docs;
           return ListView.builder(
@@ -81,7 +78,7 @@ class _OrdersScreenState extends State<OrdersScreen>
 
               List<Widget> productDetailWidgets = [];
 
-              // ส่วนของ "Order code" และสถานะ "Confirm"/"Pending" เป็นสิ่งแรก
+              // Add the widgets for order code and status
               productDetailWidgets.addAll([
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -91,7 +88,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                       Text(
                         "Order code ${orderData['order_code']}",
                         style: const TextStyle(
-                            color: fontGreyDark,
+                            color: fontGreyDark2,
                             fontFamily: 'Medium',
                             fontSize: 20),
                       ),
@@ -109,7 +106,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                 ),
               ]);
 
-              // ต่อด้วยรายละเอียดสินค้า
+              // Add product details
               productDetailWidgets.addAll(products.map((product) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -119,7 +116,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                       Text('x${product['qty']}',
                           style: const TextStyle(
                               fontSize: 12,
-                              color: fontGreyDark,
+                              color: fontGreyDark2,
                               fontFamily: 'Regular')),
                       const SizedBox(width: 5),
                       Image.network(product['img'],
@@ -133,7 +130,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                                 style: const TextStyle(
                                     fontFamily: 'Medium', fontSize: 14)),
                             Text('${product['price']} Bath',
-                                style: const TextStyle(color: fontGreyDark)),
+                                style: const TextStyle(color: fontGreyDark2)),
                           ],
                         ),
                       ),
@@ -142,7 +139,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                 );
               }).toList());
 
-              // ถ้าเป็นแท็บ "History", เพิ่มปุ่ม "Write product review"
+              // Add review button if necessary
               if (showReviewButton) {
                 productDetailWidgets.add(Padding(
                   padding: const EdgeInsets.only(top: 8.0),
@@ -155,17 +152,22 @@ class _OrdersScreenState extends State<OrdersScreen>
                 ));
               }
 
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: productDetailWidgets,
-              )
-                  .box
-                  .color(Colors.white)
-                  .roundedSM
-                  .shadowSm
-                  .margin(const EdgeInsets.all(12))
-                  .p12
-                  .make();
+              return InkWell(
+                onTap: () {
+                  Get.to(() => OrdersDetails(data: orderData)); 
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: productDetailWidgets,
+                )
+                    .box
+                    .color(Colors.white)
+                    .roundedSM
+                    .shadowSm
+                    .margin(const EdgeInsets.all(12))
+                    .p12
+                    .make(),
+              );
             },
           );
         }

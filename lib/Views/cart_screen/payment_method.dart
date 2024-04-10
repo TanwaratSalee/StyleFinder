@@ -63,7 +63,7 @@ class PaymentMethods extends StatelessWidget {
           title: "Choose Payment Method"
               .text
               .fontFamily(regular)
-              .color(fontGreyDark)
+              .color(fontGreyDark2)
               .make(),
         ),
         body: Padding(

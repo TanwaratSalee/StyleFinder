@@ -111,7 +111,7 @@ class _PersonalDetailsScreenGoogleState
                   .text
                   .size(14)
                   .fontFamily(regular)
-                  .color(fontGreyDark)
+                  .color(fontGreyDark2)
                   .make(),
             ),
             const SizedBox(height: 10),

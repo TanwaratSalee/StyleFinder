@@ -35,7 +35,7 @@ class _ProfileScreenState extends State<ProfileScreen>
           style: TextStyle(
             color: blackColor,
             fontSize: 26,
-            fontFamily: 'regular',
+            fontFamily: regular,
           ),
         ),
         actions: <Widget>[
@@ -59,12 +59,12 @@ class _ProfileScreenState extends State<ProfileScreen>
             labelStyle: const TextStyle(
               fontSize: 15,
               fontFamily: regular,
-              color: fontGreyDark
+              color: fontGreyDark2
             ),
             unselectedLabelStyle: const TextStyle(
               fontSize: 14,
               fontFamily: regular,
-              color: fontGrey
+              color: fontGreyDark1
             ),
             tabs: [
               const Tab(text: 'Product'),
@@ -166,7 +166,7 @@ class _ProfileScreenState extends State<ProfileScreen>
         if (data.isEmpty) {
           return const Center(
             child:
-                Text("No products you liked!", style: TextStyle(color: fontGreyDark)),
+                Text("No products you liked!", style: TextStyle(color: fontGreyDark2)),
           );
         }
         return ListView.separated(

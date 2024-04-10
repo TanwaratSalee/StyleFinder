@@ -1,5 +1,6 @@
 // ignore_for_file: depend_on_referenced_packages, use_super_parameters
 
+import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/orders_screen/component/order_place_details.dart';
 import 'package:flutter_finalproject/Views/orders_screen/component/orders_status.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
@@ -14,8 +15,11 @@ class OrdersDetails extends StatelessWidget {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title:
-            "Order Details".text.fontFamily(regular).color(fontGreyDark).make(),
+        title: "Order Details"
+            .text
+            .fontFamily(regular)
+            .color(fontGreyDark2)
+            .make(),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -23,26 +27,35 @@ class OrdersDetails extends StatelessWidget {
           physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
-              orderStatus(
-                  color: primaryApp,
-                  icon: Icons.done,
-                  title: "placed",
-                  showDone: data['order_placed']),
-              orderStatus(
-                  color: Colors.blue,
-                  icon: Icons.thumb_up,
-                  title: "Confirmed",
-                  showDone: data['order_confirmed']),
-              orderStatus(
-                  color: Colors.yellow,
-                  icon: Icons.car_crash,
-                  title: "On Delivery",
-                  showDone: data['order_on_delivery']),
-              orderStatus(
-                  color: Colors.purple,
-                  icon: Icons.done_all_rounded,
-                  title: "Delivered",
-                  showDone: data['order_delivered']),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Adjust as per your layout needs
+                children: [
+                  orderStatus(
+                    color: primaryApp,
+                    icon: icPlaced,
+                    title: "Placed",
+                    showDone: data['order_placed'],
+                  ),
+                  orderStatus(
+                    color: Colors.blue,
+                    icon: icConfirm,
+                    title: "Confirmed",
+                    showDone: data['order_confirmed'],
+                  ),
+                  orderStatus(
+                    color: Colors.yellow,
+                    icon: icOnDelivery,
+                    title: "On Delivery",
+                    showDone: data['order_on_delivery'],
+                  ),
+                  orderStatus(
+                    color: Colors.purple,
+                    icon: icDelivered,
+                    title: "Delivered",
+                    showDone: data['order_delivered'],
+                  ),
+                ],
+              ),
               const Divider(),
               10.heightBox,
               Column(
@@ -111,7 +124,7 @@ class OrdersDetails extends StatelessWidget {
               "Ordered Product"
                   .text
                   .size(16)
-                  .color(fontGreyDark)
+                  .color(fontGreyDark2)
                   .fontFamily(regular)
                   .makeCentered(),
               10.heightBox,
