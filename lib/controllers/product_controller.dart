@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/models/collection_model.dart';
@@ -136,31 +137,56 @@ class ProductController extends GetxController {
     });
   }
 
-  void addToWishlistMixMatch(List<Map<String, dynamic>> products,
-      Function(bool) updateIsFav, context) {
-    for (var product in products) {
-      FirebaseFirestore.instance
-          .collection(productsCollection)
-          .where('p_name', isEqualTo: product['p_name'])
-          .get()
-          .then((QuerySnapshot querySnapshot) {
-        if (querySnapshot.docs.isNotEmpty) {
-          DocumentSnapshot doc = querySnapshot.docs.first;
-          List<dynamic> wishlist = doc['p_wishlist'];
-          if (!wishlist.contains(currentUser!.uid)) {
-            doc.reference.update({
-              'p_wishlist': FieldValue.arrayUnion([currentUser!.uid])
-            }).then((value) {
-              updateIsFav(true);
-              VxToast.show(context, msg: "Added from wishlist");
-            }).catchError((error) {
-              print('Error adding ${product['p_name']} to Favorite: $error');
-            });
-          }
-        }
-      });
+void addToWishlistMixMatch(
+    String productName, Function(bool) updateIsFav, BuildContext context) {
+  FirebaseFirestore.instance
+      .collection('products')
+      .where('p_name', isEqualTo: productName)
+      .get()
+      .then((QuerySnapshot querySnapshot) {
+    if (querySnapshot.docs.isNotEmpty) {
+      DocumentSnapshot doc = querySnapshot.docs.first;
+      List<dynamic> wishlist = doc['p_wishlist'] ?? [];
+      String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
+      if (!wishlist.contains(currentUserUID)) {
+        doc.reference.update({
+          'p_wishlist': FieldValue.arrayUnion([currentUserUID])
+        }).then((value) {
+          updateIsFav(true);
+          VxToast.show(context, msg: "Added from wishlist");
+        }).catchError((error) {
+          print('Error adding $productName to Favorite: $error');
+        });
+      }
     }
-  }
+  });
+}
+
+void removeToWishlistMixMatch(
+    String productName, Function(bool) updateIsFav, BuildContext context) {
+  FirebaseFirestore.instance
+      .collection('products')
+      .where('p_name', isEqualTo: productName)
+      .get()
+      .then((QuerySnapshot querySnapshot) {
+    if (querySnapshot.docs.isNotEmpty) {
+      DocumentSnapshot doc = querySnapshot.docs.first;
+      List<dynamic> wishlist = doc['p_wishlist'] ?? [];
+      String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
+      if (wishlist.contains(currentUserUID)) { // <--- เปลี่ยนเป็นเช็คว่าอยู่ใน wishlist หรือไม่
+        doc.reference.update({
+          'p_wishlist': FieldValue.arrayRemove([currentUserUID])
+        }).then((value) {
+          updateIsFav(false); // <--- อัปเดต isFav เป็น false เมื่อลบรายการออกจาก wishlist
+          VxToast.show(context, msg: "Removed from wishlist");
+        }).catchError((error) {
+          print('Error removing $productName from Favorite: $error');
+        });
+      }
+    }
+  });
+}
+
 
   removeFromWishlist(docId, context) async {
     await firestore.collection(productsCollection).doc(docId).set({

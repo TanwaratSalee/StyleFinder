@@ -258,11 +258,134 @@ class _ProfileScreenState extends State<ProfileScreen>
     );
   }
 
-  Widget buildMatchTab() {
-    return const Center(
-      child: Text("No products you liked!"),
-    );
-  }
+Widget buildMatchTab() {
+  return StreamBuilder<QuerySnapshot>(
+    stream: FirebaseFirestore.instance.collection('products').snapshots(),
+    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+      if (!snapshot.hasData) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+
+      // Temporarily store documents by their mixMatch values
+      Map<String, List<DocumentSnapshot>> mixMatchGroups = {};
+
+      // Count occurrences of each mixMatch value
+      snapshot.data!.docs.forEach((doc) {
+        var data = doc.data() as Map<String, dynamic>;
+        if (data.containsKey('p_mixmatch') && data['p_wishlist'].contains(currentUser?.uid)) {
+          String mixMatch = data['p_mixmatch'];
+          if (mixMatchGroups[mixMatch] == null) {
+            mixMatchGroups[mixMatch] = [];
+          }
+          mixMatchGroups[mixMatch]!.add(doc);
+        }
+      });
+
+      // Filter out the mixMatch groups that don't have pairs
+      var validPairs = mixMatchGroups.values.where((list) => list.length >= 2 && list.length % 2 == 0).toList();
+
+      // Flatten the list for the GridView.builder
+      var flatList = validPairs.expand((i) => i).toList();
+
+      return GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 1 / 1.3,
+        ),
+        itemCount: flatList.length ~/ 2, // Divide by 2 because each item represents a pair
+        itemBuilder: (BuildContext context, int index) {
+          // Calculate actual index in the flat list
+          int actualIndex = index * 2;
+
+          // Safely get data for both products in the pair
+          var data1 = flatList[actualIndex].data() as Map<String, dynamic>;
+          var data2 = flatList[actualIndex + 1].data() as Map<String, dynamic>;
+
+          // Extract necessary fields
+          String productName1 = data1['p_name'];
+          String productName2 = data2['p_name'];
+          String price1 = data1['p_price'].toString();
+          String price2 = data2['p_price'].toString();
+          String productImage1 = data1['p_imgs'][0];
+          String productImage2 = data2['p_imgs'][0];
+          String totalPrice = (int.parse(price1) + int.parse(price2)).toString();
+
+          return GestureDetector(
+            onTap: () {
+              // Handle onTap event
+            },
+            child: Card(
+              clipBehavior: Clip.antiAlias,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    children: [
+                      Column(
+                        children: [
+                          Image.network(
+                            productImage1,
+                            width: 80,
+                            height: 80,
+                          ),
+                          Image.network(
+                            productImage2,
+                            width: 80,
+                            height: 80,
+                          ),
+                        ],
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                productName1,
+                                style: const TextStyle(fontFamily: 'bold'),
+                              ),
+                              Text(
+                                'Price: \$${price1}',
+                                style: const TextStyle(color: Colors.grey),
+                              ),
+                              Text(
+                                productName2,
+                                style: const TextStyle(fontFamily: 'bold'),
+                              ),
+                              Text(
+                                'Price: \$${price2}',
+                                style: const TextStyle(color: Colors.grey),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Text(
+                      'Total Price: \$${totalPrice}',
+                      style: const TextStyle(
+                        fontFamily: 'bold',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+    },
+  );
+}
+
+
+
 
   @override
   void dispose() {
