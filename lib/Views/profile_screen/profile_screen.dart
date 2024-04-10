@@ -1,5 +1,6 @@
 import 'package:flutter_finalproject/Views/profile_screen/menu_setting_screen.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../consts/consts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -219,8 +220,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                               ),
                             ),
                             Text(
-                              "${data[index]['p_price']}",
-                              style: const TextStyle(
+                              "${NumberFormat('#,##0').format(double.parse(data[index]['p_price']).toInt())} Bath",                              style: const TextStyle(
                                 fontSize: 14,
                                 fontFamily: light,
                               ),
