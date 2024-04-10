@@ -20,7 +20,7 @@ class ProductScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: whiteColor,
-        title: appbarField(),
+        title: appbarField(context: context),
       ),
       body: Container(
         padding: const EdgeInsets.all(12),

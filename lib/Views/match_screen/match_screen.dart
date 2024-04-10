@@ -38,7 +38,7 @@ class _MatchScreenState extends State<MatchScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: whiteColor,
-        title: appbarField(),
+        title: appbarField(context: context),
         // actions: <Widget>[
         //   Padding(
         //     padding: const EdgeInsets.only(right: 15.0),

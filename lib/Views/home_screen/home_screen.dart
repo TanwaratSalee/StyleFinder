@@ -82,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         backgroundColor: whiteColor,
         automaticallyImplyLeading: false,
-        title: appbarField(),
+        title: appbarField(context: context),
         // actions: <Widget>[
         //   Padding(
         //     padding: const EdgeInsets.only(right: 15.0),
