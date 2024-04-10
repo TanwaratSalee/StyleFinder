@@ -66,7 +66,7 @@ class _VisaCardScreenState extends State<VisaCardScreen> {
           "Card Detail",
           style: TextStyle(
             fontSize: 25,
-            fontFamily: 'Bold',
+            fontFamily: bold,
             color: Colors.grey[900],
           ),
         ),
@@ -137,7 +137,7 @@ class _VisaCardScreenState extends State<VisaCardScreen> {
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 24,
-                    fontFamily: 'Black',
+                    fontFamily: black,
                     shadows: [
                       Shadow(
                         offset: Offset(2.0, 2.0),
@@ -166,7 +166,7 @@ class _VisaCardScreenState extends State<VisaCardScreen> {
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,
-                  fontFamily: 'Regular',
+                  fontFamily: regular,
                   shadows: [
                     Shadow(
                       offset: Offset(2.0, 2.0),
