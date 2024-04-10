@@ -30,23 +30,48 @@ class _ItemDetailsState extends State<ItemDetails> {
     checkIsInWishlist();
   }
 
-  Future<void> checkIsInWishlist() async {
-    FirebaseFirestore.instance
-        .collection(productsCollection)
-        .where('p_name', isEqualTo: widget.data['p_name'])
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      if (querySnapshot.docs.isNotEmpty) {
-        DocumentSnapshot doc = querySnapshot.docs.first;
-        List<dynamic> wishlist = doc['p_wishlist'];
-        if (wishlist.contains(currentUser!.uid)) {
-          controller.isFav(true);
-        } else {
-          controller.isFav(false);
-        }
+void checkIsInWishlist() async {
+  FirebaseFirestore.instance
+      .collection(productsCollection)
+      .where('p_name', isEqualTo: widget.data['p_name'])
+      .get()
+      .then((QuerySnapshot querySnapshot) {
+    if (querySnapshot.docs.isNotEmpty) {
+      DocumentSnapshot doc = querySnapshot.docs.first;
+      List<dynamic> wishlist = doc['p_wishlist'];
+      if (wishlist.contains(currentUser!.uid)) {
+        controller.isFav(true);
+      } else {
+        controller.isFav(false);
       }
-    });
+    }
+  });
+
+  // เรียกใช้เมธอด updateVendorImageUrl เพื่ออัพเดท imageUrl ของ vendor
+  fetchVendorImageUrl(widget.data['vendor_id']);
+}
+
+void fetchVendorImageUrl(String vendorId) async {
+  try {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('vendors')
+        .where('vendor_id', isEqualTo: vendorId)
+        .limit(1)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      Map<String, dynamic> data =
+          querySnapshot.docs.first.data() as Map<String, dynamic>;
+      String imageUrl = data['imageUrl'] ?? '';
+      // เรียกใช้เมธอด updateVendorImageUrl เพื่ออัพเดท imageUrl ของ vendor
+      controller.updateVendorImageUrl(imageUrl);
+    }
+  } catch (e) {
+    print('Error fetching vendor image: $e');
   }
+}
+
+
 
     void _updateIsFav(bool isFav) {
     setState(() {
@@ -173,19 +198,26 @@ class _ItemDetailsState extends State<ItemDetails> {
                                 .make(),
                           ],
                         )),
-                        Expanded(
+                          Expanded(
                             child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            5.heightBox,
-                            "${widget.data['p_imgs']}"
-                                .text
-                                .fontFamily(regular)
-                                .color(blackColor)
-                                .size(16)
-                                .make(),
-                          ],
-                        )),
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                5.heightBox,
+                                Obx(() {
+                                  String imageUrl = controller.vendorImageUrl.value;
+                                  // ตรวจสอบว่า imageUrl ไม่เป็นค่าว่างหรือ null ก่อนที่จะแสดงรูปภาพ
+                                  return imageUrl.isNotEmpty
+                                      ? Image.network(
+                                          imageUrl,
+                                          width: 100,
+                                          height: 100,
+                                          fit: BoxFit.cover,
+                                        )
+                                      : SizedBox.shrink(); // ถ้าไม่มี imageUrl ก็ไม่ต้องแสดงอะไรเลย
+                                }),
+                              ],
+                            ),
+                          ),
                         10.widthBox,
                         GestureDetector(
                           onTap: () {

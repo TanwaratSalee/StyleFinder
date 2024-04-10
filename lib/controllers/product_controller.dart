@@ -8,6 +8,7 @@ class ProductController extends GetxController {
   var quantity = 0.obs;
   var colorIndex = 0.obs;
   var totalPrice = 0.obs;
+  var vendorImageUrl = ''.obs;
 
   var subcat = [];
 
@@ -24,6 +25,10 @@ class ProductController extends GetxController {
     for (var e in s[0].subcollection) {
       subcat.add(e);
     }
+  }
+
+  void updateVendorImageUrl(String url) {
+    vendorImageUrl.value = url;
   }
 
   changeColorIndex(index) {
