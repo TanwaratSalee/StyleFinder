@@ -21,6 +21,10 @@ class _VisaCardScreenState extends State<VisaCardScreen> {
   var controller = Get.find<CartController>();
   String cardHolderName = 'Card owner\'s name';
   TextEditingController cardNumberController = TextEditingController();
+  TextEditingController mmController = TextEditingController();
+  TextEditingController yyController = TextEditingController();
+  TextEditingController mmYYController = TextEditingController();
+
   String cardNumberMasked = '';
 
   @override
@@ -85,7 +89,30 @@ class _VisaCardScreenState extends State<VisaCardScreen> {
           SizedBox(height: 10),
           Row(
             children: <Widget>[
-              Expanded(child: _buildTextField(label: 'MM/YY')),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: TextFormField(
+                    controller: mmController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'MM',
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: TextFormField(
+                    controller: yyController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'YY',
+                    ),
+                  ),
+                ),
+              ),
               SizedBox(width: 8),
               Expanded(child: _buildTextField(label: 'VCC')),
             ],

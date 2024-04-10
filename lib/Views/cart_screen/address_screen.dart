@@ -13,7 +13,6 @@ class AddressScreen extends StatefulWidget {
 }
 
 class _AddressScreenState extends State<AddressScreen> {
-
   List<String>? addresses;
   List<String>? addressesDocumentIds;
   List<String> loadedAddressesDocumentIds = [];
@@ -24,51 +23,60 @@ class _AddressScreenState extends State<AddressScreen> {
     loadAddresses(currentUserUid);
   }
 
-Future<void> loadAddresses(String uid) async {
-  try {
-    // Accessing the specific document by UID
-    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+  Future<void> loadAddresses(String uid) async {
+    try {
+      // Accessing the specific document by UID
+      DocumentSnapshot documentSnapshot =
+          await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
-    List<String> loadedAddresses = [];
-    if (documentSnapshot.exists) {
-      String documentId = documentSnapshot.id;
-      loadedAddressesDocumentIds.add(documentId); // Assuming this variable is declared elsewhere
-      Map<String, dynamic>? data = documentSnapshot.data() as Map<String, dynamic>?;
+      List<String> loadedAddresses = [];
+      if (documentSnapshot.exists) {
+        String documentId = documentSnapshot.id;
+        loadedAddressesDocumentIds
+            .add(documentId); // Assuming this variable is declared elsewhere
+        Map<String, dynamic>? data =
+            documentSnapshot.data() as Map<String, dynamic>?;
 
-      // Check if 'address' exists and is a list
-      if (data != null && data.containsKey('address') && data['address'] is List) {
-        List<dynamic> addressesList = data['address'];
-        addressesList.forEach((address) {
-          if (address is Map<String, dynamic>) {
-            String formattedAddress =
-                '${address['firstname']}, ${address['surname']}, ${address['address']}, ${address['city']}, ${address['state']}, ${address['postalCode']}, ${address['phone']}';
-            loadedAddresses.add(formattedAddress);
-          }
-        });
+        // Check if 'address' exists and is a list
+        if (data != null &&
+            data.containsKey('address') &&
+            data['address'] is List) {
+          List<dynamic> addressesList = data['address'];
+          addressesList.forEach((address) {
+            if (address is Map<String, dynamic>) {
+              String formattedAddress =
+                  '${address['firstname']}, ${address['surname']}, ${address['address']}, ${address['city']}, ${address['state']}, ${address['postalCode']}, ${address['phone']}';
+              loadedAddresses.add(formattedAddress);
+            }
+          });
+        }
       }
-    }
 
-    setState(() {
-      addresses = loadedAddresses;
-      addressesDocumentIds = loadedAddressesDocumentIds;
-    });
-  } catch (error) {
-    print('Failed to load addresses for user $uid: $error');
+      setState(() {
+        addresses = loadedAddresses;
+        addressesDocumentIds = loadedAddressesDocumentIds;
+      });
+    } catch (error) {
+      print('Failed to load addresses for user $uid: $error');
+    }
   }
-}
 
   Future<void> removeAddress(String uid, int index) async {
     try {
       // Accessing the specific document by UID
-      DocumentReference docRef = FirebaseFirestore.instance.collection('users').doc(uid);
+      DocumentReference docRef =
+          FirebaseFirestore.instance.collection('users').doc(uid);
 
       DocumentSnapshot documentSnapshot = await docRef.get();
 
       if (documentSnapshot.exists) {
-        Map<String, dynamic>? data = documentSnapshot.data() as Map<String, dynamic>?;
+        Map<String, dynamic>? data =
+            documentSnapshot.data() as Map<String, dynamic>?;
 
         // Check if 'address' exists and is a list
-        if (data != null && data.containsKey('address') && data['address'] is List) {
+        if (data != null &&
+            data.containsKey('address') &&
+            data['address'] is List) {
           List<dynamic> addressesList = List.from(data['address']);
 
           // Remove the address at the specified index
@@ -86,8 +94,6 @@ Future<void> loadAddresses(String uid) async {
       // Handle error
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -128,62 +134,65 @@ Future<void> loadAddresses(String uid) async {
               color: Colors.white,
               child: addresses != null
                   ? ListView.builder(
-                    itemCount: addresses?.length ?? 0,
-                    itemBuilder: (context, index) {
-                      String uid = currentUser!.uid;
-                      return GestureDetector(
-                        onTap: () {
-                          //
-                        },
-                        child: Card(
-                          color: Colors.white,
-                          child: ListTile(
-                            title: Text(addresses![index]),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                TextButton(
-                                  child: const Text(
-                                    'Edit',
-                                    style: TextStyle(color: primaryApp),
-                                  ),
-                                  onPressed: () {
-                                    final addressData = addresses![index].split(', ');
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => editaddress_controller(
-                                          documentId: addressesDocumentIds![index],
-                                          firstname: addressData[0],
-                                          surname: addressData[1],
-                                          address: addressData[2],
-                                          city: addressData[3],
-                                          state: addressData[4],
-                                          postalCode: addressData[5],
-                                          phone: addressData[6],
+                      itemCount: addresses?.length ?? 0,
+                      itemBuilder: (context, index) {
+                        String uid = currentUser!.uid;
+                        return GestureDetector(
+                          onTap: () {
+                            //
+                          },
+                          child: Card(
+                            color: Colors.white,
+                            child: ListTile(
+                              title: Text(addresses![index]),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  TextButton(
+                                    child: const Text(
+                                      'Edit',
+                                      style: TextStyle(color: primaryApp),
+                                    ),
+                                    onPressed: () {
+                                      final addressData =
+                                          addresses![index].split(', ');
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              editaddress_controller(
+                                            documentId:
+                                                addressesDocumentIds![index],
+                                            firstname: addressData[0],
+                                            surname: addressData[1],
+                                            address: addressData[2],
+                                            city: addressData[3],
+                                            state: addressData[4],
+                                            postalCode: addressData[5],
+                                            phone: addressData[6],
+                                          ),
                                         ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                                TextButton(
-                                  child: const Text(
-                                    'Remove',
-                                    style: TextStyle(color: Colors.red),
+                                      );
+                                    },
                                   ),
-                                  onPressed: () {
-                                    setState(() {
-                                      removeAddress(uid, index);
-                                    });
-                                  },
-                                ),
-                              ],
+                                  TextButton(
+                                    child: const Text(
+                                      'Remove',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        removeAddress(uid, index);
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
-                  )
+                        );
+                      },
+                    )
                   : const Center(child: CircularProgressIndicator()),
             ),
           ),
