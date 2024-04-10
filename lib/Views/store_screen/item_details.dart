@@ -24,11 +24,19 @@ class _ItemDetailsState extends State<ItemDetails> {
   late final ProductController controller;
 
   @override
-  void initState() {
-    super.initState();
-    controller = Get.put(ProductController());
-    checkIsInWishlist();
+void initState() {
+  super.initState();
+  controller = Get.put(ProductController());
+
+  // ตรวจสอบว่า widget.data['p_price'] มีค่า และไม่เป็น null
+  if (widget.data['p_price'] != null) {
+    int price = int.tryParse(widget.data['p_price'].toString()) ?? 0; // ใช้เลข 0 หากไม่สามารถแปลงค่าได้
+    controller.calculateTotalPrice(price);
   }
+
+  checkIsInWishlist();
+}
+
 
 void checkIsInWishlist() async {
   FirebaseFirestore.instance
@@ -73,12 +81,11 @@ void fetchVendorImageUrl(String vendorId) async {
 
 
 
-    void _updateIsFav(bool isFav) {
+  void _updateIsFav(bool isFav) {
     setState(() {
       controller.isFav.value = isFav;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -133,28 +140,29 @@ void fetchVendorImageUrl(String vendorId) async {
                           style: const TextStyle(
                             color: blackColor,
                             fontFamily: medium,
-                            fontSize: 24,
+                            fontSize: 20,
                           ),
                         ),
                         const Spacer(),
                         Obx(
                           () => IconButton(
-                              onPressed: () {
-                                if (controller.isFav.value) {
-                                  controller.removeToWishlistDetail(widget.data, _updateIsFav, context);
-                                } else {
-                                  controller.addToWishlistDetail(widget.data, _updateIsFav, context);
-                                }
-                              },
-                              icon: Icon(
-                                controller.isFav.value
-                                    ? Icons.favorite
-                                    : Icons.favorite_outline,
-                                color: controller.isFav.value ? redColor : null,
-                                weight: 35,
-                              ),
-                              iconSize: 20,
+                            onPressed: () {
+                              if (controller.isFav.value) {
+                                controller.removeToWishlistDetail(
+                                    widget.data, _updateIsFav, context);
+                              } else {
+                                controller.addToWishlistDetail(
+                                    widget.data, _updateIsFav, context);
+                              }
+                            },
+                            icon: Icon(
+                              controller.isFav.value
+                                  ? Icons.favorite
+                                  : Icons.favorite_outline,
+                              color: controller.isFav.value ? redColor : null,
                             ),
+                            iconSize: 30,
+                          ),
                         )
                       ],
                     ),
@@ -166,21 +174,21 @@ void fetchVendorImageUrl(String vendorId) async {
                       normalColor: greyDark2,
                       selectionColor: golden,
                       count: 5,
-                      size: 25,
+                      size: 20,
                       maxRating: 5,
                     ),
                     5.heightBox,
                     "${widget.data['p_aboutProduct']}"
                         .text
+                        .fontFamily(regular)
                         .color(greyDark1)
-                        .size(16)
+                        .size(14)
                         .make(),
-                    "${widget.data['p_price']}"
-                        .numCurrency
+                    "${double.parse(widget.data['p_price']).toInt()} Bath"
                         .text
-                        .color(primaryApp)
-                        .fontFamily(bold)
-                        .size(22)
+                        .color(Theme.of(context).primaryColor)
+                        .fontFamily(regular)
+                        .size(20)
                         .make(),
                     20.heightBox,
                     Row(
@@ -191,6 +199,20 @@ void fetchVendorImageUrl(String vendorId) async {
                           children: [
                             5.heightBox,
                             "${widget.data['p_seller']}"
+                                .toUpperCase()
+                                .text
+                                .fontFamily(medium)
+                                .color(blackColor)
+                                .size(23)
+                                .make(),
+                          ],
+                        )),
+                        Expanded(
+                            child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            5.heightBox,
+                            "${widget.data['p_imgs']}"
                                 .text
                                 .fontFamily(regular)
                                 .color(blackColor)
@@ -198,26 +220,6 @@ void fetchVendorImageUrl(String vendorId) async {
                                 .make(),
                           ],
                         )),
-                          Expanded(
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                5.heightBox,
-                                Obx(() {
-                                  String imageUrl = controller.vendorImageUrl.value;
-                                  // ตรวจสอบว่า imageUrl ไม่เป็นค่าว่างหรือ null ก่อนที่จะแสดงรูปภาพ
-                                  return imageUrl.isNotEmpty
-                                      ? Image.network(
-                                          imageUrl,
-                                          width: 100,
-                                          height: 100,
-                                          fit: BoxFit.cover,
-                                        )
-                                      : SizedBox.shrink(); // ถ้าไม่มี imageUrl ก็ไม่ต้องแสดงอะไรเลย
-                                }),
-                              ],
-                            ),
-                          ),
                         10.widthBox,
                         GestureDetector(
                           onTap: () {
@@ -248,40 +250,43 @@ void fetchVendorImageUrl(String vendorId) async {
                         .color(thinGrey)
                         .make(),
                     20.heightBox,
-                    10.heightBox,
-                    "Description"
-                        .text
-                        .color(blackColor)
-                        .size(16)
-                        .fontFamily(medium)
-                        .make(),
-                    5.heightBox,
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Text(
-                        widget.data['p_desc'],
-                        style: const TextStyle(
-                          color: blackColor,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                    10.heightBox,
-                    "Siz & Fit"
-                        .text
-                        .color(blackColor)
-                        .size(16)
-                        .fontFamily(medium)
-                        .make(),
-                    5.heightBox,
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Text(
-                        widget.data['p_size'],
-                        style: const TextStyle(
-                          color: blackColor,
-                          fontSize: 14,
-                        ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          "Description"
+                              .text
+                              .color(blackColor)
+                              .size(16)
+                              .fontFamily(medium)
+                              .make(),
+                          SizedBox(height: 5),
+                          Text(
+                            widget.data['p_desc'],
+                            style: TextStyle(
+                              color: blackColor,
+                              fontFamily: light,
+                              fontSize: 14,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          "Size & Fit"
+                              .text
+                              .color(blackColor)
+                              .size(16)
+                              .fontFamily(medium)
+                              .make(),
+                          SizedBox(height: 5),
+                          Text(
+                            widget.data['p_size'],
+                            style: TextStyle(
+                              color: blackColor,
+                              fontFamily: light,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     10.heightBox,
@@ -339,7 +344,7 @@ void fetchVendorImageUrl(String vendorId) async {
                           .make(),
                       10.widthBox,
                       SizedBox(
-                        child: "Baht: ".text.color(blackColor).make(),
+                        child: "Bath ".text.color(blackColor).make(),
                       ),
                     ],
                   ).box.padding(const EdgeInsets.all(8)).make(),

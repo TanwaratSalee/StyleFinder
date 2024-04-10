@@ -14,6 +14,12 @@ class ProductController extends GetxController {
 
   var isFav = false.obs;
 
+  @override
+  void onInit() {
+    super.onInit();
+    resetValues();
+  }
+
   getSubCollection(title) async {
     subcat.clear();
     var data =
@@ -42,14 +48,14 @@ class ProductController extends GetxController {
   }
 
   decreaseQuantity() {
-    if (quantity.value > 0) {
+    if (quantity.value > 1) {
       quantity.value--;
     }
   }
 
-  calculateTotalPrice(price) {
-    totalPrice.value = price * quantity.value;
-  }
+  calculateTotalPrice(int price) {
+  totalPrice.value = quantity.value * price;
+ }
 
   addToCart(
       {title, img, sellername, color, qty, tprice, context, vendorID}) async {
@@ -69,8 +75,9 @@ class ProductController extends GetxController {
 
   resetValues() {
     totalPrice.value = 0;
-    quantity.value = 0;
+    quantity.value = 1;
     colorIndex.value = 0;
+    
   }
 
   addToWishlist(docId, context) async {
@@ -81,7 +88,8 @@ class ProductController extends GetxController {
     VxToast.show(context, msg: "Added to wishlist");
   }
 
-  void addToWishlistDetail(Map<String, dynamic> product, Function(bool) updateIsFav, context) {
+  void addToWishlistDetail(
+      Map<String, dynamic> product, Function(bool) updateIsFav, context) {
     FirebaseFirestore.instance
         .collection(productsCollection)
         .where('p_name', isEqualTo: product['p_name'])
@@ -104,7 +112,8 @@ class ProductController extends GetxController {
     });
   }
 
-  void removeToWishlistDetail(Map<String, dynamic> product, Function(bool) updateIsFav, context) {
+  void removeToWishlistDetail(
+      Map<String, dynamic> product, Function(bool) updateIsFav, context) {
     FirebaseFirestore.instance
         .collection(productsCollection)
         .where('p_name', isEqualTo: product['p_name'])
@@ -127,7 +136,8 @@ class ProductController extends GetxController {
     });
   }
 
-  void addToWishlistMixMatch(List<Map<String, dynamic>> products, Function(bool) updateIsFav, context) {
+  void addToWishlistMixMatch(List<Map<String, dynamic>> products,
+      Function(bool) updateIsFav, context) {
     for (var product in products) {
       FirebaseFirestore.instance
           .collection(productsCollection)
@@ -151,7 +161,6 @@ class ProductController extends GetxController {
       });
     }
   }
-
 
   removeFromWishlist(docId, context) async {
     await firestore.collection(productsCollection).doc(docId).set({

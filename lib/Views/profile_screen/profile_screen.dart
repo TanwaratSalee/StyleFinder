@@ -179,7 +179,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                   MaterialPageRoute(
                     builder: (context) => ItemDetails(
                       title: data[index]['p_name'],
-                      data: data[index].data() as Map<String, dynamic>,
+                      data: data[index],
                     ),
                   ),
                 );
