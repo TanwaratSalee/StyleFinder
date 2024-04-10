@@ -25,11 +25,16 @@ class _ItemDetailsState extends State<ItemDetails> {
   late final ProductController controller;
 
   @override
-  void initState() {
-    super.initState();
-    controller = Get.put(ProductController());
-    checkIsInWishlist();
-  }
+void initState() {
+  super.initState();
+  controller = Get.put(ProductController());
+  checkIsInWishlist();
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    int productPrice = int.parse(widget.data['p_price']); 
+    controller.calculateTotalPrice(productPrice);
+  });
+}
+
 
   void checkIsInWishlist() async {
     FirebaseFirestore.instance
