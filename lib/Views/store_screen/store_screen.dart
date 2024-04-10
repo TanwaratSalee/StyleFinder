@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
+import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/store_screen/match_detail_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/reviews_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
@@ -315,7 +316,10 @@ class StoreScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const MatchDetailScreen(),
+                      builder: (context) => ItemDetails(
+                      title: productName,
+                      data: product.data() as Map<String, dynamic>,
+                      ),
                     ),
                   );
                 },

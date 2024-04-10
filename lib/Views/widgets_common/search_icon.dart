@@ -21,7 +21,7 @@ Widget IconSearch({context}) {
                 alignment: Alignment.topCenter,
                 child: Container(
                   height: MediaQuery.of(context).size.height * 0.6,
-                  child: const SearchScreenPage(), // Make sure this is your actual search screen widget
+                  child: const SearchScreenPage(), 
                   decoration: const BoxDecoration(
                     color: whiteColor,
                     borderRadius: BorderRadius.only(

@@ -166,7 +166,7 @@ class _ProfileScreenState extends State<ProfileScreen>
         if (data.isEmpty) {
           return const Center(
             child:
-                Text("No orders yet!", style: TextStyle(color: fontGreyDark)),
+                Text("No products you liked!", style: TextStyle(color: fontGreyDark)),
           );
         }
         return ListView.separated(
@@ -260,7 +260,7 @@ class _ProfileScreenState extends State<ProfileScreen>
 
   Widget buildMatchTab() {
     return const Center(
-      child: Text("Data not found!"),
+      child: Text("No products you liked!"),
     );
   }
 
