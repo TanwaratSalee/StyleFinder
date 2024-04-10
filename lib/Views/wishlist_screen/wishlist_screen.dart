@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/services/firestore_services.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
+import 'package:intl/intl.dart';
 
 class WishlistScreen extends StatelessWidget {
   const WishlistScreen({Key? key}) : super(key: key);
@@ -83,8 +84,8 @@ class WishlistScreen extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                "${data[index]['p_price']}",
-                                style: const TextStyle(
+                                "${NumberFormat('#,##0').format(double.parse(data[index]['p_price']).toInt())} Bath",
+  style: const TextStyle(
                                   fontSize: 14,
                                   fontFamily: light,
                                 ),

@@ -3,13 +3,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
-import 'package:flutter_finalproject/Views/store_screen/match_detail_screen.dart';
+import 'package:flutter_finalproject/Views/store_screen/product_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/home_buttons.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/consts/lists.dart';
 import 'package:flutter_finalproject/controllers/news_controller.dart';
 import 'package:flutter_finalproject/services/firestore_services.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import 'dart:math' as math;
 
@@ -207,7 +208,6 @@ class NewsScreen extends StatelessWidget {
                     //         child: FutureBuilder(
                     //           future: FirestoreServices.getFeaturedProducts(),
                     //           builder: (context,AsyncSnapshot<QuerySnapshot> snapshot) {
-
                     //             if(!snapshot.hasData) {
                     //               return Center(
                     //                 child: loadingIndcator(),
@@ -215,9 +215,7 @@ class NewsScreen extends StatelessWidget {
                     //             } else if (snapshot.data!.docs.isEmpty) {
                     //               return "No featured products".text.white.makeCentered();
                     //             } else {
-
                     //               var featuredData = snapshot.data!.docs;
-
                     //               return Row(
                     //               children: List.generate(
                     //                 featuredData.length,
@@ -266,8 +264,6 @@ class NewsScreen extends StatelessWidget {
                     //   ),
                     // ),
 
-                    // 20.heightBox,
-
                     // 3nd swiper
                     // VxSwiper.builder(
                     //     aspectRatio: 16 / 9,
@@ -286,9 +282,6 @@ class NewsScreen extends StatelessWidget {
                     //           .margin(const EdgeInsets.symmetric(horizontal: 8))
                     //           .make();
                     //     }),
-
-                    // 20.heightBox,
-
                     // Align(
                     //     alignment: Alignment.centerLeft,
                     //     child: allproducts.text
@@ -384,7 +377,7 @@ class NewsScreen extends StatelessWidget {
                                   ),
                                   // const Spacer(),
                                   Padding(
-                                    padding: const EdgeInsets.all(8.0), 
+                                    padding: const EdgeInsets.all(8.0),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -393,22 +386,23 @@ class NewsScreen extends StatelessWidget {
                                           "${allproductsdata[index]['p_name']}",
                                           style: TextStyle(
                                             fontFamily: medium,
-                                            fontSize: 17,
+                                            fontSize: 16,
                                             color: blackColor,
                                           ),
                                           maxLines: 1,
                                           overflow: TextOverflow
                                               .ellipsis, // ใช้ ellipsis สำหรับข้อความที่เกิน
                                         ),
-                                           Text(
-                                            "${allproductsdata[index]['p_price']} Bath",
-                                            style: TextStyle(
-                                              fontFamily: regular,
-                                              fontSize: 14,
-                                              color:greyDark1, 
-                                            ),
+                                        Text(
+                                          "${NumberFormat('#,##0').format(double.parse(allproductsdata[index]['p_price']).toInt())} Bath",
+                                          style: TextStyle(
+                                            fontFamily: regular,
+                                            fontSize: 14,
+                                            color: greyDark2,
                                           ),
-                                        SizedBox(height: 10), // ให้ระยะห่างด้านล่าง
+                                        ),
+                                        SizedBox(
+                                            height: 10), // ให้ระยะห่างด้านล่าง
                                       ],
                                     ),
                                   )
@@ -427,7 +421,8 @@ class NewsScreen extends StatelessWidget {
                                 Get.to(() => ItemDetails(
                                       title:
                                           "${allproductsdata[index]['p_name']}",
-                                      data: allproductsdata[index].data() as Map<String, dynamic>,
+                                      data: allproductsdata[index].data()
+                                          as Map<String, dynamic>,
                                     ));
                               });
                             },
@@ -437,6 +432,31 @@ class NewsScreen extends StatelessWidget {
                     ),
 
                     const SizedBox(height: 20),
+                    InkWell(
+                      onTap: () {
+                        // Navigate to the ProductScreen when the "Explore More" row is tapped
+                        Get.to(() => ProductScreen());
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Explore More",
+                            style: TextStyle(
+                              fontFamily: medium,
+                              fontSize: 17,
+                              color: greyDark2,
+                            ),
+                          ),
+                          10.widthBox,
+                          Image.asset(
+                            icNext,
+                            width: 17,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 30),
                   ],
                 ),
               ),

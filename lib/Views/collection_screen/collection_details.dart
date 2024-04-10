@@ -9,6 +9,7 @@ import 'package:flutter_finalproject/consts/styles.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
 import 'package:flutter_finalproject/services/firestore_services.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class CollectionDetails extends StatefulWidget {
@@ -121,8 +122,7 @@ class _CollectionDetailsState extends State<CollectionDetails> {
                                 .fontFamily(regular)
                                 .color(blackColor)
                                 .make(),
-                            "${data[index]['p_price']}"
-                                .numCurrency
+                            "${NumberFormat('#,##0').format(double.parse(data[index]['p_price']).toInt())} Bath"
                                 .text
                                 .color(primaryApp)
                                 .fontFamily(bold)

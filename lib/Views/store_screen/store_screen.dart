@@ -20,7 +20,7 @@ class StoreScreen extends StatelessWidget {
         return Scaffold(
           backgroundColor: whiteColor,
           appBar: AppBar(
-            title: Text(title),
+            title: Text(title).text.color(blackColor).fontFamily(medium).size(26).make(),
             centerTitle: true,
             leading: IconButton(
               icon: const Icon(Icons.arrow_back_ios),
@@ -67,32 +67,61 @@ class StoreScreen extends StatelessWidget {
               children: [
                 Center(
                   child: FutureBuilder<String>(
-                    future: fetchSellerImgs(
-                        vendorId), // อย่าลืมเปลี่ยนให้ตรงกับการเรียกใช้ของคุณ
+                    future: fetchSellerImgs(vendorId),
                     builder:
                         (BuildContext context, AsyncSnapshot<String> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator(); // หรือ widget โหลดแบบอื่นๆ ที่คุณต้องการ
+                        return CircularProgressIndicator();
                       } else if (snapshot.hasError) {
-                        return Image.asset(
-                          imProfile, // รูปภาพหากเกิดข้อผิดพลาด
+                        return Container(
                           width: 120,
                           height: 120,
-                          fit: BoxFit.cover,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: greyColor, width: 3),
+                          ),
+                          child: ClipOval(
+                            child: Image.asset(
+                              imProfile,
+                              width: 120,
+                              height: 120,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                         );
                       } else if (snapshot.hasData) {
-                        return Image.network(
-                          snapshot.data!,
+                        return Container(
                           width: 120,
                           height: 120,
-                          fit: BoxFit.cover,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: greyColor, width: 3),
+                          ),
+                          child: ClipOval(
+                            child: Image.network(
+                              snapshot.data!,
+                              width: 120,
+                              height: 120,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                         );
                       } else {
-                        return Image.asset(
-                          imProfile, // รูปภาพเริ่มต้นหรือหากไม่มีข้อมูล
+                        return Container(
                           width: 120,
                           height: 120,
-                          fit: BoxFit.cover,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: greyColor, width: 3),
+                          ),
+                          child: ClipOval(
+                            child: Image.asset(
+                              imProfile,
+                              width: 120,
+                              height: 120,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                         );
                       }
                     },
@@ -249,8 +278,8 @@ class StoreScreen extends StatelessWidget {
           const TabBar(
             isScrollable: true,
             indicatorColor: primaryApp,
-            labelStyle: TextStyle(
-                fontSize: 13, fontFamily: regular, color: greyDark2),
+            labelStyle:
+                TextStyle(fontSize: 13, fontFamily: regular, color: greyDark2),
             unselectedLabelStyle:
                 TextStyle(fontSize: 12, fontFamily: regular, color: greyDark1),
             tabs: [
@@ -265,11 +294,16 @@ class StoreScreen extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 0.9,
             child: TabBarView(
               children: [
-                _buildProductGrid('All', 'All'), // Pass 'All' for all categories
-                _buildProductGrid('Outer', 'Outer'), // Pass 'Outer' for Outer category
-                _buildProductGrid('Dress', 'Dress'), // Pass 'Dress' for Dress category
-                _buildProductGrid('Bottoms', 'Bottoms'), // Pass 'Bottoms' for Bottoms category
-                _buildProductGrid('T-shirts', 'T-shirts'), // Pass 'T-shirts' for T-shirts category
+                _buildProductGrid(
+                    'All', 'All'), // Pass 'All' for all categories
+                _buildProductGrid(
+                    'Outer', 'Outer'), // Pass 'Outer' for Outer category
+                _buildProductGrid(
+                    'Dress', 'Dress'), // Pass 'Dress' for Dress category
+                _buildProductGrid('Bottoms',
+                    'Bottoms'), // Pass 'Bottoms' for Bottoms category
+                _buildProductGrid('T-shirts',
+                    'T-shirts'), // Pass 'T-shirts' for T-shirts category
               ],
             ),
           ),
@@ -278,98 +312,97 @@ class StoreScreen extends StatelessWidget {
     );
   }
 
-Widget _buildProductGrid(String category, String subcollection) {
-  Query query = FirebaseFirestore.instance
-      .collection('products')
-      .where('vendor_id', isEqualTo: vendorId);
+  Widget _buildProductGrid(String category, String subcollection) {
+    Query query = FirebaseFirestore.instance
+        .collection('products')
+        .where('vendor_id', isEqualTo: vendorId);
 
-  // Check if the subcollection is "All"
-  if (subcollection != 'All') {
-    query = query.where('p_subcollection', isEqualTo: subcollection);
-  }
+    // Check if the subcollection is "All"
+    if (subcollection != 'All') {
+      query = query.where('p_subcollection', isEqualTo: subcollection);
+    }
 
-  return FutureBuilder<QuerySnapshot>(
-    future: query.get(),
-    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return Center(
-          child: loadingIndicator(),
-        );
-      }
-      if (snapshot.hasError) {
-        return Text('Error: ${snapshot.error}');
-      }
-      if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-        return const Text('No Items');
-      }
+    return FutureBuilder<QuerySnapshot>(
+      future: query.get(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: loadingIndicator(),
+          );
+        }
+        if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        }
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return const Text('No Items');
+        }
 
-      return GridView.builder(
-        padding: const EdgeInsets.all(8.0),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, childAspectRatio: 1 / 1.2),
-        itemCount: snapshot.data!.docs.length,
-        itemBuilder: (BuildContext context, int index) {
-          var product = snapshot.data!.docs[index];
-          String productName = product.get('p_name');
-          String price = product.get('p_price');
-          String productImage = product.get('p_imgs')[0];
+        return GridView.builder(
+          padding: const EdgeInsets.all(8.0),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, childAspectRatio: 1 / 1.2),
+          itemCount: snapshot.data!.docs.length,
+          itemBuilder: (BuildContext context, int index) {
+            var product = snapshot.data!.docs[index];
+            String productName = product.get('p_name');
+            String price = product.get('p_price');
+            String productImage = product.get('p_imgs')[0];
 
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ItemDetails(
-                    title: productName,
-                    data: product.data() as Map<String, dynamic>,
-                  ),
-                ),
-              );
-            },
-            child: Card(
-              clipBehavior: Clip.antiAlias,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Image.network(
-                    productImage,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: 150,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        3.heightBox,
-                        Text(
-                          productName,
-                          style: const TextStyle(
-                            fontFamily: medium,
-                            fontSize: 16,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          '$price',
-                          style: const TextStyle(
-                              color: greyColor, fontFamily: regular),
-                        ),
-                      ],
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ItemDetails(
+                      title: productName,
+                      data: product.data() as Map<String, dynamic>,
                     ),
                   ),
-                ],
-              ).box.color(whiteColor).make(),
-            ),
-          );
-        },
-      );
-    },
-  );
-}
-
+                );
+              },
+              child: Card(
+                clipBehavior: Clip.antiAlias,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Image.network(
+                      productImage,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: 150,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          3.heightBox,
+                          Text(
+                            productName,
+                            style: const TextStyle(
+                              fontFamily: medium,
+                              fontSize: 16,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            '$price',
+                            style: const TextStyle(
+                                color: greyColor, fontFamily: regular),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ).box.color(whiteColor).make(),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
 
   Widget _buildCategoryMath(BuildContext context) {
     return DefaultTabController(
@@ -413,12 +446,14 @@ Widget _buildProductGrid(String category, String subcollection) {
           Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
           if (data.containsKey('p_mixmatch')) {
             String currentMixMatch = data['p_mixmatch'];
-            mixMatchCount[currentMixMatch] = (mixMatchCount[currentMixMatch] ?? 0) + 1;
+            mixMatchCount[currentMixMatch] =
+                (mixMatchCount[currentMixMatch] ?? 0) + 1;
           }
         });
 
         mixMatchCount.forEach((key, value) {
-          if (value >= 2 && value % 2 == 0) { // เพิ่มเงื่อนไขให้จำนวนรายการเป็นคู่
+          if (value >= 2 && value % 2 == 0) {
+            // เพิ่มเงื่อนไขให้จำนวนรายการเป็นคู่
             mixMatchList.add(key);
           }
         });
@@ -497,8 +532,7 @@ Widget _buildProductGrid(String category, String subcollection) {
                                 const SizedBox(height: 2),
                                 Text(
                                   productName1,
-                                  style: const TextStyle(
-                                      fontFamily: bold),
+                                  style: const TextStyle(fontFamily: bold),
                                 ),
                                 Text(
                                   'Price: \$${price1.toString()}',
@@ -507,8 +541,7 @@ Widget _buildProductGrid(String category, String subcollection) {
                                 const SizedBox(height: 20),
                                 Text(
                                   productName2,
-                                  style: const TextStyle(
-                                      fontFamily: bold),
+                                  style: const TextStyle(fontFamily: bold),
                                 ),
                                 Text(
                                   'Price: \$${price2.toString()}',
@@ -543,47 +576,39 @@ Widget _buildProductGrid(String category, String subcollection) {
   }
 
   Future<String> fetchSellerName(String vendorId) async {
-    
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('products')
         .where('vendor_id', isEqualTo: vendorId)
-        .limit(1) 
+        .limit(1)
         .get();
 
-    
     if (querySnapshot.docs.isNotEmpty) {
-      
       Map<String, dynamic> data =
           querySnapshot.docs.first.data() as Map<String, dynamic>;
-      return data['p_seller'] ??
-          'Unknown Seller'; 
+      return data['p_seller'] ?? 'Unknown Seller';
     } else {
-      return 'Unknown Seller'; 
+      return 'Unknown Seller';
     }
   }
 
   Future<String> fetchSellerImgs(String vendorId) async {
     try {
-      
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('vendors')
           .where('vendor_id', isEqualTo: vendorId)
-          .limit(1) 
+          .limit(1)
           .get();
 
-      
       if (querySnapshot.docs.isNotEmpty) {
-        
         Map<String, dynamic> data =
             querySnapshot.docs.first.data() as Map<String, dynamic>;
         return data['imageUrl'] ?? 'URL รูปภาพเริ่มต้น/คำแนะนำหากไม่พบ';
       } else {
-        return 'URL รูปภาพเริ่มต้น/คำแนะนำหากไม่พบ'; 
+        return 'URL รูปภาพเริ่มต้น/คำแนะนำหากไม่พบ';
       }
     } catch (e) {
-      
       print('เกิดข้อผิดพลาดในการดึงข้อมูล: $e');
-      return 'URL รูปภาพเริ่มต้น/คำแนะนำหากเกิดข้อผิดพลาด'; 
+      return 'URL รูปภาพเริ่มต้น/คำแนะนำหากเกิดข้อผิดพลาด';
     }
   }
 }
