@@ -1,10 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/widgets_common/custom_textfield.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 
 class ForgotScreen extends StatelessWidget {
-  const ForgotScreen({super.key});
+  ForgotScreen({super.key});
+
+  final TextEditingController _emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -41,17 +44,31 @@ class ForgotScreen extends StatelessWidget {
             customTextField(
               label: 'Enter your email',
               isPass: false,
-              readOnly: false,),
+              readOnly: false,
+              controller: _emailController,),
             const SizedBox(height: 20),
             ourButton(
                     title: 'Send Code',
                     color: primaryApp,
                     textColor: whiteColor,
-                    onPress: () {},
+                    onPress: () {
+                      _sendPasswordResetEmail(context);
+                    },
                   ),
           ],
         ),
       ),
     );
   }
+  Future<void> _sendPasswordResetEmail(BuildContext context) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(
+        email: _emailController.text.trim(),
+      );
+      VxToast.show(context, msg: "รีเซ็ตรหัสผ่านอีเมลถูกส่งไปยัง ${_emailController.text}");
+    } catch (e) {
+      VxToast.show(context, msg: "$e");
+    }
+  }
+
 }

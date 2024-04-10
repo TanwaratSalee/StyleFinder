@@ -321,8 +321,24 @@ Widget buildMatchTab() {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: IconButton(
+                      icon: Icon(Icons.favorite, color: Colors.red),
+                      onPressed: () async {
+                        // Remove both products from the wishlist
+                        await FirebaseFirestore.instance.collection('products').doc(flatList[actualIndex].id).update({
+                        'p_wishlist': FieldValue.arrayRemove([FirebaseAuth.instance.currentUser!.uid])
+                        });
+                        await FirebaseFirestore.instance.collection('products').doc(flatList[actualIndex + 1].id).update({
+                        'p_wishlist': FieldValue.arrayRemove([FirebaseAuth.instance.currentUser!.uid])
+                        });
+                          },
+                        ),
+                      ),
                   Row(
                     children: [
+                      
                       Column(
                         children: [
                           Image.network(
