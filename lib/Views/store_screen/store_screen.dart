@@ -442,21 +442,23 @@ Widget _buildProductMathGrids(String category) {
       // Initialize a map to group products by their 'p_mixmatch' value
       Map<String, List<DocumentSnapshot>> mixMatchMap = {};
 
-        snapshot.data!.docs.forEach((doc) {
-          Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-          if (data.containsKey('p_mixmatch')) {
-            String currentMixMatch = data['p_mixmatch'];
-            mixMatchCount[currentMixMatch] = (mixMatchCount[currentMixMatch] ?? 0) + 1;
+      // Populate the map
+      for (var doc in snapshot.data!.docs) {
+        var data = doc.data() as Map<String, dynamic>;
+        if (data['p_mixmatch'] != null) {
+          String mixMatchKey = data['p_mixmatch'];
+          if (!mixMatchMap.containsKey(mixMatchKey)) {
+            mixMatchMap[mixMatchKey] = [];
           }
-        });
+          mixMatchMap[mixMatchKey]!.add(doc);
+        }
+      }
 
-        mixMatchCount.forEach((key, value) {
-          if (value >= 2 && value % 2 == 0) { // เพิ่มเงื่อนไขให้จำนวนรายการเป็นคู่
-            mixMatchList.add(key);
-          }
-        });
+      // Filter out any 'p_mixmatch' groups that do not have exactly 2 products
+      var validPairs = mixMatchMap.entries.where((entry) => entry.value.length == 2).toList();
 
-        print('MixMatch List: $mixMatchList');
+      // Calculate the total number of valid pairs to display
+      int itemCount = validPairs.length;
 
       return GridView.builder(
         padding: const EdgeInsets.all(2),
@@ -482,7 +484,6 @@ Widget _buildProductMathGrids(String category) {
 
           String productImage1 = data1['p_imgs'][0];
           String productImage2 = data2['p_imgs'][0];
-
             return GestureDetector(
               onTap: () {
                 Navigator.push(
