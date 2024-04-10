@@ -7,6 +7,7 @@ import 'package:flutter_finalproject/consts/firebase_consts.dart';
 import 'package:flutter_finalproject/consts/styles.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class ItemDetails extends StatefulWidget {
@@ -24,62 +25,50 @@ class _ItemDetailsState extends State<ItemDetails> {
   late final ProductController controller;
 
   @override
-void initState() {
-  super.initState();
-  controller = Get.put(ProductController());
-
-  // ตรวจสอบว่า widget.data['p_price'] มีค่า และไม่เป็น null
-  if (widget.data['p_price'] != null) {
-    int price = int.tryParse(widget.data['p_price'].toString()) ?? 0; // ใช้เลข 0 หากไม่สามารถแปลงค่าได้
-    controller.calculateTotalPrice(price);
+  void initState() {
+    super.initState();
+    controller = Get.put(ProductController());
+    checkIsInWishlist();
   }
 
-  checkIsInWishlist();
-}
-
-
-void checkIsInWishlist() async {
-  FirebaseFirestore.instance
-      .collection(productsCollection)
-      .where('p_name', isEqualTo: widget.data['p_name'])
-      .get()
-      .then((QuerySnapshot querySnapshot) {
-    if (querySnapshot.docs.isNotEmpty) {
-      DocumentSnapshot doc = querySnapshot.docs.first;
-      List<dynamic> wishlist = doc['p_wishlist'];
-      if (wishlist.contains(currentUser!.uid)) {
-        controller.isFav(true);
-      } else {
-        controller.isFav(false);
+  void checkIsInWishlist() async {
+    FirebaseFirestore.instance
+        .collection(productsCollection)
+        .where('p_name', isEqualTo: widget.data['p_name'])
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      if (querySnapshot.docs.isNotEmpty) {
+        DocumentSnapshot doc = querySnapshot.docs.first;
+        List<dynamic> wishlist = doc['p_wishlist'];
+        if (wishlist.contains(currentUser!.uid)) {
+          controller.isFav(true);
+        } else {
+          controller.isFav(false);
+        }
       }
-    }
-  });
+    });
 
-  // เรียกใช้เมธอด updateVendorImageUrl เพื่ออัพเดท imageUrl ของ vendor
-  fetchVendorImageUrl(widget.data['vendor_id']);
-}
-
-void fetchVendorImageUrl(String vendorId) async {
-  try {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('vendors')
-        .where('vendor_id', isEqualTo: vendorId)
-        .limit(1)
-        .get();
-
-    if (querySnapshot.docs.isNotEmpty) {
-      Map<String, dynamic> data =
-          querySnapshot.docs.first.data() as Map<String, dynamic>;
-      String imageUrl = data['imageUrl'] ?? '';
-      // เรียกใช้เมธอด updateVendorImageUrl เพื่ออัพเดท imageUrl ของ vendor
-      controller.updateVendorImageUrl(imageUrl);
-    }
-  } catch (e) {
-    print('Error fetching vendor image: $e');
+    fetchVendorImageUrl(widget.data['vendor_id']);
   }
-}
 
+  void fetchVendorImageUrl(String vendorId) async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('vendors')
+          .where('vendor_id', isEqualTo: vendorId)
+          .limit(1)
+          .get();
 
+      if (querySnapshot.docs.isNotEmpty) {
+        Map<String, dynamic> data =
+            querySnapshot.docs.first.data() as Map<String, dynamic>;
+        String imageUrl = data['imageUrl'] ?? '';
+        controller.updateVendorImageUrl(imageUrl);
+      }
+    } catch (e) {
+      print('Error fetching vendor image: $e');
+    }
+  }
 
   void _updateIsFav(bool isFav) {
     setState(() {
@@ -140,7 +129,7 @@ void fetchVendorImageUrl(String vendorId) async {
                           style: const TextStyle(
                             color: blackColor,
                             fontFamily: medium,
-                            fontSize: 20,
+                            fontSize: 24,
                           ),
                         ),
                         const Spacer(),
@@ -161,7 +150,7 @@ void fetchVendorImageUrl(String vendorId) async {
                                   : Icons.favorite_outline,
                               color: controller.isFav.value ? redColor : null,
                             ),
-                            iconSize: 30,
+                            iconSize: 28,
                           ),
                         )
                       ],
@@ -184,7 +173,7 @@ void fetchVendorImageUrl(String vendorId) async {
                         .color(greyDark1)
                         .size(14)
                         .make(),
-                    "${double.parse(widget.data['p_price']).toInt()} Bath"
+                    "${NumberFormat('#,##0').format(double.parse(widget.data['p_price']).toInt())} Bath"
                         .text
                         .color(Theme.of(context).primaryColor)
                         .fontFamily(regular)
@@ -194,32 +183,39 @@ void fetchVendorImageUrl(String vendorId) async {
                     Row(
                       children: [
                         Expanded(
-                            child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            5.heightBox,
-                            "${widget.data['p_seller']}"
-                                .toUpperCase()
-                                .text
-                                .fontFamily(medium)
-                                .color(blackColor)
-                                .size(23)
-                                .make(),
-                          ],
-                        )),
-                        Expanded(
-                            child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            5.heightBox,
-                            "${widget.data['p_imgs']}"
-                                .text
-                                .fontFamily(regular)
-                                .color(blackColor)
-                                .size(16)
-                                .make(),
-                          ],
-                        )),
+                          child: Row(
+                            children: [
+                              5.widthBox,
+                              Obx(() {
+                                String imageUrl =
+                                    controller.vendorImageUrl.value;
+                                return imageUrl.isNotEmpty
+                                    ? ClipOval(
+                                        child: Image.network(
+                                          imageUrl,
+                                          width: 50,
+                                          height: 50,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                    : SizedBox.shrink();
+                              }),
+                              10.widthBox,
+                              Expanded(
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: "${widget.data['p_seller']}"
+                                      .toUpperCase()
+                                      .text
+                                      .fontFamily(medium)
+                                      .color(blackColor)
+                                      .size(18)
+                                      .make(),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                         10.widthBox,
                         GestureDetector(
                           onTap: () {
@@ -258,7 +254,7 @@ void fetchVendorImageUrl(String vendorId) async {
                           "Description"
                               .text
                               .color(blackColor)
-                              .size(16)
+                              .size(15)
                               .fontFamily(medium)
                               .make(),
                           SizedBox(height: 5),
@@ -274,7 +270,7 @@ void fetchVendorImageUrl(String vendorId) async {
                           "Size & Fit"
                               .text
                               .color(blackColor)
-                              .size(16)
+                              .size(15)
                               .fontFamily(medium)
                               .make(),
                           SizedBox(height: 5),
@@ -344,7 +340,7 @@ void fetchVendorImageUrl(String vendorId) async {
                           .make(),
                       10.widthBox,
                       SizedBox(
-                        child: "Bath ".text.color(blackColor).make(),
+                        child: "Baht: ".text.color(blackColor).make(),
                       ),
                     ],
                   ).box.padding(const EdgeInsets.all(8)).make(),
