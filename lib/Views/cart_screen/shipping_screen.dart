@@ -31,7 +31,7 @@ class ShippingDetails extends StatefulWidget {
 
 class _ShippingDetailsState extends State<ShippingDetails> {
   List<Map<String, dynamic>> _addresses = [];
-  String? _selectedAddress;
+  Map<String, dynamic>? _selectedAddress;
 
   @override
   void initState() {
@@ -112,13 +112,14 @@ class _ShippingDetailsState extends State<ShippingDetails> {
                 itemCount: _addresses.length,
                 itemBuilder: (context, index) {
                   var address = _addresses[index];
-                  String addressString = '${address['address']}, ${address['city']}, ${address['state']}, ${address['postalCode']}, ${address['phone']}';
+                  String addressString = '${address['firstname']}, ${address['surname']}, ${address['address']}, ${address['city']}, ${address['state']}, ${address['postalCode']}, ${address['phone']}';
                   return Card(
                     child: ListTile(
                       title: Text(addressString),
                       onTap: () {
                         setState(() {
-                          _selectedAddress = addressString;
+                          controller.setSelectedAddress(address);
+                          _selectedAddress = address;
                         });
                         _showAddressDialog(addressString);
                       },
