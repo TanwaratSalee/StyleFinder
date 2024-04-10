@@ -5,6 +5,7 @@ import 'package:flutter_finalproject/Views/widgets_common/appbar_ontop.dart';
 import 'package:flutter_finalproject/consts/colors.dart';
 import 'package:flutter_finalproject/consts/firebase_consts.dart';
 import 'package:flutter_finalproject/consts/images.dart';
+import 'package:flutter_finalproject/consts/styles.dart';
 import 'package:flutter_finalproject/controllers/auth_controller.dart';
 import 'package:get/get.dart';
 
@@ -59,30 +60,28 @@ class _MatchScreenState extends State<MatchScreen> {
           SliverToBoxAdapter(
             child: Column(
               children: <Widget>[
-                SizedBox(
+                const SizedBox(
                   height: 75,
                 ),
                 buildCardSetTop(),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 buildCardSetlower(),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     color: Colors.grey[200],
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Row(
-                    // เพิ่ม `child:` ก่อน Row เพื่อให้เป็น child ของ Container
-                    mainAxisAlignment: MainAxisAlignment
-                        .center, // ใช้เพื่อจัดกึ่งกลางของแถว, คุณสามารถปรับเปลี่ยนได้ตามความต้องการ
+                    mainAxisAlignment: MainAxisAlignment.center, 
                     children: <Widget>[
-                      Text(
+                      const Text(
                         'Match with you',
                         style: TextStyle(
                           fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          fontFamily: bold,
+                          color: blackColor,
                         ),
                       ),
                       IconButton(
@@ -93,7 +92,7 @@ class _MatchScreenState extends State<MatchScreen> {
                         onPressed: () async {
                           await Get.put(AuthController())
                               .signoutMethod(context);
-                          Get.offAll(() => LoginScreen());
+                          Get.offAll(() => const LoginScreen());
                         },
                       ),
                     ],

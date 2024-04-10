@@ -69,9 +69,9 @@ class NewsScreen extends StatelessWidget {
             //         }
             //       }),
             //       filled: true,
-            //       fillColor: fontGreyDark1,
+            //       fillColor: greyDark1,
             //       hintText: searchanything,
-            //       // hintStyle: const TextStyle(color: fontGreyDark1),
+            //       // hintStyle: const TextStyle(color: greyDark1),
             //     ),
             //   ),
             // ),
@@ -306,7 +306,7 @@ class NewsScreen extends StatelessWidget {
                         'MATCH'
                             .text
                             .fontFamily(medium)
-                            .color(fontGreyDark2)
+                            .color(greyDark2)
                             .size(22)
                             .make(),
                         SizedBox(height: 6),
@@ -332,7 +332,7 @@ class NewsScreen extends StatelessWidget {
                         'PRODUCT'
                             .text
                             .fontFamily(medium)
-                            .color(fontGreyDark2)
+                            .color(greyDark2)
                             .size(22)
                             .make(),
                         Container(
@@ -398,7 +398,7 @@ class NewsScreen extends StatelessWidget {
                                           style: TextStyle(
                                             fontFamily: medium,
                                             fontSize: 17,
-                                            color: Colors.black,
+                                            color: blackColor,
                                           ),
                                           maxLines: 1,
                                           overflow: TextOverflow
@@ -409,7 +409,7 @@ class NewsScreen extends StatelessWidget {
                                             style: TextStyle(
                                               fontFamily: regular,
                                               fontSize: 14,
-                                              color:fontGreyDark1, 
+                                              color:greyDark1, 
                                             ),
                                           ),
                                         SizedBox(height: 10), // ให้ระยะห่างด้านล่าง
@@ -558,7 +558,7 @@ class NewsScreen extends StatelessWidget {
                           Text(
                             productName1,
                             style: const TextStyle(
-                              fontWeight: FontWeight.bold,
+                              fontFamily: bold,
                               fontSize: 16, // ปรับขนาดตัวอักษร
                             ),
                             maxLines: 1,
@@ -573,7 +573,7 @@ class NewsScreen extends StatelessWidget {
                           Text(
                             productName2,
                             style: const TextStyle(
-                              fontWeight: FontWeight.bold,
+                              fontFamily: bold,
                               fontSize: 16, // ปรับขนาดตัวอักษร
                             ),
                             maxLines: 1,
@@ -592,8 +592,8 @@ class NewsScreen extends StatelessWidget {
                       child: Text(
                         'Total Price: \$${totalPrice.toString()}',
                         style: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
+                          color: blackColor,
+                          fontFamily: bold,
                           fontSize: 16, // ปรับขนาดตัวอักษร
                         ),
                       ),

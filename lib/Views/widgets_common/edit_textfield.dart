@@ -42,7 +42,7 @@ Widget editTextField({
               readOnly: readOnly,
               decoration: const InputDecoration(
                 isDense: true,
-                hintStyle: TextStyle(color: fontGreyDark1),
+                hintStyle: TextStyle(color: greyDark1),
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
                 enabledBorder: UnderlineInputBorder(

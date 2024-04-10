@@ -14,7 +14,7 @@ Widget ourButton(
     child: (title ?? '')
         .text
         .bold
-        .color(textColor ?? Colors.black)
+        .color(textColor ?? blackColor)
         .fontFamily(bold)
         .make(),
   );

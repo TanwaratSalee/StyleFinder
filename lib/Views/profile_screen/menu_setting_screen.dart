@@ -109,7 +109,7 @@ class MenuSettingScreen extends StatelessWidget {
                             ),
                             title: profileButtonsList[index]
                                 .text
-                                .color(fontGreyDark1)
+                                .color(greyDark1)
                                 .fontFamily(regular)
                                 .make(),
                             trailing:
@@ -162,9 +162,9 @@ class MenuSettingScreen extends StatelessWidget {
                                         style: TextStyle(
                                             fontFamily: regular,
                                             fontSize: 16,
-                                            color: fontGreyDark1))
+                                            color: greyDark1))
                                     .text
-                                    .color(fontGreyDark1)
+                                    .color(greyDark1)
                                     .fontFamily(regular)
                                     .make(),
                               ],

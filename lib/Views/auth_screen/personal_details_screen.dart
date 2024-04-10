@@ -107,7 +107,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   .text
                   .size(14)
                   .fontFamily(regular)
-                  .color(fontGreyDark2)
+                  .color(greyDark2)
                   .make(),
             ),
             const SizedBox(height: 10),
@@ -231,7 +231,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
             const Text(
               'Skin',
               style: TextStyle(
-                  fontSize: 16, color: Colors.black, fontFamily: regular),
+                  fontSize: 16, color: blackColor, fontFamily: regular),
             ),
             Column(
               children: [

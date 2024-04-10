@@ -103,21 +103,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         text: const TextSpan(children: [
                   TextSpan(
                       text: "I agree to the ",
-                      style: TextStyle(color: fontGreyDark2, fontFamily: bold)),
+                      style: TextStyle(color: greyDark2, fontFamily: bold)),
                   TextSpan(
                       text: termAndCond,
                       style: TextStyle(color: primaryApp, fontFamily: bold)),
                   TextSpan(
                       text: " & ",
                       style: TextStyle(
-                        color: fontGreyDark2,
-                        fontWeight: FontWeight.bold,
+                        color: greyDark2,
+                        fontFamily: bold,
                       )),
                   TextSpan(
                       text: privacyPolicy,
                       style: TextStyle(
                         color: primaryApp,
-                        fontWeight: FontWeight.bold,
+                        fontFamily: bold,
                       ))
                 ])))
               ],
@@ -127,7 +127,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     valueColor: AlwaysStoppedAnimation(primaryApp),
                   )
                 : ourButton(
-                    color: isCheck == true ? primaryApp : fontGreyDark1,
+                    color: isCheck == true ? primaryApp : greyDark1,
                     title: 'Next',
                     textColor: whiteColor,
                     onPress: isCheck

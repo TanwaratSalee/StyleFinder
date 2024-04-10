@@ -92,14 +92,14 @@ class EditProfileScreen extends StatelessWidget {
                         Icons.male,
                         color: controller.selectedGender.value == 'Man'
                             ? primaryApp
-                            : fontGreyDark1,
+                            : greyDark1,
                       ),
                       title: Text(
                         'Man',
                         style: TextStyle(
                           color: controller.selectedGender.value == 'Man'
                               ? primaryApp
-                              : fontGreyDark1,
+                              : greyDark1,
                           fontWeight: controller.selectedGender.value == 'Man'
                               ? FontWeight.bold
                               : FontWeight.normal,
@@ -115,14 +115,14 @@ class EditProfileScreen extends StatelessWidget {
                         Icons.female,
                         color: controller.selectedGender.value == 'Woman'
                             ? primaryApp
-                            : fontGreyDark1,
+                            : greyDark1,
                       ),
                       title: Text(
                         'Woman',
                         style: TextStyle(
                           color: controller.selectedGender.value == 'Woman'
                               ? primaryApp
-                              : fontGreyDark1,
+                              : greyDark1,
                           fontWeight: controller.selectedGender.value == 'Woman'
                               ? FontWeight.bold
                               : FontWeight.normal,
@@ -138,14 +138,14 @@ class EditProfileScreen extends StatelessWidget {
                         Icons.perm_identity,
                         color: controller.selectedGender.value == 'Other'
                             ? primaryApp
-                            : fontGreyDark1,
+                            : greyDark1,
                       ),
                       title: Text(
                         'Other',
                         style: TextStyle(
                           color: controller.selectedGender.value == 'Other'
                               ? primaryApp
-                              : fontGreyDark1,
+                              : greyDark1,
                           fontWeight: controller.selectedGender.value == 'Other'
                               ? FontWeight.bold
                               : FontWeight.normal,
@@ -170,7 +170,7 @@ class EditProfileScreen extends StatelessWidget {
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title:
-            "Edit Profile".text.fontFamily(regular).color(fontGreyDark2).make(),
+            "Edit Profile".text.fontFamily(regular).color(greyDark2).make(),
         actions: [
           TextButton(
             onPressed: () async {
@@ -314,7 +314,7 @@ class EditProfileScreen extends StatelessWidget {
                       decoration: const InputDecoration(
                         hintText: 'Select birthday',
                         hintStyle: TextStyle(
-                          color: fontGreyDark1,
+                          color: greyDark1,
                         ),
                         contentPadding: EdgeInsets.symmetric(
                             vertical: 15.0, horizontal: 20.0),
@@ -354,7 +354,7 @@ class EditProfileScreen extends StatelessWidget {
                                 .value, 
                             style: TextStyle(
                               color:
-                                  fontGreyDark1, 
+                                  greyDark1, 
                               fontFamily: regular,
                               fontSize: 16,
                             ),

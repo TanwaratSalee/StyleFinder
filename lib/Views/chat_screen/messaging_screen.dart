@@ -13,7 +13,7 @@ class MessagesScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: "Message".text.color(fontGreyDark2).fontFamily(regular).make(),
+        title: "Message".text.color(greyDark2).fontFamily(regular).make(),
       ),
       body: StreamBuilder(
           stream: FirestoreServices.getAllMessages(),
@@ -24,7 +24,7 @@ class MessagesScreen extends StatelessWidget {
                 child: loadingIndicator(),
               );
             } else if (snapshot.data!.docs.isEmpty) {
-              return "No messages yet!".text.color(fontGreyDark2).makeCentered();
+              return "No messages yet!".text.color(greyDark2).makeCentered();
             } else {
               var data = snapshot.data!.docs;
               return Padding(

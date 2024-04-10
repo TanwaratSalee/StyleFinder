@@ -141,14 +141,14 @@
 //                             Text(
 //                               formatDateForStorage(selectedDate),
 //                               style: const TextStyle(
-//                                   fontSize: 16, color: Colors.black),
+//                                   fontSize: 16, color: blackColor),
 //                             ),
 //                             const SizedBox(
 //                                 width: 70), // Space between the text and icon
 //                             const Icon(
 //                               Icons.calendar_today,
 //                               size: 24.0,
-//                               color: fontGreyDark2,
+//                               color: greyDark2,
 //                             ),
 //                           ],
 //                         ),
@@ -161,7 +161,7 @@
 //                   const Text(
 //                     'Sex',
 //                     style: TextStyle(
-//                         fontSize: 16, color: Colors.black, fontFamily: regular),
+//                         fontSize: 16, color: blackColor, fontFamily: regular),
 //                   ),
 //                   const SizedBox(height: 10),
 //                   Row(
@@ -271,7 +271,7 @@
 //                   const Text(
 //                     'Skin',
 //                     style: TextStyle(
-//                         fontSize: 16, color: Colors.black, fontFamily: regular),
+//                         fontSize: 16, color: blackColor, fontFamily: regular),
 //                   ),
 //                   Column(
 //                     children: [
@@ -328,7 +328,7 @@
 //                         TextSpan(
 //                             text: "I agree to the ",
 //                             style: TextStyle(
-//                                 color: fontGreyDark2, fontFamily: bold)),
+//                                 color: greyDark2, fontFamily: bold)),
 //                         TextSpan(
 //                             text: termAndCond,
 //                             style:
@@ -336,14 +336,14 @@
 //                         TextSpan(
 //                             text: " & ",
 //                             style: TextStyle(
-//                               color: fontGreyDark2,
-//                               fontWeight: FontWeight.bold,
+//                               color: greyDark2,
+//                               fontFamily: bold,
 //                             )),
 //                         TextSpan(
 //                             text: privacyPolicy,
 //                             style: TextStyle(
 //                               color: primaryApp,
-//                               fontWeight: FontWeight.bold,
+//                               fontFamily: bold,
 //                             ))
 //                       ])))
 //                     ],
@@ -354,7 +354,7 @@
 //                           valueColor: AlwaysStoppedAnimation(primaryApp),
 //                         )
 //                       : ourButton(
-//                           color: isCheck == true ? primaryApp : fontGreyDark1,
+//                           color: isCheck == true ? primaryApp : greyDark1,
 //                           title: 'Next',
 //                           textColor: whiteColor,
 //                           onPress: () async {

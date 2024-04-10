@@ -13,7 +13,7 @@ Widget IconSearch({required BuildContext context}) { // Specify context as requi
           showGeneralDialog(
             barrierLabel: "Barrier",
             barrierDismissible: true,
-            barrierColor: Colors.black.withOpacity(0.5),
+            barrierColor: blackColor.withOpacity(0.5),
             transitionDuration: const Duration(milliseconds: 300),
             context: context,
             pageBuilder: (_, __, ___) {

@@ -22,7 +22,7 @@ class PasswordScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Reset Password",
             style: TextStyle(
-                fontFamily: medium, fontSize: 24, color: Colors.black)),
+                fontFamily: medium, fontSize: 24, color: blackColor)),
         actions: [
           Obx(() {
             if (controller.isloading.isTrue) {

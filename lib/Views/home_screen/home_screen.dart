@@ -174,7 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Text(
                                     product['p_name'],
                                     style: const TextStyle(
-                                      color: Colors.black,
+                                      color: blackColor,
                                       fontSize: 20,
                                       fontFamily: bold,
                                     ),
@@ -183,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   // Text(
                                   //   product['p_aboutProduct'],
                                   //   style: const TextStyle(
-                                  //     color: fontGreyDark1,
+                                  //     color: greyDark1,
                                   //     fontSize: 14,
                                   //     fontFamily: light,
                                   //   ),
@@ -191,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Text(
                                     product['p_price'],
                                     style: const TextStyle(
-                                      color: fontGreyDark2,
+                                      color: greyDark2,
                                       fontSize: 18,
                                     ),
                                   ),

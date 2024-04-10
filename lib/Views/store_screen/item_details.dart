@@ -72,7 +72,7 @@ class _ItemDetailsState extends State<ItemDetails> {
               },
               icon: const Icon(Icons.arrow_back_ios)),
           title: widget.title!.text
-              .color(fontGreyDark2)
+              .color(greyDark2)
               .fontFamily(bold)
               .size(18)
               .make(),
@@ -106,7 +106,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                         Text(
                           widget.title ?? '',
                           style: const TextStyle(
-                            color: Colors.black,
+                            color: blackColor,
                             fontFamily: medium,
                             fontSize: 24,
                           ),
@@ -138,7 +138,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                       isSelectable: false,
                       value: double.parse(widget.data["p_rating"]),
                       onRatingUpdate: (value) {},
-                      normalColor: fontGreyDark2,
+                      normalColor: greyDark2,
                       selectionColor: golden,
                       count: 5,
                       size: 25,
@@ -147,7 +147,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                     5.heightBox,
                     "${widget.data['p_aboutProduct']}"
                         .text
-                        .color(fontGreyDark1)
+                        .color(greyDark1)
                         .size(16)
                         .make(),
                     "${widget.data['p_price']}"
@@ -275,7 +275,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                                 icon: const Icon(Icons.remove)),
                             controller.quantity.value.text
                                 .size(16)
-                                .color(fontGreyDark2)
+                                .color(greyDark2)
                                 .fontFamily(bold)
                                 .make(),
                             IconButton(

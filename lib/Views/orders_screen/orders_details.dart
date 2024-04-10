@@ -1,5 +1,3 @@
-// ignore_for_file: depend_on_referenced_packages, use_super_parameters
-
 import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/orders_screen/component/order_place_details.dart';
 import 'package:flutter_finalproject/Views/orders_screen/component/orders_status.dart';
@@ -15,11 +13,10 @@ class OrdersDetails extends StatelessWidget {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: "Order Details"
-            .text
-            .fontFamily(regular)
-            .color(fontGreyDark2)
-            .make(),
+        title: const Text(
+          "Order Details",
+          style: TextStyle(fontFamily: regular, color: greyDark2),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -27,37 +24,62 @@ class OrdersDetails extends StatelessWidget {
           physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Adjust as per your layout needs
-                children: [
-                  orderStatus(
-                    color: primaryApp,
-                    icon: icPlaced,
-                    title: "Placed",
-                    showDone: data['order_placed'],
-                  ),
-                  orderStatus(
-                    color: Colors.blue,
-                    icon: icConfirm,
-                    title: "Confirmed",
-                    showDone: data['order_confirmed'],
-                  ),
-                  orderStatus(
-                    color: Colors.yellow,
-                    icon: icOnDelivery,
-                    title: "On Delivery",
-                    showDone: data['order_on_delivery'],
-                  ),
-                  orderStatus(
-                    color: Colors.purple,
-                    icon: icDelivered,
-                    title: "Delivered",
-                    showDone: data['order_delivered'],
-                  ),
-                ],
+              Container(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                        "Order Status",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: regular,
+                          color: greyDark2,
+                        ),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                          width: 80,
+                          child: orderStatus(
+                            icon: icPlaced,
+                            title: "Placed",
+                            showDone: data['order_placed'],
+                          ),
+                        ),
+                        Container(
+                          width: 80,
+                          child: orderStatus(
+                            icon: icConfirm,
+                            title: "Confirmed",
+                            showDone: data['order_confirmed'],
+                          ),
+                        ),
+                        Container(
+                          width: 80,
+                          child: orderStatus(
+                            icon: icOnDelivery,
+                            title: "On Delivery",
+                            showDone: data['order_on_delivery'],
+                          ),
+                        ),
+                        Container(
+                          width: 80,
+                          child: orderStatus(
+                            icon: icDelivered,
+                            title: "Delivered",
+                            showDone: data['order_delivered'],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ).box.color(whiteColor).shadowSm.roundedSM.padding(const EdgeInsets.all(12)).make(),
               ),
-              const Divider(),
-              10.heightBox,
+              // const Divider(),
+              const SizedBox(height: 10),
               Column(
                 children: [
                   orderPlaceDetails(
@@ -89,14 +111,17 @@ class OrdersDetails extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            "Shipping Address".text.fontFamily(regular).make(),
-                            "${data['order_by_name']}".text.make(),
-                            "${data['order_by_email']}".text.make(),
-                            "${data['order_by_address']}".text.make(),
-                            "${data['order_by_city']}".text.make(),
-                            "${data['order_by_state']}".text.make(),
-                            "${data['order_by_phone']}".text.make(),
-                            "${data['order_by_postalcode']}".text.make(),
+                            const Text(
+                              "Shipping Address",
+                              style: TextStyle(fontFamily: regular),
+                            ),
+                            Text("${data['order_by_name']}"),
+                            Text("${data['order_by_email']}"),
+                            Text("${data['order_by_address']}"),
+                            Text("${data['order_by_city']}"),
+                            Text("${data['order_by_state']}"),
+                            Text("${data['order_by_phone']}"),
+                            Text("${data['order_by_postalcode']}"),
                           ],
                         ),
                         SizedBox(
@@ -105,12 +130,17 @@ class OrdersDetails extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              "Total Amount".text.fontFamily(regular).make(),
-                              "${data['total_amount']}"
-                                  .text
-                                  .color(primaryApp)
-                                  .fontFamily(bold)
-                                  .make()
+                              const Text(
+                                "Total Amount",
+                                style: TextStyle(fontFamily: regular),
+                              ),
+                              Text(
+                                "${data['total_amount']}",
+                                style: const TextStyle(
+                                  color: primaryApp,
+                                  fontFamily: bold,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -120,26 +150,34 @@ class OrdersDetails extends StatelessWidget {
                 ],
               ).box.outerShadowMd.white.make(),
               const Divider(),
-              10.heightBox,
-              "Ordered Product"
-                  .text
+              const SizedBox(height: 10),
+              const Text(
+                "Ordered Product",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: greyDark2,
+                  fontFamily: regular,
+                ),
+              ) .text
                   .size(16)
-                  .color(fontGreyDark2)
+                  .color(greyDark2)
                   .fontFamily(regular)
                   .makeCentered(),
-              10.heightBox,
-              ListView(
+              const SizedBox(height: 10),
+              ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                children: List.generate(data['orders'].length, (index) {
+                itemCount: data['orders'].length,
+                itemBuilder: (context, index) {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       orderPlaceDetails(
-                          title1: data['orders'][index]['title'],
-                          title2: data['orders'][index]['tprice'],
-                          d1: "${data['orders'][index]['qty']}x",
-                          d2: "Refundable"),
+                        title1: data['orders'][index]['title'],
+                        title2: data['orders'][index]['tprice'],
+                        d1: "${data['orders'][index]['qty']}x",
+                        d2: "Refundable",
+                      ),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Container(
@@ -150,14 +188,9 @@ class OrdersDetails extends StatelessWidget {
                       ),
                     ],
                   );
-                }).toList(),
-              )
-                  .box
-                  .outerShadowMd
-                  .white
-                  .margin(const EdgeInsets.only(bottom: 4))
-                  .make(),
-              20.heightBox,
+                },
+              ).box.outerShadowMd.white.margin(const EdgeInsets.only(bottom: 4)).make(),
+              const SizedBox(height: 20),
             ],
           ),
         ),
@@ -165,5 +198,3 @@ class OrdersDetails extends StatelessWidget {
     );
   }
 }
-
-// รออัพ Font อยู่หน้า order_detail_font.dart

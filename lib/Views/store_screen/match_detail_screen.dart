@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 
 class MatchDetailScreen extends StatefulWidget {
@@ -46,7 +47,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
               children: <Widget>[
                 const Icon(
                   Icons.favorite_border,
-                  color: Colors.black,
+                  color: blackColor,
                   size: 30,
                 ),
                 Positioned(
@@ -84,7 +85,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                               height: 150,
                               decoration: BoxDecoration(
                                 color: Colors.white,
-                                border: Border.all(color: Colors.black),
+                                border: Border.all(color: blackColor),
                               ),
                               child: Center(
                                 child: Image.network(
@@ -100,10 +101,10 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                             ),
                             Text(widget.productName1,
                                 style: const TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold)),
+                                    fontSize: 16, fontFamily: bold)),
                             Text('฿${widget.price1}',
                                 style: const TextStyle(
-                                    fontSize: 14, color: Colors.black)),
+                                    fontSize: 14, color: blackColor)),
                           ],
                         ),
                         const SizedBox(width: 10), // สร้างระยะห่าง
@@ -121,7 +122,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                             const Text('+',
                                 style: TextStyle(
                                     fontSize: 24,
-                                    fontWeight: FontWeight.bold,
+                                    fontFamily: bold,
                                     color: Colors.white)),
                           ],
                         ),
@@ -135,7 +136,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                               height: 150,
                               decoration: BoxDecoration(
                                 color: Colors.white,
-                                border: Border.all(color: Colors.black),
+                                border: Border.all(color: blackColor),
                               ),
                               child: Center(
                                 child: Image.network(
@@ -151,10 +152,10 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                             ),
                             Text(widget.productName2,
                                 style: const TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold)),
+                                    fontSize: 16, fontFamily: bold)),
                             Text('฿${widget.price2}',
                                 style: const TextStyle(
-                                    fontSize: 14, color: Colors.black)),
+                                    fontSize: 14, color: blackColor)),
                           ],
                         ),
                       ],
@@ -186,7 +187,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                               Text('Dior',
                                   style: TextStyle(
                                       fontSize: 16,
-                                      fontWeight: FontWeight.bold)),
+                                      fontFamily: bold)),
                               Row(
                                 children: [
                                   Icon(Icons.star,
@@ -346,7 +347,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                             child: Text(
                               'HEllo ',
                               style: TextStyle(
-                                color: Colors.black,
+                                color: blackColor,
                                 fontSize: 11,
                               ),
                             ),

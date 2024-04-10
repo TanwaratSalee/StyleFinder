@@ -39,7 +39,7 @@ class ProductScreen extends StatelessWidget {
                         alignment: Alignment.centerLeft,
                         child: allproducts.text
                             .fontFamily(regular)
-                            .color(fontGreyDark2)
+                            .color(greyDark2)
                             .size(18)
                             .make()),
                     StreamBuilder(
@@ -79,14 +79,14 @@ class ProductScreen extends StatelessWidget {
                                     style: TextStyle(
                                       fontFamily: medium,
                                       fontSize: 17,
-                                      color: Colors.black,
+                                      color: blackColor,
                                     ),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   "${allproductsdata[index]['p_price']} Bath"
                                       .text
-                                      .color(fontGreyDark1)
+                                      .color(greyDark1)
                                       .fontFamily(regular)
                                       .size(14)
                                       .make(),

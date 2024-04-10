@@ -152,7 +152,7 @@ class StoreScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           const BoxShadow(
-            color: fontGreyDark1,
+            color: greyDark1,
             blurRadius: 4,
             offset: Offset(0, 2),
           ),
@@ -162,7 +162,7 @@ class StoreScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text('Reviewer Name',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              style: TextStyle(fontSize: 16, fontFamily: bold)),
           Row(
             children: List.generate(5, (index) {
               return Icon(
@@ -190,9 +190,9 @@ class StoreScreen extends StatelessWidget {
         children: <Widget>[
           TabBar(
             labelStyle: const TextStyle(
-                fontSize: 15, fontFamily: regular, color: fontGreyDark2),
+                fontSize: 15, fontFamily: regular, color: greyDark2),
             unselectedLabelStyle: const TextStyle(
-                fontSize: 14, fontFamily: regular, color: fontGreyDark1),
+                fontSize: 14, fontFamily: regular, color: greyDark1),
             tabs: [
               const Tab(text: 'Product'),
               const Tab(text: 'Match'),
@@ -250,9 +250,9 @@ class StoreScreen extends StatelessWidget {
             isScrollable: true,
             indicatorColor: primaryApp,
             labelStyle: TextStyle(
-                fontSize: 13, fontFamily: regular, color: fontGreyDark2),
+                fontSize: 13, fontFamily: regular, color: greyDark2),
             unselectedLabelStyle:
-                TextStyle(fontSize: 12, fontFamily: regular, color: fontGreyDark1),
+                TextStyle(fontSize: 12, fontFamily: regular, color: greyDark1),
             tabs: [
               Tab(text: 'All'),
               Tab(text: 'Outer'),
@@ -498,7 +498,7 @@ class StoreScreen extends StatelessWidget {
                                 Text(
                                   productName1,
                                   style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
+                                      fontFamily: bold),
                                 ),
                                 Text(
                                   'Price: \$${price1.toString()}',
@@ -508,7 +508,7 @@ class StoreScreen extends StatelessWidget {
                                 Text(
                                   productName2,
                                   style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
+                                      fontFamily: bold),
                                 ),
                                 Text(
                                   'Price: \$${price2.toString()}',
@@ -526,8 +526,8 @@ class StoreScreen extends StatelessWidget {
                       child: Text(
                         'Total Price: \$${totalPrice.toString()}',
                         style: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
+                          color: blackColor,
+                          fontFamily: bold,
                         ),
                       ),
                     ),
