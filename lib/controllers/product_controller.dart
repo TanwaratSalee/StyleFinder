@@ -76,7 +76,7 @@ class ProductController extends GetxController {
     VxToast.show(context, msg: "Added to wishlist");
   }
 
-  void addToWishlistDetail(Map<String, dynamic> product, context) {
+  void addToWishlistDetail(Map<String, dynamic> product, Function(bool) updateIsFav, context) {
     FirebaseFirestore.instance
         .collection(productsCollection)
         .where('p_name', isEqualTo: product['p_name'])
@@ -89,7 +89,7 @@ class ProductController extends GetxController {
           doc.reference.update({
             'p_wishlist': FieldValue.arrayUnion([currentUser!.uid])
           }).then((value) {
-            isFav(true);
+            updateIsFav(true);
             VxToast.show(context, msg: "Added from wishlist");
           }).catchError((error) {
             print('Error adding ${product['p_name']} to Favorite: $error');
@@ -99,7 +99,7 @@ class ProductController extends GetxController {
     });
   }
 
-  void RemoveToWishlistDetail(Map<String, dynamic> product, context) {
+  void removeToWishlistDetail(Map<String, dynamic> product, Function(bool) updateIsFav, context) {
     FirebaseFirestore.instance
         .collection(productsCollection)
         .where('p_name', isEqualTo: product['p_name'])
@@ -108,19 +108,45 @@ class ProductController extends GetxController {
       if (querySnapshot.docs.isNotEmpty) {
         DocumentSnapshot doc = querySnapshot.docs.first;
         List<dynamic> wishlist = doc['p_wishlist'];
-        if (!wishlist.contains(currentUser!.uid)) {
+        if (wishlist.contains(currentUser!.uid)) {
           doc.reference.update({
             'p_wishlist': FieldValue.arrayRemove([currentUser!.uid])
           }).then((value) {
-            isFav(false);
+            updateIsFav(false);
             VxToast.show(context, msg: "Removed from wishlist");
           }).catchError((error) {
-            print('Error adding ${product['p_name']} to Favorite: $error');
+            print('Error removing ${product['p_name']} from Favorite: $error');
           });
         }
       }
     });
   }
+
+  void addToWishlistMixMatch(List<Map<String, dynamic>> products, Function(bool) updateIsFav, context) {
+    for (var product in products) {
+      FirebaseFirestore.instance
+          .collection(productsCollection)
+          .where('p_name', isEqualTo: product['p_name'])
+          .get()
+          .then((QuerySnapshot querySnapshot) {
+        if (querySnapshot.docs.isNotEmpty) {
+          DocumentSnapshot doc = querySnapshot.docs.first;
+          List<dynamic> wishlist = doc['p_wishlist'];
+          if (!wishlist.contains(currentUser!.uid)) {
+            doc.reference.update({
+              'p_wishlist': FieldValue.arrayUnion([currentUser!.uid])
+            }).then((value) {
+              updateIsFav(true);
+              VxToast.show(context, msg: "Added from wishlist");
+            }).catchError((error) {
+              print('Error adding ${product['p_name']} to Favorite: $error');
+            });
+          }
+        }
+      });
+    }
+  }
+
 
   removeFromWishlist(docId, context) async {
     await firestore.collection(productsCollection).doc(docId).set({

@@ -48,6 +48,13 @@ class _ItemDetailsState extends State<ItemDetails> {
     });
   }
 
+    void _updateIsFav(bool isFav) {
+    setState(() {
+      controller.isFav.value = isFav;
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -107,28 +114,22 @@ class _ItemDetailsState extends State<ItemDetails> {
                         const Spacer(),
                         Obx(
                           () => IconButton(
-                            onPressed: () {
-                              if (controller.isFav.value) {
-                                controller.RemoveToWishlistDetail(
-                                    widget.data, context);
-                              } else {
-                                controller.addToWishlistDetail(
-                                    widget.data, context);
-                              }
-                              controller.isFav.toggle();
-                            },
-                            icon: controller.isFav.value
-                                ? const Icon(
-                                    Icons.favorite,
-                                    color: redColor,
-                                    weight: 35,
-                                  )
-                                : const Icon(
-                                    Icons.favorite_outline,
-                                    weight: 35,
-                                  ),
-                            iconSize: 20,
-                          ),
+                              onPressed: () {
+                                if (controller.isFav.value) {
+                                  controller.removeToWishlistDetail(widget.data, _updateIsFav, context);
+                                } else {
+                                  controller.addToWishlistDetail(widget.data, _updateIsFav, context);
+                                }
+                              },
+                              icon: Icon(
+                                controller.isFav.value
+                                    ? Icons.favorite
+                                    : Icons.favorite_outline,
+                                color: controller.isFav.value ? redColor : null,
+                                weight: 35,
+                              ),
+                              iconSize: 20,
+                            ),
                         )
                       ],
                     ),

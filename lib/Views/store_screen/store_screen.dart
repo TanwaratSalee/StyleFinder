@@ -406,17 +406,22 @@ class StoreScreen extends StatelessWidget {
         }
 
         List<String> mixMatchList = [];
+        Map<String, int> mixMatchCount = {};
+
         snapshot.data!.docs.forEach((doc) {
           Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
           if (data.containsKey('p_mixmatch')) {
             String currentMixMatch = data['p_mixmatch'];
-            if (!mixMatchList.contains(currentMixMatch)) {
-              mixMatchList.add(currentMixMatch);
-            }
+            mixMatchCount[currentMixMatch] = (mixMatchCount[currentMixMatch] ?? 0) + 1;
           }
         });
 
-        // แสดงข้อมูลที่ได้จากการตรวจสอบ p_mixmatch ใน console
+        mixMatchCount.forEach((key, value) {
+          if (value >= 2 && value % 2 == 0) { // เพิ่มเงื่อนไขให้จำนวนรายการเป็นคู่
+            mixMatchList.add(key);
+          }
+        });
+
         print('MixMatch List: $mixMatchList');
 
         return GridView.builder(

@@ -418,7 +418,7 @@ class NewsScreen extends StatelessWidget {
                                 Get.to(() => ItemDetails(
                                       title:
                                           "${allproductsdata[index]['p_name']}",
-                                      data: allproductsdata[index],
+                                      data: allproductsdata[index].data() as Map<String, dynamic>,
                                     ));
                               });
                             },
