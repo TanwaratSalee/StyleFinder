@@ -121,6 +121,16 @@ const String icCash = "assets/images/payment/card.png";
 const String icPromptpay = "assets/images/payment/qr.png";
 const String icVisa = "assets/images/payment/card.png";
 
+//Order
+const String icPlaced = "assets/icons/icNormal/placed.png";
+const String icConfirm = "assets/icons/icNormal/confirm.png";
+const String icOnDelivery = "assets/icons/icNormal/onDelivery.png";
+const String icDelivered = "assets/icons/icNormal/delivered.png";
+const String icCheckPlaced = "assets/icons/icNormal/checkPlaced.png";
+const String icCheckConfirm = "assets/icons/icNormal/delivered.png";
+const String icCheckOnDelivery = "assets/icons/icNormal/checkOnDelivery.png";
+const String icCheckDelivered = "assets/icons/icNormal/checkDelivered.png";
+
 // ----------------------------------------------- item Screen -----------------------------------------------
 const String icFav = "assets/icons/icNormal/buttonFavourite.png";
 const String icClickFav = "assets/icons/icNormal/ckickbuttonFavourite.png";

@@ -20,7 +20,7 @@ class ProductScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: whiteColor,
-        title: appbarField(),
+        title: appbarField(context: context),
       ),
       body: Container(
         padding: const EdgeInsets.all(12),
@@ -39,7 +39,7 @@ class ProductScreen extends StatelessWidget {
                         alignment: Alignment.centerLeft,
                         child: allproducts.text
                             .fontFamily(regular)
-                            .color(fontGreyDark)
+                            .color(fontGreyDark2)
                             .size(18)
                             .make()),
                     StreamBuilder(
@@ -86,7 +86,7 @@ class ProductScreen extends StatelessWidget {
                                   ),
                                   "${allproductsdata[index]['p_price']} Bath"
                                       .text
-                                      .color(fontGrey)
+                                      .color(fontGreyDark1)
                                       .fontFamily(regular)
                                       .size(14)
                                       .make(),

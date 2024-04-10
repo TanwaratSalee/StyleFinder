@@ -27,7 +27,7 @@
 // //           style: TextStyle(
 // //             color: blackColor,
 // //             fontSize: 26,
-// //             fontFamily: 'regular',
+// //             fontFamily: regular,
 // //           ),
 // //         ),
 // //         actions: <Widget>[
@@ -114,7 +114,7 @@
 // //                         if (data.isEmpty) {
 // //                           return const Center(
 // //                             child: Text("No orders yet!",
-// //                                 style: TextStyle(color: fontGreyDark)),
+// //                                 style: TextStyle(color: fontGreyDark2)),
 // //                           );
 // //                         }
 // //                         return ListView.separated(
@@ -250,7 +250,7 @@
 //             style: TextStyle(
 //               color: fontBlack,
 //               fontSize: 26,
-//               fontFamily: 'regular',
+//               fontFamily: regular,
 //             ),
 //           ),
 //           actions: <Widget>[
@@ -338,7 +338,7 @@
 //                       //       if (data.isEmpty) {
 //                       //         return const Center(
 //                       //             child: Text("No orders yet!",
-//                       //                 style: TextStyle(color: fontGreyDark)));
+//                       //                 style: TextStyle(color: fontGreyDark2)));
 //                       //       }
 //                       //       return ListView.separated(
 //                       //         itemCount: data.length,

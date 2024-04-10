@@ -29,7 +29,7 @@ class NewsScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: whiteColor,
         automaticallyImplyLeading: false,
-        title: appbarField(),
+        title: appbarField(context: context),
         // actions: <Widget>[
         //   Padding(
         //     padding: const EdgeInsets.only(right: 15.0),
@@ -69,9 +69,9 @@ class NewsScreen extends StatelessWidget {
             //         }
             //       }),
             //       filled: true,
-            //       fillColor: fontGrey,
+            //       fillColor: fontGreyDark1,
             //       hintText: searchanything,
-            //       // hintStyle: const TextStyle(color: fontGrey),
+            //       // hintStyle: const TextStyle(color: fontGreyDark1),
             //     ),
             //   ),
             // ),
@@ -306,7 +306,7 @@ class NewsScreen extends StatelessWidget {
                         'MATCH'
                             .text
                             .fontFamily(medium)
-                            .color(fontGreyDark)
+                            .color(fontGreyDark2)
                             .size(22)
                             .make(),
                         SizedBox(height: 6),
@@ -332,7 +332,7 @@ class NewsScreen extends StatelessWidget {
                         'PRODUCT'
                             .text
                             .fontFamily(medium)
-                            .color(fontGreyDark)
+                            .color(fontGreyDark2)
                             .size(22)
                             .make(),
                         Container(
@@ -372,9 +372,9 @@ class NewsScreen extends StatelessWidget {
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
-                              mainAxisSpacing: 8,
+                              mainAxisSpacing: 12,
                               crossAxisSpacing: 8,
-                              mainAxisExtent: 300,
+                              mainAxisExtent: 280,
                             ),
                             itemBuilder: (context, index) {
                               return Column(
@@ -382,37 +382,50 @@ class NewsScreen extends StatelessWidget {
                                 children: [
                                   Image.network(
                                     allproductsdata[index]['p_imgs'][0],
-                                    width: 170,
+                                    width: 180,
                                     height: 210,
                                     fit: BoxFit.cover,
                                   ),
-                                  const Spacer(),
-                                  Text(
-                                    "${allproductsdata[index]['p_name']}",
-                                    style: TextStyle(
-                                      fontFamily: medium,
-                                      fontSize: 17,
-                                      color: Colors.black,
+                                  // const Spacer(),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0), 
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "${allproductsdata[index]['p_name']}",
+                                          style: TextStyle(
+                                            fontFamily: medium,
+                                            fontSize: 17,
+                                            color: Colors.black,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow
+                                              .ellipsis, // ใช้ ellipsis สำหรับข้อความที่เกิน
+                                        ),
+                                           Text(
+                                            "${allproductsdata[index]['p_price']} Bath",
+                                            style: TextStyle(
+                                              fontFamily: regular,
+                                              fontSize: 14,
+                                              color:fontGreyDark1, 
+                                            ),
+                                          ),
+                                        SizedBox(height: 10), // ให้ระยะห่างด้านล่าง
+                                      ],
                                     ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow
-                                        .ellipsis, // ใช้ ellipsis สำหรับข้อความที่เกิน
-                                  ),
-                                  "${allproductsdata[index]['p_price']} Bath"
-                                      .text
-                                      .color(fontGrey)
-                                      .fontFamily(regular)
-                                      .size(14)
-                                      .make(),
-                                  10.heightBox,
+                                  )
                                 ],
                               )
                                   .box
                                   .white
+                                  .rounded
+                                  .shadowSm
                                   .margin(
                                       const EdgeInsets.symmetric(horizontal: 2))
                                   .rounded
-                                  .padding(const EdgeInsets.all(12))
+                                  // .padding(const EdgeInsets.all(12))
                                   .make()
                                   .onTap(() {
                                 Get.to(() => ItemDetails(

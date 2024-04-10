@@ -19,7 +19,7 @@ class ChatScreen extends StatelessWidget {
         title: "${controller.friendName}"
             .text
             .fontFamily(regular)
-            .color(fontGreyDark)
+            .color(fontGreyDark2)
             .make(),
       ),
       body: Padding(
@@ -45,7 +45,7 @@ class ChatScreen extends StatelessWidget {
                               return Center(
                                 child: "Send a message..."
                                     .text
-                                    .color(fontGreyDark)
+                                    .color(fontGreyDark2)
                                     .make(),
                               );
                             } else {
@@ -72,9 +72,9 @@ class ChatScreen extends StatelessWidget {
                   controller: controller.msgController,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(
-                        borderSide: BorderSide(color: fontGrey)),
+                        borderSide: BorderSide(color: fontGreyDark1)),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: fontGrey)),
+                        borderSide: BorderSide(color: fontGreyDark1)),
                     hintText: "Type a message...",
                   ),
                 )),

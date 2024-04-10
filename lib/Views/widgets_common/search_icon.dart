@@ -1,7 +1,7 @@
 import 'package:flutter_finalproject/Views/search_screen/search_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 
-Widget IconSearch({context}) {
+Widget IconSearch({required BuildContext context}) { // Specify context as required
   return Padding(
       padding: const EdgeInsets.only(left: 15.0),
       child: IconButton(
@@ -21,7 +21,7 @@ Widget IconSearch({context}) {
                 alignment: Alignment.topCenter,
                 child: Container(
                   height: MediaQuery.of(context).size.height * 0.6,
-                  child: const SearchScreenPage(), 
+                  child: const SearchScreenPage(), // Make sure this is your actual search screen widget
                   decoration: const BoxDecoration(
                     color: whiteColor,
                     borderRadius: BorderRadius.only(

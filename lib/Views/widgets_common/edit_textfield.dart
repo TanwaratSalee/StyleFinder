@@ -31,7 +31,7 @@ Widget editTextField({
               style: const TextStyle(
                 color: blackColor,
                 fontSize: 14,
-                fontFamily: 'Regular',
+                fontFamily: regular,
               ),
             ),
           const SizedBox(width: 20),
@@ -42,7 +42,7 @@ Widget editTextField({
               readOnly: readOnly,
               decoration: const InputDecoration(
                 isDense: true,
-                hintStyle: TextStyle(color: fontGrey),
+                hintStyle: TextStyle(color: fontGreyDark1),
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
                 enabledBorder: UnderlineInputBorder(

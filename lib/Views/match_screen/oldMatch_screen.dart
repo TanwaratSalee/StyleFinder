@@ -26,7 +26,7 @@ class _OldMatchScreenState extends State<OldMatchScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: whiteColor,
-        title: appbarField(),
+        title: appbarField(context: context),
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right: 15.0),

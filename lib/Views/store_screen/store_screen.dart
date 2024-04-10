@@ -152,7 +152,7 @@ class StoreScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           const BoxShadow(
-            color: fontGrey,
+            color: fontGreyDark1,
             blurRadius: 4,
             offset: Offset(0, 2),
           ),
@@ -190,9 +190,9 @@ class StoreScreen extends StatelessWidget {
         children: <Widget>[
           TabBar(
             labelStyle: const TextStyle(
-                fontSize: 15, fontFamily: regular, color: fontGreyDark),
+                fontSize: 15, fontFamily: regular, color: fontGreyDark2),
             unselectedLabelStyle: const TextStyle(
-                fontSize: 14, fontFamily: regular, color: fontGrey),
+                fontSize: 14, fontFamily: regular, color: fontGreyDark1),
             tabs: [
               const Tab(text: 'Product'),
               const Tab(text: 'Match'),
@@ -250,9 +250,9 @@ class StoreScreen extends StatelessWidget {
             isScrollable: true,
             indicatorColor: primaryApp,
             labelStyle: TextStyle(
-                fontSize: 13, fontFamily: regular, color: fontGreyDark),
+                fontSize: 13, fontFamily: regular, color: fontGreyDark2),
             unselectedLabelStyle:
-                TextStyle(fontSize: 12, fontFamily: regular, color: fontGrey),
+                TextStyle(fontSize: 12, fontFamily: regular, color: fontGreyDark1),
             tabs: [
               Tab(text: 'All'),
               Tab(text: 'Outer'),
@@ -349,15 +349,16 @@ class StoreScreen extends StatelessWidget {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            Text(
-                              '$price',
+                            Text('$price',
                               style: const TextStyle(
                                   color: greyColor, fontFamily: regular),
                             ),
                           ],
                         ),
                       ),
+                      
                     ],
+                    
                   ).box.color(whiteColor).make(),
                 ),
               );
@@ -537,47 +538,47 @@ class StoreScreen extends StatelessWidget {
   }
 
   Future<String> fetchSellerName(String vendorId) async {
-    // ค้นหาเอกสารใน collection 'products' ที่มี 'vendor_id' ตรงกับ vendorId ที่ให้มา
+    
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('products')
         .where('vendor_id', isEqualTo: vendorId)
-        .limit(1) // จำกัดผลลัพธ์เพื่อประหยัดทรัพยากร
+        .limit(1) 
         .get();
 
-    // ตรวจสอบว่าพบเอกสารหรือไม่
+    
     if (querySnapshot.docs.isNotEmpty) {
-      // ดึงข้อมูล 'p_seller' จากเอกสารแรกที่พบ
+      
       Map<String, dynamic> data =
           querySnapshot.docs.first.data() as Map<String, dynamic>;
       return data['p_seller'] ??
-          'Unknown Seller'; // คืนค่า 'p_seller' หรือ 'Unknown Seller' หากไม่พบข้อมูล
+          'Unknown Seller'; 
     } else {
-      return 'Unknown Seller'; // คืนค่า 'Unknown Seller' หากไม่พบเอกสารใดๆ
+      return 'Unknown Seller'; 
     }
   }
 
   Future<String> fetchSellerImgs(String vendorId) async {
     try {
-      // ค้นหาเอกสารใน collection 'vendors' ที่มี 'vendor_id' ตรงกับ vendorId ที่ให้มา
+      
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('vendors')
           .where('vendor_id', isEqualTo: vendorId)
-          .limit(1) // จำกัดผลลัพธ์เพื่อประหยัดทรัพยากร
+          .limit(1) 
           .get();
 
-      // ตรวจสอบว่าพบเอกสารหรือไม่
+      
       if (querySnapshot.docs.isNotEmpty) {
-        // ดึงข้อมูล 'imageUrl' จากเอกสารแรกที่พบ
+        
         Map<String, dynamic> data =
             querySnapshot.docs.first.data() as Map<String, dynamic>;
         return data['imageUrl'] ?? 'URL รูปภาพเริ่มต้น/คำแนะนำหากไม่พบ';
       } else {
-        return 'URL รูปภาพเริ่มต้น/คำแนะนำหากไม่พบ'; // คืนค่า URL เริ่มต้นหากไม่พบเอกสารใดๆ
+        return 'URL รูปภาพเริ่มต้น/คำแนะนำหากไม่พบ'; 
       }
     } catch (e) {
-      // จัดการกับข้อผิดพลาดที่อาจเกิดขึ้น
+      
       print('เกิดข้อผิดพลาดในการดึงข้อมูล: $e');
-      return 'URL รูปภาพเริ่มต้น/คำแนะนำหากเกิดข้อผิดพลาด'; // คืนค่า URL เริ่มต้นหรือคำแนะนำในกรณีเกิดข้อผิดพลาด
+      return 'URL รูปภาพเริ่มต้น/คำแนะนำหากเกิดข้อผิดพลาด'; 
     }
   }
 }

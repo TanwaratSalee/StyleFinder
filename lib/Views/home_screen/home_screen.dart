@@ -82,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         backgroundColor: whiteColor,
         automaticallyImplyLeading: false,
-        title: appbarField(),
+        title: appbarField(context: context),
         // actions: <Widget>[
         //   Padding(
         //     padding: const EdgeInsets.only(right: 15.0),
@@ -183,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   // Text(
                                   //   product['p_aboutProduct'],
                                   //   style: const TextStyle(
-                                  //     color: fontGrey,
+                                  //     color: fontGreyDark1,
                                   //     fontSize: 14,
                                   //     fontFamily: light,
                                   //   ),
@@ -191,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Text(
                                     product['p_price'],
                                     style: const TextStyle(
-                                      color: fontGreyDark,
+                                      color: fontGreyDark2,
                                       fontSize: 18,
                                     ),
                                   ),
@@ -210,7 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           icon: Image.asset(
                             icDislikeButton,
                             width: 67,
-                          ),
+                          ).box.roundedFull.shadowSm.make(),
                           onPressed: () =>
                               controllercard.swipe(CardSwiperDirection.left),
                         ),
@@ -218,7 +218,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           icon: Image.asset(
                             icViewMoreButton,
                             width: 67,
-                          ),
+                          ).box.roundedFull.shadowSm.make(),
                           onPressed: () {
                             Get.to(() => ItemDetails(
                                   title: product['p_name'],
@@ -230,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           icon: Image.asset(
                             icLikeButton,
                             width: 67,
-                          ),
+                          ).box.roundedFull.shadowSm.make(),
                           onPressed: () => [
                             controllercard.swipe(CardSwiperDirection.right),
                             controller.addToWishlist(product),
