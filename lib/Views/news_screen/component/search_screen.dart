@@ -6,6 +6,7 @@ import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.d
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/services/firestore_services.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class SearchScreen extends StatelessWidget {
   final String? title;
@@ -16,7 +17,7 @@ class SearchScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: title!.text.color(fontGreyDark2).make(),
+        title: title!.text.color(greyDark2).make(),
       ),
       body: FutureBuilder(
         future: FirestoreServices.searchProducts(title),
@@ -59,10 +60,10 @@ class SearchScreen extends StatelessWidget {
                             "${filtered[index]['p_name']}"
                                 .text
                                 .fontFamily(regular)
-                                .color(fontGreyDark2)
+                                .color(greyDark2)
                                 .make(),
                             5.heightBox,
-                            "${filtered[index]['p_price']}"
+                            "${NumberFormat('#,##0').format(double.parse(filtered[index]['p_price']).toInt())} Bath"
                                 .text
                                 .color(primaryApp)
                                 .fontFamily(bold)

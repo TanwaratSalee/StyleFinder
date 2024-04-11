@@ -63,7 +63,7 @@ class PaymentMethods extends StatelessWidget {
           title: "Choose Payment Method"
               .text
               .fontFamily(regular)
-              .color(fontGreyDark2)
+              .color(greyDark2)
               .make(),
         ),
         body: Padding(
@@ -99,7 +99,7 @@ class PaymentMethods extends StatelessWidget {
                                       ? BlendMode.darken
                                       : BlendMode.color,
                               color: controller.paymentIndex.value == index
-                                  ? Colors.black.withOpacity(0.4)
+                                  ? blackColor.withOpacity(0.4)
                                   : Colors.transparent,
                               fit: BoxFit.cover),
                           controller.paymentIndex.value == index

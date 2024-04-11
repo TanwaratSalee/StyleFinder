@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/models/collection_model.dart';
@@ -8,10 +9,17 @@ class ProductController extends GetxController {
   var quantity = 0.obs;
   var colorIndex = 0.obs;
   var totalPrice = 0.obs;
+  var vendorImageUrl = ''.obs;
 
   var subcat = [];
 
   var isFav = false.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    resetValues();
+  }
 
   getSubCollection(title) async {
     subcat.clear();
@@ -26,6 +34,10 @@ class ProductController extends GetxController {
     }
   }
 
+  void updateVendorImageUrl(String url) {
+    vendorImageUrl.value = url;
+  }
+
   changeColorIndex(index) {
     colorIndex.value = index;
   }
@@ -37,14 +49,14 @@ class ProductController extends GetxController {
   }
 
   decreaseQuantity() {
-    if (quantity.value > 0) {
+    if (quantity.value > 1) {
       quantity.value--;
     }
   }
 
-  calculateTotalPrice(price) {
-    totalPrice.value = price * quantity.value;
-  }
+  calculateTotalPrice(int price) {
+  totalPrice.value = quantity.value * price;
+ }
 
   addToCart(
       {title, img, sellername, color, qty, tprice, context, vendorID}) async {
@@ -64,8 +76,9 @@ class ProductController extends GetxController {
 
   resetValues() {
     totalPrice.value = 0;
-    quantity.value = 0;
+    quantity.value = 1;
     colorIndex.value = 0;
+    
   }
 
   addToWishlist(docId, context) async {
@@ -76,7 +89,8 @@ class ProductController extends GetxController {
     VxToast.show(context, msg: "Added to wishlist");
   }
 
-  void addToWishlistDetail(Map<String, dynamic> product, context) {
+  void addToWishlistDetail(
+      Map<String, dynamic> product, Function(bool) updateIsFav, context) {
     FirebaseFirestore.instance
         .collection(productsCollection)
         .where('p_name', isEqualTo: product['p_name'])
@@ -89,7 +103,7 @@ class ProductController extends GetxController {
           doc.reference.update({
             'p_wishlist': FieldValue.arrayUnion([currentUser!.uid])
           }).then((value) {
-            isFav(true);
+            updateIsFav(true);
             VxToast.show(context, msg: "Added from wishlist");
           }).catchError((error) {
             print('Error adding ${product['p_name']} to Favorite: $error');
@@ -99,7 +113,8 @@ class ProductController extends GetxController {
     });
   }
 
-  void RemoveToWishlistDetail(Map<String, dynamic> product, context) {
+  void removeToWishlistDetail(
+      Map<String, dynamic> product, Function(bool) updateIsFav, context) {
     FirebaseFirestore.instance
         .collection(productsCollection)
         .where('p_name', isEqualTo: product['p_name'])
@@ -108,19 +123,70 @@ class ProductController extends GetxController {
       if (querySnapshot.docs.isNotEmpty) {
         DocumentSnapshot doc = querySnapshot.docs.first;
         List<dynamic> wishlist = doc['p_wishlist'];
-        if (!wishlist.contains(currentUser!.uid)) {
+        if (wishlist.contains(currentUser!.uid)) {
           doc.reference.update({
             'p_wishlist': FieldValue.arrayRemove([currentUser!.uid])
           }).then((value) {
-            isFav(false);
+            updateIsFav(false);
             VxToast.show(context, msg: "Removed from wishlist");
           }).catchError((error) {
-            print('Error adding ${product['p_name']} to Favorite: $error');
+            print('Error removing ${product['p_name']} from Favorite: $error');
           });
         }
       }
     });
   }
+
+void addToWishlistMixMatch(
+    String productName, Function(bool) updateIsFav, BuildContext context) {
+  FirebaseFirestore.instance
+      .collection('products')
+      .where('p_name', isEqualTo: productName)
+      .get()
+      .then((QuerySnapshot querySnapshot) {
+    if (querySnapshot.docs.isNotEmpty) {
+      DocumentSnapshot doc = querySnapshot.docs.first;
+      List<dynamic> wishlist = doc['p_wishlist'] ?? [];
+      String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
+      if (!wishlist.contains(currentUserUID)) {
+        doc.reference.update({
+          'p_wishlist': FieldValue.arrayUnion([currentUserUID])
+        }).then((value) {
+          updateIsFav(true);
+          VxToast.show(context, msg: "Added from wishlist");
+        }).catchError((error) {
+          print('Error adding $productName to Favorite: $error');
+        });
+      }
+    }
+  });
+}
+
+void removeToWishlistMixMatch(
+    String productName, Function(bool) updateIsFav, BuildContext context) {
+  FirebaseFirestore.instance
+      .collection('products')
+      .where('p_name', isEqualTo: productName)
+      .get()
+      .then((QuerySnapshot querySnapshot) {
+    if (querySnapshot.docs.isNotEmpty) {
+      DocumentSnapshot doc = querySnapshot.docs.first;
+      List<dynamic> wishlist = doc['p_wishlist'] ?? [];
+      String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
+      if (wishlist.contains(currentUserUID)) { // <--- เปลี่ยนเป็นเช็คว่าอยู่ใน wishlist หรือไม่
+        doc.reference.update({
+          'p_wishlist': FieldValue.arrayRemove([currentUserUID])
+        }).then((value) {
+          updateIsFav(false); // <--- อัปเดต isFav เป็น false เมื่อลบรายการออกจาก wishlist
+          VxToast.show(context, msg: "Removed from wishlist");
+        }).catchError((error) {
+          print('Error removing $productName from Favorite: $error');
+        });
+      }
+    }
+  });
+}
+
 
   removeFromWishlist(docId, context) async {
     await firestore.collection(productsCollection).doc(docId).set({

@@ -111,7 +111,7 @@ class _PersonalDetailsScreenGoogleState
                   .text
                   .size(14)
                   .fontFamily(regular)
-                  .color(fontGreyDark2)
+                  .color(greyDark2)
                   .make(),
             ),
             const SizedBox(height: 10),
@@ -235,7 +235,7 @@ class _PersonalDetailsScreenGoogleState
             const Text(
               'Skin',
               style: TextStyle(
-                  fontSize: 16, color: Colors.black, fontFamily: regular),
+                  fontSize: 16, color: blackColor, fontFamily: regular),
             ),
             Column(
               children: [

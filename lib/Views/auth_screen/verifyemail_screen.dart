@@ -6,6 +6,7 @@ import 'package:flutter_finalproject/Views/auth_screen/login_screen.dart';
 import 'package:flutter_finalproject/Views/auth_screen/personal_details_screen.dart';
 import 'package:flutter_finalproject/Views/home_screen/mainHome.dart';
 import 'package:flutter_finalproject/consts/colors.dart';
+import 'package:flutter_finalproject/consts/styles.dart';
 import 'package:flutter_finalproject/controllers/auth_controller.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -85,30 +86,30 @@ void setTimerForAutoRedirect() {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Icon(
+            const Icon(
               Icons.email_outlined,
               size: 100,
               color: Color.fromRGBO(53, 194, 193, 1),
             ),
-            SizedBox(height: 50),
-            Text(
+            const SizedBox(height: 50),
+            const Text(
               'Verify your email address',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.bold,
+                fontFamily: bold,
               ),
             ),
-            SizedBox(height: 20),
-            Text(
+            const SizedBox(height: 20),
+            const Text(
               'We have just sent an email verification link to your email. Please check your email and click on the link to verify your Email address.',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
               ),
             ),
-            SizedBox(height: 20),
-            Text(
+            const SizedBox(height: 20),
+            const Text(
               'If not auto redirected after verification, click on the Continue button.',
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -116,9 +117,9 @@ void setTimerForAutoRedirect() {
                 color: Colors.grey,
               ),
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             ElevatedButton(
-              child: Text('Continue', style: TextStyle(color: Colors.white)),
+              child: const Text('Continue', style: TextStyle(color: Colors.white)),
               onPressed: () async {
                 var user = FirebaseAuth.instance.currentUser;
                 await user?.reload();
@@ -131,16 +132,16 @@ void setTimerForAutoRedirect() {
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromRGBO(53, 194, 193, 1),
+                backgroundColor: const Color.fromRGBO(53, 194, 193, 1),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),
-                padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0),
+                padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0),
               ),
             ),
             TextButton(
               style: TextButton.styleFrom(
-              foregroundColor: Color.fromRGBO(53, 194, 193, 1),
+              foregroundColor: const Color.fromRGBO(53, 194, 193, 1),
               ),
               onPressed: () async {
                 User? user = FirebaseAuth.instance.currentUser;
@@ -148,16 +149,16 @@ void setTimerForAutoRedirect() {
                   await user.sendEmailVerification();
                 }
               },
-              child: Text('Resend Email Link'),
+              child: const Text('Resend Email Link'),
             ),
             TextButton(
               style: TextButton.styleFrom(
-              foregroundColor: Color.fromRGBO(53, 194, 193, 1),
+              foregroundColor: const Color.fromRGBO(53, 194, 193, 1),
               ),
               onPressed: () {
-                Get.offAll(() => LoginScreen());
+                Get.offAll(() => const LoginScreen());
               },
-              child: Text('← back to login'),
+              child: const Text('← back to login'),
             ),
           ],
         ),

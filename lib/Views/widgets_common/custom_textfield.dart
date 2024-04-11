@@ -16,7 +16,7 @@ Widget customTextField({
           title,
           style: const TextStyle(
             color: blackColor,
-            fontWeight: FontWeight.bold,
+            fontFamily: bold,
             fontSize: 16,
           ),
         ),
@@ -29,7 +29,7 @@ Widget customTextField({
           isDense: true,
           labelText: label,
           hintStyle: const TextStyle(
-            color: fontGreyDark1,
+            color: greyDark1,
           ),
           filled: true,
           fillColor: thinGrey,

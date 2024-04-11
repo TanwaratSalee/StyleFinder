@@ -1,13 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/widgets_common/appbar_ontop.dart';
+import 'package:flutter_finalproject/Views/widgets_common/search_icon.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/news_controller.dart';
 import 'package:flutter_finalproject/services/firestore_services.dart';
 import 'package:get/get.dart';
 
 import 'dart:math' as math;
+
+import 'package:intl/intl.dart';
 
 class ProductScreen extends StatelessWidget {
   const ProductScreen({super.key});
@@ -20,7 +24,37 @@ class ProductScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: whiteColor,
-        title: appbarField(context: context),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+  children: [
+    SizedBox(
+      width: 10,
+    ),
+    Image.asset(icLogoOnTop, height: 40),
+    Expanded(
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: Padding(
+          padding: const EdgeInsets.only(right: 10.0),
+          child: IconButton(
+            icon: Image.asset(
+              icCart,
+              width: 21,
+            ),
+            onPressed: () {
+              Get.to(() => const CartScreen());
+            },
+          ),
+        ),
+      ),
+    ),
+  ],
+),
+
+          ],
+        ),
       ),
       body: Container(
         padding: const EdgeInsets.all(12),
@@ -39,7 +73,7 @@ class ProductScreen extends StatelessWidget {
                         alignment: Alignment.centerLeft,
                         child: allproducts.text
                             .fontFamily(regular)
-                            .color(fontGreyDark2)
+                            .color(greyDark2)
                             .size(18)
                             .make()),
                     StreamBuilder(
@@ -59,9 +93,9 @@ class ProductScreen extends StatelessWidget {
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
-                              mainAxisSpacing: 10,
-                              crossAxisSpacing: 6,
-                              mainAxisExtent: 300,
+                              mainAxisSpacing: 18,
+                              crossAxisSpacing: 12,
+                              mainAxisExtent: 280,
                             ),
                             itemBuilder: (context, index) {
                               return Column(
@@ -69,36 +103,46 @@ class ProductScreen extends StatelessWidget {
                                 children: [
                                   Image.network(
                                     allproductsdata[index]['p_imgs'][0],
-                                    width: 170,
+                                    width: 180,
                                     height: 210,
                                     fit: BoxFit.cover,
                                   ),
-                                  const Spacer(),
-                                  Text(
-                                    "${allproductsdata[index]['p_name']}",
-                                    style: TextStyle(
-                                      fontFamily: medium,
-                                      fontSize: 17,
-                                      color: Colors.black,
+                                  // const Spacer(),
+                                  10.heightBox,
+                                  Padding(
+                                    padding: EdgeInsets.all(8),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "${allproductsdata[index]['p_name']}",
+                                          style: TextStyle(
+                                            fontFamily: medium,
+                                            fontSize: 17,
+                                            color: blackColor,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        "${NumberFormat('#,##0').format(double.parse(allproductsdata[index]['p_price']).toInt())} Bath" 
+                                        .text
+                                            .color(greyDark1)
+                                            .fontFamily(regular)
+                                            .size(14)
+                                            .make(),
+                                      ],
                                     ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  "${allproductsdata[index]['p_price']} Bath"
-                                      .text
-                                      .color(fontGreyDark1)
-                                      .fontFamily(regular)
-                                      .size(14)
-                                      .make(),
-                                  5.heightBox,
+                                  )
                                 ],
                               )
                                   .box
                                   .white
                                   .margin(
                                       const EdgeInsets.symmetric(horizontal: 2))
+                                  .shadowSm
                                   .rounded
-                                  .padding(const EdgeInsets.all(12))
+                                  // .padding(const EdgeInsets.all(12))
                                   .make()
                                   .onTap(() {
                                 Get.to(() => ItemDetails(

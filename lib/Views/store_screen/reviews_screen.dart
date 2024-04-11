@@ -33,7 +33,7 @@ class _ReviewScreenState extends State<ReviewScreen>
         title: Text(
           'Reviews',
           style: TextStyle(
-            fontWeight: FontWeight.bold,
+            fontFamily: bold,
           ),
         ),
         centerTitle: true,
@@ -95,7 +95,7 @@ Widget _botton(BuildContext context) {
           borderRadius: BorderRadius.circular(8),
           boxShadow: [
             BoxShadow(
-              color: fontGreyDark1,
+              color: greyDark1,
               blurRadius: 4,
               offset: Offset(0, 2),
             ),
@@ -153,7 +153,7 @@ Widget _buildReviewCard() {
       borderRadius: BorderRadius.circular(8),
       boxShadow: [
         BoxShadow(
-          color: fontGreyDark1,
+          color: greyDark1,
           blurRadius: 4,
           offset: Offset(0, 2),
         ),
@@ -170,7 +170,7 @@ Widget _buildReviewCard() {
             ),
             SizedBox(width: 10),
             Text('Reviewer Name',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                style: TextStyle(fontSize: 16, fontFamily: bold)),
           ],
         ),
         SizedBox(
@@ -207,7 +207,7 @@ Widget _buildReviewProductCard() {
       borderRadius: BorderRadius.circular(8),
       boxShadow: [
         BoxShadow(
-          color: fontGreyDark1,
+          color: greyDark1,
           blurRadius: 4,
           offset: Offset(0, 2),
         ),
@@ -240,7 +240,7 @@ Widget _buildReviewProductCard() {
               children: [
                 Text('Reviewer Name',
                     style:
-                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                        TextStyle(fontSize: 16, fontFamily: bold)),
                 SizedBox(height: 10),
                 Row(
                   mainAxisAlignment:

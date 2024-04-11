@@ -2,28 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 
 Widget orderStatus({String? icon, Color? color, String? title, bool? showDone}) {
+  final backgroundColor = showDone ?? false ? primaryApp : greyColor;
+  final iconColor = showDone ?? false ? whiteColor : greyDark2;
+
   return ListTile(
     contentPadding: EdgeInsets.zero,
-    title: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Image.asset(
-          icon ?? "", // Ensure icon is not null
-          color: color,
-          width: 25, // Adjust width as needed
-          height: 25, // Adjust height as needed
-        ),
-        SizedBox(height: 8), // Adjust as needed for spacing between icon and title
-        Text(
-          title ?? "", // Ensure title is not null
-          style: TextStyle(color: fontGreyDark2),
-        ),
-        if (showDone ?? false)
-          Icon(
-            Icons.done,
-            color: primaryApp,
-          )
-      ],
+    title: Container(
+      width: double.infinity, // ตั้งค่าความกว้างให้ชัดเจนหรืออาจกำหนดเป็นค่าตายตัว
+      child: Column(
+        mainAxisSize: MainAxisSize.min, // ให้ขนาดตามเนื้อหา
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            padding: EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              shape: BoxShape.circle,
+            ),
+            child: Image.asset(
+              icon ?? "",
+              color: iconColor,
+              width: 18,
+              height: 18,
+            ),
+          ),
+          SizedBox(height: 8),
+          Text(
+            title ?? "",
+            style: TextStyle(color: greyDark2, fontFamily: regular, fontSize: 12),
+          ),
+        ],
+      ),
     ),
   );
 }

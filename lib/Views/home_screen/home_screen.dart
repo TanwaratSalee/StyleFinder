@@ -11,6 +11,7 @@ import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 import '../widgets_common/appbar_ontop.dart';
 
@@ -174,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Text(
                                     product['p_name'],
                                     style: const TextStyle(
-                                      color: Colors.black,
+                                      color: blackColor,
                                       fontSize: 20,
                                       fontFamily: bold,
                                     ),
@@ -183,15 +184,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                   // Text(
                                   //   product['p_aboutProduct'],
                                   //   style: const TextStyle(
-                                  //     color: fontGreyDark1,
+                                  //     color: greyDark1,
                                   //     fontSize: 14,
                                   //     fontFamily: light,
                                   //   ),
                                   // ),
                                   Text(
-                                    product['p_price'],
+                                    "${NumberFormat('#,##0').format(double.parse(product['p_price']).toInt())} Bath",
                                     style: const TextStyle(
-                                      color: fontGreyDark2,
+                                      color: greyDark2,
                                       fontSize: 18,
                                     ),
                                   ),

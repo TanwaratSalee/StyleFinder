@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_finalproject/consts/consts.dart';
+import 'package:flutter_finalproject/controllers/product_controller.dart';
 import 'package:get/get.dart';
 
 class MatchDetailScreen extends StatefulWidget {
@@ -26,6 +29,41 @@ class MatchDetailScreen extends StatefulWidget {
 
 class _MatchDetailScreenState extends State<MatchDetailScreen> {
   bool isFavorited = false;
+  late final ProductController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.put(ProductController());
+    checkIsInWishlist();
+  }
+
+void checkIsInWishlist() async {
+  FirebaseFirestore.instance
+      .collection(productsCollection)
+      .where('p_name', whereIn: [widget.productName1, widget.productName2])
+      .get()
+      .then((QuerySnapshot querySnapshot) {
+    if (querySnapshot.docs.isNotEmpty) {
+      querySnapshot.docs.forEach((doc) {
+        List<dynamic> wishlist = doc['p_wishlist'] ?? [];
+        if (wishlist.contains(currentUser!.uid)) {
+          controller.isFav(true);
+        } else {
+          controller.isFav(false);
+        }
+      });
+    }
+  });
+}
+
+
+  void _updateIsFav(bool isFav) {
+    setState(() {
+      controller.isFav.value = isFav;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -40,30 +78,30 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
         ),
         elevation: 0,
         actions: <Widget>[
-          IconButton(
-            icon: Stack(
-              alignment: Alignment.center,
-              children: <Widget>[
-                const Icon(
-                  Icons.favorite_border,
-                  color: Colors.black,
-                  size: 30,
-                ),
-                Positioned(
-                  child: Icon(
-                    Icons.favorite,
-                    color: isFavorited ? Colors.red : Colors.white,
-                    size: 24,
-                  ),
-                ),
-              ],
-            ),
-            onPressed: () {
-              setState(() {
-                isFavorited = !isFavorited;
-              });
-            },
-          ),
+Obx(() => IconButton(
+  onPressed: () {
+    print("IconButton pressed");
+    List<String> productNames = [widget.productName1, widget.productName2];
+    bool isFav = !controller.isFav.value; // Toggle the isFav value
+    productNames.forEach((productName) {
+      if (isFav == true)  {
+        controller.addToWishlistMixMatch(productName, _updateIsFav, context);
+      }
+      if (isFav == false) {
+        controller.removeToWishlistMixMatch(productName, _updateIsFav, context);
+      }
+    });
+    print("isFav after toggling: $isFav"); // Debug print
+  },
+  icon: Icon(
+    controller.isFav.value
+        ? Icons.favorite
+        : Icons.favorite_outline,
+    color: controller.isFav.value ? redColor : null,
+  ),
+  iconSize: 28,
+)),
+
         ],
       ),
       body: Column(
@@ -84,7 +122,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                               height: 150,
                               decoration: BoxDecoration(
                                 color: Colors.white,
-                                border: Border.all(color: Colors.black),
+                                border: Border.all(color: blackColor),
                               ),
                               child: Center(
                                 child: Image.network(
@@ -100,10 +138,10 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                             ),
                             Text(widget.productName1,
                                 style: const TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold)),
+                                    fontSize: 16, fontFamily: bold)),
                             Text('฿${widget.price1}',
                                 style: const TextStyle(
-                                    fontSize: 14, color: Colors.black)),
+                                    fontSize: 14, color: blackColor)),
                           ],
                         ),
                         const SizedBox(width: 10), // สร้างระยะห่าง
@@ -121,7 +159,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                             const Text('+',
                                 style: TextStyle(
                                     fontSize: 24,
-                                    fontWeight: FontWeight.bold,
+                                    fontFamily: bold,
                                     color: Colors.white)),
                           ],
                         ),
@@ -135,7 +173,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                               height: 150,
                               decoration: BoxDecoration(
                                 color: Colors.white,
-                                border: Border.all(color: Colors.black),
+                                border: Border.all(color: blackColor),
                               ),
                               child: Center(
                                 child: Image.network(
@@ -151,10 +189,10 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                             ),
                             Text(widget.productName2,
                                 style: const TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold)),
+                                    fontSize: 16, fontFamily: bold)),
                             Text('฿${widget.price2}',
                                 style: const TextStyle(
-                                    fontSize: 14, color: Colors.black)),
+                                    fontSize: 14, color: blackColor)),
                           ],
                         ),
                       ],
@@ -186,7 +224,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                               Text('Dior',
                                   style: TextStyle(
                                       fontSize: 16,
-                                      fontWeight: FontWeight.bold)),
+                                      fontFamily: bold)),
                               Row(
                                 children: [
                                   Icon(Icons.star,
@@ -346,7 +384,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                             child: Text(
                               'HEllo ',
                               style: TextStyle(
-                                color: Colors.black,
+                                color: blackColor,
                                 fontSize: 11,
                               ),
                             ),

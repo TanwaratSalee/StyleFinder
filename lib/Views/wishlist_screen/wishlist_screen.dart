@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/services/firestore_services.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
+import 'package:intl/intl.dart';
 
 class WishlistScreen extends StatelessWidget {
   const WishlistScreen({Key? key}) : super(key: key);
@@ -15,7 +16,7 @@ class WishlistScreen extends StatelessWidget {
         title: const Text(
           "Favourite",
           style: TextStyle(
-            color: fontGreyDark2,
+            color: greyDark2,
             fontSize: 24,
             fontFamily: bold,
           ),
@@ -30,7 +31,7 @@ class WishlistScreen extends StatelessWidget {
           final data = snapshot.data!.docs;
           if (data.isEmpty) {
             return const Center(
-                child: Text("No orders yet!", style: TextStyle(color: fontGreyDark2)));
+                child: Text("No orders yet!", style: TextStyle(color: greyDark2)));
           }
           return ListView.separated(
             itemCount: data.length,
@@ -83,8 +84,8 @@ class WishlistScreen extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                "${data[index]['p_price']}",
-                                style: const TextStyle(
+                                "${NumberFormat('#,##0').format(double.parse(data[index]['p_price']).toInt())} Bath",
+  style: const TextStyle(
                                   fontSize: 14,
                                   fontFamily: light,
                                 ),

@@ -56,7 +56,7 @@ class LoginScreen extends StatelessWidget {
                                     const Text('Log In',
                                         style: TextStyle(
                                             fontSize: 32,
-                                            fontWeight: FontWeight.bold)),
+                                            fontFamily: bold)),
                                     const SizedBox(height: 5),
                                     customTextField(
                                         label: email,
@@ -112,18 +112,18 @@ class LoginScreen extends StatelessWidget {
                                       children: [
                                         const Expanded(
                                           child: Divider(
-                                              color: fontGreyDark1, height: 1),
+                                              color: greyDark1, height: 1),
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 15),
                                           child: loginWith.text
-                                              .color(fontGreyDark2)
+                                              .color(greyDark2)
                                               .make(),
                                         ),
                                         const Expanded(
                                           child: Divider(
-                                              color: fontGreyDark1, height: 1),
+                                              color: greyDark1, height: 1),
                                         ),
                                       ],
                                     ),
@@ -218,7 +218,6 @@ class LoginScreen extends StatelessWidget {
                           fontSize: 16,
                           fontFamily: bold,
                           color: primaryApp,
-                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       onPressed: () {

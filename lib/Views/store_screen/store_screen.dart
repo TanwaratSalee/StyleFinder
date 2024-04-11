@@ -20,7 +20,7 @@ class StoreScreen extends StatelessWidget {
         return Scaffold(
           backgroundColor: whiteColor,
           appBar: AppBar(
-            title: Text(title),
+            title: Text(title).text.color(blackColor).fontFamily(medium).size(26).make(),
             centerTitle: true,
             leading: IconButton(
               icon: const Icon(Icons.arrow_back_ios),
@@ -67,32 +67,61 @@ class StoreScreen extends StatelessWidget {
               children: [
                 Center(
                   child: FutureBuilder<String>(
-                    future: fetchSellerImgs(
-                        vendorId), // อย่าลืมเปลี่ยนให้ตรงกับการเรียกใช้ของคุณ
+                    future: fetchSellerImgs(vendorId),
                     builder:
                         (BuildContext context, AsyncSnapshot<String> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator(); // หรือ widget โหลดแบบอื่นๆ ที่คุณต้องการ
+                        return CircularProgressIndicator();
                       } else if (snapshot.hasError) {
-                        return Image.asset(
-                          imProfile, // รูปภาพหากเกิดข้อผิดพลาด
+                        return Container(
                           width: 120,
                           height: 120,
-                          fit: BoxFit.cover,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: greyColor, width: 3),
+                          ),
+                          child: ClipOval(
+                            child: Image.asset(
+                              imProfile,
+                              width: 120,
+                              height: 120,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                         );
                       } else if (snapshot.hasData) {
-                        return Image.network(
-                          snapshot.data!,
+                        return Container(
                           width: 120,
                           height: 120,
-                          fit: BoxFit.cover,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: greyColor, width: 3),
+                          ),
+                          child: ClipOval(
+                            child: Image.network(
+                              snapshot.data!,
+                              width: 120,
+                              height: 120,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                         );
                       } else {
-                        return Image.asset(
-                          imProfile, // รูปภาพเริ่มต้นหรือหากไม่มีข้อมูล
+                        return Container(
                           width: 120,
                           height: 120,
-                          fit: BoxFit.cover,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: greyColor, width: 3),
+                          ),
+                          child: ClipOval(
+                            child: Image.asset(
+                              imProfile,
+                              width: 120,
+                              height: 120,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                         );
                       }
                     },
@@ -152,7 +181,7 @@ class StoreScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           const BoxShadow(
-            color: fontGreyDark1,
+            color: greyDark1,
             blurRadius: 4,
             offset: Offset(0, 2),
           ),
@@ -162,7 +191,7 @@ class StoreScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text('Reviewer Name',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              style: TextStyle(fontSize: 16, fontFamily: bold)),
           Row(
             children: List.generate(5, (index) {
               return Icon(
@@ -190,9 +219,9 @@ class StoreScreen extends StatelessWidget {
         children: <Widget>[
           TabBar(
             labelStyle: const TextStyle(
-                fontSize: 15, fontFamily: regular, color: fontGreyDark2),
+                fontSize: 15, fontFamily: regular, color: greyDark2),
             unselectedLabelStyle: const TextStyle(
-                fontSize: 14, fontFamily: regular, color: fontGreyDark1),
+                fontSize: 14, fontFamily: regular, color: greyDark1),
             tabs: [
               const Tab(text: 'Product'),
               const Tab(text: 'Match'),
@@ -249,10 +278,10 @@ class StoreScreen extends StatelessWidget {
           const TabBar(
             isScrollable: true,
             indicatorColor: primaryApp,
-            labelStyle: TextStyle(
-                fontSize: 13, fontFamily: regular, color: fontGreyDark2),
+            labelStyle:
+                TextStyle(fontSize: 13, fontFamily: regular, color: greyDark2),
             unselectedLabelStyle:
-                TextStyle(fontSize: 12, fontFamily: regular, color: fontGreyDark1),
+                TextStyle(fontSize: 12, fontFamily: regular, color: greyDark1),
             tabs: [
               Tab(text: 'All'),
               Tab(text: 'Outer'),
@@ -265,11 +294,16 @@ class StoreScreen extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 0.9,
             child: TabBarView(
               children: [
-                _buildProductGrid('All'),
-                _buildProductGrid('Outer'),
-                _buildProductGrid('Dress'),
-                _buildProductGrid('Bottoms'),
-                _buildProductGrid('T-shirts'),
+                _buildProductGrid(
+                    'All', 'All'), // Pass 'All' for all categories
+                _buildProductGrid(
+                    'Outer', 'Outer'), // Pass 'Outer' for Outer category
+                _buildProductGrid(
+                    'Dress', 'Dress'), // Pass 'Dress' for Dress category
+                _buildProductGrid('Bottoms',
+                    'Bottoms'), // Pass 'Bottoms' for Bottoms category
+                _buildProductGrid('T-shirts',
+                    'T-shirts'), // Pass 'T-shirts' for T-shirts category
               ],
             ),
           ),
@@ -278,12 +312,18 @@ class StoreScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProductGrid(String category) {
+  Widget _buildProductGrid(String category, String subcollection) {
+    Query query = FirebaseFirestore.instance
+        .collection('products')
+        .where('vendor_id', isEqualTo: vendorId);
+
+    // Check if the subcollection is "All"
+    if (subcollection != 'All') {
+      query = query.where('p_subcollection', isEqualTo: subcollection);
+    }
+
     return FutureBuilder<QuerySnapshot>(
-      future: FirebaseFirestore.instance
-          .collection('products')
-          .where('vendor_id', isEqualTo: vendorId)
-          .get(),
+      future: query.get(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
@@ -294,7 +334,7 @@ class StoreScreen extends StatelessWidget {
           return Text('Error: ${snapshot.error}');
         }
         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-          return const Text('No data available');
+          return const Text('No Items');
         }
 
         return GridView.builder(
@@ -307,64 +347,57 @@ class StoreScreen extends StatelessWidget {
             String productName = product.get('p_name');
             String price = product.get('p_price');
             String productImage = product.get('p_imgs')[0];
-            String subcollection = product.get('p_subcollection');
 
-            if (category == 'All' || subcollection == category) {
-              print('Subcollection: $subcollection');
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ItemDetails(
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ItemDetails(
                       title: productName,
                       data: product.data() as Map<String, dynamic>,
+                    ),
+                  ),
+                );
+              },
+              child: Card(
+                clipBehavior: Clip.antiAlias,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Image.network(
+                      productImage,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: 150,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          3.heightBox,
+                          Text(
+                            productName,
+                            style: const TextStyle(
+                              fontFamily: medium,
+                              fontSize: 16,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            '$price',
+                            style: const TextStyle(
+                                color: greyColor, fontFamily: regular),
+                          ),
+                        ],
                       ),
                     ),
-                  );
-                },
-                child: Card(
-                  clipBehavior: Clip.antiAlias,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Image.network(
-                        productImage,
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        height: 150,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            3.heightBox,
-                            Text(
-                              productName,
-                              style: const TextStyle(
-                                fontFamily: medium,
-                                fontSize: 16,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            Text('$price',
-                              style: const TextStyle(
-                                  color: greyColor, fontFamily: regular),
-                            ),
-                          ],
-                        ),
-                      ),
-                      
-                    ],
-                    
-                  ).box.color(whiteColor).make(),
-                ),
-              );
-            } else {
-              // return Text('Data not found');
-            }
+                  ],
+                ).box.color(whiteColor).make(),
+              ),
+            );
           },
         );
       },
@@ -396,55 +429,61 @@ class StoreScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProductMathGrids(String category) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('products').snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (!snapshot.hasData) {
-          return Center(
-            child: loadingIndicator(),
-          );
-        }
+Widget _buildProductMathGrids(String category) {
+  return StreamBuilder<QuerySnapshot>(
+    stream: FirebaseFirestore.instance.collection('products').snapshots(),
+    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+      if (!snapshot.hasData) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      }
 
-        List<String> mixMatchList = [];
-        snapshot.data!.docs.forEach((doc) {
-          Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-          if (data.containsKey('p_mixmatch')) {
-            String currentMixMatch = data['p_mixmatch'];
-            if (!mixMatchList.contains(currentMixMatch)) {
-              mixMatchList.add(currentMixMatch);
-            }
+      // Initialize a map to group products by their 'p_mixmatch' value
+      Map<String, List<DocumentSnapshot>> mixMatchMap = {};
+
+      // Populate the map
+      for (var doc in snapshot.data!.docs) {
+        var data = doc.data() as Map<String, dynamic>;
+        if (data['p_mixmatch'] != null) {
+          String mixMatchKey = data['p_mixmatch'];
+          if (!mixMatchMap.containsKey(mixMatchKey)) {
+            mixMatchMap[mixMatchKey] = [];
           }
-        });
+          mixMatchMap[mixMatchKey]!.add(doc);
+        }
+      }
 
-        // แสดงข้อมูลที่ได้จากการตรวจสอบ p_mixmatch ใน console
-        print('MixMatch List: $mixMatchList');
+      // Filter out any 'p_mixmatch' groups that do not have exactly 2 products
+      var validPairs = mixMatchMap.entries.where((entry) => entry.value.length == 2).toList();
 
-        return GridView.builder(
-          padding: const EdgeInsets.all(2),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 1 / 1.3,
-          ),
-          itemBuilder: (BuildContext context, int index) {
-            int actualIndex = index * 2;
+      // Calculate the total number of valid pairs to display
+      int itemCount = validPairs.length;
 
-            String price1 = snapshot.data!.docs[actualIndex].get('p_price');
-            String price2 = snapshot.data!.docs[actualIndex + 1].get('p_price');
+      return GridView.builder(
+        padding: const EdgeInsets.all(2),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 1 / 1.3,
+        ),
+        itemCount: itemCount,
+        itemBuilder: (BuildContext context, int index) {
+          // Each pair of matched products
+          var pair = validPairs[index].value;
 
-            String totalPrice =
-                (int.parse(price1) + int.parse(price2)).toString();
+          // Assuming the data structure ensures there are exactly 2 products per matched 'p_mixmatch'
+          var data1 = pair[0].data() as Map<String, dynamic>;
+          var data2 = pair[1].data() as Map<String, dynamic>;
 
-            String productName1 =
-                snapshot.data!.docs[actualIndex].get('p_name');
-            String productName2 =
-                snapshot.data!.docs[actualIndex + 1].get('p_name');
+          String price1 = data1['p_price'].toString();
+          String price2 = data2['p_price'].toString();
+          String totalPrice = (int.parse(price1) + int.parse(price2)).toString();
 
-            String productImage1 =
-                snapshot.data!.docs[actualIndex].get('p_imgs')[0];
-            String productImage2 =
-                snapshot.data!.docs[actualIndex + 1].get('p_imgs')[0];
+          String productName1 = data1['p_name'];
+          String productName2 = data2['p_name'];
 
+          String productImage1 = data1['p_imgs'][0];
+          String productImage2 = data2['p_imgs'][0];
             return GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -492,8 +531,7 @@ class StoreScreen extends StatelessWidget {
                                 const SizedBox(height: 2),
                                 Text(
                                   productName1,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
+                                  style: const TextStyle(fontFamily: bold),
                                 ),
                                 Text(
                                   'Price: \$${price1.toString()}',
@@ -502,8 +540,7 @@ class StoreScreen extends StatelessWidget {
                                 const SizedBox(height: 20),
                                 Text(
                                   productName2,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
+                                  style: const TextStyle(fontFamily: bold),
                                 ),
                                 Text(
                                   'Price: \$${price2.toString()}',
@@ -521,8 +558,8 @@ class StoreScreen extends StatelessWidget {
                       child: Text(
                         'Total Price: \$${totalPrice.toString()}',
                         style: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
+                          color: blackColor,
+                          fontFamily: bold,
                         ),
                       ),
                     ),
@@ -531,54 +568,45 @@ class StoreScreen extends StatelessWidget {
               ),
             );
           },
-          itemCount: (mixMatchList.length).ceil(),
         );
       },
     );
   }
 
   Future<String> fetchSellerName(String vendorId) async {
-    
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('products')
         .where('vendor_id', isEqualTo: vendorId)
-        .limit(1) 
+        .limit(1)
         .get();
 
-    
     if (querySnapshot.docs.isNotEmpty) {
-      
       Map<String, dynamic> data =
           querySnapshot.docs.first.data() as Map<String, dynamic>;
-      return data['p_seller'] ??
-          'Unknown Seller'; 
+      return data['p_seller'] ?? 'Unknown Seller';
     } else {
-      return 'Unknown Seller'; 
+      return 'Unknown Seller';
     }
   }
 
   Future<String> fetchSellerImgs(String vendorId) async {
     try {
-      
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('vendors')
           .where('vendor_id', isEqualTo: vendorId)
-          .limit(1) 
+          .limit(1)
           .get();
 
-      
       if (querySnapshot.docs.isNotEmpty) {
-        
         Map<String, dynamic> data =
             querySnapshot.docs.first.data() as Map<String, dynamic>;
         return data['imageUrl'] ?? 'URL รูปภาพเริ่มต้น/คำแนะนำหากไม่พบ';
       } else {
-        return 'URL รูปภาพเริ่มต้น/คำแนะนำหากไม่พบ'; 
+        return 'URL รูปภาพเริ่มต้น/คำแนะนำหากไม่พบ';
       }
     } catch (e) {
-      
       print('เกิดข้อผิดพลาดในการดึงข้อมูล: $e');
-      return 'URL รูปภาพเริ่มต้น/คำแนะนำหากเกิดข้อผิดพลาด'; 
+      return 'URL รูปภาพเริ่มต้น/คำแนะนำหากเกิดข้อผิดพลาด';
     }
   }
 }

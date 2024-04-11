@@ -7,6 +7,7 @@ import 'package:flutter_finalproject/consts/firebase_consts.dart';
 import 'package:flutter_finalproject/consts/styles.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class ItemDetails extends StatefulWidget {
@@ -24,13 +25,18 @@ class _ItemDetailsState extends State<ItemDetails> {
   late final ProductController controller;
 
   @override
-  void initState() {
-    super.initState();
-    controller = Get.put(ProductController());
-    checkIsInWishlist();
-  }
+void initState() {
+  super.initState();
+  controller = Get.put(ProductController());
+  checkIsInWishlist();
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    int productPrice = int.parse(widget.data['p_price']); 
+    controller.calculateTotalPrice(productPrice);
+  });
+}
 
-  Future<void> checkIsInWishlist() async {
+
+  void checkIsInWishlist() async {
     FirebaseFirestore.instance
         .collection(productsCollection)
         .where('p_name', isEqualTo: widget.data['p_name'])
@@ -45,6 +51,33 @@ class _ItemDetailsState extends State<ItemDetails> {
           controller.isFav(false);
         }
       }
+    });
+
+    fetchVendorImageUrl(widget.data['vendor_id']);
+  }
+
+  void fetchVendorImageUrl(String vendorId) async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('vendors')
+          .where('vendor_id', isEqualTo: vendorId)
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        Map<String, dynamic> data =
+            querySnapshot.docs.first.data() as Map<String, dynamic>;
+        String imageUrl = data['imageUrl'] ?? '';
+        controller.updateVendorImageUrl(imageUrl);
+      }
+    } catch (e) {
+      print('Error fetching vendor image: $e');
+    }
+  }
+
+  void _updateIsFav(bool isFav) {
+    setState(() {
+      controller.isFav.value = isFav;
     });
   }
 
@@ -65,7 +98,7 @@ class _ItemDetailsState extends State<ItemDetails> {
               },
               icon: const Icon(Icons.arrow_back_ios)),
           title: widget.title!.text
-              .color(fontGreyDark2)
+              .color(greyDark2)
               .fontFamily(bold)
               .size(18)
               .make(),
@@ -99,7 +132,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                         Text(
                           widget.title ?? '',
                           style: const TextStyle(
-                            color: Colors.black,
+                            color: blackColor,
                             fontFamily: medium,
                             fontSize: 24,
                           ),
@@ -109,25 +142,20 @@ class _ItemDetailsState extends State<ItemDetails> {
                           () => IconButton(
                             onPressed: () {
                               if (controller.isFav.value) {
-                                controller.RemoveToWishlistDetail(
-                                    widget.data, context);
+                                controller.removeToWishlistDetail(
+                                    widget.data, _updateIsFav, context);
                               } else {
                                 controller.addToWishlistDetail(
-                                    widget.data, context);
+                                    widget.data, _updateIsFav, context);
                               }
-                              controller.isFav.toggle();
                             },
-                            icon: controller.isFav.value
-                                ? const Icon(
-                                    Icons.favorite,
-                                    color: redColor,
-                                    weight: 35,
-                                  )
-                                : const Icon(
-                                    Icons.favorite_outline,
-                                    weight: 35,
-                                  ),
-                            iconSize: 20,
+                            icon: Icon(
+                              controller.isFav.value
+                                  ? Icons.favorite
+                                  : Icons.favorite_outline,
+                              color: controller.isFav.value ? redColor : null,
+                            ),
+                            iconSize: 28,
                           ),
                         )
                       ],
@@ -137,54 +165,62 @@ class _ItemDetailsState extends State<ItemDetails> {
                       isSelectable: false,
                       value: double.parse(widget.data["p_rating"]),
                       onRatingUpdate: (value) {},
-                      normalColor: fontGreyDark2,
+                      normalColor: greyDark2,
                       selectionColor: golden,
                       count: 5,
-                      size: 25,
+                      size: 20,
                       maxRating: 5,
                     ),
                     5.heightBox,
                     "${widget.data['p_aboutProduct']}"
                         .text
-                        .color(fontGreyDark1)
-                        .size(16)
+                        .fontFamily(regular)
+                        .color(greyDark1)
+                        .size(14)
                         .make(),
-                    "${widget.data['p_price']}"
-                        .numCurrency
+                    "${NumberFormat('#,##0').format(double.parse(widget.data['p_price']).toInt())} Bath"
                         .text
-                        .color(primaryApp)
-                        .fontFamily(bold)
-                        .size(22)
+                        .color(Theme.of(context).primaryColor)
+                        .fontFamily(regular)
+                        .size(20)
                         .make(),
                     20.heightBox,
                     Row(
                       children: [
                         Expanded(
-                            child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            5.heightBox,
-                            "${widget.data['p_seller']}"
-                                .text
-                                .fontFamily(regular)
-                                .color(blackColor)
-                                .size(16)
-                                .make(),
-                          ],
-                        )),
-                        Expanded(
-                            child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            5.heightBox,
-                            "${widget.data['p_imgs']}"
-                                .text
-                                .fontFamily(regular)
-                                .color(blackColor)
-                                .size(16)
-                                .make(),
-                          ],
-                        )),
+                          child: Row(
+                            children: [
+                              5.widthBox,
+                              Obx(() {
+                                String imageUrl =
+                                    controller.vendorImageUrl.value;
+                                return imageUrl.isNotEmpty
+                                    ? ClipOval(
+                                        child: Image.network(
+                                          imageUrl,
+                                          width: 50,
+                                          height: 50,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                    : SizedBox.shrink();
+                              }),
+                              10.widthBox,
+                              Expanded(
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: "${widget.data['p_seller']}"
+                                      .toUpperCase()
+                                      .text
+                                      .fontFamily(medium)
+                                      .color(blackColor)
+                                      .size(18)
+                                      .make(),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                         10.widthBox,
                         GestureDetector(
                           onTap: () {
@@ -215,40 +251,43 @@ class _ItemDetailsState extends State<ItemDetails> {
                         .color(thinGrey)
                         .make(),
                     20.heightBox,
-                    10.heightBox,
-                    "Description"
-                        .text
-                        .color(blackColor)
-                        .size(16)
-                        .fontFamily(medium)
-                        .make(),
-                    5.heightBox,
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Text(
-                        widget.data['p_desc'],
-                        style: const TextStyle(
-                          color: blackColor,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                    10.heightBox,
-                    "Siz & Fit"
-                        .text
-                        .color(blackColor)
-                        .size(16)
-                        .fontFamily(medium)
-                        .make(),
-                    5.heightBox,
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Text(
-                        widget.data['p_size'],
-                        style: const TextStyle(
-                          color: blackColor,
-                          fontSize: 14,
-                        ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          "Description"
+                              .text
+                              .color(blackColor)
+                              .size(15)
+                              .fontFamily(medium)
+                              .make(),
+                          SizedBox(height: 5),
+                          Text(
+                            widget.data['p_desc'],
+                            style: TextStyle(
+                              color: blackColor,
+                              fontFamily: light,
+                              fontSize: 14,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          "Size & Fit"
+                              .text
+                              .color(blackColor)
+                              .size(15)
+                              .fontFamily(medium)
+                              .make(),
+                          SizedBox(height: 5),
+                          Text(
+                            widget.data['p_size'],
+                            style: TextStyle(
+                              color: blackColor,
+                              fontFamily: light,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     10.heightBox,
@@ -274,7 +313,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                                 icon: const Icon(Icons.remove)),
                             controller.quantity.value.text
                                 .size(16)
-                                .color(fontGreyDark2)
+                                .color(greyDark2)
                                 .fontFamily(bold)
                                 .make(),
                             IconButton(

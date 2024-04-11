@@ -12,7 +12,7 @@ class OrderDetailFont extends StatelessWidget {
             centerTitle: true,
             title: "My Order"
                 .text
-                .color(fontGreyDark2)
+                .color(greyDark2)
                 .fontFamily(medium)
                 .size(24)
                 .make(),
@@ -88,11 +88,11 @@ class DeliveryContentPage extends StatelessWidget {
             children: [
               Text(
                 'Total',
-                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 18.0, fontFamily: bold),
               ),
               Text(
                 '269,000.00 Bath', // อัพเดทราคารวมตามข้อมูลจริงของคุณ
-                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 18.0, fontFamily: bold),
               ),
             ],
           ),
@@ -160,7 +160,7 @@ class ItemTile extends StatelessWidget {
                 Text(
                   price,
                   style: const TextStyle(
-                      fontSize: 16.0, fontWeight: FontWeight.bold),
+                      fontSize: 16.0, fontFamily: bold),
                 ),
               ],
             ),
@@ -213,11 +213,11 @@ class DoneContentPage extends StatelessWidget {
             children: [
               Text(
                 'Total',
-                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 18.0, fontFamily: bold),
               ),
               Text(
                 '269,000.00 Bath',
-                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 18.0, fontFamily: bold),
               ),
             ],
           ),
