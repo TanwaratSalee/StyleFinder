@@ -148,7 +148,6 @@ class MenuSettingScreen extends StatelessWidget {
                             onPressed: () async {
                               await Get.put(AuthController())
                                   .signoutMethod(context);
-                              Get.offAll(() => LoginScreen());
                             },
                             child: Row(
                               mainAxisSize: MainAxisSize.min,

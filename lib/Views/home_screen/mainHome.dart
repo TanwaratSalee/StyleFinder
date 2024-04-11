@@ -1,5 +1,3 @@
-// ignore_for_file: unused_local_variable, deprecated_member_use
-
 import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/match_screen/match_screen.dart';
 import 'package:flutter_finalproject/Views/news_screen/news_screen.dart';
@@ -19,12 +17,17 @@ class MainHome extends StatefulWidget {
 }
 
 class _MainHomeState extends State<MainHome> {
+  late NewsController _newsController;
   int _selectedIndex = 0;
 
   @override
-  Widget build(BuildContext context) {
-    var controller = Get.put(NewsController());
+  void initState() {
+    super.initState();
+    _newsController = Get.put(NewsController());
+  }
 
+  @override
+  Widget build(BuildContext context) {
     var navbarItem = [
       BottomNavigationBarItem(
           icon: Image.asset(

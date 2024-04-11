@@ -29,6 +29,7 @@ class StoreScreen extends StatelessWidget {
             elevation: 0,
           ),
           body: SingleChildScrollView(
+            physics: NeverScrollableScrollPhysics(),
             child: Column(
               // แก้ไขในส่วนนี้
               children: [
@@ -295,15 +296,15 @@ class StoreScreen extends StatelessWidget {
             child: TabBarView(
               children: [
                 _buildProductGrid(
-                    'All', 'All'), // Pass 'All' for all categories
+                    'All', 'All'),
                 _buildProductGrid(
-                    'Outer', 'Outer'), // Pass 'Outer' for Outer category
+                    'Outer', 'Outer'),
                 _buildProductGrid(
-                    'Dress', 'Dress'), // Pass 'Dress' for Dress category
+                    'Dress', 'Dress'),
                 _buildProductGrid('Bottoms',
-                    'Bottoms'), // Pass 'Bottoms' for Bottoms category
+                    'Bottoms'),
                 _buildProductGrid('T-shirts',
-                    'T-shirts'), // Pass 'T-shirts' for T-shirts category
+                    'T-shirts'),
               ],
             ),
           ),

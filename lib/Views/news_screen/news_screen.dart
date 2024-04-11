@@ -306,7 +306,7 @@ class NewsScreen extends StatelessWidget {
                         'MATCH'
                             .text
                             .fontFamily(medium)
-                            .color(fontGreyDark2)
+                            .color(greyDark2)
                             .size(22)
                             .make(),
                         SizedBox(height: 6),
@@ -429,7 +429,7 @@ class NewsScreen extends StatelessWidget {
                         'PRODUCT'
                             .text
                             .fontFamily(medium)
-                            .color(fontGreyDark2)
+                            .color(greyDark2)
                             .size(22)
                             .make(),
                         Container(
@@ -510,7 +510,7 @@ class NewsScreen extends StatelessWidget {
                                           style: TextStyle(
                                             fontFamily: regular,
                                             fontSize: 14,
-                                            color: fontGreyDark1,
+                                            color: greyDark2,
                                           ),
                                         ),
                                         SizedBox(
