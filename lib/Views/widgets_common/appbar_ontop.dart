@@ -26,5 +26,5 @@ Widget appbarField({required BuildContext context}) { // Specify context as requ
         ),
       ),
     ],
-  ).box.white.make();
+  );
 }

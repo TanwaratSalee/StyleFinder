@@ -5,6 +5,7 @@ import 'package:flutter_finalproject/Views/store_screen/match_detail_screen.dart
 import 'package:flutter_finalproject/Views/store_screen/reviews_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class StoreScreen extends StatelessWidget {
   final String vendorId;
@@ -136,8 +137,7 @@ class StoreScreen extends StatelessWidget {
                     const SizedBox(width: 8),
                     const Text(
                       '4.9/5.0',
-                      style: TextStyle(fontSize: 14, fontFamily: regular),
-                    ),
+                    ).text.fontFamily(regular).size(14).color(greyDark2).make(),
                     const Spacer(),
                     TextButton(
                       onPressed: () {
@@ -147,7 +147,7 @@ class StoreScreen extends StatelessWidget {
                               builder: (context) => ReviewScreen()),
                         );
                       },
-                      child: const Text('All Reviews >>>'),
+                      child: const Text('All Reviews >>>').text.fontFamily(regular).size(14).color(greyDark2).make(),
                     ),
                   ],
                 ),
@@ -215,7 +215,7 @@ class StoreScreen extends StatelessWidget {
 
   Widget _buildProductMatchTabs(BuildContext context) {
     return DefaultTabController(
-      length: 2, // มีแท็บทั้งหมด 2 แท็บ
+      length: 2, 
       child: Column(
         children: <Widget>[
           TabBar(
@@ -246,10 +246,10 @@ class StoreScreen extends StatelessWidget {
   Widget _buildProductTab(BuildContext context) {
     return Column(
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(5),
-          child: _buildCategoryTabs(context),
-        ),
+        // Padding(
+          // padding: const EdgeInsets.all(5),
+          /* child: */ _buildCategoryTabs(context),
+        // ),
         Expanded(
           child: Container(),
         ),
@@ -294,7 +294,7 @@ class StoreScreen extends StatelessWidget {
               Tab(text: 'Shorts'),
               Tab(text: 'Shirts'),
             ],
-          ),
+          ).box.color(thinPrimaryApp).make(),
           Container(
             height: MediaQuery.of(context).size.height * 0.9,
             child: TabBarView(
@@ -400,9 +400,10 @@ class StoreScreen extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
-                            '$price',
+                            "${NumberFormat('#,##0').format(double.parse('$price',).toInt())} Bath",
+                            // '$price',
                             style: const TextStyle(
-                                color: greyColor, fontFamily: regular),
+                                color: greyDark1, fontFamily: regular),
                           ),
                         ],
                       ),

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/store_screen/match_detail_screen.dart';
+import 'package:flutter_finalproject/Views/store_screen/product_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/home_buttons.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/consts/lists.dart';
@@ -303,7 +304,7 @@ class NewsScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         SizedBox(height: 20),
-                        'MATCH'
+                        'MATCH BY STORE '
                             .text
                             .fontFamily(medium)
                             .color(greyDark2)
@@ -419,7 +420,7 @@ class NewsScreen extends StatelessWidget {
                       ],
                     ),
 
-                    10.heightBox,
+                    30.heightBox,
 
                     Column(
                       mainAxisSize: MainAxisSize.min,
@@ -477,9 +478,7 @@ class NewsScreen extends StatelessWidget {
                               return Column(
                                 children: [
                                   Expanded(
-                                    // ใช้ Expanded เพื่อให้รูปภาพเติมพื้นที่ในแนวตั้ง
                                     child: Center(
-                                      // ใช้ Center เพื่อจัดให้รูปภาพอยู่ตรงกลาง
                                       child: Image.network(
                                         allproductsdata[index]['p_imgs'][0],
                                         width: 200,
@@ -491,8 +490,7 @@ class NewsScreen extends StatelessWidget {
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           "${allproductsdata[index]['p_name']}",
@@ -541,6 +539,19 @@ class NewsScreen extends StatelessWidget {
                     ),
 
                     const SizedBox(height: 20),
+                                        InkWell(
+                                          onTap: () {
+                                            Get.to(() => ProductScreen());
+                                          },
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [Text('Explote More').text.fontFamily(medium).size(17).color(greyDark2).make(),
+                                            10.widthBox,
+                                            Image.asset(icNext, width: 17,)],
+                                            
+                                            
+                                          ),
+                                        ),
                   ],
                 ),
               ),
