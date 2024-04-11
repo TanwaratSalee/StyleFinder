@@ -74,7 +74,7 @@ class _MatchScreenState extends State<MatchScreen> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center, 
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       const Text(
                         'Match with you',
@@ -124,8 +124,8 @@ class _MatchScreenState extends State<MatchScreen> {
           final products = snapshot.data!;
           return Container(
             height: 250.0,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
+            child: PageView.builder(
+              controller: PageController(viewportFraction: 0.8),
               itemCount: products.length,
               itemBuilder: (context, index) {
                 final product = products[index];
@@ -168,8 +168,8 @@ class _MatchScreenState extends State<MatchScreen> {
           final products = snapshot.data!;
           return Container(
             height: 250.0,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
+            child: PageView.builder(
+              controller: PageController(viewportFraction: 0.8),
               itemCount: products.length,
               itemBuilder: (context, index) {
                 final product = products[index];

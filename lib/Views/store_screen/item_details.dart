@@ -91,12 +91,12 @@ void initState() {
       child: Scaffold(
         backgroundColor: whiteColor,
         appBar: AppBar(
-          leading: IconButton(
-              onPressed: () {
-                controller.resetValues();
-                Get.back();
-              },
-              icon: const Icon(Icons.arrow_back_ios)),
+        //   leading: IconButton(
+        //       onPressed: () {
+        //         controller.resetValues();
+        //         Get.back();
+        //       },
+        //       icon: const Icon(Icons.arrow_back_ios)),
           title: widget.title!.text
               .color(greyDark2)
               .fontFamily(bold)
