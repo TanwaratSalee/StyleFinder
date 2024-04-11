@@ -33,7 +33,8 @@ class MenuSettingScreen extends StatelessWidget {
           backgroundColor: whiteColor,
           title: const Text(
             'Setting',
-            textAlign: TextAlign.center, // This centers the title in the space available.
+            textAlign: TextAlign
+                .center, // This centers the title in the space available.
             style: TextStyle(
               color: blackColor,
               fontSize: 24,
@@ -145,12 +146,78 @@ class MenuSettingScreen extends StatelessWidget {
                             style: OutlinedButton.styleFrom(
                               side: const BorderSide(color: Colors.transparent),
                             ),
-                            onPressed: () async {
-                              await Get.put(AuthController())
-                                  .signoutMethod(context);
+                            onPressed: () {
+                              // แสดงไดอะล็อกยืนยัน
+                              showDialog(
+                                context: context,
+                                barrierDismissible:
+                                    false, // กดนอกพื้นที่ไดอะล็อกไม่ได้
+                                builder: (BuildContext dialogContext) {
+                                  return AlertDialog(
+                                    title: const Center(
+                                        child: Text('Logout',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight
+                                                    .bold))), // ทำให้คำว่า Logout อยู่ตรงกลางและหนาขึ้น
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize
+                                          .min, // ปรับขนาด Column ให้เหมาะสมกับเนื้อหา
+                                      children: [
+                                        const Text(
+                                            'Are you sure you want to logout?'),
+                                        const SizedBox(
+                                            height:
+                                                20), // เพิ่มระยะห่างเล็กน้อยก่อนเส้นแบ่ง
+                                        const Divider(), // เส้นแบ่ง
+                                        Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            TextButton(
+                                              child: Text('Cancel',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.blue)),
+                                              onPressed: () {
+                                                Navigator.of(dialogContext)
+                                                    .pop(); // ปิดไดอะล็อกโดยไม่ทำอะไร
+                                              },
+                                            ),
+                                            Container(
+                                              height: 40,
+                                              child: const VerticalDivider(
+                                                  width:
+                                                      50), // สร้างเส้นกั้นระหว่างปุ่ม
+                                            ),
+                                            TextButton(
+                                              child: Text('Logout',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.red)),
+                                              onPressed: () async {
+                                                // เรียกใช้เมธอด logout
+                                                await Get.put(AuthController())
+                                                    .signoutMethod(context);
+                                                Navigator.of(dialogContext)
+                                                    .pop(); // ปิดไดอะล็อก
+                                                Get.offAll(() =>
+                                                    const LoginScreen()); // นำทางกลับไปหน้า login
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
                             },
                             child: Row(
-                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment
+                                  .center, // ทำให้ข้อความอยู่ตรงกลางของปุ่ม
                               children: [
                                 Image.asset(
                                   icLogout,
@@ -159,7 +226,7 @@ class MenuSettingScreen extends StatelessWidget {
                                 const SizedBox(width: 8),
                                 const Text('Logout',
                                         style: TextStyle(
-                                            fontFamily: regular,
+                                            fontWeight: FontWeight.bold,
                                             fontSize: 16,
                                             color: greyDark1))
                                     .text

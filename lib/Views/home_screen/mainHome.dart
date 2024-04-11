@@ -80,18 +80,30 @@ class _MainHomeState extends State<MainHome> {
             ),
           ],
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _selectedIndex,
-          selectedItemColor: primaryApp,
-          selectedLabelStyle: const TextStyle(fontFamily: regular),
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: whiteColor,
-          items: navbarItem,
-          onTap: (value) {
-            setState(() {
-              _selectedIndex = value;
-            });
-          },
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                spreadRadius: 5,
+                blurRadius: 10,
+                offset: Offset(0, -1), // changes position of shadow
+              ),
+            ],
+          ),
+          child: BottomNavigationBar(
+            currentIndex: _selectedIndex,
+            selectedItemColor: primaryApp,
+            selectedLabelStyle: const TextStyle(fontFamily: regular),
+            type: BottomNavigationBarType.fixed,
+            backgroundColor: whiteColor,
+            items: navbarItem,
+            onTap: (value) {
+              setState(() {
+                _selectedIndex = value;
+              });
+            },
+          ),
         ),
       ),
     );

@@ -67,11 +67,10 @@ class _HomeScreenState extends State<HomeScreen> {
       return true;
     } else {
       Get.off(() => VerifyEmailScreen(
-        email: email,
-        name: '',
-        password: '',
-        
-      ));
+            email: email,
+            name: '',
+            password: '',
+          ));
       return false;
     }
   }
@@ -84,6 +83,8 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: whiteColor,
         automaticallyImplyLeading: false,
         title: appbarField(context: context),
+        elevation: 8.0,
+        shadowColor: greyColor.withOpacity(0.5),
         // actions: <Widget>[
         //   Padding(
         //     padding: const EdgeInsets.only(right: 15.0),
@@ -136,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Container(
                       width: 450,
-                      height: 505,
+                      height: 580,
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: whiteColor,
@@ -156,8 +157,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           Image.network(
                             product['p_imgs'][0],
-                            height: 410,
-                            width: 360,
+                            height: 650,
+                            width: 500,
                             fit: BoxFit.cover,
                           ),
                           Positioned(
@@ -271,4 +272,3 @@ bool isInWishlist(Map<String, dynamic> product, String currentUid) {
   List<dynamic> wishlist = product['p_wishlist'];
   return wishlist.contains(currentUid);
 }
-
