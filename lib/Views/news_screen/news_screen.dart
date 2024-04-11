@@ -475,15 +475,19 @@ class NewsScreen extends StatelessWidget {
                             ),
                             itemBuilder: (context, index) {
                               return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Image.network(
-                                    allproductsdata[index]['p_imgs'][0],
-                                    width: 180,
-                                    height: 210,
-                                    fit: BoxFit.cover,
+                                  Expanded(
+                                    // ใช้ Expanded เพื่อให้รูปภาพเติมพื้นที่ในแนวตั้ง
+                                    child: Center(
+                                      // ใช้ Center เพื่อจัดให้รูปภาพอยู่ตรงกลาง
+                                      child: Image.network(
+                                        allproductsdata[index]['p_imgs'][0],
+                                        width: 200,
+                                        height: 210,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
                                   ),
-                                  // const Spacer(),
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Column(
@@ -522,8 +526,6 @@ class NewsScreen extends StatelessWidget {
                                   .shadowSm
                                   .margin(
                                       const EdgeInsets.symmetric(horizontal: 2))
-                                  .rounded
-                                  // .padding(const EdgeInsets.all(12))
                                   .make()
                                   .onTap(() {
                                 Get.to(() => ItemDetails(
