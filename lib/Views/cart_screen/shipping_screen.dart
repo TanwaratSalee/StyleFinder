@@ -133,7 +133,7 @@ class _ShippingDetailsState extends State<ShippingDetails> {
                 );
               },
             ),
-            const Divider(color: thinGrey),
+            const Divider(color: thinGrey0),
             // ourButton(
             //   onPress: () => Navigator.push(
             //     context,
@@ -143,7 +143,7 @@ class _ShippingDetailsState extends State<ShippingDetails> {
             //   textColor: greyDark2,
             //   title: "+ Add a new address",
             // ),
-            const SizedBox(height: 20),
+            // const SizedBox(height: 20),
             Expanded(
               child: StreamBuilder<DocumentSnapshot>(
                 stream: FirebaseService().streamCurrentUserAddress(userId),
@@ -170,11 +170,11 @@ class _ShippingDetailsState extends State<ShippingDetails> {
                       return Container(
                         decoration: BoxDecoration(
                           color: isSelected
-                              ? Colors.blue.withOpacity(0.2)
+                              ? thinPrimaryApp.withOpacity(0.2)
                               : Colors.white,
                           border: isSelected
-                              ? Border.all(color: Colors.blue, width: 2)
-                              : null,
+                              ? Border.all(color: primaryApp, width: 2,)
+                              : null,borderRadius: BorderRadius.circular(8),
                         ),
                         child: ListTile(
                           title: RichText(
@@ -206,7 +206,7 @@ class _ShippingDetailsState extends State<ShippingDetails> {
                             ),
                           ),
                           trailing: isSelected
-                              ? Icon(Icons.check, color: Colors.blue)
+                              ? Icon(Icons.check_circle, color: primaryApp)
                               : null,
                           onTap: () {
                             setState(() {

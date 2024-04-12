@@ -25,19 +25,16 @@ class _AddressScreenState extends State<AddressScreen> {
 
   Future<void> loadAddresses(String uid) async {
     try {
-      // Accessing the specific document by UID
       DocumentSnapshot documentSnapshot =
           await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
       List<String> loadedAddresses = [];
       if (documentSnapshot.exists) {
         String documentId = documentSnapshot.id;
-        loadedAddressesDocumentIds
-            .add(documentId); // Assuming this variable is declared elsewhere
+        loadedAddressesDocumentIds.add(documentId);
         Map<String, dynamic>? data =
             documentSnapshot.data() as Map<String, dynamic>?;
 
-        // Check if 'address' exists and is a list
         if (data != null &&
             data.containsKey('address') &&
             data['address'] is List) {
@@ -63,7 +60,6 @@ class _AddressScreenState extends State<AddressScreen> {
 
   Future<void> removeAddress(String uid, int index) async {
     try {
-      // Accessing the specific document by UID
       DocumentReference docRef =
           FirebaseFirestore.instance.collection('users').doc(uid);
 
@@ -73,25 +69,20 @@ class _AddressScreenState extends State<AddressScreen> {
         Map<String, dynamic>? data =
             documentSnapshot.data() as Map<String, dynamic>?;
 
-        // Check if 'address' exists and is a list
         if (data != null &&
             data.containsKey('address') &&
             data['address'] is List) {
           List<dynamic> addressesList = List.from(data['address']);
 
-          // Remove the address at the specified index
           addressesList.removeAt(index);
 
-          // Update the document with the modified 'address' array
           await docRef.update({'address': addressesList});
 
-          // Reload addresses to update UI
           await loadAddresses(uid);
         }
       }
     } catch (error) {
       print("Error removing address: $error");
-      // Handle error
     }
   }
 
@@ -138,9 +129,7 @@ class _AddressScreenState extends State<AddressScreen> {
                       itemBuilder: (context, index) {
                         String uid = currentUser!.uid;
                         return GestureDetector(
-                          onTap: () {
-                            //
-                          },
+                          onTap: () {},
                           child: Card(
                             color: Colors.white,
                             child: ListTile(

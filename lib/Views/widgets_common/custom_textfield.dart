@@ -32,7 +32,7 @@ Widget customTextField({
             color: greyDark1,
           ),
           filled: true,
-          fillColor: thinGrey,
+          fillColor: thinGrey0,
           contentPadding:
               const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
           enabledBorder: OutlineInputBorder(

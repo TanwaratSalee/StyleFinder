@@ -33,7 +33,6 @@ class PaymentMethods extends StatelessWidget {
                   onPress: () async {
                     String selectedPaymentMethod =
                         paymentMethods[controller.paymentIndex.value];
-
                     if (selectedPaymentMethod == 'QR Promptpay') {
                       print('Selected Payment Method: $selectedPaymentMethod');
                       Get.to(() => const QRScreen());
@@ -60,11 +59,8 @@ class PaymentMethods extends StatelessWidget {
                   title: "Place my order"),
         ),
         appBar: AppBar(
-          title: "Choose Payment Method"
-              .text
-              .fontFamily(regular)
-              .color(greyDark2)
-              .make(),
+          title: "Choose Payment "
+              .text.color(greyDark2).fontFamily(regular).make(),
         ),
         body: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -120,7 +116,7 @@ class PaymentMethods extends StatelessWidget {
                             right: 10,
                             child: paymentMethods[index]
                                 .text
-                                .white
+                                .color(greyColor)
                                 .fontFamily(bold)
                                 .size(16)
                                 .make(),
@@ -134,6 +130,7 @@ class PaymentMethods extends StatelessWidget {
             ),
           ),
         ),
+      
       ),
     );
   }

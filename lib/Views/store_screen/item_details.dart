@@ -248,7 +248,7 @@ void initState() {
                         .box
                         .height(60)
                         .padding(const EdgeInsets.symmetric(horizontal: 16))
-                        .color(thinGrey)
+                        .color(thinGrey0)
                         .make(),
                     20.heightBox,
                     Padding(

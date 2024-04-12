@@ -264,7 +264,7 @@ class EditProfileScreen extends StatelessWidget {
                     .make(),
               ),
               const Divider(
-                color: thinGrey,
+                color: thinGrey0,
               ),
               5.heightBox,
 
@@ -291,7 +291,7 @@ class EditProfileScreen extends StatelessWidget {
                     .make(),
               ),
               const Divider(
-                color: thinGrey,
+                color: thinGrey0,
               ),
               10.heightBox,
 
