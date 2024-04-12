@@ -75,7 +75,7 @@ class CartController extends GetxController {
     paymentIndex.value = index;
   }
 
-placeMyOrder({required orderPaymentMethod, required totalAmount}) async {
+  placeMyOrder({required orderPaymentMethod, required totalAmount}) async {
     placingOrder(true);
     await getProductDetails();
     String orderCode = generateRandomOrderCode(8);
@@ -112,9 +112,7 @@ placeMyOrder({required orderPaymentMethod, required totalAmount}) async {
       'vendors': FieldValue.arrayUnion(vendors)
     });
     placingOrder(false);
-}
-
-
+  }
 
   getProductDetails() {
     products.clear();

@@ -147,28 +147,22 @@ class MenuSettingScreen extends StatelessWidget {
                               side: const BorderSide(color: Colors.transparent),
                             ),
                             onPressed: () {
-                              // แสดงไดอะล็อกยืนยัน
                               showDialog(
                                 context: context,
-                                barrierDismissible:
-                                    false, // กดนอกพื้นที่ไดอะล็อกไม่ได้
+                                barrierDismissible: false,
                                 builder: (BuildContext dialogContext) {
                                   return AlertDialog(
                                     title: const Center(
                                         child: Text('Logout',
                                             style: TextStyle(
-                                                fontWeight: FontWeight
-                                                    .bold))), // ทำให้คำว่า Logout อยู่ตรงกลางและหนาขึ้น
+                                                fontWeight: FontWeight.bold))),
                                     content: Column(
-                                      mainAxisSize: MainAxisSize
-                                          .min, // ปรับขนาด Column ให้เหมาะสมกับเนื้อหา
+                                      mainAxisSize: MainAxisSize.min,
                                       children: [
                                         const Text(
                                             'Are you sure you want to logout?'),
-                                        const SizedBox(
-                                            height:
-                                                20), // เพิ่มระยะห่างเล็กน้อยก่อนเส้นแบ่ง
-                                        const Divider(), // เส้นแบ่ง
+                                        const SizedBox(height: 20),
+                                        const Divider(),
                                         Row(
                                           mainAxisSize: MainAxisSize.min,
                                           mainAxisAlignment:
@@ -216,8 +210,7 @@ class MenuSettingScreen extends StatelessWidget {
                               );
                             },
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment
-                                  .center, // ทำให้ข้อความอยู่ตรงกลางของปุ่ม
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Image.asset(
                                   icLogout,
@@ -244,7 +237,6 @@ class MenuSettingScreen extends StatelessWidget {
                           .margin(const EdgeInsets.symmetric(
                               horizontal: 18, vertical: 8))
                           .padding(const EdgeInsets.symmetric(horizontal: 8))
-                          // .shadowSm
                           .make(),
                     ],
                   ),
