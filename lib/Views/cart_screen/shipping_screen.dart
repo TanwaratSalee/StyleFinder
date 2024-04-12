@@ -33,11 +33,14 @@ class _ShippingDetailsState extends State<ShippingDetails> {
   List<Map<String, dynamic>> _addresses = [];
   Map<String, dynamic>? _selectedAddress;
 
-  @override
-  void initState() {
-    super.initState();
-    loadCurrentUserAddress();
-  }
+  
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   loadCurrentUserAddress();
+  // }
+  
 
   Future<void> loadCurrentUserAddress() async {
     String userId = currentUser!.uid; // Ensure currentUser is not null
