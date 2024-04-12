@@ -343,8 +343,7 @@ class _VisaCardScreenState extends State<VisaCardScreen> {
         orderPaymentMethod: selectedPaymentMethod,
         totalAmount: controller.totalP.value,
       );
-
-      Get.offAll(() => MainHome());
+      // Get.to(() => CartScreen());
     });
   }
 }
@@ -450,7 +449,14 @@ Future<void> _showCustomDialog(BuildContext context) async {
             alignment: Alignment.center,
             child: ElevatedButton(
               onPressed: () {
+<<<<<<< HEAD
                 Get.to(() => MainHome());
+=======
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => MainHome()),
+                );
+>>>>>>> cc3635ec544673d45be36b6a23f84c20bbeff756
               },
               child: Text(
                 ' Back to home ',

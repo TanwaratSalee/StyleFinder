@@ -404,6 +404,7 @@ class StoreScreen extends StatelessWidget {
                             "${NumberFormat('#,##0').format(double.parse(
                               '$price',
                             ).toInt())} Bath",
+                            // "${NumberFormat('#,##0').format(double.parse('$price',).toInt())} Bath",
                             // '$price',
                             style: const TextStyle(
                                 color: greyDark1, fontFamily: regular),
@@ -445,6 +446,16 @@ class StoreScreen extends StatelessWidget {
       ),
     );
   }
+
+  // Widget _buildProductMathGrids(String category) {
+  //   return StreamBuilder<QuerySnapshot>(
+  //     stream: FirebaseFirestore.instance.collection('products').snapshots(),
+  //     builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+  //       if (!snapshot.hasData) {
+  //         return Center(
+  //           child: CircularProgressIndicator(),
+  //         );
+  //       }
 
   Widget _buildProductMathGrids(String category) {
     return StreamBuilder<QuerySnapshot>(
