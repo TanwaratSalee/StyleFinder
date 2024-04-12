@@ -75,14 +75,30 @@ class _QRScreenState extends State<QRScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Display QR Code'),
-        backgroundColor: whiteColor,
+        backgroundColor: Colors.white, // สีของ AppBar
       ),
+      backgroundColor: Colors.white, // สีพื้นหลังของ Scaffold
       body: Center(
-          child: Container(
-        width: 200,
-        height: 200,
-        child: Text(downloadUri ?? "no imgs"),
-      )),
+        child: Container(
+          width: 300, // ความกว้างของสี่เหลี่ยม
+          height: 200, // ความสูงของสี่เหลี่ยม
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.black, // สีของเส้นกรอบ
+              width: 2.0, // ความหนาของเส้นกรอบ
+            ),
+          ),
+          //   child: Center(
+          //     child: downloadUri != null
+          //         ? Image.network(
+          //             downloadUri!,
+          //             width: 150,
+          //             height: 150,
+          //           )
+          //         : Text('No image available'),
+          //   ),
+        ),
+      ),
     );
   }
 }
