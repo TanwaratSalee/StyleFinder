@@ -579,10 +579,10 @@ class NewsScreen extends StatelessWidget {
           physics: NeverScrollableScrollPhysics(),
           padding: const EdgeInsets.all(8),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
+            crossAxisCount: 1,
             mainAxisSpacing: 5,
             crossAxisSpacing: 5,
-            mainAxisExtent: 270, // เพิ่มระยะห่างระหว่างแถว
+            mainAxisExtent: 250, // เพิ่มระยะห่างระหว่างแถว
           ),
           itemBuilder: (BuildContext context, int index) {
             int actualIndex = index * 2;
@@ -621,202 +621,122 @@ class NewsScreen extends StatelessWidget {
                 );
               },
               child: Card(
+                color: Colors.white,
                 clipBehavior: Clip.antiAlias,
-                elevation: 2, // เพิ่มเงาให้กับการ์ด
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 3,
-                          child: Image.network(
-                            productImage1,
-                            height: 120,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: Padding(
-                            padding: const EdgeInsets.all(6),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                LayoutBuilder(
-                                  builder: (BuildContext context,
-                                      BoxConstraints constraints) {
-                                    // สร้าง TextPainter เพื่อวัดขนาดของข้อความ
-                                    final textPainter = TextPainter(
-                                      text: TextSpan(
-                                        text: productName1,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14,
-                                        ),
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  // side: BorderSide(color: Colors.black, width: 0.5),
+                ),
+                child: Stack(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(height: 2),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.network(
+                                productImage1,
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            Expanded(
+                              flex: 3,
+                              child: Padding(
+                                padding: const EdgeInsets.all(25),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      productName1,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                        color: Colors.black,
                                       ),
                                       maxLines: 1,
-                                      textDirection: TextDirection.ltr,
-                                    )..layout(
-                                        maxWidth: constraints
-                                            .maxWidth); // กำหนดความกว้างสูงสุด
-
-                                    // ตรวจสอบว่าข้อความยาวเกินกว่าที่จะพอดีหรือไม่
-                                    if (textPainter.didExceedMaxLines) {
-                                      // ถ้าข้อความยาวเกิน, ใช้ ShaderMask
-                                      return ShaderMask(
-                                        shaderCallback: (Rect bounds) {
-                                          return LinearGradient(
-                                            colors: [
-                                              Colors.black,
-                                              Colors.transparent
-                                            ],
-                                            begin: Alignment.centerLeft,
-                                            end: Alignment.centerRight,
-                                            stops: [0.7, 1.0],
-                                          ).createShader(bounds);
-                                        },
-                                        blendMode: BlendMode.dstIn,
-                                        child: Text(
-                                          productName1,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14,
-                                            color: Colors.black,
-                                          ),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.clip,
-                                        ),
-                                      );
-                                    } else {
-                                      // ถ้าข้อความพอดี, แสดงแบบปกติ
-                                      return Text(
-                                        productName1,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.clip,
-                                      );
-                                    }
-                                  },
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    Text(
+                                      'Price: \$${price1.toString()}',
+                                      style:
+                                          const TextStyle(color: Colors.grey),
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  'Price: \$${price2.toString()}',
-                                  style: const TextStyle(color: Colors.grey),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.network(
+                                productImage2,
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            Expanded(
+                              flex: 3,
+                              child: Padding(
+                                padding: const EdgeInsets.all(19),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      productName2,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                        color: Colors.black,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    Text(
+                                      'Price: \$${price2.toString()}',
+                                      style:
+                                          const TextStyle(color: Colors.grey),
+                                    ),
+                                  ],
                                 ),
-                              ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 100),
+                          child: Text(
+                            'Total Price: \$${totalPrice.toString()}',
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
                             ),
                           ),
                         ),
                       ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 3,
-                          child: Image.network(
-                            productImage2,
-                            height: 120,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: Padding(
-                            padding: const EdgeInsets.all(6),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                LayoutBuilder(
-                                  builder: (BuildContext context,
-                                      BoxConstraints constraints) {
-                                    // สร้าง TextPainter เพื่อวัดขนาดของข้อความ
-                                    final textPainter = TextPainter(
-                                      text: TextSpan(
-                                        text: productName2,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                      maxLines: 1,
-                                      textDirection: TextDirection.ltr,
-                                    )..layout(
-                                        maxWidth: constraints
-                                            .maxWidth); // กำหนดความกว้างสูงสุด
-
-                                    // ตรวจสอบว่าข้อความยาวเกินกว่าที่จะพอดีหรือไม่
-                                    if (textPainter.didExceedMaxLines) {
-                                      // ถ้าข้อความยาวเกิน, ใช้ ShaderMask
-                                      return ShaderMask(
-                                        shaderCallback: (Rect bounds) {
-                                          return LinearGradient(
-                                            colors: [
-                                              Colors.black,
-                                              Colors.transparent
-                                            ],
-                                            begin: Alignment.centerLeft,
-                                            end: Alignment.centerRight,
-                                            stops: [0.7, 1.0],
-                                          ).createShader(bounds);
-                                        },
-                                        blendMode: BlendMode.dstIn,
-                                        child: Text(
-                                          productName2,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14,
-                                            color: Colors.black,
-                                          ),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.clip,
-                                        ),
-                                      );
-                                    } else {
-                                      // ถ้าข้อความพอดี, แสดงแบบปกติ
-                                      return Text(
-                                        productName2,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.clip,
-                                      );
-                                    }
-                                  },
-                                ),
-                                Text(
-                                  'Price: \$${price2.toString()}',
-                                  style: const TextStyle(color: Colors.grey),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Text(
-                        'Total Price: \$${totalPrice.toString()}',
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12, // ปรับขนาดตัวอักษร
-                        ),
-                      ),
                     ),
                   ],
                 ),
               ),
             );
           },
-          itemCount: (mixMatchList.length).ceil(),
+          itemCount: 2,
+          // (mixMatchList.length).ceil(),
         );
       },
     );

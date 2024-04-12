@@ -122,10 +122,31 @@ class _VisaCardScreenState extends State<VisaCardScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: ElevatedButton(
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(primaryApp),
+                backgroundColor: MaterialStateProperty.all<Color>(
+                    Colors.blue), // แทนที่ด้วย primaryApp หากมีการกำหนดไว้
               ),
               onPressed: () {
-                getTokenandSourceTest();
+                getTokenandSourceTest(); // เพิ่มการเรียกฟังก์ชันที่ต้องการทำงานก่อนแสดงป๊อปอัพ
+
+                // แสดง AlertDialog
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text("Confirmation"),
+                      content: Text("Payment was successful!"),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text("OK"),
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pop(); // ปิด AlertDialog เมื่อกด OK
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
               },
               child: Text(
                 'Confirm',
