@@ -151,22 +151,23 @@ class MenuSettingScreen extends StatelessWidget {
                                 context: context,
                                 builder: (BuildContext dialogContext) {
                                   return Dialog(
-                                    backgroundColor: Colors
-                                        .white, // กำหนดสีพื้นหลังของ Custom Popup เป็นสีขาว
+                                    backgroundColor: Colors.white,
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        const SizedBox(height: 20),
+                                        const SizedBox(height: 30),
                                         const Text(
-                                          'Logout',
+                                          'Are you sure you want to logout?',
                                           style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                              fontFamily: regular,
+                                              fontSize: 18),
                                         ),
-                                        const SizedBox(height: 10),
-                                        const Text(
-                                            'Are you sure you want to logout?'),
-                                        const SizedBox(height: 20),
-                                        const Divider(),
+                                        SizedBox(
+                                          height: 30,
+                                        ),
+                                        Divider(
+                                          height: 1,
+                                        ), // เส้นแบ่ง
                                         Row(
                                           mainAxisSize: MainAxisSize.min,
                                           mainAxisAlignment:
@@ -176,21 +177,27 @@ class MenuSettingScreen extends StatelessWidget {
                                               child: Text(
                                                 'Cancel',
                                                 style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
+                                                  fontFamily: regular,
+                                                  fontSize: 18,
+                                                  color: greyDark1,
+                                                ),
                                               ),
                                               onPressed: () {
                                                 Navigator.of(dialogContext)
-                                                    .pop(); // ปิด Custom Popup โดยไม่ทำอะไร
+                                                    .pop();
                                               },
                                             ),
-                                            const SizedBox(width: 50),
+                                            Container(
+                                                height: 50,
+                                                child: const VerticalDivider(
+                                                    width: 70)),
                                             TextButton(
                                               child: Text(
                                                 'Logout',
                                                 style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.red,
+                                                  fontFamily: regular,
+                                                  color: redColor,
+                                                  fontSize: 18,
                                                 ),
                                               ),
                                               onPressed: () async {

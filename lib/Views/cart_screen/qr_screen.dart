@@ -77,12 +77,16 @@ class _QRScreenState extends State<QRScreen> {
         title: Text('Display QR Code'),
         backgroundColor: whiteColor,
       ),
+      backgroundColor: whiteColor,
       body: Center(
-          child: Container(
-        width: 200,
-        height: 200,
-        child: Text(downloadUri ?? "no imgs"),
-      )),
+        child: downloadUri != null
+            ? Image.network(
+                downloadUri!,
+                width: 200,
+                height: 200,
+              )
+            : Text(downloadUri ?? "no imgs"),
+      ),
     );
   }
 }
