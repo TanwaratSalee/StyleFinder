@@ -67,8 +67,8 @@ class MenuSettingScreen extends StatelessWidget {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
-                          padding: EdgeInsets.only(left: 30),
-                          child: Text('Account')
+                          padding: const EdgeInsets.only(left: 30),
+                          child: const Text('Account')
                               .text
                               .size(20)
                               .fontFamily(medium)
@@ -97,7 +97,7 @@ class MenuSettingScreen extends StatelessWidget {
                                   Get.to(() => AddressScreen());
                                   break;
                                 case 3:
-                                  Get.to(() => OrdersScreen());
+                                  Get.to(() => const OrdersScreen());
                                   break;
                                 case 4:
                                   Get.to(() => const MessagesScreen());
@@ -132,8 +132,8 @@ class MenuSettingScreen extends StatelessWidget {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
-                          padding: EdgeInsets.only(left: 30),
-                          child: Text('Actions')
+                          padding: const EdgeInsets.only(left: 30),
+                          child: const Text('Actions')
                               .text
                               .size(20)
                               .fontFamily(medium)
@@ -162,10 +162,10 @@ class MenuSettingScreen extends StatelessWidget {
                                               fontFamily: regular,
                                               fontSize: 18),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 30,
                                         ),
-                                        Divider(
+                                        const Divider(
                                           height: 1,
                                         ), // เส้นแบ่ง
                                         Row(
@@ -174,7 +174,7 @@ class MenuSettingScreen extends StatelessWidget {
                                               MainAxisAlignment.center,
                                           children: <Widget>[
                                             TextButton(
-                                              child: Text(
+                                              child: const Text(
                                                 'Cancel',
                                                 style: TextStyle(
                                                   fontFamily: regular,
@@ -192,7 +192,7 @@ class MenuSettingScreen extends StatelessWidget {
                                                 child: const VerticalDivider(
                                                     width: 70)),
                                             TextButton(
-                                              child: Text(
+                                              child: const Text(
                                                 'Logout',
                                                 style: TextStyle(
                                                   fontFamily: regular,
@@ -201,11 +201,9 @@ class MenuSettingScreen extends StatelessWidget {
                                                 ),
                                               ),
                                               onPressed: () async {
-                                                // เรียกใช้เมธอด logout
                                                 await Get.put(AuthController())
                                                     .signoutMethod(context);
-                                                Navigator.of(dialogContext)
-                                                    .pop(); // ปิด Custom Popup
+                                                Navigator.of(dialogContext).pop(); // ปิด Custom Popup
                                                 Get.offAll(() =>
                                                     const LoginScreen()); // นำทางกลับไปหน้า login
                                               },

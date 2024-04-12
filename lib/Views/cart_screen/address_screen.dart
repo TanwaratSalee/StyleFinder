@@ -42,7 +42,7 @@ class _AddressScreenState extends State<AddressScreen> {
           addressesList.forEach((address) {
             if (address is Map<String, dynamic>) {
               String formattedAddress =
-                  '${address['firstname']}, ${address['surname']}, ${address['address']}, ${address['city']}, ${address['state']}, ${address['postalCode']}, ${address['phone']}';
+                  '${address['firstname']} ${address['surname']},\n ${address['address']}, ${address['city']}, ${address['state']}, ${address['postalCode']}\n ${address['phone']}';
               loadedAddresses.add(formattedAddress);
             }
           });
@@ -103,20 +103,16 @@ class _AddressScreenState extends State<AddressScreen> {
           SizedBox(height: 8.0),
           Container(
             width: double.infinity,
-            color: primaryApp,
-            child: TextButton(
-              onPressed: () {
+            // color: primaryApp,
+            child: ListTile(
+              leading: const Icon(Icons.add),
+              title: const Text('Add new address'),
+              onTap: () async {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => AddressForm()),
                 );
               },
-              child: Text(
-                ' + Add a new address',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
             ),
           ),
           SizedBox(height: 8.0),
@@ -130,54 +126,65 @@ class _AddressScreenState extends State<AddressScreen> {
                         String uid = currentUser!.uid;
                         return GestureDetector(
                           onTap: () {},
-                          child: Card(
-                            color: Colors.white,
-                            child: ListTile(
-                              title: Text(addresses![index]),
-                              trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  TextButton(
-                                    child: const Text(
-                                      'Edit',
-                                      style: TextStyle(color: primaryApp),
-                                    ),
-                                    onPressed: () {
-                                      final addressData =
-                                          addresses![index].split(', ');
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              editaddress_controller(
-                                            documentId:
-                                                addressesDocumentIds![index],
-                                            firstname: addressData[0],
-                                            surname: addressData[1],
-                                            address: addressData[2],
-                                            city: addressData[3],
-                                            state: addressData[4],
-                                            postalCode: addressData[5],
-                                            phone: addressData[6],
-                                          ),
+                          child: Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(4), // Optional: if you want rounded corners
+                                ),
+                                child: ListTile(
+                                  title: Text(addresses![index]),
+                                  trailing: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      TextButton(
+                                        child: const Text(
+                                          'Edit',
+                                          style: TextStyle(
+                                              color:
+                                                  primaryApp), // Make sure primaryApp is defined
                                         ),
-                                      );
-                                    },
+                                        onPressed: () {
+                                          final addressData =
+                                              addresses![index].split(', ');
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  editaddress_controller(
+                                                documentId:
+                                                    addressesDocumentIds![
+                                                        index],
+                                                firstname: addressData[0],
+                                                surname: addressData[1],
+                                                address: addressData[2],
+                                                city: addressData[3],
+                                                state: addressData[4],
+                                                postalCode: addressData[5],
+                                                phone: addressData[6],
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                      TextButton(
+                                        child: const Text(
+                                          'Remove',
+                                          style: TextStyle(color: Colors.red),
+                                        ),
+                                        onPressed: () {
+                                          setState(() {
+                                            removeAddress(uid, index);
+                                          });
+                                        },
+                                      ),
+                                    ],
                                   ),
-                                  TextButton(
-                                    child: const Text(
-                                      'Remove',
-                                      style: TextStyle(color: Colors.red),
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        removeAddress(uid, index);
-                                      });
-                                    },
-                                  ),
-                                ],
+                                ),
                               ),
-                            ),
+                                const Divider(color: thinGrey0).box.margin(EdgeInsets.symmetric(horizontal: 12)).make(),
+                            ],
                           ),
                         );
                       },
