@@ -348,39 +348,126 @@ class _VisaCardScreenState extends State<VisaCardScreen> {
   }
 }
 
+// Future<void> _showCustomDialog(BuildContext context) async {
+//   return showDialog<void>(
+//     context: context,
+//     barrierDismissible: false,
+//     builder: (BuildContext context) {
+//       return AlertDialog(
+//         // title: Text(
+//         //   'Complete!',
+//         //   textAlign: TextAlign.center, // ข้อความอยู่ตรงกลาง
+//         //   style: TextStyle(
+//         //     fontWeight: FontWeight.bold, // ทำให้ตัวหนา
+//         //   ),
+//         // ),
+//         content: SingleChildScrollView(
+//           child: ListBody(
+//             children: <Widget>[
+//               SizedBox(
+//                 height: 50,
+//               ),
+//               Image.asset('assets/images/Finishpay.PNG'),
+//               SizedBox(
+//                 height: 40,
+//               ),
+//               Text(
+//                 'Payment was successful!',
+//                 textAlign: TextAlign.center,
+//                 style: TextStyle(
+//                   fontWeight: FontWeight.bold,
+//                   fontSize: 20,
+//                 ),
+//               ),
+//               SizedBox(
+//                 height: 20,
+//               ),
+//               Text(
+//                 '1,400,000 Bath',
+//                 textAlign: TextAlign.center,
+//                 style: TextStyle(
+//                   fontWeight: FontWeight.bold,
+//                   color: Colors.blue,
+//                   fontSize: 16,
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//         actions: <Widget>[
+//           TextButton(
+//             child: Text('OK'),
+//             onPressed: () {
+//               Navigator.of(context).pop();
+//             },
+//           ),
+//         ],
+//         content: Container(
+//           padding: EdgeInsets.all(20.0), // กำหนดขอบรอบของข้อความ
+//           child: Text('Your message here'), // เพิ่มข้อความที่ต้องการแสดงในกรอบ
+//         ),
+//       );
+//     },
+//   );
+// }
 Future<void> _showCustomDialog(BuildContext context) async {
   return showDialog<void>(
     context: context,
     barrierDismissible: false,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text(
-          'Complete!',
-          textAlign: TextAlign.center, // ข้อความอยู่ตรงกลาง
-          style: TextStyle(
-            fontWeight: FontWeight.bold, // ทำให้ตัวหนา
-          ),
-        ),
+        backgroundColor: whiteColor,
         content: SingleChildScrollView(
           child: ListBody(
             children: <Widget>[
+              SizedBox(height: 50),
               Image.asset('assets/images/Finishpay.PNG'),
-              SizedBox(
-                height: 40,
-              ),
+              SizedBox(height: 40),
               Text(
-                'Payment Successful!',
-                textAlign: TextAlign.center, // ข้อความอยู่ตรงกลาง
+                'Payment was successful!',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+              SizedBox(height: 15),
+              Text(
+                '1,400,000 Bath',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue,
+                  fontSize: 16,
+                ),
               ),
             ],
           ),
         ),
         actions: <Widget>[
-          TextButton(
-            child: Text('OK'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
+          Align(
+            alignment: Alignment.center,
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                ' Back to home ',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    side: BorderSide(color: Colors.white),
+                  ),
+                ),
+                backgroundColor: MaterialStateProperty.all<Color>(primaryApp),
+              ),
+            ),
           ),
         ],
       );
