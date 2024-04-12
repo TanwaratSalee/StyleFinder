@@ -58,6 +58,7 @@ class _MatchScreenState extends State<MatchScreen> {
         // ],
       ),
       body: CustomScrollView(
+        physics: NeverScrollableScrollPhysics(),
         slivers: <Widget>[
           SliverToBoxAdapter(
             child: Column(
@@ -91,10 +92,25 @@ class _MatchScreenState extends State<MatchScreen> {
                           icLikeButton,
                           width: 67,
                         ),
-                        onPressed: () async {
-                          await Get.put(AuthController())
-                              .signoutMethod(context);
-                          Get.offAll(() => const LoginScreen());
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content:
+                                  Text('เพิ่มไปยังรายการโปรดเรียบร้อยแล้ว'),
+                              duration: Duration(seconds: 2),
+                              backgroundColor:
+                                  primaryApp, // ตั้งเวลาให้ SnackBar หายไปใน 2 วินาที
+                              action: SnackBarAction(
+                                label: 'Close',
+                                onPressed: () {
+                                  ScaffoldMessenger.of(context)
+                                      .hideCurrentSnackBar(); // ปิด SnackBar เมื่อกดปุ่ม
+                                },
+                                // icon: Icon(Icons
+                                //     .close), // ใช้ไอคอนสัญลักษณ์ปิดแทน 'OK'
+                              ),
+                            ),
+                          );
                         },
                       ),
                     ],

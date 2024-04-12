@@ -303,6 +303,33 @@ class NewsScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         SizedBox(height: 20),
+                        'Brand'
+                            .text
+                            .fontFamily(medium)
+                            .color(greyDark2)
+                            .size(22)
+                            .make(),
+                        SizedBox(height: 6),
+                        Image.asset(
+                          icUndertext,
+                          width: 170,
+                        ),
+                        SizedBox(height: 6),
+                        SingleChildScrollView(
+                          physics: NeverScrollableScrollPhysics(),
+                          child: Container(
+                              height: MediaQuery.of(context).size.height * 0.2,
+                              child: ButtonsGrid()),
+                        )
+                      ],
+                    ),
+                    10.heightBox,
+
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(height: 20),
                         'MATCH'
                             .text
                             .fontFamily(medium)
@@ -318,7 +345,7 @@ class NewsScreen extends StatelessWidget {
                         SingleChildScrollView(
                           physics: NeverScrollableScrollPhysics(),
                           child: Container(
-                            height: MediaQuery.of(context).size.height * 0.65,
+                            height: MediaQuery.of(context).size.height * 0.55,
                             child: _buildProductMathGrids(category),
                           ),
                         )
@@ -739,6 +766,65 @@ class NewsScreen extends StatelessWidget {
           // (mixMatchList.length).ceil(),
         );
       },
+    );
+  }
+}
+
+class GridCardExample extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      padding: EdgeInsets.all(10),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2, // จำนวนคอลัมน์ในแต่ละแถว
+        crossAxisSpacing: 5, // ระยะห่างระหว่างการ์ดในแนวแกนตั้ง
+        mainAxisSpacing: 10, // ระยะห่างระหว่างการ์ดในแนวแกนนอน
+        childAspectRatio: 1, // อัตราส่วนของความกว้างต่อความสูงของการ์ด
+      ),
+      itemCount: 4, // จำนวนการ์ดทั้งหมด
+      itemBuilder: (BuildContext context, int index) {
+        return Card(
+          elevation: 2, // ระดับเงาของการ์ด
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10)), // ขอบมนของการ์ด
+        );
+      },
+    );
+  }
+}
+
+class ButtonsGrid extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return GridView.count(
+      crossAxisCount: 2,
+      physics: NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.all(10),
+      crossAxisSpacing: 10,
+      mainAxisSpacing: 10,
+      children: List.generate(4, (index) {
+        return Padding(
+          padding: const EdgeInsets.all(10),
+          child: ElevatedButton(
+            onPressed: () {
+              print("Button $index pressed");
+            },
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+              padding: MaterialStateProperty.all<EdgeInsets>(
+                EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+              ),
+            ),
+            child: Text("Button ${index + 1}"),
+          ),
+        );
+      }),
     );
   }
 }

@@ -3,12 +3,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_finalproject/Views/home_screen/mainHome.dart';
+import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/consts/lists.dart';
 import 'package:flutter_finalproject/controllers/cart_controller.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:omise_flutter/omise_flutter.dart';
+import 'package:flutter/material.dart';
 
 class VisaCardScreen extends StatefulWidget {
   const VisaCardScreen({Key? key}) : super(key: key);
@@ -120,39 +122,14 @@ class _VisaCardScreenState extends State<VisaCardScreen> {
           SizedBox(height: 24),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(
-                    Colors.blue), // แทนที่ด้วย primaryApp หากมีการกำหนดไว้
-              ),
-              onPressed: () {
-                getTokenandSourceTest(); // เพิ่มการเรียกฟังก์ชันที่ต้องการทำงานก่อนแสดงป๊อปอัพ
-
-                // แสดง AlertDialog
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text("Confirmation"),
-                      content: Text("Payment was successful!"),
-                      actions: <Widget>[
-                        TextButton(
-                          child: Text("OK"),
-                          onPressed: () {
-                            Navigator.of(context)
-                                .pop(); // ปิด AlertDialog เมื่อกด OK
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-              child: Text(
-                'Confirm',
-                style: TextStyle(fontSize: 14),
-              ),
-            ),
+            child: ourButton(
+                onPress: () {
+                  getTokenandSourceTest();
+                  _showCustomDialog(context);
+                },
+                color: primaryApp,
+                textColor: whiteColor,
+                title: "Comfirm"),
           )
         ],
       ),
@@ -370,3 +347,69 @@ class _VisaCardScreenState extends State<VisaCardScreen> {
     });
   }
 }
+
+Future<void> _showCustomDialog(BuildContext context) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(
+          'Complete!',
+          textAlign: TextAlign.center, // ข้อความอยู่ตรงกลาง
+          style: TextStyle(
+            fontWeight: FontWeight.bold, // ทำให้ตัวหนา
+          ),
+        ),
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: <Widget>[
+              Image.asset('assets/images/Finishpay.PNG'),
+              SizedBox(
+                height: 40,
+              ),
+              Text(
+                'Payment Successful!',
+                textAlign: TextAlign.center, // ข้อความอยู่ตรงกลาง
+              ),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: Text('OK'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+
+
+// class OurButton extends StatelessWidget {
+//   final VoidCallback onPressed;
+//   final Widget child;
+
+//   const OurButton({
+//     Key? key,
+//     required this.onPressed,
+//     required this.child,
+//   }) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return ElevatedButton(
+//       style: ButtonStyle(
+//         backgroundColor: MaterialStateProperty.all<Color>(
+//           Colors.blue,
+//         ),
+//       ),
+//       onPressed: onPressed,
+//       child: child,
+//     );
+//   }
+// }
