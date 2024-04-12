@@ -226,7 +226,7 @@ class MenuSettingScreen extends StatelessWidget {
                                 const SizedBox(width: 8),
                                 const Text('Logout',
                                         style: TextStyle(
-                                            fontWeight: FontWeight.bold,
+                                            fontFamily: regular,
                                             fontSize: 16,
                                             color: greyDark1))
                                     .text
