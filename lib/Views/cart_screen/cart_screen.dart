@@ -68,7 +68,7 @@ class CartScreen extends StatelessWidget {
                                 onTap: () {
                                   Get.to(
                                     () => ItemDetails(
-                                      title: data[index][''],
+                                      title: data[index]['title'],
                                       data: data[index],
                                     ),
                                   );
