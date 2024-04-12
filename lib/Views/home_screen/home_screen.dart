@@ -143,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               Image.network(
                                 product['p_imgs'][0],
-                                height: 420,
+                                height: 400,
                                 width: 320,
                                 fit: BoxFit.cover,
                               ),

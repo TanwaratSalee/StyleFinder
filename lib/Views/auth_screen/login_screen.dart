@@ -99,7 +99,7 @@ class LoginScreen extends StatelessWidget {
                                                 if (value != null) {
                                                   VxToast.show(context,
                                                       msg: successfully);
-                                                  Get.offAll(() => MainHome());
+                                                  Get.to(() => MainHome());
                                                 } else {
                                                   controller.isloading(false);
                                                 }
@@ -168,7 +168,8 @@ class LoginScreen extends StatelessWidget {
                                             }
                                           },
                                           child: Container(
-                                            padding: const EdgeInsets.fromLTRB(50, 15, 50, 15),
+                                            padding: const EdgeInsets.fromLTRB(
+                                                50, 15, 50, 15),
                                             decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(8),
@@ -236,48 +237,51 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-Future<void> signInWithGoogle(BuildContext context) async {
-  try {
-    // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
-    final OAuthCredential credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
-    final UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
-
-    final String email = userCredential.user?.email ?? "No Email";
-    final String name = userCredential.user?.displayName ?? "No Name";
-    final String uid = userCredential.user?.uid ?? "";
-
-    // Check if the user's uid exists in Firestore
-    final DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
-
-    if (userDoc.exists) {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => MainHome()),
-        (Route<dynamic> route) => false,
+  Future<void> signInWithGoogle(BuildContext context) async {
+    try {
+      // Trigger the authentication flow
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
+      final OAuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
       );
-    } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => PersonalDetailsScreenGoogle(
-            email: email,
-            name: name,
-            password: "Not Available",
-            userCredential: userCredential,
+      final UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      final String email = userCredential.user?.email ?? "No Email";
+      final String name = userCredential.user?.displayName ?? "No Name";
+      final String uid = userCredential.user?.uid ?? "";
+
+      // Check if the user's uid exists in Firestore
+      final DocumentSnapshot userDoc =
+          await FirebaseFirestore.instance.collection('users').doc(uid).get();
+
+      if (userDoc.exists) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => MainHome()),
+          (Route<dynamic> route) => false,
+        );
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PersonalDetailsScreenGoogle(
+              email: email,
+              name: name,
+              password: "Not Available",
+              userCredential: userCredential,
+            ),
           ),
-        ),
-      );
+        );
+      }
+    } catch (e) {
+      print("Error signing in with Google: $e");
+      // Handle error appropriately
     }
-  } catch (e) {
-    print("Error signing in with Google: $e");
-    // Handle error appropriately
   }
-}
 
   Future<UserCredential?> signInWithFacebook() async {
     // Trigger the sign-in flow
