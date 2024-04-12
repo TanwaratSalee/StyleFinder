@@ -198,7 +198,7 @@ class _ShippingDetailsState extends State<ShippingDetails> {
                                 ),
                                 TextSpan(
                                   text:
-                                      '${capitalize(address['address'])}, ${capitalize(address['city'])},\n ${capitalize(address['state'])}, ${address['postalCode']},\n',
+                                      '${capitalize(address['address'])}, ${capitalize(address['city'])},\n ${capitalize(address['state'])}, ${address['postalCode']}\n',
                                   style:
                                       TextStyle(fontFamily: light, height: 1.5),
                                 ),
