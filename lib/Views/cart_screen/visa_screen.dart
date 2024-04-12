@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
 import 'package:flutter_finalproject/Views/home_screen/home_screen.dart';
 import 'package:flutter_finalproject/Views/home_screen/mainHome.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
@@ -449,10 +450,7 @@ Future<void> _showCustomDialog(BuildContext context) async {
             alignment: Alignment.center,
             child: ElevatedButton(
               onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomeScreen()),
-                );
+                Get.to(() => MainHome());
               },
               child: Text(
                 ' Back to home ',
