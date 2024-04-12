@@ -449,6 +449,7 @@ Future<void> _showCustomDialog(BuildContext context) async {
             alignment: Alignment.center,
             child: ElevatedButton(
               onPressed: () {
+                Get.to(() => MainHome());
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => MainHome()),

@@ -21,7 +21,12 @@ class StoreScreen extends StatelessWidget {
         return Scaffold(
           backgroundColor: whiteColor,
           appBar: AppBar(
-            title: Text(title).text.color(blackColor).fontFamily(medium).size(26).make(),
+            title: Text(title)
+                .text
+                .color(blackColor)
+                .fontFamily(medium)
+                .size(26)
+                .make(),
             centerTitle: true,
             // leading: IconButton(
             //   icon: const Icon(Icons.arrow_back_ios),
@@ -147,7 +152,12 @@ class StoreScreen extends StatelessWidget {
                               builder: (context) => ReviewScreen()),
                         );
                       },
-                      child: const Text('All Reviews >>>').text.fontFamily(regular).size(14).color(greyDark2).make(),
+                      child: const Text('All Reviews >>>')
+                          .text
+                          .fontFamily(regular)
+                          .size(14)
+                          .color(greyDark2)
+                          .make(),
                     ),
                   ],
                 ),
@@ -215,7 +225,7 @@ class StoreScreen extends StatelessWidget {
 
   Widget _buildProductMatchTabs(BuildContext context) {
     return DefaultTabController(
-      length: 2, 
+      length: 2,
       child: Column(
         children: <Widget>[
           TabBar(
@@ -247,8 +257,8 @@ class StoreScreen extends StatelessWidget {
     return Column(
       children: <Widget>[
         // Padding(
-          // padding: const EdgeInsets.all(5),
-          /* child: */ _buildCategoryTabs(context),
+        // padding: const EdgeInsets.all(5),
+        /* child: */ _buildCategoryTabs(context),
         // ),
         Expanded(
           child: Container(),
@@ -299,24 +309,15 @@ class StoreScreen extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 0.9,
             child: TabBarView(
               children: [
-                _buildProductGrid(
-                    'All', 'All'),
-                _buildProductGrid(
-                    'Knitwear', 'Knitwear'),
-                _buildProductGrid(
-                    'Dresses', 'Dresses'),
-                _buildProductGrid('Coat',
-                    'Coat'),
-                _buildProductGrid('T-shirts',
-                    'T-shirts'),
-                    _buildProductGrid(
-                    'Skirts', 'Skirts'),
-                _buildProductGrid(
-                    'Pants', 'Pants'),
-                _buildProductGrid(
-                    'Shorts', 'Shorts'),
-                _buildProductGrid('Shirts',
-                    'Shirts'),
+                _buildProductGrid('All', 'All'),
+                _buildProductGrid('Knitwear', 'Knitwear'),
+                _buildProductGrid('Dresses', 'Dresses'),
+                _buildProductGrid('Coat', 'Coat'),
+                _buildProductGrid('T-shirts', 'T-shirts'),
+                _buildProductGrid('Skirts', 'Skirts'),
+                _buildProductGrid('Pants', 'Pants'),
+                _buildProductGrid('Shorts', 'Shorts'),
+                _buildProductGrid('Shirts', 'Shirts'),
               ],
             ),
           ),
@@ -400,7 +401,10 @@ class StoreScreen extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
-                            "${NumberFormat('#,##0').format(double.parse('$price',).toInt())} Bath",
+                            "${NumberFormat('#,##0').format(double.parse(
+                              '$price',
+                            ).toInt())} Bath",
+                            // "${NumberFormat('#,##0').format(double.parse('$price',).toInt())} Bath",
                             // '$price',
                             style: const TextStyle(
                                 color: greyDark1, fontFamily: regular),
@@ -443,61 +447,74 @@ class StoreScreen extends StatelessWidget {
     );
   }
 
-Widget _buildProductMathGrids(String category) {
-  return StreamBuilder<QuerySnapshot>(
-    stream: FirebaseFirestore.instance.collection('products').snapshots(),
-    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-      if (!snapshot.hasData) {
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      }
+  // Widget _buildProductMathGrids(String category) {
+  //   return StreamBuilder<QuerySnapshot>(
+  //     stream: FirebaseFirestore.instance.collection('products').snapshots(),
+  //     builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+  //       if (!snapshot.hasData) {
+  //         return Center(
+  //           child: CircularProgressIndicator(),
+  //         );
+  //       }
 
-      // Initialize a map to group products by their 'p_mixmatch' value
-      Map<String, List<DocumentSnapshot>> mixMatchMap = {};
-
-      // Populate the map
-      for (var doc in snapshot.data!.docs) {
-        var data = doc.data() as Map<String, dynamic>;
-        if (data['p_mixmatch'] != null) {
-          String mixMatchKey = data['p_mixmatch'];
-          if (!mixMatchMap.containsKey(mixMatchKey)) {
-            mixMatchMap[mixMatchKey] = [];
-          }
-          mixMatchMap[mixMatchKey]!.add(doc);
+  Widget _buildProductMathGrids(String category) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance.collection('products').snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (!snapshot.hasData) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
         }
-      }
 
-      // Filter out any 'p_mixmatch' groups that do not have exactly 2 products
-      var validPairs = mixMatchMap.entries.where((entry) => entry.value.length == 2).toList();
+        // Initialize a map to group products by their 'p_mixmatch' value
+        Map<String, List<DocumentSnapshot>> mixMatchMap = {};
 
-      // Calculate the total number of valid pairs to display
-      int itemCount = validPairs.length;
+        // Populate the map
+        for (var doc in snapshot.data!.docs) {
+          var data = doc.data() as Map<String, dynamic>;
+          if (data['p_mixmatch'] != null) {
+            String mixMatchKey = data['p_mixmatch'];
+            if (!mixMatchMap.containsKey(mixMatchKey)) {
+              mixMatchMap[mixMatchKey] = [];
+            }
+            mixMatchMap[mixMatchKey]!.add(doc);
+          }
+        }
 
-      return GridView.builder(
-        padding: const EdgeInsets.all(2),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 1 / 1.3,
-        ),
-        itemCount: itemCount,
-        itemBuilder: (BuildContext context, int index) {
-          // Each pair of matched products
-          var pair = validPairs[index].value;
+        // Filter out any 'p_mixmatch' groups that do not have exactly 2 products
+        var validPairs = mixMatchMap.entries
+            .where((entry) => entry.value.length == 2)
+            .toList();
 
-          // Assuming the data structure ensures there are exactly 2 products per matched 'p_mixmatch'
-          var data1 = pair[0].data() as Map<String, dynamic>;
-          var data2 = pair[1].data() as Map<String, dynamic>;
+        // Calculate the total number of valid pairs to display
+        int itemCount = validPairs.length;
 
-          String price1 = data1['p_price'].toString();
-          String price2 = data2['p_price'].toString();
-          String totalPrice = (int.parse(price1) + int.parse(price2)).toString();
+        return GridView.builder(
+          padding: const EdgeInsets.all(2),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 1 / 1.3,
+          ),
+          itemCount: itemCount,
+          itemBuilder: (BuildContext context, int index) {
+            // Each pair of matched products
+            var pair = validPairs[index].value;
 
-          String productName1 = data1['p_name'];
-          String productName2 = data2['p_name'];
+            // Assuming the data structure ensures there are exactly 2 products per matched 'p_mixmatch'
+            var data1 = pair[0].data() as Map<String, dynamic>;
+            var data2 = pair[1].data() as Map<String, dynamic>;
 
-          String productImage1 = data1['p_imgs'][0];
-          String productImage2 = data2['p_imgs'][0];
+            String price1 = data1['p_price'].toString();
+            String price2 = data2['p_price'].toString();
+            String totalPrice =
+                (int.parse(price1) + int.parse(price2)).toString();
+
+            String productName1 = data1['p_name'];
+            String productName2 = data2['p_name'];
+
+            String productImage1 = data1['p_imgs'][0];
+            String productImage2 = data2['p_imgs'][0];
             return GestureDetector(
               onTap: () {
                 Navigator.push(

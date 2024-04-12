@@ -438,7 +438,14 @@ class _ProfileScreenState extends State<ProfileScreen>
                             alignment: Alignment.topRight,
                             child: IconButton(
                               icon: Icon(Icons.favorite, color: Colors.red),
-                              onPressed: () async {},
+                              onPressed: () async {
+                        await FirebaseFirestore.instance.collection('products').doc(flatList[actualIndex].id).update({
+                        'p_wishlist': FieldValue.arrayRemove([FirebaseAuth.instance.currentUser!.uid])
+                        });
+                        await FirebaseFirestore.instance.collection('products').doc(flatList[actualIndex + 1].id).update({
+                        'p_wishlist': FieldValue.arrayRemove([FirebaseAuth.instance.currentUser!.uid])
+                        });
+                              },
                             ),
                           ),
                         ],
