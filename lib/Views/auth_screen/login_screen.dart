@@ -55,8 +55,7 @@ class LoginScreen extends StatelessWidget {
                                   children: [
                                     const Text('Log In',
                                         style: TextStyle(
-                                            fontSize: 32,
-                                            fontFamily: bold)),
+                                            fontSize: 32, fontFamily: bold)),
                                     const SizedBox(height: 5),
                                     customTextField(
                                         label: email,
