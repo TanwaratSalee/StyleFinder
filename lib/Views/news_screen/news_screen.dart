@@ -303,21 +303,21 @@ class NewsScreen extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         'Brand'
                             .text
                             .fontFamily(medium)
                             .color(greyDark2)
                             .size(22)
                             .make(),
-                        SizedBox(height: 6),
+                        const SizedBox(height: 6),
                         Image.asset(
                           icUndertext,
                           width: 170,
                         ),
-                        SizedBox(height: 6),
+                        const SizedBox(height: 6),
                         SingleChildScrollView(
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           child: Container(
                               height: MediaQuery.of(context).size.height * 0.2,
                               child: ButtonsGrid()),
@@ -330,7 +330,7 @@ class NewsScreen extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         'MATCH'
                                 'MATCH BY STORE '
                             .text
@@ -338,14 +338,14 @@ class NewsScreen extends StatelessWidget {
                             .color(greyDark2)
                             .size(22)
                             .make(),
-                        SizedBox(height: 6),
+                        const SizedBox(height: 6),
                         Image.asset(
                           icUndertext,
                           width: 170,
                         ),
-                        SizedBox(height: 6),
+                        const SizedBox(height: 6),
                         SingleChildScrollView(
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           child: Container(
                             height: MediaQuery.of(context).size.height * 0.55,
                             child: _buildProductMathGrids(category),
@@ -472,7 +472,7 @@ class NewsScreen extends StatelessWidget {
                       ],
                     ),
 
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
 
@@ -523,7 +523,7 @@ class NewsScreen extends StatelessWidget {
                                       children: [
                                         Text(
                                           "${allproductsdata[index]['p_name']}",
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontFamily: medium,
                                             fontSize: 17,
                                             color: Colors.black,
@@ -534,13 +534,13 @@ class NewsScreen extends StatelessWidget {
                                         ),
                                         Text(
                                           "${allproductsdata[index]['p_price']} Bath",
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontFamily: regular,
                                             fontSize: 14,
                                             color: greyDark2,
                                           ),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                             height: 10), // ให้ระยะห่างด้านล่าง
                                       ],
                                     ),
@@ -570,12 +570,12 @@ class NewsScreen extends StatelessWidget {
                     const SizedBox(height: 20),
                     InkWell(
                       onTap: () {
-                        Get.to(() => ProductScreen());
+                        Get.to(() => const ProductScreen());
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Explote More')
+                          const Text('Explote More')
                               .text
                               .fontFamily(medium)
                               .size(17)
@@ -624,7 +624,7 @@ class NewsScreen extends StatelessWidget {
         print('MixMatch List: $mixMatchList');
 
         return GridView.builder(
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           padding: const EdgeInsets.all(8),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 1,
@@ -681,7 +681,7 @@ class NewsScreen extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        SizedBox(height: 2),
+                        const SizedBox(height: 2),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -762,7 +762,7 @@ class NewsScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         Padding(
@@ -795,8 +795,8 @@ class GridCardExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-      padding: EdgeInsets.all(10),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      padding: const EdgeInsets.all(10),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2, // จำนวนคอลัมน์ในแต่ละแถว
         crossAxisSpacing: 5, // ระยะห่างระหว่างการ์ดในแนวแกนตั้ง
         mainAxisSpacing: 10, // ระยะห่างระหว่างการ์ดในแนวแกนนอน
@@ -819,8 +819,8 @@ class ButtonsGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return GridView.count(
       crossAxisCount: 2,
-      physics: NeverScrollableScrollPhysics(),
-      padding: EdgeInsets.all(10),
+      physics: const NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.all(10),
       crossAxisSpacing: 10,
       mainAxisSpacing: 10,
       children: List.generate(4, (index) {
@@ -839,7 +839,7 @@ class ButtonsGrid extends StatelessWidget {
                 ),
               ),
               padding: MaterialStateProperty.all<EdgeInsets>(
-                EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
               ),
             ),
             child: Text("Button ${index + 1}"),

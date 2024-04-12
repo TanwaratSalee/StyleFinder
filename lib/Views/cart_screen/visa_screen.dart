@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
 import 'package:flutter_finalproject/Views/home_screen/home_screen.dart';
 import 'package:flutter_finalproject/Views/home_screen/mainHome.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
@@ -342,8 +343,7 @@ class _VisaCardScreenState extends State<VisaCardScreen> {
         orderPaymentMethod: selectedPaymentMethod,
         totalAmount: controller.totalP.value,
       );
-
-      Get.offAll(() => MainHome());
+      // Get.to(() => CartScreen());
     });
   }
 }
@@ -451,7 +451,7 @@ Future<void> _showCustomDialog(BuildContext context) async {
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                  MaterialPageRoute(builder: (context) => MainHome()),
                 );
               },
               child: Text(

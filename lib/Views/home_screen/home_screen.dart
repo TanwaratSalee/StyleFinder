@@ -136,41 +136,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 return Column(
                   children: [
                     Container(
-                      width: 450,
-                      height: 580,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: whiteColor,
-                          width: 15,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: greyColor.withOpacity(0.5),
-                            spreadRadius: 5,
-                            blurRadius: 7,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
                       child: Stack(
                         children: [
-                          Image.network(
-                            product['p_imgs'][0],
-                            height: 650,
-                            width: 500,
-                            fit: BoxFit.cover,
-                          ),
-                          Positioned(
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            child: Container(
-                              padding: const EdgeInsets.all(5),
-                              decoration: const BoxDecoration(
-                                color: whiteColor,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Image.network(
+                                product['p_imgs'][0],
+                                height: 420,
+                                width: 320,
+                                fit: BoxFit.cover,
                               ),
-                              child: Column(
+                              Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
@@ -182,13 +159,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                   const SizedBox(height: 2),
-                                  // Text(
-                                  //   product['p_aboutProduct'],
-                                  //   style: const TextStyle(
-                                  //     color: greyDark1,
-                                  //     fontSize: 14,
-                                  //     fontFamily: light,
-                                  //   ),
                                   // ),
                                   Text(
                                     "${NumberFormat('#,##0').format(double.parse(product['p_price']).toInt())} Bath",
@@ -198,10 +168,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                 ],
-                              ),
-                            ),
-                          ),
-                        ],
+                              ).box.padding(EdgeInsets.all(8)).make(),
+                            ],
+                          ).box.white.roundedLg.shadowSm.padding(EdgeInsets.all(12)).make()
+
+                         ],
                       ),
                     ),
                     const SizedBox(height: 5.0),
@@ -211,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         IconButton(
                           icon: Image.asset(
                             icDislikeButton,
-                            width: 67,
+                            width: 62,
                           ).box.roundedFull.shadowSm.make(),
                           onPressed: () =>
                               controllercard.swipe(CardSwiperDirection.left),
@@ -219,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         IconButton(
                           icon: Image.asset(
                             icViewMoreButton,
-                            width: 67,
+                            width: 62,
                           ).box.roundedFull.shadowSm.make(),
                           onPressed: () {
                             Get.to(() => ItemDetails(
@@ -231,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         IconButton(
                           icon: Image.asset(
                             icLikeButton,
-                            width: 67,
+                            width: 62,
                           ).box.roundedFull.shadowSm.make(),
                           onPressed: () => [
                             controllercard.swipe(CardSwiperDirection.right),
