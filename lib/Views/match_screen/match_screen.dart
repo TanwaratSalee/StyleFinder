@@ -42,20 +42,6 @@ class _MatchScreenState extends State<MatchScreen> {
         title: appbarField(context: context),
         elevation: 8.0,
         shadowColor: greyColor.withOpacity(0.5),
-        // actions: <Widget>[
-        //   Padding(
-        //     padding: const EdgeInsets.only(right: 15.0),
-        //     child: IconButton(
-        //       icon: Image.asset(
-        //         icCart,
-        //         width: 21,
-        //       ),
-        //       onPressed: () {
-        //         Get.to(() => const CartScreen());
-        //       },
-        //     ),
-        //   ),
-        // ],
       ),
       body: CustomScrollView(
         physics: NeverScrollableScrollPhysics(),

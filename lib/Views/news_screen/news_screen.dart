@@ -11,6 +11,7 @@ import 'package:flutter_finalproject/consts/lists.dart';
 import 'package:flutter_finalproject/controllers/news_controller.dart';
 import 'package:flutter_finalproject/services/firestore_services.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import 'dart:math' as math;
 
@@ -301,38 +302,126 @@ class NewsScreen extends StatelessWidget {
 
                     Column(
                       mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment
+                          .center, // Ensure alignment if needed
                       children: [
-                        const SizedBox(height: 20),
-                        'Brand'
+                        'BRAND'
                             .text
                             .fontFamily(medium)
                             .color(greyDark2)
                             .size(22)
                             .make(),
-                        const SizedBox(height: 6),
-                        Image.asset(
-                          icUndertext,
-                          width: 170,
+                        Container(
+                          child: GestureDetector(
+                            child: Image.asset(
+                              icUndertext,
+                              width: 170,
+                            ),
+                          ),
                         ),
-                        const SizedBox(height: 6),
-                        SingleChildScrollView(
-                          physics: const NeverScrollableScrollPhysics(),
-                          child: Container(
-                              height: MediaQuery.of(context).size.height * 0.2,
-                              child: ButtonsGrid()),
-                        )
                       ],
                     ),
+
                     10.heightBox,
+                    StreamBuilder(
+                      stream: FirestoreServices.allproducts(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (!snapshot.hasData) {
+                          return Center(
+                            child: loadingIndicator(),
+                          );
+                        } else {
+                          var allproductsdata = snapshot.data!.docs;
+                          allproductsdata.shuffle(math
+                              .Random()); // Shuffle the list using Dart's Random
+
+                          int itemCount = math.min(allproductsdata.length, 4);
+
+                          return GridView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: itemCount,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 12,
+                              crossAxisSpacing: 8,
+                              mainAxisExtent: 280,
+                            ),
+                            itemBuilder: (context, index) {
+                              return Column(
+                                children: [
+                                  Expanded(
+                                    child: Center(
+                                      child: Image.network(
+                                        allproductsdata[index]['p_imgs'][0],
+                                        width: 200,
+                                        height: 210,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          // mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "${allproductsdata[index]['p_name']}",
+                                          style: const TextStyle(
+                                            fontFamily: medium,
+                                            fontSize: 17,
+                                            color: greyDark2,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow
+                                              .ellipsis, // ใช้ ellipsis สำหรับข้อความที่เกิน
+                                        ),
+                                        Text(
+                                          "${allproductsdata[index]['p_price']} Bath",
+                                          style: const TextStyle(
+                                            fontFamily: regular,
+                                            fontSize: 14,
+                                            color: greyDark2,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                            height: 10), // ให้ระยะห่างด้านล่าง
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              )
+                                  .box
+                                  .white
+                                  .rounded
+                                  .shadowSm
+                                  .margin(
+                                      const EdgeInsets.symmetric(horizontal: 2))
+                                  .make()
+                                  .onTap(() {
+                                Get.to(() => ItemDetails(
+                                      title:
+                                          "${allproductsdata[index]['p_name']}",
+                                      data: allproductsdata[index],
+                                    ));
+                              });
+                            },
+                          );
+                        }
+                      },
+                    ),
+
 
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         const SizedBox(height: 20),
-                        'MATCH'
-                                'MATCH BY STORE '
+                                'MATCH BY STORE'
                             .text
                             .fontFamily(medium)
                             .color(greyDark2)
@@ -347,105 +436,11 @@ class NewsScreen extends StatelessWidget {
                         SingleChildScrollView(
                           physics: const NeverScrollableScrollPhysics(),
                           child: Container(
-                            height: MediaQuery.of(context).size.height * 0.55,
+                            height: MediaQuery.of(context).size.height * 0.56,
                             child: _buildProductMathGrids(category),
                           ),
                         )
-
-                        // StreamBuilder(
-                        //   stream: FirestoreServices.allproducts(),
-                        //   builder: (BuildContext context,
-                        //       AsyncSnapshot<QuerySnapshot> snapshot) {
-                        //     if (!snapshot.hasData) {
-                        //       return Center(
-                        //         child: loadingIndicator(),
-                        //       );
-                        //     } else {
-                        //       var allproductsdata = snapshot.data!.docs;
-                        //       allproductsdata.shuffle(math
-                        //           .Random()); // Shuffle the list using Dart's Random
-
-                        //       int itemCount =
-                        //           math.min(allproductsdata.length, 4);
-
-                        //       return GridView.builder(
-                        //         physics: const NeverScrollableScrollPhysics(),
-                        //         shrinkWrap: true,
-                        //         itemCount: itemCount,
-                        //         gridDelegate:
-                        //             const SliverGridDelegateWithFixedCrossAxisCount(
-                        //           crossAxisCount: 2,
-                        //           mainAxisSpacing: 12,
-                        //           crossAxisSpacing: 8,
-                        //           mainAxisExtent: 280,
-                        //         ),
-                        //         itemBuilder: (context, index) {
-                        //           return Column(
-                        //             crossAxisAlignment:
-                        //                 CrossAxisAlignment.start,
-                        //             children: [
-                        //               Image.network(
-                        //                 allproductsdata[index]['p_imgs'][0],
-                        //                 width: 180,
-                        //                 height: 210,
-                        //                 fit: BoxFit.cover,
-                        //               ),
-                        //               // const Spacer(),
-                        //               Padding(
-                        //                 padding: const EdgeInsets.all(8.0),
-                        //                 child: Column(
-                        //                   crossAxisAlignment:
-                        //                       CrossAxisAlignment.start,
-                        //                   children: [
-                        //                     Text(
-                        //                       "${allproductsdata[index]['p_name']}",
-                        //                       style: TextStyle(
-                        //                         fontFamily: medium,
-                        //                         fontSize: 17,
-                        //                         color: Colors.black,
-                        //                       ),
-                        //                       maxLines: 1,
-                        //                       overflow: TextOverflow
-                        //                           .ellipsis, // ใช้ ellipsis สำหรับข้อความที่เกิน
-                        //                     ),
-                        //                     Text(
-                        //                       "${allproductsdata[index]['p_price']} Bath",
-                        //                       style: TextStyle(
-                        //                         fontFamily: regular,
-                        //                         fontSize: 14,
-                        //                         color: fontGreyDark1,
-                        //                       ),
-                        //                     ),
-                        //                     SizedBox(
-                        //                         height:
-                        //                             10), // ให้ระยะห่างด้านล่าง
-                        //                   ],
-                        //                 ),
-                        //               )
-                        //             ],
-                        //           )
-                        //               .box
-                        //               .white
-                        //               .rounded
-                        //               .shadowSm
-                        //               .margin(const EdgeInsets.symmetric(
-                        //                   horizontal: 2))
-                        //               .rounded
-                        //               // .padding(const EdgeInsets.all(12))
-                        //               .make()
-                        //               .onTap(() {
-                        //             Get.to(() => ItemDetails(
-                        //                   title:
-                        //                       "${allproductsdata[index]['p_name']}",
-                        //                   data: allproductsdata[index],
-                        //                 ));
-                        //           });
-                        //         },
-                        //       );
-                        //     }
-                        //   },
-                        // ),
-                      ],
+                        ],
                     ),
 
                     30.heightBox,
@@ -520,20 +515,22 @@ class NewsScreen extends StatelessWidget {
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
+                                          // mainAxisAlignment: MainAxisAlignment.start,
                                       children: [
                                         Text(
                                           "${allproductsdata[index]['p_name']}",
                                           style: const TextStyle(
                                             fontFamily: medium,
                                             fontSize: 17,
-                                            color: Colors.black,
+                                            color: greyDark2,
                                           ),
                                           maxLines: 1,
                                           overflow: TextOverflow
                                               .ellipsis, // ใช้ ellipsis สำหรับข้อความที่เกิน
                                         ),
-                                        Text(
-                                          "${allproductsdata[index]['p_price']} Bath",
+                                        Text("${NumberFormat('#,##0').format(double.parse(allproductsdata[index]['p_price']).toInt())} Bath",
+                                        // Text(
+                                        //   "${allproductsdata[index]['p_price']} Bath",
                                           style: const TextStyle(
                                             fontFamily: regular,
                                             fontSize: 14,
@@ -589,6 +586,7 @@ class NewsScreen extends StatelessWidget {
                         ],
                       ),
                     ),
+                    SizedBox(height: 20,)
                   ],
                 ),
               ),
@@ -609,10 +607,8 @@ class NewsScreen extends StatelessWidget {
           );
         }
 
-        // Initialize a map to group products by their 'p_mixmatch' value
         Map<String, List<DocumentSnapshot>> mixMatchMap = {};
 
-        // Populate the map
         for (var doc in snapshot.data!.docs) {
           var data = doc.data() as Map<String, dynamic>;
           if (data['p_mixmatch'] != null) {
@@ -624,12 +620,10 @@ class NewsScreen extends StatelessWidget {
           }
         }
 
-        // Filter out any 'p_mixmatch' groups that do not have exactly 2 products
         var validPairs = mixMatchMap.entries
             .where((entry) => entry.value.length == 2)
             .toList();
 
-        // Calculate the total number of valid pairs to display
         int itemCount = validPairs.length;
         return GridView.builder(
           physics: const NeverScrollableScrollPhysics(),
@@ -638,12 +632,11 @@ class NewsScreen extends StatelessWidget {
             crossAxisCount: 1,
             mainAxisSpacing: 5,
             crossAxisSpacing: 5,
-            mainAxisExtent: 250, // เพิ่มระยะห่างระหว่างแถว
+            mainAxisExtent: 230,
           ),
           itemBuilder: (BuildContext context, int index) {
             var pair = validPairs[index].value;
 
-            // Assuming the data structure ensures there are exactly 2 products per matched 'p_mixmatch'
             var data1 = pair[0].data() as Map<String, dynamic>;
             var data2 = pair[1].data() as Map<String, dynamic>;
 
@@ -659,139 +652,163 @@ class NewsScreen extends StatelessWidget {
             String productImage2 = data2['p_imgs'][0];
 
             return GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MatchDetailScreen(
-                      price1: price1,
-                      price2: price2,
-                      productName1: productName1,
-                      productName2: productName2,
-                      productImage1: productImage1,
-                      productImage2: productImage2,
-                      totalPrice: totalPrice,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MatchDetailScreen(
+                        price1: price1,
+                        price2: price2,
+                        productName1: productName1,
+                        productName2: productName2,
+                        productImage1: productImage1,
+                        productImage2: productImage2,
+                        totalPrice: totalPrice,
+                      ),
                     ),
-                  ),
-                );
-              },
-              child: Card(
-                color: Colors.white,
-                clipBehavior: Clip.antiAlias,
-                elevation: 2,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  // side: BorderSide(color: Colors.black, width: 0.5),
-                ),
-                child: Stack(
+                  );
+                },
+                child: Column(
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        const SizedBox(height: 2),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.network(
-                                productImage1,
-                                width: 100,
-                                height: 100,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            Expanded(
-                              flex: 3,
-                              child: Padding(
-                                padding: const EdgeInsets.all(25),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      productName1,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
-                                        color: Colors.black,
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    Text(
-                                      'Price: \$${price1.toString()}',
-                                      style:
-                                          const TextStyle(color: Colors.grey),
-                                    ),
-                                  ],
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          const SizedBox(height: 2),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ClipRRect(
+                                child: Image.network(
+                                  productImage1,
+                                  width: 80,
+                                  height: 80,
+                                  fit: BoxFit.cover,
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.network(
-                                productImage2,
-                                width: 100,
-                                height: 100,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            Expanded(
-                              flex: 3,
-                              child: Padding(
-                                padding: const EdgeInsets.all(19),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      productName2,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
-                                        color: Colors.black,
+                              Expanded(
+                                flex: 3,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(25),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        productName1,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                          color: greyDark2,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    Text(
-                                      'Price: \$${price2.toString()}',
-                                      style:
-                                          const TextStyle(color: Colors.grey),
-                                    ),
-                                  ],
+                                      Text(
+                                        "${NumberFormat('#,##0').format(double.parse(price1.toString()).toInt())} Bath",
+                                        style:
+                                            const TextStyle(color: greyDark1),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 100),
-                          child: Text(
-                            'Total Price: \$${totalPrice.toString()}',
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                            ),
+                            ],
                           ),
-                        ),
-                      ],
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ClipRRect(
+                                child: Image.network(
+                                  productImage2,
+                                  width: 80,
+                                  height: 80,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Expanded(
+                                flex: 3,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(19),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        productName2,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                          color: greyDark2,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      Text(
+                                        "${NumberFormat('#,##0').format(double.parse(price2.toString()).toInt())} Bath",
+                                        style:
+                                            const TextStyle(color: greyDark1),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                                    children: [
+                                      Text(
+                                        "Total Price ",
+                                        style: TextStyle(
+                                          color:
+                                              greyDark2, 
+                                          fontFamily:
+                                              'regular', 
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      Text(
+                                        "${NumberFormat('#,##0').format(double.parse(totalPrice.toString()).toInt())} ",
+                                        style: TextStyle(
+                                          color:
+                                              greyDark2, 
+                                          fontFamily:
+                                              'medium', 
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      Text(
+                                        "Bath",
+                                        style: TextStyle(
+                                          color:
+                                              greyDark2, 
+                                          fontFamily:
+                                              'regular', 
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                        ],
+                      )
+                          .box
+                          .color(whiteColor)
+                          .padding(EdgeInsets.all(12))
+                          .rounded
+                          .shadowSm
+                          .make(),
                     ),
                   ],
-                ),
-              ),
-            );
+                ));
           },
           itemCount: 2,
-          // (mixMatchList.length).ceil(),
         );
       },
     );
@@ -804,15 +821,15 @@ class GridCardExample extends StatelessWidget {
     return GridView.builder(
       padding: const EdgeInsets.all(10),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2, // จำนวนคอลัมน์ในแต่ละแถว
-        crossAxisSpacing: 5, // ระยะห่างระหว่างการ์ดในแนวแกนตั้ง
-        mainAxisSpacing: 10, // ระยะห่างระหว่างการ์ดในแนวแกนนอน
-        childAspectRatio: 1, // อัตราส่วนของความกว้างต่อความสูงของการ์ด
+        crossAxisCount: 2,
+        crossAxisSpacing: 5,
+        mainAxisSpacing: 10,
+        childAspectRatio: 1,
       ),
-      itemCount: 4, // จำนวนการ์ดทั้งหมด
+      itemCount: 4,
       itemBuilder: (BuildContext context, int index) {
         return Card(
-          elevation: 2, // ระดับเงาของการ์ด
+          elevation: 2,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10)), // ขอบมนของการ์ด
         );
@@ -839,7 +856,7 @@ class ButtonsGrid extends StatelessWidget {
             },
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+              foregroundColor: MaterialStateProperty.all<Color>(greyDark2),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),

@@ -108,13 +108,14 @@ class _ProfileScreenState extends State<ProfileScreen>
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          SizedBox(height: 10),
                           data['imageUrl'] == ''
                               ? ClipRRect(
                                   borderRadius: BorderRadius.circular(100),
                                   child: Image.asset(
                                     imProfile,
-                                    width: 120,
-                                    height: 120,
+                                    width: 110,
+                                    height: 110,
                                     fit: BoxFit.cover,
                                   ),
                                 )
@@ -122,8 +123,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                                   borderRadius: BorderRadius.circular(100),
                                   child: Image.network(
                                     data['imageUrl'],
-                                    width: 120,
-                                    height: 120,
+                                    width: 110,
+                                    height: 110,
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -263,10 +264,8 @@ class _ProfileScreenState extends State<ProfileScreen>
           );
         }
 
-        // Temporarily store documents by their mixMatch values
         Map<String, List<DocumentSnapshot>> mixMatchGroups = {};
 
-        // Count occurrences of each mixMatch value
         snapshot.data!.docs.forEach((doc) {
           var data = doc.data() as Map<String, dynamic>;
           if (data.containsKey('p_mixmatch') &&
@@ -279,31 +278,25 @@ class _ProfileScreenState extends State<ProfileScreen>
           }
         });
 
-        // Filter out the mixMatch groups that don't have pairs
         var validPairs = mixMatchGroups.values
             .where((list) => list.length >= 2 && list.length % 2 == 0)
             .toList();
 
-        // Flatten the list for the GridView.builder
         var flatList = validPairs.expand((i) => i).toList();
 
         return GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 1,
-            childAspectRatio: 1 / 0.55,
+            childAspectRatio: 1 / 0.61,
           ),
-          itemCount: flatList.length ~/
-              2, // Divide by 2 because each item represents a pair
+          itemCount: flatList.length ~/ 2,
           itemBuilder: (BuildContext context, int index) {
-            // Calculate actual index in the flat list
             int actualIndex = index * 2;
 
-            // Safely get data for both products in the pair
             var data1 = flatList[actualIndex].data() as Map<String, dynamic>;
             var data2 =
                 flatList[actualIndex + 1].data() as Map<String, dynamic>;
 
-            // Extract necessary fields
             String productName1 = data1['p_name'];
             String productName2 = data2['p_name'];
             String price1 = data1['p_price'].toString();
@@ -314,145 +307,154 @@ class _ProfileScreenState extends State<ProfileScreen>
                 (int.parse(price1) + int.parse(price2)).toString();
 
             return GestureDetector(
-                onTap: () {
-                  // Handle onTap event
-                },
-                child: Column(
-                  children: [
-                    Card(
-                      color: Colors.white,
-                      clipBehavior: Clip.antiAlias,
-                      elevation: 2,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        // side: BorderSide(color: Colors.black, width: 0.5),
-                      ),
-                      child: Stack(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              SizedBox(height: 2),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image.network(
-                                      productImage1,
-                                      width: 100,
-                                      height: 100,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 3,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(25),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            productName1,
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                              color: Colors.black,
-                                            ),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          Text(
-                                            // 'Price: \$${price1.toString()}',
-                                            "${NumberFormat('#,##0').format(double.parse(price1.toString()).toInt())} Bath",
-                                            style: const TextStyle(
-                                                color: Colors.grey),
-                                          ),
-                                        ],
+                onTap: () {},
+                child: Column(children: [
+                  Column(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: whiteColor,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Stack(
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ClipRRect(
+                                      // borderRadius: BorderRadius.circular(10),
+                                      child: Image.network(
+                                        productImage1,
+                                        width: 75,
+                                        height: 75,
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image.network(
-                                      productImage2,
-                                      width: 100,
-                                      height: 100,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 3,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(19),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            productName2,
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                              color: Colors.black,
+                                    Expanded(
+                                      flex: 3,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(25),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              productName1,
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14,
+                                                color: Colors.black,
+                                              ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
                                             ),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          Text(
-                                            "${NumberFormat('#,##0').format(double.parse(price2.toString()).toInt())} Bath",
-                                            // 'Price: \$${price2.toString()}',
-                                            style: const TextStyle(
-                                                color: Colors.grey),
-                                          ),
-                                        ],
+                                            Text(
+                                              "${NumberFormat('#,##0').format(double.parse(price1.toString()).toInt())} Bath",
+                                              style: const TextStyle(
+                                                  color: greyDark1),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 100),
-                                child: Text(
-                                  'Total Price: \$${totalPrice.toString()}',
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12,
-                                  ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: IconButton(
-                              icon: Icon(Icons.favorite, color: Colors.red),
-                              onPressed: () async {
-                        await FirebaseFirestore.instance.collection('products').doc(flatList[actualIndex].id).update({
-                        'p_wishlist': FieldValue.arrayRemove([FirebaseAuth.instance.currentUser!.uid])
-                        });
-                        await FirebaseFirestore.instance.collection('products').doc(flatList[actualIndex + 1].id).update({
-                        'p_wishlist': FieldValue.arrayRemove([FirebaseAuth.instance.currentUser!.uid])
-                        });
-                              },
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ClipRRect(
+                                      // borderRadius: BorderRadius.circular(10),
+                                      child: Image.network(
+                                        productImage2,
+                                        width: 75,
+                                        height: 75,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 3,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(19),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              productName2,
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14,
+                                                color: Colors.black,
+                                              ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            Text(
+                                              "${NumberFormat('#,##0').format(double.parse(price2.toString()).toInt())} Bath",
+                                              style: const TextStyle(
+                                                  color: greyDark1),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 6),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Total Price  ",
+                                      style: TextStyle(
+                                        color: greyDark2,
+                                        fontFamily: 'regular',
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    Text(
+                                      "${NumberFormat('#,##0').format(double.parse(totalPrice.toString()).toInt())} ",
+                                      style: TextStyle(
+                                        color: greyDark2,
+                                        fontFamily: 'medium',
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    Text(
+                                      " Bath",
+                                      style: TextStyle(
+                                        color: greyDark2,
+                                        fontFamily: 'regular',
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
                             ),
-                          ),
-                        ],
+                            Align(
+                              alignment: Alignment.topRight,
+                              child: IconButton(
+                                icon: Icon(Icons.favorite, color: redColor),
+                                onPressed: () async {},
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ));
+                    ],
+                  ),
+                  Divider(
+                    color: thinGrey01,
+                  )
+                ])
+                    .box
+                    .color(whiteColor)
+                    .margin(EdgeInsets.symmetric(vertical: 5, horizontal: 12))
+                    .padding(EdgeInsets.all(8))
+                    .make());
           },
         );
       },
