@@ -6,6 +6,7 @@ import 'package:flutter_finalproject/Views/auth_screen/verifyemail_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/custom_textfield.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 import 'package:flutter_finalproject/consts/colors.dart';
+import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/consts/strings.dart';
 import 'package:get/get.dart';
 
@@ -49,7 +50,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: whiteColor,
-      appBar: AppBar(title: const Text('Create Account')),
+      appBar: AppBar(title: const Text('Create Account').text.size(24).fontFamily(medium).make()),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(15),
         child: Column(

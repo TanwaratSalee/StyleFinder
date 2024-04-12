@@ -90,7 +90,7 @@ Future<void> updateAddressForCurrentUser() async {
           await userRef.update({'address': addressesList});
 
           // Show a message or perform any other action after update if necessary
-          VxToast.show(context, msg: "Suscessful save Address");
+          VxToast.show(context, msg: "The new address was successfully added");
           Navigator.pop(context);
         } else {
           print('Address not found');
@@ -117,7 +117,7 @@ Future<void> updateAddressForCurrentUser() async {
       backgroundColor: whiteColor,
       appBar: AppBar(
         title:
-            "Edit Address".text.fontFamily(regular).color(greyDark2).make(),
+            "Edit Address".text.size(24).fontFamily(medium).make(),
       ),
       bottomNavigationBar: SizedBox(
         height: 70,
