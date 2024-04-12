@@ -149,16 +149,20 @@ class MenuSettingScreen extends StatelessWidget {
                             onPressed: () {
                               showDialog(
                                 context: context,
-                                barrierDismissible: false,
                                 builder: (BuildContext dialogContext) {
-                                  return AlertDialog(
-                                    title: const Center(
-                                        child: Text('Logout',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold))),
-                                    content: Column(
+                                  return Dialog(
+                                    backgroundColor: Colors
+                                        .white, // กำหนดสีพื้นหลังของ Custom Popup เป็นสีขาว
+                                    child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
+                                        const SizedBox(height: 20),
+                                        const Text(
+                                          'Logout',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        const SizedBox(height: 10),
                                         const Text(
                                             'Are you sure you want to logout?'),
                                         const SizedBox(height: 20),
@@ -169,34 +173,32 @@ class MenuSettingScreen extends StatelessWidget {
                                               MainAxisAlignment.center,
                                           children: <Widget>[
                                             TextButton(
-                                              child: Text('Cancel',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.blue)),
+                                              child: Text(
+                                                'Cancel',
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
                                               onPressed: () {
                                                 Navigator.of(dialogContext)
-                                                    .pop(); // ปิดไดอะล็อกโดยไม่ทำอะไร
+                                                    .pop(); // ปิด Custom Popup โดยไม่ทำอะไร
                                               },
                                             ),
-                                            Container(
-                                              height: 40,
-                                              child: const VerticalDivider(
-                                                  width:
-                                                      50), // สร้างเส้นกั้นระหว่างปุ่ม
-                                            ),
+                                            const SizedBox(width: 50),
                                             TextButton(
-                                              child: Text('Logout',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.red)),
+                                              child: Text(
+                                                'Logout',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.red,
+                                                ),
+                                              ),
                                               onPressed: () async {
                                                 // เรียกใช้เมธอด logout
                                                 await Get.put(AuthController())
                                                     .signoutMethod(context);
                                                 Navigator.of(dialogContext)
-                                                    .pop(); // ปิดไดอะล็อก
+                                                    .pop(); // ปิด Custom Popup
                                                 Get.offAll(() =>
                                                     const LoginScreen()); // นำทางกลับไปหน้า login
                                               },

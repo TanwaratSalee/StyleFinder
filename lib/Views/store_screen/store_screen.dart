@@ -152,7 +152,12 @@ class StoreScreen extends StatelessWidget {
                               builder: (context) => ReviewScreen()),
                         );
                       },
-                      child: const Text('All Reviews >>>').text.fontFamily(regular).size(14).color(greyDark2).make(),
+                      child: const Text('All Reviews >>>')
+                          .text
+                          .fontFamily(regular)
+                          .size(14)
+                          .color(greyDark2)
+                          .make(),
                     ),
                   ],
                 ),
@@ -220,7 +225,7 @@ class StoreScreen extends StatelessWidget {
 
   Widget _buildProductMatchTabs(BuildContext context) {
     return DefaultTabController(
-      length: 2, 
+      length: 2,
       child: Column(
         children: <Widget>[
           TabBar(
@@ -252,8 +257,8 @@ class StoreScreen extends StatelessWidget {
     return Column(
       children: <Widget>[
         // Padding(
-          // padding: const EdgeInsets.all(5),
-          /* child: */ _buildCategoryTabs(context),
+        // padding: const EdgeInsets.all(5),
+        /* child: */ _buildCategoryTabs(context),
         // ),
         Expanded(
           child: Container(),
@@ -304,32 +309,15 @@ class StoreScreen extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 0.9,
             child: TabBarView(
               children: [
-<<<<<<< HEAD
-                _buildProductGridAll('All', 'All'),
-                _buildProductGridouter('Outer', 'Outer'),
-                _buildProductGridDress('Dress', 'Dress'),
-                _buildProductGridBottoms('Bottoms', 'Bottoms'),
-                _buildProductGridTshirts('T-shirts', 'T-shirts'),
-=======
-                _buildProductGrid(
-                    'All', 'All'),
-                _buildProductGrid(
-                    'Knitwear', 'Knitwear'),
-                _buildProductGrid(
-                    'Dresses', 'Dresses'),
-                _buildProductGrid('Coat',
-                    'Coat'),
-                _buildProductGrid('T-shirts',
-                    'T-shirts'),
-                    _buildProductGrid(
-                    'Skirts', 'Skirts'),
-                _buildProductGrid(
-                    'Pants', 'Pants'),
-                _buildProductGrid(
-                    'Shorts', 'Shorts'),
-                _buildProductGrid('Shirts',
-                    'Shirts'),
->>>>>>> 047f633590a82c899768ecd0ca1c7142a93e0ab8
+                _buildProductGrid('All', 'All'),
+                _buildProductGrid('Knitwear', 'Knitwear'),
+                _buildProductGrid('Dresses', 'Dresses'),
+                _buildProductGrid('Coat', 'Coat'),
+                _buildProductGrid('T-shirts', 'T-shirts'),
+                _buildProductGrid('Skirts', 'Skirts'),
+                _buildProductGrid('Pants', 'Pants'),
+                _buildProductGrid('Shorts', 'Shorts'),
+                _buildProductGrid('Shirts', 'Shirts'),
               ],
             ),
           ),
@@ -505,7 +493,9 @@ class StoreScreen extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
-                            "${NumberFormat('#,##0').format(double.parse('$price',).toInt())} Bath",
+                            "${NumberFormat('#,##0').format(double.parse(
+                              '$price',
+                            ).toInt())} Bath",
                             // '$price',
                             style: const TextStyle(
                                 color: greyDark1, fontFamily: regular),

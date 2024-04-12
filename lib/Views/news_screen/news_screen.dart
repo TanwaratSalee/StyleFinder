@@ -304,7 +304,6 @@ class NewsScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         SizedBox(height: 20),
-<<<<<<< HEAD
                         'Brand'
                             .text
                             .fontFamily(medium)
@@ -333,9 +332,7 @@ class NewsScreen extends StatelessWidget {
                       children: [
                         SizedBox(height: 20),
                         'MATCH'
-=======
-                        'MATCH BY STORE '
->>>>>>> 047f633590a82c899768ecd0ca1c7142a93e0ab8
+                                'MATCH BY STORE '
                             .text
                             .fontFamily(medium)
                             .color(greyDark2)
@@ -521,7 +518,8 @@ class NewsScreen extends StatelessWidget {
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           "${allproductsdata[index]['p_name']}",
@@ -570,19 +568,27 @@ class NewsScreen extends StatelessWidget {
                     ),
 
                     const SizedBox(height: 20),
-                                        InkWell(
-                                          onTap: () {
-                                            Get.to(() => ProductScreen());
-                                          },
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [Text('Explote More').text.fontFamily(medium).size(17).color(greyDark2).make(),
-                                            10.widthBox,
-                                            Image.asset(icNext, width: 17,)],
-                                            
-                                            
-                                          ),
-                                        ),
+                    InkWell(
+                      onTap: () {
+                        Get.to(() => ProductScreen());
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Explote More')
+                              .text
+                              .fontFamily(medium)
+                              .size(17)
+                              .color(greyDark2)
+                              .make(),
+                          10.widthBox,
+                          Image.asset(
+                            icNext,
+                            width: 17,
+                          )
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
