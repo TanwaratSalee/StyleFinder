@@ -605,24 +605,32 @@ class NewsScreen extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) {
           return Center(
-            child: loadingIndicator(),
+            child: CircularProgressIndicator(),
           );
         }
 
-        List<String> mixMatchList = [];
-        snapshot.data!.docs.forEach((doc) {
-          Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-          if (data.containsKey('p_mixmatch')) {
-            String currentMixMatch = data['p_mixmatch'];
-            if (!mixMatchList.contains(currentMixMatch)) {
-              mixMatchList.add(currentMixMatch);
+        // Initialize a map to group products by their 'p_mixmatch' value
+        Map<String, List<DocumentSnapshot>> mixMatchMap = {};
+
+        // Populate the map
+        for (var doc in snapshot.data!.docs) {
+          var data = doc.data() as Map<String, dynamic>;
+          if (data['p_mixmatch'] != null) {
+            String mixMatchKey = data['p_mixmatch'];
+            if (!mixMatchMap.containsKey(mixMatchKey)) {
+              mixMatchMap[mixMatchKey] = [];
             }
+            mixMatchMap[mixMatchKey]!.add(doc);
           }
-        });
+        }
 
-        // แสดงข้อมูลที่ได้จากการตรวจสอบ p_mixmatch ใน console
-        print('MixMatch List: $mixMatchList');
+        // Filter out any 'p_mixmatch' groups that do not have exactly 2 products
+        var validPairs = mixMatchMap.entries
+            .where((entry) => entry.value.length == 2)
+            .toList();
 
+        // Calculate the total number of valid pairs to display
+        int itemCount = validPairs.length;
         return GridView.builder(
           physics: const NeverScrollableScrollPhysics(),
           padding: const EdgeInsets.all(8),
@@ -633,23 +641,22 @@ class NewsScreen extends StatelessWidget {
             mainAxisExtent: 250, // เพิ่มระยะห่างระหว่างแถว
           ),
           itemBuilder: (BuildContext context, int index) {
-            int actualIndex = index * 2;
+            var pair = validPairs[index].value;
 
-            String price1 = snapshot.data!.docs[actualIndex].get('p_price');
-            String price2 = snapshot.data!.docs[actualIndex + 1].get('p_price');
+            // Assuming the data structure ensures there are exactly 2 products per matched 'p_mixmatch'
+            var data1 = pair[0].data() as Map<String, dynamic>;
+            var data2 = pair[1].data() as Map<String, dynamic>;
 
+            String price1 = data1['p_price'].toString();
+            String price2 = data2['p_price'].toString();
             String totalPrice =
                 (int.parse(price1) + int.parse(price2)).toString();
 
-            String productName1 =
-                snapshot.data!.docs[actualIndex].get('p_name');
-            String productName2 =
-                snapshot.data!.docs[actualIndex + 1].get('p_name');
+            String productName1 = data1['p_name'];
+            String productName2 = data2['p_name'];
 
-            String productImage1 =
-                snapshot.data!.docs[actualIndex].get('p_imgs')[0];
-            String productImage2 =
-                snapshot.data!.docs[actualIndex + 1].get('p_imgs')[0];
+            String productImage1 = data1['p_imgs'][0];
+            String productImage2 = data2['p_imgs'][0];
 
             return GestureDetector(
               onTap: () {
