@@ -185,18 +185,6 @@ class _ProfileScreenState extends State<ProfileScreen>
                 margin: const EdgeInsets.symmetric(
                   horizontal: 4,
                 ),
-                decoration: BoxDecoration(
-                  color: whiteColor,
-                  borderRadius: BorderRadius.circular(8),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 3,
-                      blurRadius: 2,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -376,7 +364,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                           Text(
-                                            'Price: \$${price1.toString()}',
+                                            // 'Price: \$${price1.toString()}',
+                                            "${NumberFormat('#,##0').format(double.parse(price1.toString()).toInt())} Bath",
                                             style: const TextStyle(
                                                 color: Colors.grey),
                                           ),
@@ -417,7 +406,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                           Text(
-                                            'Price: \$${price2.toString()}',
+                                            "${NumberFormat('#,##0').format(double.parse(price2.toString()).toInt())} Bath",
+                                            // 'Price: \$${price2.toString()}',
                                             style: const TextStyle(
                                                 color: Colors.grey),
                                           ),
