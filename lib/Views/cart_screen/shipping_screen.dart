@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_finalproject/Views/collection_screen/address_controller.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/cart_controller.dart';
@@ -10,6 +10,11 @@ import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 class FirebaseService {
   final CollectionReference usersCollection =
       FirebaseFirestore.instance.collection('users');
+
+  //real time
+  Stream<DocumentSnapshot> streamCurrentUserAddress(String userId) {
+    return usersCollection.doc(userId).snapshots();
+  }
 
   Future<DocumentSnapshot> getCurrentUserAddress(String userId) async {
     try {
@@ -39,13 +44,23 @@ class _ShippingDetailsState extends State<ShippingDetails> {
     loadCurrentUserAddress();
   }
 
+  String capitalize(String text) {
+    if (text.isEmpty) return "";
+    return text[0].toUpperCase() + text.substring(1);
+  }
+
+  String formatPhoneNumber(String phone) {
+    return '(+66) $phone';
+  }
+
   Future<void> loadCurrentUserAddress() async {
     String userId = currentUser!.uid; // Ensure currentUser is not null
     try {
       DocumentSnapshot documentSnapshot =
           await FirebaseService().getCurrentUserAddress(userId);
       if (documentSnapshot.exists) {
-        Map<String, dynamic>? userData = documentSnapshot.data() as Map<String, dynamic>?;
+        Map<String, dynamic>? userData =
+            documentSnapshot.data() as Map<String, dynamic>?;
         if (userData != null && userData.containsKey('address')) {
           List<dynamic> addressesList = userData['address'];
           setState(() {
@@ -63,11 +78,11 @@ class _ShippingDetailsState extends State<ShippingDetails> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Selected Address'),
+        title: const Text('Selected Address'),
         content: Text(address),
         actions: <Widget>[
           TextButton(
-            child: Text('OK'),
+            child: const Text('OK'),
             onPressed: () => Navigator.of(context).pop(),
           ),
         ],
@@ -78,22 +93,24 @@ class _ShippingDetailsState extends State<ShippingDetails> {
   @override
   Widget build(BuildContext context) {
     var controller = Get.find<CartController>();
+    String userId = FirebaseAuth.instance.currentUser!.uid;
 
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: Text("Shipping Info"),
-        backgroundColor: primaryApp,
+        title:
+            const Text("Shipping Info").text.size(24).fontFamily(medium).make(),
+        backgroundColor: whiteColor,
       ),
       bottomNavigationBar: SizedBox(
         height: 70,
         child: ourButton(
           onPress: () {
-            if (_selectedAddress != null || controller.addressController.text.isNotEmpty) {
-              // Logic to save or use the existing/new address as needed
+            if (_selectedAddress != null ||
+                controller.addressController.text.isNotEmpty) {
               Get.to(() => const PaymentMethods());
             } else {
-              // Show toast or another form of error
+              VxToast.show(context, msg: "Choose an address");
             }
           },
           color: primaryApp,
@@ -106,39 +123,105 @@ class _ShippingDetailsState extends State<ShippingDetails> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Existing addresses
+            ListTile(
+              leading: const Icon(Icons.add),
+              title: const Text('Add new address'),
+              onTap: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AddressForm()),
+                );
+              },
+            ),
+            const Divider(color: thinGrey0),
+            // ourButton(
+            //   onPress: () => Navigator.push(
+            //     context,
+            //     MaterialPageRoute(builder: (context) => AddressForm()),
+            //   ),
+            //   color: whiteColor,
+            //   textColor: greyDark2,
+            //   title: "+ Add a new address",
+            // ),
+            // const SizedBox(height: 20),
             Expanded(
-              child: ListView.builder(
-                itemCount: _addresses.length,
-                itemBuilder: (context, index) {
-                  var address = _addresses[index];
-                  String addressString = '${address['firstname']}, ${address['surname']}, ${address['address']}, ${address['city']}, ${address['state']}, ${address['postalCode']}, ${address['phone']}';
-                  return Card(
-                    child: ListTile(
-                      title: Text(addressString),
-                      onTap: () {
-                        setState(() {
-                          controller.setSelectedAddress(address);
-                          _selectedAddress = address;
-                        });
-                        _showAddressDialog(addressString);
-                      },
-                    ),
+              child: StreamBuilder<DocumentSnapshot>(
+                stream: FirebaseService().streamCurrentUserAddress(userId),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  if (!snapshot.hasData || !snapshot.data!.exists) {
+                    return const Center(child: Text("No addresses found."));
+                  }
+
+                  Map<String, dynamic>? userData =
+                      snapshot.data!.data() as Map<String, dynamic>?;
+                  List<dynamic> addressesList = userData?['address'] ?? [];
+                  return ListView.separated(
+                    itemCount: addressesList.length,
+                    itemBuilder: (context, index) {
+                      var address =
+                          Map<String, dynamic>.from(addressesList[index]);
+                      bool isSelected = _selectedAddress != null &&
+                          _selectedAddress!.containsValue(address['address']);
+
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? thinPrimaryApp.withOpacity(0.2)
+                              : Colors.white,
+                          border: isSelected
+                              ? Border.all(color: primaryApp, width: 2,)
+                              : null,borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: ListTile(
+                          title: RichText(
+                            text: TextSpan(
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text:
+                                      '${capitalize(address['firstname'])} ${capitalize(address['surname'])},\n',
+                                  style: TextStyle(
+                                      fontFamily: medium, height: 3.0),
+                                ),
+                                TextSpan(
+                                  text:
+                                      '${formatPhoneNumber(address['phone'])},\n',
+                                  style:
+                                      TextStyle(fontFamily: light, height: 1.5),
+                                ),
+                                TextSpan(
+                                  text:
+                                      '${capitalize(address['address'])}, ${capitalize(address['city'])},\n ${capitalize(address['state'])}, ${address['postalCode']},\n',
+                                  style:
+                                      TextStyle(fontFamily: light, height: 1.5),
+                                ),
+                              ],
+                            ),
+                          ),
+                          trailing: isSelected
+                              ? Icon(Icons.check_circle, color: primaryApp)
+                              : null,
+                          onTap: () {
+                            setState(() {
+                              controller.setSelectedAddress(address);
+                              _selectedAddress = address;
+                            });
+                          },
+                        ),
+                      );
+                    },
+                    separatorBuilder: (context, index) => Divider(),
                   );
                 },
               ),
-            ),
-            SizedBox(height: 16),
-            // Button to add a new address
-            ourButton(
-              onPress: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AddressForm()),
-              ),
-              color: primaryApp,
-              textColor: whiteColor,
-              title: "+ Add a new address",
-            ),
+            )
           ],
         ),
       ),

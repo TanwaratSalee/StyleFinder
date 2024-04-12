@@ -72,10 +72,10 @@ void checkIsInWishlist() async {
       appBar: AppBar(
         title: const Text('Match Detail'),
         centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () => Get.back(),
-        ),
+        // leading: IconButton(
+        //   icon: const Icon(Icons.arrow_back_ios),
+        //   onPressed: () => Get.back(),
+        // ),
         elevation: 0,
         actions: <Widget>[
 Obx(() => IconButton(

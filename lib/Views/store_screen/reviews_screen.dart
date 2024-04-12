@@ -37,10 +37,10 @@ class _ReviewScreenState extends State<ReviewScreen>
           ),
         ),
         centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () => Get.back(),
-        ),
+        // leading: IconButton(
+        //   icon: const Icon(Icons.arrow_back_ios),
+        //   onPressed: () => Get.back(),
+        // ),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(50.0), // ปรับความสูงเพื่อรองรับ TabBar
           child: TabBar(

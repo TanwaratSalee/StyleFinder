@@ -91,12 +91,12 @@ void initState() {
       child: Scaffold(
         backgroundColor: whiteColor,
         appBar: AppBar(
-          leading: IconButton(
-              onPressed: () {
-                controller.resetValues();
-                Get.back();
-              },
-              icon: const Icon(Icons.arrow_back_ios)),
+        //   leading: IconButton(
+        //       onPressed: () {
+        //         controller.resetValues();
+        //         Get.back();
+        //       },
+        //       icon: const Icon(Icons.arrow_back_ios)),
           title: widget.title!.text
               .color(greyDark2)
               .fontFamily(bold)
@@ -248,7 +248,7 @@ void initState() {
                         .box
                         .height(60)
                         .padding(const EdgeInsets.symmetric(horizontal: 16))
-                        .color(thinGrey)
+                        .color(thinGrey0)
                         .make(),
                     20.heightBox,
                     Padding(

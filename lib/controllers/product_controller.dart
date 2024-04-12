@@ -173,11 +173,11 @@ void removeToWishlistMixMatch(
       DocumentSnapshot doc = querySnapshot.docs.first;
       List<dynamic> wishlist = doc['p_wishlist'] ?? [];
       String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
-      if (wishlist.contains(currentUserUID)) { // <--- เปลี่ยนเป็นเช็คว่าอยู่ใน wishlist หรือไม่
+      if (wishlist.contains(currentUserUID)) {
         doc.reference.update({
           'p_wishlist': FieldValue.arrayRemove([currentUserUID])
         }).then((value) {
-          updateIsFav(false); // <--- อัปเดต isFav เป็น false เมื่อลบรายการออกจาก wishlist
+          updateIsFav(false); 
           VxToast.show(context, msg: "Removed from wishlist");
         }).catchError((error) {
           print('Error removing $productName from Favorite: $error');

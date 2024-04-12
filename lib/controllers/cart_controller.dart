@@ -28,6 +28,10 @@ class CartController extends GetxController {
   var selectAll = false.obs; // Tracks the state of the "select all" toggle
 
   Map<String, dynamic>? _selectedAddress;
+  
+  List<Map<String, dynamic>> selectedProducts = [];
+  double totalPrice = 0.0;
+
 
   void setSelectedAddress(Map<String, dynamic>? address) {
     _selectedAddress = address;

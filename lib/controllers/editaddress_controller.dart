@@ -53,17 +53,14 @@ class _editaddressFormState extends State<editaddress_controller> {
 
 Future<void> updateAddressForCurrentUser() async {
   try {
-    // Get the current user's document reference
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
       final userRef = FirebaseFirestore.instance.collection('users').doc(currentUser.uid);
 
-      // Get the current user's address data
       final userData = await userRef.get();
       final List<dynamic>? addressesList = userData.data()?['address'];
 
       if (addressesList is List) {
-        // Find the index of the address to be updated
         final index = addressesList.indexWhere((address) {
           return address['firstname'] == widget.firstname &&
               address['surname'] == widget.surname &&
@@ -75,7 +72,6 @@ Future<void> updateAddressForCurrentUser() async {
         });
 
         if (index != -1) {
-          // Update the address at the found index
           addressesList[index] = {
             'firstname': _firstnameController.text,
             'surname': _surnameController.text,
@@ -86,27 +82,21 @@ Future<void> updateAddressForCurrentUser() async {
             'phone': _phoneController.text,
           };
 
-          // Update the user document with the modified addresses list
           await userRef.update({'address': addressesList});
 
-          // Show a message or perform any other action after update if necessary
-          VxToast.show(context, msg: "Suscessful save Address");
+          VxToast.show(context, msg: "The new address was successfully added");
           Navigator.pop(context);
         } else {
           print('Address not found');
-          // Handle case where address to be updated is not found
         }
       } else {
         print('No address data found');
-        // Handle case where no address data is found for the user
       }
     } else {
       print('User not logged in');
-      // Handle case where no user is logged in
     }
   } catch (error) {
     print('Failed to update address: $error');
-    // Handle error as needed
   }
 }
 
@@ -117,7 +107,7 @@ Future<void> updateAddressForCurrentUser() async {
       backgroundColor: whiteColor,
       appBar: AppBar(
         title:
-            "Edit Address".text.fontFamily(regular).color(greyDark2).make(),
+            "Edit Address".text.size(24).fontFamily(medium).make(),
       ),
       bottomNavigationBar: SizedBox(
         height: 70,

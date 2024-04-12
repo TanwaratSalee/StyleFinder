@@ -3,17 +3,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/Views/cart_screen/shipping_screen.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
+import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/cart_controller.dart';
 import 'package:flutter_finalproject/services/firestore_services.dart';
 import 'package:get/get.dart';
-
-
+import 'package:intl/intl.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({Key? key}) : super(key: key);
-  
 
   @override
   Widget build(BuildContext context) {
@@ -34,11 +33,7 @@ class CartScreen extends StatelessWidget {
         ),
         appBar: AppBar(
           // automaticallyImplyLeading: false,
-          title: "Cart"
-              .text
-              .color(greyDark2)
-              .fontFamily(regular)
-              .make(),
+          title: "Cart".text.color(greyDark2).fontFamily(regular).make(),
         ),
         body: StreamBuilder(
           stream: FirestoreServices.getCart(currentUser!.uid),
@@ -58,62 +53,131 @@ class CartScreen extends StatelessWidget {
               controller.productSnapshot = data;
 
               return Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(0.0),
                 child: Column(
                   children: [
                     Expanded(
                         child: ListView.builder(
                             itemCount: data.length,
                             itemBuilder: (BuildContext context, int index) {
-return ListTile(
-  leading: 
-                    
-                  
-      // Image
-      Image.network(
-        "${data[index]['img']}",
-        width: 60,
-        fit: BoxFit.cover,
-      ),
-    
-  title: Text("${data[index]['title']} (x${data[index]['qty']})",
-              style: TextStyle(fontFamily: regular, fontSize: 16)),
-  subtitle: Text("${data[index]['tprice']}", 
-                  style: TextStyle(color: primaryApp, fontFamily: regular)),
-  trailing: GestureDetector(
-    onTap: () {
-      FirestoreServices.deleteDocument(data[index].id); // Your method to delete the item
-    },
-    child: const Icon(Icons.delete, color: primaryApp),
-  ),
-);
+                              String formattedPrice =
+                                  NumberFormat('#,##0', 'en_US')
+                                      .format(data[index]['tprice']);
 
+                              return InkWell(
+                                onTap: () {
+                                  Get.to(
+                                    () => ItemDetails(
+                                      title: data[index][''],
+                                      data: data[index],
+                                    ),
+                                  );
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 8.0, horizontal: 16.0),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        width: 80,
+                                        height: 70,
+                                        child: Image.network(
+                                          data[index]['img'],
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                          width:
+                                              15), // เพิ่มช่องว่างระหว่างภาพและข้อความ
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              data[index]['title'],
+                                              style: TextStyle(
+                                                color: greyDark2,
+                                                fontFamily: medium,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            SizedBox(height: 3),
+                                            Text(
+                                              "x${data[index]['qty']}",
+                                              style: TextStyle(
+                                                color: greyDark2,
+                                                fontFamily: light,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            Text(
+                                              "$formattedPrice Bath",
+                                              style: TextStyle(
+                                                color: greyDark1,
+                                                fontFamily: light,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          FirestoreServices.deleteDocument(
+                                              data[index].id);
+                                        },
+                                        child: Icon(Icons.delete,
+                                            color: primaryApp),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
                             })),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        "Total price"
+                        "Select All"
                             .text
                             .fontFamily(regular)
-                            .color(greyDark2)
+                            .color(Colors.black)
                             .make(),
-                        Obx(
-                          () => "${controller.totalP.value}"
-                              .numCurrency
-                              .text
-                              .fontFamily(regular)
-                              .color(blackColor)
-                              .make(),
-                        ),
+                        Row(
+                          children: [
+                            "Total price  "
+                                .text
+                                .fontFamily(regular)
+                                .color(greyDark1)
+                                .size(12)
+                                .make(),
+                            Obx(
+                              () => "${controller.totalP.value}"
+                                  .numCurrency
+                                  .text
+                                  .size(18)
+                                  .fontFamily(medium)
+                                  .color(blackColor)
+                                  .make(),
+                            ),
+                            "  Bath"
+                                .text
+                                .fontFamily(regular)
+                                .color(greyDark1)
+                                .size(12)
+                                .make(),
+                          ],
+                        )
                       ],
                     )
                         .box
-                        .padding(const EdgeInsets.all(12))
-                        .color(greyDark1)
-                        .width(context.screenWidth - 60)
-                        .roundedSM
+                        .padding(const EdgeInsets.all(22))
+                        .color(thinGrey01)
+                        // .roundedSM
                         .make(),
-                    10.heightBox,
+                    // 10.heightBox,
                     // SizedBox(
                     //   width: context.screenWidth - 60,
                     //   child: ourButton(

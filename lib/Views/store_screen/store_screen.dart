@@ -5,6 +5,7 @@ import 'package:flutter_finalproject/Views/store_screen/match_detail_screen.dart
 import 'package:flutter_finalproject/Views/store_screen/reviews_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class StoreScreen extends StatelessWidget {
   final String vendorId;
@@ -27,10 +28,10 @@ class StoreScreen extends StatelessWidget {
                 .size(26)
                 .make(),
             centerTitle: true,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back_ios),
-              onPressed: () => Get.back(),
-            ),
+            // leading: IconButton(
+            //   icon: const Icon(Icons.arrow_back_ios),
+            //   onPressed: () => Get.back(),
+            // ),
             elevation: 0,
           ),
           body: SingleChildScrollView(
@@ -141,8 +142,7 @@ class StoreScreen extends StatelessWidget {
                     const SizedBox(width: 8),
                     const Text(
                       '4.9/5.0',
-                      style: TextStyle(fontSize: 14, fontFamily: regular),
-                    ),
+                    ).text.fontFamily(regular).size(14).color(greyDark2).make(),
                     const Spacer(),
                     TextButton(
                       onPressed: () {
@@ -152,7 +152,7 @@ class StoreScreen extends StatelessWidget {
                               builder: (context) => ReviewScreen()),
                         );
                       },
-                      child: const Text('All Reviews >>>'),
+                      child: const Text('All Reviews >>>').text.fontFamily(regular).size(14).color(greyDark2).make(),
                     ),
                   ],
                 ),
@@ -220,7 +220,7 @@ class StoreScreen extends StatelessWidget {
 
   Widget _buildProductMatchTabs(BuildContext context) {
     return DefaultTabController(
-      length: 2, // มีแท็บทั้งหมด 2 แท็บ
+      length: 2, 
       child: Column(
         children: <Widget>[
           TabBar(
@@ -251,10 +251,10 @@ class StoreScreen extends StatelessWidget {
   Widget _buildProductTab(BuildContext context) {
     return Column(
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(5),
-          child: _buildCategoryTabs(context),
-        ),
+        // Padding(
+          // padding: const EdgeInsets.all(5),
+          /* child: */ _buildCategoryTabs(context),
+        // ),
         Expanded(
           child: Container(),
         ),
@@ -278,7 +278,7 @@ class StoreScreen extends StatelessWidget {
 
   Widget _buildCategoryTabs(BuildContext context) {
     return DefaultTabController(
-      length: 5,
+      length: 9,
       child: Column(
         children: <Widget>[
           const TabBar(
@@ -290,21 +290,46 @@ class StoreScreen extends StatelessWidget {
                 TextStyle(fontSize: 12, fontFamily: regular, color: greyDark1),
             tabs: [
               Tab(text: 'All'),
-              Tab(text: 'Outer'),
-              Tab(text: 'Dress'),
-              Tab(text: 'Bottoms'),
+              Tab(text: 'Knitwear'),
+              Tab(text: 'Dresses'),
+              Tab(text: 'Coat'),
               Tab(text: 'T-shirts'),
+              Tab(text: 'Skirts'),
+              Tab(text: 'Pants'),
+              Tab(text: 'Shorts'),
+              Tab(text: 'Shirts'),
             ],
-          ),
+          ).box.color(thinPrimaryApp).make(),
           Container(
             height: MediaQuery.of(context).size.height * 0.9,
             child: TabBarView(
               children: [
+<<<<<<< HEAD
                 _buildProductGridAll('All', 'All'),
                 _buildProductGridouter('Outer', 'Outer'),
                 _buildProductGridDress('Dress', 'Dress'),
                 _buildProductGridBottoms('Bottoms', 'Bottoms'),
                 _buildProductGridTshirts('T-shirts', 'T-shirts'),
+=======
+                _buildProductGrid(
+                    'All', 'All'),
+                _buildProductGrid(
+                    'Knitwear', 'Knitwear'),
+                _buildProductGrid(
+                    'Dresses', 'Dresses'),
+                _buildProductGrid('Coat',
+                    'Coat'),
+                _buildProductGrid('T-shirts',
+                    'T-shirts'),
+                    _buildProductGrid(
+                    'Skirts', 'Skirts'),
+                _buildProductGrid(
+                    'Pants', 'Pants'),
+                _buildProductGrid(
+                    'Shorts', 'Shorts'),
+                _buildProductGrid('Shirts',
+                    'Shirts'),
+>>>>>>> 047f633590a82c899768ecd0ca1c7142a93e0ab8
               ],
             ),
           ),
@@ -480,9 +505,10 @@ class StoreScreen extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
-                            '$price',
+                            "${NumberFormat('#,##0').format(double.parse('$price',).toInt())} Bath",
+                            // '$price',
                             style: const TextStyle(
-                                color: greyColor, fontFamily: regular),
+                                color: greyDark1, fontFamily: regular),
                           ),
                         ],
                       ),
