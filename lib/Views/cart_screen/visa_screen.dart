@@ -13,6 +13,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:omise_flutter/omise_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:pattern_formatter/numeric_formatter.dart';
 
 class VisaCardScreen extends StatefulWidget {
   const VisaCardScreen({Key? key}) : super(key: key);
@@ -27,6 +28,8 @@ class _VisaCardScreenState extends State<VisaCardScreen> {
   TextEditingController cardNumberController = TextEditingController();
   TextEditingController mmController = TextEditingController();
   TextEditingController yyController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController cvcController = TextEditingController();
 
   String cardNumberMasked = '';
 
@@ -64,6 +67,114 @@ class _VisaCardScreenState extends State<VisaCardScreen> {
     });
   }
 
+Future<void> _showSuccessDialog(BuildContext context) async {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: whiteColor,
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: <Widget>[
+              SizedBox(height: 50),
+              Image.asset('assets/images/Finishpay.PNG'),
+              SizedBox(height: 40),
+              Text(
+                'Payment was successful!',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+              SizedBox(height: 15),
+              Text(
+                '${controller.totalP.value} Bath',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+
+  String selectedPaymentMethod = paymentMethods[controller.paymentIndex.value];
+  await controller.placeMyOrder(
+    orderPaymentMethod: selectedPaymentMethod,
+    totalAmount: controller.totalP.value,
+  );
+
+  await controller.clearCart();
+  VxToast.show(context, msg: "Order placed successfully");
+  await Future.delayed(Duration(seconds: 4));
+  Get.find<CartController>().totalP.refresh();
+  Get.offAll(() => MainHome());
+}
+
+
+
+Widget _buildNameTextField() {
+  return TextFormField(
+    controller: nameController,
+    decoration: InputDecoration(
+      border: OutlineInputBorder(),
+      labelText: 'Name',
+    ),
+    onChanged: _updateCardHolderName,
+  );
+}
+
+
+  Widget _buildCardNumberTextField() {
+    String determineImageAsset() {
+      if (cardNumberMasked.startsWith('5')) {
+        return 'assets/images/Mastercard-Logo.png';
+      } else if (cardNumberMasked.startsWith('4')) {
+        return 'assets/images/Visa.png';
+      } else {
+        return '';
+      }
+    }
+
+    final String imageAssetPath = determineImageAsset();
+
+    final Widget? suffixIconWidget = imageAssetPath.isNotEmpty
+        ? Image.asset(imageAssetPath, width: 24, height: 24)
+        : null;
+
+    return SizedBox(
+      height: 50,
+      child: _buildTextField(
+        label: 'Card number',
+        suffixIcon: suffixIconWidget,
+      ),
+    );
+  }
+
+Widget _buildVCCTextField() {
+  return TextFormField(
+    controller: cvcController,
+    decoration: InputDecoration(
+      border: OutlineInputBorder(),
+      labelText: 'VCC',
+    ),
+    inputFormatters: <TextInputFormatter>[
+      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+      LengthLimitingTextInputFormatter(3),
+    ],
+    keyboardType: TextInputType.number,
+  );
+}
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,10 +194,7 @@ class _VisaCardScreenState extends State<VisaCardScreen> {
         children: <Widget>[
           _buildCardDetail(),
           SizedBox(height: 20),
-          _buildTextField(
-            label: 'Name',
-            onChanged: _updateCardHolderName,
-          ),
+          _buildNameTextField(),
           SizedBox(height: 10),
           _buildCardNumberTextField(),
           SizedBox(height: 10),
@@ -101,6 +209,11 @@ class _VisaCardScreenState extends State<VisaCardScreen> {
                       border: OutlineInputBorder(),
                       labelText: 'MM',
                     ),
+                        inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                        LengthLimitingTextInputFormatter(2),
+                      ],
+                      keyboardType: TextInputType.number,
                   ),
                 ),
               ),
@@ -113,12 +226,20 @@ class _VisaCardScreenState extends State<VisaCardScreen> {
                       border: OutlineInputBorder(),
                       labelText: 'YY',
                     ),
+                      inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                      LengthLimitingTextInputFormatter(4),
+                        ],
+                        keyboardType: TextInputType.number,
                   ),
                 ),
               ),
               SizedBox(width: 8),
-              Expanded(child: _buildTextField(label: 'VCC')),
+              Expanded(
+                child: _buildVCCTextField(),
+              ),
             ],
+            
           ),
           SizedBox(height: 24),
           Padding(
@@ -126,7 +247,6 @@ class _VisaCardScreenState extends State<VisaCardScreen> {
             child: ourButton(
                 onPress: () {
                   getTokenandSourceTest();
-                  _showCustomDialog(context);
                 },
                 color: primaryApp,
                 textColor: whiteColor,
@@ -228,43 +348,18 @@ class _VisaCardScreenState extends State<VisaCardScreen> {
         suffixIcon: suffixIcon,
       ),
       style: TextStyle(),
-      keyboardType: TextInputType.number,
       inputFormatters: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(
-            RegExp(r'[0-9]')), // กำหนดให้กรอกได้เฉพาะตัวเลข
-        LengthLimitingTextInputFormatter(16), // กำหนดความยาวสูงสุดของข้อความ
+        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+        LengthLimitingTextInputFormatter(16),
+        CreditCardFormatter(separator: '-'),
       ],
+      keyboardType: TextInputType.number,
       onChanged: onChanged != null ? onChanged as void Function(String)? : null,
       maxLines: 1,
       minLines: 1,
     );
   }
 
-  Widget _buildCardNumberTextField() {
-    String determineImageAsset() {
-      if (cardNumberMasked.startsWith('5')) {
-        return 'assets/images/Mastercard-Logo.png';
-      } else if (cardNumberMasked.startsWith('4')) {
-        return 'assets/images/Visa.png';
-      } else {
-        return '';
-      }
-    }
-
-    final String imageAssetPath = determineImageAsset();
-
-    final Widget? suffixIconWidget = imageAssetPath.isNotEmpty
-        ? Image.asset(imageAssetPath, width: 24, height: 24)
-        : null;
-
-    return SizedBox(
-      height: 50,
-      child: _buildTextField(
-        label: 'Card number',
-        suffixIcon: suffixIconWidget,
-      ),
-    );
-  }
 
   void _updateCardHolderName(String newName) {
     setState(() {
@@ -275,9 +370,15 @@ class _VisaCardScreenState extends State<VisaCardScreen> {
   }
 
   getTokenandSourceTest() async {
+  String name = nameController.text;
+  String cardNumber = cardNumberController.text.replaceAll(' ', ''); // ลบช่องว่างออกจากหมายเลขบัตร
+  String expMonth = mmController.text;
+  String expYear = yyController.text;
+  String cvc = cvcController.text;
+  
     OmiseFlutter omise = OmiseFlutter('pkey_test_5yzhwpn9nih3syz8e2v');
     await omise.token
-        .create("John Doe", "4111111111140011", "12", "2026", "123")
+        .create(name, cardNumber, expMonth, expYear, cvc)
         .then((value) async {
       String token = value.id.toString();
       print(token);
@@ -310,40 +411,12 @@ class _VisaCardScreenState extends State<VisaCardScreen> {
       print('status ของการตัดบัตร ===> ${resultCharge['status']}');
 
       if (resultCharge['status'] == 'successful') {
-        _showSuccessDialog();
+        _showSuccessDialog(context);
       } else if (resultCharge['status'] == 'failed') {
         VxToast.show(context, msg: "Wrong your card or informaton");
       } else {
         VxToast.show(context, msg: "Wrong your card or informaton");
       }
-    });
-  }
-
-  void _showSuccessDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Payment completed'),
-          content: Text('Your payment has been completed.'),
-          actions: <Widget>[
-            ElevatedButton(
-              child: Text('Done'),
-              onPressed: () {
-                Navigator.of(context).pop(); // ปิด dialog
-              },
-            ),
-          ],
-        );
-      },
-    ).then((_) async {
-      String selectedPaymentMethod =
-          paymentMethods[controller.paymentIndex.value];
-      await controller.placeMyOrder(
-        orderPaymentMethod: selectedPaymentMethod,
-        totalAmount: controller.totalP.value,
-      );
-      // Get.to(() => CartScreen());
     });
   }
 }
@@ -410,75 +483,6 @@ class _VisaCardScreenState extends State<VisaCardScreen> {
 //     },
 //   );
 // }
-Future<void> _showCustomDialog(BuildContext context) async {
-  return showDialog<void>(
-    context: context,
-    barrierDismissible: false,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        backgroundColor: whiteColor,
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: <Widget>[
-              SizedBox(height: 50),
-              Image.asset('assets/images/Finishpay.PNG'),
-              SizedBox(height: 40),
-              Text(
-                'Payment was successful!',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-              SizedBox(height: 15),
-              Text(
-                '1,400,000 Bath',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blue,
-                  fontSize: 16,
-                ),
-              ),
-            ],
-          ),
-        ),
-        actions: <Widget>[
-          Align(
-            alignment: Alignment.center,
-            child: ElevatedButton(
-              onPressed: () {
-                Get.to(() => MainHome());
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => MainHome()),
-                );
-              },
-              child: Text(
-                ' Back to home ',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              style: ButtonStyle(
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    side: BorderSide(color: Colors.white),
-                  ),
-                ),
-                backgroundColor: MaterialStateProperty.all<Color>(primaryApp),
-              ),
-            ),
-          ),
-        ],
-      );
-    },
-  );
-}
-
 
 
 // class OurButton extends StatelessWidget {

@@ -49,6 +49,7 @@ class PaymentMethods extends StatelessWidget {
                       VxToast.show(context, msg: "Order placed successfully");
 
                       Get.offAll(() => MainHome());
+                      
                     } else {
                       VxToast.show(context,
                           msg: "Selected payment method is not supported yet.");

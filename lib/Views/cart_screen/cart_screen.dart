@@ -11,14 +11,25 @@ import 'package:flutter_finalproject/services/firestore_services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    var controller = Get.put(CartController());
-    bool isCheck = false;
+  _CartScreenState createState() => _CartScreenState();
+}
 
+class _CartScreenState extends State<CartScreen> {
+  late CartController controller;
+  bool isCheck = false;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.put(CartController());
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: whiteColor,
         bottomNavigationBar: SizedBox(
