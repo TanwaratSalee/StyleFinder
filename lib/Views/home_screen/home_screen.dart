@@ -3,7 +3,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_finalproject/Views/auth_screen/verifyemail_screen.dart';
 import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
-import 'package:flutter_finalproject/Views/search_screen/search_screen.dart';
+import 'package:flutter_finalproject/Views/search_screen/recent_search_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/home_controller.dart';
 import 'package:get/get.dart';
@@ -143,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               Image.network(
                                 product['p_imgs'][0],
-                                height: 400,
+                                height: 420,
                                 width: 320,
                                 fit: BoxFit.cover,
                               ),

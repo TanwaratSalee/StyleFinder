@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_finalproject/Views/search_screen/search_screen.dart';
+import 'package:flutter_finalproject/Views/search_screen/recent_search_screen.dart';
 import 'package:flutter_finalproject/consts/colors.dart';
 import 'package:flutter_finalproject/consts/images.dart';
 import 'package:get/get.dart';
