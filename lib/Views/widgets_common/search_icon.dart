@@ -1,4 +1,4 @@
-import 'package:flutter_finalproject/Views/search_screen/search_screen.dart';
+import 'package:flutter_finalproject/Views/search_screen/recent_search_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 
 Widget IconSearch({required BuildContext context}) { // Specify context as required

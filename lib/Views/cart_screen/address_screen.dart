@@ -41,8 +41,7 @@ class _AddressScreenState extends State<AddressScreen> {
           List<dynamic> addressesList = data['address'];
           addressesList.forEach((address) {
             if (address is Map<String, dynamic>) {
-              String formattedAddress =
-                  '${address['firstname']} ${address['surname']},\n ${address['address']}, ${address['city']}, ${address['state']}, ${address['postalCode']}\n ${address['phone']}';
+              String formattedAddress = '${address['firstname']},${address['surname']},${address['address']},${address['city']},${address['state']},${address['postalCode']},${address['phone']}';
               loadedAddresses.add(formattedAddress);
             }
           });
@@ -147,7 +146,7 @@ class _AddressScreenState extends State<AddressScreen> {
                                         ),
                                         onPressed: () {
                                           final addressData =
-                                              addresses![index].split(', ');
+                                              addresses![index].split(',');
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(

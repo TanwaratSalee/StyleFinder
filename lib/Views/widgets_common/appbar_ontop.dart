@@ -3,7 +3,7 @@ import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 
 import '../cart_screen/cart_screen.dart';
-import '../search_screen/search_screen.dart';
+import '../search_screen/recent_search_screen.dart';
 
 Widget appbarField({required BuildContext context}) { // Specify context as required
   return Row(
