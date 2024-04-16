@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/orders_screen/orders_details.dart';
+import 'package:flutter_finalproject/Views/orders_screen/writeReview_screen.dart';
+import 'package:flutter_finalproject/Views/store_screen/reviews_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/services/firestore_services.dart';
@@ -147,7 +149,9 @@ class _OrdersScreenState extends State<OrdersScreen>
                     title: 'Write product review',
                     color: primaryApp,
                     textColor: whiteColor,
-                    onPress: () {},
+                    onPress: () {
+                      Get.to(() => const WriteReviewScreen());
+                    },
                   ),
                 ));
               }
