@@ -50,6 +50,7 @@ dependencies:
   flutter_facebook_auth: ^6.0.4
   flutter_marquee: ^2.0.1 
   pattern_formatter: ^3.0.0
+  flutter_svg_provider: ^1.0.4
   
 
 dev_dependencies:
