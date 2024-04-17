@@ -336,7 +336,7 @@ class NewsScreen extends StatelessWidget {
                         } else {
                           var allproductsdata = snapshot.data!.docs;
                           allproductsdata.shuffle(math
-                              .Random()); // Shuffle the list using Dart's Random
+                              .Random());
 
                           int itemCount = math.min(allproductsdata.length, 4);
 
@@ -382,15 +382,6 @@ class NewsScreen extends StatelessWidget {
                                           overflow: TextOverflow
                                               .ellipsis, // ใช้ ellipsis สำหรับข้อความที่เกิน
                                         ),
-                                        // Text(
-                                        //   "${allproductsdata[index]['p_price']} Bath",
-                                        //   style: const TextStyle(
-                                        //     fontFamily: regular,
-                                        //     fontSize: 14,
-                                        //     color: greyDark2,
-                                        //   ),
-                                        // ),
-                                        
                                       ],
                                     ),
                                   )
@@ -404,7 +395,10 @@ class NewsScreen extends StatelessWidget {
                                       const EdgeInsets.symmetric(horizontal: 2))
                                   .make()
                                   .onTap(() {
-                                // Get.to(() => const StoreScreen());
+                                  Get.to(
+                                    () => StoreScreen(
+                                        vendorId: allproductsdata[index]['vendor_id']),
+                                  );
                               });
                             },
                           );

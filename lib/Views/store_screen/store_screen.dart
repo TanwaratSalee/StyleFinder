@@ -14,9 +14,8 @@ class StoreScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<String>(
-      future: fetchSellerName(vendorId), // ดึงชื่อผู้ขาย
+      future: fetchSellerName(vendorId),
       builder: (context, snapshot) {
-        // สร้าง AppBar ตามสถานะของ Future
         String title = snapshot.hasData ? snapshot.data! : 'Loading...';
         return Scaffold(
           backgroundColor: whiteColor,
@@ -457,152 +456,163 @@ class StoreScreen extends StatelessWidget {
   //         );
   //       }
 
-  Widget _buildProductMathGrids(String category) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('products').snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (!snapshot.hasData) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
+Widget _buildProductMathGrids(String category) {
+  Query query = FirebaseFirestore.instance
+      .collection('products')
+      .where('vendor_id')
+      .where('p_mixmatch');
 
-        // Initialize a map to group products by their 'p_mixmatch' value
-        Map<String, List<DocumentSnapshot>> mixMatchMap = {};
+  return StreamBuilder<QuerySnapshot>(
+    stream: query.snapshots(),
+    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+      if (!snapshot.hasData) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      }
 
-        // Populate the map
-        for (var doc in snapshot.data!.docs) {
-          var data = doc.data() as Map<String, dynamic>;
-          if (data['p_mixmatch'] != null) {
-            String mixMatchKey = data['p_mixmatch'];
-            if (!mixMatchMap.containsKey(mixMatchKey)) {
-              mixMatchMap[mixMatchKey] = [];
-            }
-            mixMatchMap[mixMatchKey]!.add(doc);
+      // Initialize a map to group products by their 'p_mixmatch' value
+      Map<String, List<DocumentSnapshot>> mixMatchMap = {};
+
+      // Populate the map
+      for (var doc in snapshot.data!.docs) {
+        var data = doc.data() as Map<String, dynamic>;
+        // เพิ่มเงื่อนไขเช็ค vendor.id ตรงนี้
+        if (data['vendor_id'] == vendorId && data['p_mixmatch'] != null) {
+          String mixMatchKey = data['p_mixmatch'];
+          if (!mixMatchMap.containsKey(mixMatchKey)) {
+            mixMatchMap[mixMatchKey] = [];
           }
+          mixMatchMap[mixMatchKey]!.add(doc);
         }
+      }
 
-        // Filter out any 'p_mixmatch' groups that do not have exactly 2 products
-        var validPairs = mixMatchMap.entries
-            .where((entry) => entry.value.length == 2)
-            .toList();
+      // Filter out any 'p_mixmatch' groups that do not have exactly 2 products
+      var validPairs = mixMatchMap.entries
+          .where((entry) => entry.value.length == 2)
+          .toList();
 
-        // Calculate the total number of valid pairs to display
-        int itemCount = validPairs.length;
+      // Calculate the total number of valid pairs to display
+      int itemCount = validPairs.length;
 
-        return GridView.builder(
-          padding: const EdgeInsets.all(2),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 1 / 1.3,
-          ),
-          itemCount: itemCount,
-          itemBuilder: (BuildContext context, int index) {
-            // Each pair of matched products
-            var pair = validPairs[index].value;
+      return GridView.builder(
+        padding: const EdgeInsets.all(2),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 1 / 1.3,
+        ),
+        itemCount: itemCount,
+        itemBuilder: (BuildContext context, int index) {
+          // Each pair of matched products
+          var pair = validPairs[index].value;
 
-            // Assuming the data structure ensures there are exactly 2 products per matched 'p_mixmatch'
-            var data1 = pair[0].data() as Map<String, dynamic>;
-            var data2 = pair[1].data() as Map<String, dynamic>;
+          // Assuming the data structure ensures there are exactly 2 products per matched 'p_mixmatch'
+          var data1 = pair[0].data() as Map<String, dynamic>;
+          var data2 = pair[1].data() as Map<String, dynamic>;
 
-            String price1 = data1['p_price'].toString();
-            String price2 = data2['p_price'].toString();
-            String totalPrice =
-                (int.parse(price1) + int.parse(price2)).toString();
+          String price1 = data1['p_price'].toString();
+          String price2 = data2['p_price'].toString();
+          String totalPrice =
+              (int.parse(price1) + int.parse(price2)).toString();
 
-            String productName1 = data1['p_name'];
-            String productName2 = data2['p_name'];
+          String productName1 = data1['p_name'];
+          String productName2 = data2['p_name'];
 
-            String productImage1 = data1['p_imgs'][0];
-            String productImage2 = data2['p_imgs'][0];
-            return GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MatchDetailScreen(
-                      price1: price1,
-                      price2: price2,
-                      productName1: productName1,
-                      productName2: productName2,
-                      productImage1: productImage1,
-                      productImage2: productImage2,
-                      totalPrice: totalPrice,
-                    ),
+          String productImage1 = data1['p_imgs'][0];
+          String productImage2 = data2['p_imgs'][0];
+
+          String vendorName = 'vendor_id';
+
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MatchDetailScreen(
+                    price1: price1,
+                    price2: price2,
+                    productName1: productName1,
+                    productName2: productName2,
+                    productImage1: productImage1,
+                    productImage2: productImage2,
+                    totalPrice: totalPrice,
+                    vendorName: vendorName,
                   ),
-                );
-              },
-              child: Card(
-                clipBehavior: Clip.antiAlias,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      children: [
-                        Column(
-                          children: [
-                            Image.network(
-                              productImage1,
-                              width: 80,
-                              height: 80,
-                            ),
-                            Image.network(
-                              productImage2,
-                              width: 80,
-                              height: 80,
-                            ),
-                          ],
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                const SizedBox(height: 2),
-                                Text(
-                                  productName1,
-                                  style: const TextStyle(fontFamily: bold),
-                                ),
-                                Text(
-                                  'Price: \$${price1.toString()}',
-                                  style: const TextStyle(color: Colors.grey),
-                                ),
-                                const SizedBox(height: 20),
-                                Text(
-                                  productName2,
-                                  style: const TextStyle(fontFamily: bold),
-                                ),
-                                Text(
-                                  'Price: \$${price2.toString()}',
-                                  style: const TextStyle(color: Colors.grey),
-                                ),
-                              ],
-                            ),
+                ),
+              );
+            },
+            child: Card(
+              clipBehavior: Clip.antiAlias,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    children: [
+                      Column(
+                        children: [
+                          Image.network(
+                            productImage1,
+                            width: 80,
+                            height: 80,
+                          ),
+                          Image.network(
+                            productImage2,
+                            width: 80,
+                            height: 80,
+                          ),
+                        ],
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              const SizedBox(height: 2),
+                              Text(
+                                productName1,
+                                style: const TextStyle(fontFamily: bold),
+                              ),
+                              Text(
+                                'Price: \$${price1.toString()}',
+                                style: const TextStyle(color: Colors.grey),
+                              ),
+                              const SizedBox(height: 20),
+                              Text(
+                                productName2,
+                                style: const TextStyle(fontFamily: bold),
+                              ),
+                              Text(
+                                'Price: \$${price2.toString()}',
+                                style: const TextStyle(color: Colors.grey),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Text(
-                        'Total Price: \$${totalPrice.toString()}',
-                        style: const TextStyle(
-                          color: blackColor,
-                          fontFamily: bold,
-                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Text(
+                      'Total Price: \$${totalPrice.toString()}',
+                      style: const TextStyle(
+                        color: blackColor,
+                        fontFamily: bold,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            );
-          },
-        );
-      },
-    );
-  }
+            ),
+          );
+        },
+      );
+    },
+  );
+}
+
 
   Future<String> fetchSellerName(String vendorId) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance

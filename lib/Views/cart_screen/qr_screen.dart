@@ -124,7 +124,6 @@ Future<void> checkStatus(String chargeId, BuildContext context) async {
 
     var resultCharge = jsonDecode(response.body);
     print('status Kbank ===> ${resultCharge['status']}');
-    print(resultCharge);
 
     if (resultCharge['status'] == 'successful') {
       _showSuccessDialog(context);
