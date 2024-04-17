@@ -81,14 +81,18 @@ class ProductScreen extends StatelessWidget {
                             itemBuilder: (context, index) {
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Image.network(
-                                    allproductsdata[index]['p_imgs'][0],
-                                    width: 180,
-                                    height: 210,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  // const Spacer(),
+                                children: [ ClipRRect(
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(15.0),
+                                          topRight: Radius.circular(15.0),
+                                        ),
+                                        child: Image.network(
+                                          allproductsdata[index]['p_imgs'][0],
+                                          width: 200,
+                                          height: 210,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
                                   10.heightBox,
                                   Padding(
                                     padding: EdgeInsets.all(8),

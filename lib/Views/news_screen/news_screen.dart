@@ -322,7 +322,13 @@ class NewsScreen extends StatelessWidget {
                           ),
                         ),
                       ],
-                    ).box.color(thinPrimaryApp).padding(EdgeInsets.symmetric(vertical: 5, horizontal: 70)).roundedLg.make(),
+                    )
+                        .box
+                        .color(thinPrimaryApp)
+                        .padding(
+                            const EdgeInsets.symmetric(vertical: 5, horizontal: 70))
+                        .roundedLg
+                        .make(),
 
                     15.heightBox,
                     StreamBuilder(
@@ -335,8 +341,7 @@ class NewsScreen extends StatelessWidget {
                           );
                         } else {
                           var allproductsdata = snapshot.data!.docs;
-                          allproductsdata.shuffle(math
-                              .Random());
+                          allproductsdata.shuffle(math.Random());
 
                           int itemCount = math.min(allproductsdata.length, 4);
 
@@ -346,10 +351,10 @@ class NewsScreen extends StatelessWidget {
                             itemCount: itemCount,
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
+                              crossAxisCount: 4,
                               mainAxisSpacing: 12,
                               crossAxisSpacing: 8,
-                              mainAxisExtent: 150,
+                              mainAxisExtent: 100,
                             ),
                             itemBuilder: (context, index) {
                               return Column(
@@ -357,7 +362,8 @@ class NewsScreen extends StatelessWidget {
                                   Expanded(
                                     child: Center(
                                       child: Image.network(
-                                        allproductsdata[index]['imageUrl']/* s */,
+                                        allproductsdata[index]
+                                            ['imageUrl'] /* s */,
                                         width: 200,
                                         height: 210,
                                         fit: BoxFit.cover,
@@ -395,46 +401,51 @@ class NewsScreen extends StatelessWidget {
                                       const EdgeInsets.symmetric(horizontal: 2))
                                   .make()
                                   .onTap(() {
-                                  Get.to(
-                                    () => StoreScreen(
-                                        vendorId: allproductsdata[index]['vendor_id']),
-                                  );
+                                Get.to(
+                                  () => StoreScreen(
+                                      vendorId: allproductsdata[index]
+                                          ['vendor_id']),
+                                );
                               });
                             },
                           );
                         }
                       },
                     ),
-                    SizedBox(height: 50),
-
-                     
+                    const SizedBox(height: 50),
 
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment
-                          .center, // Ensure alignment if needed
-                      children: [
-                        'MATCH BY STORE'
-                            .text
-                            .fontFamily(medium)
-                            .color(greyDark2)
-                            .size(22)
-                            .make(),
-                        Container(
-                          child: GestureDetector(
-                            child: Image.asset(
-                              icUndertext,
-                              width: 170,
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment
+                              .center, // Ensure alignment if needed
+                          children: [
+                            'MATCH BY STORE'
+                                .text
+                                .fontFamily(medium)
+                                .color(greyDark2)
+                                .size(22)
+                                .make(),
+                            Container(
+                              child: GestureDetector(
+                                child: Image.asset(
+                                  icUndertext,
+                                  width: 170,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ],
-                    ).box.color(thinPrimaryApp).padding(EdgeInsets.symmetric(vertical: 5, horizontal: 70)).roundedLg.make(),
-                        SizedBox(height: 15),
+                          ],
+                        )
+                            .box
+                            .color(thinPrimaryApp)
+                            .padding(const EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 70))
+                            .roundedLg
+                            .make(),
+                        const SizedBox(height: 15),
                         SingleChildScrollView(
                           physics: const NeverScrollableScrollPhysics(),
                           child: Container(
@@ -489,7 +500,13 @@ class NewsScreen extends StatelessWidget {
                           ),
                         ),
                       ],
-                    ).box.color(thinPrimaryApp).padding(EdgeInsets.symmetric(vertical: 5, horizontal: 70)).roundedLg.make(),
+                    )
+                        .box
+                        .color(thinPrimaryApp)
+                        .padding(
+                            const EdgeInsets.symmetric(vertical: 5, horizontal: 70))
+                        .roundedLg
+                        .make(),
 
                     const SizedBox(
                       height: 15,
@@ -505,8 +522,7 @@ class NewsScreen extends StatelessWidget {
                           );
                         } else {
                           var allproductsdata = snapshot.data!.docs;
-                          allproductsdata.shuffle(math
-                              .Random()); // Shuffle the list using Dart's Random
+                          allproductsdata.shuffle(math.Random()); 
 
                           int itemCount = math.min(allproductsdata.length, 4);
 
@@ -526,19 +542,24 @@ class NewsScreen extends StatelessWidget {
                                 children: [
                                   Expanded(
                                     child: Center(
-                                      child: Image.network(
-                                        allproductsdata[index]['p_imgs'][0],
-                                        width: 200,
-                                        height: 210,
-                                        fit: BoxFit.cover,
+                                      child: ClipRRect(
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(15.0),
+                                          topRight: Radius.circular(15.0),
+                                        ),
+                                        child: Image.network(
+                                          allproductsdata[index]['p_imgs'][0],
+                                          width: 200,
+                                          height: 210,
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment:CrossAxisAlignment.start,
                                       // mainAxisAlignment: MainAxisAlignment.start,
                                       children: [
                                         Text(
@@ -550,20 +571,17 @@ class NewsScreen extends StatelessWidget {
                                           ),
                                           maxLines: 1,
                                           overflow: TextOverflow
-                                              .ellipsis, // ใช้ ellipsis สำหรับข้อความที่เกิน
+                                              .ellipsis,
                                         ),
                                         Text(
                                           "${NumberFormat('#,##0').format(double.parse(allproductsdata[index]['p_price']).toInt())} Bath",
-                                          // Text(
-                                          //   "${allproductsdata[index]['p_price']} Bath",
                                           style: const TextStyle(
                                             fontFamily: regular,
                                             fontSize: 14,
                                             color: greyDark2,
                                           ),
                                         ),
-                                        const SizedBox(
-                                            height: 10), // ให้ระยะห่างด้านล่าง
+                                        const SizedBox(height: 10), 
                                       ],
                                     ),
                                   )
