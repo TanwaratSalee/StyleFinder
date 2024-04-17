@@ -47,7 +47,7 @@ class LoginScreen extends StatelessWidget {
                               Container(
                                 padding: const EdgeInsets.all(24),
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: whiteColor,
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: Column(
@@ -208,7 +208,7 @@ class LoginScreen extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 16,
                         fontFamily: regular,
-                        color: Colors.white,
+                        color: whiteColor,
                       ),
                     ),
                     TextButton(

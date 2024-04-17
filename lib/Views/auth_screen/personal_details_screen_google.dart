@@ -46,7 +46,7 @@ class _PersonalDetailsScreenGoogleState
       context: context,
       builder: (_) => Container(
         height: 300,
-        color: Colors.white,
+        color: whiteColor,
         child: Column(
           children: [
             Container(

@@ -151,7 +151,7 @@ class MenuSettingScreen extends StatelessWidget {
                                 context: context,
                                 builder: (BuildContext dialogContext) {
                                   return Dialog(
-                                    backgroundColor: Colors.white,
+                                    backgroundColor: whiteColor,
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [

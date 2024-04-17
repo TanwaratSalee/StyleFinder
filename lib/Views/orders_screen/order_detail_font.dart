@@ -106,7 +106,7 @@ class DeliveryContentPage extends StatelessWidget {
             },
             child: const Text('Write product review'),
             style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.white,
+              foregroundColor: whiteColor,
               backgroundColor: Colors.teal,
               minimumSize: const Size(double.infinity, 50),
             ),
@@ -231,7 +231,7 @@ class DoneContentPage extends StatelessWidget {
             },
             child: const Text('Write product review'),
             style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.white,
+              foregroundColor: whiteColor,
               backgroundColor: Colors.teal,
               minimumSize: const Size(double.infinity, 50),
             ),

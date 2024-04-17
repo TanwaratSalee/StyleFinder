@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_finalproject/Views/match_screen/match_screen.dart';
+import 'package:flutter_finalproject/Views/match_screen/mixandmatch_screen.dart';
 import 'package:flutter_finalproject/Views/news_screen/news_screen.dart';
 import 'package:flutter_finalproject/Views/profile_screen/profile_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/exit_dialog.dart';

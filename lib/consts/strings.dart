@@ -76,6 +76,8 @@ const wishlist = "Favorite",
     newpass = "New password";
 
 //---------------------------------- Payment ----------------------------------
-const promptpay = "QR Promptpay",
+const mobilebanking = "Mobile Banking",
     visaCard = "Visa",
     cashOnDelivery = "Cash On Delivery";
+
+    

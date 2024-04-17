@@ -286,7 +286,7 @@ class _YourWidgetState extends State<YourWidget> {
         style: ElevatedButton.styleFrom(
           foregroundColor: Colors.grey,
           backgroundColor:
-              Colors.white, // Content color for the button's children
+              whiteColor, // Content color for the button's children
           shadowColor: Colors.grey, // Shadow color
           elevation: 4, // Shadow elevation
           shape: RoundedRectangleBorder(

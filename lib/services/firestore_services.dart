@@ -107,6 +107,10 @@ class FirestoreServices {
     return firestore.collection(productsCollection).snapshots();
   }
 
+  static allmatchbystore() {
+    return firestore.collection(vendorsCollection).snapshots();
+  }
+
   static getFeaturedProducts() {
     return firestore
         .collection(productsCollection)

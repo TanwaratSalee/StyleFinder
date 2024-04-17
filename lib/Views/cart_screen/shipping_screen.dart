@@ -171,7 +171,7 @@ class _ShippingDetailsState extends State<ShippingDetails> {
                         decoration: BoxDecoration(
                           color: isSelected
                               ? thinPrimaryApp.withOpacity(0.2)
-                              : Colors.white,
+                              : whiteColor,
                           border: isSelected
                               ? Border.all(color: primaryApp, width: 2,)
                               : null,borderRadius: BorderRadius.circular(8),

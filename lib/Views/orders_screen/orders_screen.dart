@@ -165,7 +165,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                   children: productDetailWidgets,
                 )
                     .box
-                    .color(Colors.white)
+                    .color(whiteColor)
                     .roundedSM
                     .shadowSm
                     .margin(const EdgeInsets.all(12))

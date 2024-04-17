@@ -119,7 +119,7 @@ void setTimerForAutoRedirect() {
             ),
             const SizedBox(height: 30),
             ElevatedButton(
-              child: const Text('Continue', style: TextStyle(color: Colors.white)),
+              child: const Text('Continue', style: TextStyle(color: whiteColor)),
               onPressed: () async {
                 var user = FirebaseAuth.instance.currentUser;
                 await user?.reload();

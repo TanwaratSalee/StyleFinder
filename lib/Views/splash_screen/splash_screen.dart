@@ -37,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return MaterialApp(
       title: 'Elegance Ease',
       home: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: whiteColor,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

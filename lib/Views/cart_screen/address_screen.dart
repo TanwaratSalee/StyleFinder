@@ -117,7 +117,7 @@ class _AddressScreenState extends State<AddressScreen> {
           SizedBox(height: 8.0),
           Expanded(
             child: Container(
-              color: Colors.white,
+              color: whiteColor,
               child: addresses != null
                   ? ListView.builder(
                       itemCount: addresses?.length ?? 0,
@@ -129,7 +129,7 @@ class _AddressScreenState extends State<AddressScreen> {
                             children: [
                               Container(
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: whiteColor,
                                   borderRadius: BorderRadius.circular(4), // Optional: if you want rounded corners
                                 ),
                                 child: ListTile(

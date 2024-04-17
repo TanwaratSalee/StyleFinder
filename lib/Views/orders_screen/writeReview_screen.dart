@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 
 class WriteReviewScreen extends StatelessWidget {

@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
-import 'package:flutter_finalproject/Views/widgets_common/appbar_ontop.dart';
-import 'package:flutter_finalproject/Views/widgets_common/search_icon.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/news_controller.dart';
 import 'package:flutter_finalproject/services/firestore_services.dart';
@@ -22,37 +20,20 @@ class ProductScreen extends StatelessWidget {
     var controller = Get.find<NewsController>();
 
     return Scaffold(
-      appBar: AppBar(
+      appBar:  AppBar(
         backgroundColor: whiteColor,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-  children: [
-    SizedBox(
-      width: 10,
-    ),
-    Image.asset(icLogoOnTop, height: 40),
-    Expanded(
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: Padding(
-          padding: const EdgeInsets.only(right: 10.0),
-          child: IconButton(
-            icon: Image.asset(
-              icCart,
-              width: 21,
+            SizedBox(height: 20),
+            Image.asset(icLogoOnTop, height: 40), // Logo on the left
+            IconButton(
+              // Cart icon on the right
+              icon: Image.asset(icCart, width: 21),
+              onPressed: () {
+                Get.to(() => const CartScreen());
+              },
             ),
-            onPressed: () {
-              Get.to(() => const CartScreen());
-            },
-          ),
-        ),
-      ),
-    ),
-  ],
-),
-
           ],
         ),
       ),
@@ -125,8 +106,8 @@ class ProductScreen extends StatelessWidget {
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                         ),
-                                        "${NumberFormat('#,##0').format(double.parse(allproductsdata[index]['p_price']).toInt())} Bath" 
-                                        .text
+                                        "${NumberFormat('#,##0').format(double.parse(allproductsdata[index]['p_price']).toInt())} Bath"
+                                            .text
                                             .color(greyDark1)
                                             .fontFamily(regular)
                                             .size(14)

@@ -51,4 +51,4 @@ const profileButtonsIcon = [
 //Payment
 const paymentMethodsImg = [imgPromptpay, imgVisa, imgCash];
 const paymentMethodsIc = [icPromptpay, icVisa, icCash];
-const paymentMethods = [promptpay, visaCard, cashOnDelivery];
+const paymentMethods = [mobilebanking, visaCard, cashOnDelivery];

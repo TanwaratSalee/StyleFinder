@@ -239,7 +239,7 @@ void initState() {
                             child: const Text(
                               'See Store',
                               style: TextStyle(
-                                  color: Colors.white, fontFamily: regular),
+                                  color: whiteColor, fontFamily: regular),
                             ),
                           ),
                         )

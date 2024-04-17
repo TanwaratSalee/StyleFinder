@@ -281,7 +281,7 @@ Widget _buildVCCTextField() {
               alignment: Alignment.centerRight,
               child: Text('VISA',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: whiteColor,
                     fontSize: 24,
                     fontFamily: black,
                     shadows: [
@@ -297,7 +297,7 @@ Widget _buildVCCTextField() {
               alignment: Alignment.center,
               child: Text(cardNumberMasked,
                   style: TextStyle(
-                    color: Colors.white,
+                    color: whiteColor,
                     fontSize: 25,
                     shadows: [
                       Shadow(
@@ -310,7 +310,7 @@ Widget _buildVCCTextField() {
             ),
             Text(cardHolderName,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: whiteColor,
                   fontSize: 20,
                   fontFamily: regular,
                   shadows: [

@@ -68,7 +68,7 @@ void checkIsInWishlist() async {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: whiteColor,
       appBar: AppBar(
         title: const Text('Match Detail'),
         centerTitle: true,
@@ -121,7 +121,7 @@ Obx(() => IconButton(
                               width: 150,
                               height: 150,
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: whiteColor,
                                 border: Border.all(color: blackColor),
                               ),
                               child: Center(
@@ -160,7 +160,7 @@ Obx(() => IconButton(
                                 style: TextStyle(
                                     fontSize: 24,
                                     fontFamily: bold,
-                                    color: Colors.white)),
+                                    color: whiteColor)),
                           ],
                         ),
                         const SizedBox(width: 10),
@@ -172,7 +172,7 @@ Obx(() => IconButton(
                               width: 150,
                               height: 150,
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: whiteColor,
                                 border: Border.all(color: blackColor),
                               ),
                               child: Center(
@@ -213,7 +213,7 @@ Obx(() => IconButton(
                             child: const Center(
                               child: Text('Dior',
                                   style: TextStyle(
-                                      fontSize: 14, color: Colors.white)),
+                                      fontSize: 14, color: whiteColor)),
                             ),
                           ),
                           const SizedBox(width: 10),
@@ -250,7 +250,7 @@ Obx(() => IconButton(
                               style: ButtonStyle(
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(
-                                        Colors.white!),
+                                        whiteColor!),
                                 minimumSize: MaterialStateProperty.all<Size>(
                                     const Size(0, 30)),
                               )),
