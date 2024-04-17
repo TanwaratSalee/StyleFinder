@@ -49,7 +49,6 @@ class PaymentMethods extends StatelessWidget {
                       VxToast.show(context, msg: "Order placed successfully");
 
                       Get.offAll(() => MainHome());
-                      
                     } else {
                       VxToast.show(context,
                           msg: "Selected payment method is not supported yet.");
@@ -61,7 +60,10 @@ class PaymentMethods extends StatelessWidget {
         ),
         appBar: AppBar(
           title: "Choose Payment "
-              .text.color(greyDark2).fontFamily(regular).make(),
+              .text
+              .color(greyDark2)
+              .fontFamily(regular)
+              .make(),
         ),
         body: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -131,7 +133,6 @@ class PaymentMethods extends StatelessWidget {
             ),
           ),
         ),
-      
       ),
     );
   }
