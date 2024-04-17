@@ -70,7 +70,7 @@ class ForgotScreen extends StatelessWidget {
         email: _emailController.text.trim(),
       );
       VxToast.show(context,
-          msg: "รีเซ็ตรหัสผ่านอีเมลถูกส่งไปยัง ${_emailController.text}");
+          msg: "Reset password sent in your E-mail ${_emailController.text}");
     } catch (e) {
       VxToast.show(context, msg: "$e");
     }
