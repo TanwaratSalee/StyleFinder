@@ -69,10 +69,12 @@ class ForgotScreen extends StatelessWidget {
       await FirebaseAuth.instance.sendPasswordResetEmail(
         email: _emailController.text.trim(),
       );
-
+<<<<<<<<< Temporary merge branch 1
       VxToast.show(context, msg: "Sent a reset password has been sent to ${_emailController.text}");
+=========
       VxToast.show(context,
           msg: "Reset password sent in your E-mail ${_emailController.text}");
+>>>>>>>>> Temporary merge branch 2
     } catch (e) {
       VxToast.show(context, msg: "$e");
     }

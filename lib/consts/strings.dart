@@ -76,6 +76,19 @@ const wishlist = "Favorite",
     newpass = "New password";
 
 //---------------------------------- Payment ----------------------------------
+
 const promptpay = "QR Promptpay",
     visaCard = "Visa",
     cashOnDelivery = "Cash On Delivery";
+
+const promptpay = " Mobile Banking ",
+    visaCard = "Visa",
+    cashOnDelivery = "Cash On Delivery",
+    mobilebanking = " Mobile Banking";
+
+//Bank-------------------------------------------
+const kbank = " Kbank ",
+    scb = " SCB ",
+    bbl = " BBL ",
+    ktb = " KTB ",
+    bay = " BAY ";

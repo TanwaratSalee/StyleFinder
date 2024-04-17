@@ -31,7 +31,8 @@ class WishlistScreen extends StatelessWidget {
           final data = snapshot.data!.docs;
           if (data.isEmpty) {
             return const Center(
-                child: Text("No orders yet!", style: TextStyle(color: greyDark2)));
+                child:
+                    Text("No orders yet!", style: TextStyle(color: greyDark2)));
           }
           return ListView.separated(
             itemCount: data.length,
@@ -85,7 +86,7 @@ class WishlistScreen extends StatelessWidget {
                               ),
                               Text(
                                 "${NumberFormat('#,##0').format(double.parse(data[index]['p_price']).toInt())} Bath",
-  style: const TextStyle(
+                                style: const TextStyle(
                                   fontSize: 14,
                                   fontFamily: light,
                                 ),
