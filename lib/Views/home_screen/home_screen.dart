@@ -44,6 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Map<String, dynamic>? selectedProduct;
   Map<String, dynamic>? previousSwipedProduct;
   late List<Map<String, dynamic>> productsToShow;
+  String? selectedItemDetail;
 
   _HomeScreenState(this.data);
 
@@ -57,6 +58,21 @@ class _HomeScreenState extends State<HomeScreen> {
     controllercard.dispose();
     isEmailVerified();
     super.dispose();
+  }
+
+  Future<void> navigateToItemDetails() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ItemDetails(
+          title: previousSwipedProduct!['p_name'],
+          data: previousSwipedProduct!,
+      )),
+    );
+    if (result != null) {
+      setState(() {
+        selectedItemDetail = result;
+      });
+    }
   }
 
   Future<bool> isEmailVerified() async {
@@ -127,6 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
               scale: 0.5,
               isLoop: false,
               controller: controllercard,
+              allowedSwipeDirection: AllowedSwipeDirection.only(left: true, right: true),
               cardsCount: productsToShow.length,
               cardBuilder: (BuildContext context, int index,
                   int percentThresholdX, int percentThresholdY) {
@@ -200,12 +217,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             icViewMoreButton,
                             width: 55,
                           ).box.roundedFull.shadowSm.make(),
-                          onPressed: () {
-                            Get.to(() => ItemDetails(
-                                  title: product['p_name'],
-                                  data: product,
-                                ));
-                          },
+                          onPressed: () => navigateToItemDetails(),
                         ),
                         IconButton(
                           icon: Image.asset(
@@ -228,10 +240,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 } else if (direction == CardSwiperDirection.left) {
                   //
                 } else if (direction == CardSwiperDirection.top) {
-                  Get.to(() => ItemDetails(
-                        title: previousSwipedProduct!['p_name'],
-                        data: previousSwipedProduct!,
-                      ));
+                  navigateToItemDetails();
                 }
                 return true;
               },
