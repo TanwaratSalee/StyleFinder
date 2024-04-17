@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/auth_screen/login_screen.dart';
+import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/widgets_common/appbar_ontop.dart';
 import 'package:flutter_finalproject/consts/colors.dart';
 import 'package:flutter_finalproject/consts/firebase_consts.dart';
@@ -31,21 +32,50 @@ class MatchScreen extends StatefulWidget {
 }
 
 class _MatchScreenState extends State<MatchScreen> {
-  int selectedCardIndex = 0;
   late final ProductController controller;
-  List<Map<String, dynamic>> productsTop = [];
-  List<Map<String, dynamic>> productsLower = [];
+  late final PageController _pageControllerTop, _pageControllerLower;
+  late int _currentPageIndexTop, _currentPageIndexLower;
+
+  late Future<List<Map<String, dynamic>>> _topProductsFuture;
+  late Future<List<Map<String, dynamic>>> _lowerProductsFuture;
 
   @override
   void initState() {
     super.initState();
     controller = Get.put(ProductController());
-    fetchProductstop();
-    fetchProductslower();
+    _pageControllerTop = PageController(viewportFraction: 0.8);
+    _pageControllerLower = PageController(viewportFraction: 0.8);
+    _currentPageIndexTop = 0;
+    _currentPageIndexLower = 0;
 
-    selectedCardIndex = 0;
+    _pageControllerTop.addListener(() {
+      final newPageIndex = _pageControllerTop.page!.round();
+      if (_currentPageIndexTop != newPageIndex) {
+        setState(() {
+          _currentPageIndexTop = newPageIndex;
+        });
+      }
+    });
+
+    _pageControllerLower.addListener(() {
+      final newPageIndex = _pageControllerLower.page!.round();
+      if (_currentPageIndexLower != newPageIndex) {
+        setState(() {
+          _currentPageIndexLower = newPageIndex;
+        });
+      }
+    });
+
+    _topProductsFuture = fetchProductstop();
+    _lowerProductsFuture = fetchProductslower();
   }
 
+  @override
+  void dispose() {
+    _pageControllerTop.dispose();
+    _pageControllerLower.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,44 +94,12 @@ class _MatchScreenState extends State<MatchScreen> {
           SliverToBoxAdapter(
             child: Column(
               children: <Widget>[
-                const SizedBox(
-                  height: 50,
-                ),
+                const SizedBox(height: 50),
                 buildCardSetTop(),
                 const SizedBox(height: 5),
-                buildCardSetlower(),
+                buildCardSetLower(),
                 const SizedBox(height: 10),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      const Text(
-                        'Match with you',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: bold,
-                          color: blackColor,
-                        ),
-                      ),
-                      IconButton(
-                        icon: Image.asset(
-                          icLikeButton,
-                          width: 67,
-                        ),
-                        onPressed: () {
-                        final productNameTop = productsTop[selectedCardIndex]['p_name'];
-                        final productNameLower = productsLower[selectedCardIndex]['p_name'];
-                        controller.addToWishlistMatch(productNameTop, productNameLower, context);
-                        }
-                      ),
-                    ],
-                  ),
-                )
+                matchWithYouContainer(),
               ],
             ),
           ),
@@ -110,38 +108,100 @@ class _MatchScreenState extends State<MatchScreen> {
     );
   }
 
+  Widget matchWithYouContainer() {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          const Text(
+            'Match with you',
+            style: TextStyle(fontSize: 18, fontFamily: bold, color: blackColor),
+          ),
+          IconButton(
+            icon: Image.asset(icLikeButton, width: 67),
+            onPressed: () async {
+              final topProducts = await _topProductsFuture;
+              final lowerProducts = await _lowerProductsFuture;
+              if (topProducts.isNotEmpty && lowerProducts.isNotEmpty) {
+                final topProduct = topProducts[_currentPageIndexTop];
+                final lowerProduct = lowerProducts[_currentPageIndexLower];
+                controller.addToWishlistMatch(
+                  topProduct['p_name'],
+                  lowerProduct['p_name'],
+                  context,
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('ไม่สามารถเพิ่มไปยังรายการโปรดได้ เนื่องจากข้อมูลไม่พร้อมใช้งาน')),
+                );
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> fetchProductstop() async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('products')
+        .where('p_part', isEqualTo: 'top')
+        .get();
+    return querySnapshot.docs
+        .map((doc) => doc.data() as Map<String, dynamic>)
+        .toList();
+  }
+
+  Future<List<Map<String, dynamic>>> fetchProductslower() async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('products')
+        .where('p_part', isEqualTo: 'lower')
+        .get();
+    return querySnapshot.docs
+        .map((doc) => doc.data() as Map<String, dynamic>)
+        .toList();
+  }
+
 Widget buildCardSetTop() {
   return FutureBuilder<List<Map<String, dynamic>>>(
-    future: fetchProductstop(),
+    future: _topProductsFuture,
     builder: (context, snapshot) {
       if (snapshot.connectionState == ConnectionState.waiting) {
-        return const Center(child: CircularProgressIndicator());
+        return Center(child: CircularProgressIndicator());
       }
       if (snapshot.error != null) {
         return Center(child: Text('An error occurred: ${snapshot.error}'));
       }
       if (!snapshot.hasData || snapshot.data!.isEmpty) {
-        return const Center(child: Text('No data available'));
+        return Center(child: Text('No data available'));
       }
-      final products = snapshot.data!;
+      final topProducts = snapshot.data!;
       return Container(
         height: 250.0,
         child: PageView.builder(
-          controller: PageController(viewportFraction: 0.8),
-          itemCount: products.length,
+          controller: _pageControllerTop,
+          itemCount: topProducts.length,
           itemBuilder: (context, index) {
-            final product = products[index];
-            return Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Container(
-                width: 300.0,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Image.network(
-                    product['p_imgs'][0],
-                    fit: BoxFit.cover,
+            final product = topProducts[index];
+            return GestureDetector(
+              onTap: () {
+                Get.to(() => ItemDetails(
+                title: product['p_name'],
+                data: product,
+                ));
+              },
+              child: Card(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                child: Container(
+                  width: 300.0,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.network(product['p_imgs'][0], fit: BoxFit.cover),
                   ),
                 ),
               ),
@@ -153,67 +213,53 @@ Widget buildCardSetTop() {
   );
 }
 
-  Widget buildCardSetlower() {
-    return FutureBuilder<List<Map<String, dynamic>>>(
-        future: fetchProductslower(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (snapshot.error != null) {
-            return Center(child: Text('An error occurred: ${snapshot.error}'));
-          }
-
-          if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No data available'));
-          }
-          final products = snapshot.data!;
-          return Container(
-            height: 250.0,
-            child: PageView.builder(
-              controller: PageController(viewportFraction: 0.8),
-              itemCount: products.length,
-              itemBuilder: (context, index) {
-                final product = products[index];
-                return Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Container(
-                    width: 300.0,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Image.network(
-                        product['p_imgs'][0],
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                );
+Widget buildCardSetLower() {
+  return FutureBuilder<List<Map<String, dynamic>>>(
+    future: _lowerProductsFuture,
+    builder: (context, snapshot) {
+      // ตรวจสอบสถานะการโหลดข้อมูล
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return Center(child: CircularProgressIndicator());
+      }
+      if (snapshot.error != null) {
+        return Center(child: Text('An error occurred: ${snapshot.error}'));
+      }
+      if (!snapshot.hasData || snapshot.data!.isEmpty) {
+        return Center(child: Text('No data available'));
+      }
+      final lowerProducts = snapshot.data!;
+      return Container(
+        height: 250.0,
+        child: PageView.builder(
+          controller: _pageControllerLower,
+          itemCount: lowerProducts.length,
+          itemBuilder: (context, index) {
+            final product = lowerProducts[index];
+            return GestureDetector(
+              onTap: () {
+                Get.to(() => ItemDetails(
+                title: product['p_name'],
+                data: product,
+                ));
               },
-            ),
-          );
-        });
-  }
-
-Future<List<Map<String, dynamic>>> fetchProductstop() async {
-  final querySnapshot = await FirebaseFirestore.instance
-      .collection('products')
-      .where('p_part', isEqualTo: 'top')
-      .get();
-  return querySnapshot.docs
-      .map((doc) => doc.data() as Map<String, dynamic>)
-      .toList();
+              child: Card(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                child: Container(
+                  width: 300.0,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.network(product['p_imgs'][0], fit: BoxFit.cover),
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      );
+    },
+  );
 }
 
-Future<List<Map<String, dynamic>>> fetchProductslower() async {
-  final querySnapshot = await FirebaseFirestore.instance
-      .collection('products')
-      .where('p_part', isEqualTo: 'lower')
-      .get();
-  return querySnapshot.docs
-      .map((doc) => doc.data() as Map<String, dynamic>)
-      .toList();
-}
+
+
 }

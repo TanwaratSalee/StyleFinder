@@ -202,7 +202,9 @@ void addToWishlistMatch(String productNameTop, String productNameLower, BuildCon
             if (!wishlist.contains(currentUserUID)) {
               doc.reference.update({
                 'p_wishlist': FieldValue.arrayUnion([currentUserUID])
-              }).catchError((error) {
+              }).then((value) {
+          VxToast.show(context, msg: "Added from wishlist");
+        }).catchError((error) {
                 print('Error adding to Favorite: $error');
               });
             }
@@ -213,10 +215,7 @@ void addToWishlistMatch(String productNameTop, String productNameLower, BuildCon
       }).catchError((error) {
         print('Error retrieving products: $error');
       });
-}
-
-
-
+    }
 
   removeFromWishlist(docId, context) async {
     await firestore.collection(productsCollection).doc(docId).set({
