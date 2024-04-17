@@ -7,6 +7,7 @@ import 'package:flutter_finalproject/consts/firebase_consts.dart';
 import 'package:flutter_finalproject/consts/images.dart';
 import 'package:flutter_finalproject/consts/styles.dart';
 import 'package:flutter_finalproject/controllers/auth_controller.dart';
+import 'package:flutter_finalproject/controllers/product_controller.dart';
 import 'package:get/get.dart';
 
 class FirestoreServices {
@@ -30,7 +31,21 @@ class MatchScreen extends StatefulWidget {
 }
 
 class _MatchScreenState extends State<MatchScreen> {
-  int selectedCardIndex = 0; // เก็บ index ของการ์ดที่ถูกเลือก
+  int selectedCardIndex = 0;
+  late final ProductController controller;
+  List<Map<String, dynamic>> productsTop = [];
+  List<Map<String, dynamic>> productsLower = [];
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.put(ProductController());
+    fetchProductstop();
+    fetchProductslower();
+
+    selectedCardIndex = 0;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -79,25 +94,10 @@ class _MatchScreenState extends State<MatchScreen> {
                           width: 67,
                         ),
                         onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content:
-                                  Text('เพิ่มไปยังรายการโปรดเรียบร้อยแล้ว'),
-                              duration: Duration(seconds: 2),
-                              backgroundColor:
-                                  primaryApp, // ตั้งเวลาให้ SnackBar หายไปใน 2 วินาที
-                              action: SnackBarAction(
-                                label: 'Close',
-                                onPressed: () {
-                                  ScaffoldMessenger.of(context)
-                                      .hideCurrentSnackBar(); // ปิด SnackBar เมื่อกดปุ่ม
-                                },
-                                // icon: Icon(Icons
-                                //     .close), // ใช้ไอคอนสัญลักษณ์ปิดแทน 'OK'
-                              ),
-                            ),
-                          );
-                        },
+                        final productNameTop = productsTop[selectedCardIndex]['p_name'];
+                        final productNameLower = productsLower[selectedCardIndex]['p_name'];
+                        controller.addToWishlistMatch(productNameTop, productNameLower, context);
+                        }
                       ),
                     ],
                   ),
@@ -110,49 +110,48 @@ class _MatchScreenState extends State<MatchScreen> {
     );
   }
 
-  Widget buildCardSetTop() {
-    return FutureBuilder<List<Map<String, dynamic>>>(
-        future: fetchProductstop(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (snapshot.error != null) {
-            return Center(child: Text('An error occurred: ${snapshot.error}'));
-          }
-
-          if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No data available'));
-          }
-          final products = snapshot.data!;
-          return Container(
-            height: 250.0,
-            child: PageView.builder(
-              controller: PageController(viewportFraction: 0.8),
-              itemCount: products.length,
-              itemBuilder: (context, index) {
-                final product = products[index];
-                return Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+Widget buildCardSetTop() {
+  return FutureBuilder<List<Map<String, dynamic>>>(
+    future: fetchProductstop(),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const Center(child: CircularProgressIndicator());
+      }
+      if (snapshot.error != null) {
+        return Center(child: Text('An error occurred: ${snapshot.error}'));
+      }
+      if (!snapshot.hasData || snapshot.data!.isEmpty) {
+        return const Center(child: Text('No data available'));
+      }
+      final products = snapshot.data!;
+      return Container(
+        height: 250.0,
+        child: PageView.builder(
+          controller: PageController(viewportFraction: 0.8),
+          itemCount: products.length,
+          itemBuilder: (context, index) {
+            final product = products[index];
+            return Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Container(
+                width: 300.0,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.network(
+                    product['p_imgs'][0],
+                    fit: BoxFit.cover,
                   ),
-                  child: Container(
-                    width: 300.0,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Image.network(
-                        product['p_imgs'][0],
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          );
-        });
-  }
+                ),
+              ),
+            );
+          },
+        ),
+      );
+    },
+  );
+}
 
   Widget buildCardSetlower() {
     return FutureBuilder<List<Map<String, dynamic>>>(
@@ -198,50 +197,23 @@ class _MatchScreenState extends State<MatchScreen> {
         });
   }
 
-  Widget buildheart() {
-    return Container(
-      height: 100.0, // กำหนดความสูงของ container ที่มีการ์ด
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal, // ให้การ์ดเลื่อนได้ในแนวนอน
-        itemCount: 10, // จำนวนการ์ด
-        itemBuilder: (context, index) {
-          return Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Container(
-              width: 100.0,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.asset(
-                  'assets/images/product${index % 3 + 1}.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
+Future<List<Map<String, dynamic>>> fetchProductstop() async {
+  final querySnapshot = await FirebaseFirestore.instance
+      .collection('products')
+      .where('p_part', isEqualTo: 'top')
+      .get();
+  return querySnapshot.docs
+      .map((doc) => doc.data() as Map<String, dynamic>)
+      .toList();
+}
 
-  Future<List<Map<String, dynamic>>> fetchProductstop() async {
-    final querySnapshot = await FirebaseFirestore.instance
-        .collection('products') // แทนที่ด้วยชื่อคอลเลคชันของคุณ
-        .where('p_part', isEqualTo: 'top')
-        .get();
-    return querySnapshot.docs
-        .map((doc) => doc.data() as Map<String, dynamic>)
-        .toList();
-  }
-
-  Future<List<Map<String, dynamic>>> fetchProductslower() async {
-    final querySnapshot = await FirebaseFirestore.instance
-        .collection('products') // แทนที่ด้วยชื่อคอลเลคชันของคุณ
-        .where('p_part', isEqualTo: 'lower')
-        .get();
-    return querySnapshot.docs
-        .map((doc) => doc.data() as Map<String, dynamic>)
-        .toList();
-  }
+Future<List<Map<String, dynamic>>> fetchProductslower() async {
+  final querySnapshot = await FirebaseFirestore.instance
+      .collection('products')
+      .where('p_part', isEqualTo: 'lower')
+      .get();
+  return querySnapshot.docs
+      .map((doc) => doc.data() as Map<String, dynamic>)
+      .toList();
+}
 }

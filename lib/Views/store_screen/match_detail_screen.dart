@@ -12,6 +12,7 @@ class MatchDetailScreen extends StatefulWidget {
   final String productImage1;
   final String productImage2;
   final String totalPrice;
+  final String vendorName;
 
   const MatchDetailScreen({
     this.productName1 = '',
@@ -21,6 +22,7 @@ class MatchDetailScreen extends StatefulWidget {
     this.productImage1 = '',
     this.productImage2 = '',
     this.totalPrice = '',
+    this.vendorName = '',
   });
 
   @override

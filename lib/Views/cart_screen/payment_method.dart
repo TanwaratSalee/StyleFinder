@@ -33,7 +33,7 @@ class PaymentMethods extends StatelessWidget {
                   onPress: () async {
                     String selectedPaymentMethod =
                         paymentMethods[controller.paymentIndex.value];
-                    if (selectedPaymentMethod == 'QR Promptpay') {
+                    if (selectedPaymentMethod == 'Mobile Banking') {
                       print('Selected Payment Method: $selectedPaymentMethod');
                       Get.to(() => const QRScreen());
                     } else if (selectedPaymentMethod == 'Visa') {

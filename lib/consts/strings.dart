@@ -76,6 +76,7 @@ const wishlist = "Favorite",
     newpass = "New password";
 
 //---------------------------------- Payment ----------------------------------
+
 const promptpay = " Mobile Banking ",
     visaCard = "Visa",
     cashOnDelivery = "Cash On Delivery",
