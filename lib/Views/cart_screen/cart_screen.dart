@@ -77,12 +77,7 @@ class _CartScreenState extends State<CartScreen> {
 
                               return InkWell(
                                 onTap: () {
-                                  Get.to(
-                                    () => ItemDetails(
-                                      title: data[index]['title'],
-                                      data: data[index],
-                                    ),
-                                  );
+                                  navigateToItemDetails(context , data[index]['title']);
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -204,4 +199,29 @@ class _CartScreenState extends State<CartScreen> {
           },
         ));
   }
+
+    void navigateToItemDetails(BuildContext context, Productname) {
+    FirebaseFirestore.instance
+        .collection('products')
+        .where('p_name', isEqualTo: Productname)
+        .limit(1)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+          if (querySnapshot.docs.isNotEmpty) {
+            var productData = querySnapshot.docs.first.data() as Map<String, dynamic>;
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ItemDetails(
+                  title: productData['p_name'],
+                  data: productData,
+                ),
+              ),
+            );
+          } else {
+            //
+          }
+        });
+      }
+
 }

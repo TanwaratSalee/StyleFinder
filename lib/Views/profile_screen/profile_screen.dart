@@ -393,8 +393,8 @@ Widget buildUserMixMatchTab() {
             'lower_price': data['p_price_lower'].toString(),
             'top_image': data['p_imgs_top'][0],
             'lower_image': data['p_imgs_lower'][0],
-            'docId_top': doc.id, // assuming doc.id is sufficient for identification
-            'docId_lower': doc.id // adjust if different documents should be referenced
+            'docId_top': doc.id,
+            'docId_lower': doc.id
           });
         }
       }
@@ -403,34 +403,161 @@ Widget buildUserMixMatchTab() {
         return Center(child: Text("No complete pairs in your wishlist!", style: TextStyle(color: greyDark2)));
       }
 
-      return GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 1,
-          childAspectRatio: 1 / 0.61,
-        ),
+      return ListView.builder(
         itemCount: pairs.length,
         itemBuilder: (BuildContext context, int index) {
           var pair = pairs[index];
-          return GestureDetector(
-            onTap: () {},
-            child: Column(children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Column(
+          return Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: thinGrey01),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Stack(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    productInfoRow(pair['top_image'], pair['top'], pair['top_price']),
-                    Divider(color: Colors.grey[300]),
-                    productInfoRow(pair['lower_image'], pair['lower'], pair['lower_price']),
+                  // Product 1
+                  GestureDetector(
+                    onTap: () {
+                      navigateToItemDetails(context, pair['top']);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ClipRRect(
+                            child: Image.network(
+                              pair['top_image'],
+                              width: 75,
+                              height: 75,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    pair['top'],
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Text(
+                                    "${NumberFormat('#,##0').format(double.parse(pair['top_price']).toInt())} Bath",
+                                    style: const TextStyle(color: greyDark1),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                    // Product 2
+                    GestureDetector(
+                      onTap: () {
+                        navigateToItemDetails(context, pair['lower']);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ClipRRect(
+                              child: Image.network(
+                                pair['lower_image'],
+                                width: 75,
+                                height: 75,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            Expanded(
+                              flex: 3,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      pair['lower'],
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                        color: Colors.black,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    Text(
+                                      "${NumberFormat('#,##0').format(double.parse(pair['lower_price']).toInt())} Bath",
+                                      style: const TextStyle(color: greyDark1),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                     SizedBox(height: 6),
-                    totalPriceRow(pair['top_price'], pair['lower_price'])
+                    // Total Price
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Total Price  ",
+                            style: TextStyle(
+                              color: greyDark2,
+                              fontFamily: 'regular',
+                              fontSize: 14,
+                            ),
+                          ),
+                          Text(
+                            "${NumberFormat('#,##0').format(double.parse(pair['top_price']).toInt() + double.parse(pair['lower_price']).toInt())} ",
+                            style: TextStyle(
+                              color: greyDark2,
+                              fontFamily: 'medium',
+                              fontSize: 14,
+                            ),
+                          ),
+                          Text(
+                            " Bath",
+                            style: TextStyle(
+                              color: greyDark2,
+                              fontFamily: 'regular',
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
                   ],
                 ),
-              ),
-              Divider(color: Colors.grey[200], height: 12),
-            ]),
+                // Favorite Icon
+                Align(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                    icon: Icon(Icons.favorite, color: redColor),
+                    onPressed: () async {
+                      _showDeleteConfirmationDialog(context, pair['top'], pair['docId_top'], pair['docId_lower']);
+                    },
+                  ),
+                ),
+              ],
+            ),
           );
         },
       );
@@ -438,73 +565,109 @@ Widget buildUserMixMatchTab() {
   );
 }
 
-Widget productInfoRow(String imageUrl, String productName, String price) {
-  return Padding(
-    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: Image.network(
-            imageUrl,
-            width: 75,
-            height: 75,
-            fit: BoxFit.cover,
-          ),
+void _showDeleteConfirmationDialog(BuildContext context, String productName, String docIdTop, String docIdLower) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
         ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 20),
+        elevation: 0.0,
+        backgroundColor: Colors.transparent,
+        child: AnimatedPadding(
+          duration: Duration(milliseconds: 100),
+          curve: Curves.easeInOut,
+          padding: MediaQuery.of(context).viewInsets,
+          child: Container(
+            padding: EdgeInsets.all(20.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.circular(20.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 10.0,
+                  offset: const Offset(0.0, 10.0),
+                ),
+              ],
+            ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  productName,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                    color: Colors.black,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                  "Confirm Deletion",
+                  style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600),
                 ),
+                SizedBox(height: 20.0),
                 Text(
-                  "${NumberFormat('#,##0').format(double.parse(price))} Bath",
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 12,
-                  ),
+                  "Are you sure you want to delete ?",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16.0),
+                ),
+                SizedBox(height: 20.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(); // Close the dialog
+                      },
+                      child: Text(
+                        "Cancel",
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                    SizedBox(width: 20.0),
+                    TextButton(
+                      onPressed: () async {
+                        await FirebaseFirestore.instance.collection('usermixmatchs').doc(docIdTop).delete();
+                        await FirebaseFirestore.instance.collection('usermixmatchs').doc(docIdLower).delete();
+                        Navigator.of(context).pop(); // Close the dialog
+                      },
+                      child: Text(
+                        "Delete",
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
         ),
-      ],
-    ),
+      );
+    },
   );
 }
 
-Widget totalPriceRow(String price1, String price2) {
-  int total = int.parse(price1) + int.parse(price2);
-  return Padding(
-    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Text(
-          "Total Price: ${NumberFormat('#,##0').format(total)} Bath",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-            color: Colors.black,
-          ),
-        ),
-      ],
-    ),
-  );
-}
 
+void navigateToItemDetails(BuildContext context, String productName) {
+  FirebaseFirestore.instance
+      .collection('products')
+      .where('p_name', isEqualTo: productName)
+      .limit(1)
+      .get()
+      .then((QuerySnapshot querySnapshot) {
+        if (querySnapshot.docs.isNotEmpty) {
+          var productData = querySnapshot.docs.first.data() as Map<String, dynamic>;
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ItemDetails(
+                title: productData['p_name'],
+                data: productData,
+              ),
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("No details available for $productName"),
+          ));
+        }
+      });
+}
 
 
   Widget buildMatchTab() {
