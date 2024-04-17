@@ -187,6 +187,36 @@ void removeToWishlistMixMatch(
   });
 }
 
+void addToWishlistMatch(String productNameTop, String productNameLower, BuildContext context) {
+  List<String> productNames = [productNameTop, productNameLower];
+  FirebaseFirestore.instance
+      .collection('products')
+      .where('p_name', whereIn: productNames)
+      .get()
+      .then((QuerySnapshot querySnapshot) {
+        if (querySnapshot.docs.isNotEmpty) {
+          for (var doc in querySnapshot.docs) {
+            // Using null safety checks to handle possible null values
+            List<dynamic> wishlist = (doc.data() as Map<String, dynamic>?)?['p_wishlist'] as List<dynamic>? ?? [];
+            String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
+            if (!wishlist.contains(currentUserUID)) {
+              doc.reference.update({
+                'p_wishlist': FieldValue.arrayUnion([currentUserUID])
+              }).catchError((error) {
+                print('Error adding to Favorite: $error');
+              });
+            }
+          }
+        } else {
+          print('No products found matching the names.');
+        }
+      }).catchError((error) {
+        print('Error retrieving products: $error');
+      });
+}
+
+
+
 
   removeFromWishlist(docId, context) async {
     await firestore.collection(productsCollection).doc(docId).set({
