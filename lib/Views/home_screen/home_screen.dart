@@ -141,11 +141,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              SizedBox(
+                                height: 1,
+                              ),
                               Image.network(
                                 product['p_imgs'][0],
-                                height: 420,
-                                width: 320,
-                                fit: BoxFit.cover,
+                                height: 490,
+                                width: 400,
+                                fit: BoxFit.fitHeight,
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -170,12 +173,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ],
                               ).box.padding(EdgeInsets.all(8)).make(),
                             ],
-                          ).box.white.roundedLg.shadowSm.padding(EdgeInsets.all(12)).make()
-
-                         ],
+                          )
+                              .box
+                              .white
+                              .roundedLg
+                              .shadowSm
+                              .padding(EdgeInsets.all(12))
+                              .make()
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 5.0),
+                    const SizedBox(height: 7.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [

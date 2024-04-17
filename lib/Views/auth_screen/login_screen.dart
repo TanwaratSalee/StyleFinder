@@ -58,17 +58,18 @@ class LoginScreen extends StatelessWidget {
                                             fontSize: 32, fontFamily: bold)),
                                     const SizedBox(height: 5),
                                     customTextField(
-                                        label: email,
-                                        isPass: false,
-                                        readOnly: false,
-                                        controller: controller.emailController),
+                                      label: 'Email',
+                                      isPass: false,
+                                      readOnly: false,
+                                      controller: controller.emailController,
+                                    ),
                                     const SizedBox(height: 5),
-                                    customTextField(
-                                        label: password,
-                                        isPass: true,
-                                        readOnly: false,
-                                        controller:
-                                            controller.passwordController),
+                                    CustomTextFieldd(
+                                      label: 'Password',
+                                      isPass: true,
+                                      readOnly: false,
+                                      controller: controller.passwordController,
+                                    ),
                                     Align(
                                       alignment: Alignment.centerRight,
                                       child: TextButton(
@@ -302,4 +303,63 @@ class LoginScreen extends StatelessWidget {
       return null; // or throw an error, depending on your requirement
     }
   }
+}
+
+Future<void> _showCustomDialog(BuildContext context) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        // title: Text(
+        //   'Complete!',
+        //   textAlign: TextAlign.center, // ข้อความอยู่ตรงกลาง
+        //   style: TextStyle(
+        //     fontWeight: FontWeight.bold, // ทำให้ตัวหนา
+        //   ),
+        // ),
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: <Widget>[
+              SizedBox(
+                height: 50,
+              ),
+              Image.asset('assets/images/Finishpay.PNG'),
+              SizedBox(
+                height: 40,
+              ),
+              Text(
+                'Payment was successful!',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                '1,400,000 Bath',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: Text('OK'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
 }

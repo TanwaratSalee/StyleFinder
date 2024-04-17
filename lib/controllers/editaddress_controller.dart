@@ -51,69 +51,69 @@ class _editaddressFormState extends State<editaddress_controller> {
     _phoneController = TextEditingController(text: widget.phone);
   }
 
-Future<void> updateAddressForCurrentUser() async {
-  try {
-    final currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser != null) {
-      final userRef = FirebaseFirestore.instance.collection('users').doc(currentUser.uid);
+  Future<void> updateAddressForCurrentUser() async {
+    try {
+      final currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        final userRef =
+            FirebaseFirestore.instance.collection('users').doc(currentUser.uid);
 
-      final userData = await userRef.get();
-      final List<dynamic>? addressesList = userData.data()?['address'];
+        final userData = await userRef.get();
+        final List<dynamic>? addressesList = userData.data()?['address'];
 
-      if (addressesList is List) {
-        final index = addressesList.indexWhere((address) {
-          return address['firstname'] == widget.firstname &&
-              address['surname'] == widget.surname &&
-              address['address'] == widget.address &&
-              address['city'] == widget.city &&
-              address['state'] == widget.state &&
-              address['postalCode'] == widget.postalCode &&
-              address['phone'] == widget.phone;
-        });
+        if (addressesList is List) {
+          final index = addressesList.indexWhere((address) {
+            return address['firstname'] == widget.firstname &&
+                address['surname'] == widget.surname &&
+                address['address'] == widget.address &&
+                address['city'] == widget.city &&
+                address['state'] == widget.state &&
+                address['postalCode'] == widget.postalCode &&
+                address['phone'] == widget.phone;
+          });
 
-        if (index != -1) {
-          addressesList[index] = {
-            'firstname': _firstnameController.text,
-            'surname': _surnameController.text,
-            'address': _addressController.text,
-            'city': _cityController.text,
-            'state': _stateController.text,
-            'postalCode': _postalCodeController.text,
-            'phone': _phoneController.text,
-          };
+          if (index != -1) {
+            addressesList[index] = {
+              'firstname': _firstnameController.text,
+              'surname': _surnameController.text,
+              'address': _addressController.text,
+              'city': _cityController.text,
+              'state': _stateController.text,
+              'postalCode': _postalCodeController.text,
+              'phone': _phoneController.text,
+            };
 
-          await userRef.update({'address': addressesList});
+            await userRef.update({'address': addressesList});
 
-          VxToast.show(context, msg: "The new address was successfully added");
-          Navigator.pop(context);
+            VxToast.show(context,
+                msg: "The new address was successfully added");
+            Navigator.pop(context);
+          } else {
+            print('Address not found');
+          }
         } else {
-          print('Address not found');
+          print('No address data found');
         }
       } else {
-        print('No address data found');
+        print('User not logged in');
       }
-    } else {
-      print('User not logged in');
+    } catch (error) {
+      print('Failed to update address: $error');
     }
-  } catch (error) {
-    print('Failed to update address: $error');
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title:
-            "Edit Address".text.size(24).fontFamily(medium).make(),
+        title: "Edit Address".text.size(24).fontFamily(medium).make(),
       ),
       bottomNavigationBar: SizedBox(
         height: 70,
         child: ourButton(
-          onPress: () {
-          updateAddressForCurrentUser();
+            onPress: () {
+              updateAddressForCurrentUser();
             },
             color: primaryApp,
             textColor: whiteColor,
