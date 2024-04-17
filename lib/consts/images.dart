@@ -116,10 +116,19 @@ const String icUndertext = "assets/icons/icNormal/undertext.png";
 const String imgCash = "assets/images/payment/cashOnDelivery.png";
 const String imgPromptpay = "assets/images/payment/Promptpay.png";
 const String imgVisa = "assets/images/payment/visa.png";
+const String imgmobile = "assets/images/payment/visa.png";
 
 const String icCash = "assets/images/payment/card.png";
 const String icPromptpay = "assets/images/payment/qr.png";
 const String icVisa = "assets/images/payment/card.png";
+const String icmobile = "assets/images/payment/visa.png";
+
+//bank
+const String imgkbank = " ";
+const String imgscb = " ";
+const String imgbbl = " ";
+const String imgktb = " ";
+const String imgkbay = " ";
 
 //Order
 const String icPlaced = "assets/icons/icNormal/placed.png";

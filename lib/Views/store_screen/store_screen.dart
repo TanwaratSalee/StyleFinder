@@ -35,7 +35,7 @@ class StoreScreen extends StatelessWidget {
             elevation: 0,
           ),
           body: SingleChildScrollView(
-            physics: NeverScrollableScrollPhysics(),
+            // physics: NeverScrollableScrollPhysics(),
             child: Column(
               // แก้ไขในส่วนนี้
               children: [
@@ -306,18 +306,18 @@ class StoreScreen extends StatelessWidget {
             ],
           ).box.color(thinPrimaryApp).make(),
           Container(
-            height: MediaQuery.of(context).size.height * 0.9,
+            height: 700,
             child: TabBarView(
               children: [
-                _buildProductGrid('All', 'All'),
-                _buildProductGrid('Knitwear', 'Knitwear'),
-                _buildProductGrid('Dresses', 'Dresses'),
-                _buildProductGrid('Coat', 'Coat'),
-                _buildProductGrid('T-shirts', 'T-shirts'),
-                _buildProductGrid('Skirts', 'Skirts'),
-                _buildProductGrid('Pants', 'Pants'),
-                _buildProductGrid('Shorts', 'Shorts'),
-                _buildProductGrid('Shirts', 'Shirts'),
+                _buildProductGridAll('All', 'All'),
+                _buildProductGridKnitwear('Knitwear', 'Knitwear'),
+                _buildProductGridDress('Dresses', 'Dresses'),
+                _buildProductGridCoat('Coat', 'Coat'),
+                _buildProductGridTshirt('T-shirts', 'T-shirts'),
+                _buildProductGridSkirt('Skirts', 'Skirts'),
+                _buildProductGridPant('Pants', 'Pants'),
+                _buildProductGridShort('Shorts', 'Shorts'),
+                _buildProductGridShirt('Shirts', 'Shirts'),
               ],
             ),
           ),
@@ -326,7 +326,487 @@ class StoreScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProductGrid(String category, String subcollection) {
+  Widget _buildProductGridAll(String category, String subcollection) {
+    Query query = FirebaseFirestore.instance
+        .collection('products')
+        .where('vendor_id', isEqualTo: vendorId);
+
+    // Check if the subcollection is "All"
+    if (subcollection != 'All') {
+      query = query.where('p_subcollection', isEqualTo: subcollection);
+    }
+
+    return FutureBuilder<QuerySnapshot>(
+      future: query.get(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: loadingIndicator(),
+          );
+        }
+        if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        }
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return const Text('No Items');
+        }
+
+        return GridView.builder(
+          padding: const EdgeInsets.all(8.0),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, childAspectRatio: 1 / 1.2),
+          itemCount: snapshot.data!.docs.length,
+          itemBuilder: (BuildContext context, int index) {
+            var product = snapshot.data!.docs[index];
+            String productName = product.get('p_name');
+            String price = product.get('p_price');
+            String productImage = product.get('p_imgs')[0];
+
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ItemDetails(
+                      title: productName,
+                      data: product.data() as Map<String, dynamic>,
+                    ),
+                  ),
+                );
+              },
+              child: Card(
+                clipBehavior: Clip.antiAlias,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Image.network(
+                      productImage,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: 150,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          3.heightBox,
+                          Text(
+                            productName,
+                            style: const TextStyle(
+                              fontFamily: medium,
+                              fontSize: 16,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            "${NumberFormat('#,##0').format(double.parse(
+                              '$price',
+                            ).toInt())} Bath",
+                            // "${NumberFormat('#,##0').format(double.parse('$price',).toInt())} Bath",
+                            // '$price',
+                            style: const TextStyle(
+                                color: greyDark1, fontFamily: regular),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ).box.color(whiteColor).make(),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildProductGridKnitwear(String category, String subcollection) {
+    Query query = FirebaseFirestore.instance
+        .collection('products')
+        .where('vendor_id', isEqualTo: vendorId);
+
+    // Check if the subcollection is "All"
+    if (subcollection != 'All') {
+      query = query.where('p_subcollection', isEqualTo: subcollection);
+    }
+
+    return FutureBuilder<QuerySnapshot>(
+      future: query.get(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: loadingIndicator(),
+          );
+        }
+        if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        }
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return const Text('No Items');
+        }
+
+        return GridView.builder(
+          padding: const EdgeInsets.all(8.0),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, childAspectRatio: 1 / 1.2),
+          itemCount: snapshot.data!.docs.length,
+          itemBuilder: (BuildContext context, int index) {
+            var product = snapshot.data!.docs[index];
+            String productName = product.get('p_name');
+            String price = product.get('p_price');
+            String productImage = product.get('p_imgs')[0];
+
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ItemDetails(
+                      title: productName,
+                      data: product.data() as Map<String, dynamic>,
+                    ),
+                  ),
+                );
+              },
+              child: Card(
+                clipBehavior: Clip.antiAlias,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Image.network(
+                      productImage,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: 150,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          3.heightBox,
+                          Text(
+                            productName,
+                            style: const TextStyle(
+                              fontFamily: medium,
+                              fontSize: 16,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            "${NumberFormat('#,##0').format(double.parse(
+                              '$price',
+                            ).toInt())} Bath",
+                            // "${NumberFormat('#,##0').format(double.parse('$price',).toInt())} Bath",
+                            // '$price',
+                            style: const TextStyle(
+                                color: greyDark1, fontFamily: regular),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ).box.color(whiteColor).make(),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildProductGridDress(String category, String subcollection) {
+    Query query = FirebaseFirestore.instance
+        .collection('products')
+        .where('vendor_id', isEqualTo: vendorId);
+
+    // Check if the subcollection is "All"
+    if (subcollection != 'All') {
+      query = query.where('p_subcollection', isEqualTo: subcollection);
+    }
+
+    return FutureBuilder<QuerySnapshot>(
+      future: query.get(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: loadingIndicator(),
+          );
+        }
+        if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        }
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return const Text('No Items');
+        }
+
+        return GridView.builder(
+          padding: const EdgeInsets.all(8.0),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, childAspectRatio: 1 / 1.2),
+          itemCount: snapshot.data!.docs.length,
+          itemBuilder: (BuildContext context, int index) {
+            var product = snapshot.data!.docs[index];
+            String productName = product.get('p_name');
+            String price = product.get('p_price');
+            String productImage = product.get('p_imgs')[0];
+
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ItemDetails(
+                      title: productName,
+                      data: product.data() as Map<String, dynamic>,
+                    ),
+                  ),
+                );
+              },
+              child: Card(
+                clipBehavior: Clip.antiAlias,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Image.network(
+                      productImage,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: 150,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          3.heightBox,
+                          Text(
+                            productName,
+                            style: const TextStyle(
+                              fontFamily: medium,
+                              fontSize: 16,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            "${NumberFormat('#,##0').format(double.parse(
+                              '$price',
+                            ).toInt())} Bath",
+                            // "${NumberFormat('#,##0').format(double.parse('$price',).toInt())} Bath",
+                            // '$price',
+                            style: const TextStyle(
+                                color: greyDark1, fontFamily: regular),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ).box.color(whiteColor).make(),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildProductGridCoat(String category, String subcollection) {
+    Query query = FirebaseFirestore.instance
+        .collection('products')
+        .where('vendor_id', isEqualTo: vendorId);
+
+    // Check if the subcollection is "All"
+    if (subcollection != 'All') {
+      query = query.where('p_subcollection', isEqualTo: subcollection);
+    }
+
+    return FutureBuilder<QuerySnapshot>(
+      future: query.get(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: loadingIndicator(),
+          );
+        }
+        if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        }
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return const Text('No Items');
+        }
+
+        return GridView.builder(
+          padding: const EdgeInsets.all(8.0),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, childAspectRatio: 1 / 1.2),
+          itemCount: snapshot.data!.docs.length,
+          itemBuilder: (BuildContext context, int index) {
+            var product = snapshot.data!.docs[index];
+            String productName = product.get('p_name');
+            String price = product.get('p_price');
+            String productImage = product.get('p_imgs')[0];
+
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ItemDetails(
+                      title: productName,
+                      data: product.data() as Map<String, dynamic>,
+                    ),
+                  ),
+                );
+              },
+              child: Card(
+                clipBehavior: Clip.antiAlias,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Image.network(
+                      productImage,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: 150,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          3.heightBox,
+                          Text(
+                            productName,
+                            style: const TextStyle(
+                              fontFamily: medium,
+                              fontSize: 16,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            "${NumberFormat('#,##0').format(double.parse(
+                              '$price',
+                            ).toInt())} Bath",
+                            // "${NumberFormat('#,##0').format(double.parse('$price',).toInt())} Bath",
+                            // '$price',
+                            style: const TextStyle(
+                                color: greyDark1, fontFamily: regular),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ).box.color(whiteColor).make(),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildProductGridTshirt(String category, String subcollection) {
+    Query query = FirebaseFirestore.instance
+        .collection('products')
+        .where('vendor_id', isEqualTo: vendorId);
+
+    // Check if the subcollection is "All"
+    if (subcollection != 'All') {
+      query = query.where('p_subcollection', isEqualTo: subcollection);
+    }
+
+    return FutureBuilder<QuerySnapshot>(
+      future: query.get(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: loadingIndicator(),
+          );
+        }
+        if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        }
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return const Text('No Items');
+        }
+
+        return GridView.builder(
+          padding: const EdgeInsets.all(8.0),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, childAspectRatio: 1 / 1.2),
+          itemCount: snapshot.data!.docs.length,
+          itemBuilder: (BuildContext context, int index) {
+            var product = snapshot.data!.docs[index];
+            String productName = product.get('p_name');
+            String price = product.get('p_price');
+            String productImage = product.get('p_imgs')[0];
+
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ItemDetails(
+                      title: productName,
+                      data: product.data() as Map<String, dynamic>,
+                    ),
+                  ),
+                );
+              },
+              child: Card(
+                clipBehavior: Clip.antiAlias,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Image.network(
+                      productImage,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: 150,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          3.heightBox,
+                          Text(
+                            productName,
+                            style: const TextStyle(
+                              fontFamily: medium,
+                              fontSize: 16,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            "${NumberFormat('#,##0').format(double.parse(
+                              '$price',
+                            ).toInt())} Bath",
+                            // "${NumberFormat('#,##0').format(double.parse('$price',).toInt())} Bath",
+                            // '$price',
+                            style: const TextStyle(
+                                color: greyDark1, fontFamily: regular),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ).box.color(whiteColor).make(),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildProductGridShirt(String category, String subcollection) {
     Query query = FirebaseFirestore.instance
         .collection('products')
         .where('vendor_id', isEqualTo: vendorId);
@@ -427,13 +907,6 @@ class StoreScreen extends StatelessWidget {
       length: 1,
       child: Column(
         children: <Widget>[
-          const TabBar(
-            isScrollable: true,
-            indicatorColor: primaryApp,
-            tabs: [
-              Tab(text: 'All'),
-            ],
-          ),
           Container(
             height: MediaQuery.of(context).size.height * 0.9,
             child: TabBarView(
@@ -447,6 +920,293 @@ class StoreScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildProductGridShort(String category, String subcollection) {
+    Query query = FirebaseFirestore.instance
+        .collection('products')
+        .where('vendor_id', isEqualTo: vendorId);
+
+    // Check if the subcollection is "All"
+    if (subcollection != 'All') {
+      query = query.where('p_subcollection', isEqualTo: subcollection);
+    }
+
+    return FutureBuilder<QuerySnapshot>(
+      future: query.get(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: loadingIndicator(),
+          );
+        }
+        if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        }
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return const Text('No Items');
+        }
+
+        return GridView.builder(
+          padding: const EdgeInsets.all(8.0),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, childAspectRatio: 1 / 1.2),
+          itemCount: snapshot.data!.docs.length,
+          itemBuilder: (BuildContext context, int index) {
+            var product = snapshot.data!.docs[index];
+            String productName = product.get('p_name');
+            String price = product.get('p_price');
+            String productImage = product.get('p_imgs')[0];
+
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ItemDetails(
+                      title: productName,
+                      data: product.data() as Map<String, dynamic>,
+                    ),
+                  ),
+                );
+              },
+              child: Card(
+                clipBehavior: Clip.antiAlias,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Image.network(
+                      productImage,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: 150,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          3.heightBox,
+                          Text(
+                            productName,
+                            style: const TextStyle(
+                              fontFamily: medium,
+                              fontSize: 16,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            "${NumberFormat('#,##0').format(double.parse(
+                              '$price',
+                            ).toInt())} Bath",
+                            // "${NumberFormat('#,##0').format(double.parse('$price',).toInt())} Bath",
+                            // '$price',
+                            style: const TextStyle(
+                                color: greyDark1, fontFamily: regular),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ).box.color(whiteColor).make(),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildProductGridPant(String category, String subcollection) {
+    Query query = FirebaseFirestore.instance
+        .collection('products')
+        .where('vendor_id', isEqualTo: vendorId);
+
+    // Check if the subcollection is "All"
+    if (subcollection != 'All') {
+      query = query.where('p_subcollection', isEqualTo: subcollection);
+    }
+
+    return FutureBuilder<QuerySnapshot>(
+      future: query.get(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: loadingIndicator(),
+          );
+        }
+        if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        }
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return const Text('No Items');
+        }
+
+        return GridView.builder(
+          padding: const EdgeInsets.all(8.0),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, childAspectRatio: 1 / 1.2),
+          itemCount: snapshot.data!.docs.length,
+          itemBuilder: (BuildContext context, int index) {
+            var product = snapshot.data!.docs[index];
+            String productName = product.get('p_name');
+            String price = product.get('p_price');
+            String productImage = product.get('p_imgs')[0];
+
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ItemDetails(
+                      title: productName,
+                      data: product.data() as Map<String, dynamic>,
+                    ),
+                  ),
+                );
+              },
+              child: Card(
+                clipBehavior: Clip.antiAlias,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Image.network(
+                      productImage,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: 150,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          3.heightBox,
+                          Text(
+                            productName,
+                            style: const TextStyle(
+                              fontFamily: medium,
+                              fontSize: 16,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            "${NumberFormat('#,##0').format(double.parse(
+                              '$price',
+                            ).toInt())} Bath",
+                            // "${NumberFormat('#,##0').format(double.parse('$price',).toInt())} Bath",
+                            // '$price',
+                            style: const TextStyle(
+                                color: greyDark1, fontFamily: regular),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ).box.color(whiteColor).make(),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildProductGridSkirt(String category, String subcollection) {
+    Query query = FirebaseFirestore.instance
+        .collection('products')
+        .where('vendor_id', isEqualTo: vendorId);
+
+    // Check if the subcollection is "All"
+    if (subcollection != 'All') {
+      query = query.where('p_subcollection', isEqualTo: subcollection);
+    }
+
+    return FutureBuilder<QuerySnapshot>(
+      future: query.get(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: loadingIndicator(),
+          );
+        }
+        if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        }
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return const Text('No Items');
+        }
+
+        return GridView.builder(
+          padding: const EdgeInsets.all(8.0),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, childAspectRatio: 1 / 1.2),
+          itemCount: snapshot.data!.docs.length,
+          itemBuilder: (BuildContext context, int index) {
+            var product = snapshot.data!.docs[index];
+            String productName = product.get('p_name');
+            String price = product.get('p_price');
+            String productImage = product.get('p_imgs')[0];
+
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ItemDetails(
+                      title: productName,
+                      data: product.data() as Map<String, dynamic>,
+                    ),
+                  ),
+                );
+              },
+              child: Card(
+                clipBehavior: Clip.antiAlias,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Image.network(
+                      productImage,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: 150,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          3.heightBox,
+                          Text(
+                            productName,
+                            style: const TextStyle(
+                              fontFamily: medium,
+                              fontSize: 16,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            "${NumberFormat('#,##0').format(double.parse(
+                              '$price',
+                            ).toInt())} Bath",
+                            // "${NumberFormat('#,##0').format(double.parse('$price',).toInt())} Bath",
+                            // '$price',
+                            style: const TextStyle(
+                                color: greyDark1, fontFamily: regular),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ).box.color(whiteColor).make(),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
   // Widget _buildProductMathGrids(String category) {
   //   return StreamBuilder<QuerySnapshot>(
   //     stream: FirebaseFirestore.instance.collection('products').snapshots(),

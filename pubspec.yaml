@@ -49,8 +49,11 @@ dependencies:
   google_sign_in: ^6.2.1
   flutter_facebook_auth: ^6.0.4
   flutter_marquee: ^2.0.1 
+  path: ^1.8.0 
+  qr_flutter: ^4.0.0
+  
+
   pattern_formatter: ^3.0.0
-  flutter_svg_provider: ^1.0.4
   
 
 dev_dependencies:
