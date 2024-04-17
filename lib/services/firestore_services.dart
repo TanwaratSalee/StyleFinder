@@ -69,6 +69,13 @@ class FirestoreServices {
         .snapshots();
   }
 
+  static getWishlistsusermixmatchs() {
+    return firestore
+        .collection(usermixmatchCollection)
+        .where('p_wishlist', arrayContains: currentUser!.uid)
+        .snapshots();
+  }
+
   static getAllMessages() {
     return firestore
         .collection(chatsCollection)

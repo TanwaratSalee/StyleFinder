@@ -20,7 +20,7 @@ class _ProfileScreenState extends State<ProfileScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -66,6 +66,7 @@ class _ProfileScreenState extends State<ProfileScreen>
             tabs: [
               const Tab(text: 'Product'),
               const Tab(text: 'Match'),
+              const Tab(text: 'User Match'),
             ],
             indicatorColor: Theme.of(context).primaryColor,
           ),
@@ -76,6 +77,7 @@ class _ProfileScreenState extends State<ProfileScreen>
               children: [
                 buildProductsTab(),
                 buildMatchTab(),
+                buildUserMixMatchTab(),
               ],
             ),
           ),
@@ -254,13 +256,271 @@ class _ProfileScreenState extends State<ProfileScreen>
     );
   }
 
+/* Widget buildUserMixMatchTab() {
+  return StreamBuilder<QuerySnapshot>(
+    stream: FirestoreServices.getWishlistsusermixmatchs(),
+    builder: (context, snapshot) {
+      if (!snapshot.hasData) {
+        return Center(child: CircularProgressIndicator());
+      }
+      var wishlistNames = snapshot.data!.docs.map((doc) => doc['p_name']).toList();
+      if (wishlistNames.isEmpty) {
+        return Center(child: Text("No products in your wishlist!", style: TextStyle(color: greyDark2)));
+      }
+
+      return ListView.separated(
+        itemCount: wishlistNames.length,
+        separatorBuilder: (context, index) => Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Divider(
+            color: Colors.grey[200],
+            thickness: 1,
+          ),
+        ),
+        itemBuilder: (context, index) {
+          return FutureBuilder<QuerySnapshot>(
+            future: FirebaseFirestore.instance.collection('products')
+                    .where('p_name', isEqualTo: wishlistNames[index])
+                    .limit(1)
+                    .get(),
+            builder: (context, productSnapshot) {
+              if (!productSnapshot.hasData) {
+                return Center(child: CircularProgressIndicator());
+              }
+              if (productSnapshot.data!.docs.isEmpty) {
+                return ListTile(title: Text('No details available for ${wishlistNames[index]}'));
+              }
+
+              var productData = productSnapshot.data!.docs.first.data() as Map<String, dynamic>;
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ItemDetails(
+                        title: productData['p_name'],
+                        data: productData,
+                      ),
+                    ),
+                  );
+                },
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 4),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.network(
+                            productData['p_imgs'][0],
+                            height: 75,
+                            width: 65,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                productData['p_name'],
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: regular,
+                                ),
+                              ),
+                              Text(
+                                "${NumberFormat('#,##0').format(double.parse(productData['p_price']).toInt())} Bath",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: light,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.favorite, color: Colors.red),
+                        onPressed: () async {
+                          await FirebaseFirestore.instance
+                              .collection(productsCollection)
+                              .doc(productData['docId']) // Make sure 'docId' is the correct document identifier
+                              .update({
+                            'p_wishlist': FieldValue.arrayRemove(
+                                [FirebaseAuth.instance.currentUser!.uid])
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      );
+    },
+  );
+} */
+
+Widget buildUserMixMatchTab() {
+  return StreamBuilder<QuerySnapshot>(
+    stream: FirestoreServices.getWishlistsusermixmatchs(),
+    builder: (context, snapshot) {
+      if (!snapshot.hasData) {
+        return Center(child: CircularProgressIndicator());
+      }
+      var documents = snapshot.data!.docs;
+
+      if (documents.isEmpty) {
+        return Center(child: Text("No products in your wishlist!", style: TextStyle(color: greyDark2)));
+      }
+
+      List<Map<String, dynamic>> pairs = [];
+      for (var doc in documents) {
+        var data = doc.data() as Map<String, dynamic>;
+        if (data['p_name_top'] != null && data['p_name_lower'] != null) {
+          pairs.add({
+            'top': data['p_name_top'],
+            'lower': data['p_name_lower'],
+            'top_price': data['p_price_top'].toString(),
+            'lower_price': data['p_price_lower'].toString(),
+            'top_image': data['p_imgs_top'][0],
+            'lower_image': data['p_imgs_lower'][0],
+            'docId_top': doc.id, // assuming doc.id is sufficient for identification
+            'docId_lower': doc.id // adjust if different documents should be referenced
+          });
+        }
+      }
+
+      if (pairs.isEmpty) {
+        return Center(child: Text("No complete pairs in your wishlist!", style: TextStyle(color: greyDark2)));
+      }
+
+      return GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 1,
+          childAspectRatio: 1 / 0.61,
+        ),
+        itemCount: pairs.length,
+        itemBuilder: (BuildContext context, int index) {
+          var pair = pairs[index];
+          return GestureDetector(
+            onTap: () {},
+            child: Column(children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Column(
+                  children: [
+                    productInfoRow(pair['top_image'], pair['top'], pair['top_price']),
+                    Divider(color: Colors.grey[300]),
+                    productInfoRow(pair['lower_image'], pair['lower'], pair['lower_price']),
+                    SizedBox(height: 6),
+                    totalPriceRow(pair['top_price'], pair['lower_price'])
+                  ],
+                ),
+              ),
+              Divider(color: Colors.grey[200], height: 12),
+            ]),
+          );
+        },
+      );
+    },
+  );
+}
+
+Widget productInfoRow(String imageUrl, String productName, String price) {
+  return Padding(
+    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Image.network(
+            imageUrl,
+            width: 75,
+            height: 75,
+            fit: BoxFit.cover,
+          ),
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  productName,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    color: Colors.black,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  "${NumberFormat('#,##0').format(double.parse(price))} Bath",
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget totalPriceRow(String price1, String price2) {
+  int total = int.parse(price1) + int.parse(price2);
+  return Padding(
+    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Text(
+          "Total Price: ${NumberFormat('#,##0').format(total)} Bath",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+            color: Colors.black,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+
+
   Widget buildMatchTab() {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance.collection('products').snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
+          );
+        }
+        final data = snapshot.data!.docs;
+        if (data.isEmpty) {
+          return const Center(
+            child: Text("No products you liked!",
+                style: TextStyle(color: greyDark2)),
           );
         }
 
@@ -294,8 +554,7 @@ class _ProfileScreenState extends State<ProfileScreen>
             int actualIndex = index * 2;
 
             var data1 = flatList[actualIndex].data() as Map<String, dynamic>;
-            var data2 =
-                flatList[actualIndex + 1].data() as Map<String, dynamic>;
+            var data2 = flatList[actualIndex + 1].data() as Map<String, dynamic>;
 
             String productName1 = data1['p_name'];
             String productName2 = data2['p_name'];
@@ -438,7 +697,23 @@ class _ProfileScreenState extends State<ProfileScreen>
                               alignment: Alignment.topRight,
                               child: IconButton(
                                 icon: Icon(Icons.favorite, color: redColor),
-                                onPressed: () async {},
+                                onPressed: () async {
+
+                                // สร้าง List ที่มีรหัสผู้ใช้ปัจจุบันอยู่
+                                List<String> currentUserUid = [FirebaseAuth.instance.currentUser!.uid];
+
+                                // สร้าง Map ที่จะใช้ในการอัปเดตเอกสารใน Firestore
+                                Map<String, dynamic> updateData = {
+                                  'p_wishlist': FieldValue.arrayRemove(currentUserUid)
+                                };
+                                
+                                    for (int i = actualIndex; i <= actualIndex + 1; i++) {
+                                    await FirebaseFirestore.instance
+                                        .collection(productsCollection)
+                                        .doc(flatList[i].id)
+                                        .update(updateData);
+                                  };
+                                },
                               ),
                             ),
                           ],

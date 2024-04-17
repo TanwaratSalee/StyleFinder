@@ -130,7 +130,7 @@ class _MatchScreenState extends State<MatchScreen> {
               if (topProducts.isNotEmpty && lowerProducts.isNotEmpty) {
                 final topProduct = topProducts[_currentPageIndexTop];
                 final lowerProduct = lowerProducts[_currentPageIndexLower];
-                controller.addToWishlistMatch(
+                controller.addToWishlistUserMatch(
                   topProduct['p_name'],
                   lowerProduct['p_name'],
                   context,
