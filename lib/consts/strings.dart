@@ -77,10 +77,6 @@ const wishlist = "Favorite",
 
 //---------------------------------- Payment ----------------------------------
 
-const promptpay = "QR Promptpay",
-    visaCard = "Visa",
-    cashOnDelivery = "Cash On Delivery";
-
 const promptpay = " Mobile Banking ",
     visaCard = "Visa",
     cashOnDelivery = "Cash On Delivery",
