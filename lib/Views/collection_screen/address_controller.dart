@@ -158,47 +158,50 @@ void saveAddressToFirestore() async {
             textColor: whiteColor,
             title: "Save"),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          children: [
-            customTextField(
-                label: "Firstname",
-                isPass: false,
-                readOnly: false,
-                controller: _firstnameController),
-            customTextField(
-                label: "Surname",
-                isPass: false,
-                readOnly: false,
-                controller: _surnameController),
-            customTextField(
-                label: "Address",
-                isPass: false,
-                readOnly: false,
-                controller: _addressController),
-            customTextField(
-                label: "City",
-                isPass: false,
-                readOnly: false,
-                controller: _cityController),
-            customTextField(
-                label: "State",
-                isPass: false,
-                readOnly: false,
-                controller: _stateController),
-            customTextField(
-                label: "Postal Code",
-                isPass: false,
-                readOnly: false,
-                controller: _postalCodeController),
-            customTextField(
-                label: "Phone",
-                isPass: false,
-                readOnly: false,
-                controller: _phoneController),
-            const SizedBox(height: 20),
-          ],
+      body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            children: [
+              customTextField(
+                  label: "Firstname",
+                  isPass: false,
+                  readOnly: false,
+                  controller: _firstnameController),
+              customTextField(
+                  label: "Surname",
+                  isPass: false,
+                  readOnly: false,
+                  controller: _surnameController),
+              customTextField(
+                  label: "Address",
+                  isPass: false,
+                  readOnly: false,
+                  controller: _addressController),
+              customTextField(
+                  label: "City",
+                  isPass: false,
+                  readOnly: false,
+                  controller: _cityController),
+              customTextField(
+                  label: "State",
+                  isPass: false,
+                  readOnly: false,
+                  controller: _stateController),
+              customTextField(
+                  label: "Postal Code",
+                  isPass: false,
+                  readOnly: false,
+                  controller: _postalCodeController),
+              customTextField(
+                  label: "Phone",
+                  isPass: false,
+                  readOnly: false,
+                  controller: _phoneController),
+              const SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );

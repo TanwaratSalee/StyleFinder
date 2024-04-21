@@ -163,8 +163,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               Image.network(
                                 product['p_imgs'][0],
-                                height: 490,
-                                width: 400,
+                                height: 410,
+                                width: 300,
                                 fit: BoxFit.fitHeight,
                               ),
                               Column(
@@ -207,7 +207,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         IconButton(
                           icon: Image.asset(
                             icDislikeButton,
-                            width: 55,
+                            width: 62,
                           ).box.roundedFull.shadowSm.make(),
                           onPressed: () =>
                               controllercard.swipe(CardSwiperDirection.left),
@@ -215,14 +215,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         IconButton(
                           icon: Image.asset(
                             icViewMoreButton,
-                            width: 55,
+                            width: 62,
                           ).box.roundedFull.shadowSm.make(),
                           onPressed: () => navigateToItemDetails(),
                         ),
                         IconButton(
                           icon: Image.asset(
                             icLikeButton,
-                            width: 55,
+                            width: 62,
                           ).box.roundedFull.shadowSm.make(),
                           onPressed: () => [
                             controllercard.swipe(CardSwiperDirection.right),
