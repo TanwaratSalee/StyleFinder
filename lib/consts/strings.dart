@@ -74,6 +74,8 @@ const wishlist = "Favorite",
     messagse = "Messages",
     oldpass = "Old password",
     newpass = "New password";
+const aboutaccount = "About Account",
+      aboutyou = "About You";
 
 //---------------------------------- Payment ----------------------------------
 

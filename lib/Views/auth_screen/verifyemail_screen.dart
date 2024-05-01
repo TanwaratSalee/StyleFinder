@@ -6,6 +6,7 @@ import 'package:flutter_finalproject/Views/auth_screen/login_screen.dart';
 import 'package:flutter_finalproject/Views/auth_screen/personal_details_screen.dart';
 import 'package:flutter_finalproject/Views/home_screen/mainHome.dart';
 import 'package:flutter_finalproject/consts/colors.dart';
+import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/consts/styles.dart';
 import 'package:flutter_finalproject/controllers/auth_controller.dart';
 import 'package:get/get.dart';
@@ -38,43 +39,42 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
   }
 
   bool validateInput() {
-    if (widget.email.isNotEmpty && widget.name.isNotEmpty && widget.password.isNotEmpty) {
+    if (widget.email.isNotEmpty &&
+        widget.name.isNotEmpty &&
+        widget.password.isNotEmpty) {
       return true;
     } else {
       return false;
     }
   }
 
-Future<void> sendVerificationEmail() async {
-  User? user = FirebaseAuth.instance.currentUser;
-  if (user != null && !user.emailVerified) {
-    try {
-      await user.sendEmailVerification();
-      print("Email verification link has been sent.");
-    } catch (e) {
-      print("An error occurred while sending email verification: $e");
-    }
-  } else {
-    print("No user logged in or email already verified.");
-  }
-}
-
-
-void setTimerForAutoRedirect() {
-  Timer.periodic(
-    const Duration(seconds: 1),
-    (timer) async {
-      await FirebaseAuth.instance.currentUser?.reload();
-      var user = FirebaseAuth.instance.currentUser;
-      if (user?.emailVerified ?? false) {
-        timer.cancel();
-        Get.offAll(() => MainHome());
+  Future<void> sendVerificationEmail() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null && !user.emailVerified) {
+      try {
+        await user.sendEmailVerification();
+        print("Email verification link has been sent.");
+      } catch (e) {
+        print("An error occurred while sending email verification: $e");
       }
-    },
-  );
-}
+    } else {
+      print("No user logged in or email already verified.");
+    }
+  }
 
-
+  void setTimerForAutoRedirect() {
+    Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) async {
+        await FirebaseAuth.instance.currentUser?.reload();
+        var user = FirebaseAuth.instance.currentUser;
+        if (user?.emailVerified ?? false) {
+          timer.cancel();
+          Get.offAll(() => MainHome());
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +119,8 @@ void setTimerForAutoRedirect() {
             ),
             const SizedBox(height: 30),
             ElevatedButton(
-              child: const Text('Continue', style: TextStyle(color: whiteColor)),
+              child:
+                  const Text('Continue', style: TextStyle(color: whiteColor)),
               onPressed: () async {
                 var user = FirebaseAuth.instance.currentUser;
                 await user?.reload();
@@ -128,7 +129,9 @@ void setTimerForAutoRedirect() {
                 if (user != null && user.emailVerified) {
                   Get.offAll(() => MainHome());
                 } else {
-                  Get.snackbar('Verification Required', 'Please verify your email first.', snackPosition: SnackPosition.BOTTOM);
+                  VxToast.show(Get.context!,
+                      msg:
+                          'Verification Required\nPlease verify your email first.');
                 }
               },
               style: ElevatedButton.styleFrom(
@@ -136,12 +139,13 @@ void setTimerForAutoRedirect() {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),
-                padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 12.0, horizontal: 20.0),
               ),
             ),
             TextButton(
               style: TextButton.styleFrom(
-              foregroundColor: const Color.fromRGBO(53, 194, 193, 1),
+                foregroundColor: const Color.fromRGBO(53, 194, 193, 1),
               ),
               onPressed: () async {
                 User? user = FirebaseAuth.instance.currentUser;
@@ -153,7 +157,7 @@ void setTimerForAutoRedirect() {
             ),
             TextButton(
               style: TextButton.styleFrom(
-              foregroundColor: const Color.fromRGBO(53, 194, 193, 1),
+                foregroundColor: const Color.fromRGBO(53, 194, 193, 1),
               ),
               onPressed: () {
                 Get.offAll(() => const LoginScreen());

@@ -23,18 +23,18 @@ class ItemDetails extends StatefulWidget {
 
 class _ItemDetailsState extends State<ItemDetails> {
   late final ProductController controller;
+  int? selectedSizeIndex;
 
   @override
-void initState() {
-  super.initState();
-  controller = Get.put(ProductController());
-  checkIsInWishlist();
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    int productPrice = int.parse(widget.data['p_price']); 
-    controller.calculateTotalPrice(productPrice);
-  });
-}
-
+  void initState() {
+    super.initState();
+    controller = Get.put(ProductController());
+    checkIsInWishlist();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      int productPrice = int.parse(widget.data['p_price']);
+      controller.calculateTotalPrice(productPrice);
+    });
+  }
 
   void checkIsInWishlist() async {
     FirebaseFirestore.instance
@@ -54,6 +54,14 @@ void initState() {
     });
 
     fetchVendorImageUrl(widget.data['vendor_id']);
+  }
+
+  int? selectedIndex; // This holds the index of the currently selected item
+
+  void selectItem(int index) {
+    setState(() {
+      selectedIndex = index; // Update the selectedIndex on tap
+    });
   }
 
   void fetchVendorImageUrl(String vendorId) async {
@@ -91,12 +99,12 @@ void initState() {
       child: Scaffold(
         backgroundColor: whiteColor,
         appBar: AppBar(
-        //   leading: IconButton(
-        //       onPressed: () {
-        //         controller.resetValues();
-        //         Get.back();
-        //       },
-        //       icon: const Icon(Icons.arrow_back_ios)),
+          //   leading: IconButton(
+          //       onPressed: () {
+          //         controller.resetValues();
+          //         Get.back();
+          //       },
+          //       icon: const Icon(Icons.arrow_back_ios)),
           title: widget.title!.text
               .color(greyDark2)
               .fontFamily(bold)
@@ -195,13 +203,11 @@ void initState() {
                                 String imageUrl =
                                     controller.vendorImageUrl.value;
                                 return imageUrl.isNotEmpty
-                                    ? ClipOval(
-                                        child: Image.network(
-                                          imageUrl,
-                                          width: 50,
-                                          height: 50,
-                                          fit: BoxFit.cover,
-                                        ),
+                                    ? Image.network(
+                                        imageUrl,
+                                        width: 50,
+                                        height: 50,
+                                        fit: BoxFit.cover,
                                       )
                                     : SizedBox.shrink();
                               }),
@@ -256,6 +262,40 @@ void initState() {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          "Collection"
+                              .text
+                              .color(blackColor)
+                              .size(15)
+                              .fontFamily(medium)
+                              .make(),
+                          SizedBox(height: 5),
+                          Container(
+                            height: 40,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: widget.data['p_collection'].length,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  child: Text(
+                                    "${widget.data['p_collection'][index].toString()[0].toUpperCase()}${widget.data['p_collection'][index].toString().substring(1)}",
+                                  )
+                                      .text
+                                      .color(greyDark1)
+                                      .fontFamily(medium)
+                                      .size(14)
+                                      .make(),
+                                )
+                                    .box
+                                    .color(thinPrimaryApp)
+                                    .margin(EdgeInsets.symmetric(horizontal: 6))
+                                    .rounded
+                                    .padding(EdgeInsets.symmetric(
+                                        horizontal: 24, vertical: 12))
+                                    .make();
+                              },
+                            ),
+                          ),
+                          SizedBox(height: 10),
                           "Description"
                               .text
                               .color(blackColor)
@@ -296,59 +336,99 @@ void initState() {
               ),
             )),
             Obx(
-              () => Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              () => Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Obx(
-                        () => Row(
-                          children: [
-                            IconButton(
-                                onPressed: () {
-                                  controller.decreaseQuantity();
-                                  controller.calculateTotalPrice(
-                                      int.parse(widget.data['p_price']));
-                                },
-                                icon: const Icon(Icons.remove)),
-                            controller.quantity.value.text
-                                .size(16)
-                                .color(greyDark2)
-                                .fontFamily(bold)
+                  Container(
+                    height: 70, // Set a fixed height
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: widget.data['p_productsize'].length,
+                      itemBuilder: (context, index) {
+                        bool isSelected = index == selectedIndex;
+                        return GestureDetector(
+                          onTap: () => selectItem(index),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              // color: isSelected ? whiteColor : whiteColor,
+                              borderRadius: BorderRadius.circular(10),
+                              border: isSelected
+                                  ? Border.all(color: primaryApp, width: 2)
+                                  : Border.all(color: greyColor, width: 1),
+                            ),
+                            child: Text(
+                              widget.data['p_productsize'][index],
+                              style: TextStyle(
+                                color: isSelected ? blackColor : blackColor,
+                              ),
+                            )
+                                .box
+                                .padding(EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 8))
                                 .make(),
-                            IconButton(
-                                onPressed: () {
-                                  controller.increaseQuantity(
-                                      int.parse(widget.data['p_quantity']));
-                                  controller.calculateTotalPrice(
-                                      int.parse(widget.data['p_price']));
-                                },
-                                icon: const Icon(Icons.add)),
-                            10.heightBox,
-                          ],
-                        ),
-                      ),
-                    ],
-                  ).box.padding(const EdgeInsets.all(8)).make(),
+                          )
+                              .box
+                              .padding(EdgeInsets.symmetric(
+                                  horizontal: 4, vertical: 15))
+                              .make(),
+                        );
+                      },
+                    ),
+                  ),
+
+                  // Row for Quantity Adjustment
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SizedBox(
-                        child: "Total price ".text.color(blackColor).make(),
-                      ),
-                      10.widthBox,
-                      "${controller.totalPrice.value}"
-                          .numCurrency
-                          .text
-                          .color(blackColor)
-                          .size(20)
-                          .fontFamily(medium)
-                          .make(),
-                      10.widthBox,
-                      SizedBox(
-                        child: "Baht: ".text.color(blackColor).make(),
-                      ),
+                      Row(
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              controller.decreaseQuantity();
+                              controller.calculateTotalPrice(
+                                  int.parse(widget.data['p_price']));
+                            },
+                            icon: const Icon(Icons.remove),
+                          ),
+                          Text(controller.quantity.value.toString())
+                              .text
+                              .size(16)
+                              .color(greyDark2)
+                              .fontFamily(bold)
+                              .make(),
+                          IconButton(
+                            onPressed: () {
+                              controller.increaseQuantity(
+                                  int.parse(widget.data['p_quantity']));
+                              controller.calculateTotalPrice(
+                                  int.parse(widget.data['p_price']));
+                            },
+                            icon: const Icon(Icons.add),
+                          ),
+                        ],
+                      ).box.padding(const EdgeInsets.all(8)).make(),
+
+                      // Displaying Total Price
+                      Row(
+                        children: [
+                          "Total price ".text.color(blackColor).make(),
+                          5.widthBox,
+                          Text(
+                            NumberFormat("#,##0.00", "en_US")
+                                .format(controller.totalPrice.value),
+                          )
+                              .text
+                              .color(blackColor)
+                              .size(20)
+                              .fontFamily(medium)
+                              .make(),
+                          5.widthBox,
+                          " Baht".text.color(blackColor).make(),
+                           5.widthBox,
+                        ],
+                      ).box.padding(const EdgeInsets.all(8)).make(),
                     ],
-                  ).box.padding(const EdgeInsets.all(8)).make(),
+                  ),
                 ],
               ).box.white.shadowSm.make(),
             ),
@@ -358,21 +438,26 @@ void initState() {
               child: ourButton(
                   color: primaryApp,
                   onPress: () {
-                    if (controller.quantity.value > 0) {
+                    if (controller.quantity.value > 0 &&
+                        selectedIndex != null) {
+                      // Check if a size is selected
+                      String selectedSize = widget.data['p_productsize'][
+                          selectedIndex!]; // Use the selected index to fetch the size
                       controller.addToCart(
-                          color: widget.data['p_colors']
-                              [controller.colorIndex.value],
-                          context: context,
-                          vendorID: widget.data['vendor_id'],
-                          img: widget.data['p_imgs'][0],
-                          qty: controller.quantity.value,
-                          sellername: widget.data['p_seller'],
-                          title: widget.data['p_name'],
-                          tprice: controller.totalPrice.value);
+                        context: context,
+                        vendorID: widget.data['vendor_id'],
+                        img: widget.data['p_imgs'][0],
+                        qty: controller.quantity.value,
+                        sellername: widget.data['p_seller'],
+                        title: widget.data['p_name'],
+                        tprice: controller.totalPrice.value,
+                        productsize: selectedSize, // Pass the selected size
+                      );
                       VxToast.show(context, msg: "Added to cart");
                     } else {
                       VxToast.show(context,
-                          msg: "Please select the quantity of products ");
+                          msg:
+                              "Please select the quantity and size of the products");
                     }
                   },
                   textColor: whiteColor,

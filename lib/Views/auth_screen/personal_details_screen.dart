@@ -1,6 +1,5 @@
-// ignore_for_file: use_super_parameters, library_private_types_in_public_api, sort_child_properties_last
-
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/auth_screen/verifyemail_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/custom_textfield.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
@@ -8,6 +7,7 @@ import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/auth_controller.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 class PersonalDetailsScreen extends StatefulWidget {
   final String email;
@@ -37,7 +37,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
   Color? selectedSkinTone;
   bool canSelectSkin = true;
 
-  void _showDatePicker() {
+  void showDatePicker() {
     showCupertinoModalPopup(
       context: context,
       builder: (_) => Container(
@@ -58,7 +58,12 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
               ),
             ),
             CupertinoButton(
-              child: const Text('OK'),
+              child: const Text('OK')
+                  .text
+                  .color(primaryApp)
+                  .fontFamily(medium)
+                  .size(20)
+                  .make(),
               onPressed: () => Navigator.of(context).pop(),
             ),
           ],
@@ -68,9 +73,9 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
   }
 
   final List<Color> skinTones = [
-    const Color(0xFFFFDBAC),
-    const Color(0xFFE5A073),
-    const Color(0xFFCD8C5C),
+    Color.fromARGB(255, 246, 227, 202),
+    Color.fromARGB(255, 234, 186, 164),
+    Color.fromARGB(255, 185, 118, 70),
     const Color(0xFF5C3836),
   ];
 
@@ -89,7 +94,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
         child: Column(
           children: [
             GestureDetector(
-              onTap: _showDatePicker,
+              onTap: showDatePicker,
               child: AbsorbPointer(
                 child: customTextField(
                   label: 'Birthday',
@@ -100,12 +105,12 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
             Align(
-              alignment: Alignment.centerLeft,
+              alignment: Alignment.center,
               child: const Text('Gender')
                   .text
-                  .size(14)
+                  .size(16)
                   .fontFamily(regular)
                   .color(greyDark2)
                   .make(),
@@ -197,7 +202,6 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 );
               }).toList(),
             ),
-
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -227,12 +231,17 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 20),
-            const Text(
-              'Skin',
-              style: TextStyle(
-                  fontSize: 16, color: blackColor, fontFamily: regular),
+            const SizedBox(height: 30),
+            Align(
+              alignment: Alignment.center,
+              child: const Text('Skin')
+                  .text
+                  .size(16)
+                  .fontFamily(medium)
+                  .color(greyDark2)
+                  .make(),
             ),
+            const SizedBox(height: 10),
             Column(
               children: [
                 Row(
@@ -266,22 +275,48 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
               ],
             ),
             const SizedBox(height: 20),
-            // สมมติว่านี่คือส่วนของโค้ดที่ตั้งค่าปุ่ม "Done"
             ourButton(
+              color: selectedDate != null &&
+                      selectedGender != null &&
+                      heightController.text.isNotEmpty &&
+                      weightController.text.isNotEmpty &&
+                      selectedSkinTone != null
+                  ? primaryApp
+                  : greyDark1,
               title: 'Done',
+              textColor: selectedDate != null &&
+                      selectedGender != null &&
+                      heightController.text.isNotEmpty &&
+                      weightController.text.isNotEmpty &&
+                      selectedSkinTone != null
+                  ? whiteColor
+                  : greyDark2,
               onPress: () async {
-                await controller.saveUserData(
-                  name: widget.name,
-                  email: widget.email,
-                  password: widget.password,
-                  birthday: selectedDate,
-                  gender: selectedGender!,
-                  uHeight: heightController.text,
-                  uWeight: weightController.text,
-                  skin: selectedSkinTone!,
-                );
+                if (selectedDate == null) {
+                  VxToast.show(context, msg: 'Please select your birthday');
+                } else if (selectedGender == null) {
+                  VxToast.show(context, msg: 'Please select your gender');
+                } else if (heightController.text.isEmpty ||
+                    weightController.text.isEmpty) {
+                  VxToast.show(context,
+                      msg: 'Please tap your height and weight');
+                } else if (selectedSkinTone == null) {
+                  VxToast.show(context, msg: 'Please select your skin color');
+                } else {
+                  // บันทึกข้อมูลเมื่อทุกช่องถูกกรอกครบ
+                  await controller.saveUserData(
+                    name: widget.name,
+                    email: widget.email,
+                    password: widget.password,
+                    birthday: selectedDate,
+                    gender: selectedGender!,
+                    uHeight: heightController.text,
+                    uWeight: weightController.text,
+                    skin: selectedSkinTone!,
+                  );
+                }
               },
-            )
+            ),
           ],
         ),
       ),

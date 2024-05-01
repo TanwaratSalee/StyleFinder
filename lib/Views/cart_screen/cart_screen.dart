@@ -77,26 +77,46 @@ class _CartScreenState extends State<CartScreen> {
 
                               return InkWell(
                                 onTap: () {
-                                  navigateToItemDetails(context , data[index]['title']);
+                                  navigateToItemDetails(
+                                      context, data[index]['title']);
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 8.0, horizontal: 16.0),
                                   child: Row(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Container(
-                                        width: 80,
+                                        padding: EdgeInsets.only(
+                                            left:
+                                                5), // Padding to the left of the text
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          "x${data[index]['qty']}",
+                                        )
+                                            .text
+                                            .size(14)
+                                            .color(greyDark2)
+                                            .fontFamily(regular)
+                                            .make(),
+                                      ),
+                                      15.widthBox,
+                                      Container(
+                                        // width: 90,
                                         height: 70,
-                                        child: Image.network(
-                                          data[index]['img'],
-                                          fit: BoxFit.cover,
+                                        child: Stack(
+                                          children: [
+                                            Image.network(
+                                              data[index]['img'],
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ],
                                         ),
                                       ),
                                       SizedBox(
                                           width:
-                                              15), // เพิ่มช่องว่างระหว่างภาพและข้อความ
+                                              20), // Additional space if needed after the quantity text
                                       Expanded(
                                         child: Column(
                                           crossAxisAlignment:
@@ -107,23 +127,24 @@ class _CartScreenState extends State<CartScreen> {
                                               style: TextStyle(
                                                 color: greyDark2,
                                                 fontFamily: medium,
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                            SizedBox(height: 3),
+                                            Text(
+                                             'Size: ${data[index]['productsize']}',
+                                              style: TextStyle(
+                                                color: greyDark1,
+                                                fontFamily: regular,
                                                 fontSize: 16,
                                               ),
                                             ),
                                             SizedBox(height: 3),
                                             Text(
-                                              "x${data[index]['qty']}",
-                                              style: TextStyle(
-                                                color: greyDark2,
-                                                fontFamily: light,
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            Text(
                                               "$formattedPrice Bath",
                                               style: TextStyle(
                                                 color: greyDark1,
-                                                fontFamily: light,
+                                                fontFamily: regular,
                                                 fontSize: 16,
                                               ),
                                             ),
@@ -200,28 +221,28 @@ class _CartScreenState extends State<CartScreen> {
         ));
   }
 
-    void navigateToItemDetails(BuildContext context, Productname) {
+  void navigateToItemDetails(BuildContext context, Productname) {
     FirebaseFirestore.instance
         .collection('products')
         .where('p_name', isEqualTo: Productname)
         .limit(1)
         .get()
         .then((QuerySnapshot querySnapshot) {
-          if (querySnapshot.docs.isNotEmpty) {
-            var productData = querySnapshot.docs.first.data() as Map<String, dynamic>;
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ItemDetails(
-                  title: productData['p_name'],
-                  data: productData,
-                ),
-              ),
-            );
-          } else {
-            //
-          }
-        });
+      if (querySnapshot.docs.isNotEmpty) {
+        var productData =
+            querySnapshot.docs.first.data() as Map<String, dynamic>;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ItemDetails(
+              title: productData['p_name'],
+              data: productData,
+            ),
+          ),
+        );
+      } else {
+        //
       }
-
+    });
+  }
 }

@@ -46,6 +46,7 @@ class ForgotScreen extends StatelessWidget {
               label: 'Enter your email',
               isPass: false,
               readOnly: false,
+              
               controller: _emailController,
             ),
             const SizedBox(height: 20),

@@ -1,17 +1,9 @@
-// ignore_for_file: use_super_parameters, library_private_types_in_public_api
-
-import 'package:flutter/material.dart';
-import 'package:flutter_finalproject/Views/auth_screen/personal_details_screen.dart';
-import 'package:flutter_finalproject/Views/auth_screen/verifyemail_screen.dart';
-import 'package:flutter_finalproject/Views/widgets_common/custom_textfield.dart';
-import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
-import 'package:flutter_finalproject/consts/colors.dart';
-import 'package:flutter_finalproject/consts/consts.dart';
-import 'package:flutter_finalproject/consts/strings.dart';
 import 'package:get/get.dart';
-
-import '../../consts/styles.dart';
-import '../../controllers/auth_controller.dart';
+import 'package:flutter_finalproject/controllers/auth_controller.dart';
+import 'package:flutter_finalproject/views/auth_screen/personal_details_screen.dart';
+import 'package:flutter_finalproject/views/widgets_common/custom_textfield.dart';
+import 'package:flutter_finalproject/views/widgets_common/our_button.dart';
+import 'package:flutter_finalproject/consts/consts.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -32,17 +24,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (text.isEmpty) return "";
     return text[0].toUpperCase() + text.substring(1);
   }
-
-  bool validateInput() {
-    if (emailController.text.isNotEmpty &&
-        nameController.text.isNotEmpty &&
-        passwordController.text.isNotEmpty &&
-        passwordRetypeController.text == passwordController.text) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  
+  
+  // Validate password function and other methods
 
   bool isCheck = false;
 
@@ -50,7 +34,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: whiteColor,
-      appBar: AppBar(title: const Text('Create Account').text.size(24).fontFamily(medium).make()),
+      appBar: AppBar(
+          title: const Text('Create Account')
+              .text
+              .size(24)
+              .fontFamily(medium)
+              .make()),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(15),
         child: Column(
@@ -128,30 +117,59 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     valueColor: AlwaysStoppedAnimation(primaryApp),
                   )
                 : ourButton(
+                    // Button widget
                     color: isCheck == true ? primaryApp : greyDark1,
                     title: 'Next',
                     textColor: whiteColor,
                     onPress: isCheck
-                      ? () {
-                          // Validate input before changing the screen
-                          if (validateInput()) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => PersonalDetailsScreen(
-                                  email: emailController.text,
-                                  name: nameController.text,
-                                  password: passwordController.text,
+                        ? () {
+                            // Validate input before changing the screen
+                            if (validateInput()) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => PersonalDetailsScreen(
+                                    email: emailController.text,
+                                    name: nameController.text,
+                                    password: passwordController.text,
+                                  ),
                                 ),
-                              ),
-                            );
+                              );
+                            }
                           }
-                        }
-                      : null,
+                        : null,
                   ),
           ],
         ),
       ),
     );
   }
+
+bool validateInput() {
+  String? passwordError = controller.validatePassword(passwordController.text);
+  bool isValid = emailController.text.isNotEmpty &&
+      nameController.text.isNotEmpty &&
+      passwordController.text.isNotEmpty &&
+      passwordRetypeController.text.isNotEmpty &&
+      passwordRetypeController.text == passwordController.text &&
+      passwordError == null;
+
+  if (!isValid) {
+    if (emailController.text.isEmpty ||
+        nameController.text.isEmpty ||
+        passwordController.text.isEmpty ||
+        passwordRetypeController.text.isEmpty) {
+      VxToast.show(context, msg: 'Please fill in all fields.');
+    } else if (passwordController.text != passwordRetypeController.text) {
+      VxToast.show(context, msg: "Passwords don't match.");
+    } else if (passwordError != null) {
+      VxToast.show(context, msg: passwordError);
+    } else {
+      VxToast.show(context, msg: 'Please check your input.');
+    }
+  }
+
+  return isValid;
+  }
+
 }

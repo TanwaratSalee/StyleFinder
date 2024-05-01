@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class MatchDetailScreen extends StatefulWidget {
   final String productName1;
@@ -40,32 +41,30 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
     checkIsInWishlist();
   }
 
-void checkIsInWishlist() async {
-  FirebaseFirestore.instance
-      .collection(productsCollection)
-      .where('p_name', whereIn: [widget.productName1, widget.productName2])
-      .get()
-      .then((QuerySnapshot querySnapshot) {
-    if (querySnapshot.docs.isNotEmpty) {
-      querySnapshot.docs.forEach((doc) {
-        List<dynamic> wishlist = doc['p_wishlist'] ?? [];
-        if (wishlist.contains(currentUser!.uid)) {
-          controller.isFav(true);
-        } else {
-          controller.isFav(false);
-        }
-      });
-    }
-  });
-}
-
+  void checkIsInWishlist() async {
+    FirebaseFirestore.instance
+        .collection(productsCollection)
+        .where('p_name', whereIn: [widget.productName1, widget.productName2])
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+          if (querySnapshot.docs.isNotEmpty) {
+            querySnapshot.docs.forEach((doc) {
+              List<dynamic> wishlist = doc['p_wishlist'] ?? [];
+              if (wishlist.contains(currentUser!.uid)) {
+                controller.isFav(true);
+              } else {
+                controller.isFav(false);
+              }
+            });
+          }
+        });
+  }
 
   void _updateIsFav(bool isFav) {
     setState(() {
       controller.isFav.value = isFav;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -80,30 +79,35 @@ void checkIsInWishlist() async {
         // ),
         elevation: 0,
         actions: <Widget>[
-Obx(() => IconButton(
-  onPressed: () {
-    print("IconButton pressed");
-    List<String> productNames = [widget.productName1, widget.productName2];
-    bool isFav = !controller.isFav.value; // Toggle the isFav value
-    productNames.forEach((productName) {
-      if (isFav == true)  {
-        controller.addToWishlistMixMatch(productName, _updateIsFav, context);
-      }
-      if (isFav == false) {
-        controller.removeToWishlistMixMatch(productName, _updateIsFav, context);
-      }
-    });
-    print("isFav after toggling: $isFav"); // Debug print
-  },
-  icon: Icon(
-    controller.isFav.value
-        ? Icons.favorite
-        : Icons.favorite_outline,
-    color: controller.isFav.value ? redColor : null,
-  ),
-  iconSize: 28,
-)),
-
+          Obx(() => IconButton(
+                onPressed: () {
+                  print("IconButton pressed");
+                  List<String> productNames = [
+                    widget.productName1,
+                    widget.productName2
+                  ];
+                  bool isFav =
+                      !controller.isFav.value; // Toggle the isFav value
+                  productNames.forEach((productName) {
+                    if (isFav == true) {
+                      controller.addToWishlistMixMatch(
+                          productName, _updateIsFav, context);
+                    }
+                    if (isFav == false) {
+                      controller.removeToWishlistMixMatch(
+                          productName, _updateIsFav, context);
+                    }
+                  });
+                  print("isFav after toggling: $isFav"); // Debug print
+                },
+                icon: Icon(
+                  controller.isFav.value
+                      ? Icons.favorite
+                      : Icons.favorite_outline,
+                  color: controller.isFav.value ? redColor : null,
+                ),
+                iconSize: 28,
+              )),
         ],
       ),
       body: Column(
@@ -117,92 +121,104 @@ Obx(() => IconButton(
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Column(
-                          children: [
-                            Container(
-                              width: 150,
-                              height: 150,
-                              decoration: BoxDecoration(
-                                color: whiteColor,
-                                border: Border.all(color: blackColor),
-                              ),
-                              child: Center(
-                                child: Image.network(
-                                  widget.productImage1,
-                                  width: 120,
-                                  height: 120,
-                                  fit: BoxFit.cover,
+                        Expanded(
+                          // Wrap with Expanded
+                          child: Column(
+                            children: [
+                              Container(
+                                child: Center(
+                                  child: Image.network(
+                                    widget.productImage1,
+                                    width: 120,
+                                    height: 120,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text(widget.productName1,
-                                style: const TextStyle(
-                                    fontSize: 16, fontFamily: bold)),
-                            Text('฿${widget.price1}',
-                                style: const TextStyle(
-                                    fontSize: 14, color: blackColor)),
-                          ],
+                              Text(
+                                widget.productName1,
+                                softWrap: true,
+                                overflow: TextOverflow.clip,
+                              )
+                                  .text
+                                  .color(greyDark1)
+                                  .fontFamily(medium)
+                                  .size(16)
+                                  .make(),
+                              Text(
+                                "${NumberFormat('#,##0').format(double.parse(widget.price1.toString()).toInt())} Bath",
+                              )
+                                  .text
+                                  .color(greyDark1)
+                                  .fontFamily(regular)
+                                  .size(14)
+                                  .make(),
+                            ],
+                          )
+                              .box
+                              .border(color: thinGrey01)
+                              .padding(EdgeInsets.all(2))
+                              .rounded
+                              .make(),
                         ),
-                        const SizedBox(width: 10), // สร้างระยะห่าง
+                        const SizedBox(width: 10), // Spacing between columns
                         Stack(
                           alignment: Alignment.center,
                           children: [
-                            Container(
-                              width: 20, // ขนาดของวงกลม
-                              height: 20, // ขนาดของวงกลม
-                              decoration: BoxDecoration(
-                                color: Colors.lightBlue[100], // สีฟ้าอ่อน
-                                shape: BoxShape.circle, // ทำให้เป็นรูปวงกลม
-                              ),
-                            ),
-                            const Text('+',
-                                style: TextStyle(
-                                    fontSize: 24,
-                                    fontFamily: bold,
-                                    color: whiteColor)),
+                            const Icon(
+                              Icons.add,
+                              color: whiteColor,
+                            )
+                                .box
+                                .color(primaryApp)
+                                .roundedFull
+                                .padding(EdgeInsets.all(4))
+                                .make(),
                           ],
                         ),
-                        const SizedBox(width: 10),
-                        // สร้างระยะห่าง
-                        // สำหรับรูปภาพที่สองและข้อมูล
-                        Column(
-                          children: [
-                            Container(
-                              width: 150,
-                              height: 150,
-                              decoration: BoxDecoration(
-                                color: whiteColor,
-                                border: Border.all(color: blackColor),
-                              ),
-                              child: Center(
-                                child: Image.network(
-                                  widget.productImage2,
-                                  width: 120,
-                                  height: 120,
-                                  fit: BoxFit.cover,
+                        Expanded(
+                          // Wrap with Expanded
+                          child: Column(
+                            children: [
+                              Container(
+                                child: Center(
+                                  child: Image.network(
+                                    widget.productImage2,
+                                    width: 120,
+                                    height: 120,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text(widget.productName2,
-                                style: const TextStyle(
-                                    fontSize: 16, fontFamily: bold)),
-                            Text('฿${widget.price2}',
-                                style: const TextStyle(
-                                    fontSize: 14, color: blackColor)),
-                          ],
+                              Text(widget.productName2)
+                                  .text
+                                  .color(greyDark1)
+                                  .fontFamily(medium)
+                                  .size(16)
+                                  .make(),
+                              Text(
+                                "${NumberFormat('#,##0').format(double.parse(widget.price2.toString()).toInt())} Bath",
+                              )
+                                  .text
+                                  .color(greyDark1)
+                                  .fontFamily(regular)
+                                  .size(14)
+                                  .make(),
+                            ],
+                          )
+                              .box
+                              .border(color: thinGrey01)
+                              .padding(EdgeInsets.all(2))
+                              .rounded
+                              .make(),
                         ),
                       ],
                     ),
                     const SizedBox(height: 30), // เพิ่มระยะห่าง
                     Container(
                       height: 65,
-                      margin: const EdgeInsets.only( bottom: 10), // ขยับ widget bar จากด้านบนลงมา
+                      margin: const EdgeInsets.only(
+                          bottom: 10), // ขยับ widget bar จากด้านบนลงมา
                       child: Row(
                         children: [
                           Container(
@@ -225,8 +241,7 @@ Obx(() => IconButton(
                             children: [
                               Text('Dior',
                                   style: TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: bold)),
+                                      fontSize: 16, fontFamily: bold)),
                               Row(
                                 children: [
                                   Icon(Icons.star,
@@ -291,8 +306,8 @@ Obx(() => IconButton(
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(
                               Colors.grey[100]!),
-                          minimumSize:
-                              MaterialStateProperty.all<Size>(const Size(20, 20)),
+                          minimumSize: MaterialStateProperty.all<Size>(
+                              const Size(20, 20)),
                           padding: MaterialStateProperty.all<EdgeInsets>(
                             const EdgeInsets.symmetric(
                                 horizontal: 10,
@@ -320,8 +335,8 @@ Obx(() => IconButton(
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(
                               Colors.grey[100]!),
-                          minimumSize:
-                              MaterialStateProperty.all<Size>(const Size(20, 20)),
+                          minimumSize: MaterialStateProperty.all<Size>(
+                              const Size(20, 20)),
                           padding: MaterialStateProperty.all<EdgeInsets>(
                             const EdgeInsets.symmetric(
                                 horizontal: 10,
@@ -349,8 +364,8 @@ Obx(() => IconButton(
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(
                               Colors.grey[100]!),
-                          minimumSize:
-                              MaterialStateProperty.all<Size>(const Size(20, 20)),
+                          minimumSize: MaterialStateProperty.all<Size>(
+                              const Size(20, 20)),
                           padding: MaterialStateProperty.all<EdgeInsets>(
                             const EdgeInsets.symmetric(
                                 horizontal: 10,
@@ -381,8 +396,8 @@ Obx(() => IconButton(
                           alignment:
                               Alignment.topLeft, // จัดตำแหน่งข้อความชิดซ้ายบน
                           child: Padding(
-                            padding: EdgeInsets.all(
-                                8.0), // เพิ่ม padding ให้ข้อความ
+                            padding:
+                                EdgeInsets.all(8.0), // เพิ่ม padding ให้ข้อความ
                             child: Text(
                               'HEllo ',
                               style: TextStyle(

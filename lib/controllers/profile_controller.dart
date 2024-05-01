@@ -33,7 +33,7 @@ class ProfileController extends GetxController {
 
   void selectGender(String gender) {
   selectedGender.value = gender;
-  genderController.text = gender; // ตรวจสอบว่ามีการตั้งค่านี้
+  genderController.text = gender; 
 }
 
   changeImage(context) async {

@@ -41,7 +41,7 @@ class EditProfileScreen extends StatelessWidget {
     String formattedDateString = dateParts[1];
     DateTime initialBirthday = DateFormat('dd/MM/yyyy').parse(formattedDateString);
 
-    void _showDatePicker() {
+    void showDatePicker() {
       showCupertinoModalPopup(
         context: context,
         builder: (_) => Container(
@@ -77,7 +77,7 @@ class EditProfileScreen extends StatelessWidget {
       );
     }
 
-    void _showGenderPicker(BuildContext context) {
+    void showGenderPicker(BuildContext context) {
       final controller = Get.find<
           ProfileController>(); // Ensure you have access to the controller
       showModalBottomSheet(
@@ -256,7 +256,7 @@ class EditProfileScreen extends StatelessWidget {
               20.heightBox,
               Align(
                 alignment: Alignment.centerLeft,
-                child: const Text('About Account')
+                child: const Text(aboutaccount)
                     .text
                     .size(16)
                     .fontFamily(medium)
@@ -283,7 +283,7 @@ class EditProfileScreen extends StatelessWidget {
 
               Align(
                 alignment: Alignment.centerLeft,
-                child: const Text('About You')
+                child: const Text(aboutyou)
                     .text
                     .size(16)
                     .fontFamily(medium)
@@ -310,7 +310,7 @@ class EditProfileScreen extends StatelessWidget {
                     child: TextFormField(
                       readOnly: true,
                       controller: controller.birthdayController,
-                      onTap: _showDatePicker,
+                      onTap: showDatePicker,
                       decoration: const InputDecoration(
                         hintText: 'Select birthday',
                         hintStyle: TextStyle(
@@ -343,7 +343,7 @@ class EditProfileScreen extends StatelessWidget {
                   ),
                   Expanded(
                     child: InkWell(
-                      onTap: () => _showGenderPicker(context),
+                      onTap: () => showGenderPicker(context),
                       child: Container(
                         height: 40,
                         alignment: Alignment.centerLeft,

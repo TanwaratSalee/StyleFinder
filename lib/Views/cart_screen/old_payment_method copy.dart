@@ -13,8 +13,8 @@ import 'package:flutter_finalproject/controllers/cart_controller.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-class PaymentMethods extends StatelessWidget {
-  const PaymentMethods({super.key});
+class OldPaymentMethods extends StatelessWidget {
+  const OldPaymentMethods({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -70,13 +70,14 @@ class PaymentMethods extends StatelessWidget {
           child: Obx(
             () => Column(
               children: List.generate(
-                paymentMethods.length,
+                paymentMethodsImg.length,
                 (index) {
                   return GestureDetector(
                     onTap: () {
                       controller.changePaymentIndex(index);
                     },
                     child: Container(
+                      clipBehavior: Clip.antiAlias,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
@@ -86,35 +87,43 @@ class PaymentMethods extends StatelessWidget {
                             width: 4,
                           )),
                       margin: const EdgeInsets.only(bottom: 8),
-                      padding: EdgeInsets.all(16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      child: Stack(
+                        alignment: Alignment.topRight,
                         children: [
-                          paymentMethods[index]
-                              .text
-                              .color(blackColor)
-                              .fontFamily(bold)
-                              .size(16)
-                              .make(),
+                          Image.asset(paymentMethodsImg[index],
+                              width: double.infinity,
+                              height: 120,
+                              colorBlendMode:
+                                  controller.paymentIndex.value == index
+                                      ? BlendMode.darken
+                                      : BlendMode.color,
+                              color: controller.paymentIndex.value == index
+                                  ? blackColor.withOpacity(0.4)
+                                  : Colors.transparent,
+                              fit: BoxFit.cover),
                           controller.paymentIndex.value == index
-                              ? Checkbox(
-                                  activeColor: primaryApp,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(50),
+                              ? Transform.scale(
+                                  scale: 1.3,
+                                  child: Checkbox(
+                                    activeColor: primaryApp,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(50),
+                                    ),
+                                    value: true,
+                                    onChanged: (value) {},
                                   ),
-                                  value: true,
-                                  onChanged: (value) {},
                                 )
-                              : Checkbox(
-                                  activeColor: primaryApp,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  value: false,
-                                  onChanged: (value) {
-                                    controller.changePaymentIndex(index);
-                                  },
-                                ),
+                              : Container(),
+                          Positioned(
+                            bottom: 10,
+                            left: 10,
+                            child: paymentMethods[index]
+                                .text
+                                .color(blackColor)
+                                .fontFamily(bold)
+                                .size(16)
+                                .make(),
+                          )
                         ],
                       ),
                     ),
@@ -128,4 +137,3 @@ class PaymentMethods extends StatelessWidget {
     );
   }
 }
-

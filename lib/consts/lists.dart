@@ -2,7 +2,7 @@ import 'package:flutter_finalproject/consts/images.dart';
 import 'package:flutter_finalproject/consts/strings.dart';
 
 // login page
-const socialIconList = [icFacebook, icGmail];
+const socialIconList = [icGmail];
 
 // --------------------------------- Home ---------------------------------
 const cardsImages = [card1, card2, card3, card4, card5, card6];
@@ -50,5 +50,5 @@ const profileButtonsIcon = [
 
 //Payment
 const paymentMethodsImg = [imgPromptpay, imgVisa, imgCash];
-const paymentMethodsIc = [icPromptpay, icVisa, icCash];
+const paymentIcons = [icPromptpay, icVisa, icCash];
 const paymentMethods = [promptpay, visaCard, cashOnDelivery];

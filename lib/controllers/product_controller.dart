@@ -10,7 +10,7 @@ class ProductController extends GetxController {
   var colorIndex = 0.obs;
   var totalPrice = 0.obs;
   var vendorImageUrl = ''.obs;
-
+  
   var subcat = [];
 
   var isFav = false.obs;
@@ -19,6 +19,21 @@ class ProductController extends GetxController {
   void onInit() {
     super.onInit();
     resetValues();
+  }
+
+  void updateWishlistStatus(String productName, bool isFav) {
+    this.isFav.value = isFav; // Update observable value
+    // Update the database entry for the product
+    FirebaseFirestore.instance.collection('products')
+      .where('name', isEqualTo: productName)
+      .get()
+      .then((querySnapshot) {
+        querySnapshot.docs.forEach((document) {
+          document.reference.update({'isFavorited': isFav});
+        });
+      }).catchError((error) {
+        print("Error updating favorite status: $error");
+      });
   }
 
   getSubCollection(title) async {
@@ -59,7 +74,7 @@ class ProductController extends GetxController {
  }
 
   addToCart(
-      {title, img, sellername, color, qty, tprice, context, vendorID}) async {
+      {title, img, sellername, color, qty, tprice, context, vendorID, productsize}) async {
     await firestore.collection(cartCollection).doc().set({
       'title': title,
       'img': img,
@@ -68,7 +83,8 @@ class ProductController extends GetxController {
       'qty': qty,
       'vendor_id': vendorID,
       'tprice': tprice,
-      'added_by': currentUser!.uid
+      'added_by': currentUser!.uid,
+      'productsize': productsize,
     }).catchError((error) {
       VxToast.show(context, msg: error.toString());
     });

@@ -21,8 +21,8 @@ class PasswordScreen extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text("Reset Password",
-            style: TextStyle(
-                fontFamily: medium, fontSize: 24, color: blackColor)),
+            style:
+                TextStyle(fontFamily: medium, fontSize: 24, color: blackColor)),
         actions: [
           Obx(() {
             if (controller.isloading.isTrue) {

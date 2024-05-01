@@ -2,31 +2,15 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_finalproject/Views/auth_screen/verifyemail_screen.dart';
-import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
-import 'package:flutter_finalproject/Views/search_screen/recent_search_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/home_controller.dart';
 import 'package:get/get.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 import '../widgets_common/appbar_ontop.dart';
-
-class FirestoreServices {
-  static Future<List<Map<String, dynamic>>> getFeaturedProducts() async {
-    try {
-      QuerySnapshot<Map<String, dynamic>> snapshot =
-          await FirebaseFirestore.instance.collection(productsCollection).get();
-      return snapshot.docs.map((doc) => doc.data()).toList();
-    } catch (e) {
-      print("Error fetching featured products: $e");
-      return [];
-    }
-  }
-}
 
 class HomeScreen extends StatefulWidget {
   final dynamic data;
@@ -63,10 +47,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> navigateToItemDetails() async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ItemDetails(
-          title: previousSwipedProduct!['p_name'],
-          data: previousSwipedProduct!,
-      )),
+      MaterialPageRoute(
+          builder: (context) => ItemDetails(
+                title: previousSwipedProduct!['p_name'],
+                data: previousSwipedProduct!,
+              )),
     );
     if (result != null) {
       setState(() {
@@ -99,26 +84,10 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: whiteColor,
         automaticallyImplyLeading: false,
         title: appbarField(context: context),
-        elevation: 8.0,
-        shadowColor: greyColor.withOpacity(0.5),
-        // actions: <Widget>[
-        //   Padding(
-        //     padding: const EdgeInsets.only(right: 15.0),
-        //     child: IconButton(
-        //       icon: Image.asset(
-        //         icCart,
-        //         width: 21,
-        //       ),
-        //       onPressed: () {
-        //         Get.to(() => const CartScreen());
-        //       },
-        //     ),
-        //   ),
-        // ],
+        // elevation: 8.0,
+        // shadowColor: greyColor.withOpacity(0.5),
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 0, left: 0, right: 0),
-        child: FutureBuilder<List<Map<String, dynamic>>>(
+      body: FutureBuilder<List<Map<String, dynamic>>>(
           future: fetchProducts(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -143,7 +112,8 @@ class _HomeScreenState extends State<HomeScreen> {
               scale: 0.5,
               isLoop: false,
               controller: controllercard,
-              allowedSwipeDirection: AllowedSwipeDirection.only(left: true, right: true),
+              allowedSwipeDirection:
+                  AllowedSwipeDirection.only(left: true, right: true),
               cardsCount: productsToShow.length,
               cardBuilder: (BuildContext context, int index,
                   int percentThresholdX, int percentThresholdY) {
@@ -161,11 +131,17 @@ class _HomeScreenState extends State<HomeScreen> {
                               SizedBox(
                                 height: 1,
                               ),
-                              Image.network(
-                                product['p_imgs'][0],
-                                height: 410,
-                                width: 300,
-                                fit: BoxFit.fitHeight,
+                              ClipRRect(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(14),
+                                  topLeft: Radius.circular(14),
+                                ),
+                                child: Image.network(
+                                  product['p_imgs'][0],
+                                  height: 450,
+                                  width: 380,
+                                  fit: BoxFit.fitHeight,
+                                ),
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -207,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         IconButton(
                           icon: Image.asset(
                             icDislikeButton,
-                            width: 62,
+                            width: 65,
                           ).box.roundedFull.shadowSm.make(),
                           onPressed: () =>
                               controllercard.swipe(CardSwiperDirection.left),
@@ -215,14 +191,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         IconButton(
                           icon: Image.asset(
                             icViewMoreButton,
-                            width: 62,
+                            width: 65,
                           ).box.roundedFull.shadowSm.make(),
                           onPressed: () => navigateToItemDetails(),
                         ),
                         IconButton(
                           icon: Image.asset(
                             icLikeButton,
-                            width: 62,
+                            width: 65,
                           ).box.roundedFull.shadowSm.make(),
                           onPressed: () => [
                             controllercard.swipe(CardSwiperDirection.right),
@@ -247,13 +223,25 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           },
         ),
-      ),
     );
   }
 }
 
 Future<List<Map<String, dynamic>>> fetchProducts() async {
   return FirestoreServices.getFeaturedProducts();
+}
+
+class FirestoreServices {
+  static Future<List<Map<String, dynamic>>> getFeaturedProducts() async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot =
+          await FirebaseFirestore.instance.collection(productsCollection).get();
+      return snapshot.docs.map((doc) => doc.data()).toList();
+    } catch (e) {
+      print("Error fetching featured products: $e");
+      return [];
+    }
+  }
 }
 
 bool isInWishlist(Map<String, dynamic> product, String currentUid) {

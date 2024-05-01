@@ -100,7 +100,7 @@ class _PersonalDetailsScreenGoogleState
                   controller: TextEditingController(
                       text: DateFormat('EEEE, MMMM d, yyyy')
                           .format(selectedDate)),
-                  isPass: false,
+                  isPass: false, 
                 ),
               ),
             ),
@@ -212,7 +212,7 @@ class _PersonalDetailsScreenGoogleState
                     child: customTextField(
                       label: 'Height',
                       controller: heightController,
-                      isPass: false,
+                      isPass: false, 
                       readOnly: false,
                     ),
                   ),
@@ -224,7 +224,7 @@ class _PersonalDetailsScreenGoogleState
                     child: customTextField(
                       label: 'Weight',
                       controller: weightController,
-                      isPass: false,
+                      isPass: false, 
                       readOnly: false,
                     ),
                   ),

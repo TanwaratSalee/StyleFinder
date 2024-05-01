@@ -1,10 +1,11 @@
 // ignore_for_file: unused_local_variable, sort_child_properties_last
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_finalproject/Views/news_screen/component/featured_button.dart';
 import 'package:flutter_finalproject/Views/news_screen/matchproduct_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
-import 'package:flutter_finalproject/Views/store_screen/match_detail_screen.dart';
+import 'package:flutter_finalproject/Views/store_screen/mixandmatch_detail.dart';
 import 'package:flutter_finalproject/Views/news_screen/product_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/home_buttons.dart';
@@ -34,20 +35,6 @@ class NewsScreen extends StatelessWidget {
         backgroundColor: whiteColor,
         automaticallyImplyLeading: false,
         title: appbarField(context: context),
-        // actions: <Widget>[
-        //   Padding(
-        //     padding: const EdgeInsets.only(right: 15.0),
-        //     child: IconButton(
-        //       icon: Image.asset(
-        //         icCart,
-        //         width: 21,
-        //       ),
-        //       onPressed: () {
-        //         Get.to(() => const CartScreen());
-        //       },
-        //     ),
-        //   ),
-        // ],
       ),
       body: Container(
         padding: const EdgeInsets.all(12),
@@ -57,29 +44,6 @@ class NewsScreen extends StatelessWidget {
         child: SafeArea(
             child: Column(
           children: [
-            // Container(
-            //   alignment: Alignment.center,
-            //   height: 60,
-            //   color: whiteColor,
-            //   child: TextFormField(
-            //     controller: controller.searchController,
-            //     decoration: InputDecoration(
-            //       border: InputBorder.none,
-            //       suffixIcon: const Icon(Icons.search).onTap(() {
-            //         if (controller.searchController.text.isNotEmptyAndNotNull){
-            //           Get.to(() => SearchScreen(
-            //             title: controller.searchController.text,
-            //         ));
-            //         }
-            //       }),
-            //       filled: true,
-            //       fillColor: fontGreyDark1,
-            //       hintText: searchanything,
-            //       // hintStyle: const TextStyle(color: fontGreyDark1),
-            //     ),
-            //   ),
-            // ),
-
             // 1nd swiper
             Expanded(
               child: SingleChildScrollView(
@@ -104,173 +68,27 @@ class NewsScreen extends StatelessWidget {
                               .make();
                         }),
 
-                    10.heightBox,
-
+                    // 30.heightBox,
                     // Row(
                     //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     //   children: List.generate(
-                    //     2,
+                    //     3,
                     //     (index) => homeButtons(
                     //       height: context.screenHeight * 0.1,
-                    //       width: context.screenWidth / 2.3,
-                    //       icon: index == 0 ? icTodaysDeal : icFlashDeal,
-                    //       title: index == 0 ? todayDeal : flashsale,
+                    //       width: context.screenWidth / 3.5,
+                    //       icon: index == 0
+                    //           ? icTopCategories
+                    //           : index == 1
+                    //               ? icBrand
+                    //               : icTopCategories,
+                    //       title: index == 0
+                    //           ? topCategories
+                    //           : index == 1
+                    //               ? brand
+                    //               : topSellers,
                     //     ),
                     //   ),
                     // ),
-
-                    // 10.heightBox,
-
-                    // 2nd swiper
-                    // VxSwiper.builder(
-                    //     aspectRatio: 16 / 9,
-                    //     autoPlay: true,
-                    //     height: 170,
-                    //     enlargeCenterPage: true,
-                    //     itemCount: secondSlidersList.length,
-                    //     itemBuilder: (context, index) {
-                    //       return Image.asset(
-                    //         secondSlidersList[index],
-                    //         fit: BoxFit.fill,
-                    //       )
-                    //           .box
-                    //           .rounded
-                    //           .clip(Clip.antiAlias)
-                    //           .margin(const EdgeInsets.symmetric(horizontal: 8))
-                    //           .make();
-                    //     }),
-
-                    10.heightBox,
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: List.generate(
-                        3,
-                        (index) => homeButtons(
-                          height: context.screenHeight * 0.1,
-                          width: context.screenWidth / 3.5,
-                          icon: index == 0
-                              ? icTopCategories
-                              : index == 1
-                                  ? icBrand
-                                  : icTopCategories,
-                          title: index == 0
-                              ? topCategories
-                              : index == 1
-                                  ? brand
-                                  : topSellers,
-                        ),
-                      ),
-                    ),
-
-                    // 20.heightBox,
-                    // Align(
-                    //     alignment: Alignment.centerLeft,
-                    //     child: featuredCategories.text
-                    //         .color(blackColor)
-                    //         .size(18)
-                    //         .fontFamily(regular)
-                    //         .make()),
-                    // 20.heightBox,
-
-                    // SingleChildScrollView(
-                    //   scrollDirection: Axis.horizontal,
-                    //   child: Row(
-                    //     children: List.generate(
-                    //         3,
-                    //         (index) => Column(
-                    //               children: [
-                    //                 featuredButton(
-                    //                     icon: featuredImages1[index],
-                    //                     title: freaturedTitles1[index]),
-                    //                 10.heightBox,
-                    //                 featuredButton(
-                    //                     icon: featuredImages2[index],
-                    //                     title: freaturedTitles2[index]),
-                    //               ],
-                    //             )),
-                    //   ),
-                    // ),
-
-                    // 20.heightBox,
-
-                    // Container(
-                    //   padding: const EdgeInsets.all(12),
-                    //   width: double.infinity,
-                    //   color: primaryApp,
-                    //   child: Column(
-                    //     crossAxisAlignment: CrossAxisAlignment.start,
-                    //     children: [
-                    //       featuredProduct.text.white
-                    //           .fontFamily(bold)
-                    //           .size(18)
-                    //           .make(),
-                    //       10.heightBox,
-                    //       SingleChildScrollView(
-                    //         scrollDirection: Axis.horizontal,
-                    //         child: FutureBuilder(
-                    //           future: FirestoreServices.getFeaturedProducts(),
-                    //           builder: (context,AsyncSnapshot<QuerySnapshot> snapshot) {
-
-                    //             if(!snapshot.hasData) {
-                    //               return Center(
-                    //                 child: loadingIndcator(),
-                    //               );
-                    //             } else if (snapshot.data!.docs.isEmpty) {
-                    //               return "No featured products".text.white.makeCentered();
-                    //             } else {
-
-                    //               var featuredData = snapshot.data!.docs;
-
-                    //               return Row(
-                    //               children: List.generate(
-                    //                 featuredData.length,
-                    //                 (index) => Column(
-                    //                   crossAxisAlignment: CrossAxisAlignment.start,
-                    //                       children: [
-                    //                         Image.network(
-                    //                           featuredData[index]['p_imgs'][0],
-                    //                           width: 140,
-                    //                           height: 195,
-                    //                           fit: BoxFit.cover,
-                    //                         ),
-                    //                         10.heightBox,
-                    //                         "${ featuredData[index]['p_name']}"
-                    //                             .text
-                    //                             .fontFamily(regular)
-                    //                             .color(blackColor)
-                    //                             .make(),
-                    //                         5.heightBox,
-                    //                         "${featuredData[index]['p_price']}"
-                    //                             .numCurrency
-                    //                             .text
-                    //                             .color(primaryApp)
-                    //                             .fontFamily(bold)
-                    //                             .size(16)
-                    //                             .make()
-                    //                       ],
-                    //                     )
-                    //                         .box
-                    //                         .white
-                    //                         .margin(
-                    //                             const EdgeInsets.symmetric(horizontal: 4))
-                    //                         .rounded
-                    //                         .padding(const EdgeInsets.all(8))
-                    //                         .make()
-                    //                         .onTap(() {
-                    //                           Get.to(() => ItemDetails(title: "${featuredData[index]['p_name']}",
-                    //                           data: featuredData[index],));
-                    //                         })),
-                    //               );
-                    //             }
-                    //           },
-                    //         ),
-                    //       )
-                    //     ],
-                    //   ),
-                    // ),
-
-                    // 20.heightBox,
 
                     // 3nd swiper
                     // VxSwiper.builder(
@@ -290,17 +108,7 @@ class NewsScreen extends StatelessWidget {
                     //           .margin(const EdgeInsets.symmetric(horizontal: 8))
                     //           .make();
                     //     }),
-
-                    // 20.heightBox,
-
-                    // Align(
-                    //     alignment: Alignment.centerLeft,
-                    //     child: allproducts.text
-                    //         .fontFamily(regular)
-                    //         .color(redColor)
-                    //         .size(18)
-                    //         .make()),
-                    30.heightBox,
+                    50.heightBox,
 
                     Column(
                       mainAxisSize: MainAxisSize.min,
@@ -325,8 +133,8 @@ class NewsScreen extends StatelessWidget {
                     )
                         .box
                         .color(thinPrimaryApp)
-                        .padding(
-                            const EdgeInsets.symmetric(vertical: 5, horizontal: 70))
+                        .padding(const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 70))
                         .roundedLg
                         .make(),
 
@@ -412,7 +220,7 @@ class NewsScreen extends StatelessWidget {
                         }
                       },
                     ),
-                    const SizedBox(height: 50),
+                    50.heightBox,
 
                     Column(
                       mainAxisSize: MainAxisSize.min,
@@ -449,13 +257,12 @@ class NewsScreen extends StatelessWidget {
                         SingleChildScrollView(
                           physics: const NeverScrollableScrollPhysics(),
                           child: Container(
-                            height: MediaQuery.of(context).size.height * 0.56,
-                            child: _buildProductMathGrids(category),
+                            height: MediaQuery.of(context).size.height * 0.52,
+                            child: buildProductMathGrids(category),
                           ),
                         )
                       ],
                     ),
-                    const SizedBox(height: 20),
                     InkWell(
                       onTap: () {
                         Get.to(() => const MatchProductScreen());
@@ -503,8 +310,8 @@ class NewsScreen extends StatelessWidget {
                     )
                         .box
                         .color(thinPrimaryApp)
-                        .padding(
-                            const EdgeInsets.symmetric(vertical: 5, horizontal: 70))
+                        .padding(const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 70))
                         .roundedLg
                         .make(),
 
@@ -522,7 +329,7 @@ class NewsScreen extends StatelessWidget {
                           );
                         } else {
                           var allproductsdata = snapshot.data!.docs;
-                          allproductsdata.shuffle(math.Random()); 
+                          allproductsdata.shuffle(math.Random());
 
                           int itemCount = math.min(allproductsdata.length, 4);
 
@@ -559,7 +366,8 @@ class NewsScreen extends StatelessWidget {
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Column(
-                                      crossAxisAlignment:CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       // mainAxisAlignment: MainAxisAlignment.start,
                                       children: [
                                         Text(
@@ -570,8 +378,7 @@ class NewsScreen extends StatelessWidget {
                                             color: greyDark2,
                                           ),
                                           maxLines: 1,
-                                          overflow: TextOverflow
-                                              .ellipsis,
+                                          overflow: TextOverflow.ellipsis,
                                         ),
                                         Text(
                                           "${NumberFormat('#,##0').format(double.parse(allproductsdata[index]['p_price']).toInt())} Bath",
@@ -581,7 +388,7 @@ class NewsScreen extends StatelessWidget {
                                             color: greyDark2,
                                           ),
                                         ),
-                                        const SizedBox(height: 10), 
+                                        const SizedBox(height: 10),
                                       ],
                                     ),
                                   )
@@ -606,8 +413,7 @@ class NewsScreen extends StatelessWidget {
                         }
                       },
                     ),
-
-                    const SizedBox(height: 20),
+                    20.heightBox,
                     InkWell(
                       onTap: () {
                         Get.to(() => const ProductScreen());
@@ -629,9 +435,7 @@ class NewsScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(
-                      height: 30,
-                    )
+                    50.heightBox,
                   ],
                 ),
               ),
@@ -642,7 +446,7 @@ class NewsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProductMathGrids(String category) {
+  Widget buildProductMathGrids(String category) {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance.collection('products').snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -795,9 +599,7 @@ class NewsScreen extends StatelessWidget {
                                       ),
                                       Text(
                                         "${NumberFormat('#,##0').format(double.parse(price2.toString()).toInt())} Bath",
-                                        style:
-                                            const TextStyle(color: greyDark1),
-                                      ),
+                                      ).text.color(greyDark1).make(),
                                     ],
                                   ),
                                 ),

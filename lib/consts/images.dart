@@ -143,3 +143,6 @@ const String icCheckDelivered = "assets/icons/icNormal/checkDelivered.png";
 // ----------------------------------------------- item Screen -----------------------------------------------
 const String icFav = "assets/icons/icNormal/buttonFavourite.png";
 const String icClickFav = "assets/icons/icNormal/ckickbuttonFavourite.png";
+
+//----------------------------------------------- popup -----------------------------------------------
+const String imgPopup = 'assets/images/Finishpay.PNG';
