@@ -116,27 +116,28 @@ class MenuSettingScreen extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const SizedBox(height: 30),
-            const Text('Are you sure you want to logout?').text.size(18).fontFamily(regular).make(),
-            const SizedBox(height: 30),
-            const Divider(height: 1),
+            45.heightBox,
+            const Text('Are you sure to logout?').text.size(16).fontFamily(regular).make(),
+            45.heightBox,
+            const Divider(height: 1,color: greyColor,),
             IntrinsicHeight( 
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Expanded( 
                     child: TextButton(
-                      child: const Text('Cancel', style: TextStyle(fontFamily: regular, fontSize: 18, color: greyDark1)),
+                      child: const Text('Cancel', style: TextStyle(fontFamily: regular, fontSize: 18, color: redColor)),
                       onPressed: () => Navigator.of(dialogContext).pop(),
                     ),
                   ),
                   VerticalDivider(
                     width: 1,
-                    thickness: 1
+                    thickness: 1,
+                    color: greyColor,
                   ),
                   Expanded( 
                     child: TextButton(
-                      child: const Text('Logout', style: TextStyle(fontFamily: regular, color: redColor, fontSize: 18)),
+                      child: const Text('Logout', style: TextStyle(fontFamily: regular, color: greyDark1, fontSize: 18)),
                       onPressed: () async {
                         await Get.put(AuthController()).signoutMethod(context);
                         Navigator.of(dialogContext).pop(); 

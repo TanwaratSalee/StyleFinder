@@ -92,11 +92,20 @@ class _PersonalDetailsScreenGoogleState
         padding: const EdgeInsets.all(15),
         child: Column(
           children: [
+            Align(
+              alignment: Alignment.center,
+              child: const Text('Birthday')
+                  .text
+                  .size(16)
+                  .fontFamily(regular)
+                  .color(greyDark2)
+                  .make(),
+            ),
             GestureDetector(
               onTap: _showDatePicker,
               child: AbsorbPointer(
                 child: customTextField(
-                  label: 'Birthday',
+                  // label: 'Birthday',
                   controller: TextEditingController(
                       text: DateFormat('EEEE, MMMM d, yyyy')
                           .format(selectedDate)),
@@ -106,10 +115,10 @@ class _PersonalDetailsScreenGoogleState
             ),
             const SizedBox(height: 20),
             Align(
-              alignment: Alignment.centerLeft,
+              alignment: Alignment.center,
               child: const Text('Gender')
                   .text
-                  .size(14)
+                  .size(16)
                   .fontFamily(regular)
                   .color(greyDark2)
                   .make(),
@@ -186,8 +195,8 @@ class _PersonalDetailsScreenGoogleState
                             borderRadius: BorderRadius.circular(8.0),
                             side: BorderSide(
                                 color: selectedGender == gender
-                                    ? Colors.teal
-                                    : whiteColor),
+                                     ? primaryApp
+                                    : greyColor),
                           ),
                         ),
                         elevation: MaterialStateProperty.all<double>(0),
@@ -202,7 +211,17 @@ class _PersonalDetailsScreenGoogleState
               }).toList(),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
+            Align(
+              alignment: Alignment.center,
+              child: const Text('Shape')
+                  .text
+                  .size(16)
+                  .fontFamily(regular)
+                  .color(greyDark2)
+                  .make(),
+            ),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -231,12 +250,17 @@ class _PersonalDetailsScreenGoogleState
                 ),
               ],
             ),
-            const SizedBox(height: 20),
-            const Text(
-              'Skin',
-              style: TextStyle(
-                  fontSize: 16, color: blackColor, fontFamily: regular),
+            const SizedBox(height: 30),
+            Align(
+              alignment: Alignment.center,
+              child: const Text('Skin')
+                  .text
+                  .size(16)
+                  .fontFamily(regular)
+                  .color(greyDark2)
+                  .make(),
             ),
+            const SizedBox(height: 10),
             Column(
               children: [
                 Row(

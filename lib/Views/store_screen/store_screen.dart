@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/store_screen/mixandmatch_detail.dart';
-import 'package:flutter_finalproject/Views/store_screen/reviews_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:intl/intl.dart';
 
@@ -31,7 +30,7 @@ class StoreScreen extends StatelessWidget {
           body: SingleChildScrollView(
             child: Column(
               children: [
-                _buildLogoAndRatingSection(context),
+                _ShopProfile(context),
                 _buildProductMatchTabs(context),
               ],
             ),
@@ -41,18 +40,7 @@ class StoreScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildLogoAndRatingSection(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 6.0),
-      child: Column(
-        children: <Widget>[
-          _buildRatingSection(context),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildRatingSection(BuildContext context) {
+  Widget _ShopProfile(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 1.0),
       child: Row(
@@ -126,75 +114,8 @@ class StoreScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.star, color: Colors.amber, size: 24),
-                    const SizedBox(width: 8),
-                    const Text(
-                      '4.9/5.0',
-                    ).text.fontFamily(regular).size(14).color(greyDark2).make(),
-                    const Spacer(),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ReviewScreen()),
-                        );
-                      },
-                      child: const Text('All Reviews >>>')
-                          .text
-                          .fontFamily(regular)
-                          .size(14)
-                          .color(greyDark2)
-                          .make(),
-                    ),
-                  ],
-                ),
               ],
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildReviewCard() {
-    return Container(
-      width: 200,
-      margin: const EdgeInsets.all(5.0),
-      padding: const EdgeInsets.all(10.0),
-      decoration: BoxDecoration(
-        color: whiteColor,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          const BoxShadow(
-            color: greyDark1,
-            blurRadius: 4,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('Reviewer Name',
-              style: TextStyle(fontSize: 16, fontFamily: bold)),
-          Row(
-            children: List.generate(5, (index) {
-              return Icon(
-                index < 4 ? Icons.star : Icons.star_border,
-                color: Colors.amber,
-                size: 20,
-              );
-            }),
-          ),
-          const Text(
-            'The review text goes here...',
-            style: TextStyle(fontSize: 14),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
@@ -218,11 +139,11 @@ class StoreScreen extends StatelessWidget {
             indicatorColor: Theme.of(context).primaryColor,
           ),
           Container(
-            height: MediaQuery.of(context).size.height * 0.9,
+            height: MediaQuery.of(context).size.height * 0.67,
             child: TabBarView(
               children: [
-                _buildProductTab(context),
-                _buildMatchTab(context),
+                buildProductTab(context),
+                buildMatchTab(context),
               ],
             ),
           ),
@@ -231,23 +152,85 @@ class StoreScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProductTab(BuildContext context) {
+  Widget buildProductTab(BuildContext context) {
     return Column(
       children: <Widget>[
-        /* child: */ _buildCategoryTabs(context),
         Expanded(
-          child: Container(),
+          child: DefaultTabController(
+            length: 12,
+            child: Column(
+              children: <Widget>[
+                const TabBar(
+                  isScrollable: true,
+                  indicatorColor: primaryApp,
+                  labelStyle: TextStyle(
+                      fontSize: 13, fontFamily: regular, color: greyDark2),
+                  unselectedLabelStyle: TextStyle(
+                      fontSize: 12, fontFamily: regular, color: greyDark1),
+                  tabs: [
+                    Tab(text: 'All'),
+                    Tab(text: 'Dresses'),
+                    Tab(text: 'Outerwear & Costs'),
+                    Tab(text: 'Blazers'),
+                    Tab(text: 'Suits'),
+                    Tab(text: 'Blouses & Tops'),
+                    Tab(text: 'Knitwear'),
+                    Tab(text: 'T-shirts'),
+                    Tab(text: 'Skirts'),
+                    Tab(text: 'Pants'),
+                    Tab(text: 'Denim'),
+                    Tab(text: 'Activewear'),
+                  ],
+                ).box.color(thinPrimaryApp).make(),
+                Container(
+                  height: 570,
+                  child: TabBarView(
+                    children: [
+                      _buildProductGridAll(),
+                      _buildProductGridDress('dresses', 'dresses'),
+                      _buildProductGridOuterwear(
+                          'outerwear & Costs', 'outerwear & Costs'),
+                      _buildProductGridDress('blazers', 'blazers'),
+                      _buildProductGridCoat('suits', 'suits'),
+                      _buildProductGridTshirt(
+                          'blouses & Tops', 'blouses & Tops'),
+                      _buildProductGridSkirt('knitwear', 'knitwear'),
+                      _buildProductGridPant('t-shirts', 't-shirts'),
+                      _buildProductGridShort('skirts', 'skirts'),
+                      _buildProductGridShirt('pants', 'pants'),
+                      _buildProductGridShort('denim', 'denim'),
+                      _buildProductGridShirt('activewear', 'activewear'),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ],
     );
   }
 
-  Widget _buildMatchTab(BuildContext context) {
+  Widget buildMatchTab(BuildContext context) {
     return Column(
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.all(5),
-          child: _buildCategoryMath(context),
+          child: DefaultTabController(
+            length: 1,
+            child: Column(
+              children: <Widget>[
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.6,
+                  child: TabBarView(
+                    children: [
+                      _buildProductMathGrids('All'),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
         Expanded(
           child: Container(),
@@ -256,66 +239,16 @@ class StoreScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoryTabs(BuildContext context) {
-    return DefaultTabController(
-      length: 9,
-      child: Column(
-        children: <Widget>[
-          const TabBar(
-            isScrollable: true,
-            indicatorColor: primaryApp,
-            labelStyle:
-                TextStyle(fontSize: 13, fontFamily: regular, color: greyDark2),
-            unselectedLabelStyle:
-                TextStyle(fontSize: 12, fontFamily: regular, color: greyDark1),
-            tabs: [
-              Tab(text: 'All'),
-              Tab(text: 'Knitwear'),
-              Tab(text: 'Dresses'),
-              Tab(text: 'Coat'),
-              Tab(text: 'T-shirts'),
-              Tab(text: 'Skirts'),
-              Tab(text: 'Pants'),
-              Tab(text: 'Shorts'),
-              Tab(text: 'Shirts'),
-            ],
-          ).box.color(thinPrimaryApp).make(),
-          Container(
-            height: 700,
-            child: TabBarView(
-              children: [
-                _buildProductGridAll('All', 'All'),
-                _buildProductGridKnitwear('Knitwear', 'Knitwear'),
-                _buildProductGridDress('Dresses', 'Dresses'),
-                _buildProductGridCoat('Coat', 'Coat'),
-                _buildProductGridTshirt('T-shirts', 'T-shirts'),
-                _buildProductGridSkirt('Skirts', 'Skirts'),
-                _buildProductGridPant('Pants', 'Pants'),
-                _buildProductGridShort('Shorts', 'Shorts'),
-                _buildProductGridShirt('Shirts', 'Shirts'),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildProductGridAll(String category, String subcollection) {
-    Query query = FirebaseFirestore.instance
-        .collection('products')
-        .where('vendor_id', isEqualTo: vendorId);
-
-    if (subcollection != 'All') {
-      query = query.where('p_subcollection', isEqualTo: subcollection);
-    }
+  Widget _buildProductGridAll() {
+    CollectionReference productsCollection =
+        FirebaseFirestore.instance.collection('products');
 
     return FutureBuilder<QuerySnapshot>(
-      future: query.get(),
+      future: productsCollection.get(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
-            child: loadingIndicator(),
+            child: CircularProgressIndicator(),
           );
         }
         if (snapshot.hasError) {
@@ -325,78 +258,83 @@ class StoreScreen extends StatelessWidget {
           return const Text('No Items');
         }
 
+        List<QueryDocumentSnapshot> allProducts = snapshot.data!.docs;
+
         return GridView.builder(
           padding: const EdgeInsets.all(8.0),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, childAspectRatio: 1 / 1.2),
-          itemCount: snapshot.data!.docs.length,
+              crossAxisCount: 2, childAspectRatio: 1 / 1.35),
+          itemCount: allProducts.length,
           itemBuilder: (BuildContext context, int index) {
-            var product = snapshot.data!.docs[index];
+            var product = allProducts[index];
             String productName = product.get('p_name');
             String price = product.get('p_price');
             String productImage = product.get('p_imgs')[0];
 
             return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ItemDetails(
-                            title: productName,
-                            data: product.data() as Map<String, dynamic>,
-                          ),
-                        ),
-                      );
-                    },
-                    child: Container(
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4.0),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            ClipRRect(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(14),
-                                topLeft: Radius.circular(14),
-                              ),
-                              child: Image.network(
-                                productImage,
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                                height: 150,
-                              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ItemDetails(
+                      title: productName,
+                      data: product.data() as Map<String, dynamic>,
+                    ),
+                  ),
+                );
+              },
+              child: Container(
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4.0),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(14),
+                        topLeft: Radius.circular(14),
+                      ),
+                      child: Image.network(
+                        productImage,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: 190,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          SizedBox(height: 3),
+                          Text(
+                            productName,
+                            style: TextStyle(
+                              fontFamily: 'Medium',
+                              fontSize: 16,
                             ),
-                            Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    SizedBox(height: 3),
-                                    Text(
-                                      productName,
-                                      style: TextStyle(
-                                        fontFamily: 'Medium',
-                                        fontSize: 16,
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    Text(
-                                      "${NumberFormat('#,##0').format(double.parse('$price').toInt())} Bath",
-                                      style: TextStyle(
-                                        color: greyDark1,
-                                        fontFamily: 'Regular',
-                                      ),
-                                    ),
-                                  ],
-                                )),
-                          ],
-                        )))
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            "${NumberFormat('#,##0').format(double.parse('$price').toInt())} Bath",
+                            style: TextStyle(
+                              color: Colors.grey[800],
+                              fontFamily: 'Regular',
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
                 .box
-                .color(whiteColor)
-                .border(color: thinGrey01)
+                .color(Colors.white)
+                .border(color: Colors.grey[300]!)
                 .margin(EdgeInsets.all(6))
                 .rounded
                 .make();
@@ -406,7 +344,7 @@ class StoreScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProductGridKnitwear(String category, String subcollection) {
+  Widget _buildProductGridOuterwear(String category, String subcollection) {
     Query query = FirebaseFirestore.instance
         .collection('products')
         .where('vendor_id', isEqualTo: vendorId);
@@ -433,7 +371,7 @@ class StoreScreen extends StatelessWidget {
         return GridView.builder(
           padding: const EdgeInsets.all(8.0),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, childAspectRatio: 1 / 1.1),
+              crossAxisCount: 2, childAspectRatio: 1 / 1.35),
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (BuildContext context, int index) {
             var product = snapshot.data!.docs[index];
@@ -462,7 +400,7 @@ class StoreScreen extends StatelessWidget {
                       productImage,
                       fit: BoxFit.cover,
                       width: double.infinity,
-                      height: 150,
+                      height: 190,
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -526,7 +464,7 @@ class StoreScreen extends StatelessWidget {
         return GridView.builder(
           padding: const EdgeInsets.all(8.0),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, childAspectRatio: 1 / 1.1),
+              crossAxisCount: 2, childAspectRatio: 1 / 1.35),
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (BuildContext context, int index) {
             var product = snapshot.data!.docs[index];
@@ -555,7 +493,7 @@ class StoreScreen extends StatelessWidget {
                       productImage,
                       fit: BoxFit.cover,
                       width: double.infinity,
-                      height: 150,
+                      height: 190,
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -619,7 +557,7 @@ class StoreScreen extends StatelessWidget {
         return GridView.builder(
           padding: const EdgeInsets.all(8.0),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, childAspectRatio: 1 / 1.1),
+              crossAxisCount: 2, childAspectRatio: 1 / 1.35),
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (BuildContext context, int index) {
             var product = snapshot.data!.docs[index];
@@ -648,7 +586,7 @@ class StoreScreen extends StatelessWidget {
                       productImage,
                       fit: BoxFit.cover,
                       width: double.infinity,
-                      height: 150,
+                      height: 190,
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -712,7 +650,7 @@ class StoreScreen extends StatelessWidget {
         return GridView.builder(
           padding: const EdgeInsets.all(8.0),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, childAspectRatio: 1 / 1.1),
+              crossAxisCount: 2, childAspectRatio: 1 / 1.35),
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (BuildContext context, int index) {
             var product = snapshot.data!.docs[index];
@@ -741,7 +679,7 @@ class StoreScreen extends StatelessWidget {
                       productImage,
                       fit: BoxFit.cover,
                       width: double.infinity,
-                      height: 150,
+                      height: 190,
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -805,7 +743,7 @@ class StoreScreen extends StatelessWidget {
         return GridView.builder(
           padding: const EdgeInsets.all(8.0),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, childAspectRatio: 1 / 1.1),
+              crossAxisCount: 2, childAspectRatio: 1 / 1.35),
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (BuildContext context, int index) {
             var product = snapshot.data!.docs[index];
@@ -834,7 +772,7 @@ class StoreScreen extends StatelessWidget {
                       productImage,
                       fit: BoxFit.cover,
                       width: double.infinity,
-                      height: 150,
+                      height: 190,
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -871,24 +809,6 @@ class StoreScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoryMath(BuildContext context) {
-    return DefaultTabController(
-      length: 1,
-      child: Column(
-        children: <Widget>[
-          Container(
-            height: MediaQuery.of(context).size.height * 0.9,
-            child: TabBarView(
-              children: [
-                _buildProductMathGrids('All'),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildProductGridShort(String category, String subcollection) {
     Query query = FirebaseFirestore.instance
         .collection('products')
@@ -916,7 +836,7 @@ class StoreScreen extends StatelessWidget {
         return GridView.builder(
           padding: const EdgeInsets.all(8.0),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, childAspectRatio: 1 / 1.1),
+              crossAxisCount: 2, childAspectRatio: 1 / 1.35),
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (BuildContext context, int index) {
             var product = snapshot.data!.docs[index];
@@ -945,7 +865,7 @@ class StoreScreen extends StatelessWidget {
                       productImage,
                       fit: BoxFit.cover,
                       width: double.infinity,
-                      height: 150,
+                      height: 190,
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -1009,7 +929,7 @@ class StoreScreen extends StatelessWidget {
         return GridView.builder(
           padding: const EdgeInsets.all(8.0),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, childAspectRatio: 1 / 1.1),
+              crossAxisCount: 2, childAspectRatio: 1 / 1.35),
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (BuildContext context, int index) {
             var product = snapshot.data!.docs[index];
@@ -1102,7 +1022,7 @@ class StoreScreen extends StatelessWidget {
         return GridView.builder(
           padding: const EdgeInsets.all(8.0),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, childAspectRatio: 1 / 1.1),
+              crossAxisCount: 2, childAspectRatio: 1 / 1.35),
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (BuildContext context, int index) {
             var product = snapshot.data!.docs[index];
@@ -1168,6 +1088,43 @@ class StoreScreen extends StatelessWidget {
     );
   }
 
+  Future<String> fetchSellerName(String vendorId) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('products')
+        .where('vendor_id', isEqualTo: vendorId)
+        .limit(1)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      Map<String, dynamic> data =
+          querySnapshot.docs.first.data() as Map<String, dynamic>;
+      return data['p_seller'] ?? 'Unknown Seller';
+    } else {
+      return 'Unknown Seller';
+    }
+  }
+
+  Future<String> fetchSellerImgs(String vendorId) async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('vendors')
+          .where('vendor_id', isEqualTo: vendorId)
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        Map<String, dynamic> data =
+            querySnapshot.docs.first.data() as Map<String, dynamic>;
+        return data['imageUrl'] ?? 'Error product image';
+      } else {
+        return 'Error product image';
+      }
+    } catch (e) {
+      print('An error occurred fetching data: $e');
+      return 'Error product image';
+    }
+  }
+
   Widget _buildProductMathGrids(String category) {
     Query query = FirebaseFirestore.instance
         .collection('products')
@@ -1204,10 +1161,9 @@ class StoreScreen extends StatelessWidget {
         int itemCount = validPairs.length;
 
         return GridView.builder(
-          padding: const EdgeInsets.all(2),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            childAspectRatio: 1 / 2,
+            childAspectRatio: 1 / 1.15,
           ),
           itemCount: itemCount,
           itemBuilder: (BuildContext context, int index) {
@@ -1227,128 +1183,141 @@ class StoreScreen extends StatelessWidget {
             String productImage1 = data1['p_imgs'][0];
             String productImage2 = data2['p_imgs'][0];
             return GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MatchDetailScreen(
-                      price1: price1,
-                      price2: price2,
-                      productName1: productName1,
-                      productName2: productName2,
-                      productImage1: productImage1,
-                      productImage2: productImage2,
-                      totalPrice: totalPrice,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MatchDetailScreen(
+                        price1: price1,
+                        price2: price2,
+                        productName1: productName1,
+                        productName2: productName2,
+                        productImage1: productImage1,
+                        productImage2: productImage2,
+                        totalPrice: totalPrice,
+                      ),
                     ),
-                  ),
-                );
-              },
-              child: Card(
-                clipBehavior: Clip.antiAlias,
+                  );
+                },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    Row(
+                    Column(
                       children: [
-                        Column(
+                        Row(
                           children: [
                             Image.network(
                               productImage1,
                               width: 80,
-                              height: 80,
+                              height: 90,
+                              fit: BoxFit.cover,
                             ),
+                            5.widthBox,
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 200,
+                                    child: Text(
+                                      productName1,
+                                      style: const TextStyle(
+                                        fontFamily: 'Medium',
+                                        fontSize: 14,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ),
+                                  ),
+                                  Text(
+                                    "${NumberFormat('#,##0').format(double.parse(price1).toInt())} Bath",
+                                    style: const TextStyle(color: Colors.grey),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                        5.heightBox,
+                        Row(
+                          children: [
                             Image.network(
                               productImage2,
                               width: 80,
-                              height: 80,
+                              height: 90,
+                              fit: BoxFit.cover,
                             ),
+                            5.widthBox,
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 200,
+                                    child: Text(
+                                      productName2,
+                                      style: const TextStyle(
+                                        fontFamily: 'Medium',
+                                        fontSize: 14,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ),
+                                  ),
+                                  Text(
+                                    "${NumberFormat('#,##0').format(double.parse(price2).toInt())} Bath",
+                                    style: const TextStyle(color: Colors.grey),
+                                  ),
+                                ],
+                              ),
+                            )
                           ],
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                const SizedBox(height: 2),
-                                Text(
-                                  productName1,
-                                  style: const TextStyle(fontFamily: bold),
-                                ),
-                                Text(
-                                  'Price: \$${price1.toString()}',
-                                  style: const TextStyle(color: Colors.grey),
-                                ),
-                                const SizedBox(height: 20),
-                                Text(
-                                  productName2,
-                                  style: const TextStyle(fontFamily: bold),
-                                ),
-                                Text(
-                                  'Price: \$${price2.toString()}',
-                                  style: const TextStyle(color: Colors.grey),
-                                ),
-                              ],
-                            ),
-                          ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 10),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Text(
-                        'Total Price: \$${totalPrice.toString()}',
-                        style: const TextStyle(
-                          color: blackColor,
-                          fontFamily: bold,
-                        ),
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Price: ",
+                            style: TextStyle(
+                                color: blackColor,
+                                fontFamily: regular,
+                                fontSize: 14),
+                          ),
+                          Text(
+                            "${NumberFormat('#,##0').format(double.parse(totalPrice).toInt())} ",
+                            style: TextStyle(
+                                color: blackColor,
+                                fontFamily: medium,
+                                fontSize: 16),
+                          ),
+                          Text(
+                            "Bath",
+                            style: TextStyle(
+                                color: blackColor,
+                                fontFamily: regular,
+                                fontSize: 14),
+                          ),
+                        ],
                       ),
-                    ),
+                    )
                   ],
-                ),
-              ),
-            );
+                )
+                    .box
+                    .padding(EdgeInsets.all(6))
+                    .margin(EdgeInsets.symmetric(horizontal: 4))
+                    .roundedSM
+                    .border(color: thinGrey01)
+                    .make());
           },
         );
       },
     );
-  }
-
-  Future<String> fetchSellerName(String vendorId) async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('products')
-        .where('vendor_id', isEqualTo: vendorId)
-        .limit(1)
-        .get();
-
-    if (querySnapshot.docs.isNotEmpty) {
-      Map<String, dynamic> data =
-          querySnapshot.docs.first.data() as Map<String, dynamic>;
-      return data['p_seller'] ?? 'Unknown Seller';
-    } else {
-      return 'Unknown Seller';
-    }
-  }
-
-  Future<String> fetchSellerImgs(String vendorId) async {
-    try {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('vendors')
-          .where('vendor_id', isEqualTo: vendorId)
-          .limit(1)
-          .get();
-
-      if (querySnapshot.docs.isNotEmpty) {
-        Map<String, dynamic> data =
-            querySnapshot.docs.first.data() as Map<String, dynamic>;
-        return data['imageUrl'] ?? 'Error product image';
-      } else {
-        return 'Error product image';
-      }
-    } catch (e) {
-      print('An error occurred fetching data: $e');
-      return 'Error product image';
-    }
   }
 }

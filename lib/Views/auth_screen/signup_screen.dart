@@ -24,8 +24,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (text.isEmpty) return "";
     return text[0].toUpperCase() + text.substring(1);
   }
-  
-  
+
   // Validate password function and other methods
 
   bool isCheck = false;
@@ -71,12 +70,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
               isPass: true,
               readOnly: false,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             Row(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(2),
-                  child: Checkbox(
+                  Checkbox(
                     activeColor: primaryApp,
                     checkColor: whiteColor,
                     value: isCheck,
@@ -86,28 +83,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       });
                     },
                   ),
-                ),
-                const SizedBox(width: 8),
                 Expanded(
                     child: RichText(
                         text: const TextSpan(children: [
                   TextSpan(
-                      text: "I agree to the ",
-                      style: TextStyle(color: greyDark2, fontFamily: bold)),
+                      text: iAgree,
+                      style: TextStyle(color: greyDark2, fontFamily: medium,fontSize: 15)),
                   TextSpan(
                       text: termAndCond,
-                      style: TextStyle(color: primaryApp, fontFamily: bold)),
+                      style: TextStyle(color: primaryApp, fontFamily: medium,fontSize: 15)),
                   TextSpan(
                       text: " & ",
                       style: TextStyle(
                         color: greyDark2,
-                        fontFamily: bold,
+                        fontFamily: medium,
+                        fontSize: 15,
                       )),
                   TextSpan(
                       text: privacyPolicy,
                       style: TextStyle(
                         color: primaryApp,
-                        fontFamily: bold,
+                        fontFamily: medium,
+                        fontSize: 15,
                       ))
                 ])))
               ],
@@ -145,31 +142,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-bool validateInput() {
-  String? passwordError = controller.validatePassword(passwordController.text);
-  bool isValid = emailController.text.isNotEmpty &&
-      nameController.text.isNotEmpty &&
-      passwordController.text.isNotEmpty &&
-      passwordRetypeController.text.isNotEmpty &&
-      passwordRetypeController.text == passwordController.text &&
-      passwordError == null;
+  bool validateInput() {
+    String? passwordError =
+        controller.validatePassword(passwordController.text);
+    bool isValid = emailController.text.isNotEmpty &&
+        nameController.text.isNotEmpty &&
+        passwordController.text.isNotEmpty &&
+        passwordRetypeController.text.isNotEmpty &&
+        passwordRetypeController.text == passwordController.text &&
+        passwordError == null;
 
-  if (!isValid) {
-    if (emailController.text.isEmpty ||
-        nameController.text.isEmpty ||
-        passwordController.text.isEmpty ||
-        passwordRetypeController.text.isEmpty) {
-      VxToast.show(context, msg: 'Please fill in all fields.');
-    } else if (passwordController.text != passwordRetypeController.text) {
-      VxToast.show(context, msg: "Passwords don't match.");
-    } else if (passwordError != null) {
-      VxToast.show(context, msg: passwordError);
-    } else {
-      VxToast.show(context, msg: 'Please check your input.');
+    if (!isValid) {
+      if (emailController.text.isEmpty ||
+          nameController.text.isEmpty ||
+          passwordController.text.isEmpty ||
+          passwordRetypeController.text.isEmpty) {
+        VxToast.show(context, msg: 'Please fill in all fields.');
+      } else if (passwordController.text != passwordRetypeController.text) {
+        VxToast.show(context, msg: "Passwords don't match.");
+      } else if (passwordError != null) {
+        VxToast.show(context, msg: passwordError);
+      } else {
+        VxToast.show(context, msg: 'Please check your input.');
+      }
     }
-  }
 
-  return isValid;
+    return isValid;
   }
-
 }

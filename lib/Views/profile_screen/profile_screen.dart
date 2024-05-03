@@ -1,7 +1,6 @@
 import 'package:flutter_finalproject/Views/profile_screen/menu_setting_screen.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-
 import '../../consts/consts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -39,7 +38,6 @@ class _ProfileScreenState extends State<ProfileScreen>
             fontFamily: regular,
           ),
         ),
-        elevation: 8.0,
         shadowColor: greyColor.withOpacity(0.5),
         actions: <Widget>[
           IconButton(
@@ -369,306 +367,328 @@ class _ProfileScreenState extends State<ProfileScreen>
   );
 } */
 
-Widget buildUserMixMatchTab() {
-  return StreamBuilder<QuerySnapshot>(
-    stream: FirestoreServices.getWishlistsusermixmatchs(),
-    builder: (context, snapshot) {
-      if (!snapshot.hasData) {
-        return Center(child: CircularProgressIndicator());
-      }
-      var documents = snapshot.data!.docs;
-
-      if (documents.isEmpty) {
-        return Center(child: Text("No products in your wishlist!", style: TextStyle(color: greyDark2)));
-      }
-
-      List<Map<String, dynamic>> pairs = [];
-      for (var doc in documents) {
-        var data = doc.data() as Map<String, dynamic>;
-        if (data['p_name_top'] != null && data['p_name_lower'] != null) {
-          pairs.add({
-            'top': data['p_name_top'],
-            'lower': data['p_name_lower'],
-            'top_price': data['p_price_top'].toString(),
-            'lower_price': data['p_price_lower'].toString(),
-            'top_image': data['p_imgs_top'][0],
-            'lower_image': data['p_imgs_lower'][0],
-            'docId_top': doc.id,
-            'docId_lower': doc.id
-          });
+  Widget buildUserMixMatchTab() {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirestoreServices.getWishlistsusermixmatchs(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(child: CircularProgressIndicator());
         }
-      }
+        var documents = snapshot.data!.docs;
 
-      if (pairs.isEmpty) {
-        return Center(child: Text("No complete pairs in your wishlist!", style: TextStyle(color: greyDark2)));
-      }
+        if (documents.isEmpty) {
+          return Center(
+              child: Text("No products in your wishlist!",
+                  style: TextStyle(color: greyDark2)));
+        }
 
-      return ListView.builder(
-        itemCount: pairs.length,
-        itemBuilder: (BuildContext context, int index) {
-          var pair = pairs[index];
-          return Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: thinGrey01),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Stack(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                  // Product 1
-                  GestureDetector(
-                    onTap: () {
-                      navigateToItemDetails(context, pair['top']);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ClipRRect(
-                            child: Image.network(
-                              pair['top_image'],
-                              width: 75,
-                              height: 75,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          Expanded(
-                            flex: 3,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    pair['top'],
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  Text(
-                                    "${NumberFormat('#,##0').format(double.parse(pair['top_price']).toInt())} Bath",
-                                    style: const TextStyle(color: greyDark1),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                    // Product 2
-                    GestureDetector(
-                      onTap: () {
-                        navigateToItemDetails(context, pair['lower']);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ClipRRect(
-                              child: Image.network(
-                                pair['lower_image'],
-                                width: 75,
-                                height: 75,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            Expanded(
-                              flex: 3,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      pair['lower'],
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
-                                        color: Colors.black,
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    Text(
-                                      "${NumberFormat('#,##0').format(double.parse(pair['lower_price']).toInt())} Bath",
-                                      style: const TextStyle(color: greyDark1),
-                                    ),
-                                  ],
+        List<Map<String, dynamic>> pairs = [];
+        for (var doc in documents) {
+          var data = doc.data() as Map<String, dynamic>;
+          if (data['p_name_top'] != null && data['p_name_lower'] != null) {
+            pairs.add({
+              'top': data['p_name_top'],
+              'lower': data['p_name_lower'],
+              'top_price': data['p_price_top'].toString(),
+              'lower_price': data['p_price_lower'].toString(),
+              'top_image': data['p_imgs_top'][0],
+              'lower_image': data['p_imgs_lower'][0],
+              'docId_top': doc.id,
+              'docId_lower': doc.id
+            });
+          }
+        }
+
+        if (pairs.isEmpty) {
+          return Center(
+              child: Text("No complete pairs in your wishlist!",
+                  style: TextStyle(color: greyDark2)));
+        }
+
+        return ListView.builder(
+          itemCount: pairs.length,
+          itemBuilder: (BuildContext context, int index) {
+            var pair = pairs[index];
+            return Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: thinGrey01), 
+                ),
+              ),
+              child: Stack(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Product 1
+                      GestureDetector(
+                        onTap: () {
+                          navigateToItemDetails(context, pair['top']);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ClipRRect(
+                                child: Image.network(
+                                  pair['top_image'],
+                                  width: 75,
+                                  height: 75,
+                                  fit: BoxFit.cover,
                                 ),
+                              ),
+                              Expanded(
+                                flex: 3,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        pair['top'],
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      Text(
+                                        "${NumberFormat('#,##0').format(double.parse(pair['top_price']).toInt())} Bath",
+                                        style:
+                                            const TextStyle(color: greyDark2),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      // Product 2
+                      GestureDetector(
+                        onTap: () {
+                          navigateToItemDetails(context, pair['lower']);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ClipRRect(
+                                child: Image.network(
+                                  pair['lower_image'],
+                                  width: 75,
+                                  height: 75,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Expanded(
+                                flex: 3,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        pair['lower'],
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      Text(
+                                        "${NumberFormat('#,##0').format(double.parse(pair['lower_price']).toInt())} Bath",
+                                        style:
+                                            const TextStyle(color: greyDark2),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 6),
+                      // Total Price
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Row(
+                          children: [
+                            Text(
+                              "Total Price  ",
+                              style: TextStyle(
+                                color: greyDark2,
+                                fontFamily: 'regular',
+                                fontSize: 16,
+                              ),
+                            ),
+                            Text(
+                              "${NumberFormat('#,##0').format(double.parse(pair['top_price']).toInt() + double.parse(pair['lower_price']).toInt())} ",
+                              style: TextStyle(
+                                color: greyDark2,
+                                fontFamily: medium,
+                                fontSize: 16,
+                              ),
+                            ),
+                            Text(
+                              " Bath",
+                              style: TextStyle(
+                                color: greyDark2,
+                                fontFamily: 'regular',
+                                fontSize: 16,
                               ),
                             ),
                           ],
                         ),
-                      ),
-                    ),
-                    SizedBox(height: 6),
-                    // Total Price
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Total Price  ",
-                            style: TextStyle(
-                              color: greyDark2,
-                              fontFamily: 'regular',
-                              fontSize: 14,
-                            ),
-                          ),
-                          Text(
-                            "${NumberFormat('#,##0').format(double.parse(pair['top_price']).toInt() + double.parse(pair['lower_price']).toInt())} ",
-                            style: TextStyle(
-                              color: greyDark2,
-                              fontFamily: 'medium',
-                              fontSize: 14,
-                            ),
-                          ),
-                          Text(
-                            " Bath",
-                            style: TextStyle(
-                              color: greyDark2,
-                              fontFamily: 'regular',
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-                // Favorite Icon
-                Align(
-                  alignment: Alignment.topRight,
-                  child: IconButton(
-                    icon: Icon(Icons.favorite, color: redColor),
-                    onPressed: () async {
-                      _showDeleteConfirmationDialog(context, pair['top'], pair['docId_top'], pair['docId_lower']);
-                    },
+                      )
+                    ],
                   ),
-                ),
-              ],
-            ),
-          );
-        },
-      );
-    },
-  );
-}
 
-void _showDeleteConfirmationDialog(BuildContext context, String productName, String docIdTop, String docIdLower) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        elevation: 0.0,
-        backgroundColor: Colors.transparent,
-        child: AnimatedPadding(
-          duration: Duration(milliseconds: 100),
-          curve: Curves.easeInOut,
-          padding: MediaQuery.of(context).viewInsets,
-          child: Container(
-            padding: EdgeInsets.all(20.0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.circular(20.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 10.0,
-                  offset: const Offset(0.0, 10.0),
-                ),
-              ],
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  "Confirm Deletion",
-                  style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600),
-                ),
-                SizedBox(height: 20.0),
-                Text(
-                  "Are you sure you want to delete ?",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 16.0),
-                ),
-                SizedBox(height: 20.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop(); // Close the dialog
-                      },
-                      child: Text(
-                        "Cancel",
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ),
-                    SizedBox(width: 20.0),
-                    TextButton(
+                  // Favorite Icon
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      icon: Icon(Icons.favorite, color: redColor),
                       onPressed: () async {
-                        await FirebaseFirestore.instance.collection('usermixmatchs').doc(docIdTop).delete();
-                        await FirebaseFirestore.instance.collection('usermixmatchs').doc(docIdLower).delete();
-                        Navigator.of(context).pop(); // Close the dialog
+                        _showDeleteConfirmationDialog(context, pair['top'],
+                            pair['docId_top'], pair['docId_lower']);
                       },
-                      child: Text(
-                        "Delete",
-                        style: TextStyle(color: Colors.red),
-                      ),
                     ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              )
+                  .box
+                  .p4
+                  .margin(EdgeInsetsDirectional.symmetric(horizontal: 14))
+                  .make(),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _showDeleteConfirmationDialog(BuildContext context, String productName,
+      String docIdTop, String docIdLower) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
           ),
-        ),
-      );
-    },
-  );
-}
-
-
-void navigateToItemDetails(BuildContext context, String productName) {
-  FirebaseFirestore.instance
-      .collection('products')
-      .where('p_name', isEqualTo: productName)
-      .limit(1)
-      .get()
-      .then((QuerySnapshot querySnapshot) {
-        if (querySnapshot.docs.isNotEmpty) {
-          var productData = querySnapshot.docs.first.data() as Map<String, dynamic>;
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ItemDetails(
-                title: productData['p_name'],
-                data: productData,
+          elevation: 0.0,
+          backgroundColor: Colors.transparent,
+          child: AnimatedPadding(
+            duration: Duration(milliseconds: 100),
+            curve: Curves.easeInOut,
+            padding: MediaQuery.of(context).viewInsets,
+            child: Container(
+              padding: EdgeInsets.all(20.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(20.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 10.0,
+                    offset: const Offset(0.0, 10.0),
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "Confirm Deletion",
+                    style:
+                        TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600),
+                  ),
+                  SizedBox(height: 20.0),
+                  Text(
+                    "Are you sure you want to delete ?",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+                  SizedBox(height: 20.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(); // Close the dialog
+                        },
+                        child: Text(
+                          "Cancel",
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                      SizedBox(width: 20.0),
+                      TextButton(
+                        onPressed: () async {
+                          await FirebaseFirestore.instance
+                              .collection('usermixmatchs')
+                              .doc(docIdTop)
+                              .delete();
+                          await FirebaseFirestore.instance
+                              .collection('usermixmatchs')
+                              .doc(docIdLower)
+                              .delete();
+                          Navigator.of(context).pop(); // Close the dialog
+                        },
+                        child: Text(
+                          "Delete",
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("No details available for $productName"),
-          ));
-        }
-      });
-}
+          ),
+        );
+      },
+    );
+  }
 
+  void navigateToItemDetails(BuildContext context, String productName) {
+    FirebaseFirestore.instance
+        .collection('products')
+        .where('p_name', isEqualTo: productName)
+        .limit(1)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      if (querySnapshot.docs.isNotEmpty) {
+        var productData =
+            querySnapshot.docs.first.data() as Map<String, dynamic>;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ItemDetails(
+              title: productData['p_name'],
+              data: productData,
+            ),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("No details available for $productName"),
+        ));
+      }
+    });
+  }
 
   Widget buildMatchTab() {
     return StreamBuilder<QuerySnapshot>(
@@ -717,7 +737,8 @@ void navigateToItemDetails(BuildContext context, String productName) {
             int actualIndex = index * 2;
 
             var data1 = flatList[actualIndex].data() as Map<String, dynamic>;
-            var data2 = flatList[actualIndex + 1].data() as Map<String, dynamic>;
+            var data2 =
+                flatList[actualIndex + 1].data() as Map<String, dynamic>;
 
             String productName1 = data1['p_name'];
             String productName2 = data2['p_name'];
@@ -861,21 +882,26 @@ void navigateToItemDetails(BuildContext context, String productName) {
                               child: IconButton(
                                 icon: Icon(Icons.favorite, color: redColor),
                                 onPressed: () async {
+                                  // สร้าง List ที่มีรหัสผู้ใช้ปัจจุบันอยู่
+                                  List<String> currentUserUid = [
+                                    FirebaseAuth.instance.currentUser!.uid
+                                  ];
 
-                                // สร้าง List ที่มีรหัสผู้ใช้ปัจจุบันอยู่
-                                List<String> currentUserUid = [FirebaseAuth.instance.currentUser!.uid];
+                                  // สร้าง Map ที่จะใช้ในการอัปเดตเอกสารใน Firestore
+                                  Map<String, dynamic> updateData = {
+                                    'p_wishlist':
+                                        FieldValue.arrayRemove(currentUserUid)
+                                  };
 
-                                // สร้าง Map ที่จะใช้ในการอัปเดตเอกสารใน Firestore
-                                Map<String, dynamic> updateData = {
-                                  'p_wishlist': FieldValue.arrayRemove(currentUserUid)
-                                };
-                                
-                                    for (int i = actualIndex; i <= actualIndex + 1; i++) {
+                                  for (int i = actualIndex;
+                                      i <= actualIndex + 1;
+                                      i++) {
                                     await FirebaseFirestore.instance
                                         .collection(productsCollection)
                                         .doc(flatList[i].id)
                                         .update(updateData);
-                                  };
+                                  }
+                                  ;
                                 },
                               ),
                             ),

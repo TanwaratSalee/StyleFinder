@@ -127,16 +127,15 @@ class _CartScreenState extends State<CartScreen> {
                                               style: TextStyle(
                                                 color: greyDark2,
                                                 fontFamily: medium,
-                                                fontSize: 18,
+                                                fontSize: 15,
                                               ),
                                             ),
-                                            SizedBox(height: 3),
                                             Text(
                                              'Size: ${data[index]['productsize']}',
                                               style: TextStyle(
                                                 color: greyDark1,
                                                 fontFamily: regular,
-                                                fontSize: 16,
+                                                fontSize: 14,
                                               ),
                                             ),
                                             SizedBox(height: 3),
@@ -145,7 +144,7 @@ class _CartScreenState extends State<CartScreen> {
                                               style: TextStyle(
                                                 color: greyDark1,
                                                 fontFamily: regular,
-                                                fontSize: 16,
+                                                fontSize: 14,
                                               ),
                                             ),
                                           ],
@@ -165,20 +164,16 @@ class _CartScreenState extends State<CartScreen> {
                               );
                             })),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        "Select All"
-                            .text
-                            .fontFamily(regular)
-                            .color(Colors.black)
-                            .make(),
+                      
                         Row(
                           children: [
                             "Total price  "
                                 .text
                                 .fontFamily(regular)
                                 .color(greyDark1)
-                                .size(12)
+                                .size(14)
                                 .make(),
                             Obx(
                               () => "${controller.totalP.value}"
@@ -193,7 +188,7 @@ class _CartScreenState extends State<CartScreen> {
                                 .text
                                 .fontFamily(regular)
                                 .color(greyDark1)
-                                .size(12)
+                                .size(14)
                                 .make(),
                           ],
                         )
@@ -201,18 +196,9 @@ class _CartScreenState extends State<CartScreen> {
                     )
                         .box
                         .padding(const EdgeInsets.all(22))
-                        .color(thinGrey01)
-                        // .roundedSM
+                        // .color(thinGrey01)
+                        .border(color: thinGrey01)
                         .make(),
-                    // 10.heightBox,
-                    // SizedBox(
-                    //   width: context.screenWidth - 60,
-                    //   child: ourButton(
-                    //       color: primaryApp,
-                    //       onPress: () {},
-                    //       textColor: whiteColor,
-                    //       title: "Proceed to shipping"),
-                    // )
                   ],
                 ),
               );

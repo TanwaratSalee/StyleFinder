@@ -11,6 +11,7 @@ const createNewAccount = "Don’t have an account? ";
 const loginWith = "Log in with";
 const fullname = "Fullname";
 const privacyPolicy = "Privacy Policy";
+const iAgree = "I agree to the ";
 const termAndCond = "Term And Conditions";
 const successfully = "Successfully";
 const loggedout = "Logged out successfully";

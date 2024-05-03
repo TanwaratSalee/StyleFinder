@@ -1,14 +1,12 @@
 // ignore_for_file: unused_local_variable, sort_child_properties_last
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_finalproject/Views/news_screen/component/featured_button.dart';
 import 'package:flutter_finalproject/Views/news_screen/matchproduct_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/store_screen/mixandmatch_detail.dart';
 import 'package:flutter_finalproject/Views/news_screen/product_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
-import 'package:flutter_finalproject/Views/widgets_common/home_buttons.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/consts/lists.dart';
 import 'package:flutter_finalproject/controllers/news_controller.dart';
@@ -346,6 +344,8 @@ class NewsScreen extends StatelessWidget {
                             ),
                             itemBuilder: (context, index) {
                               return Column(
+                                 crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                 children: [
                                   Expanded(
                                     child: Center(
@@ -364,7 +364,7 @@ class NewsScreen extends StatelessWidget {
                                     ),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.all(8.0),
+                                    padding: const EdgeInsets.all(8),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -398,8 +398,7 @@ class NewsScreen extends StatelessWidget {
                                   .white
                                   .rounded
                                   .shadowSm
-                                  .margin(
-                                      const EdgeInsets.symmetric(horizontal: 2))
+                                  .margin(const EdgeInsets.symmetric(horizontal: 2))
                                   .make()
                                   .onTap(() {
                                 Get.to(() => ItemDetails(

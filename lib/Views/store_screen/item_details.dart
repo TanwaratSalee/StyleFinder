@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
+import 'package:flutter_finalproject/Views/widgets_common/marqueeWidget.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 import 'package:flutter_finalproject/consts/colors.dart';
 import 'package:flutter_finalproject/consts/firebase_consts.dart';
@@ -131,12 +132,17 @@ class _ItemDetailsState extends State<ItemDetails> {
                     10.heightBox,
                     Row(
                       children: [
-                        Text(
-                          widget.title ?? '',
-                          style: const TextStyle(
-                            color: blackColor,
-                            fontFamily: medium,
-                            fontSize: 24,
+                        Container(
+                          width: 360, 
+                          child: Text(
+                            widget.title ?? '',
+                            style: const TextStyle(
+                              color: blackColor,
+                              fontFamily: medium,
+                              fontSize: 22,
+                            ),
+                            softWrap:
+                                true, 
                           ),
                         ),
                         const Spacer(),
@@ -418,7 +424,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                               .make(),
                           5.widthBox,
                           " Baht".text.color(blackColor).make(),
-                           5.widthBox,
+                          5.widthBox,
                         ],
                       ).box.padding(const EdgeInsets.all(8)).make(),
                     ],

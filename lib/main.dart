@@ -20,8 +20,21 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: thinGrey0),
-        // scaffoldBackgroundColor: Colors.transparent,
+        // Manually defined ColorScheme
+        colorScheme: ColorScheme(
+          brightness: Brightness.light,
+          primary: thinGrey0,
+          onPrimary: whiteColor,
+          secondary: thinGrey01,
+          onSecondary: blackColor,
+          error: redColor,
+          onError: whiteColor,
+          background: thinGrey0,
+          onBackground: blackColor,
+          surface: thinGrey0,
+          onSurface: blackColor,
+        ),
+        scaffoldBackgroundColor: thinGrey0,
         appBarTheme: const AppBarTheme(
           iconTheme: IconThemeData(color: blackColor),
           elevation: 0.0,

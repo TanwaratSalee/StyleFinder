@@ -83,8 +83,8 @@ class _MatchScreenState extends State<MatchScreen> {
         automaticallyImplyLeading: false,
         backgroundColor: whiteColor,
         title: appbarField(context: context),
-        elevation: 8.0,
-        shadowColor: greyColor.withOpacity(0.5),
+        // elevation: 8.0,
+        // shadowColor: greyColor.withOpacity(0.5),
       ),
       body: CustomScrollView(
         physics: NeverScrollableScrollPhysics(),
