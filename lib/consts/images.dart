@@ -123,12 +123,16 @@ const String icPromptpay = "assets/images/payment/qr.png";
 const String icVisa = "assets/images/payment/card.png";
 const String icmobile = "assets/images/payment/visa.png";
 
+const String icPaymentCard  = "assets/icons/iconsPayment/card.png";
+const String icPaymentDelivery  = "assets/icons/iconsPayment/delivery.png";
+const String icPaymentPromptpay  = "assets/icons/iconsPayment/mobilebanking.png";
+
 //bank
-const String imgkbank = " ";
-const String imgscb = " ";
-const String imgbbl = " ";
-const String imgktb = " ";
-const String imgkbay = " ";
+const String imgkbank = 'assets/images/payment/Kbank.png';
+const String imgscb = 'assets/images/payment/SCE.png';
+const String imgbbl = 'assets/images/payment/BBL.png';
+const String imgktb =  'assets/images/payment/krungthai.png';
+const String imgkbay =  'assets/images/payment/KMA.jpg';
 
 //Order
 const String icPlaced = "assets/icons/icNormal/placed.png";

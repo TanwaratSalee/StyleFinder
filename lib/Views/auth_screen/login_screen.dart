@@ -163,7 +163,7 @@ class LoginScreen extends StatelessWidget {
                                           },
                                           child: Container(
                                             padding: const EdgeInsets.fromLTRB(
-                                                50, 15, 50, 15),
+                                                120, 15, 120, 15),
                                             decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(8),

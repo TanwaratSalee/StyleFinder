@@ -18,15 +18,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      // title: appname,
       theme: ThemeData(
-          scaffoldBackgroundColor: Colors.transparent,
-          appBarTheme: const AppBarTheme(
-              iconTheme: IconThemeData(color: blackColor),
-              elevation: 0.0,
-              backgroundColor: Colors.transparent),
-          primaryColor: primaryApp,
-          fontFamily: light),
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: thinGrey0),
+        // scaffoldBackgroundColor: Colors.transparent,
+        appBarTheme: const AppBarTheme(
+          iconTheme: IconThemeData(color: blackColor),
+          elevation: 0.0,
+          backgroundColor: Colors.transparent),
+        primaryColor: primaryApp,
+        fontFamily: light),
       home: const SplashScreen(),
     );
   }

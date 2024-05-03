@@ -49,6 +49,7 @@ const profileButtonsIcon = [
 ];
 
 //Payment
-const paymentMethodsImg = [imgPromptpay, imgVisa, imgCash];
-const paymentIcons = [icPromptpay, icVisa, icCash];
-const paymentMethods = [promptpay, visaCard, cashOnDelivery];
+const paymentIcons = [icPaymentCard,icPaymentDelivery,icPaymentPromptpay];
+const textpaymentMethods = [cashOnDelivery, card, mobile];
+const imgBank = [imgkbank,imgscb,imgbbl,imgktb,imgkbay];
+// const textBank = [kbank,scb,bbl,ktb,bay];

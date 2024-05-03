@@ -67,7 +67,7 @@ class _ItemDetailsState extends State<ItemDetails> {
   void fetchVendorImageUrl(String vendorId) async {
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('vendors')
+          .collection(vendorsCollection)
           .where('vendor_id', isEqualTo: vendorId)
           .limit(1)
           .get();
@@ -99,12 +99,6 @@ class _ItemDetailsState extends State<ItemDetails> {
       child: Scaffold(
         backgroundColor: whiteColor,
         appBar: AppBar(
-          //   leading: IconButton(
-          //       onPressed: () {
-          //         controller.resetValues();
-          //         Get.back();
-          //       },
-          //       icon: const Icon(Icons.arrow_back_ios)),
           title: widget.title!.text
               .color(greyDark2)
               .fontFamily(bold)

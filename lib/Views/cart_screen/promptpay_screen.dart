@@ -1,23 +1,19 @@
 import 'dart:convert'; // แก้ไขบรรทัดนี้
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
-import 'package:flutter_finalproject/consts/lists.dart';
 import 'package:flutter_finalproject/controllers/cart_controller.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:path/path.dart';
 
-class QRScreen extends StatefulWidget {
-  const QRScreen({Key? key}) : super(key: key);
+class PromptpayScreen extends StatefulWidget {
+  const PromptpayScreen({Key? key}) : super(key: key);
 
   @override
-  _QRScreenState createState() => _QRScreenState();
+  _PromptpayScreenState createState() => _PromptpayScreenState();
 }
 
-class _QRScreenState extends State<QRScreen> {
+class _PromptpayScreenState extends State<PromptpayScreen> {
   var controller = Get.find<CartController>(); // ตัวอย่างการเข้าถึง controller
   String? downloadUri;
 

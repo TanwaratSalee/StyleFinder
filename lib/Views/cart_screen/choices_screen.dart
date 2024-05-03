@@ -1,9 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/collection_screen/address_controller.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
-import 'package:flutter_finalproject/controllers/cart_controller.dart';
 import 'package:get/get.dart';
 import 'package:flutter_finalproject/Views/cart_screen/payment_method.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
@@ -30,7 +26,7 @@ class _ChoicesScreenState extends State<ChoicesScreen> {
       backgroundColor: whiteColor,
       appBar: AppBar(
         title:
-            const Text("Shipping Info").text.size(24).fontFamily(medium).make(),
+            const Text("Shipping address").text.size(24).fontFamily(medium).make(),
         backgroundColor: whiteColor,
       ),
       body: Padding(

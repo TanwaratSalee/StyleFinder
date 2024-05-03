@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/auth_screen/login_screen.dart';
 import 'package:flutter_finalproject/Views/cart_screen/address_screen.dart';
 import 'package:flutter_finalproject/Views/chat_screen/messaging_screen.dart';
@@ -77,7 +76,7 @@ class MenuSettingScreen extends StatelessWidget {
           trailing: const Icon(Icons.arrow_forward_ios, size: 16),
         );
       },
-    ).box.color(thinPrimaryApp).rounded.margin(const EdgeInsets.symmetric(horizontal: 18, vertical: 8)).padding(const EdgeInsets.symmetric(horizontal: 16)).make();
+    ).box.color(whiteColor).rounded.margin(const EdgeInsets.symmetric(horizontal: 4, vertical: 8)).padding(const EdgeInsets.symmetric(horizontal: 16)).make();
   }
 
   Widget buildActionsSection(BuildContext context) {
@@ -103,47 +102,58 @@ class MenuSettingScreen extends StatelessWidget {
                   .make(),
             ],
           ),
-        ).box.color(thinPrimaryApp).rounded.margin(const EdgeInsets.symmetric(horizontal: 18, vertical: 8)).padding(const EdgeInsets.symmetric(horizontal: 8)).make(),
+        ).box.color(thinGrey01).rounded.margin(const EdgeInsets.symmetric(horizontal: 12, vertical: 8)).padding(const EdgeInsets.symmetric(horizontal: 8)).make(),
       ],
     );
   }
 
-  void showLogoutDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext dialogContext) {
-        return Dialog(
-          backgroundColor: whiteColor,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(height: 30),
-              const Text('Are you sure you want to logout?', style: TextStyle(fontFamily: regular, fontSize: 18)),
-              const SizedBox(height: 30),
-              const Divider(height: 1),
-              Row(
+ void showLogoutDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext dialogContext) {
+      return Dialog(
+        backgroundColor: whiteColor,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 30),
+            const Text('Are you sure you want to logout?').text.size(18).fontFamily(regular).make(),
+            const SizedBox(height: 30),
+            const Divider(height: 1),
+            IntrinsicHeight( 
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  TextButton(
-                    child: const Text('Cancel', style: TextStyle(fontFamily: regular, fontSize: 18, color: greyDark1)),
-                    onPressed: () => Navigator.of(dialogContext).pop(),
+                  Expanded( 
+                    child: TextButton(
+                      child: const Text('Cancel', style: TextStyle(fontFamily: regular, fontSize: 18, color: greyDark1)),
+                      onPressed: () => Navigator.of(dialogContext).pop(),
+                    ),
                   ),
-                  TextButton(
-                    child: const Text('Logout', style: TextStyle(fontFamily: regular, color: redColor, fontSize: 18)),
-                    onPressed: () async {
-                      await Get.put(AuthController()).signoutMethod(context);
-                      Navigator.of(dialogContext).pop(); // Close the dialog
-                      Get.offAll(() => const LoginScreen()); // Navigate back to the login screen
-                    },
+                  VerticalDivider(
+                    width: 1,
+                    thickness: 1
+                  ),
+                  Expanded( 
+                    child: TextButton(
+                      child: const Text('Logout', style: TextStyle(fontFamily: regular, color: redColor, fontSize: 18)),
+                      onPressed: () async {
+                        await Get.put(AuthController()).signoutMethod(context);
+                        Navigator.of(dialogContext).pop(); 
+                        Get.offAll(() => const LoginScreen()); 
+                      },
+                    ),
                   ),
                 ],
               ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
 
   void handleProfileNavigation(int index, BuildContext context, dynamic data, profileCtrl.ProfileController controller) {
     switch (index) {

@@ -25,7 +25,12 @@ class CartController extends GetxController {
   var placingOrder = false.obs;
 
   var selectedItems = RxMap<String, bool>(); // Tracks selected items by ID
-  var selectAll = false.obs; // Tracks the state of the "select all" toggle
+  var selectAll = false.obs; 
+  var isMobileBankingExpanded = false.obs;
+
+  void toggleMobileBankingExpanded() {
+    isMobileBankingExpanded.value = !isMobileBankingExpanded.value;
+  }
 
   Map<String, dynamic>? _selectedAddress;
   
@@ -41,7 +46,7 @@ class CartController extends GetxController {
   void toggleItemSelection(String id) {
     final isSelected = selectedItems[id] ?? false;
     selectedItems[id] = !isSelected;
-    updateSelectedItems(); // Update select all status based on individual selections
+    updateSelectedItems(); 
   }
 
   // Toggle the selection of all items

@@ -1,9 +1,5 @@
 import 'dart:convert';
-
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
-import 'package:flutter_finalproject/Views/home_screen/home_screen.dart';
 import 'package:flutter_finalproject/Views/home_screen/mainHome.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
@@ -12,17 +8,16 @@ import 'package:flutter_finalproject/controllers/cart_controller.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:omise_flutter/omise_flutter.dart';
-import 'package:flutter/material.dart';
 import 'package:pattern_formatter/numeric_formatter.dart';
 
-class VisaCardScreen extends StatefulWidget {
-  const VisaCardScreen({Key? key}) : super(key: key);
+class CreditCardScreen extends StatefulWidget {
+  const CreditCardScreen({Key? key}) : super(key: key);
 
   @override
-  _VisaCardScreenState createState() => _VisaCardScreenState();
+  _CreditCardScreenState createState() => _CreditCardScreenState();
 }
 
-class _VisaCardScreenState extends State<VisaCardScreen> {
+class _CreditCardScreenState extends State<CreditCardScreen> {
   var controller = Get.find<CartController>();
   String cardHolderName = 'Card owner\'s name';
   TextEditingController cardNumberController = TextEditingController();
@@ -105,7 +100,7 @@ Future<void> _showSuccessDialog(BuildContext context) async {
     },
   );
 
-  String selectedPaymentMethod = paymentMethods[controller.paymentIndex.value];
+  String selectedPaymentMethod = textpaymentMethods[controller.paymentIndex.value];
   await controller.placeMyOrder(
     orderPaymentMethod: selectedPaymentMethod,
     totalAmount: controller.totalP.value,

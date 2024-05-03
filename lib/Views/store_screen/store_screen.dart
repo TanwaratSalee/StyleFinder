@@ -26,19 +26,12 @@ class StoreScreen extends StatelessWidget {
                 .size(26)
                 .make(),
             centerTitle: true,
-            // leading: IconButton(
-            //   icon: const Icon(Icons.arrow_back_ios),
-            //   onPressed: () => Get.back(),
-            // ),
             elevation: 0,
           ),
           body: SingleChildScrollView(
-            // physics: NeverScrollableScrollPhysics(),
             child: Column(
-              // แก้ไขในส่วนนี้
               children: [
                 _buildLogoAndRatingSection(context),
-                // _buildReviewHighlights(),
                 _buildProductMatchTabs(context),
               ],
             ),
@@ -167,19 +160,6 @@ class StoreScreen extends StatelessWidget {
     );
   }
 
-  // Widget _buildReviewHighlights() {
-  //   return Container(
-  //     height: 120,
-  //     child: ListView.builder(
-  //       scrollDirection: Axis.horizontal,
-  //       itemCount: 3,
-  //       itemBuilder: (context, index) {
-  //         return _buildReviewCard();
-  //       },
-  //     ),
-  //   );
-  // }
-
   Widget _buildReviewCard() {
     return Container(
       width: 200,
@@ -255,7 +235,6 @@ class StoreScreen extends StatelessWidget {
     return Column(
       children: <Widget>[
         /* child: */ _buildCategoryTabs(context),
-        // ),
         Expanded(
           child: Container(),
         ),
@@ -327,7 +306,6 @@ class StoreScreen extends StatelessWidget {
         .collection('products')
         .where('vendor_id', isEqualTo: vendorId);
 
-    // Check if the subcollection is "All"
     if (subcollection != 'All') {
       query = query.where('p_subcollection', isEqualTo: subcollection);
     }
@@ -373,7 +351,6 @@ class StoreScreen extends StatelessWidget {
                     child: Container(
                         clipBehavior: Clip.antiAlias,
                         decoration: BoxDecoration(
-                          // color: whiteColor,
                           borderRadius: BorderRadius.circular(4.0),
                         ),
                         child: Column(
@@ -416,8 +393,7 @@ class StoreScreen extends StatelessWidget {
                                   ],
                                 )),
                           ],
-                        ) 
-                        ))
+                        )))
                 .box
                 .color(whiteColor)
                 .border(color: thinGrey01)
@@ -435,7 +411,6 @@ class StoreScreen extends StatelessWidget {
         .collection('products')
         .where('vendor_id', isEqualTo: vendorId);
 
-    // Check if the subcollection is "All"
     if (subcollection != 'All') {
       query = query.where('p_subcollection', isEqualTo: subcollection);
     }
@@ -508,8 +483,6 @@ class StoreScreen extends StatelessWidget {
                             "${NumberFormat('#,##0').format(double.parse(
                               '$price',
                             ).toInt())} Bath",
-                            // "${NumberFormat('#,##0').format(double.parse('$price',).toInt())} Bath",
-                            // '$price',
                             style: const TextStyle(
                                 color: greyDark1, fontFamily: regular),
                           ),
@@ -531,7 +504,6 @@ class StoreScreen extends StatelessWidget {
         .collection('products')
         .where('vendor_id', isEqualTo: vendorId);
 
-    // Check if the subcollection is "All"
     if (subcollection != 'All') {
       query = query.where('p_subcollection', isEqualTo: subcollection);
     }
@@ -604,8 +576,6 @@ class StoreScreen extends StatelessWidget {
                             "${NumberFormat('#,##0').format(double.parse(
                               '$price',
                             ).toInt())} Bath",
-                            // "${NumberFormat('#,##0').format(double.parse('$price',).toInt())} Bath",
-                            // '$price',
                             style: const TextStyle(
                                 color: greyDark1, fontFamily: regular),
                           ),
@@ -627,7 +597,6 @@ class StoreScreen extends StatelessWidget {
         .collection('products')
         .where('vendor_id', isEqualTo: vendorId);
 
-    // Check if the subcollection is "All"
     if (subcollection != 'All') {
       query = query.where('p_subcollection', isEqualTo: subcollection);
     }
@@ -700,8 +669,6 @@ class StoreScreen extends StatelessWidget {
                             "${NumberFormat('#,##0').format(double.parse(
                               '$price',
                             ).toInt())} Bath",
-                            // "${NumberFormat('#,##0').format(double.parse('$price',).toInt())} Bath",
-                            // '$price',
                             style: const TextStyle(
                                 color: greyDark1, fontFamily: regular),
                           ),
@@ -723,7 +690,6 @@ class StoreScreen extends StatelessWidget {
         .collection('products')
         .where('vendor_id', isEqualTo: vendorId);
 
-    // Check if the subcollection is "All"
     if (subcollection != 'All') {
       query = query.where('p_subcollection', isEqualTo: subcollection);
     }
@@ -796,8 +762,6 @@ class StoreScreen extends StatelessWidget {
                             "${NumberFormat('#,##0').format(double.parse(
                               '$price',
                             ).toInt())} Bath",
-                            // "${NumberFormat('#,##0').format(double.parse('$price',).toInt())} Bath",
-                            // '$price',
                             style: const TextStyle(
                                 color: greyDark1, fontFamily: regular),
                           ),
@@ -819,7 +783,6 @@ class StoreScreen extends StatelessWidget {
         .collection('products')
         .where('vendor_id', isEqualTo: vendorId);
 
-    // Check if the subcollection is "All"
     if (subcollection != 'All') {
       query = query.where('p_subcollection', isEqualTo: subcollection);
     }
@@ -892,8 +855,6 @@ class StoreScreen extends StatelessWidget {
                             "${NumberFormat('#,##0').format(double.parse(
                               '$price',
                             ).toInt())} Bath",
-                            // "${NumberFormat('#,##0').format(double.parse('$price',).toInt())} Bath",
-                            // '$price',
                             style: const TextStyle(
                                 color: greyDark1, fontFamily: regular),
                           ),
@@ -933,7 +894,6 @@ class StoreScreen extends StatelessWidget {
         .collection('products')
         .where('vendor_id', isEqualTo: vendorId);
 
-    // Check if the subcollection is "All"
     if (subcollection != 'All') {
       query = query.where('p_subcollection', isEqualTo: subcollection);
     }
@@ -1006,8 +966,6 @@ class StoreScreen extends StatelessWidget {
                             "${NumberFormat('#,##0').format(double.parse(
                               '$price',
                             ).toInt())} Bath",
-                            // "${NumberFormat('#,##0').format(double.parse('$price',).toInt())} Bath",
-                            // '$price',
                             style: const TextStyle(
                                 color: greyDark1, fontFamily: regular),
                           ),
@@ -1029,7 +987,6 @@ class StoreScreen extends StatelessWidget {
         .collection('products')
         .where('vendor_id', isEqualTo: vendorId);
 
-    // Check if the subcollection is "All"
     if (subcollection != 'All') {
       query = query.where('p_subcollection', isEqualTo: subcollection);
     }
@@ -1102,8 +1059,6 @@ class StoreScreen extends StatelessWidget {
                             "${NumberFormat('#,##0').format(double.parse(
                               '$price',
                             ).toInt())} Bath",
-                            // "${NumberFormat('#,##0').format(double.parse('$price',).toInt())} Bath",
-                            // '$price',
                             style: const TextStyle(
                                 color: greyDark1, fontFamily: regular),
                           ),
@@ -1125,7 +1080,6 @@ class StoreScreen extends StatelessWidget {
         .collection('products')
         .where('vendor_id', isEqualTo: vendorId);
 
-    // Check if the subcollection is "All"
     if (subcollection != 'All') {
       query = query.where('p_subcollection', isEqualTo: subcollection);
     }
@@ -1198,8 +1152,6 @@ class StoreScreen extends StatelessWidget {
                             "${NumberFormat('#,##0').format(double.parse(
                               '$price',
                             ).toInt())} Bath",
-                            // "${NumberFormat('#,##0').format(double.parse('$price',).toInt())} Bath",
-                            // '$price',
                             style: const TextStyle(
                                 color: greyDark1, fontFamily: regular),
                           ),
@@ -1215,15 +1167,6 @@ class StoreScreen extends StatelessWidget {
       },
     );
   }
-  // Widget _buildProductMathGrids(String category) {
-  //   return StreamBuilder<QuerySnapshot>(
-  //     stream: FirebaseFirestore.instance.collection('products').snapshots(),
-  //     builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-  //       if (!snapshot.hasData) {
-  //         return Center(
-  //           child: CircularProgressIndicator(),
-  //         );
-  //       }
 
   Widget _buildProductMathGrids(String category) {
     Query query = FirebaseFirestore.instance
@@ -1240,13 +1183,11 @@ class StoreScreen extends StatelessWidget {
           );
         }
 
-        // Initialize a map to group products by their 'p_mixmatch' value
         Map<String, List<DocumentSnapshot>> mixMatchMap = {};
 
-        // Populate the map
         for (var doc in snapshot.data!.docs) {
           var data = doc.data() as Map<String, dynamic>;
-          // เพิ่มเงื่อนไขเช็ค vendor.id ตรงนี้
+
           if (data['vendor_id'] == vendorId && data['p_mixmatch'] != null) {
             String mixMatchKey = data['p_mixmatch'];
             if (!mixMatchMap.containsKey(mixMatchKey)) {
@@ -1256,12 +1197,10 @@ class StoreScreen extends StatelessWidget {
           }
         }
 
-        // Filter out any 'p_mixmatch' groups that do not have exactly 2 products
         var validPairs = mixMatchMap.entries
             .where((entry) => entry.value.length == 2)
             .toList();
 
-        // Calculate the total number of valid pairs to display
         int itemCount = validPairs.length;
 
         return GridView.builder(
@@ -1272,10 +1211,8 @@ class StoreScreen extends StatelessWidget {
           ),
           itemCount: itemCount,
           itemBuilder: (BuildContext context, int index) {
-            // Each pair of matched products
             var pair = validPairs[index].value;
 
-            // Assuming the data structure ensures there are exactly 2 products per matched 'p_mixmatch'
             var data1 = pair[0].data() as Map<String, dynamic>;
             var data2 = pair[1].data() as Map<String, dynamic>;
 

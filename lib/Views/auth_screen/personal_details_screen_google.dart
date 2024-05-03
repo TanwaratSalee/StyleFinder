@@ -71,11 +71,11 @@ class _PersonalDetailsScreenGoogleState
     );
   }
 
-  final List<Color> skinTones = [
-    const Color(0xFFFFDBAC),
-    const Color(0xFFE5A073),
-    const Color(0xFFCD8C5C),
-    const Color(0xFF5C3836),
+   final List<Color> skinTones = [
+    Color.fromRGBO(255, 231, 218, 1),
+    Color.fromRGBO(248, 201, 156, 1),
+    Color.fromRGBO(185, 135, 98, 1),
+     Color.fromRGBO(116, 78, 60, 1),
   ];
 
   @override

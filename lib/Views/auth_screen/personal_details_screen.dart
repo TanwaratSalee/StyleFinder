@@ -1,13 +1,10 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_finalproject/Views/auth_screen/verifyemail_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/custom_textfield.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/auth_controller.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 class PersonalDetailsScreen extends StatefulWidget {
   final String email;
@@ -73,10 +70,10 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
   }
 
   final List<Color> skinTones = [
-    Color.fromARGB(255, 246, 227, 202),
-    Color.fromARGB(255, 234, 186, 164),
-    Color.fromARGB(255, 185, 118, 70),
-    const Color(0xFF5C3836),
+    Color.fromRGBO(255, 231, 218, 1),
+    Color.fromRGBO(248, 201, 156, 1),
+    Color.fromRGBO(185, 135, 98, 1),
+     Color.fromRGBO(116, 78, 60, 1),
   ];
 
   @override
@@ -93,11 +90,21 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
         padding: const EdgeInsets.all(15),
         child: Column(
           children: [
+            Align(
+              alignment: Alignment.center,
+              child: const Text('Birthday')
+                  .text
+                  .size(16)
+                  .fontFamily(regular)
+                  .color(greyDark2)
+                  .make(),
+            ),
+            const SizedBox(height: 10),
             GestureDetector(
               onTap: showDatePicker,
               child: AbsorbPointer(
                 child: customTextField(
-                  label: 'Birthday',
+                  // label: 'Birthday',
                   controller: TextEditingController(
                       text: DateFormat('EEEE, MMMM d, yyyy')
                           .format(selectedDate)),
@@ -187,8 +194,8 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                             borderRadius: BorderRadius.circular(8.0),
                             side: BorderSide(
                                 color: selectedGender == gender
-                                    ? Colors.teal
-                                    : whiteColor),
+                                    ? primaryApp
+                                    : greyColor),
                           ),
                         ),
                         elevation: MaterialStateProperty.all<double>(0),
@@ -202,7 +209,17 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 );
               }).toList(),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
+             Align(
+              alignment: Alignment.center,
+              child: const Text('Shape')
+                  .text
+                  .size(16)
+                  .fontFamily(regular)
+                  .color(greyDark2)
+                  .make(),
+            ),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -237,7 +254,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
               child: const Text('Skin')
                   .text
                   .size(16)
-                  .fontFamily(medium)
+                  .fontFamily(regular)
                   .color(greyDark2)
                   .make(),
             ),
@@ -274,7 +291,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 40),
             ourButton(
               color: selectedDate != null &&
                       selectedGender != null &&
@@ -282,7 +299,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                       weightController.text.isNotEmpty &&
                       selectedSkinTone != null
                   ? primaryApp
-                  : greyDark1,
+                  : greyColor,
               title: 'Done',
               textColor: selectedDate != null &&
                       selectedGender != null &&
@@ -290,7 +307,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                       weightController.text.isNotEmpty &&
                       selectedSkinTone != null
                   ? whiteColor
-                  : greyDark2,
+                  : greyDark1,
               onPress: () async {
                 if (selectedDate == null) {
                   VxToast.show(context, msg: 'Please select your birthday');

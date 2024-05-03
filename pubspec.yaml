@@ -51,6 +51,7 @@ dependencies:
   flutter_marquee: ^2.0.1 
   path: ^1.8.0 
   qr_flutter: ^4.0.0
+  material_design_icons_flutter: ^5.0.6295
   
 
   pattern_formatter: ^3.0.0
@@ -93,6 +94,7 @@ flutter:
     - assets/icons/
     - assets/icons/icNormal/
     - assets/icons/iconsAccount/
+    - assets/icons/iconsPayment/
     - assets/icons/iconsOtherApp/
     - assets/icons/iconsNavbar/
     - assets/icons/icHomePage/

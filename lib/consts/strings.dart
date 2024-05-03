@@ -79,10 +79,9 @@ const aboutaccount = "About Account",
 
 //---------------------------------- Payment ----------------------------------
 
-const promptpay = " Mobile Banking ",
-    visaCard = "Visa",
-    cashOnDelivery = "Cash On Delivery",
-    mobilebanking = " Mobile Banking";
+const mobile = " Mobile Banking ",
+    card = "Credit Card",
+    cashOnDelivery = "Cash On Delivery";
 
 //Bank-------------------------------------------
 const kbank = " Kbank ",

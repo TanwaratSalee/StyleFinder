@@ -1,8 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_finalproject/Views/auth_screen/login_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/custom_textfield.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 class ForgotScreen extends StatelessWidget {
   ForgotScreen({super.key});
@@ -82,76 +85,56 @@ class ForgotScreen extends StatelessWidget {
 Future<void> _showCustomDialog(BuildContext context) async {
   return showDialog<void>(
     context: context,
-    barrierDismissible: false,
+    barrierDismissible: true, 
     builder: (BuildContext context) {
       return AlertDialog(
-        backgroundColor: whiteColor,
-        // title: Text(
-        //   'Complete!',
-        //   textAlign: TextAlign.center, // ข้อความอยู่ตรงกลาง
-        //   style: TextStyle(
-        //     fontWeight: FontWeight.bold, // ทำให้ตัวหนา
-        //   ),
-        // ),
+        backgroundColor: whiteColor, 
+        
         content: SingleChildScrollView(
           child: ListBody(
             children: <Widget>[
-              SizedBox(
-                height: 50,
+              Image.asset(
+                imgPopup,
+                width: 200, 
+                height: 240, 
+                fit: BoxFit.contain, 
               ),
-              Image.asset('assets/images/Finishpay.PNG'),
-              SizedBox(
-                height: 40,
-              ),
-              Text(
-                'Check your email to reset your password!',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  'Check your email to reset your password!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: medium, 
+                    color: greyDark2,  
+                    fontSize: 20
+                  ),
                 ),
               ),
-              SizedBox(
-                height: 20,
-              ),
-              // Text(
-              //   '1,400,000 Bath',
-              //   textAlign: TextAlign.center,
-              //   style: TextStyle(
-              //     fontWeight: FontWeight.bold,
-              //     color: Colors.blue,
-              //     fontSize: 16,
-              //   ),
-              // ),
             ],
           ),
         ),
+        actionsAlignment: MainAxisAlignment.center, 
         actions: <Widget>[
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.all(8),
-            alignment: Alignment.center,
-            child: TextButton(
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.white,
-                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                backgroundColor: primaryApp,
-                elevation: 0,
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text(
-                'Continue',
-                style: TextStyle(fontFamily: black),
-              ),
-            ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); 
+              Get.to(LoginScreen()); 
+            },
+            child: Text('Continue', style: TextStyle(
+                  fontFamily: medium, 
+                  fontSize: 16.0,
+                  color: Colors.white, 
+                ))
+              .box
+              .padding(EdgeInsets.symmetric(horizontal: 100, vertical: 10))
+              .color(primaryApp) 
+              .roundedSM
+              .make(),
           ),
         ],
       );
     },
   );
 }
+
