@@ -113,25 +113,25 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: Roboto-Light
+    - family: Urbanist-Light
       fonts:
-        - asset: assets/fonts/Roboto-Light.ttf
+        - asset: assets/fonts/Urbanist/Urbanist-Light.ttf
 
-    - family: Roboto-Regular
+    - family: Urbanist-Regular
       fonts:
-        - asset: assets/fonts/Roboto-Regular.ttf
+        - asset: assets/fonts/Urbanist/Urbanist-Regular.ttf
 
-    - family: Roboto-Bold
+    - family: Urbanist-Bold
       fonts:
-        - asset: assets/fonts/Roboto-Bold.ttf    
+        - asset: assets/fonts/Urbanist/Urbanist-Bold.ttf    
 
-    - family: Roboto-Black
+    - family: Urbanist-Black
       fonts:
-        - asset: assets/fonts/Roboto-Black.ttf 
+        - asset: assets/fonts/Urbanist/Urbanist-Black.ttf 
         
-    - family: Roboto-Medium
+    - family: Urbanist-Medium
       fonts:
-        - asset: assets/fonts/Roboto-Medium.ttf     
+        - asset: assets/fonts/Urbanist/Urbanist-Bold.ttf     
 
   # fonts:
   #   - family: Schyler

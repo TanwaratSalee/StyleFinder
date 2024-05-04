@@ -58,7 +58,7 @@ class MatchProductScreen extends StatelessWidget {
                 .toList();
 
             if (validPairs.isEmpty) {
-              return const Text('ไม่มีคู่สินค้าที่ตรงกัน'); // No matching pairs found.
+              return const Text('No product'); // No matching pairs found.
             }
 
             return GridView.builder(

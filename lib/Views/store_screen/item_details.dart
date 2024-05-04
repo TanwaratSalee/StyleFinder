@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
-import 'package:flutter_finalproject/Views/widgets_common/marqueeWidget.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 import 'package:flutter_finalproject/consts/colors.dart';
 import 'package:flutter_finalproject/consts/firebase_consts.dart';
@@ -100,10 +99,9 @@ class _ItemDetailsState extends State<ItemDetails> {
       child: Scaffold(
         backgroundColor: whiteColor,
         appBar: AppBar(
-          title: widget.title!.text
-              .color(greyDark2)
-              .fontFamily(bold)
-              .size(18)
+          title: widget.title!.text.color(greyDark2)
+              .fontFamily(medium)
+              .size(24)
               .make(),
         ),
         body: Column(
@@ -138,7 +136,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                             widget.title ?? '',
                             style: const TextStyle(
                               color: blackColor,
-                              fontFamily: medium,
+                              fontFamily: bold,
                               fontSize: 22,
                             ),
                             softWrap:
@@ -200,8 +198,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                             children: [
                               5.widthBox,
                               Obx(() {
-                                String imageUrl =
-                                    controller.vendorImageUrl.value;
+                                String imageUrl = controller.vendorImageUrl.value;
                                 return imageUrl.isNotEmpty
                                     ? Image.network(
                                         imageUrl,
@@ -307,7 +304,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                             widget.data['p_desc'],
                             style: TextStyle(
                               color: blackColor,
-                              fontFamily: light,
+                              fontFamily: regular,
                               fontSize: 14,
                             ),
                           ),
@@ -323,7 +320,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                             widget.data['p_size'],
                             style: TextStyle(
                               color: blackColor,
-                              fontFamily: light,
+                              fontFamily: regular,
                               fontSize: 14,
                             ),
                           ),

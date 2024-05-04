@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
 import 'package:get/get.dart';
@@ -71,12 +71,13 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: const Text('Match Detail'),
+        title: const Text('Match Detail')
+            .text
+            .color(greyDark2)
+            .fontFamily(medium)
+            .size(24)
+            .make(),
         centerTitle: true,
-        // leading: IconButton(
-        //   icon: const Icon(Icons.arrow_back_ios),
-        //   onPressed: () => Get.back(),
-        // ),
         elevation: 0,
         actions: <Widget>[
           Obx(() => IconButton(
@@ -87,7 +88,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                     widget.productName2
                   ];
                   bool isFav =
-                      !controller.isFav.value; // Toggle the isFav value
+                      !controller.isFav.value; 
                   productNames.forEach((productName) {
                     if (isFav == true) {
                       controller.addToWishlistMixMatch(
@@ -98,7 +99,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                           productName, _updateIsFav, context);
                     }
                   });
-                  print("isFav after toggling: $isFav"); // Debug print
+                  print("isFav after toggling: $isFav"); 
                 },
                 icon: Icon(
                   controller.isFav.value
@@ -122,19 +123,26 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Expanded(
-                          // Wrap with Expanded
+                          
                           child: Column(
                             children: [
                               Container(
                                 child: Center(
-                                  child: Image.network(
-                                    widget.productImage1,
-                                    width: 120,
-                                    height: 120,
-                                    fit: BoxFit.cover,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(14),
+                                      topLeft: Radius.circular(14),
+                                    ),
+                                    child: Image.network(
+                                      widget.productImage1,
+                                      height: 160,
+                                      width: 220,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
                               ),
+                              5.heightBox,
                               Text(
                                 widget.productName1,
                                 softWrap: true,
@@ -142,8 +150,10 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                               )
                                   .text
                                   .color(greyDark1)
-                                  .fontFamily(medium)
+                                  .fontFamily(bold)
                                   .size(16)
+                                  .ellipsis
+                                  .maxLines(1)
                                   .make(),
                               Text(
                                 "${NumberFormat('#,##0').format(double.parse(widget.price1.toString()).toInt())} Bath",
@@ -154,14 +164,9 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                                   .size(14)
                                   .make(),
                             ],
-                          )
-                              .box
-                              .border(color: thinGrey01)
-                              .padding(EdgeInsets.all(2))
-                              .rounded
-                              .make(),
+                          ).box.border(color: thinGrey01).rounded.make(),
                         ),
-                        const SizedBox(width: 10), // Spacing between columns
+                        const SizedBox(width: 10),
                         Stack(
                           alignment: Alignment.center,
                           children: [
@@ -176,25 +181,34 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                                 .make(),
                           ],
                         ),
+                        const SizedBox(width: 10),
                         Expanded(
-                          // Wrap with Expanded
                           child: Column(
                             children: [
                               Container(
                                 child: Center(
-                                  child: Image.network(
-                                    widget.productImage2,
-                                    width: 120,
-                                    height: 120,
-                                    fit: BoxFit.cover,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(14),
+                                      topLeft: Radius.circular(14),
+                                    ),
+                                    child: Image.network(
+                                      widget.productImage2,
+                                      height: 160,
+                                      width: 220,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
                               ),
+                              5.heightBox,
                               Text(widget.productName2)
                                   .text
                                   .color(greyDark1)
-                                  .fontFamily(medium)
+                                  .fontFamily(bold)
                                   .size(16)
+                                  .ellipsis
+                                  .maxLines(1)
                                   .make(),
                               Text(
                                 "${NumberFormat('#,##0').format(double.parse(widget.price2.toString()).toInt())} Bath",
@@ -208,177 +222,84 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                           )
                               .box
                               .border(color: thinGrey01)
-                              .padding(EdgeInsets.all(2))
+                              
                               .rounded
                               .make(),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 30), // เพิ่มระยะห่าง
-                    Container(
-                      height: 65,
-                      margin: const EdgeInsets.only(
-                          bottom: 10), // ขยับ widget bar จากด้านบนลงมา
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 70,
-                            height: 70,
-                            decoration: BoxDecoration(
-                              color: Colors.lightBlue[100],
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Center(
-                              child: Text('Dior',
-                                  style: TextStyle(
-                                      fontSize: 14, color: whiteColor)),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          const Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
+                    const SizedBox(height: 30),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Row(
                             children: [
-                              Text('Dior',
-                                  style: TextStyle(
-                                      fontSize: 16, fontFamily: bold)),
-                              Row(
-                                children: [
-                                  Icon(Icons.star,
-                                      color: Colors.yellow, size: 20),
-                                  Icon(Icons.star,
-                                      color: Colors.yellow, size: 20),
-                                  Icon(Icons.star,
-                                      color: Colors.yellow, size: 20),
-                                  Icon(Icons.star,
-                                      color: Colors.yellow, size: 20),
-                                  Icon(Icons.star,
-                                      color: Colors.yellow, size: 20),
-                                ],
+                              5.widthBox,
+                              Obx(() {
+                                String imageUrl =
+                                    controller.vendorImageUrl.value;
+                                return imageUrl.isNotEmpty
+                                    ? Image.network(
+                                        imageUrl,
+                                        width: 50,
+                                        height: 50,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : SizedBox.shrink();
+                              }),
+                              10.widthBox,
+                              Expanded(
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: "${widget.vendorName}"
+                                      .toUpperCase()
+                                      .text
+                                      .fontFamily(medium)
+                                      .color(blackColor)
+                                      .size(18)
+                                      .make(),
+                                ),
                               ),
                             ],
                           ),
-                          const Spacer(),
-                          ElevatedButton(
-                              onPressed: () {
-                                // ทำสิ่งที่ต้องการเมื่อกดปุ่ม
-                              },
-                              child: const Text('See Store'),
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        whiteColor!),
-                                minimumSize: MaterialStateProperty.all<Size>(
-                                    const Size(0, 30)),
-                              )),
-                        ],
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    const SizedBox(height: 0.5),
-                    // เพิ่มระยะห่าง
-
-                    const Padding(
-                      padding: EdgeInsets.fromLTRB(0, 0, 250, 0),
+                        ),
+                        10.widthBox,
+                        GestureDetector(
+                          onTap: () {
+                            Get.to(
+                              () => StoreScreen(vendorId: widget.vendorName),
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
+                            decoration: BoxDecoration(
+                              color: primaryApp,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: const Text(
+                              'See Store',
+                              style: TextStyle(
+                                  color: whiteColor, fontFamily: regular),
+                            ),
+                          ),
+                        )
+                      ],
+                    )
+                        .box
+                        .height(60)
+                        .padding(const EdgeInsets.symmetric(horizontal: 16))
+                        .color(thinGrey0)
+                        .make(),
+                        30.heightBox,
+                    Align(
+                      alignment: Alignment.centerLeft,
                       child: Text(
-                        'Opportunity for',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontSize: 12,
-                        ),
-                      ),
+                        'Opportunity suitable for',
+                      ).text.fontFamily(regular).size(16).make(),
                     ),
-
                     Row(children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          // ทำสิ่งที่ต้องการเมื่อกดปุ่ม
-                        },
-                        child: const Text(
-                          'Everyday',
-                          style: TextStyle(
-                            fontSize: 13,
-                          ),
-                        ),
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              Colors.grey[100]!),
-                          minimumSize: MaterialStateProperty.all<Size>(
-                              const Size(20, 20)),
-                          padding: MaterialStateProperty.all<EdgeInsets>(
-                            const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 5), // ปรับระยะห่างภายในปุ่ม
-                          ),
-                          textStyle: MaterialStateProperty.all<TextStyle>(
-                            const TextStyle(
-                              fontSize:
-                                  13, // ตั้งค่าขนาดตัวอักษรของข้อความภายในปุ่ม
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 3),
-                      ElevatedButton(
-                        onPressed: () {
-                          // ทำสิ่งที่ต้องการเมื่อกดปุ่ม
-                        },
-                        child: const Text(
-                          'Dating',
-                          style: TextStyle(
-                            fontSize: 13,
-                          ),
-                        ),
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              Colors.grey[100]!),
-                          minimumSize: MaterialStateProperty.all<Size>(
-                              const Size(20, 20)),
-                          padding: MaterialStateProperty.all<EdgeInsets>(
-                            const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 5), // ปรับระยะห่างภายในปุ่ม
-                          ),
-                          textStyle: MaterialStateProperty.all<TextStyle>(
-                            const TextStyle(
-                              fontSize:
-                                  13, // ตั้งค่าขนาดตัวอักษรของข้อความภายในปุ่ม
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 3),
-                      ElevatedButton(
-                        onPressed: () {
-                          // ทำสิ่งที่ต้องการเมื่อกดปุ่ม
-                        },
-                        child: const Text(
-                          'Seminars ',
-                          style: TextStyle(
-                            fontSize: 13,
-                          ),
-                        ),
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              Colors.grey[100]!),
-                          minimumSize: MaterialStateProperty.all<Size>(
-                              const Size(20, 20)),
-                          padding: MaterialStateProperty.all<EdgeInsets>(
-                            const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 5), // ปรับระยะห่างภายในปุ่ม
-                          ),
-                          textStyle: MaterialStateProperty.all<TextStyle>(
-                            const TextStyle(
-                              fontSize:
-                                  13, // ตั้งค่าขนาดตัวอักษรของข้อความภายในปุ่ม
-                            ),
-                          ),
-                        ),
-                      ),
+                      
                     ]),
                     const SizedBox(
                       height: 10,
@@ -386,18 +307,18 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                     Padding(
                       padding: const EdgeInsets.all(10),
                       child: Container(
-                        width: double.infinity, // ทำให้ container กว้างเต็มขอบ
-                        height: 150, // กำหนดความสูง
+                        width: double.infinity, 
+                        height: 150, 
                         decoration: BoxDecoration(
-                          color: Colors.grey[200], // ตั้งค่าสีพื้นหลัง
-                          borderRadius: BorderRadius.circular(10), // มุมโค้ง
+                          color: thinPrimaryApp, 
+                          borderRadius: BorderRadius.circular(10), 
                         ),
                         child: const Align(
                           alignment:
-                              Alignment.topLeft, // จัดตำแหน่งข้อความชิดซ้ายบน
+                              Alignment.topLeft, 
                           child: Padding(
                             padding:
-                                EdgeInsets.all(8.0), // เพิ่ม padding ให้ข้อความ
+                                EdgeInsets.all(8.0), 
                             child: Text(
                               'HEllo ',
                               style: TextStyle(

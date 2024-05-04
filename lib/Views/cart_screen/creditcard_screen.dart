@@ -278,7 +278,7 @@ Widget _buildVCCTextField() {
                   style: TextStyle(
                     color: whiteColor,
                     fontSize: 24,
-                    fontFamily: black,
+                    fontFamily: bold,
                     shadows: [
                       Shadow(
                         offset: Offset(2.0, 2.0),

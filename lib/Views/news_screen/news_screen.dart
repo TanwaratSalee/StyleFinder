@@ -169,16 +169,15 @@ class NewsScreen extends StatelessWidget {
                                     child: Center(
                                       child: Image.network(
                                         allproductsdata[index]
-                                            ['imageUrl'] /* s */,
+                                            ['imageUrl'] ,
                                         width: 200,
-                                        height: 210,
+                                        height: 220,
                                         fit: BoxFit.cover,
                                       ),
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
+                                  Divider(color: thinGrey01,),
+                                    Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       // mainAxisAlignment: MainAxisAlignment.start,
@@ -196,7 +195,6 @@ class NewsScreen extends StatelessWidget {
                                         ),
                                       ],
                                     ),
-                                  )
                                 ],
                               )
                                   .box
@@ -227,7 +225,7 @@ class NewsScreen extends StatelessWidget {
                         Column(
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment
-                              .center, // Ensure alignment if needed
+                              .center,
                           children: [
                             'MATCH BY STORE'
                                 .text
@@ -255,7 +253,7 @@ class NewsScreen extends StatelessWidget {
                         SingleChildScrollView(
                           physics: const NeverScrollableScrollPhysics(),
                           child: Container(
-                            height: MediaQuery.of(context).size.height * 0.52,
+                            height: MediaQuery.of(context).size.height * 0.55,
                             child: buildProductMathGrids(category),
                           ),
                         )
@@ -475,12 +473,12 @@ class NewsScreen extends StatelessWidget {
         int itemCount = validPairs.length;
         return GridView.builder(
           physics: const NeverScrollableScrollPhysics(),
-          padding: const EdgeInsets.all(8),
+          // padding: const EdgeInsets.all(8),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 1,
-            mainAxisSpacing: 5,
-            crossAxisSpacing: 5,
-            mainAxisExtent: 230,
+            crossAxisCount: 2,
+            mainAxisSpacing: 7,
+            crossAxisSpacing: 7,
+            mainAxisExtent: 240,
           ),
           itemBuilder: (BuildContext context, int index) {
             var pair = validPairs[index].value;
@@ -518,137 +516,111 @@ class NewsScreen extends StatelessWidget {
                 },
                 child: Column(
                   children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: whiteColor,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          const SizedBox(height: 2),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ClipRRect(
-                                child: Image.network(
-                                  productImage1,
-                                  width: 80,
-                                  height: 80,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Expanded(
-                                flex: 3,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(25),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        productName1,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14,
-                                          color: greyDark2,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
+                      Row(
+                          children: [
+                            Image.network(
+                              productImage1,
+                              width: 80,
+                              height: 90,
+                              fit: BoxFit.cover,
+                            ),
+                            5.widthBox,
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 200,
+                                    child: Text(
+                                      productName1,
+                                      style: const TextStyle(
+                                        fontFamily: 'Medium',
+                                        fontSize: 14,
                                       ),
-                                      Text(
-                                        "${NumberFormat('#,##0').format(double.parse(price1.toString()).toInt())} Bath",
-                                        style:
-                                            const TextStyle(color: greyDark1),
-                                      ),
-                                    ],
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ClipRRect(
-                                child: Image.network(
-                                  productImage2,
-                                  width: 80,
-                                  height: 80,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Expanded(
-                                flex: 3,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(19),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        productName2,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14,
-                                          color: greyDark2,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      Text(
-                                        "${NumberFormat('#,##0').format(double.parse(price2.toString()).toInt())} Bath",
-                                      ).text.color(greyDark1).make(),
-                                    ],
+                                  Text(
+                                    "${NumberFormat('#,##0').format(double.parse(price1).toInt())} Bath",
+                                    style: const TextStyle(color: Colors.grey),
                                   ),
-                                ),
+                                ],
                               ),
-                            ],
+                            )
+                          ],
+                        ),
+                        5.heightBox,
+                        Row(
+                          children: [
+                            Image.network(
+                              productImage2,
+                              width: 80,
+                              height: 90,
+                              fit: BoxFit.cover,
+                            ),
+                            5.widthBox,
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 200,
+                                    child: Text(
+                                      productName2,
+                                      style: const TextStyle(
+                                        fontFamily: 'Medium',
+                                        fontSize: 14,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ),
+                                  ),
+                                  Text(
+                                    "${NumberFormat('#,##0').format(double.parse(price2).toInt())} Bath",
+                                    style: const TextStyle(color: Colors.grey),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Price: ",
+                            style: TextStyle(
+                                color: blackColor,
+                                fontFamily: regular,
+                                fontSize: 14),
                           ),
-                          const SizedBox(
-                            height: 10,
+                          Text(
+                            "${NumberFormat('#,##0').format(double.parse(totalPrice).toInt())} ",
+                            style: TextStyle(
+                                color: blackColor,
+                                fontFamily: medium,
+                                fontSize: 16),
                           ),
-                          Row(
-                            children: [
-                              const Text(
-                                "Price ",
-                                style: TextStyle(
-                                  color: greyDark2,
-                                  fontFamily: 'regular',
-                                  fontSize: 14,
-                                ),
-                              ),
-                              Text(
-                                "${NumberFormat('#,##0').format(double.parse(totalPrice.toString()).toInt())} ",
-                                style: const TextStyle(
-                                  color: greyDark2,
-                                  fontFamily: 'medium',
-                                  fontSize: 14,
-                                ),
-                              ),
-                              const Text(
-                                "Bath",
-                                style: TextStyle(
-                                  color: greyDark2,
-                                  fontFamily: 'regular',
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ],
-                          )
+                          Text(
+                            "Bath",
+                            style: TextStyle(
+                                color: blackColor,
+                                fontFamily: regular,
+                                fontSize: 14),
+                          ),
                         ],
-                      )
-                          .box
-                          .color(whiteColor)
-                          .padding(const EdgeInsets.all(12))
-                          .rounded
-                          .shadowSm
-                          .make(),
-                    ),
-                  ],
-                ));
+                      ),
+                    )
+                  
+                      ],
+                ).box.border(color: thinGrey01).p8.margin(EdgeInsets.all(2)).roundedSM.make());
           },
-          itemCount: 2,
+          itemCount: 4,
         );
       },
     );

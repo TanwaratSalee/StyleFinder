@@ -22,9 +22,8 @@ class ProductController extends GetxController {
   }
 
   void updateWishlistStatus(String productName, bool isFav) {
-    this.isFav.value = isFav; // Update observable value
-    // Update the database entry for the product
-    FirebaseFirestore.instance.collection('products')
+    this.isFav.value = isFav; 
+    FirebaseFirestore.instance.collection(productsCollection)
       .where('name', isEqualTo: productName)
       .get()
       .then((querySnapshot) {

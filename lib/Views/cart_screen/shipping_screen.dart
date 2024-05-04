@@ -194,13 +194,13 @@ class _ShippingDetailsState extends State<ShippingDetails> {
                                   text:
                                       '${formatPhoneNumber(address['phone'])},\n',
                                   style:
-                                      TextStyle(fontFamily: light, height: 1.5),
+                                      TextStyle(fontFamily: regular, height: 1.5),
                                 ),
                                 TextSpan(
                                   text:
                                       '${capitalize(address['address'])}, ${capitalize(address['city'])},\n ${capitalize(address['state'])}, ${address['postalCode']}\n',
                                   style:
-                                      TextStyle(fontFamily: light, height: 1.5),
+                                      TextStyle(fontFamily: regular, height: 1.5),
                                 ),
                               ],
                             ),

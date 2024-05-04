@@ -346,7 +346,7 @@ class AuthController extends GetxController {
     if (password.length < 8) {
       return 'Password must be at least 8 characters long.';
     }
-    return null; // Return null if password is valid
+    return null; 
   }
 
  

@@ -88,7 +88,7 @@ class WishlistScreen extends StatelessWidget {
                                 "${NumberFormat('#,##0').format(double.parse(data[index]['p_price']).toInt())} Bath",
                                 style: const TextStyle(
                                   fontSize: 14,
-                                  fontFamily: light,
+                                  fontFamily: regular,
                                 ),
                               ),
                             ],

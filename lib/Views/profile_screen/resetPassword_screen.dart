@@ -1,14 +1,12 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/widgets_common/custom_textfield.dart';
 import 'package:get/get.dart';
 import 'package:flutter_finalproject/controllers/profile_controller.dart';
-import 'package:flutter_finalproject/consts/consts.dart'; // Ensure this file exists and contains your constants
+import 'package:flutter_finalproject/consts/consts.dart';
 
 class PasswordScreen extends StatelessWidget {
   final oldpassController = TextEditingController();
   final newpassController = TextEditingController();
-  final confirmNewPassController =
-      TextEditingController(); // ตัวควบคุมสำหรับการยืนยันรหัสผ่านใหม่
+  final confirmNewPassController = TextEditingController();
 
   PasswordScreen({Key? key}) : super(key: key);
 
@@ -17,7 +15,7 @@ class PasswordScreen extends StatelessWidget {
     final ProfileController controller = Get.find<ProfileController>();
 
     return Scaffold(
-      backgroundColor: whiteColor, // Ensure this constant is defined
+      backgroundColor: whiteColor,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text("Reset Password",
@@ -82,6 +80,23 @@ class PasswordScreen extends StatelessWidget {
                 isPass: true,
                 readOnly: false,
               ).p2(),
+              15.heightBox,
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  '- Password must be at least 8 characters long.\n'
+                  '- Password must include at least one lowercase letter.\n'
+                  '- Password must include an uppercase letter.\n'
+                  '- Password must include a digit.\n'
+                  '- Password must include a special characte. (e.g., @#\$%^&+=!).\n',
+                  style: TextStyle(
+                    fontFamily: regular,
+                    fontSize: 12,
+                    color: greyDark1,
+                    height: 1.5,
+                  ),
+                ),
+              ).box.padding(EdgeInsets.only(left: 15)).make()
             ],
           ),
         ),

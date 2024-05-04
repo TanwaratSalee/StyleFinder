@@ -218,7 +218,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                               "${NumberFormat('#,##0').format(double.parse(data[index]['p_price']).toInt())} Bath",
                               style: const TextStyle(
                                 fontSize: 14,
-                                fontFamily: light,
+                                fontFamily: regular,
                               ),
                             ),
                           ],
@@ -336,7 +336,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 "${NumberFormat('#,##0').format(double.parse(productData['p_price']).toInt())} Bath",
                                 style: TextStyle(
                                   fontSize: 14,
-                                  fontFamily: light,
+                                  fontFamily: regular,
                                 ),
                               ),
                             ],

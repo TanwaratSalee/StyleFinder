@@ -25,8 +25,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return text[0].toUpperCase() + text.substring(1);
   }
 
-  // Validate password function and other methods
-
   bool isCheck = false;
 
   @override

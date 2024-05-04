@@ -29,7 +29,7 @@ Widget customTextField({
           isDense: true,
           labelText: label,
           labelStyle: const TextStyle(
-              color: greyDark2, fontFamily: regular, fontSize: 16),
+              color: greyDark1, fontFamily: regular, fontSize: 16),
           hintStyle: const TextStyle(
               color: greyDark1, fontFamily: regular, fontSize: 16),
           filled: true,

@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
           elevation: 0.0,
           backgroundColor: Colors.transparent),
         primaryColor: primaryApp,
-        fontFamily: light),
+        fontFamily: regular),
       home: const SplashScreen(),
     );
   }
