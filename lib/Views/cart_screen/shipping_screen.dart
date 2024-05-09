@@ -99,7 +99,7 @@ class _ShippingDetailsState extends State<ShippingDetails> {
       backgroundColor: whiteColor,
       appBar: AppBar(
         title:
-            const Text("Shipping Info").text.size(24).fontFamily(medium).make(),
+            const Text("Shipping Info").text.size(24).fontFamily(medium).color(greyDark2).make(),
         backgroundColor: whiteColor,
       ),
       bottomNavigationBar: SizedBox(
@@ -181,26 +181,26 @@ class _ShippingDetailsState extends State<ShippingDetails> {
                             text: TextSpan(
                               style: TextStyle(
                                 fontSize: 14,
-                                color: Colors.black,
+                                color: greyDark1,
                               ),
                               children: [
                                 TextSpan(
                                   text:
                                       '${capitalize(address['firstname'])} ${capitalize(address['surname'])},\n',
                                   style: TextStyle(
-                                      fontFamily: medium, height: 3.0),
+                                      fontFamily: medium,fontSize: 16 , height: 3.0),
                                 ),
                                 TextSpan(
                                   text:
                                       '${formatPhoneNumber(address['phone'])},\n',
                                   style:
-                                      TextStyle(fontFamily: regular, height: 1.5),
+                                      TextStyle(fontFamily: regular,fontSize: 16 , height: 1.5),
                                 ),
                                 TextSpan(
                                   text:
-                                      '${capitalize(address['address'])}, ${capitalize(address['city'])},\n ${capitalize(address['state'])}, ${address['postalCode']}\n',
+                                      '${capitalize(address['address'])}, ${capitalize(address['city'])},\n${capitalize(address['state'])},${address['postalCode']}\n',
                                   style:
-                                      TextStyle(fontFamily: regular, height: 1.5),
+                                      TextStyle(fontFamily: regular,fontSize: 16 ,height: 1.5),
                                 ),
                               ],
                             ),
@@ -217,7 +217,7 @@ class _ShippingDetailsState extends State<ShippingDetails> {
                         ),
                       );
                     },
-                    separatorBuilder: (context, index) => Divider(),
+                    separatorBuilder: (context, index) => Divider(color: thinGrey01),
                   );
                 },
               ),

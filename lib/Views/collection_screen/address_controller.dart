@@ -146,7 +146,7 @@ void saveAddressToFirestore() async {
       backgroundColor: whiteColor,
       appBar: AppBar(
         title:
-            "Add Address".text.fontFamily(medium).color(greyDark2).make(),
+            "Add Address".text.size(24).fontFamily(medium).color(greyDark2).make(),
       ),
       bottomNavigationBar: SizedBox(
         height: 70,

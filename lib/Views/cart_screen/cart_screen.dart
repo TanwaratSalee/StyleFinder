@@ -83,81 +83,87 @@ class _CartScreenState extends State<CartScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 8.0, horizontal: 16.0),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                  child: Column(
                                     children: [
-                                      Container(
-                                        padding: EdgeInsets.only(
-                                            left:
-                                                5), // Padding to the left of the text
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          "x${data[index]['qty']}",
-                                        )
-                                            .text
-                                            .size(14)
-                                            .color(greyDark2)
-                                            .fontFamily(regular)
-                                            .make(),
-                                      ),
-                                      15.widthBox,
-                                      Container(
-                                        // width: 90,
-                                        height: 70,
-                                        child: Stack(
-                                          children: [
-                                            Image.network(
-                                              data[index]['img'],
-                                              fit: BoxFit.cover,
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            padding: EdgeInsets.only(left: 5),
+                                            alignment: Alignment.centerLeft,
+                                            child:
+                                                Text("x${data[index]['qty']}")
+                                                    .text
+                                                    .size(14)
+                                                    .color(greyDark2)
+                                                    .fontFamily(regular)
+                                                    .make(),
+                                          ),
+                                          15.widthBox,
+                                          Container(
+                                            width: 56,
+                                            height: 70,
+                                            child: Stack(
+                                              children: [
+                                                Image.network(
+                                                  data[index]['img'],
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ],
                                             ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                          width:
-                                              20), // Additional space if needed after the quantity text
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              data[index]['title'],
-                                              style: TextStyle(
-                                                color: greyDark2,
-                                                fontFamily: medium,
-                                                fontSize: 15,
-                                              ),
+                                          ).box.border(color: thinGrey0).make(),
+                                          SizedBox(width: 10),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  width: 220,
+                                                  child: Text(
+                                                    data[index]['title'],
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    softWrap: false,
+                                                    style: TextStyle(
+                                                      color: greyDark2,
+                                                      fontFamily: 'medium',
+                                                      fontSize: 15,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Text(
+                                                  'Size: ${data[index]['productsize']}',
+                                                  style: TextStyle(
+                                                    color: greyDark1,
+                                                    fontFamily: regular,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 3),
+                                                Text(
+                                                  "$formattedPrice Bath",
+                                                  style: TextStyle(
+                                                    color: greyDark1,
+                                                    fontFamily: regular,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                            Text(
-                                             'Size: ${data[index]['productsize']}',
-                                              style: TextStyle(
-                                                color: greyDark1,
-                                                fontFamily: regular,
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            SizedBox(height: 3),
-                                            Text(
-                                              "$formattedPrice Bath",
-                                              style: TextStyle(
-                                                color: greyDark1,
-                                                fontFamily: regular,
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              FirestoreServices.deleteDocument(
+                                                  data[index].id);
+                                            },
+                                            child: Icon(Icons.delete,
+                                                color: primaryApp),
+                                          ),
+                                        ],
                                       ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          FirestoreServices.deleteDocument(
-                                              data[index].id);
-                                        },
-                                        child: Icon(Icons.delete,
-                                            color: primaryApp),
-                                      ),
+                                      Divider(color: thinGrey01,).box.padding(EdgeInsets.only(top: 14)).make(), 
                                     ],
                                   ),
                                 ),
@@ -166,7 +172,6 @@ class _CartScreenState extends State<CartScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                      
                         Row(
                           children: [
                             "Total price  "

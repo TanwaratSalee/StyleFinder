@@ -44,7 +44,7 @@ class _CollectionDetailsState extends State<CollectionDetails> {
     return Scaffold(
       appBar: AppBar(
         title: widget.title != null
-            ? widget.title!.text.fontFamily(bold).black.make()
+            ? widget.title!.text.size(24).fontFamily(medium).color(greyDark2).make()
             : const Text('No Title'),
       ),
       backgroundColor: whiteColor,

@@ -1,7 +1,10 @@
+import 'dart:async';
 import 'dart:convert'; // แก้ไขบรรทัดนี้
 import 'dart:io';
 
+import 'package:flutter_finalproject/Views/home_screen/mainHome.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
+import 'package:flutter_finalproject/consts/lists.dart';
 import 'package:flutter_finalproject/controllers/cart_controller.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -20,10 +23,10 @@ class _PromptpayScreenState extends State<PromptpayScreen> {
   @override
   void initState() {
     super.initState();
-    createChargeWithPromptPay();
+    createChargeWithMobileBanking();
   }
 
-  createChargeWithPromptPay() async {
+/*   createChargeWithPromptPay() async {
     String secretKey = 'skey_test_5yzhwpoh5cu85yb4qrr'; // ใช้ Secret Key ของคุณ
     String urlAPI = 'https://api.omise.co/charges';
 
@@ -51,7 +54,6 @@ class _PromptpayScreenState extends State<PromptpayScreen> {
       final resultCharge = jsonDecode(response.body);
       print('Charge created: ${resultCharge['id']}');
 
-      // ตรวจสอบและเข้าถึง download_uri
       downloadUri =
           resultCharge['source']?['scannable_code']?['image']?['download_uri'];
       if (downloadUri != null) {
@@ -66,7 +68,64 @@ class _PromptpayScreenState extends State<PromptpayScreen> {
     } else {
       print('Failed to create charge: ${response.body}');
     }
+  } */
+
+  createChargeWithMobileBanking() async {
+    String secretKey = 'skey_test_5yzhwpoh5cu85yb4qrr'; // ใช้ Secret Key ของคุณ
+    String urlAPI = 'https://api.omise.co/charges';
+
+    String basicAuth = 'Basic ' + base64Encode(utf8.encode('$secretKey:'));
+
+    Map<String, String> headerMap = {};
+    headerMap['authorization'] = basicAuth;
+    headerMap['Cache-Control'] = 'no-cache';
+    headerMap['Content-Type'] = 'application/x-www-form-urlencoded';
+
+    Map<String, dynamic> data = {};
+    data['amount'] = controller.totalP.value.toString();
+    data['currency'] = 'thb';
+    data['return_uri'] = 'myapp://payments';
+    data['source[type]'] = 'mobile_banking_kbank';
+
+    Uri uri = Uri.parse(urlAPI);
+
+    http.Response response = await http.post(
+      uri,
+      headers: headerMap,
+      body: data,
+    );
+
+  if (response.statusCode == 200) {
+    final resultCharge = jsonDecode(response.body);
+    print('Charge created: ${resultCharge['id']}');
+    
+    Timer.periodic(Duration(seconds: 3), (Timer timer) async {
+      http.Response statusResponse = await http.get(
+        Uri.parse('https://api.omise.co/charges/${resultCharge['id']}'),
+        headers: headerMap,
+      );
+
+      if (statusResponse.statusCode == 200) {
+        final updatedResultCharge = jsonDecode(statusResponse.body);
+
+        if (updatedResultCharge['status'] == 'successful') {
+          timer.cancel();
+          _showSuccessDialog(context);
+
+        } else if (updatedResultCharge['status'] == 'failed' || updatedResultCharge['status'] == 'expired') {
+          timer.cancel();
+          print('Transaction failed or expired');
+
+        }
+      } else {
+        print('Failed to fetch charge status: ${statusResponse.body}');
+
+      }
+    });
+  } else {
+    print('Failed to create charge: ${response.body}');
   }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -105,4 +164,55 @@ class _PromptpayScreenState extends State<PromptpayScreen> {
       ),
     );
   }
+
+Future<void> _showSuccessDialog(BuildContext context) async {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: whiteColor,
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: <Widget>[
+              SizedBox(height: 50),
+              Image.asset('assets/images/Finishpay.PNG'),
+              SizedBox(height: 40),
+              Text(
+                'Payment was successful!',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+              SizedBox(height: 15),
+              Text(
+                '${controller.totalP.value} Bath',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+
+  String selectedPaymentMethod = textpaymentMethods[controller.paymentIndex.value];
+  await controller.placeMyOrder(
+    orderPaymentMethod: selectedPaymentMethod,
+    totalAmount: controller.totalP.value,
+  );
+
+  await controller.clearCart();
+  VxToast.show(context, msg: "Order placed successfully");
+  await Future.delayed(Duration(seconds: 4));
+  Get.find<CartController>().totalP.refresh();
+  Get.offAll(() => MainHome());
+}
 }

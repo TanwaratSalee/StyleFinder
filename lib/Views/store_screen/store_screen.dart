@@ -221,7 +221,7 @@ class StoreScreen extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 Container(
-                  height: MediaQuery.of(context).size.height * 0.6,
+                  height: MediaQuery.of(context).size.height * 0.656,
                   child: TabBarView(
                     children: [
                       _buildProductMathGrids('All'),
@@ -243,33 +243,34 @@ class StoreScreen extends StatelessWidget {
     CollectionReference productsCollection =
         FirebaseFirestore.instance.collection('products');
 
+    // Adding the where condition to filter products by vendorId
+    Query query = productsCollection.where('vendor_id', isEqualTo: vendorId);
+
     return FutureBuilder<QuerySnapshot>(
-      future: productsCollection.get(),
+      future: query.get(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return Center(child: CircularProgressIndicator());
         }
         if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         }
         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-          return const Text('No Items');
+          return const Center(child: Text('No Items'));
         }
 
-        List<QueryDocumentSnapshot> allProducts = snapshot.data!.docs;
+        List<QueryDocumentSnapshot> products = snapshot.data!.docs;
 
         return GridView.builder(
           padding: const EdgeInsets.all(8.0),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2, childAspectRatio: 1 / 1.35),
-          itemCount: allProducts.length,
+          itemCount: products.length,
           itemBuilder: (BuildContext context, int index) {
-            var product = allProducts[index];
-            String productName = product.get('p_name');
-            String price = product.get('p_price');
-            String productImage = product.get('p_imgs')[0];
+            var product = products[index].data() as Map<String, dynamic>;
+            String productName = product['p_name'];
+            String price = product['p_price'];
+            String productImage = product['p_imgs'][0];
 
             return GestureDetector(
               onTap: () {
@@ -278,7 +279,7 @@ class StoreScreen extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (context) => ItemDetails(
                       title: productName,
-                      data: product.data() as Map<String, dynamic>,
+                      data: product,
                     ),
                   ),
                 );
@@ -291,53 +292,36 @@ class StoreScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    ClipRRect(
-                      borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(14),
-                        topLeft: Radius.circular(14),
-                      ),
-                      child: Image.network(
-                        productImage,
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        height: 190,
-                      ),
-                    ),
+                    Image.network(productImage,
+                        fit: BoxFit.cover, width: double.infinity, height: 190),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          SizedBox(height: 3),
+                          Text(productName,
+                              style:
+                                  TextStyle(fontFamily: 'Medium', fontSize: 16),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis),
                           Text(
-                            productName,
-                            style: TextStyle(
-                              fontFamily: 'Medium',
-                              fontSize: 16,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Text(
-                            "${NumberFormat('#,##0').format(double.parse('$price').toInt())} Bath",
-                            style: TextStyle(
-                              color: Colors.grey[800],
-                              fontFamily: 'Regular',
-                            ),
-                          ),
+                              "${NumberFormat('#,##0').format(double.parse(price).toInt())} Bath",
+                              style: TextStyle(
+                                  color: Colors.grey[800],
+                                  fontFamily: 'Regular')),
                         ],
                       ),
                     ),
                   ],
                 ),
-              ),
-            )
-                .box
-                .color(Colors.white)
-                .border(color: Colors.grey[300]!)
-                .margin(EdgeInsets.all(6))
-                .rounded
-                .make();
+              )
+                  .box
+                  .color(Colors.white)
+                  .border(color: Colors.grey[300]!)
+                  .margin(EdgeInsets.all(6))
+                  .rounded
+                  .make(),
+            );
           },
         );
       },
@@ -346,7 +330,7 @@ class StoreScreen extends StatelessWidget {
 
   Widget _buildProductGridOuterwear(String category, String subcollection) {
     Query query = FirebaseFirestore.instance
-        .collection('products')
+        .collection(productsCollection)
         .where('vendor_id', isEqualTo: vendorId);
 
     if (subcollection != 'All') {
@@ -439,7 +423,7 @@ class StoreScreen extends StatelessWidget {
 
   Widget _buildProductGridDress(String category, String subcollection) {
     Query query = FirebaseFirestore.instance
-        .collection('products')
+        .collection(productsCollection)
         .where('vendor_id', isEqualTo: vendorId);
 
     if (subcollection != 'All') {
@@ -532,7 +516,7 @@ class StoreScreen extends StatelessWidget {
 
   Widget _buildProductGridCoat(String category, String subcollection) {
     Query query = FirebaseFirestore.instance
-        .collection('products')
+        .collection(productsCollection)
         .where('vendor_id', isEqualTo: vendorId);
 
     if (subcollection != 'All') {
@@ -625,7 +609,7 @@ class StoreScreen extends StatelessWidget {
 
   Widget _buildProductGridTshirt(String category, String subcollection) {
     Query query = FirebaseFirestore.instance
-        .collection('products')
+        .collection(productsCollection)
         .where('vendor_id', isEqualTo: vendorId);
 
     if (subcollection != 'All') {
@@ -718,7 +702,7 @@ class StoreScreen extends StatelessWidget {
 
   Widget _buildProductGridShirt(String category, String subcollection) {
     Query query = FirebaseFirestore.instance
-        .collection('products')
+        .collection(productsCollection)
         .where('vendor_id', isEqualTo: vendorId);
 
     if (subcollection != 'All') {
@@ -811,7 +795,7 @@ class StoreScreen extends StatelessWidget {
 
   Widget _buildProductGridShort(String category, String subcollection) {
     Query query = FirebaseFirestore.instance
-        .collection('products')
+        .collection(productsCollection)
         .where('vendor_id', isEqualTo: vendorId);
 
     if (subcollection != 'All') {
@@ -904,7 +888,7 @@ class StoreScreen extends StatelessWidget {
 
   Widget _buildProductGridPant(String category, String subcollection) {
     Query query = FirebaseFirestore.instance
-        .collection('products')
+        .collection(productsCollection)
         .where('vendor_id', isEqualTo: vendorId);
 
     if (subcollection != 'All') {
@@ -958,7 +942,7 @@ class StoreScreen extends StatelessWidget {
                       productImage,
                       fit: BoxFit.cover,
                       width: double.infinity,
-                      height: 150,
+                      height: 190,
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -997,7 +981,7 @@ class StoreScreen extends StatelessWidget {
 
   Widget _buildProductGridSkirt(String category, String subcollection) {
     Query query = FirebaseFirestore.instance
-        .collection('products')
+        .collection(productsCollection)
         .where('vendor_id', isEqualTo: vendorId);
 
     if (subcollection != 'All') {
@@ -1090,7 +1074,7 @@ class StoreScreen extends StatelessWidget {
 
   Future<String> fetchSellerName(String vendorId) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('products')
+        .collection(productsCollection)
         .where('vendor_id', isEqualTo: vendorId)
         .limit(1)
         .get();
@@ -1098,7 +1082,7 @@ class StoreScreen extends StatelessWidget {
     if (querySnapshot.docs.isNotEmpty) {
       Map<String, dynamic> data =
           querySnapshot.docs.first.data() as Map<String, dynamic>;
-      return data['p_seller'] ?? 'Unknown Seller';
+      return data['p_seller'] ?? 'Unknow Seller';
     } else {
       return 'Unknown Seller';
     }
@@ -1107,7 +1091,7 @@ class StoreScreen extends StatelessWidget {
   Future<String> fetchSellerImgs(String vendorId) async {
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('vendors')
+          .collection(vendorsCollection)
           .where('vendor_id', isEqualTo: vendorId)
           .limit(1)
           .get();
@@ -1127,7 +1111,7 @@ class StoreScreen extends StatelessWidget {
 
   Widget _buildProductMathGrids(String category) {
     Query query = FirebaseFirestore.instance
-        .collection('products')
+        .collection(productsCollection)
         .where('vendor_id')
         .where('p_mixmatch');
 
@@ -1208,10 +1192,17 @@ class StoreScreen extends StatelessWidget {
                         Row(
                           children: [
                             Image.network(
-                              productImage1,
+                              productImage1.isNotEmpty
+                                  ? productImage1
+                                  : imgError,
                               width: 80,
                               height: 90,
                               fit: BoxFit.cover,
+                              errorBuilder: (BuildContext context,
+                                  Object exception, StackTrace? stackTrace) {
+                                return Image.asset(imgError,
+                                    width: 80, height: 90, fit: BoxFit.cover);
+                              },
                             ),
                             5.widthBox,
                             Expanded(

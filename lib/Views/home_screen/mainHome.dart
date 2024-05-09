@@ -84,7 +84,7 @@ class _MainHomeState extends State<MainHome> {
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: greyDark1.withOpacity(0.1),
                 spreadRadius: 5,
                 blurRadius: 10,
                 offset: Offset(0, -1), // changes position of shadow

@@ -3,7 +3,6 @@ import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 
 import '../cart_screen/cart_screen.dart';
-import '../search_screen/recent_search_screen.dart';
 
 Widget appbarField({required BuildContext context}) { // Specify context as required
   return Row(
@@ -11,7 +10,7 @@ Widget appbarField({required BuildContext context}) { // Specify context as requ
     children: [
       IconSearch(context: context),
       Center(
-        child: Image.asset(icLogoOnTop, height: 40),
+        child: Image.asset(icLogoOnTop, height: 35),
       ),
       Padding(
         padding: const EdgeInsets.only(right: 15.0),

@@ -12,3 +12,5 @@ const Color blackColor = Color.fromARGB(255, 24, 24, 24);
 const Color golden = Color.fromRGBO(245, 214, 50, 1);
 const Color redColor = Color.fromARGB(255, 249, 87, 89);
 const Color backGround = Color.fromARGB(242, 242, 242, 242);
+
+const Color whiteOpacity = Color.fromRGBO(255, 255, 255, 0.5);

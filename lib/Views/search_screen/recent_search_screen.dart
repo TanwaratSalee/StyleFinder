@@ -17,7 +17,7 @@ class SearchScreenPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: Text(title ?? 'Search'),
+        title: Text(title ?? 'Search').text.size(24).fontFamily(medium).color(greyDark2).make(),
       ),
       body: Column(
         children: [
@@ -29,12 +29,12 @@ class SearchScreenPage extends StatelessWidget {
               controller: controller.searchController,
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: whiteColor),
-                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(color: thinGrey01),
+                  borderRadius: BorderRadius.circular(80),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: greyDark1),
-                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(color: greyColor),
+                  borderRadius: BorderRadius.circular(80),
                 ),
                 suffixIcon: const Icon(Icons.search).onTap(() {
                   final searchQuery = controller.searchController.text;
@@ -66,8 +66,8 @@ class SearchScreenPage extends StatelessWidget {
                       title: Text(controller.searchHistory[index]),
                       leading: const Icon(Icons.history),
                       onTap: () {
-                        final searchQuery = controller.searchHistory[index]; // Retrieve search query
-                        Get.to(() => SearchScreen(title: searchQuery)); // Pass search query to SearchScreen
+                        final searchQuery = controller.searchHistory[index]; 
+                        Get.to(() => SearchScreen(title: searchQuery)); 
                       },
                       trailing: IconButton(
                         icon: const Icon(Icons.clear),

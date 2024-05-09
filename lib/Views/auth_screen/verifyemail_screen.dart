@@ -1,16 +1,11 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/auth_screen/login_screen.dart';
-import 'package:flutter_finalproject/Views/auth_screen/personal_details_screen.dart';
 import 'package:flutter_finalproject/Views/home_screen/mainHome.dart';
-import 'package:flutter_finalproject/consts/colors.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
-import 'package:flutter_finalproject/consts/styles.dart';
 import 'package:flutter_finalproject/controllers/auth_controller.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class VerifyEmailScreen extends StatefulWidget {
   final String email;

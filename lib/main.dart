@@ -19,28 +19,29 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        useMaterial3: true,
-        // Manually defined ColorScheme
-        colorScheme: ColorScheme(
-          brightness: Brightness.light,
-          primary: thinGrey0,
-          onPrimary: whiteColor,
-          secondary: thinGrey01,
-          onSecondary: blackColor,
-          error: redColor,
-          onError: whiteColor,
-          background: thinGrey0,
-          onBackground: blackColor,
-          surface: thinGrey0,
-          onSurface: blackColor,
-        ),
-        scaffoldBackgroundColor: thinGrey0,
-        appBarTheme: const AppBarTheme(
-          iconTheme: IconThemeData(color: blackColor),
-          elevation: 0.0,
-          backgroundColor: Colors.transparent),
-        primaryColor: primaryApp,
-        fontFamily: regular),
+          useMaterial3: true,
+          // Manually defined ColorScheme
+          colorScheme: ColorScheme(
+            brightness: Brightness.light,
+            primary: thinPrimaryApp,
+            onPrimary: whiteColor,
+            secondary: whiteColor,
+            onSecondary: blackColor,
+            error: redColor,
+            onError: whiteColor,
+            background: whiteColor,
+            onBackground: blackColor,
+            surface: whiteColor,
+            onSurface: blackColor,
+          ),
+          dialogBackgroundColor: whiteColor,
+          scaffoldBackgroundColor: whiteColor,
+          appBarTheme: const AppBarTheme(
+              iconTheme: IconThemeData(color: blackColor),
+              elevation: 0.0,
+              backgroundColor: Colors.transparent),
+          primaryColor: primaryApp,
+          fontFamily: regular),
       home: const SplashScreen(),
     );
   }

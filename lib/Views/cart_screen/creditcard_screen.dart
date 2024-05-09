@@ -177,12 +177,8 @@ Widget _buildVCCTextField() {
       appBar: AppBar(
         title: Text(
           "Card Detail",
-          style: TextStyle(
-            fontSize: 25,
-            fontFamily: bold,
-            color: Colors.grey[900],
-          ),
-        ),
+          
+        ).text.size(24).fontFamily(medium).color(greyDark2).make(),
       ),
       body: ListView(
         padding: EdgeInsets.all(16),

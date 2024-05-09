@@ -1,14 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
-import 'package:flutter_finalproject/consts/colors.dart';
-import 'package:flutter_finalproject/consts/firebase_consts.dart';
-import 'package:flutter_finalproject/consts/styles.dart';
+import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 class ItemDetails extends StatefulWidget {
   final String? title;
@@ -101,7 +97,7 @@ class _ItemDetailsState extends State<ItemDetails> {
         appBar: AppBar(
           title: widget.title!.text.color(greyDark2)
               .fontFamily(medium)
-              .size(24)
+              .size(18)
               .make(),
         ),
         body: Column(
@@ -136,12 +132,12 @@ class _ItemDetailsState extends State<ItemDetails> {
                             widget.title ?? '',
                             style: const TextStyle(
                               color: blackColor,
-                              fontFamily: bold,
+                              fontFamily: medium,
                               fontSize: 22,
                             ),
                             softWrap:
                                 true, 
-                          ),
+                          ).box.p4.make(),
                         ),
                         const Spacer(),
                         Obx(
@@ -166,7 +162,6 @@ class _ItemDetailsState extends State<ItemDetails> {
                         )
                       ],
                     ),
-                    2.heightBox,
                     VxRating(
                       isSelectable: false,
                       value: double.parse(widget.data["p_rating"]),
@@ -176,9 +171,12 @@ class _ItemDetailsState extends State<ItemDetails> {
                       count: 5,
                       size: 20,
                       maxRating: 5,
-                    ),
+                    ).box.padding(EdgeInsets.symmetric(horizontal: 4)).make(),
                     5.heightBox,
-                    "${widget.data['p_aboutProduct']}"
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        "${widget.data['p_aboutProduct']}"
                         .text
                         .fontFamily(regular)
                         .color(greyDark1)
@@ -186,10 +184,12 @@ class _ItemDetailsState extends State<ItemDetails> {
                         .make(),
                     "${NumberFormat('#,##0').format(double.parse(widget.data['p_price']).toInt())} Bath"
                         .text
-                        .color(Theme.of(context).primaryColor)
-                        .fontFamily(regular)
+                        .color(primaryApp)
+                        .fontFamily(medium)
                         .size(20)
                         .make(),
+                      ],
+                    ).box.padding(EdgeInsets.symmetric(horizontal: 4)).make(),
                     20.heightBox,
                     Row(
                       children: [
@@ -202,8 +202,8 @@ class _ItemDetailsState extends State<ItemDetails> {
                                 return imageUrl.isNotEmpty
                                     ? Image.network(
                                         imageUrl,
-                                        width: 50,
-                                        height: 50,
+                                        width: 60,
+                                        height: 60,
                                         fit: BoxFit.cover,
                                       )
                                     : SizedBox.shrink();
@@ -233,23 +233,17 @@ class _ItemDetailsState extends State<ItemDetails> {
                             );
                           },
                           child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 10),
-                            decoration: BoxDecoration(
-                              color: primaryApp,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
                             child: const Text(
                               'See Store',
                               style: TextStyle(
                                   color: whiteColor, fontFamily: regular),
                             ),
-                          ),
+                          ).box.padding(EdgeInsets.symmetric(horizontal: 20, vertical: 10)).color(primaryApp).roundedLg.make(),
                         )
                       ],
                     )
                         .box
-                        .height(60)
+                        .height(80)
                         .padding(const EdgeInsets.symmetric(horizontal: 16))
                         .color(thinGrey0)
                         .make(),
@@ -262,7 +256,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                           "Collection"
                               .text
                               .color(blackColor)
-                              .size(15)
+                              .size(16)
                               .fontFamily(medium)
                               .make(),
                           SizedBox(height: 5),
@@ -277,15 +271,15 @@ class _ItemDetailsState extends State<ItemDetails> {
                                     "${widget.data['p_collection'][index].toString()[0].toUpperCase()}${widget.data['p_collection'][index].toString().substring(1)}",
                                   )
                                       .text
+                                      .size(14)
                                       .color(greyDark1)
                                       .fontFamily(medium)
-                                      .size(14)
                                       .make(),
                                 )
                                     .box
                                     .color(thinPrimaryApp)
                                     .margin(EdgeInsets.symmetric(horizontal: 6))
-                                    .rounded
+                                    .roundedLg
                                     .padding(EdgeInsets.symmetric(
                                         horizontal: 24, vertical: 12))
                                     .make();
@@ -296,18 +290,17 @@ class _ItemDetailsState extends State<ItemDetails> {
                           "Description"
                               .text
                               .color(blackColor)
-                              .size(15)
+                              .size(16)
                               .fontFamily(medium)
                               .make(),
                           SizedBox(height: 5),
                           Text(
                             widget.data['p_desc'],
-                            style: TextStyle(
-                              color: blackColor,
-                              fontFamily: regular,
-                              fontSize: 14,
-                            ),
-                          ),
+                          ) .text
+                              .color(blackColor)
+                              .size(12)
+                              .fontFamily(regular)
+                              .make(),
                           SizedBox(height: 10),
                           "Size & Fit"
                               .text
@@ -361,17 +354,17 @@ class _ItemDetailsState extends State<ItemDetails> {
                             )
                                 .box
                                 .padding(EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 8))
+                                    horizontal: 14, vertical: 8))
                                 .make(),
                           )
                               .box
                               .padding(EdgeInsets.symmetric(
-                                  horizontal: 4, vertical: 15))
+                                  horizontal: 5, vertical: 15))
                               .make(),
                         );
                       },
                     ),
-                  ),
+                  ).box.padding(EdgeInsets.only(left: 10,)).make(),
 
                   // Row for Quantity Adjustment
                   Row(

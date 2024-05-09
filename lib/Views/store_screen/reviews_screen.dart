@@ -32,10 +32,7 @@ class _ReviewScreenState extends State<ReviewScreen>
       appBar: AppBar(
         title: Text(
           'Reviews',
-          style: TextStyle(
-            fontFamily: bold,
-          ),
-        ),
+        ).text.size(24).fontFamily(medium).color(greyDark2).make(),
         centerTitle: true,
         // leading: IconButton(
         //   icon: const Icon(Icons.arrow_back_ios),

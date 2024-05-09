@@ -34,7 +34,12 @@ class _PaymentMethodsState extends State<PaymentMethods> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Select Payment Method'),
+        title: Text('Select Payment Method')
+            .text
+            .size(24)
+            .fontFamily(medium)
+            .color(greyDark2)
+            .make(),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -121,28 +126,33 @@ class _PaymentMethodsState extends State<PaymentMethods> {
         child: Obx(() => controller.placingOrder.value
             ? Center(child: CircularProgressIndicator())
             : ourButton(
-               onPress: () async {
-  print('Selected Payment Method: $selectedMethod'); // Debugging output
+                onPress: () async {
+                  print(
+                      'Selected Payment Method: $selectedMethod'); // Debugging output
 
-  if (selectedMethod == 'Credit Card') {
-    Get.to(() => const CreditCardScreen());
-  } else if (selectedMethod == 'Cash on Delivery') { // Make sure this matches exactly with what's being logged
-    print('Processing Cash on Delivery'); // Confirming correct branch
-    await controller.placeMyOrder(orderPaymentMethod: selectedMethod, totalAmount: controller.totalP.value);
-    await controller.clearCart();
-    VxToast.show(context, msg: "Order placed successfully");
-    Get.offAll(() => MainHome());
-  } else if (selectedMethod == 'Mobile Banking') {
-    if (selectedBank != null) {
-      Get.to(() => const PromptpayScreen()); 
-    } else {
-      VxToast.show(context, msg: "Please select a bank first.");
-    }
-  } else {
-    VxToast.show(context, msg: "Selected payment method is not supported yet.");
-  }
-},
-
+                  if (selectedMethod == 'Credit Card') {
+                    Get.to(() => const CreditCardScreen());
+                  } else if (selectedMethod == 'Cash on Delivery') {
+                    // Make sure this matches exactly with what's being logged
+                    print(
+                        'Processing Cash on Delivery'); // Confirming correct branch
+                    await controller.placeMyOrder(
+                        orderPaymentMethod: selectedMethod,
+                        totalAmount: controller.totalP.value);
+                    await controller.clearCart();
+                    VxToast.show(context, msg: "Order placed successfully");
+                    Get.offAll(() => MainHome());
+                  } else if (selectedMethod == 'Mobile Banking') {
+                    if (selectedBank != null) {
+                      Get.to(() => const PromptpayScreen());
+                    } else {
+                      VxToast.show(context, msg: "Please select a bank first.");
+                    }
+                  } else {
+                    VxToast.show(context,
+                        msg: "Selected payment method is not supported yet.");
+                  }
+                },
                 color: primaryApp,
                 textColor: whiteColor,
                 title: "Place my order")),

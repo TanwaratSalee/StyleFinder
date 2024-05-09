@@ -119,7 +119,10 @@ class ProductController extends GetxController {
             'p_wishlist': FieldValue.arrayUnion([currentUser!.uid])
           }).then((value) {
             updateIsFav(true);
-            VxToast.show(context, msg: "Added from wishlist");
+            VxToast.show(context, msg: "Added from wishlist", bgColor:whiteOpacity);
+
+        }).catchError((error) {
+                print('Error adding to Favorite: $error');
           }).catchError((error) {
             print('Error adding ${product['p_name']} to Favorite: $error');
           });
@@ -155,7 +158,7 @@ class ProductController extends GetxController {
 void addToWishlistMixMatch(
     String productName, Function(bool) updateIsFav, BuildContext context) {
   FirebaseFirestore.instance
-      .collection('products')
+      .collection(productsCollection)
       .where('p_name', isEqualTo: productName)
       .get()
       .then((QuerySnapshot querySnapshot) {
@@ -168,7 +171,7 @@ void addToWishlistMixMatch(
           'p_wishlist': FieldValue.arrayUnion([currentUserUID])
         }).then((value) {
           updateIsFav(true);
-          VxToast.show(context, msg: "Added from wishlist");
+          VxToast.show(context, msg: "Added from wishlist", bgColor:whiteOpacity);
         }).catchError((error) {
           print('Error adding $productName to Favorite: $error');
         });
@@ -180,7 +183,7 @@ void addToWishlistMixMatch(
 void removeToWishlistMixMatch(
     String productName, Function(bool) updateIsFav, BuildContext context) {
   FirebaseFirestore.instance
-      .collection('products')
+      .collection(productsCollection)
       .where('p_name', isEqualTo: productName)
       .get()
       .then((QuerySnapshot querySnapshot) {
@@ -205,7 +208,7 @@ void removeToWishlistMixMatch(
 void addToWishlistMatch(String productNameTop, String productNameLower, BuildContext context) {
   List<String> productNames = [productNameTop, productNameLower];
   FirebaseFirestore.instance
-      .collection('products')
+      .collection(productsCollection)
       .where('p_name', whereIn: productNames)
       .get()
       .then((QuerySnapshot querySnapshot) {
@@ -218,7 +221,8 @@ void addToWishlistMatch(String productNameTop, String productNameLower, BuildCon
               doc.reference.update({
                 'p_wishlist': FieldValue.arrayUnion([currentUserUID])
               }).then((value) {
-          VxToast.show(context, msg: "Added from wishlist");
+         VxToast.show(context, msg: "Added from wishlist", bgColor: Colors.grey.withOpacity(0.8));
+
         }).catchError((error) {
                 print('Error adding to Favorite: $error');
               });
@@ -235,7 +239,7 @@ void addToWishlistMatch(String productNameTop, String productNameLower, BuildCon
 void addToWishlistUserMatch(String productNameTop, String productNameLower, BuildContext context) {
   List<String> productNames = [productNameTop, productNameLower];
   FirebaseFirestore.instance
-      .collection('products')
+      .collection(productsCollection)
       .where('p_name', whereIn: productNames)
       .get()
       .then((QuerySnapshot querySnapshot) {

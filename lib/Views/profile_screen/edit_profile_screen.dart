@@ -63,7 +63,7 @@ class EditProfileScreen extends StatelessWidget {
                 ),
               ),
               CupertinoButton(
-                child: const Text('OK'),
+                child: const Text('OK').text.color(primaryApp).fontFamily(medium).make(),
                 onPressed: () {
                   // Force UI update if necessary
                   controller.birthdayController.text =
@@ -170,7 +170,7 @@ class EditProfileScreen extends StatelessWidget {
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title:
-            "Edit Profile".text.fontFamily(regular).color(greyDark2).make(),
+            "Edit Profile".text.size(24).fontFamily(medium).color(greyDark2).make(),
         actions: [
           TextButton(
             onPressed: () async {

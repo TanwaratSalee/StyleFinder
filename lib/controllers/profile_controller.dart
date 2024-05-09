@@ -76,7 +76,7 @@ class ProfileController extends GetxController {
       if (gender != null) dataToUpdate['gender'] = gender;
 
       await FirebaseFirestore.instance
-          .collection('users')
+          .collection(usersCollection)
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .update(dataToUpdate);
 

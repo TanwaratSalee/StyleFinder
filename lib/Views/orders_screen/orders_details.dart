@@ -15,8 +15,7 @@ class OrdersDetails extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           "Order Details",
-          style: TextStyle(fontFamily: regular, color: greyDark2),
-        ),
+        ).text.size(24).fontFamily(medium).color(greyDark2).make(),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -179,14 +178,14 @@ class OrdersDetails extends StatelessWidget {
                         d1: "${data['orders'][index]['qty']}x",
                         d2: "Refundable",
                       ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Container(
-                          width: 30,
-                          height: 20,
-                          color: Color(data['orders'][index]['color']),
-                        ),
-                      ),
+                      // Container(
+                      //   padding: const EdgeInsets.symmetric(horizontal: 16),
+                      //   child: Container(
+                      //     width: 30,
+                      //     height: 20,
+                      //     color: Color(data['orders'][index]['color']),
+                      //   ),
+                      // ),
                     ],
                   );
                 },

@@ -2,6 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_finalproject/Views/auth_screen/verifyemail_screen.dart';
+import 'package:flutter_finalproject/Views/news_screen/component/search_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/home_controller.dart';
 import 'package:get/get.dart';
@@ -10,7 +11,6 @@ import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
-import '../widgets_common/appbar_ontop.dart';
 
 class HomeScreen extends StatefulWidget {
   final dynamic data;
@@ -83,146 +83,209 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         backgroundColor: whiteColor,
         automaticallyImplyLeading: false,
-        title: appbarField(context: context),
-        // elevation: 8.0,
-        // shadowColor: greyColor.withOpacity(0.5),
-      ),
-      body: FutureBuilder<List<Map<String, dynamic>>>(
-          future: fetchProducts(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
-            if (snapshot.error != null) {
-              return Center(
-                  child: Text('An error occurred: ${snapshot.error}'));
-            }
-
-            if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const Center(child: Text('No data available'));
-            }
-
-            List<Map<String, dynamic>> products = snapshot.data!;
-            productsToShow = products
-                .where((product) => !isInWishlist(product, currentUser!.uid))
-                .toList();
-
-            return CardSwiper(
-              scale: 0.5,
-              isLoop: false,
-              controller: controllercard,
-              allowedSwipeDirection:
-                  AllowedSwipeDirection.only(left: true, right: true),
-              cardsCount: productsToShow.length,
-              cardBuilder: (BuildContext context, int index,
-                  int percentThresholdX, int percentThresholdY) {
-                previousSwipedProduct = selectedProduct;
-                selectedProduct = productsToShow[index];
-                Map<String, dynamic> product = productsToShow[index];
-                return Column(
-                  children: [
-                    Container(
-                      child: Stack(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                height: 1,
-                              ),
-                              ClipRRect(
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(14),
-                                  topLeft: Radius.circular(14),
-                                ),
-                                child: Image.network(
-                                  product['p_imgs'][0],
-                                  height: 450,
-                                  width: 380,
-                                  fit: BoxFit.fitHeight,
-                                ),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    product['p_name'],
-                                    style: const TextStyle(
-                                      color: blackColor,
-                                      fontSize: 20,
-                                      fontFamily: bold,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 2),
-                                  // ),
-                                  Text(
-                                    "${NumberFormat('#,##0').format(double.parse(product['p_price']).toInt())} Bath",
-                                    style: const TextStyle(
-                                      color: greyDark2,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                ],
-                              ).box.padding(EdgeInsets.all(8)).make(),
-                            ],
-                          )
-                              .box
-                              .white
-                              .roundedLg
-                              .shadowSm
-                              .padding(EdgeInsets.all(12))
-                              .make()
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 7.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        IconButton(
-                          icon: Image.asset(
-                            icDislikeButton,
-                            width: 65,
-                          ).box.roundedFull.shadowSm.make(),
-                          onPressed: () =>
-                              controllercard.swipe(CardSwiperDirection.left),
-                        ),
-                        IconButton(
-                          icon: Image.asset(
-                            icViewMoreButton,
-                            width: 65,
-                          ).box.roundedFull.shadowSm.make(),
-                          onPressed: () => navigateToItemDetails(),
-                        ),
-                        IconButton(
-                          icon: Image.asset(
-                            icLikeButton,
-                            width: 65,
-                          ).box.roundedFull.shadowSm.make(),
-                          onPressed: () => [
-                            controllercard.swipe(CardSwiperDirection.right),
-                            controller.addToWishlist(product),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                );
-              },
-              onSwipe: (previousIndex, currentIndex, direction) {
-                if (direction == CardSwiperDirection.right) {
-                  controller.addToWishlist(previousSwipedProduct!);
-                } else if (direction == CardSwiperDirection.left) {
-                  //
-                } else if (direction == CardSwiperDirection.top) {
-                  navigateToItemDetails();
-                }
-                return true;
-              },
-            );
-          },
+        title: Center(
+          child: Column(children: [
+            Image.asset(icLogoOnTop, height: 35),
+            10.heightBox
+          ],),
         ),
+      ),
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: Column(
+          children: [
+            Container(
+              alignment: Alignment.center,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: TextFormField(
+                        controller: controller.searchController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          suffixIcon:
+                              Icon(Icons.search, color: greyDark1).onTap(() {
+                            if (controller.searchController.text.isNotEmpty) {
+                              Get.to(() => SearchScreen(
+                                    title: controller.searchController.text,
+                                  ));
+                            }
+                          }),
+                          filled: true,
+                          fillColor: whiteColor,
+                          hintText: 'Search',
+                          hintStyle: TextStyle(color: greyColor),
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 10),
+                        ),
+                      ),
+                    )
+                        .box
+                        .border(color: greyColor, width: 0.5)
+                        .padding(EdgeInsets.symmetric(horizontal: 10))
+                        .roundedLg
+                        .make(),
+                  ),
+                  10.widthBox,
+                  IconButton(
+                    icon: Icon(
+                      Icons.filter_list_rounded,
+                      color: greyDark1,
+                      size: 30,
+                    ),
+                    onPressed: () {},
+                  ).box.border(color: greyColor, width: 0.5).roundedLg.make(),
+                ],
+              ),
+            ).box.padding(EdgeInsets.symmetric(horizontal: 30)).make(),
+            Expanded(
+              child: FutureBuilder<List<Map<String, dynamic>>>(
+                future: fetchProducts(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (snapshot.error != null) {
+                    return Center(
+                        child: Text('An error occurred: ${snapshot.error}'));
+                  }
+                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Center(child: Text('No data available'));
+                  }
+
+                  List<Map<String, dynamic>> products = snapshot.data!;
+                  productsToShow = products
+                      .where(
+                          (product) => !isInWishlist(product, currentUser!.uid))
+                      .toList();
+                  return CardSwiper(
+                    scale: 0.5,
+                    isLoop: false,
+                    controller: controllercard,
+                    allowedSwipeDirection:
+                        AllowedSwipeDirection.only(left: true, right: true),
+                    cardsCount: productsToShow.length,
+                    cardBuilder: (BuildContext context, int index,
+                        int percentThresholdX, int percentThresholdY) {
+                      previousSwipedProduct = selectedProduct;
+                      selectedProduct = productsToShow[index];
+                      Map<String, dynamic> product = productsToShow[index];
+                      return Column(
+                        children: [
+                          Container(
+                            child: Stack(
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      height: 1,
+                                    ),
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(14),
+                                        topLeft: Radius.circular(14),
+                                      ),
+                                      child: Image.network(
+                                        product['p_imgs'][0],
+                                        height: 430,
+                                        width: 380,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          product['p_name'],
+                                          style: const TextStyle(
+                                            color: blackColor,
+                                            fontSize: 20,
+                                            fontFamily: medium,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 2),
+                                        // ),
+                                        Text(
+                                          "${NumberFormat('#,##0').format(double.parse(product['p_price']).toInt())} Bath",
+                                          style: const TextStyle(
+                                            color: greyDark2,
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                      ],
+                                    ).box.padding(EdgeInsets.all(8)).make(),
+                                  ],
+                                )
+                                    .box
+                                    .white
+                                    .roundedLg
+                                    .shadowSm
+                                    .padding(EdgeInsets.all(12))
+                                    .make()
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              IconButton(
+                                icon: Image.asset(
+                                  icDislikeButton,
+                                  width: 70,
+                                ).box.roundedFull.shadowSm.make(),
+                                onPressed: () => controllercard
+                                    .swipe(CardSwiperDirection.left),
+                              ),
+                              IconButton(
+                                icon: Image.asset(
+                                  icViewMoreButton,
+                                  width: 70,
+                                ).box.roundedFull.shadowSm.make(),
+                                onPressed: () => navigateToItemDetails(),
+                              ),
+                              IconButton(
+                                icon: Image.asset(
+                                  icLikeButton,
+                                  width: 70,
+                                ).box.roundedFull.shadowSm.make(),
+                                onPressed: () => [
+                                  controllercard
+                                      .swipe(CardSwiperDirection.right),
+                                  controller.addToWishlist(product),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      );
+                    },
+                    onSwipe: (previousIndex, currentIndex, direction) {
+                      if (direction == CardSwiperDirection.right) {
+                        controller.addToWishlist(previousSwipedProduct!);
+                      } else if (direction == CardSwiperDirection.left) {
+                        //
+                      } else if (direction == CardSwiperDirection.top) {
+                        navigateToItemDetails();
+                      }
+                      return true;
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

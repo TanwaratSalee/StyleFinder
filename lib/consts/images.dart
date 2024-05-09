@@ -150,3 +150,5 @@ const String icClickFav = "assets/icons/icNormal/ckickbuttonFavourite.png";
 
 //----------------------------------------------- popup -----------------------------------------------
 const String imgPopup = 'assets/images/Finishpay.PNG';
+const String shopError = 'assets/images/ShopError.png';
+const String imgError = 'assets/images/imgError.png';

@@ -16,11 +16,7 @@ class ChatScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: "${controller.friendName}"
-            .text
-            .fontFamily(regular)
-            .color(greyDark2)
-            .make(),
+        title: "${controller.friendName}".text.size(24).fontFamily(medium).color(greyDark2).make(),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

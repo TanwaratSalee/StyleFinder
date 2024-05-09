@@ -72,7 +72,6 @@ class NewsController extends GetxController {
 
   @override
   void onClose() {
-    // Dispose of the searchController when the controller is closed
     searchController.dispose();
     super.onClose();
   }

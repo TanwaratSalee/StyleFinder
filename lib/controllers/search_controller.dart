@@ -20,7 +20,7 @@ class SearchPageController extends GetxController {
     searchInProgress.value = true;
     try {
       final results = await FirebaseFirestore.instance
-          .collection('products')
+          .collection(productsCollection)
           .where('searchKeywords', arrayContains: query.toLowerCase())
           .get();
 

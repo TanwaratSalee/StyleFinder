@@ -35,7 +35,7 @@ class _ProfileScreenState extends State<ProfileScreen>
           style: TextStyle(
             color: blackColor,
             fontSize: 26,
-            fontFamily: regular,
+            fontFamily: medium,
           ),
         ),
         shadowColor: greyColor.withOpacity(0.5),
@@ -58,7 +58,7 @@ class _ProfileScreenState extends State<ProfileScreen>
           TabBar(
             controller: _tabController,
             labelStyle: const TextStyle(
-                fontSize: 15, fontFamily: regular, color: greyDark2),
+                fontSize: 15, fontFamily: medium, color: primaryApp),
             unselectedLabelStyle: const TextStyle(
                 fontSize: 14, fontFamily: regular, color: greyDark1),
             tabs: [
@@ -133,9 +133,9 @@ class _ProfileScreenState extends State<ProfileScreen>
                             data['name'][0].toUpperCase() +
                                 data['name'].substring(1),
                             style: const TextStyle(
-                              fontSize: 18,
+                              fontSize: 20,
                               color: blackColor,
-                              fontFamily: regular,
+                              fontFamily: medium,
                             ),
                           ),
                         ],
@@ -192,11 +192,10 @@ class _ProfileScreenState extends State<ProfileScreen>
                     Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
                         child: Image.network(
                           data[index]['p_imgs'][0],
-                          height: 75,
-                          width: 65,
+                          height: 80,
+                          width: 75,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -211,7 +210,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                               data[index]['p_name'],
                               style: const TextStyle(
                                 fontSize: 16,
-                                fontFamily: regular,
+                                fontFamily: medium,
                               ),
                             ),
                             Text(
@@ -443,24 +442,16 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment:CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         pair['top'],
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                        ),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
-                                      ),
+                                      ).text.fontFamily(medium).size(16).color(greyDark2).make(),
                                       Text(
                                         "${NumberFormat('#,##0').format(double.parse(pair['top_price']).toInt())} Bath",
-                                        style:
-                                            const TextStyle(color: greyDark2),
-                                      ),
+                                      ).text.fontFamily(regular).size(14).color(greyDark1).make(),
                                     ],
                                   ),
                                 ),
@@ -497,19 +488,12 @@ class _ProfileScreenState extends State<ProfileScreen>
                                     children: [
                                       Text(
                                         pair['lower'],
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                        ),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
-                                      ),
+                                      ).text.fontFamily(medium).size(16).color(greyDark1).make(),
                                       Text(
                                         "${NumberFormat('#,##0').format(double.parse(pair['lower_price']).toInt())} Bath",
-                                        style:
-                                            const TextStyle(color: greyDark2),
-                                      ),
+                                      ).text.fontFamily(regular).size(14).color(greyDark1).make(),
                                     ],
                                   ),
                                 ),
@@ -518,18 +502,17 @@ class _ProfileScreenState extends State<ProfileScreen>
                           ),
                         ),
                       ),
-                      SizedBox(height: 6),
                       // Total Price
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
+                        padding: const EdgeInsets.all(5),
                         child: Row(
                           children: [
                             Text(
-                              "Total Price  ",
+                              "Total  ",
                               style: TextStyle(
                                 color: greyDark2,
-                                fontFamily: 'regular',
-                                fontSize: 16,
+                                fontFamily: regular,
+                                fontSize: 14,
                               ),
                             ),
                             Text(
@@ -545,7 +528,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                               style: TextStyle(
                                 color: greyDark2,
                                 fontFamily: 'regular',
-                                fontSize: 16,
+                                fontSize: 14,
                               ),
                             ),
                           ],
@@ -601,7 +584,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                 borderRadius: BorderRadius.circular(20.0),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black26,
+                    color: greyDark1,
                     blurRadius: 10.0,
                     offset: const Offset(0.0, 10.0),
                   ),
@@ -631,7 +614,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                         },
                         child: Text(
                           "Cancel",
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(color: greyDark1),
                         ),
                       ),
                       SizedBox(width: 20.0),
@@ -787,9 +770,9 @@ class _ProfileScreenState extends State<ProfileScreen>
                                             Text(
                                               productName1,
                                               style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
+                                                fontFamily: medium,
                                                 fontSize: 14,
-                                                color: Colors.black,
+                                                color: greyDark1,
                                               ),
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
@@ -822,15 +805,16 @@ class _ProfileScreenState extends State<ProfileScreen>
                                       child: Padding(
                                         padding: const EdgeInsets.all(19),
                                         child: Column(
+                                          
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               productName2,
                                               style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
+                                                fontFamily: medium,
                                                 fontSize: 14,
-                                                color: Colors.black,
+                                                color: greyDark1,
                                               ),
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,

@@ -38,7 +38,7 @@ class _OrdersScreenState extends State<OrdersScreen>
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: const Text("My Orders", style: TextStyle(color: greyDark2, fontFamily: medium, fontSize: 22)),
+        title: const Text("My Orders").text.size(24).fontFamily(medium).color(greyDark2).make(),
         bottom: TabBar(
           controller: _tabController,
           tabs: const [

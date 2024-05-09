@@ -131,7 +131,7 @@ flutter:
         
     - family: Urbanist-Medium
       fonts:
-        - asset: assets/fonts/Urbanist/Urbanist-Bold.ttf     
+        - asset: assets/fonts/Urbanist/Urbanist-Medium.ttf     
 
   # fonts:
   #   - family: Schyler

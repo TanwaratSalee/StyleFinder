@@ -7,6 +7,13 @@ import 'package:get/get.dart';
 class HomeController extends GetxController {
   var isFav = false.obs;
 
+  get searchController => null;
+
+  void onClose() {
+    searchController.dispose();
+    super.onClose();
+  }
+
   void addToWishlist(Map<String, dynamic> product) {
     FirebaseFirestore.instance
         .collection(productsCollection)

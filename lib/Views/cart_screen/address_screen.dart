@@ -17,7 +17,7 @@ class _AddressScreenState extends State<AddressScreen> {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: const Text('Address'),
+        title: const Text('Address').text.size(24).fontFamily(medium).color(greyDark2).make(),
         centerTitle: true,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(4.0),

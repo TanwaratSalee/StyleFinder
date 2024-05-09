@@ -107,7 +107,7 @@ class _editaddressFormState extends State<editaddress_controller> {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: "Edit Address".text.size(24).fontFamily(medium).make(),
+        title: "Edit Address".text.size(24).fontFamily(medium).color(greyDark2).make(),
       ),
       bottomNavigationBar: SizedBox(
         height: 70,
