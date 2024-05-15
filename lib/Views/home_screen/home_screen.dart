@@ -78,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var screenSize = MediaQuery.of(context).size; 
+    var screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
       backgroundColor: whiteColor,
@@ -226,6 +226,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                               fontSize: 20,
                                               fontFamily: medium,
                                             ),
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
                                           ),
                                           SizedBox(height: 2),
                                           Text(
@@ -255,7 +257,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 IconButton(
                                   icon: Image.asset(
                                     icDislikeButton,
-                                    width: 67,
+                                    width: 60,
                                   ).box.roundedFull.shadowSm.make(),
                                   onPressed: () => controllercard
                                       .swipe(CardSwiperDirection.left),
@@ -263,14 +265,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                 IconButton(
                                   icon: Image.asset(
                                     icViewMoreButton,
-                                    width: 67,
+                                    width: 60,
                                   ).box.roundedFull.shadowSm.make(),
                                   onPressed: () => navigateToItemDetails(),
                                 ),
                                 IconButton(
                                   icon: Image.asset(
                                     icLikeButton,
-                                    width: 67,
+                                    width: 60,
                                   ).box.roundedFull.shadowSm.make(),
                                   onPressed: () => [
                                     controllercard
