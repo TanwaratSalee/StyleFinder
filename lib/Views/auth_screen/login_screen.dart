@@ -159,20 +159,17 @@ class LoginScreen extends StatelessWidget {
                                         children: List.generate(
                                           socialIconList.length,
                                           (index) => Expanded(
-                                            // ใช้ Expanded ที่นี่เพื่อให้ทุกไอเท็มยืดเต็มพื้นที่ในแนวนอน
                                             child: GestureDetector(
                                               onTap: () {
                                                 switch (index) {
-                                                  case 0: // Google
+                                                  case 0: 
                                                     controller.signInWithGoogle(
                                                         context);
                                                     break;
                                                 }
                                               },
                                               child: Container(
-                                                padding: const EdgeInsets
-                                                    .fromLTRB(20, 15, 20,
-                                                    15), // ปรับค่า padding ให้เหมาะสม
+                                                padding: const EdgeInsets.fromLTRB(0, 15, 0,15), 
                                                 decoration: BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.circular(8),
