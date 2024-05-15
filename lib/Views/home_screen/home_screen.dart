@@ -12,7 +12,6 @@ import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
-
 class HomeScreen extends StatefulWidget {
   final dynamic data;
   const HomeScreen({super.key, this.data});
@@ -79,26 +78,30 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var screenSize = MediaQuery.of(context).size; // ขนาดหน้าจอ
+
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
         backgroundColor: whiteColor,
         automaticallyImplyLeading: false,
         title: Center(
-          child: Row(children: [
-            120.widthBox,
-            Image.asset(icLogoOnTop, height: 35),
-            40.widthBox,
-             IconButton(
-          icon: Image.asset(
-            icCart,
-            width: 21,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Center(
+                  child: Image.asset(icLogoOnTop, height: 35),
+                ),
+              ),
+              IconButton(
+                icon: Image.asset(icCart, width: 21),
+                onPressed: () {
+                  Get.to(() => const CartScreen());
+                },
+              ),
+            ],
           ),
-          onPressed: () {
-            Get.to(() => const CartScreen());
-          },
-        ),
-          ],),
         ),
       ),
       body: GestureDetector(
@@ -109,6 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Container(
               alignment: Alignment.center,
+              padding: EdgeInsets.symmetric(horizontal: 30),
               child: Row(
                 children: [
                   Expanded(
@@ -133,18 +137,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           fillColor: whiteColor,
                           hintText: 'Search',
                           hintStyle: TextStyle(color: greyColor),
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 10),
+                          contentPadding: EdgeInsets.symmetric(horizontal: 25),
                         ),
                       ),
-                    )
-                        .box
-                        .border(color: greyColor, width: 0.5)
-                        .padding(EdgeInsets.symmetric(horizontal: 10))
-                        .roundedLg
-                        .make(),
+                    ).box.border(color: greyColor, width: 0.5).roundedLg.make(),
                   ),
-                  10.widthBox,
+                  5.widthBox,
                   IconButton(
                     icon: Icon(
                       Icons.filter_list_rounded,
@@ -155,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ).box.border(color: greyColor, width: 0.5).roundedLg.make(),
                 ],
               ),
-            ).box.padding(EdgeInsets.symmetric(horizontal: 30)).make(),
+            ),
             Expanded(
               child: FutureBuilder<List<Map<String, dynamic>>>(
                 future: fetchProducts(),
@@ -188,102 +186,108 @@ class _HomeScreenState extends State<HomeScreen> {
                       previousSwipedProduct = selectedProduct;
                       selectedProduct = productsToShow[index];
                       Map<String, dynamic> product = productsToShow[index];
-                      return Column(
-                        children: [
-                          Container(
-                            child: Stack(
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      height: 1,
-                                    ),
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(14),
-                                        topLeft: Radius.circular(14),
-                                      ),
-                                      child: Image.network(
-                                        product['p_imgs'][0],
-                                        height: 420,
-                                        width: 380,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          product['p_name'],
-                                          style: const TextStyle(
-                                            color: blackColor,
-                                            fontSize: 20,
-                                            fontFamily: medium,
-                                          ),
+
+                      return Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height,
+                        child: Column(
+                          children: [
+                            Container(
+                              child: Stack(
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(height: 1),
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(14),
+                                            topLeft: Radius.circular(14)),
+                                        child: Image.network(
+                                          product['p_imgs'][0],
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.47,
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          fit: BoxFit.cover,
                                         ),
-                                        const SizedBox(height: 2),
-                                        Text(
-                                          "${NumberFormat('#,##0').format(double.parse(product['p_price']).toInt())} Bath",
-                                          style: const TextStyle(
-                                            color: greyDark2,
-                                            fontSize: 18,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            product['p_name'],
+                                            style: TextStyle(
+                                              color: blackColor,
+                                              fontSize: 20,
+                                              fontFamily: medium,
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    ).box.padding(EdgeInsets.all(8)).make(),
-                                  ],
-                                )
-                                    .box
-                                    .white
-                                    .roundedLg
-                                    .shadowSm
-                                    .padding(EdgeInsets.all(12))
-                                    .make()
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 5),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              IconButton(
-                                icon: Image.asset(
-                                  icDislikeButton,
-                                  width: 70,
-                                ).box.roundedFull.shadowSm.make(),
-                                onPressed: () => controllercard
-                                    .swipe(CardSwiperDirection.left),
-                              ),
-                              IconButton(
-                                icon: Image.asset(
-                                  icViewMoreButton,
-                                  width: 70,
-                                ).box.roundedFull.shadowSm.make(),
-                                onPressed: () => navigateToItemDetails(),
-                              ),
-                              IconButton(
-                                icon: Image.asset(
-                                  icLikeButton,
-                                  width: 70,
-                                ).box.roundedFull.shadowSm.make(),
-                                onPressed: () => [
-                                  controllercard
-                                      .swipe(CardSwiperDirection.right),
-                                  controller.addToWishlist(product),
+                                          SizedBox(height: 2),
+                                          Text(
+                                            "${NumberFormat('#,##0').format(double.parse(product['p_price']).toInt())} Bath",
+                                            style: TextStyle(
+                                              color: greyDark2,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        ],
+                                      ).box.padding(EdgeInsets.all(8)).make(),
+                                    ],
+                                  )
+                                      .box
+                                      .white
+                                      .roundedLg
+                                      .shadowSm
+                                      .padding(EdgeInsets.all(12))
+                                      .make(),
                                 ],
                               ),
-                            ],
-                          ),
-                        ],
+                            ),
+                            SizedBox(height: 5),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                IconButton(
+                                  icon: Image.asset(
+                                    icDislikeButton,
+                                    width: 67,
+                                  ).box.roundedFull.shadowSm.make(),
+                                  onPressed: () => controllercard
+                                      .swipe(CardSwiperDirection.left),
+                                ),
+                                IconButton(
+                                  icon: Image.asset(
+                                    icViewMoreButton,
+                                    width: 67,
+                                  ).box.roundedFull.shadowSm.make(),
+                                  onPressed: () => navigateToItemDetails(),
+                                ),
+                                IconButton(
+                                  icon: Image.asset(
+                                    icLikeButton,
+                                    width: 67,
+                                  ).box.roundedFull.shadowSm.make(),
+                                  onPressed: () => [
+                                    controllercard
+                                        .swipe(CardSwiperDirection.right),
+                                    controller.addToWishlist(product),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       );
                     },
                     onSwipe: (previousIndex, currentIndex, direction) {
                       if (direction == CardSwiperDirection.right) {
                         controller.addToWishlist(previousSwipedProduct!);
                       } else if (direction == CardSwiperDirection.left) {
-
                       } else if (direction == CardSwiperDirection.top) {
                         navigateToItemDetails();
                       }
