@@ -119,7 +119,7 @@ class ProductController extends GetxController {
             'p_wishlist': FieldValue.arrayUnion([currentUser!.uid])
           }).then((value) {
             updateIsFav(true);
-            VxToast.show(context, msg: "Added from wishlist", bgColor:whiteOpacity);
+            VxToast.show(context, msg: "Added from wishlist");
 
         }).catchError((error) {
                 print('Error adding to Favorite: $error');
@@ -171,7 +171,7 @@ void addToWishlistMixMatch(
           'p_wishlist': FieldValue.arrayUnion([currentUserUID])
         }).then((value) {
           updateIsFav(true);
-          VxToast.show(context, msg: "Added from wishlist", bgColor:whiteOpacity);
+          VxToast.show(context, msg: "Added from wishlist");
         }).catchError((error) {
           print('Error adding $productName to Favorite: $error');
         });

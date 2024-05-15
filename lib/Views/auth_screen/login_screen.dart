@@ -19,8 +19,8 @@ class LoginScreen extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       body: GestureDetector(
         onTap: () {
-        FocusScope.of(context).requestFocus(FocusNode());
-      },
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
         child: Container(
           decoration: const BoxDecoration(
             image: DecorationImage(
@@ -60,7 +60,6 @@ class LoginScreen extends StatelessWidget {
                                         label: 'Email',
                                         isPass: false,
                                         readOnly: false,
-                                        
                                         controller: controller.emailController,
                                       ),
                                       const SizedBox(height: 5),
@@ -68,8 +67,8 @@ class LoginScreen extends StatelessWidget {
                                         label: 'Password',
                                         isPass: true,
                                         readOnly: false,
-                                        
-                                        controller: controller.passwordController,
+                                        controller:
+                                            controller.passwordController,
                                       ),
                                       Align(
                                         alignment: Alignment.centerRight,
@@ -85,8 +84,9 @@ class LoginScreen extends StatelessWidget {
                                       const SizedBox(height: 10),
                                       controller.isloading.value
                                           ? const CircularProgressIndicator(
-                                              valueColor: AlwaysStoppedAnimation(
-                                                  primaryApp),
+                                              valueColor:
+                                                  AlwaysStoppedAnimation(
+                                                      primaryApp),
                                             )
                                           : ourButton(
                                               color: primaryApp,
@@ -94,9 +94,10 @@ class LoginScreen extends StatelessWidget {
                                               textColor: whiteColor,
                                               onPress: () async {
                                                 controller.isloading(true);
-        
+
                                                 await controller
-                                                    .loginMethod(context: context)
+                                                    .loginMethod(
+                                                        context: context)
                                                     .then((value) {
                                                   if (value != null) {
                                                     VxToast.show(context,
@@ -157,29 +158,34 @@ class LoginScreen extends StatelessWidget {
                                             MainAxisAlignment.spaceEvenly,
                                         children: List.generate(
                                           socialIconList.length,
-                                          (index) => GestureDetector(
-                                            onTap: () {
-                                              switch (index) {
-                                                case 0: // Google
-                                                  controller.signInWithGoogle(context);
-                                                  break;
-                                              }
-                                            },
-                                            child: Container(
-                                              padding: const EdgeInsets.fromLTRB(
-                                                  120, 15, 120, 15),
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                border: Border.all(
-                                                  color: greyColor,
-                                                  width: 1,
+                                          (index) => Expanded(
+                                            // ใช้ Expanded ที่นี่เพื่อให้ทุกไอเท็มยืดเต็มพื้นที่ในแนวนอน
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                switch (index) {
+                                                  case 0: // Google
+                                                    controller.signInWithGoogle(
+                                                        context);
+                                                    break;
+                                                }
+                                              },
+                                              child: Container(
+                                                padding: const EdgeInsets
+                                                    .fromLTRB(20, 15, 20,
+                                                    15), // ปรับค่า padding ให้เหมาะสม
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                  border: Border.all(
+                                                    color: greyColor,
+                                                    width: 1,
+                                                  ),
                                                 ),
-                                              ),
-                                              child: Image.asset(
-                                                socialIconList[index],
-                                                width: 80,
-                                                height: 24,
+                                                child: Image.asset(
+                                                  socialIconList[index],
+                                                  width: 80,
+                                                  height: 24,
+                                                ),
                                               ),
                                             ),
                                           ),

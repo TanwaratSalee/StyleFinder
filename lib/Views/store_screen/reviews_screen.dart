@@ -15,13 +15,12 @@ class _ReviewScreenState extends State<ReviewScreen>
   @override
   void initState() {
     super.initState();
-    _tabController =
-        TabController(length: 2, vsync: this); // กำหนดจำนวน tabs และ vsync
+    _tabController = TabController(length: 2, vsync: this);
   }
 
   @override
   void dispose() {
-    _tabController.dispose(); // ทำลาย controller เมื่อไม่ใช้งาน
+    _tabController.dispose();
     super.dispose();
   }
 
@@ -34,12 +33,8 @@ class _ReviewScreenState extends State<ReviewScreen>
           'Reviews',
         ).text.size(24).fontFamily(medium).color(greyDark2).make(),
         centerTitle: true,
-        // leading: IconButton(
-        //   icon: const Icon(Icons.arrow_back_ios),
-        //   onPressed: () => Get.back(),
-        // ),
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(50.0), // ปรับความสูงเพื่อรองรับ TabBar
+          preferredSize: Size.fromHeight(50.0),
           child: TabBar(
             controller: _tabController,
             tabs: [
@@ -52,10 +47,7 @@ class _ReviewScreenState extends State<ReviewScreen>
       body: Expanded(
         child: TabBarView(
           controller: _tabController,
-          children: <Widget>[
-            _buildReviewShop(context),
-            _buildReviewProduct(context)
-          ],
+          children: <Widget>[_buildReviewShop(), _buildReviewProduct(context)],
         ),
       ),
     );
@@ -77,43 +69,7 @@ Widget _buildReviewProduct(BuildContext context) {
   );
 }
 
-Widget _botton(BuildContext context) {
-  return Container(
-      alignment: Alignment.centerRight, // จัดตำแหน่งชิดขวากลาง
-      margin: EdgeInsets.only(right: 20.0), // กำหนดระยะห่างจากขวา 20.0 พิกเซล
-      child: Container(
-        height: 28,
-        width: 70,
-        margin: EdgeInsets.only(top: 5),
-        // margin: EdgeInsets.all(10),
-        // padding: EdgeInsets.all(10.0),
-        decoration: BoxDecoration(
-          color: whiteColor,
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-              color: greyDark1,
-              blurRadius: 4,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
-      ));
-}
-
-Widget _buildReviewShop(BuildContext context) {
-  return Column(
-    children: <Widget>[
-      YourWidget(),
-      Padding(
-        padding: const EdgeInsets.all(5),
-        child: _buildReviewHighlights(),
-      ),
-    ],
-  );
-}
-
-Widget _buildReviewHighlights() {
+Widget _buildReviewShop() {
   return Container(
     height: 600,
     margin: EdgeInsets.only(top: 0.5),
@@ -211,37 +167,28 @@ Widget _buildReviewProductCard() {
       ],
     ),
     child: Row(
-      // Changed to Row to allow for side-by-side layout
       children: [
         Container(
-          // This container is for the image placeholder
-          height: 122, // Adjusted to fit within the parent container's padding
-          width: 122, // Making it square
+          height: 122,
+          width: 122,
           decoration: BoxDecoration(
-            color: Colors.grey[200], // Placeholder color
-            borderRadius:
-                BorderRadius.circular(8), // Optional: to match the card's style
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(8),
           ),
-          // You can add an image here using a widget like Image.network or for a placeholder use Icon
-          child: Icon(Icons.photo, color: Colors.grey[500]), // Placeholder icon
+          child: Icon(Icons.photo, color: Colors.grey[500]),
         ),
         Expanded(
-          // Using Expanded to fill the remaining space
           child: Padding(
-            padding:
-                const EdgeInsets.only(left: 10.0), // Added padding for spacing
+            padding: const EdgeInsets.only(left: 10.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center, // Center vertically
-              crossAxisAlignment:
-                  CrossAxisAlignment.start, // Align text to the start
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('Reviewer Name',
-                    style:
-                        TextStyle(fontSize: 16, fontFamily: bold)),
+                    style: TextStyle(fontSize: 16, fontFamily: bold)),
                 SizedBox(height: 10),
                 Row(
-                  mainAxisAlignment:
-                      MainAxisAlignment.start, // Align stars to start
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: List.generate(5, (index) {
                     return Icon(
                       index < 4 ? Icons.star : Icons.star_border,
@@ -272,25 +219,23 @@ class YourWidget extends StatefulWidget {
 }
 
 class _YourWidgetState extends State<YourWidget> {
-  String buttonText = 'New'; // Initial button text
+  String buttonText = 'New';
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      alignment: Alignment.centerRight, // Align the button to the center-right
+      alignment: Alignment.centerRight,
       margin: EdgeInsets.fromLTRB(0, 10, 10, 0),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           foregroundColor: Colors.grey,
-          backgroundColor:
-              whiteColor, // Content color for the button's children
-          shadowColor: Colors.grey, // Shadow color
-          elevation: 4, // Shadow elevation
+          backgroundColor: whiteColor,
+          shadowColor: Colors.grey,
+          elevation: 4,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8), // Rounded corners
+            borderRadius: BorderRadius.circular(8),
           ),
-          fixedSize:
-              Size(110, 28), // Adjusted size of the button to accommodate icon
+          fixedSize: Size(110, 28),
         ),
         onPressed: () {
           setState(() {
@@ -298,14 +243,14 @@ class _YourWidgetState extends State<YourWidget> {
           });
         },
         child: Row(
-          mainAxisSize: MainAxisSize.min, // Use the minimum amount of space
+          mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
               buttonText == 'New' ? Icons.arrow_upward : Icons.arrow_downward,
-              size: 16, // Icon size
-              color: Colors.grey, // Icon color
+              size: 16,
+              color: Colors.grey,
             ),
-            SizedBox(width: 4), // Space between icon and text
+            SizedBox(width: 4),
             Text(buttonText),
           ],
         ),

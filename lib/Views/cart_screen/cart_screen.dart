@@ -133,14 +133,20 @@ class _CartScreenState extends State<CartScreen> {
                                                     ),
                                                   ),
                                                 ),
-                                                Text(
-                                                  'Size: ${data[index]['productsize']}',
-                                                  style: TextStyle(
-                                                    color: greyDark1,
-                                                    fontFamily: regular,
-                                                    fontSize: 14,
-                                                  ),
-                                                ),
+                                                (data[index]['productsize'] !=
+                                                            null &&
+                                                        data[index]
+                                                                ['productsize']
+                                                            .isNotEmpty)
+                                                    ? Text(
+                                                        'Size: ${data[index]['productsize']}',
+                                                        style: TextStyle(
+                                                          color: greyDark1,
+                                                          fontFamily: regular,
+                                                          fontSize: 14,
+                                                        ),
+                                                      )
+                                                    : SizedBox.shrink(), 
                                                 SizedBox(height: 3),
                                                 Text(
                                                   "$formattedPrice Bath",
@@ -163,7 +169,12 @@ class _CartScreenState extends State<CartScreen> {
                                           ),
                                         ],
                                       ),
-                                      Divider(color: thinGrey01,).box.padding(EdgeInsets.only(top: 14)).make(), 
+                                      Divider(
+                                        color: thinGrey01,
+                                      )
+                                          .box
+                                          .padding(EdgeInsets.only(top: 14))
+                                          .make(),
                                     ],
                                   ),
                                 ),

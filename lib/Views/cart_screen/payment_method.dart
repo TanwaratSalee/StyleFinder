@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/cart_screen/creditcard_screen.dart';
 import 'package:flutter_finalproject/Views/cart_screen/promptpay_screen.dart';
 import 'package:flutter_finalproject/Views/home_screen/mainHome.dart';
@@ -6,8 +5,7 @@ import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/consts/lists.dart';
 import 'package:flutter_finalproject/controllers/cart_controller.dart';
-import 'package:get/get.dart'; // Make sure to have this import if using GetX for navigation and state management
-import 'package:velocity_x/velocity_x.dart'; // For VxToast
+import 'package:get/get.dart';
 
 class PaymentMethods extends StatefulWidget {
   const PaymentMethods({super.key});
@@ -50,8 +48,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
                       onTap: () {
                         setState(() {
                           selectedMethod = textPaymentMethods[index];
-                          selectedBank =
-                              null; // Reset bank selection on payment method change
+                          selectedBank = null;
                         });
                       },
                       child: Container(
@@ -127,15 +124,12 @@ class _PaymentMethodsState extends State<PaymentMethods> {
             ? Center(child: CircularProgressIndicator())
             : ourButton(
                 onPress: () async {
-                  print(
-                      'Selected Payment Method: $selectedMethod'); // Debugging output
+                  print('Selected Payment Method: $selectedMethod');
 
                   if (selectedMethod == 'Credit Card') {
                     Get.to(() => const CreditCardScreen());
                   } else if (selectedMethod == 'Cash on Delivery') {
-                    // Make sure this matches exactly with what's being logged
-                    print(
-                        'Processing Cash on Delivery'); // Confirming correct branch
+                    print('Processing Cash on Delivery');
                     await controller.placeMyOrder(
                         orderPaymentMethod: selectedMethod,
                         totalAmount: controller.totalP.value);

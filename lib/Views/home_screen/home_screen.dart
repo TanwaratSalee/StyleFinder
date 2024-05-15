@@ -2,6 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_finalproject/Views/auth_screen/verifyemail_screen.dart';
+import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
 import 'package:flutter_finalproject/Views/news_screen/component/search_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/home_controller.dart';
@@ -84,9 +85,19 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: whiteColor,
         automaticallyImplyLeading: false,
         title: Center(
-          child: Column(children: [
+          child: Row(children: [
+            120.widthBox,
             Image.asset(icLogoOnTop, height: 35),
-            10.heightBox
+            40.widthBox,
+             IconButton(
+          icon: Image.asset(
+            icCart,
+            width: 21,
+          ),
+          onPressed: () {
+            Get.to(() => const CartScreen());
+          },
+        ),
           ],),
         ),
       ),
@@ -195,7 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       child: Image.network(
                                         product['p_imgs'][0],
-                                        height: 430,
+                                        height: 420,
                                         width: 380,
                                         fit: BoxFit.cover,
                                       ),
@@ -213,7 +224,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                         ),
                                         const SizedBox(height: 2),
-                                        // ),
                                         Text(
                                           "${NumberFormat('#,##0').format(double.parse(product['p_price']).toInt())} Bath",
                                           style: const TextStyle(
@@ -273,7 +283,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       if (direction == CardSwiperDirection.right) {
                         controller.addToWishlist(previousSwipedProduct!);
                       } else if (direction == CardSwiperDirection.left) {
-                        //
+
                       } else if (direction == CardSwiperDirection.top) {
                         navigateToItemDetails();
                       }

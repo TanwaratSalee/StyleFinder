@@ -47,7 +47,6 @@ class ForgotScreen extends StatelessWidget {
               label: 'Enter your email',
               isPass: false,
               readOnly: false,
-              
               controller: _emailController,
             ),
             const SizedBox(height: 20),
@@ -57,7 +56,7 @@ class ForgotScreen extends StatelessWidget {
               textColor: whiteColor,
               onPress: () {
                 _sendPasswordResetEmail(context);
-                _showCustomDialog(context);
+                popupForgotPassword(context);
               },
             ),
           ],
@@ -71,7 +70,9 @@ class ForgotScreen extends StatelessWidget {
       await FirebaseAuth.instance.sendPasswordResetEmail(
         email: _emailController.text.trim(),
       );
-      VxToast.show(context, msg: "Sent a reset password has been sent to ${_emailController.text}");
+      VxToast.show(context,
+          msg:
+              "Sent a reset password has been sent to ${_emailController.text}");
       VxToast.show(context,
           msg: "Reset password sent in your E-mail ${_emailController.text}");
     } catch (e) {
@@ -80,59 +81,61 @@ class ForgotScreen extends StatelessWidget {
   }
 }
 
-Future<void> _showCustomDialog(BuildContext context) async {
+Future<void> popupForgotPassword(BuildContext context) async {
   return showDialog<void>(
     context: context,
-    barrierDismissible: true, 
+    barrierDismissible: true,
     builder: (BuildContext context) {
-      return AlertDialog(
-        backgroundColor: whiteColor, 
-        
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: <Widget>[
-              Image.asset(
-                imgPopup,
-                width: 200, 
-                height: 240, 
-                fit: BoxFit.contain, 
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'Check your email to reset your password!',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontFamily: medium, 
-                    color: greyDark2,  
-                    fontSize: 20
+      return Theme(
+        data: ThemeData(
+          dialogBackgroundColor: whiteColor,
+        ),
+        child: AlertDialog(
+          backgroundColor: whiteColor,
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Container(
+                  child: Column(
+                    children: <Widget>[
+                      Image.asset(
+                        imgPopup,
+                        width: 220,
+                        height: 150,
+                        fit: BoxFit.cover,
+                      ),
+                      Text(
+                        'Check your email to reset your password!',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: medium,
+                          color: greyDark2,
+                          fontSize: 20,
+                        ),
+                      ),
+                      20.heightBox,
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          Get.to(LoginScreen());
+                        },
+                        child: Text(
+                          'Continue',
+                          style: TextStyle(
+                            fontFamily: medium,
+                            fontSize: 16,
+                            color: whiteColor,
+                          ),
+                        ),
+                      ).box.width(context.screenWidth).roundedSM.margin(EdgeInsets.symmetric(horizontal: 10)).color(primaryApp).make(),
+                    ],
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-        actionsAlignment: MainAxisAlignment.center, 
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(); 
-              Get.to(LoginScreen()); 
-            },
-            child: Text('Continue', style: TextStyle(
-                  fontFamily: medium, 
-                  fontSize: 16.0,
-                  color: Colors.white, 
-                ))
-              .box
-              .padding(EdgeInsets.symmetric(horizontal: 100, vertical: 10))
-              .color(primaryApp) 
-              .roundedSM
-              .make(),
-          ),
-        ],
       );
     },
   );
 }
-

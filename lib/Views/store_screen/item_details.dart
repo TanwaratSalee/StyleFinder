@@ -330,7 +330,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    height: 70, // Set a fixed height
+                    height: 70,  
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: widget.data['p_productsize'].length,
