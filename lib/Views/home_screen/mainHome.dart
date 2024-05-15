@@ -33,26 +33,30 @@ class _MainHomeState extends State<MainHome> {
           icon: Image.asset(
             _selectedIndex == 0 ? icHomeSelected : icHome,
             width: 24,
+            color: _selectedIndex == 0 ? primaryApp : greyDark1,
           ),
           label: home),
       BottomNavigationBarItem(
           icon: Image.asset(
             _selectedIndex == 1 ? icNewsSelected : icNews,
             width: 24,
+            color: _selectedIndex == 1 ? primaryApp : greyDark1,
           ),
           label: news),
       BottomNavigationBarItem(
           icon: Image.asset(
             _selectedIndex == 2 ? icMatchSelected : icMatch,
             width: 24,
+            color: _selectedIndex == 2 ? primaryApp : greyDark1,
           ),
           label: match),
       BottomNavigationBarItem(
           icon: Image.asset(
             _selectedIndex == 3 ? icPersonSelected : icPerson,
             width: 24,
+            color: _selectedIndex == 3 ? primaryApp : greyDark1,
           ),
-          label: person),
+          label: profile),
     ];
 
     var navBody = [
@@ -87,7 +91,7 @@ class _MainHomeState extends State<MainHome> {
                 color: greyDark1.withOpacity(0.1),
                 spreadRadius: 5,
                 blurRadius: 10,
-                offset: Offset(0, -1), // changes position of shadow
+                offset: Offset(0, -1), 
               ),
             ],
           ),

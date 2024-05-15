@@ -78,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var screenSize = MediaQuery.of(context).size; // ขนาดหน้าจอ
+    var screenSize = MediaQuery.of(context).size; 
 
     return Scaffold(
       backgroundColor: whiteColor,

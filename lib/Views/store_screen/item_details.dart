@@ -52,11 +52,11 @@ class _ItemDetailsState extends State<ItemDetails> {
     fetchVendorImageUrl(widget.data['vendor_id']);
   }
 
-  int? selectedIndex; // This holds the index of the currently selected item
+  int? selectedIndex;
 
   void selectItem(int index) {
     setState(() {
-      selectedIndex = index; // Update the selectedIndex on tap
+      selectedIndex = index;
     });
   }
 
@@ -95,7 +95,8 @@ class _ItemDetailsState extends State<ItemDetails> {
       child: Scaffold(
         backgroundColor: whiteColor,
         appBar: AppBar(
-          title: widget.title!.text.color(greyDark2)
+          title: widget.title!.text
+              .color(greyDark2)
               .fontFamily(medium)
               .size(18)
               .make(),
@@ -127,7 +128,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                     Row(
                       children: [
                         Container(
-                          width: 360, 
+                          width: 360,
                           child: Text(
                             widget.title ?? '',
                             style: const TextStyle(
@@ -135,8 +136,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                               fontFamily: medium,
                               fontSize: 22,
                             ),
-                            softWrap:
-                                true, 
+                            softWrap: true,
                           ).box.p4.make(),
                         ),
                         const Spacer(),
@@ -177,17 +177,17 @@ class _ItemDetailsState extends State<ItemDetails> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         "${widget.data['p_aboutProduct']}"
-                        .text
-                        .fontFamily(regular)
-                        .color(greyDark1)
-                        .size(14)
-                        .make(),
-                    "${NumberFormat('#,##0').format(double.parse(widget.data['p_price']).toInt())} Bath"
-                        .text
-                        .color(primaryApp)
-                        .fontFamily(medium)
-                        .size(20)
-                        .make(),
+                            .text
+                            .fontFamily(regular)
+                            .color(greyDark1)
+                            .size(14)
+                            .make(),
+                        "${NumberFormat('#,##0').format(double.parse(widget.data['p_price']).toInt())} Bath"
+                            .text
+                            .color(primaryApp)
+                            .fontFamily(medium)
+                            .size(20)
+                            .make(),
                       ],
                     ).box.padding(EdgeInsets.symmetric(horizontal: 4)).make(),
                     20.heightBox,
@@ -198,7 +198,8 @@ class _ItemDetailsState extends State<ItemDetails> {
                             children: [
                               5.widthBox,
                               Obx(() {
-                                String imageUrl = controller.vendorImageUrl.value;
+                                String imageUrl =
+                                    controller.vendorImageUrl.value;
                                 return imageUrl.isNotEmpty
                                     ? Image.network(
                                         imageUrl,
@@ -238,7 +239,13 @@ class _ItemDetailsState extends State<ItemDetails> {
                               style: TextStyle(
                                   color: whiteColor, fontFamily: regular),
                             ),
-                          ).box.padding(EdgeInsets.symmetric(horizontal: 20, vertical: 10)).color(primaryApp).roundedLg.make(),
+                          )
+                              .box
+                              .padding(EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 10))
+                              .color(primaryApp)
+                              .roundedLg
+                              .make(),
                         )
                       ],
                     )
@@ -296,7 +303,8 @@ class _ItemDetailsState extends State<ItemDetails> {
                           SizedBox(height: 5),
                           Text(
                             widget.data['p_desc'],
-                          ) .text
+                          )
+                              .text
                               .color(blackColor)
                               .size(12)
                               .fontFamily(regular)
@@ -330,7 +338,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    height: 70,  
+                    height: 70,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: widget.data['p_productsize'].length,
@@ -364,7 +372,12 @@ class _ItemDetailsState extends State<ItemDetails> {
                         );
                       },
                     ),
-                  ).box.padding(EdgeInsets.only(left: 10,)).make(),
+                  )
+                      .box
+                      .padding(EdgeInsets.only(
+                        left: 10,
+                      ))
+                      .make(),
 
                   // Row for Quantity Adjustment
                   Row(
@@ -378,13 +391,13 @@ class _ItemDetailsState extends State<ItemDetails> {
                               controller.calculateTotalPrice(
                                   int.parse(widget.data['p_price']));
                             },
-                            icon: const Icon(Icons.remove),
+                            icon: const Icon(Icons.remove, size: 20),
                           ),
                           Text(controller.quantity.value.toString())
                               .text
-                              .size(16)
+                              .size(20)
                               .color(greyDark2)
-                              .fontFamily(bold)
+                              .fontFamily(regular)
                               .make(),
                           IconButton(
                             onPressed: () {
@@ -393,30 +406,35 @@ class _ItemDetailsState extends State<ItemDetails> {
                               controller.calculateTotalPrice(
                                   int.parse(widget.data['p_price']));
                             },
-                            icon: const Icon(Icons.add),
+                            icon: const Icon(Icons.add, size: 20),
                           ),
                         ],
                       ).box.padding(const EdgeInsets.all(8)).make(),
 
                       // Displaying Total Price
-                      Row(
-                        children: [
-                          "Total price ".text.color(blackColor).make(),
-                          5.widthBox,
-                          Text(
-                            NumberFormat("#,##0.00", "en_US")
-                                .format(controller.totalPrice.value),
-                          )
-                              .text
-                              .color(blackColor)
-                              .size(20)
-                              .fontFamily(medium)
-                              .make(),
-                          5.widthBox,
-                          " Baht".text.color(blackColor).make(),
-                          5.widthBox,
-                        ],
-                      ).box.padding(const EdgeInsets.all(8)).make(),
+                      Container(
+                        alignment: Alignment.bottomCenter,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end, 
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            "Price ".text.size(14).color(blackColor).make(),
+                            5.widthBox,
+                            Text(
+                              NumberFormat("#,##0.00", "en_US")
+                                  .format(controller.totalPrice.value),
+                            )
+                                .text
+                                .color(blackColor)
+                                .size(24)
+                                .fontFamily(medium)
+                                .make(),
+                            5.widthBox,
+                            " Baht".text.size(14).color(blackColor).make(),
+                            5.widthBox,
+                          ],
+                        ).box.padding(const EdgeInsets.symmetric(horizontal: 12)).make(),
+                      ),
                     ],
                   ),
                 ],
@@ -424,15 +442,14 @@ class _ItemDetailsState extends State<ItemDetails> {
             ),
             SizedBox(
               width: double.infinity,
-              height: 60,
+              height: 70,
               child: ourButton(
                   color: primaryApp,
                   onPress: () {
                     if (controller.quantity.value > 0 &&
                         selectedIndex != null) {
-                      // Check if a size is selected
-                      String selectedSize = widget.data['p_productsize'][
-                          selectedIndex!]; // Use the selected index to fetch the size
+                      String selectedSize =
+                          widget.data['p_productsize'][selectedIndex!];
                       controller.addToCart(
                         context: context,
                         vendorID: widget.data['vendor_id'],
@@ -441,9 +458,9 @@ class _ItemDetailsState extends State<ItemDetails> {
                         sellername: widget.data['p_seller'],
                         title: widget.data['p_name'],
                         tprice: controller.totalPrice.value,
-                        productsize: selectedSize, // Pass the selected size
+                        productsize: selectedSize,
                       );
-                      VxToast.show(context, msg: "Added to cart");
+                      VxToast.show(context, msg: "Add to your cart");
                     } else {
                       VxToast.show(context,
                           msg:
@@ -451,7 +468,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                     }
                   },
                   textColor: whiteColor,
-                  title: "Add to cart"),
+                  title: "Add to your cart"),
             ),
           ],
         ),

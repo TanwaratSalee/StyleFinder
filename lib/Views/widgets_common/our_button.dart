@@ -6,14 +6,14 @@ Widget ourButton(
     style: ElevatedButton.styleFrom(
       backgroundColor: color,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
+        // borderRadius: BorderRadius.circular(0),
       ),
       minimumSize: const Size(double.infinity, 45),
     ),
     onPressed: onPress,
     child: (title ?? '')
         .text
-        .bold
+        .size(16)
         .color(textColor ?? blackColor)
         .fontFamily(bold)
         .make(),

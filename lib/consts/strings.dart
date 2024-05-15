@@ -29,7 +29,7 @@ const home = "Home",
     // collection = "Collection",
     news = "News",
     match = "Match",
-    person = "Me";
+    profile = "Profile";
 
 // ---------------------------------- News Screen ----------------------------------
 const searchanything = "Search anything...",
