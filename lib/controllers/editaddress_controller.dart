@@ -111,7 +111,7 @@ class _editaddressFormState extends State<editaddress_controller> {
       ),
       bottomNavigationBar: SizedBox(
         height: 70,
-        child: ourButton(
+        child: tapButton(
             onPress: () {
               updateAddressForCurrentUser();
             },

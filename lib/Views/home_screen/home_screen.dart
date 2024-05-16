@@ -1,5 +1,7 @@
 // ignore_for_file: unnecessary_import, library_private_types_in_public_api
 
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_finalproject/Views/auth_screen/verifyemail_screen.dart';
 import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
@@ -18,6 +20,12 @@ class HomeScreen extends StatefulWidget {
 
   @override
   _HomeScreenState createState() => _HomeScreenState(data);
+}
+
+List<Map<String, dynamic>> getRandomizedList(List<Map<String, dynamic>> originalList) {
+  List<Map<String, dynamic>> list = List.from(originalList); // Create a copy of the original list
+  list.shuffle(Random()); 
+  return list;
 }
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -170,10 +178,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   }
 
                   List<Map<String, dynamic>> products = snapshot.data!;
-                  productsToShow = products
+                  productsToShow = getRandomizedList(products
                       .where(
                           (product) => !isInWishlist(product, currentUser!.uid))
-                      .toList();
+                      .toList());
                   return CardSwiper(
                     scale: 0.5,
                     isLoop: false,
@@ -243,7 +251,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   )
                                       .box
                                       .white
-                                      .roundedLg
+                                      .rounded
                                       .shadowSm
                                       .padding(EdgeInsets.all(12))
                                       .make(),
@@ -252,7 +260,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             SizedBox(height: 5),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 IconButton(
                                   icon: Image.asset(
@@ -262,6 +270,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   onPressed: () => controllercard
                                       .swipe(CardSwiperDirection.left),
                                 ),
+                                SizedBox(width: 30),
                                 IconButton(
                                   icon: Image.asset(
                                     icViewMoreButton,
@@ -269,6 +278,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ).box.roundedFull.shadowSm.make(),
                                   onPressed: () => navigateToItemDetails(),
                                 ),
+                                SizedBox(width: 30),
                                 IconButton(
                                   icon: Image.asset(
                                     icLikeButton,

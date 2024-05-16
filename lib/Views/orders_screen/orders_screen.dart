@@ -145,7 +145,7 @@ class _OrdersScreenState extends State<OrdersScreen>
               if (showReviewButton) {
                 productDetailWidgets.add(Padding(
                   padding: const EdgeInsets.only(top: 8.0),
-                  child: ourButton(
+                  child: tapButton(
                     title: 'Write product review',
                     color: primaryApp,
                     textColor: whiteColor,

@@ -235,7 +235,7 @@ Widget _buildVCCTextField() {
           SizedBox(height: 24),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: ourButton(
+            child: tapButton(
                 onPress: () {
                   getTokenandSourceTest();
                 },

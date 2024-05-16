@@ -50,7 +50,7 @@ class ForgotScreen extends StatelessWidget {
               controller: _emailController,
             ),
             const SizedBox(height: 20),
-            ourButton(
+            tapButton(
               title: 'Send Code',
               color: primaryApp,
               textColor: whiteColor,

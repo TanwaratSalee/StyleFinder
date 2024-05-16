@@ -150,7 +150,7 @@ void saveAddressToFirestore() async {
       ),
       bottomNavigationBar: SizedBox(
         height: 70,
-        child: ourButton(
+        child: tapButton(
             onPress: () {
               saveAddressToFirestore();
             },

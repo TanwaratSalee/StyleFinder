@@ -38,7 +38,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
     showCupertinoModalPopup(
       context: context,
       builder: (_) => Container(
-        height: 300,
+        height: 150,
         color: whiteColor,
         child: Column(
           children: [
@@ -73,7 +73,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
     Color.fromRGBO(255, 231, 218, 1),
     Color.fromRGBO(248, 201, 156, 1),
     Color.fromRGBO(185, 135, 98, 1),
-     Color.fromRGBO(116, 78, 60, 1),
+    Color.fromRGBO(116, 78, 60, 1),
   ];
 
   @override
@@ -86,12 +86,61 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
               .fontFamily(medium)
               .size(20)
               .make()),
+      bottomNavigationBar: SizedBox(
+        height: 90,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 40),
+          child: tapButton(
+            color: selectedDate != null &&
+                    selectedGender != null &&
+                    heightController.text.isNotEmpty &&
+                    weightController.text.isNotEmpty &&
+                    selectedSkinTone != null
+                ? primaryApp
+                : greyColor,
+            title: 'Done',
+            textColor: selectedDate != null &&
+                    selectedGender != null &&
+                    heightController.text.isNotEmpty &&
+                    weightController.text.isNotEmpty &&
+                    selectedSkinTone != null
+                ? whiteColor
+                : greyDark1,
+            onPress: () async {
+              if (selectedDate == null) {
+                VxToast.show(context, msg: 'Please select your birthday');
+              } else if (selectedGender == null) {
+                VxToast.show(context, msg: 'Please select your gender');
+              } else if (heightController.text.isEmpty ||
+                  weightController.text.isEmpty) {
+                VxToast.show(context, msg: 'Please tap your height and weight');
+              } else if (selectedSkinTone == null) {
+                VxToast.show(context, msg: 'Please select your skin color');
+              } else {
+                await controller.saveUserData(
+                  name: widget.name,
+                  email: widget.email,
+                  password: widget.password,
+                  birthday: selectedDate,
+                  gender: selectedGender!,
+                  uHeight: heightController.text,
+                  uWeight: weightController.text,
+                  skin: selectedSkinTone!,
+                );
+              }
+            },
+            // color: primaryApp,
+            // textColor: whiteColor,
+            // title: "Continue",
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(15),
+        padding: const EdgeInsets.symmetric(horizontal: 40),
         child: Column(
           children: [
             Align(
-              alignment: Alignment.center,
+              alignment: Alignment.topLeft,
               child: const Text('Birthday')
                   .text
                   .size(16)
@@ -112,9 +161,9 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 15),
             Align(
-              alignment: Alignment.center,
+              alignment: Alignment.topLeft,
               child: const Text('Gender')
                   .text
                   .size(16)
@@ -150,7 +199,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   fit: FlexFit.tight,
                   child: Padding(
                     padding: EdgeInsets.only(
-                        left: idx != 0 ? 6.0 : 0, right: idx != 2 ? 6.0 : 0),
+                        left: idx != 0 ? 6 : 0, right: idx != 2 ? 6 : 0),
                     child: ElevatedButton(
                       onPressed: isSelectable
                           ? () {
@@ -167,7 +216,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                             color: isSelectable && selectedGender == gender
                                 ? primaryApp
                                 : greyColor,
-                            size: 24.0,
+                            size: 24,
                           ),
                           Text(
                             gender,
@@ -191,7 +240,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
+                            borderRadius: BorderRadius.circular(8),
                             side: BorderSide(
                                 color: selectedGender == gender
                                     ? primaryApp
@@ -201,7 +250,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                         elevation: MaterialStateProperty.all<double>(0),
                         padding: MaterialStateProperty.all<EdgeInsets>(
                           const EdgeInsets.symmetric(
-                              vertical: 15.0, horizontal: 25.0),
+                              vertical: 15, horizontal: 25),
                         ),
                       ),
                     ),
@@ -209,9 +258,9 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 );
               }).toList(),
             ),
-            const SizedBox(height: 30),
-             Align(
-              alignment: Alignment.center,
+            const SizedBox(height: 15),
+            Align(
+              alignment: Alignment.topLeft,
               child: const Text('Shape')
                   .text
                   .size(16)
@@ -220,12 +269,12 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   .make(),
             ),
             const SizedBox(height: 10),
-            Row(
+             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(right: 4.0),
+                    padding: const EdgeInsets.only(right: 4),
                     child: customTextField(
                       label: 'Height',
                       controller: heightController,
@@ -234,10 +283,9 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 20),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 4.0),
+                    padding: const EdgeInsets.only(left: 4),
                     child: customTextField(
                       label: 'Weight',
                       controller: weightController,
@@ -246,11 +294,12 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                     ),
                   ),
                 ),
+                const SizedBox(width: 90),
               ],
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 15),
             Align(
-              alignment: Alignment.center,
+              alignment: Alignment.topLeft,
               child: const Text('Skin')
                   .text
                   .size(16)
@@ -262,78 +311,42 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
             Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment
+                      .start, // แก้ให้เป็น MainAxisAlignment.start
                   children: skinTones.map((tone) {
-                    return GestureDetector(
-                      onTap: () {
-                        if (canSelectSkin) {
-                          setState(() {
-                            selectedSkinTone = tone;
-                          });
-                        }
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: tone,
-                          border: Border.all(
-                            color: selectedSkinTone == tone
-                                ? primaryApp
-                                : Colors.transparent,
-                            width: 3,
+                    return Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            if (canSelectSkin) {
+                              setState(() {
+                                selectedSkinTone = tone;
+                              });
+                            }
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: tone,
+                              border: Border.all(
+                                color: selectedSkinTone == tone
+                                    ? primaryApp
+                                    : Colors.transparent,
+                                width: 3,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            width: 47,
+                            height: 47,
                           ),
-                          borderRadius: BorderRadius.circular(8),
                         ),
-                        width: 50,
-                        height: 50,
-                      ),
+                        SizedBox(width: 20),
+                      ],
                     );
                   }).toList(),
                 ),
               ],
             ),
             const SizedBox(height: 40),
-            ourButton(
-              color: selectedDate != null &&
-                      selectedGender != null &&
-                      heightController.text.isNotEmpty &&
-                      weightController.text.isNotEmpty &&
-                      selectedSkinTone != null
-                  ? primaryApp
-                  : greyColor,
-              title: 'Done',
-              textColor: selectedDate != null &&
-                      selectedGender != null &&
-                      heightController.text.isNotEmpty &&
-                      weightController.text.isNotEmpty &&
-                      selectedSkinTone != null
-                  ? whiteColor
-                  : greyDark1,
-              onPress: () async {
-                if (selectedDate == null) {
-                  VxToast.show(context, msg: 'Please select your birthday');
-                } else if (selectedGender == null) {
-                  VxToast.show(context, msg: 'Please select your gender');
-                } else if (heightController.text.isEmpty ||
-                    weightController.text.isEmpty) {
-                  VxToast.show(context,
-                      msg: 'Please tap your height and weight');
-                } else if (selectedSkinTone == null) {
-                  VxToast.show(context, msg: 'Please select your skin color');
-                } else {
-                  // บันทึกข้อมูลเมื่อทุกช่องถูกกรอกครบ
-                  await controller.saveUserData(
-                    name: widget.name,
-                    email: widget.email,
-                    password: widget.password,
-                    birthday: selectedDate,
-                    gender: selectedGender!,
-                    uHeight: heightController.text,
-                    uWeight: weightController.text,
-                    skin: selectedSkinTone!,
-                  );
-                }
-              },
-            ),
           ],
         ),
       ),

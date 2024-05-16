@@ -122,7 +122,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
         height: 70,
         child: Obx(() => controller.placingOrder.value
             ? Center(child: CircularProgressIndicator())
-            : ourButton(
+            : tapButton(
                 onPress: () async {
                   print('Selected Payment Method: $selectedMethod');
 

@@ -1,8 +1,8 @@
+import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 import 'package:get/get.dart';
 import 'package:flutter_finalproject/controllers/auth_controller.dart';
 import 'package:flutter_finalproject/views/auth_screen/personal_details_screen.dart';
 import 'package:flutter_finalproject/views/widgets_common/custom_textfield.dart';
-import 'package:flutter_finalproject/views/widgets_common/our_button.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -111,7 +111,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ? const CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation(primaryApp),
                   )
-                : ourButton(
+                : tapButton(
                     // Button widget
                     color: isCheck == true ? primaryApp : greyDark1,
                     title: 'Next',

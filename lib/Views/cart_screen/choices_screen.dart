@@ -61,7 +61,7 @@ class _ChoicesScreenState extends State<ChoicesScreen> {
                 },
               ),
             ),
-            ourButton(
+            tapButton(
               onPress: () {
                 if (_selectedAddress != null) {
                   Get.to(() => const PaymentMethods());

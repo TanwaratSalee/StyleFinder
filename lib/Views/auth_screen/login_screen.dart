@@ -88,7 +88,7 @@ class LoginScreen extends StatelessWidget {
                                                   AlwaysStoppedAnimation(
                                                       primaryApp),
                                             )
-                                          : ourButton(
+                                          : tapButton(
                                               color: primaryApp,
                                               title: 'Login',
                                               textColor: whiteColor,

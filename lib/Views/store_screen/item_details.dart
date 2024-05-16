@@ -87,6 +87,9 @@ class _ItemDetailsState extends State<ItemDetails> {
 
   @override
   Widget build(BuildContext context) {
+    List<String> sizeOrder = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+    List<String> sizes = widget.data['p_productsize'].cast<String>().toList();
+    sizes.sort((a, b) => sizeOrder.indexOf(a).compareTo(sizeOrder.indexOf(b)));
     return WillPopScope(
       onWillPop: () async {
         controller.resetValues();
@@ -341,21 +344,20 @@ class _ItemDetailsState extends State<ItemDetails> {
                     height: 70,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: widget.data['p_productsize'].length,
+                      itemCount: sizes.length,
                       itemBuilder: (context, index) {
                         bool isSelected = index == selectedIndex;
                         return GestureDetector(
                           onTap: () => selectItem(index),
                           child: Container(
                             decoration: BoxDecoration(
-                              // color: isSelected ? whiteColor : whiteColor,
                               borderRadius: BorderRadius.circular(10),
                               border: isSelected
                                   ? Border.all(color: primaryApp, width: 2)
                                   : Border.all(color: greyColor, width: 1),
                             ),
                             child: Text(
-                              widget.data['p_productsize'][index],
+                              sizes[index],
                               style: TextStyle(
                                 color: isSelected ? blackColor : blackColor,
                               ),
@@ -372,14 +374,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                         );
                       },
                     ),
-                  )
-                      .box
-                      .padding(EdgeInsets.only(
-                        left: 10,
-                      ))
-                      .make(),
-
-                  // Row for Quantity Adjustment
+                  ).box.padding(EdgeInsets.only(left: 10,)).make(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -410,12 +405,10 @@ class _ItemDetailsState extends State<ItemDetails> {
                           ),
                         ],
                       ).box.padding(const EdgeInsets.all(8)).make(),
-
-                      // Displaying Total Price
                       Container(
                         alignment: Alignment.bottomCenter,
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end, 
+                          mainAxisAlignment: MainAxisAlignment.end,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             "Price ".text.size(14).color(blackColor).make(),
@@ -433,42 +426,48 @@ class _ItemDetailsState extends State<ItemDetails> {
                             " Baht".text.size(14).color(blackColor).make(),
                             5.widthBox,
                           ],
-                        ).box.padding(const EdgeInsets.symmetric(horizontal: 12)).make(),
+                        )
+                            .box
+                            .padding(const EdgeInsets.symmetric(horizontal: 12))
+                            .make(),
                       ),
                     ],
                   ),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 90,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 40),
+                      child: tapButton(
+                          color: primaryApp,
+                          onPress: () {
+                            if (controller.quantity.value > 0 &&
+                                selectedIndex != null) {
+                              String selectedSize =
+                                  widget.data['p_productsize'][selectedIndex!];
+                              controller.addToCart(
+                                context: context,
+                                vendorID: widget.data['vendor_id'],
+                                img: widget.data['p_imgs'][0],
+                                qty: controller.quantity.value,
+                                sellername: widget.data['p_seller'],
+                                title: widget.data['p_name'],
+                                tprice: controller.totalPrice.value,
+                                productsize: selectedSize,
+                              );
+                              VxToast.show(context, msg: "Add to your cart");
+                            } else {
+                              VxToast.show(context,
+                                  msg:
+                                      "Please select the quantity and size of the products");
+                            }
+                          },
+                          textColor: whiteColor,
+                          title: "Add to your cart"),
+                    ),
+                  ),
                 ],
               ).box.white.shadowSm.make(),
-            ),
-            SizedBox(
-              width: double.infinity,
-              height: 70,
-              child: ourButton(
-                  color: primaryApp,
-                  onPress: () {
-                    if (controller.quantity.value > 0 &&
-                        selectedIndex != null) {
-                      String selectedSize =
-                          widget.data['p_productsize'][selectedIndex!];
-                      controller.addToCart(
-                        context: context,
-                        vendorID: widget.data['vendor_id'],
-                        img: widget.data['p_imgs'][0],
-                        qty: controller.quantity.value,
-                        sellername: widget.data['p_seller'],
-                        title: widget.data['p_name'],
-                        tprice: controller.totalPrice.value,
-                        productsize: selectedSize,
-                      );
-                      VxToast.show(context, msg: "Add to your cart");
-                    } else {
-                      VxToast.show(context,
-                          msg:
-                              "Please select the quantity and size of the products");
-                    }
-                  },
-                  textColor: whiteColor,
-                  title: "Add to your cart"),
             ),
           ],
         ),

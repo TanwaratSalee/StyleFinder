@@ -104,7 +104,7 @@ class _ShippingDetailsState extends State<ShippingDetails> {
       ),
       bottomNavigationBar: SizedBox(
         height: 70,
-        child: ourButton(
+        child: tapButton(
           onPress: () {
             if (_selectedAddress != null ||
                 controller.addressController.text.isNotEmpty) {

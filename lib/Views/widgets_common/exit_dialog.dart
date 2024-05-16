@@ -15,14 +15,14 @@ Widget exitDialog(context) {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            ourButton(
+            tapButton(
                 color: primaryApp,
                 onPress: () {
                   SystemNavigator.pop();
                 },
                 textColor: whiteColor,
                 title: "Yes"),
-            ourButton(
+            tapButton(
                 color: primaryApp,
                 onPress: () {
                   Navigator.pop(context);

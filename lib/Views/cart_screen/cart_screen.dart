@@ -34,7 +34,7 @@ class _CartScreenState extends State<CartScreen> {
         backgroundColor: whiteColor,
         bottomNavigationBar: SizedBox(
           height: 60,
-          child: ourButton(
+          child: tapButton(
               color: primaryApp,
               onPress: () {
                 Get.to(() => const ShippingDetails());

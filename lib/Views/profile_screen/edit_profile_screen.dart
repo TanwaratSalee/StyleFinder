@@ -243,7 +243,7 @@ class EditProfileScreen extends StatelessWidget {
               SizedBox(
                   width: context.screenWidth - 260,
                   height: context.screenWidth - 360,
-                  child: ourButton(
+                  child: tapButton(
                       color: whiteColor,
                       onPress: () {
                         controller.changeImage(context);
