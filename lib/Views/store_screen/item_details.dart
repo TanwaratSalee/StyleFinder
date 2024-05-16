@@ -98,11 +98,11 @@ class _ItemDetailsState extends State<ItemDetails> {
       child: Scaffold(
         backgroundColor: whiteColor,
         appBar: AppBar(
-          title: widget.title!.text
-              .color(greyDark2)
-              .fontFamily(medium)
-              .size(18)
-              .make(),
+          // title: widget.title!.text
+          //     .color(greyDark2)
+          //     .fontFamily(medium)
+          //     .size(18)
+          //     .make(),
         ),
         body: Column(
           children: [
@@ -131,7 +131,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                     Row(
                       children: [
                         Container(
-                          width: 360,
+                          width: 300,
                           child: Text(
                             widget.title ?? '',
                             style: const TextStyle(
@@ -341,7 +341,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    height: 70,
+                    height: 55,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: sizes.length,
@@ -364,12 +364,11 @@ class _ItemDetailsState extends State<ItemDetails> {
                             )
                                 .box
                                 .padding(EdgeInsets.symmetric(
-                                    horizontal: 14, vertical: 8))
+                                    horizontal: 12, vertical: 6))
                                 .make(),
                           )
                               .box
-                              .padding(EdgeInsets.symmetric(
-                                  horizontal: 5, vertical: 15))
+                              .padding(EdgeInsets.symmetric(horizontal: 4, vertical: 10))
                               .make(),
                         );
                       },
@@ -404,7 +403,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                             icon: const Icon(Icons.add, size: 20),
                           ),
                         ],
-                      ).box.padding(const EdgeInsets.all(8)).make(),
+                      ).box.padding(const EdgeInsets.symmetric(horizontal: 8)).make(),
                       Container(
                         alignment: Alignment.bottomCenter,
                         child: Row(
@@ -428,14 +427,15 @@ class _ItemDetailsState extends State<ItemDetails> {
                           ],
                         )
                             .box
-                            .padding(const EdgeInsets.symmetric(horizontal: 12))
+                            .padding(const EdgeInsets.symmetric(horizontal: 18))
                             .make(),
                       ),
                     ],
                   ),
+                  5.heightBox,
                   SizedBox(
                     width: double.infinity,
-                    height: 90,
+                    height: 85,
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(20, 0, 20, 40),
                       child: tapButton(

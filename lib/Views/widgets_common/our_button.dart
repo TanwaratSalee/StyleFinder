@@ -16,7 +16,7 @@ Widget tapButton(
         .text
         .size(16)
         .color(textColor ?? blackColor)
-        .fontFamily(bold)
+        .fontFamily(medium)
         .make(),
   );
 }

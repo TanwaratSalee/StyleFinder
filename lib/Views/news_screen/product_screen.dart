@@ -51,9 +51,9 @@ class ProductScreen extends StatelessWidget {
               const Tab(text: 'Match'),
             ],
             indicatorColor: Theme.of(context).primaryColor,
-          ),
+          ).box.border(color: thinGrey0).make(),
           Container(
-            height: MediaQuery.of(context).size.height * 0.75,
+            height: MediaQuery.of(context).size.height * 0.82,
             child: TabBarView(
               children: [
                 buildProductTab(context),
@@ -97,14 +97,15 @@ class ProductScreen extends StatelessWidget {
                   ],
                 ).box.color(thinPrimaryApp).make(),
                 Container(
-                  height: 670,
+                  height: MediaQuery.of(context).size.height * 0.76,
                   child: Padding(
                     padding: const EdgeInsets.all(12),
                     child: TabBarView(
                       children: [
                         buildProductGridAll(),
                         buildProductGrid('dresses', 'dresses'),
-                        buildProductGrid('outerwear & Costs', 'outerwear & Costs'),
+                        buildProductGrid(
+                            'outerwear & Costs', 'outerwear & Costs'),
                         buildProductGrid('blazers', 'blazers'),
                         buildProductGrid('suits', 'suits'),
                         buildProductGrid('blouses & Tops', 'blouses & Tops'),
@@ -136,7 +137,7 @@ class ProductScreen extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 Container(
-                  height: MediaQuery.of(context).size.height * 0.75,
+                  height: MediaQuery.of(context).size.height * 0.76,
                   child: TabBarView(
                     children: [
                       _buildProductMathGrids('All'),
@@ -168,14 +169,13 @@ class ProductScreen extends StatelessWidget {
         } else {
           var allproductsdata = snapshot.data!.docs;
           return GridView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
+            physics: const AlwaysScrollableScrollPhysics(),
             itemCount: allproductsdata.length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              mainAxisSpacing: 18,
-              crossAxisSpacing: 12,
-              mainAxisExtent: 280,
+              mainAxisSpacing: 20,
+              crossAxisSpacing: 8,
+              mainAxisExtent: 260,
             ),
             itemBuilder: (context, index) {
               if (index >= allproductsdata.length) {
@@ -187,19 +187,19 @@ class ProductScreen extends StatelessWidget {
                 children: [
                   ClipRRect(
                     borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(15.0),
-                      topRight: Radius.circular(15.0),
+                      topLeft: Radius.circular(15),
+                      topRight: Radius.circular(15),
                     ),
                     child: Image.network(
                       product['p_imgs'][0],
-                      width: 200,
-                      height: 210,
+                      width: 195,
+                      height: 200,
                       fit: BoxFit.cover,
                     ),
                   ),
                   10.heightBox,
                   Padding(
-                    padding: EdgeInsets.all(8),
+                    padding: EdgeInsets.symmetric(horizontal: 8),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -207,7 +207,7 @@ class ProductScreen extends StatelessWidget {
                           product['p_name'],
                           style: TextStyle(
                             fontFamily: medium,
-                            fontSize: 17,
+                            fontSize: 16,
                             color: blackColor,
                           ),
                           maxLines: 1,
@@ -226,9 +226,9 @@ class ProductScreen extends StatelessWidget {
               )
                   .box
                   .white
-                  .margin(const EdgeInsets.symmetric(horizontal: 2))
-                  .shadowSm
+                  .margin(const EdgeInsets.symmetric(horizontal: 3))
                   .rounded
+                  .border(color: thinGrey01)
                   .make()
                   .onTap(() {
                 Get.to(() => ItemDetails(
@@ -266,9 +266,13 @@ class ProductScreen extends StatelessWidget {
         }
 
         return GridView.builder(
-          padding: const EdgeInsets.all(8.0),
+          physics: const AlwaysScrollableScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, childAspectRatio: 1 / 1.3),
+               crossAxisCount: 2,
+              mainAxisSpacing: 20,
+              crossAxisSpacing: 8,
+              mainAxisExtent: 260
+              ),
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (BuildContext context, int index) {
             if (index >= snapshot.data!.docs.length) {
@@ -280,57 +284,64 @@ class ProductScreen extends StatelessWidget {
             String productImage = product.get('p_imgs')[0];
 
             return GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ItemDetails(
-                      title: productName,
-                      data: product.data() as Map<String, dynamic>,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ItemDetails(
+                        title: productName,
+                        data: product.data() as Map<String, dynamic>,
+                      ),
                     ),
-                  ),
-                );
-              },
-              child: Card(
-                clipBehavior: Clip.antiAlias,
+                  );
+                },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Image.network(
-                      productImage,
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: 120,
+                  children:[
+                    ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                        topRight: Radius.circular(15),
+                      ),
+                      child: Image.network(
+                        productImage,
+                        width: 195,
+                        height: 200,
+                        fit: BoxFit.cover,
+                      ),
                     ),
+                    10.heightBox,
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.symmetric(horizontal: 8),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          3.heightBox,
+                        children: [
                           Text(
                             productName,
                             style: const TextStyle(
                               fontFamily: medium,
                               fontSize: 16,
+                              color: blackColor,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          Text(
-                            "${NumberFormat('#,##0').format(double.parse(
-                              '$price',
-                            ).toInt())} Bath",
-                            style: const TextStyle(
-                                color: greyDark1, fontFamily: regular),
-                          ),
+                            "${NumberFormat('#,##0').format(double.parse(price).toInt())} Bath".text
+                            .color(greyDark1)
+                            .fontFamily(regular)
+                            .size(14)
+                            .make(),
                         ],
                       ),
                     ),
                   ],
-                ).box.color(whiteColor).make(),
-              ),
-            );
+                ).box.white.margin(const EdgeInsets.symmetric(horizontal: 3)).rounded.border(color: thinGrey01).make()
+                    .onTap(() {
+                  Get.to(() => ItemDetails(
+                        title: productName,
+                        data: product,
+                      ));
+                }));
           },
         );
       },
@@ -369,7 +380,7 @@ class ProductScreen extends StatelessWidget {
         return GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            childAspectRatio: 1 / 1.3,
+            childAspectRatio: 1 / 1.03,
           ),
           itemCount: validPairs.length,
           itemBuilder: (BuildContext context, int index) {
@@ -378,7 +389,7 @@ class ProductScreen extends StatelessWidget {
             }
             var pair = validPairs[index].value;
             if (pair.length < 2) {
-              return Container(); // Skip this pair if it doesn't have 2 items
+              return Container(); 
             }
             var data1 = pair[0].data() as Map<String, dynamic>;
             var data2 = pair[1].data() as Map<String, dynamic>;
@@ -409,10 +420,9 @@ class ProductScreen extends StatelessWidget {
                 );
               },
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Image.network(
                         productImage1.isNotEmpty ? productImage1 : imgError,
@@ -425,27 +435,30 @@ class ProductScreen extends StatelessWidget {
                               width: 80, height: 90, fit: BoxFit.cover);
                         },
                       ),
+                      5.widthBox,
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               productName1,
-                              style: TextStyle(
-                                  fontFamily: medium, fontSize: 14),
+                              style:
+                                  TextStyle(fontFamily: medium, fontSize: 14),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                             ),
                             Text(
                               "${NumberFormat('#,##0').format(double.parse(price1).toInt())} Bath",
-                              style: TextStyle(color: Colors.grey),
+                              style: TextStyle(color: greyColor),
                             ),
                           ],
                         ),
                       )
                     ],
                   ),
+                  5.heightBox,
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Image.network(
                         productImage2.isNotEmpty ? productImage2 : imgError,
@@ -458,14 +471,15 @@ class ProductScreen extends StatelessWidget {
                               width: 80, height: 90, fit: BoxFit.cover);
                         },
                       ),
+                      5.widthBox,
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               productName2,
-                              style: TextStyle(
-                                  fontFamily: medium, fontSize: 14),
+                              style:
+                                  TextStyle(fontFamily: medium, fontSize: 14),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                             ),
@@ -479,7 +493,13 @@ class ProductScreen extends StatelessWidget {
                     ],
                   ),
                 ],
-              ).box.padding(EdgeInsets.all(6)).make(),
+              )
+                  .box
+                  .border(color: thinGrey01)
+                  .rounded
+                  .p8
+                  .margin(EdgeInsets.all(6))
+                  .make(),
             );
           },
         );

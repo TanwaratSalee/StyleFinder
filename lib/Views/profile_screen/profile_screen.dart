@@ -194,8 +194,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                       child: ClipRRect(
                         child: Image.network(
                           data[index]['p_imgs'][0],
-                          height: 80,
-                          width: 75,
+                          height: 70,
+                          width: 65,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -209,16 +209,18 @@ class _ProfileScreenState extends State<ProfileScreen>
                             Text(
                               data[index]['p_name'],
                               style: const TextStyle(
-                                fontSize: 16,
+                                fontSize: 14,
                                 fontFamily: medium,
                               ),
+                              softWrap: true,
+                              overflow: TextOverflow.visible,
                             ),
                             Text(
                               "${NumberFormat('#,##0').format(double.parse(data[index]['p_price']).toInt())} Bath",
                               style: const TextStyle(
-                                fontSize: 14,
-                                fontFamily: regular,
-                              ),
+                                  fontSize: 14,
+                                  fontFamily: regular,
+                                  color: greyDark1),
                             ),
                           ],
                         ),
@@ -411,7 +413,7 @@ class _ProfileScreenState extends State<ProfileScreen>
             return Container(
               decoration: BoxDecoration(
                 border: Border(
-                  bottom: BorderSide(color: thinGrey01), 
+                  bottom: BorderSide(color: thinGrey01),
                 ),
               ),
               child: Stack(
@@ -432,8 +434,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                               ClipRRect(
                                 child: Image.network(
                                   pair['top_image'],
-                                  width: 75,
-                                  height: 75,
+                                  width: 65,
+                                  height: 60,
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -442,16 +444,27 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
-                                    crossAxisAlignment:CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         pair['top'],
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
-                                      ).text.fontFamily(medium).size(16).color(greyDark2).make(),
+                                      )
+                                          .text
+                                          .fontFamily(medium)
+                                          .size(14)
+                                          .color(blackColor)
+                                          .make(),
                                       Text(
                                         "${NumberFormat('#,##0').format(double.parse(pair['top_price']).toInt())} Bath",
-                                      ).text.fontFamily(regular).size(14).color(greyDark1).make(),
+                                      )
+                                          .text
+                                          .fontFamily(regular)
+                                          .size(14)
+                                          .color(greyDark1)
+                                          .make(),
                                     ],
                                   ),
                                 ),
@@ -473,8 +486,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                               ClipRRect(
                                 child: Image.network(
                                   pair['lower_image'],
-                                  width: 75,
-                                  height: 75,
+                                  width: 65,
+                                  height: 60,
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -483,17 +496,26 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment:CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         pair['lower'],
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
-                                      ).text.fontFamily(medium).size(16).color(greyDark1).make(),
+                                      )
+                                          .text
+                                          .fontFamily(medium)
+                                          .size(14)
+                                          .color(blackColor)
+                                          .make(),
                                       Text(
                                         "${NumberFormat('#,##0').format(double.parse(pair['lower_price']).toInt())} Bath",
-                                      ).text.fontFamily(regular).size(14).color(greyDark1).make(),
+                                      )
+                                          .text
+                                          .fontFamily(regular)
+                                          .size(14)
+                                          .color(greyDark1)
+                                          .make(),
                                     ],
                                   ),
                                 ),
@@ -805,7 +827,6 @@ class _ProfileScreenState extends State<ProfileScreen>
                                       child: Padding(
                                         padding: const EdgeInsets.all(19),
                                         child: Column(
-                                          
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [

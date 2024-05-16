@@ -270,8 +270,8 @@ class NewsScreen extends StatelessWidget {
                       ],
                     ),
                     InkWell(
-                      onTap: () {
-                        Get.to(() => const MatchProductScreen());
+                       onTap: () {
+                        Get.to(() => const ProductScreen());
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -296,7 +296,7 @@ class NewsScreen extends StatelessWidget {
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment
-                          .center, // Ensure alignment if needed
+                          .center, 
                       children: [
                         'PRODUCT'
                             .text

@@ -33,14 +33,17 @@ class _CartScreenState extends State<CartScreen> {
     return Scaffold(
         backgroundColor: whiteColor,
         bottomNavigationBar: SizedBox(
-          height: 60,
-          child: tapButton(
-              color: primaryApp,
-              onPress: () {
-                Get.to(() => const ShippingDetails());
-              },
-              textColor: whiteColor,
-              title: "Proceed to shipping"),
+          height: 85,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 40),
+            child: tapButton(
+                color: primaryApp,
+                onPress: () {
+                  Get.to(() => const ShippingDetails());
+                },
+                textColor: whiteColor,
+                title: "Proceed to shipping"),
+          ),
         ),
         appBar: AppBar(
           // automaticallyImplyLeading: false,
@@ -146,7 +149,7 @@ class _CartScreenState extends State<CartScreen> {
                                                           fontSize: 14,
                                                         ),
                                                       )
-                                                    : SizedBox.shrink(), 
+                                                    : SizedBox.shrink(),
                                                 SizedBox(height: 3),
                                                 Text(
                                                   "$formattedPrice Bath",
@@ -212,9 +215,14 @@ class _CartScreenState extends State<CartScreen> {
                     )
                         .box
                         .padding(const EdgeInsets.all(22))
-                        // .color(thinGrey01)
-                        .border(color: thinGrey01)
-                        .make(),
+                        .withDecoration(BoxDecoration(
+                          border: Border(
+                            top: BorderSide(
+                                color: thinGrey01,
+                                width: 1), // ตั้งค่าเส้นขอบด้านบน
+                          ),
+                        ))
+                        .make()
                   ],
                 ),
               );
