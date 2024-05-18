@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/widgets_common/appbar_ontop.dart';
 import 'package:flutter_finalproject/consts/colors.dart';
+import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/consts/firebase_consts.dart';
 import 'package:flutter_finalproject/consts/images.dart';
 import 'package:flutter_finalproject/consts/styles.dart';
@@ -134,8 +135,10 @@ class _MatchScreenState extends State<MatchScreen> {
                   context,
                 );
               } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('ไม่สามารถเพิ่มไปยังรายการโปรดได้ เนื่องจากข้อมูลไม่พร้อมใช้งาน')),
+                VxToast.show(
+                  context,
+                  msg:
+                      'Unable to add to favorites, Because the information is not available',
                 );
               }
             },
@@ -165,99 +168,100 @@ class _MatchScreenState extends State<MatchScreen> {
         .toList();
   }
 
-Widget buildCardSetTop() {
-  return FutureBuilder<List<Map<String, dynamic>>>(
-    future: _topProductsFuture,
-    builder: (context, snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return Center(child: CircularProgressIndicator());
-      }
-      if (snapshot.error != null) {
-        return Center(child: Text('An error occurred: ${snapshot.error}'));
-      }
-      if (!snapshot.hasData || snapshot.data!.isEmpty) {
-        return Center(child: Text('No data available'));
-      }
-      final topProducts = snapshot.data!;
-      return Container(
-        height: 250.0,
-        child: PageView.builder(
-          controller: _pageControllerTop,
-          itemCount: topProducts.length,
-          itemBuilder: (context, index) {
-            final product = topProducts[index];
-            return GestureDetector(
-              onTap: () {
-                Get.to(() => ItemDetails(
-                title: product['p_name'],
-                data: product,
-                ));
-              },
-              child: Card(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                child: Container(
-                  width: 300.0,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.network(product['p_imgs'][0], fit: BoxFit.cover),
+  Widget buildCardSetTop() {
+    return FutureBuilder<List<Map<String, dynamic>>>(
+      future: _topProductsFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        }
+        if (snapshot.error != null) {
+          return Center(child: Text('An error occurred: ${snapshot.error}'));
+        }
+        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Center(child: Text('No data available'));
+        }
+        final topProducts = snapshot.data!;
+        return Container(
+          height: 250.0,
+          child: PageView.builder(
+            controller: _pageControllerTop,
+            itemCount: topProducts.length,
+            itemBuilder: (context, index) {
+              final product = topProducts[index];
+              return GestureDetector(
+                onTap: () {
+                  Get.to(() => ItemDetails(
+                        title: product['p_name'],
+                        data: product,
+                      ));
+                },
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  child: Container(
+                    width: 300.0,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Image.network(product['p_imgs'][0],
+                          fit: BoxFit.cover),
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
-        ),
-      );
-    },
-  );
-}
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
 
-Widget buildCardSetLower() {
-  return FutureBuilder<List<Map<String, dynamic>>>(
-    future: _lowerProductsFuture,
-    builder: (context, snapshot) {
-      // ตรวจสอบสถานะการโหลดข้อมูล
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return Center(child: CircularProgressIndicator());
-      }
-      if (snapshot.error != null) {
-        return Center(child: Text('An error occurred: ${snapshot.error}'));
-      }
-      if (!snapshot.hasData || snapshot.data!.isEmpty) {
-        return Center(child: Text('No data available'));
-      }
-      final lowerProducts = snapshot.data!;
-      return Container(
-        height: 250.0,
-        child: PageView.builder(
-          controller: _pageControllerLower,
-          itemCount: lowerProducts.length,
-          itemBuilder: (context, index) {
-            final product = lowerProducts[index];
-            return GestureDetector(
-              onTap: () {
-                Get.to(() => ItemDetails(
-                title: product['p_name'],
-                data: product,
-                ));
-              },
-              child: Card(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                child: Container(
-                  width: 300.0,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.network(product['p_imgs'][0], fit: BoxFit.cover),
+  Widget buildCardSetLower() {
+    return FutureBuilder<List<Map<String, dynamic>>>(
+      future: _lowerProductsFuture,
+      builder: (context, snapshot) {
+        // ตรวจสอบสถานะการโหลดข้อมูล
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        }
+        if (snapshot.error != null) {
+          return Center(child: Text('An error occurred: ${snapshot.error}'));
+        }
+        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Center(child: Text('No data available'));
+        }
+        final lowerProducts = snapshot.data!;
+        return Container(
+          height: 250.0,
+          child: PageView.builder(
+            controller: _pageControllerLower,
+            itemCount: lowerProducts.length,
+            itemBuilder: (context, index) {
+              final product = lowerProducts[index];
+              return GestureDetector(
+                onTap: () {
+                  Get.to(() => ItemDetails(
+                        title: product['p_name'],
+                        data: product,
+                      ));
+                },
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  child: Container(
+                    width: 300.0,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Image.network(product['p_imgs'][0],
+                          fit: BoxFit.cover),
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
-        ),
-      );
-    },
-  );
-}
-
-
-
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
 }

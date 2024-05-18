@@ -17,7 +17,7 @@ class SearchScreenPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: Text(title ?? 'Search').text.size(24).fontFamily(medium).color(greyDark2).make(),
+        title: Text(title ?? 'Search').text.size(24).fontFamily(semiBold).color(greyDark2).make(),
       ),
       body: Column(
         children: [
@@ -45,7 +45,8 @@ class SearchScreenPage extends StatelessWidget {
                 }),
                 filled: true,
                 fillColor: whiteColor,
-                hintText: searchanything,
+                hintText: search,
+                contentPadding: EdgeInsets.symmetric(horizontal: 25),
                 hintStyle: const TextStyle(color: greyDark1),
               ),
             ),

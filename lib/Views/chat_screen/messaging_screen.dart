@@ -13,7 +13,7 @@ class MessagesScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: "Message".text.size(24).fontFamily(medium).color(greyDark2).make(),
+        title: "Message".text.size(24).fontFamily(semiBold).color(greyDark2).make(),
       ),
       body: StreamBuilder(
           stream: FirestoreServices.getAllMessages(),

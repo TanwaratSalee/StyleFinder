@@ -437,7 +437,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                     width: double.infinity,
                     height: 85,
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 40),
+                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 35),
                       child: tapButton(
                           color: primaryApp,
                           onPress: () {

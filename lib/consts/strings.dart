@@ -32,7 +32,7 @@ const home = "Home",
     profile = "Profile";
 
 // ---------------------------------- News Screen ----------------------------------
-const searchanything = "Search anything...",
+const search = "Search",
     todayDeal = "Today's Deal",
     flashsale = "Flash Sale",
     topSellers = "Top Sellers",

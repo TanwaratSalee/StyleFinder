@@ -2,12 +2,9 @@ import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/scheduler.dart';
-
-import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/profile_controller.dart';
 import 'package:get/get.dart';
-
 import '../widgets_common/edit_textfield.dart';
 
 class EditProfileScreen extends StatelessWidget {
@@ -56,7 +53,6 @@ class EditProfileScreen extends StatelessWidget {
                   mode: CupertinoDatePickerMode.date,
                   onDateTimeChanged: (val) {
                     selectedDate = val;
-
                     controller.birthdayController.text =
                         DateFormat('EEEE, dd/MM/yyyy', 'en').format(val);
                   },
@@ -198,19 +194,15 @@ class EditProfileScreen extends StatelessWidget {
                 controller.isloading(false);
                 Navigator.pop(context);
                 SchedulerBinding.instance.addPostFrameCallback((_) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text("Profile Updated Successfully")),
+                  VxToast.show(
+                    context,
+                    msg: 'Profile Updated Successfully',
                   );
                 });
               }
             },
-            child: "Save"
-                .text
-                .color(primaryApp)
-                .fontFamily(medium)
-                .size(18)
-                .make(),
+            child:
+                "Save".text.color(greyDark1).fontFamily(medium).size(16).make(),
           ),
         ],
       ),
@@ -219,36 +211,55 @@ class EditProfileScreen extends StatelessWidget {
           () => Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-             Container(
-              child:  data['imageUrl'] == '' && controller.profileImgPath.isEmpty
-                  ? Image.asset(
-                      imProfile,
-                      width: 100,
-                      fit: BoxFit.cover,
-                    ).box.roundedFull.clip(Clip.antiAlias).make()
-                  : data['imageUrl'] != '' && controller.profileImgPath.isEmpty
-                      ? Image.network(
-                          data['imageUrl'],
-                          width: 100,
-                          fit: BoxFit.cover,
-                        ).box.roundedFull.clip(Clip.antiAlias).make()
-                      : Image.file(
-                          File(controller.profileImgPath.value),
-                          width: 100,
-                          fit: BoxFit.cover,
-                        ).box.roundedFull.clip(Clip.antiAlias).make(),
-             ),
-              SizedBox(
-                  width: 150,
-                  height: 40,
-                  child: tapButton(
-                      color: whiteColor,
-                      onPress: () {
+              Stack(
+                children: [
+                  Container(
+                    child: data['imageUrl'] == '' &&
+                            controller.profileImgPath.isEmpty
+                        ? Image.asset(
+                            'assets/profile.png',
+                            width: 130,
+                            height: 130,
+                            fit: BoxFit.cover,
+                          ).box.roundedFull.clip(Clip.antiAlias).make()
+                        : data['imageUrl'] != '' &&
+                                controller.profileImgPath.isEmpty
+                            ? Image.network(
+                                data['imageUrl'],
+                                width: 130,
+                                height: 130,
+                                fit: BoxFit.cover,
+                              ).box.roundedFull.clip(Clip.antiAlias).make()
+                            : Image.file(
+                                File(controller.profileImgPath.value),
+                                width: 130,
+                                height: 130,
+                                fit: BoxFit.cover,
+                              ).box.roundedFull.clip(Clip.antiAlias).make(),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: GestureDetector(
+                      onTap: () {
                         controller.changeImage(context);
                       },
-                      textColor: primaryApp,
-                      title: "Edit Picture")),
-              10.heightBox,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: primaryApp,
+                          shape: BoxShape.circle,
+                        ),
+                        padding: EdgeInsets.all(8),
+                        child: Icon(
+                          Icons.edit,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               20.heightBox,
               Align(
                 alignment: Alignment.centerLeft,

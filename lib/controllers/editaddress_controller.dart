@@ -107,17 +107,25 @@ class _editaddressFormState extends State<editaddress_controller> {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: "Edit Address".text.size(24).fontFamily(medium).color(greyDark2).make(),
+        title: "Edit Address"
+            .text
+            .size(24)
+            .fontFamily(medium)
+            .color(greyDark2)
+            .make(),
       ),
-      bottomNavigationBar: SizedBox(
-        height: 70,
-        child: tapButton(
-            onPress: () {
-              updateAddressForCurrentUser();
-            },
-            color: primaryApp,
-            textColor: whiteColor,
-            title: "Save"),
+      bottomNavigationBar: Padding(
+         padding: const EdgeInsets.fromLTRB(20, 0, 20, 35),
+        child: SizedBox(
+          height: 50,
+          child: tapButton(
+              onPress: () {
+                updateAddressForCurrentUser();
+              },
+              color: primaryApp,
+              textColor: whiteColor,
+              title: "Save"),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
@@ -127,43 +135,36 @@ class _editaddressFormState extends State<editaddress_controller> {
                 label: "Firstname",
                 isPass: false,
                 readOnly: false,
-                 
                 controller: _firstnameController),
             customTextField(
                 label: "Surname",
                 isPass: false,
                 readOnly: false,
-                 
                 controller: _surnameController),
             customTextField(
                 label: "Address",
                 isPass: false,
                 readOnly: false,
-                 
                 controller: _addressController),
             customTextField(
                 label: "City",
                 isPass: false,
                 readOnly: false,
-                 
                 controller: _cityController),
             customTextField(
                 label: "State",
                 isPass: false,
                 readOnly: false,
-                 
                 controller: _stateController),
             customTextField(
                 label: "Postal Code",
                 isPass: false,
                 readOnly: false,
-                 
                 controller: _postalCodeController),
             customTextField(
                 label: "Phone",
                 isPass: false,
                 readOnly: false,
-                 
                 controller: _phoneController),
             const SizedBox(height: 20),
           ],

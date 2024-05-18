@@ -176,7 +176,7 @@ Future<void> _showSuccessDialog(BuildContext context) async {
           child: ListBody(
             children: <Widget>[
               SizedBox(height: 50),
-              Image.asset('assets/images/Finishpay.PNG'),
+              Image.asset(imgSuccessful),
               SizedBox(height: 40),
               Text(
                 'Payment was successful!',

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/store_screen/mixandmatch_detail.dart';
@@ -42,7 +43,7 @@ class StoreScreen extends StatelessWidget {
 
   Widget ShopProfile(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 1.0),
+      padding: const EdgeInsets.symmetric(horizontal: 1),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,34 +124,46 @@ class StoreScreen extends StatelessWidget {
   }
 
   Widget ProductMatchTabs(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Column(
-        children: <Widget>[
-          TabBar(
-            labelStyle: const TextStyle(
-                fontSize: 15, fontFamily: regular, color: greyDark2),
-            unselectedLabelStyle: const TextStyle(
-                fontSize: 14, fontFamily: regular, color: greyDark1),
-            tabs: [
-              const Tab(text: 'Product'),
-              const Tab(text: 'Match'),
+  return DefaultTabController(
+    length: 2,
+    child: Column(
+      children: <Widget>[
+        Container(
+          child: Column(
+            children: [
+              TabBar(
+                labelStyle: const TextStyle(
+                    fontSize: 15, fontFamily: regular, color: greyDark2),
+                unselectedLabelStyle: const TextStyle(
+                    fontSize: 14, fontFamily: regular, color: greyDark1),
+                tabs: [
+                  const Tab(text: 'Product'),
+                  const Tab(text: 'Match'),
+                ],
+                indicatorColor: Theme.of(context).primaryColor,
+              ),
+                 Divider(
+                  color: thinGrey0, 
+                  thickness: 2, 
+                  height: 3, 
+              ),
             ],
-            indicatorColor: Theme.of(context).primaryColor,
           ),
-          Container(
-            height: MediaQuery.of(context).size.height * 0.67,
-            child: TabBarView(
-              children: [
-                buildProductTab(context),
-                buildMatchTab(context),
-              ],
-            ),
+        ),
+        Container(
+          height: MediaQuery.of(context).size.height * 0.67,
+          child: TabBarView(
+            children: [
+              buildProductTab(context),
+              buildMatchTab(context),
+            ],
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
+
 
   Widget buildProductTab(BuildContext context) {
     return Column(
@@ -182,8 +195,7 @@ class StoreScreen extends StatelessWidget {
                     Tab(text: 'Activewear'),
                   ],
                 ).box.color(thinPrimaryApp).make(),
-                Container(
-                  height: 570,
+                Expanded(
                   child: TabBarView(
                     children: [
                       buildProductGridAll(),
@@ -222,7 +234,7 @@ class StoreScreen extends StatelessWidget {
                   height: MediaQuery.of(context).size.height * 0.656,
                   child: TabBarView(
                     children: [
-                      _buildProductMathGrids('All'),
+                      buildProductMathGrids('All'),
                     ],
                   ),
                 ),
@@ -259,7 +271,7 @@ class StoreScreen extends StatelessWidget {
         List<QueryDocumentSnapshot> products = snapshot.data!.docs;
 
         return GridView.builder(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2, childAspectRatio: 1 / 1.35),
           itemCount: products.length,
@@ -284,7 +296,7 @@ class StoreScreen extends StatelessWidget {
               child: Container(
                 clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4.0),
+                  borderRadius: BorderRadius.circular(4),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -292,20 +304,20 @@ class StoreScreen extends StatelessWidget {
                     Image.network(productImage,
                         fit: BoxFit.cover, width: double.infinity, height: 190),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(8),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(productName,
                               style:
-                                  TextStyle(fontFamily: 'Medium', fontSize: 16),
+                                  TextStyle(fontFamily: medium, fontSize: 16),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis),
                           Text(
                               "${NumberFormat('#,##0').format(double.parse(price).toInt())} Bath",
                               style: TextStyle(
                                   color: Colors.grey[800],
-                                  fontFamily: 'Regular')),
+                                  fontFamily: regular)),
                         ],
                       ),
                     ),
@@ -350,7 +362,7 @@ class StoreScreen extends StatelessWidget {
         }
 
         return GridView.builder(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2, childAspectRatio: 1 / 1.35),
           itemCount: snapshot.data!.docs.length,
@@ -384,7 +396,7 @@ class StoreScreen extends StatelessWidget {
                       height: 190,
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(8),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -455,10 +467,10 @@ class StoreScreen extends StatelessWidget {
     }
   }
 
-  Widget _buildProductMathGrids(String category) {
+  Widget buildProductMathGrids(String category) {
     Query query = FirebaseFirestore.instance
         .collection(productsCollection)
-        .where('vendor_id')
+        .where('vendor_id', isEqualTo: vendorId)
         .where('p_mixmatch');
 
     return StreamBuilder<QuerySnapshot>(
@@ -493,7 +505,7 @@ class StoreScreen extends StatelessWidget {
         return GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            childAspectRatio: 1 / 1.15,
+            childAspectRatio: 1 / 1.25,
           ),
           itemCount: itemCount,
           itemBuilder: (BuildContext context, int index) {
@@ -561,7 +573,7 @@ class StoreScreen extends StatelessWidget {
                                     child: Text(
                                       productName1,
                                       style: const TextStyle(
-                                        fontFamily: 'Medium',
+                                        fontFamily: medium,
                                         fontSize: 14,
                                       ),
                                       overflow: TextOverflow.ellipsis,
@@ -597,7 +609,7 @@ class StoreScreen extends StatelessWidget {
                                     child: Text(
                                       productName2,
                                       style: const TextStyle(
-                                        fontFamily: 'Medium',
+                                        fontFamily: medium,
                                         fontSize: 14,
                                       ),
                                       overflow: TextOverflow.ellipsis,
@@ -648,7 +660,7 @@ class StoreScreen extends StatelessWidget {
                 )
                     .box
                     .padding(EdgeInsets.all(6))
-                    .margin(EdgeInsets.symmetric(horizontal: 4))
+                    .margin(EdgeInsets.symmetric(horizontal: 4, vertical: 6))
                     .roundedSM
                     .border(color: thinGrey01)
                     .make());

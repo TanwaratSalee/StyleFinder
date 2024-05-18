@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_finalproject/Views/collection_screen/address_controller.dart';
+import 'package:flutter_finalproject/Views/profile_screen/menu_addAddress_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/cart_controller.dart';
 import 'package:get/get.dart';
@@ -50,8 +50,22 @@ class _ShippingDetailsState extends State<ShippingDetails> {
   }
 
   String formatPhoneNumber(String phone) {
-    return '(+66) $phone';
+  String cleaned = phone.replaceAll(RegExp(r'\D'), '');
+  
+  if (cleaned.length == 10) {
+    final RegExp regExp = RegExp(r'(\d{3})(\d{3})(\d{4})');
+    return cleaned.replaceAllMapped(regExp, (Match match) {
+      return '(+66) ${match[1]}-${match[2]}-${match[3]}';
+    });
+  } else if (cleaned.length == 9) {
+    final RegExp regExp = RegExp(r'(\d{2})(\d{3})(\d{4})');
+    return cleaned.replaceAllMapped(regExp, (Match match) {
+      return '(+66) ${match[1]}-${match[2]}-${match[3]}';
+    });
   }
+  return phone; 
+}
+
 
   Future<void> loadCurrentUserAddress() async {
     String userId = currentUser!.uid; // Ensure currentUser is not null
@@ -70,7 +84,6 @@ class _ShippingDetailsState extends State<ShippingDetails> {
       }
     } catch (error) {
       print('Failed to load user address: $error');
-      // Handle error appropriately
     }
   }
 
@@ -102,20 +115,23 @@ class _ShippingDetailsState extends State<ShippingDetails> {
             const Text("Shipping Info").text.size(24).fontFamily(medium).make(),
         backgroundColor: whiteColor,
       ),
-      bottomNavigationBar: SizedBox(
-        height: 70,
-        child: tapButton(
-          onPress: () {
-            if (_selectedAddress != null ||
-                controller.addressController.text.isNotEmpty) {
-              Get.to(() => const PaymentMethods());
-            } else {
-              VxToast.show(context, msg: "Choose an address");
-            }
-          },
-          color: primaryApp,
-          textColor: whiteColor,
-          title: "Continue",
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 35),
+        child: SizedBox(
+          height: 50,
+          child: tapButton(
+            onPress: () {
+              if (_selectedAddress != null ||
+                  controller.addressController.text.isNotEmpty) {
+                Get.to(() => const PaymentMethods());
+              } else {
+                VxToast.show(context, msg: "Choose an address");
+              }
+            },
+            color: primaryApp,
+            textColor: whiteColor,
+            title: "Continue",
+          ),
         ),
       ),
       body: Padding(
@@ -133,17 +149,7 @@ class _ShippingDetailsState extends State<ShippingDetails> {
                 );
               },
             ),
-            const Divider(color: thinGrey0),
-            // ourButton(
-            //   onPress: () => Navigator.push(
-            //     context,
-            //     MaterialPageRoute(builder: (context) => AddressForm()),
-            //   ),
-            //   color: whiteColor,
-            //   textColor: greyDark2,
-            //   title: "+ Add a new address",
-            // ),
-            // const SizedBox(height: 20),
+            const Divider(color: thinGrey01),
             Expanded(
               child: StreamBuilder<DocumentSnapshot>(
                 stream: FirebaseService().streamCurrentUserAddress(userId),
@@ -221,7 +227,7 @@ class _ShippingDetailsState extends State<ShippingDetails> {
                         ),
                       );
                     },
-                    separatorBuilder: (context, index) => Divider(),
+                    separatorBuilder: (context, index) => Divider(color: thinGrey01,),
                   );
                 },
               ),

@@ -1,14 +1,12 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/orders_screen/orders_details.dart';
 import 'package:flutter_finalproject/Views/orders_screen/writeReview_screen.dart';
-import 'package:flutter_finalproject/Views/store_screen/reviews_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
-import 'package:flutter_finalproject/services/firestore_services.dart';
 import 'package:get/get.dart';
-import 'package:velocity_x/velocity_x.dart';
+import 'package:intl/intl.dart';
 
 class OrdersScreen extends StatefulWidget {
   const OrdersScreen({Key? key}) : super(key: key);
@@ -38,7 +36,12 @@ class _OrdersScreenState extends State<OrdersScreen>
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: const Text("My Orders").text.size(24).fontFamily(medium).color(greyDark2).make(),
+        title: const Text("My Orders")
+            .text
+            .size(24)
+            .fontFamily(semiBold)
+            .color(greyDark2)
+            .make(),
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
@@ -53,17 +56,17 @@ class _OrdersScreenState extends State<OrdersScreen>
       body: TabBarView(
         controller: _tabController,
         children: [
-          buildOrdersList(FirestoreServices.getOrders()),
-          buildOrdersList(FirestoreServices.getDeliveryOrders()),
-          buildOrdersList(FirestoreServices.getOrderHistory(), showReviewButton: true),
+          buildOrders(context),
+          buildDelivery(context),
+          buildHistory(context),
         ],
       ),
     );
   }
 
-  Widget buildOrdersList(Stream<QuerySnapshot> stream, {bool showReviewButton = false}) {
+  Widget buildOrders(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: stream,
+      stream: getOrders(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(child: loadingIndicator());
@@ -78,97 +81,78 @@ class _OrdersScreenState extends State<OrdersScreen>
               var orderData = data[index].data() as Map<String, dynamic>;
               var products = orderData['orders'] as List<dynamic>;
 
-              List<Widget> productDetailWidgets = [];
-
-              // Add the widgets for order code and status
-              productDetailWidgets.addAll([
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Order code ${orderData['order_code']}",
-                        style: const TextStyle(
-                            color: greyDark2,
-                            fontFamily: 'Medium',
-                            fontSize: 20),
-                      ),
-                      Text(
-                        orderData['order_confirmed'] ? "Confirm" : "Pending",
-                        style: TextStyle(
-                            color: orderData['order_confirmed']
-                                ? Colors.green
-                                : Colors.orange,
-                            fontFamily: 'Regular',
-                            fontSize: 16),
-                      ),
-                    ],
-                  ),
-                ),
-              ]);
-
-              // Add product details
-              productDetailWidgets.addAll(products.map((product) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text('x${product['qty']}',
-                          style: const TextStyle(
-                              fontSize: 12,
-                              color: greyDark2,
-                              fontFamily: 'Regular')),
-                      const SizedBox(width: 5),
-                      Image.network(product['img'],
-                          width: 70, height: 60, fit: BoxFit.cover),
-                      const SizedBox(width: 5),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(product['title'],
-                                style: const TextStyle(
-                                    fontFamily: 'Medium', fontSize: 14)),
-                            Text('${product['price']} Bath',
-                                style: const TextStyle(color: greyDark2)),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              }).toList());
-
-              // Add review button if necessary
-              if (showReviewButton) {
-                productDetailWidgets.add(Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: tapButton(
-                    title: 'Write product review',
-                    color: primaryApp,
-                    textColor: whiteColor,
-                    onPress: () {
-                      Get.to(() => const WriteReviewScreen());
-                    },
-                  ),
-                ));
-              }
-
               return InkWell(
                 onTap: () {
-                  Get.to(() => OrdersDetails(data: orderData)); 
+                  Get.to(() => OrdersDetails(data: orderData));
                 },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: productDetailWidgets,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Order code ${orderData['order_code']}",
+                          style: const TextStyle(
+                              color: greyDark2, fontFamily: medium, fontSize: 18),
+                        ),
+                        Text(
+                          orderData['order_confirmed'] ? "Confirm" : "Pending",
+                          style: TextStyle(
+                              color: orderData['order_confirmed']
+                                  ? Colors.green
+                                  : Colors.orange,
+                              fontFamily: regular,
+                              fontSize: 16),
+                        ),
+                      ],
+                    ).box.padding(EdgeInsets.symmetric(horizontal: 12)).make(),
+                    5.heightBox,
+                    ...products.map((product) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('x${product['qty']}',
+                                style: const TextStyle(
+                                    fontSize: 12,
+                                    color: greyDark2,
+                                    fontFamily: regular)),
+                            const SizedBox(width: 5),
+                            Image.network(product['img'],
+                                width: 70, height: 60, fit: BoxFit.cover),
+                            const SizedBox(width: 5),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    product['title'],
+                                    style: const TextStyle(
+                                      fontFamily: medium,
+                                      fontSize: 14,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Text(
+                                      '${NumberFormat('#,##0').format(product['price'])} Bath',
+                                      style: const TextStyle(color: greyDark2)),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  ],
                 )
                     .box
                     .color(whiteColor)
                     .roundedSM
                     .shadowSm
-                    .margin(const EdgeInsets.all(12))
+                    .margin(const EdgeInsets.symmetric(vertical: 8, horizontal: 18))
                     .p12
                     .make(),
               );
@@ -177,5 +161,240 @@ class _OrdersScreenState extends State<OrdersScreen>
         }
       },
     );
+  }
+
+  Widget buildDelivery(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: getDeliveryOrders(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(child: loadingIndicator());
+        } else if (snapshot.data!.docs.isEmpty) {
+          return const Center(
+              child: Text("No orders yet!", style: TextStyle(color: greyDark2)));
+        } else {
+          var data = snapshot.data!.docs;
+          return ListView.builder(
+            itemCount: data.length,
+            itemBuilder: (context, index) {
+              var orderData = data[index].data() as Map<String, dynamic>;
+              var products = orderData['orders'] as List<dynamic>;
+
+              return InkWell(
+                onTap: () {
+                  Get.to(() => OrdersDetails(data: orderData));
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Order code ${orderData['order_code']}",
+                          style: const TextStyle(
+                              color: greyDark2, fontFamily: medium, fontSize: 18),
+                        ),
+                        Text(
+                          orderData['order_confirmed'] ? "Confirm" : "Pending",
+                          style: TextStyle(
+                              color: orderData['order_confirmed']
+                                  ? Colors.green
+                                  : Colors.orange,
+                              fontFamily: regular,
+                              fontSize: 16),
+                        ),
+                      ],
+                    ).box.padding(EdgeInsets.symmetric(horizontal: 12)).make(),
+                    5.heightBox,
+                    ...products.map((product) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('x${product['qty']}',
+                                style: const TextStyle(
+                                    fontSize: 12,
+                                    color: greyDark2,
+                                    fontFamily: regular)),
+                            const SizedBox(width: 5),
+                            Image.network(product['img'],
+                                width: 70, height: 60, fit: BoxFit.cover),
+                            const SizedBox(width: 5),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    product['title'],
+                                    style: const TextStyle(
+                                      fontFamily: medium,
+                                      fontSize: 14,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Text(
+                                      '${NumberFormat('#,##0').format(product['price'])} Bath',
+                                      style: const TextStyle(color: greyDark2)),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  ],
+                )
+                    .box
+                    .color(whiteColor)
+                    .roundedSM
+                    .shadowSm
+                    .margin(const EdgeInsets.symmetric(vertical: 8, horizontal: 18))
+                    .p12
+                    .make(),
+              );
+            },
+          );
+        }
+      },
+    );
+  }
+
+  Widget buildHistory(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: getOrderHistory(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(child: loadingIndicator());
+        } else if (snapshot.data!.docs.isEmpty) {
+          return const Center(
+              child: Text("No orders yet!", style: TextStyle(color: greyDark2)));
+        } else {
+          var data = snapshot.data!.docs;
+          return ListView.builder(
+            itemCount: data.length,
+            itemBuilder: (context, index) {
+              var orderData = data[index].data() as Map<String, dynamic>;
+              var products = orderData['orders'] as List<dynamic>;
+
+              return InkWell(
+                onTap: () {
+                  Get.to(() => OrdersDetails(data: orderData));
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Order code ${orderData['order_code']}",
+                          style: const TextStyle(
+                              color: greyDark2, fontFamily: medium, fontSize: 18),
+                        ),
+                        Text(
+                          orderData['order_confirmed'] ? "Confirm" : "Pending",
+                          style: TextStyle(
+                              color: orderData['order_confirmed']
+                                  ? Colors.green
+                                  : Colors.orange,
+                              fontFamily: regular,
+                              fontSize: 16),
+                        ),
+                      ],
+                    ).box.padding(EdgeInsets.symmetric(horizontal: 12)).make(),
+                    5.heightBox,
+                    ...products.map((product) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('x${product['qty']}',
+                                style: const TextStyle(
+                                    fontSize: 12,
+                                    color: greyDark2,
+                                    fontFamily: regular)),
+                            const SizedBox(width: 5),
+                            Image.network(product['img'],
+                                width: 70, height: 60, fit: BoxFit.cover),
+                            const SizedBox(width: 5),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    product['title'],
+                                    style: const TextStyle(
+                                      fontFamily: medium,
+                                      fontSize: 14,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Text(
+                                      '${NumberFormat('#,##0').format(product['price'])} Bath',
+                                      style: const TextStyle(color: greyDark2)),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12),
+                      child: tapButton(
+                        title: 'Write product review',
+                        color: primaryApp,
+                        textColor: whiteColor,
+                        onPress: () {
+                          Get.to(() => WriteReviewScreen(products: products));
+                        },
+                      ),
+                    ),
+                  ],
+                )
+                    .box
+                    .color(whiteColor)
+                    .roundedSM
+                    .shadowSm
+                    .margin(const EdgeInsets.symmetric(vertical: 8, horizontal: 18))
+                    .p12
+                    .make(),
+              );
+            },
+          );
+        }
+      },
+    );
+  }
+
+  static Stream<QuerySnapshot> getOrders() {
+    return firestore
+        .collection(ordersCollection)
+        .where('order_on_delivery', isEqualTo: false)
+        .where('order_delivered', isEqualTo: false)
+        .where('order_by', isEqualTo: currentUser!.uid)
+        .snapshots();
+  }
+
+  static Stream<QuerySnapshot> getDeliveryOrders() {
+    return firestore
+        .collection(ordersCollection)
+        .where('order_on_delivery', isEqualTo: true)
+        .where('order_delivered', isEqualTo: false)
+        .where('order_by', isEqualTo: currentUser!.uid)
+        .snapshots();
+  }
+
+  static Stream<QuerySnapshot> getOrderHistory() {
+    return firestore
+        .collection(ordersCollection)
+        .where('order_delivered', isEqualTo: true)
+        .where('order_by', isEqualTo: currentUser!.uid)
+        .snapshots();
   }
 }

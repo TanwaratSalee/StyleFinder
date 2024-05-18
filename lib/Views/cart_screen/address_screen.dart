@@ -1,11 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_finalproject/Views/collection_screen/address_controller.dart';
+import 'package:flutter_finalproject/Views/profile_screen/menu_addAddress_screen.dart';
 import 'package:flutter_finalproject/controllers/editaddress_controller.dart';
-import 'package:flutter_finalproject/consts/colors.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
-import 'package:get/get.dart';
 
 class AddressScreen extends StatefulWidget {
   @override

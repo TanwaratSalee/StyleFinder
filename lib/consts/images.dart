@@ -113,6 +113,7 @@ const String icNext = "assets/icons/icNormal/Iconnext.png";
 const String icUndertext = "assets/icons/icNormal/undertext.png";
 
 // Paymet
+const String imgSuccessful = "assets/images/payment/paymentSuccessful.png";
 const String imgCash = "assets/images/payment/cashOnDelivery.png";
 const String imgPromptpay = "assets/images/payment/Promptpay.png";
 const String imgVisa = "assets/images/payment/visa.png";

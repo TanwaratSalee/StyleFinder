@@ -35,7 +35,7 @@ class _CartScreenState extends State<CartScreen> {
         bottomNavigationBar: SizedBox(
           height: 85,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 40),
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 35),
             child: tapButton(
                 color: primaryApp,
                 onPress: () {
@@ -131,7 +131,7 @@ class _CartScreenState extends State<CartScreen> {
                                                     softWrap: false,
                                                     style: TextStyle(
                                                       color: greyDark2,
-                                                      fontFamily: 'medium',
+                                                      fontFamily: medium,
                                                       fontSize: 15,
                                                     ),
                                                   ),
