@@ -271,7 +271,7 @@ class NewsScreen extends StatelessWidget {
                     ),
                     InkWell(
                        onTap: () {
-                        Get.to(() => const ProductScreen());
+                        Get.to(() => const ProductScreen(initialTabIndex: 1));
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
@@ -10,7 +11,9 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class ProductScreen extends StatelessWidget {
-  const ProductScreen({super.key});
+  final int initialTabIndex;
+
+  const ProductScreen({Key? key, this.initialTabIndex = 0}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,13 +35,14 @@ class ProductScreen extends StatelessWidget {
           ],
         ),
       ),
-      body: ProductMatchTabs(context),
+      body: ProductMatchTabs(context, initialTabIndex),
     );
   }
 
-  Widget ProductMatchTabs(BuildContext context) {
+  Widget ProductMatchTabs(BuildContext context, int initialTabIndex) {
     return DefaultTabController(
       length: 2,
+      initialIndex: initialTabIndex,
       child: Column(
         children: <Widget>[
           TabBar(
@@ -57,8 +61,7 @@ class ProductScreen extends StatelessWidget {
             thickness: 2,
             height: 3,
           ),
-          Container(
-            height: MediaQuery.of(context).size.height * 0.825,
+          Expanded(
             child: TabBarView(
               children: [
                 buildProductTab(context),
@@ -101,8 +104,7 @@ class ProductScreen extends StatelessWidget {
                     Tab(text: 'Activewear'),
                   ],
                 ).box.color(thinPrimaryApp).make(),
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.77,
+                Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(12),
                     child: TabBarView(
@@ -132,30 +134,29 @@ class ProductScreen extends StatelessWidget {
   }
 
   Widget buildMatchTab(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(5),
-          child: DefaultTabController(
-            length: 1,
-            child: Column(
-              children: <Widget>[
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.8,
-                  child: TabBarView(
-                    children: [
-                      _buildProductMathGrids('All'),
-                    ],
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(5),
+            child: DefaultTabController(
+              length: 1,
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.8,
+                    child: TabBarView(
+                      children: [
+                        _buildProductMathGrids('All'),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-        Expanded(
-          child: Container(),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
