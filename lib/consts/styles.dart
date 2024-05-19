@@ -7,5 +7,6 @@
 const light = "Urbanist-Light";
 const regular = "Urbanist-Regular";
 const medium = "Urbanist-Medium";
+const semiBold = "Urbanist-SemiBold";
 const bold = "Urbanist-bold";
 

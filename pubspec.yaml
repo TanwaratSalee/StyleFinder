@@ -128,10 +128,14 @@ flutter:
     - family: Urbanist-Black
       fonts:
         - asset: assets/fonts/Urbanist/Urbanist-Black.ttf 
+
+    - family: Urbanist-SemiBold
+      fonts:
+        - asset: assets/fonts/Urbanist/Urbanist-SemiBold.ttf     
         
     - family: Urbanist-Medium
       fonts:
-        - asset: assets/fonts/Urbanist/Urbanist-Medium.ttf     
+        - asset: assets/fonts/Urbanist/Urbanist-Medium.ttf    
 
   # fonts:
   #   - family: Schyler

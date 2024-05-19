@@ -246,10 +246,235 @@ class _ProfileScreenState extends State<ProfileScreen>
           separatorBuilder: (context, index) => Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Divider(
-              color: Colors.grey[200],
+              color: thinGrey01,
               thickness: 1,
             ),
           ),
+        );
+      },
+    );
+  }
+
+  Widget buildMatchTab() {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance.collection('products').snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        final data = snapshot.data!.docs;
+        if (data.isEmpty) {
+          return const Center(
+            child: Text("No products you liked!",
+                style: TextStyle(color: greyDark2)),
+          );
+        }
+
+        Map<String, List<DocumentSnapshot>> mixMatchGroups = {};
+
+        snapshot.data!.docs.forEach((doc) {
+          var data = doc.data() as Map<String, dynamic>;
+          if (data.containsKey('p_mixmatch') &&
+              data['p_wishlist'].contains(currentUser?.uid)) {
+            String mixMatch = data['p_mixmatch'];
+            if (mixMatchGroups[mixMatch] == null) {
+              mixMatchGroups[mixMatch] = [];
+            }
+            mixMatchGroups[mixMatch]!.add(doc);
+          }
+        });
+
+        var validPairs = mixMatchGroups.values
+            .where((list) => list.length >= 2 && list.length % 2 == 0)
+            .toList();
+
+        var flatList = validPairs.expand((i) => i).toList();
+
+        return GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 1,
+            childAspectRatio: 1 / 0.61,
+          ),
+          itemCount: flatList.length ~/ 2,
+          itemBuilder: (BuildContext context, int index) {
+            int actualIndex = index * 2;
+
+            var data1 = flatList[actualIndex].data() as Map<String, dynamic>;
+            var data2 =
+                flatList[actualIndex + 1].data() as Map<String, dynamic>;
+
+            String productName1 = data1['p_name'];
+            String productName2 = data2['p_name'];
+            String price1 = data1['p_price'].toString();
+            String price2 = data2['p_price'].toString();
+            String productImage1 = data1['p_imgs'][0];
+            String productImage2 = data2['p_imgs'][0];
+            String totalPrice =
+                (int.parse(price1) + int.parse(price2)).toString();
+
+            return GestureDetector(
+                onTap: () {},
+                child: Column(children: [
+                  Column(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: whiteColor,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Stack(
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // borderRadius: BorderRadius.circular(10),
+                                    Image.network(
+                                      productImage1,
+                                      width: 60,
+                                      height: 65,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    15.widthBox,
+                                    Expanded(
+                                      flex: 3,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            productName1,
+                                            style: const TextStyle(
+                                              fontFamily: medium,
+                                              fontSize: 14,
+                                              color: blackColor,
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          Text(
+                                            "${NumberFormat('#,##0').format(double.parse(price1.toString()).toInt())} Bath",
+                                            style: const TextStyle(
+                                                color: greyDark1),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                5.heightBox,
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ClipRRect(
+                                      child: Image.network(
+                                        productImage2,
+                                        width: 60,
+                                        height: 65,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    15.widthBox,
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            productName2,
+                                            style: const TextStyle(
+                                              fontFamily: medium,
+                                              fontSize: 14,
+                                              color: blackColor,
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          Text(
+                                            "${NumberFormat('#,##0').format(double.parse(price2.toString()).toInt())} Bath",
+                                            style: const TextStyle(
+                                                color: greyDark1),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                5.heightBox,
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Total  ",
+                                      style: TextStyle(
+                                        color: greyDark1,
+                                        fontFamily: regular,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    Text(
+                                      "${NumberFormat('#,##0').format(double.parse(totalPrice.toString()).toInt())} ",
+                                      style: TextStyle(
+                                        color: blackColor,
+                                        fontFamily: medium,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    Text(
+                                      " Bath",
+                                      style: TextStyle(
+                                        color: greyDark1,
+                                        fontFamily: regular,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                            Align(
+                              alignment: Alignment.topRight,
+                              child: IconButton(
+                                icon: Icon(Icons.favorite, color: redColor),
+                                onPressed: () async {
+                                  // สร้าง List ที่มีรหัสผู้ใช้ปัจจุบันอยู่
+                                  List<String> currentUserUid = [
+                                    FirebaseAuth.instance.currentUser!.uid
+                                  ];
+
+                                  // สร้าง Map ที่จะใช้ในการอัปเดตเอกสารใน Firestore
+                                  Map<String, dynamic> updateData = {
+                                    'p_wishlist':
+                                        FieldValue.arrayRemove(currentUserUid)
+                                  };
+
+                                  for (int i = actualIndex;
+                                      i <= actualIndex + 1;
+                                      i++) {
+                                    await FirebaseFirestore.instance
+                                        .collection(productsCollection)
+                                        .doc(flatList[i].id)
+                                        .update(updateData);
+                                  }
+                                  ;
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ])
+                    .box
+                    .color(whiteColor)
+                    .margin(EdgeInsets.symmetric(vertical: 5, horizontal: 12))
+                    .padding(EdgeInsets.all(8))
+                    .make());
+          },
         );
       },
     );
@@ -382,7 +607,6 @@ class _ProfileScreenState extends State<ProfileScreen>
               child: Text("No products in your wishlist!",
                   style: TextStyle(color: greyDark2)));
         }
-
         List<Map<String, dynamic>> pairs = [];
         for (var doc in documents) {
           var data = doc.data() as Map<String, dynamic>;
@@ -411,9 +635,11 @@ class _ProfileScreenState extends State<ProfileScreen>
           itemBuilder: (BuildContext context, int index) {
             var pair = pairs[index];
             return Container(
+              padding: EdgeInsets.symmetric(
+                  horizontal: 10), // เพิ่ม Padding ด้านข้าง
               decoration: BoxDecoration(
                 border: Border(
-                  bottom: BorderSide(color: thinGrey01),
+                  bottom: BorderSide(color: thinGrey01), // เส้นใต้
                 ),
               ),
               child: Stack(
@@ -431,42 +657,37 @@ class _ProfileScreenState extends State<ProfileScreen>
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              ClipRRect(
-                                child: Image.network(
-                                  pair['top_image'],
-                                  width: 65,
-                                  height: 60,
-                                  fit: BoxFit.cover,
-                                ),
+                              Image.network(
+                                pair['top_image'],
+                                width: 60,
+                                height: 65,
+                                fit: BoxFit.cover,
                               ),
+                              15.widthBox,
                               Expanded(
                                 flex: 3,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        pair['top'],
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      )
-                                          .text
-                                          .fontFamily(medium)
-                                          .size(14)
-                                          .color(blackColor)
-                                          .make(),
-                                      Text(
-                                        "${NumberFormat('#,##0').format(double.parse(pair['top_price']).toInt())} Bath",
-                                      )
-                                          .text
-                                          .fontFamily(regular)
-                                          .size(14)
-                                          .color(greyDark1)
-                                          .make(),
-                                    ],
-                                  ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      pair['top'],
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    )
+                                        .text
+                                        .fontFamily(medium)
+                                        .size(14)
+                                        .color(blackColor)
+                                        .make(),
+                                    Text(
+                                      "${NumberFormat('#,##0').format(double.parse(pair['top_price']).toInt())} Bath",
+                                    )
+                                        .text
+                                        .fontFamily(regular)
+                                        .size(14)
+                                        .color(greyDark1)
+                                        .make(),
+                                  ],
                                 ),
                               ),
                             ],
@@ -483,41 +704,36 @@ class _ProfileScreenState extends State<ProfileScreen>
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              ClipRRect(
-                                child: Image.network(
-                                  pair['lower_image'],
-                                  width: 65,
-                                  height: 60,
-                                  fit: BoxFit.cover,
-                                ),
+                              Image.network(
+                                pair['lower_image'],
+                                width: 60,
+                                height: 65,
+                                fit: BoxFit.cover,
                               ),
+                              15.widthBox,
                               Expanded(
-                                flex: 3,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    crossAxisAlignment:CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        pair['lower'],
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      )
-                                          .text
-                                          .fontFamily(medium)
-                                          .size(14)
-                                          .color(blackColor)
-                                          .make(),
-                                      Text(
-                                        "${NumberFormat('#,##0').format(double.parse(pair['lower_price']).toInt())} Bath",
-                                      )
-                                          .text
-                                          .fontFamily(regular)
-                                          .size(14)
-                                          .color(greyDark1)
-                                          .make(),
-                                    ],
-                                  ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      pair['lower'],
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    )
+                                        .text
+                                        .fontFamily(medium)
+                                        .size(14)
+                                        .color(blackColor)
+                                        .make(),
+                                    Text(
+                                      "${NumberFormat('#,##0').format(double.parse(pair['lower_price']).toInt())} Bath",
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontFamily: regular,
+                                        color: greyDark1,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
@@ -540,16 +756,16 @@ class _ProfileScreenState extends State<ProfileScreen>
                             Text(
                               "${NumberFormat('#,##0').format(double.parse(pair['top_price']).toInt() + double.parse(pair['lower_price']).toInt())} ",
                               style: TextStyle(
-                                color: greyDark2,
+                                color: blackColor,
                                 fontFamily: medium,
-                                fontSize: 16,
+                                fontSize: 18,
                               ),
                             ),
                             Text(
                               " Bath",
                               style: TextStyle(
                                 color: greyDark2,
-                                fontFamily: 'regular',
+                                fontFamily: regular,
                                 fontSize: 14,
                               ),
                             ),
@@ -558,7 +774,6 @@ class _ProfileScreenState extends State<ProfileScreen>
                       )
                     ],
                   ),
-
                   // Favorite Icon
                   Align(
                     alignment: Alignment.topRight,
@@ -571,11 +786,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                     ),
                   ),
                 ],
-              )
-                  .box
-                  .p4
-                  .margin(EdgeInsetsDirectional.symmetric(horizontal: 14))
-                  .make(),
+              ).box.p4.margin(EdgeInsets.symmetric(horizontal: 10)).make(),
             );
           },
         );
@@ -670,7 +881,7 @@ class _ProfileScreenState extends State<ProfileScreen>
 
   void navigateToItemDetails(BuildContext context, String productName) {
     FirebaseFirestore.instance
-        .collection('products')
+        .collection(productsCollection)
         .where('p_name', isEqualTo: productName)
         .limit(1)
         .get()
@@ -688,246 +899,12 @@ class _ProfileScreenState extends State<ProfileScreen>
           ),
         );
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("No details available for $productName"),
-        ));
+        VxToast.show(
+          context,
+          msg: 'No details available for $productName',
+        );
       }
     });
-  }
-
-  Widget buildMatchTab() {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('products').snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (!snapshot.hasData) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        final data = snapshot.data!.docs;
-        if (data.isEmpty) {
-          return const Center(
-            child: Text("No products you liked!",
-                style: TextStyle(color: greyDark2)),
-          );
-        }
-
-        Map<String, List<DocumentSnapshot>> mixMatchGroups = {};
-
-        snapshot.data!.docs.forEach((doc) {
-          var data = doc.data() as Map<String, dynamic>;
-          if (data.containsKey('p_mixmatch') &&
-              data['p_wishlist'].contains(currentUser?.uid)) {
-            String mixMatch = data['p_mixmatch'];
-            if (mixMatchGroups[mixMatch] == null) {
-              mixMatchGroups[mixMatch] = [];
-            }
-            mixMatchGroups[mixMatch]!.add(doc);
-          }
-        });
-
-        var validPairs = mixMatchGroups.values
-            .where((list) => list.length >= 2 && list.length % 2 == 0)
-            .toList();
-
-        var flatList = validPairs.expand((i) => i).toList();
-
-        return GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 1,
-            childAspectRatio: 1 / 0.61,
-          ),
-          itemCount: flatList.length ~/ 2,
-          itemBuilder: (BuildContext context, int index) {
-            int actualIndex = index * 2;
-
-            var data1 = flatList[actualIndex].data() as Map<String, dynamic>;
-            var data2 =
-                flatList[actualIndex + 1].data() as Map<String, dynamic>;
-
-            String productName1 = data1['p_name'];
-            String productName2 = data2['p_name'];
-            String price1 = data1['p_price'].toString();
-            String price2 = data2['p_price'].toString();
-            String productImage1 = data1['p_imgs'][0];
-            String productImage2 = data2['p_imgs'][0];
-            String totalPrice =
-                (int.parse(price1) + int.parse(price2)).toString();
-
-            return GestureDetector(
-                onTap: () {},
-                child: Column(children: [
-                  Column(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: whiteColor,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Stack(
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    ClipRRect(
-                                      // borderRadius: BorderRadius.circular(10),
-                                      child: Image.network(
-                                        productImage1,
-                                        width: 75,
-                                        height: 75,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 3,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(25),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              productName1,
-                                              style: const TextStyle(
-                                                fontFamily: medium,
-                                                fontSize: 14,
-                                                color: greyDark1,
-                                              ),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            Text(
-                                              "${NumberFormat('#,##0').format(double.parse(price1.toString()).toInt())} Bath",
-                                              style: const TextStyle(
-                                                  color: greyDark1),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    ClipRRect(
-                                      // borderRadius: BorderRadius.circular(10),
-                                      child: Image.network(
-                                        productImage2,
-                                        width: 75,
-                                        height: 75,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 3,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(19),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              productName2,
-                                              style: const TextStyle(
-                                                fontFamily: medium,
-                                                fontSize: 14,
-                                                color: greyDark1,
-                                              ),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            Text(
-                                              "${NumberFormat('#,##0').format(double.parse(price2.toString()).toInt())} Bath",
-                                              style: const TextStyle(
-                                                  color: greyDark1),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 6),
-                                Row(
-                                  children: [
-                                    Text(
-                                      "Total Price  ",
-                                      style: TextStyle(
-                                        color: greyDark2,
-                                        fontFamily: 'regular',
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                    Text(
-                                      "${NumberFormat('#,##0').format(double.parse(totalPrice.toString()).toInt())} ",
-                                      style: TextStyle(
-                                        color: greyDark2,
-                                        fontFamily: 'medium',
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                    Text(
-                                      " Bath",
-                                      style: TextStyle(
-                                        color: greyDark2,
-                                        fontFamily: 'regular',
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: IconButton(
-                                icon: Icon(Icons.favorite, color: redColor),
-                                onPressed: () async {
-                                  // สร้าง List ที่มีรหัสผู้ใช้ปัจจุบันอยู่
-                                  List<String> currentUserUid = [
-                                    FirebaseAuth.instance.currentUser!.uid
-                                  ];
-
-                                  // สร้าง Map ที่จะใช้ในการอัปเดตเอกสารใน Firestore
-                                  Map<String, dynamic> updateData = {
-                                    'p_wishlist':
-                                        FieldValue.arrayRemove(currentUserUid)
-                                  };
-
-                                  for (int i = actualIndex;
-                                      i <= actualIndex + 1;
-                                      i++) {
-                                    await FirebaseFirestore.instance
-                                        .collection(productsCollection)
-                                        .doc(flatList[i].id)
-                                        .update(updateData);
-                                  }
-                                  ;
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  Divider(
-                    color: thinGrey01,
-                  )
-                ])
-                    .box
-                    .color(whiteColor)
-                    .margin(EdgeInsets.symmetric(vertical: 5, horizontal: 12))
-                    .padding(EdgeInsets.all(8))
-                    .make());
-          },
-        );
-      },
-    );
   }
 
   @override

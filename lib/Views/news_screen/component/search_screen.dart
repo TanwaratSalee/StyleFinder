@@ -90,7 +90,7 @@ class SearchScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: title!.text.size(24).fontFamily(medium).color(greyDark2).make(),
+        title: title!.text.size(24).fontFamily(semiBold).color(greyDark2).make(),
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: fetchProducts(),

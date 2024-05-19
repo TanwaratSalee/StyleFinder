@@ -8,7 +8,6 @@ import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
-
 import '../Views/home_screen/mainHome.dart';
 
 class AuthController extends GetxController {
@@ -34,37 +33,25 @@ class AuthController extends GetxController {
       userCredential = await auth.signInWithEmailAndPassword(
           email: emailController.text, password: passwordController.text);
       print("Login successful: $userCredential");
+      VxToast.show(context, msg: "Login successful");
     } on FirebaseAuthException catch (e) {
       print("Login failed: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(e.toString()),
-          duration: const Duration(seconds: 4),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.red,
-        ),
-      );
+      VxToast.show(context, msg: "Login failed: $e", bgColor: Colors.red);
     }
 
     return userCredential;
   }
 
   //signup method
-
   Future<UserCredential?> signupMethod({email, password, context}) async {
     UserCredential? userCredential;
 
     try {
       userCredential = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
+      VxToast.show(context, msg: "Signup successful");
     } on FirebaseAuthException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(e.toString()),
-          duration: const Duration(seconds: 4),
-          backgroundColor: blackColor,
-        ),
-      );
+      VxToast.show(context, msg: "Signup failed: $e", bgColor: blackColor);
     }
     return userCredential;
   }
@@ -99,7 +86,6 @@ class AuthController extends GetxController {
         password: password,
       );
 
-      // จัดรูปแบบวันที่เพื่อรวมชื่อวันในสัปดาห์
       String formattedDateWithDay =
           DateFormat('EEEE, dd/MM/yyyy').format(birthday);
 
@@ -109,7 +95,6 @@ class AuthController extends GetxController {
           .set({
         'email': email,
         'name': name,
-        // 'password': password,
         'imageUrl': '',
         'id': currentUser.user!.uid,
         'birthday': formattedDateWithDay,
@@ -122,11 +107,8 @@ class AuthController extends GetxController {
         'order_count': "0"
       });
 
-      // แสดงข้อความเมื่อบันทึกข้อมูลสำเร็จ
       VxToast.show(Get.context!, msg: 'User data saved successfully!');
 
-      // ปรับเปลี่ยนไปใช้ VerifyEmailScreen ก่อนไป MainHome
-      // สำคัญ: ต้องรับ context มาในพารามิเตอร์ของฟังก์ชัน saveUserData หรือใช้ Get.context ถ้าคุณไม่อยากเพิ่ม context เป็นพารามิเตอร์
       Get.offAll(() => VerifyEmailScreen(
             email: email,
             name: name,
@@ -157,10 +139,9 @@ class AuthController extends GetxController {
           .collection(usersCollection)
           .doc(currentUser.user!.uid)
           .set({
-        'email': currentUser.user!.email, // ใช้ email จาก currentUser
+        'email': currentUser.user!.email,
         'name': name,
-        'imageUrl': currentUser.user!.photoURL ??
-            '', // ใช้ URL รูปภาพจาก currentUser (ถ้ามี)
+        'imageUrl': currentUser.user!.photoURL ?? '',
         'id': currentUser.user!.uid,
         'birthday': formattedDateWithDay,
         'gender': gender,
@@ -184,13 +165,9 @@ class AuthController extends GetxController {
       String email, BuildContext context) async {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Password reset email has been sent.')),
-      );
+      VxToast.show(context, msg: 'Password reset email has been sent.');
     } on FirebaseAuthException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: ${e.message}')),
-      );
+      VxToast.show(context, msg: 'Error: ${e.message}', bgColor: Colors.red);
     }
   }
 
@@ -198,18 +175,16 @@ class AuthController extends GetxController {
   signoutMethod(context) async {
     print('Starting to logout...');
     try {
-      //   await FirebaseAuth.instance.signOut();
-      //   print('Firebase sign out success');
-      //   Get.offAll(() => const LoginScreen());
-
       await FirebaseAuth.instance.signOut();
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => const LoginScreen()),
         (route) => false,
       );
+      VxToast.show(context, msg: 'Logout successful');
       print('Navigated to LoginScreen');
     } catch (e) {
       print('Logout error: $e');
+      VxToast.show(context, msg: 'Logout error: $e', bgColor: Colors.red);
     }
   }
 
@@ -231,11 +206,11 @@ class AuthController extends GetxController {
       final String name = userCredential.user?.displayName ?? "No Name";
       final String uid = userCredential.user?.uid ?? "";
 
-      // Check if the user's uid exists in Firestore
       final DocumentSnapshot userDoc =
           await FirebaseFirestore.instance.collection('users').doc(uid).get();
       if (userDoc.exists) {
         Get.offAll(() => MainHome());
+        VxToast.show(context, msg: 'Login with Google successful');
       } else {
         Navigator.push(
           context,
@@ -251,6 +226,8 @@ class AuthController extends GetxController {
       }
     } catch (e) {
       print("Error signing in with Google: $e");
+      VxToast.show(context,
+          msg: 'Error signing in with Google: $e', bgColor: Colors.red);
     } finally {
       isLoading(false);
     }
@@ -267,11 +244,16 @@ class AuthController extends GetxController {
         final UserCredential userCredential =
             await FirebaseAuth.instance.signInWithCredential(credential);
         Get.offAll(() => MainHome());
+        VxToast.show(Get.context!, msg: 'Login with Facebook successful');
       } else {
         print('Error: Access token is null');
+        VxToast.show(Get.context!,
+            msg: 'Error: Access token is null', bgColor: Colors.red);
       }
     } catch (e) {
       print("Error signing in with Facebook: $e");
+      VxToast.show(Get.context!,
+          msg: 'Error signing in with Facebook: $e', bgColor: Colors.red);
     } finally {
       isLoading(false);
     }

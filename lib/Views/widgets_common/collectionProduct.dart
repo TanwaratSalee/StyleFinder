@@ -13,8 +13,8 @@ class CollectionProductTabs extends StatelessWidget {
           bottom: const TabBar(
             isScrollable: true,
             indicatorColor: primaryApp,
-            labelStyle: TextStyle(fontSize: 13, fontFamily: 'Regular', color: greyDark2),
-            unselectedLabelStyle: TextStyle(fontSize: 12, fontFamily: 'Regular', color: greyDark1),
+            labelStyle: TextStyle(fontSize: 13, fontFamily: regular, color: greyDark2),
+            unselectedLabelStyle: TextStyle(fontSize: 12, fontFamily: regular, color: greyDark1),
             tabs: [
               Tab(text: 'All'),
               Tab(text: 'Dresses'),
@@ -154,7 +154,7 @@ class CollectionProductTabs extends StatelessWidget {
                 Text(
                   productName,
                   style: const TextStyle(
-                    fontFamily: 'Medium',
+                    fontFamily: medium,
                     fontSize: 16,
                   ),
                   maxLines: 1,
@@ -164,7 +164,7 @@ class CollectionProductTabs extends StatelessWidget {
                   "${NumberFormat('#,##0').format(double.parse(price).toInt())} Bath",
                   style: const TextStyle(
                     color: greyColor,
-                    fontFamily: 'Regular',
+                    fontFamily: regular,
                   ),
                 ),
               ],

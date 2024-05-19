@@ -21,7 +21,7 @@ class FirebaseService {
 Future<void> updateAddressForCurrentUser(String userId, String firstname, String surname, String address,
     String city, String state, String postalCode, String phone) async {
   try {
-    // ตรวจสอบว่าค่าไม่เป็นค่าว่างเปล่าก่อนที่จะทำการอัปเดต
+    
     if (firstname.isNotEmpty &&
     surname.isNotEmpty &&
       address.isNotEmpty &&
@@ -29,21 +29,21 @@ Future<void> updateAddressForCurrentUser(String userId, String firstname, String
         state.isNotEmpty &&
         postalCode.isNotEmpty &&
         phone.isNotEmpty) {
-      // อ่านข้อมูลที่มีอยู่และตรวจสอบสำหรับการเพิ่ม address
+      
       DocumentSnapshot documentSnapshot =
           await usersCollection.doc(currentUser!.uid).get();
       if (documentSnapshot.exists) {
         Map<String, dynamic>? userData =
             documentSnapshot.data() as Map<String, dynamic>?;
         if (userData != null) {
-          // ตรวจสอบว่ามีข้อมูลใน field 'address' หรือไม่
+          
           if (userData.containsKey('address')) {
-            // สร้าง List ของ address ที่มีอยู่แล้ว
+            
             List<dynamic>? addressList = List.from(userData['address']);
             if (addressList == null) {
               addressList = [];
             }
-            // เพิ่ม address ลงใน List
+            
             addressList.add({
               'firstname': firstname,
               'surname': surname,
@@ -53,12 +53,12 @@ Future<void> updateAddressForCurrentUser(String userId, String firstname, String
               'postalCode': postalCode,
               'phone': phone,
             });
-            // ทำการอัปเดตข้อมูลในฐานข้อมูล
+            
             await usersCollection.doc(currentUser!.uid).update({
               'address': addressList,
             });
           } else {
-            // ถ้ายังไม่มี field 'address' ให้เพิ่มข้อมูลลงใน field 'address'
+            
             await usersCollection.doc(currentUser!.uid).update({
               'address': [
                 {
@@ -146,7 +146,7 @@ void saveAddressToFirestore() async {
       backgroundColor: whiteColor,
       appBar: AppBar(
         title:
-            "Add Address".text.size(24).fontFamily(medium).color(greyDark2).make(),
+            "Add Address".text.size(24).fontFamily(semiBold).color(greyDark2).make(),
       ),
       bottomNavigationBar: SizedBox(
         height: 70,

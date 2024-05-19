@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_finalproject/Views/chat_screen/chat_screen.dart';
 import 'package:flutter_finalproject/Views/orders_screen/component/order_place_details.dart';
 import 'package:flutter_finalproject/Views/orders_screen/component/orders_status.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:intl/intl.dart';
 
 class OrdersDetails extends StatelessWidget {
   final dynamic data;
@@ -15,70 +18,94 @@ class OrdersDetails extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           "Order Details",
-        ).text.size(24).fontFamily(medium).color(greyDark2).make(),
+        ).text.size(24).fontFamily(semiBold).color(greyDark2).make(),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 18),
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
               Container(
-                padding: const EdgeInsets.all(8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                        "Order Status",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: regular,
-                          color: greyDark2,
-                        ),
-                    ),
-                    const SizedBox(height: 8),
+                      "Order Status",
+                    )
+                        .text
+                        .size(20)
+                        .color(greyDark2)
+                        .fontFamily(semiBold)
+                        .makeCentered(),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          width: 80,
-                          child: orderStatus(
-                            icon: icPlaced,
-                            title: "Placed",
-                            showDone: data['order_placed'],
-                          ),
+                        orderStatus(
+                          icon: icPlaced,
+                          title: "Placed",
+                          showDone: data['order_placed'],
                         ),
-                        Container(
-                          width: 80,
-                          child: orderStatus(
-                            icon: icConfirm,
-                            title: "Confirmed",
-                            showDone: data['order_confirmed'],
-                          ),
+                        3.widthBox,
+                        horizontalLine(isActive: data['order_confirmed']),
+                        orderStatus(
+                          icon: icOnDelivery,
+                          title: "Confirmed",
+                          showDone: data['order_confirmed'],
                         ),
-                        Container(
-                          width: 80,
-                          child: orderStatus(
-                            icon: icOnDelivery,
-                            title: "On Delivery",
-                            showDone: data['order_on_delivery'],
-                          ),
+                        horizontalLine(isActive: data['order_on_delivery']),
+                        orderStatus(
+                          icon: icDelivered,
+                          title: "On Delivery",
+                          showDone: data['order_on_delivery'],
                         ),
-                        Container(
-                          width: 80,
-                          child: orderStatus(
-                            icon: icDelivered,
-                            title: "Delivered",
-                            showDone: data['order_delivered'],
-                          ),
+                        horizontalLine(isActive: data['order_delivered']),
+                        orderStatus(
+                          icon: icHome,
+                          title: "Delivered",
+                          showDone: data['order_delivered'],
                         ),
                       ],
                     ),
                   ],
-                ).box.color(whiteColor).shadowSm.roundedSM.padding(const EdgeInsets.all(12)).make(),
+                )
+                    .box
+                    .color(whiteColor)
+                    .shadowXs
+                    .roundedSM
+                    .border(color: thinGrey01)
+                    .padding(const EdgeInsets.all(12))
+                    .make(),
               ),
-              // const Divider(),
-              const SizedBox(height: 10),
+              const SizedBox(height: 15),
+              Column(
+                children: [
+                  ListTile(
+                    leading: Image.asset(
+                      icPerson,
+                      color: greyDark1,
+                      height: 20,
+                    ),
+                    title: Text(
+                      'Contact Seller',
+                      style: TextStyle(color: greyDark1, fontFamily: medium),
+                    ),
+                    trailing: Icon(Icons.chevron_right, color: greyDark1),
+                    onTap: () {
+                      Get.to(() => const ChatScreen(),
+                          arguments: [data['p_seller'], data['vendor_id']]);
+                    },
+                  )
+                      .box
+                      .color(whiteColor)
+                      .shadowXs
+                      .roundedSM
+                      .border(color: thinGrey01)
+                      .padding(const EdgeInsets.symmetric(horizontal: 4))
+                      .make(),
+                ],
+              ),
+              const SizedBox(height: 15),
               Column(
                 children: [
                   orderPlaceDetails(
@@ -112,11 +139,11 @@ class OrdersDetails extends StatelessWidget {
                           children: [
                             const Text(
                               "Shipping Address",
-                              style: TextStyle(fontFamily: regular),
+                              style: TextStyle(fontFamily: semiBold),
                             ),
-                            Text("${data['order_by_firstname']}"),
-                            Text("${data['order_by_surname']}"),
-                            Text("${data['order_by_email']}"),
+                            Text(
+                                "${data['order_by_firstname']} ${data['order_by_surname']}"),
+                            // Text("${data['order_by_email']}"),
                             Text("${data['order_by_address']}"),
                             Text("${data['order_by_city']}"),
                             Text("${data['order_by_state']}"),
@@ -126,21 +153,33 @@ class OrdersDetails extends StatelessWidget {
                         ),
                         SizedBox(
                           width: 130,
+                          height: 180,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text(
                                 "Total Amount",
-                                style: TextStyle(fontFamily: regular),
+                                style: TextStyle(fontFamily: semiBold),
                               ),
-                              Text(
-                                "${data['total_amount']}",
-                                style: const TextStyle(
-                                  color: primaryApp,
-                                  fontFamily: bold,
-                                ),
-                              ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    "${intl.NumberFormat('#,##0').format(data['total_amount'])} ",
+                                    style: const TextStyle(
+                                        color: greyDark1,
+                                        fontFamily: regular,
+                                        fontSize: 24),
+                                  ),
+                                  5.widthBox,
+                                  Text('Bath')
+                                      .text
+                                      .fontFamily(light)
+                                      .size(14)
+                                      .make()
+                                ],
+                              )
                             ],
                           ),
                         ),
@@ -148,48 +187,97 @@ class OrdersDetails extends StatelessWidget {
                     ),
                   )
                 ],
-              ).box.outerShadowMd.white.make(),
-              const Divider(),
-              const SizedBox(height: 10),
-              const Text(
-                "Ordered Product",
-                style: TextStyle(
-                  fontSize: 16,
-                  color: greyDark2,
-                  fontFamily: regular,
-                ),
-              ) .text
-                  .size(16)
-                  .color(greyDark2)
-                  .fontFamily(regular)
-                  .makeCentered(),
-              const SizedBox(height: 10),
-              ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: data['orders'].length,
-                itemBuilder: (context, index) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      orderPlaceDetails(
-                        title1: data['orders'][index]['title'],
-                        title2: data['orders'][index]['tprice'],
-                        d1: "${data['orders'][index]['qty']}x",
-                        d2: "Refundable",
-                      ),
-                      // Container(
-                      //   padding: const EdgeInsets.symmetric(horizontal: 16),
-                      //   child: Container(
-                      //     width: 30,
-                      //     height: 20,
-                      //     color: Color(data['orders'][index]['color']),
-                      //   ),
-                      // ),
-                    ],
-                  );
-                },
-              ).box.outerShadowMd.white.margin(const EdgeInsets.only(bottom: 4)).make(),
+              )
+                  .box
+                  .color(whiteColor)
+                  .shadowXs
+                  .roundedSM
+                  .border(color: thinGrey01)
+                  .padding(const EdgeInsets.all(6))
+                  .make(),
+              const SizedBox(height: 15),
+              Column(
+                children: [
+                  
+                    const Text(
+                      "Ordered Product",
+                    )
+                        .text
+                        .size(20)
+                        .color(greyDark2)
+                        .fontFamily(semiBold)
+                        .makeCentered(),
+                        5.heightBox,
+                  ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: data['orders'].length,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // orderPlaceDetails(
+                          //   title1: data['orders'][index]['title'],
+                          //   title2: data['orders'][index]['tprice'],
+                          //   d1: "${data['orders'][index]['qty']}x",
+                          //   d2: "Refundable",
+                          // ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 4),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment
+                                  .center, 
+                              children: [
+                                Text(
+                                  'x${data['orders'][index]['qty']}',
+                                  style: const TextStyle(
+                                      fontSize: 12,
+                                      color: greyDark2,
+                                      fontFamily: regular),
+                                ),
+                                const SizedBox(width: 5),
+                                Image.network(data['orders'][index]['img'],
+                                    width: 70, height: 60, fit: BoxFit.cover),
+                                const SizedBox(width: 15),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        data['orders'][index]['title'],
+                                        style: const TextStyle(
+                                          fontFamily: semiBold,
+                                          fontSize: 14,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      Text(
+                                        '${NumberFormat('#,##0').format(data['orders'][index]['price'])} Bath',
+                                        style:
+                                            const TextStyle(color: greyDark2),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      );
+                    },
+                  )
+                ],
+              )
+                  .box
+                  .color(whiteColor)
+                  .shadowXs
+                  .roundedSM
+                  .border(color: thinGrey01)
+                  .padding(const EdgeInsets.all(6))
+                  .make(),
               const SizedBox(height: 20),
             ],
           ),

@@ -1,4 +1,4 @@
-import 'package:flutter_finalproject/Views/collection_screen/address_controller.dart';
+import 'package:flutter_finalproject/Views/profile_screen/menu_addAddress_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 import 'package:flutter_finalproject/Views/cart_screen/payment_method.dart';
@@ -26,7 +26,7 @@ class _ChoicesScreenState extends State<ChoicesScreen> {
       backgroundColor: whiteColor,
       appBar: AppBar(
         title:
-            const Text("Shipping address").text.size(24).fontFamily(medium).color(greyDark2).make(),
+            const Text("Shipping address").text.size(24).fontFamily(semiBold).color(greyDark2).make(),
         backgroundColor: whiteColor,
       ),
       body: Padding(

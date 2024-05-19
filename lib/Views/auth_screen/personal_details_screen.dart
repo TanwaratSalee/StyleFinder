@@ -89,7 +89,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
       bottomNavigationBar: SizedBox(
         height: 90,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 40),
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 35),
           child: tapButton(
             color: selectedDate != null &&
                     selectedGender != null &&

@@ -3,7 +3,7 @@ import 'package:flutter_finalproject/Views/auth_screen/login_screen.dart';
 import 'package:flutter_finalproject/Views/cart_screen/address_screen.dart';
 import 'package:flutter_finalproject/Views/chat_screen/messaging_screen.dart';
 import 'package:flutter_finalproject/Views/orders_screen/orders_screen.dart';
-import 'package:flutter_finalproject/Views/profile_screen/edit_profile_screen.dart';
+import 'package:flutter_finalproject/Views/profile_screen/menu_edit_profile_screen.dart';
 import 'package:flutter_finalproject/Views/profile_screen/resetPassword_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/consts/lists.dart';

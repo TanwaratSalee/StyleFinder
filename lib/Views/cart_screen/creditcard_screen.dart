@@ -73,7 +73,7 @@ Future<void> _showSuccessDialog(BuildContext context) async {
           child: ListBody(
             children: <Widget>[
               SizedBox(height: 50),
-              Image.asset('assets/images/Finishpay.PNG'),
+              Image.asset(imgSuccessful),
               SizedBox(height: 40),
               Text(
                 'Payment was successful!',
@@ -178,7 +178,7 @@ Widget _buildVCCTextField() {
         title: Text(
           "Card Detail",
           
-        ).text.size(24).fontFamily(medium).color(greyDark2).make(),
+        ).text.size(24).fontFamily(semiBold).color(greyDark2).make(),
       ),
       body: ListView(
         padding: EdgeInsets.all(16),

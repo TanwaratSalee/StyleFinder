@@ -9,7 +9,7 @@ Widget orderPlaceDetails({title1, title2, d1, d2}) {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            "$title1".text.fontFamily(medium).make(),
+            "$title1".text.fontFamily(semiBold).make(),
             "$d1".text.color(blackColor).fontFamily(light).make()
           ],
         ),
@@ -18,7 +18,7 @@ Widget orderPlaceDetails({title1, title2, d1, d2}) {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              "$title2".text.fontFamily(medium).make(),
+              "$title2".text.fontFamily(semiBold).make(),
               "$d2".text.fontFamily(light).color(blackColor).make(),
             ],
           ),

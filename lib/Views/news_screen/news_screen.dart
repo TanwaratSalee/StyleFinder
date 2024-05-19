@@ -263,7 +263,7 @@ class NewsScreen extends StatelessWidget {
                         SingleChildScrollView(
                           physics: const NeverScrollableScrollPhysics(),
                           child: Container(
-                            height: MediaQuery.of(context).size.height * 0.55,
+                            height: MediaQuery.of(context).size.height * 0.58,
                             child: buildProductMathGrids(category),
                           ),
                         )
@@ -545,7 +545,7 @@ class NewsScreen extends StatelessWidget {
                                 child: Text(
                                   productName1,
                                   style: const TextStyle(
-                                    fontFamily: 'Medium',
+                                    fontFamily: medium,
                                     fontSize: 14,
                                   ),
                                   overflow: TextOverflow.ellipsis,
@@ -581,7 +581,7 @@ class NewsScreen extends StatelessWidget {
                                 child: Text(
                                   productName2,
                                   style: const TextStyle(
-                                    fontFamily: 'Medium',
+                                    fontFamily: medium,
                                     fontSize: 14,
                                   ),
                                   overflow: TextOverflow.ellipsis,

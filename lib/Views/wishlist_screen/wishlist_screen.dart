@@ -16,7 +16,7 @@ class WishlistScreen extends StatelessWidget {
         title: const Text(
           "Favourite",
           
-        ).text.size(24).fontFamily(medium).color(greyDark2).make(),
+        ).text.size(24).fontFamily(semiBold).color(greyDark2).make(),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirestoreServices.getWishlists(),
