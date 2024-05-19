@@ -37,17 +37,20 @@ class _HomeScreenState extends State<HomeScreen> {
   Map<String, dynamic>? previousSwipedProduct;
   late List<Map<String, dynamic>> productsToShow;
   String? selectedItemDetail;
+  late TextEditingController searchController;
 
   _HomeScreenState(this.data);
 
   @override
   void initState() {
     super.initState();
+    searchController = TextEditingController();
   }
 
   @override
   void dispose() {
     controllercard.dispose();
+    searchController.dispose();
     isEmailVerified();
     super.dispose();
   }
@@ -127,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Container(
                       alignment: Alignment.center,
                       child: TextFormField(
-                        controller: controller.searchController,
+                        controller: searchController,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderSide: BorderSide.none,
@@ -135,9 +138,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           suffixIcon:
                               Icon(Icons.search, color: greyDark1).onTap(() {
-                            if (controller.searchController.text.isNotEmpty) {
+                            if (searchController.text.isNotEmpty) {
                               Get.to(() => SearchScreen(
-                                    title: controller.searchController.text,
+                                    title: searchController.text,
                                   ));
                             }
                           }),
