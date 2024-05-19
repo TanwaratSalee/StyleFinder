@@ -17,7 +17,7 @@ class PromptpayScreen extends StatefulWidget {
 }
 
 class _PromptpayScreenState extends State<PromptpayScreen> {
-  var controller = Get.find<CartController>(); // ตัวอย่างการเข้าถึง controller
+  var controller = Get.find<CartController>();
   String? downloadUri;
 
   @override
@@ -132,7 +132,6 @@ class _PromptpayScreenState extends State<PromptpayScreen> {
     List<Map<String, dynamic>> banks = [
       {'name': 'KBANK', 'icon': Icons.account_balance},
       {'name': 'SCB', 'icon': Icons.account_balance_wallet},
-      // ต่อไปนี้เพิ่มข้อมูลธนาคารตามที่คุณมี
     ];
 
     return Scaffold(
