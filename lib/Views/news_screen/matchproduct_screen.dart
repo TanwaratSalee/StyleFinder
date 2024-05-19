@@ -12,7 +12,7 @@ class MatchProductScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: whiteColor, 
+      backgroundColor: whiteColor,
       appBar: AppBar(
         backgroundColor: whiteColor,
         title: Row(
@@ -57,11 +57,10 @@ class MatchProductScreen extends StatelessWidget {
                 .toList();
 
             if (validPairs.isEmpty) {
-              return const Text('No product'); // No matching pairs found.
+              return const Text('No product');
             }
 
             return GridView.builder(
-              // Removed NeverScrollableScrollPhysics to enable scrolling
               padding: const EdgeInsets.all(8),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 1,
@@ -69,12 +68,17 @@ class MatchProductScreen extends StatelessWidget {
                 crossAxisSpacing: 5,
                 mainAxisExtent: 240,
               ),
-              itemCount: validPairs.length,  // Use the length of validPairs list
+              itemCount: validPairs.length,
               itemBuilder: (BuildContext context, int index) {
                 var pair = validPairs[index].value;
 
                 var data1 = pair[0].data() as Map<String, dynamic>;
                 var data2 = pair[1].data() as Map<String, dynamic>;
+
+                String vendorName1 = data1['p_seller'];
+                String vendorName2 = data2['p_seller'];
+
+                String vendor_id = data1['vendor_id'];
 
                 String price1 = data1['p_price'].toString();
                 String price2 = data2['p_price'].toString();
@@ -99,6 +103,9 @@ class MatchProductScreen extends StatelessWidget {
                           productImage1: productImage1,
                           productImage2: productImage2,
                           totalPrice: totalPrice,
+                          vendorName1: vendorName1,
+                          vendorName2: vendorName2,
+                          vendor_id: vendor_id,
                         ),
                       ),
                     );

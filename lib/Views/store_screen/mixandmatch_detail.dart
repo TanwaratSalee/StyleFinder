@@ -13,7 +13,9 @@ class MatchDetailScreen extends StatefulWidget {
   final String productImage1;
   final String productImage2;
   final String totalPrice;
-  final String vendorName;
+  final String vendorName1;
+  final String vendorName2;
+  final String vendor_id;
 
   const MatchDetailScreen({
     this.productName1 = '',
@@ -23,7 +25,9 @@ class MatchDetailScreen extends StatefulWidget {
     this.productImage1 = '',
     this.productImage2 = '',
     this.totalPrice = '',
-    this.vendorName = '',
+    this.vendorName1 = '',
+    this.vendorName2 = '',
+    this.vendor_id= '',
   });
 
   @override
@@ -251,7 +255,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                               Expanded(
                                 child: Align(
                                   alignment: Alignment.centerLeft,
-                                  child: "${widget.vendorName}"
+                                  child: widget.vendorName1
                                       .toUpperCase()
                                       .text
                                       .fontFamily(medium)
@@ -267,7 +271,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                         GestureDetector(
                           onTap: () {
                             Get.to(
-                              () => StoreScreen(vendorId: widget.vendorName),
+                              () => StoreScreen(vendorId: widget.vendor_id),
                             );
                           },
                           child: Container(

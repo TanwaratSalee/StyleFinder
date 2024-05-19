@@ -514,6 +514,12 @@ class StoreScreen extends StatelessWidget {
             var data1 = pair[0].data() as Map<String, dynamic>;
             var data2 = pair[1].data() as Map<String, dynamic>;
 
+
+            String vendorName1 = data1['p_seller'];
+            String vendorName2 = data2['p_seller'];
+
+            String vendor_id = data1['vendor_id'];
+
             String price1 = data1['p_price'].toString();
             String price2 = data2['p_price'].toString();
             String totalPrice =
@@ -537,6 +543,9 @@ class StoreScreen extends StatelessWidget {
                         productImage1: productImage1,
                         productImage2: productImage2,
                         totalPrice: totalPrice,
+                        vendorName1: vendorName1,
+                        vendorName2: vendorName2,
+                        vendor_id : vendor_id,
                       ),
                     ),
                   );
