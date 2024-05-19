@@ -71,25 +71,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
             const SizedBox(height: 10),
             Row(
               children: [
-                  Checkbox(
-                    activeColor: primaryApp,
-                    checkColor: whiteColor,
-                    value: isCheck,
-                    onChanged: (bool? newValue) {
-                      setState(() {
-                        isCheck = newValue ?? false;
-                      });
-                    },
-                  ),
+                Checkbox(
+                  activeColor: primaryApp,
+                  checkColor: whiteColor,
+                  value: isCheck,
+                  onChanged: (bool? newValue) {
+                    setState(() {
+                      isCheck = newValue ?? false;
+                    });
+                  },
+                ),
                 Expanded(
                     child: RichText(
                         text: const TextSpan(children: [
                   TextSpan(
                       text: iAgree,
-                      style: TextStyle(color: greyDark2, fontFamily: medium,fontSize: 15)),
+                      style: TextStyle(
+                          color: greyDark2, fontFamily: medium, fontSize: 15)),
                   TextSpan(
                       text: termAndCond,
-                      style: TextStyle(color: primaryApp, fontFamily: medium,fontSize: 15)),
+                      style: TextStyle(
+                          color: primaryApp, fontFamily: medium, fontSize: 15)),
                   TextSpan(
                       text: " & ",
                       style: TextStyle(
