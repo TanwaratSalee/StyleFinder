@@ -1,3 +1,4 @@
+import 'package:flutter_finalproject/Views/auth_screen/%20termAndConditions.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 import 'package:get/get.dart';
 import 'package:flutter_finalproject/controllers/auth_controller.dart';
@@ -71,40 +72,54 @@ class _SignUpScreenState extends State<SignUpScreen> {
             const SizedBox(height: 10),
             Row(
               children: [
-                  Checkbox(
-                    activeColor: primaryApp,
-                    checkColor: whiteColor,
-                    value: isCheck,
-                    onChanged: (bool? newValue) {
-                      setState(() {
-                        isCheck = newValue ?? false;
-                      });
-                    },
-                  ),
+                Checkbox(
+                  activeColor: primaryApp,
+                  checkColor: whiteColor,
+                  value: isCheck,
+                  onChanged: (bool? newValue) {
+                    setState(() {
+                      isCheck = newValue ?? false;
+                    });
+                  },
+                ),
                 Expanded(
-                    child: RichText(
-                        text: const TextSpan(children: [
-                  TextSpan(
-                      text: iAgree,
-                      style: TextStyle(color: greyDark2, fontFamily: medium,fontSize: 15)),
-                  TextSpan(
-                      text: termAndCond,
-                      style: TextStyle(color: primaryApp, fontFamily: medium,fontSize: 15)),
-                  TextSpan(
-                      text: " & ",
-                      style: TextStyle(
-                        color: greyDark2,
-                        fontFamily: medium,
-                        fontSize: 15,
-                      )),
-                  TextSpan(
-                      text: privacyPolicy,
-                      style: TextStyle(
-                        color: primaryApp,
-                        fontFamily: medium,
-                        fontSize: 15,
-                      ))
-                ])))
+  child: RichText(
+    text: TextSpan(children: [
+      TextSpan(
+        text: iAgree,
+        style: TextStyle(
+          color: greyDark2, fontFamily: medium, fontSize: 15)),
+      WidgetSpan(
+        child: GestureDetector(
+          onTap: () {
+            Get.to(() => TermAndConditions());
+          },
+          child: Text(
+            termAndCond,
+            style: TextStyle(
+              color: primaryApp, fontFamily: medium, fontSize: 15)),
+        ),
+      ),
+      TextSpan(
+        text: " & ",
+        style: TextStyle(
+          color: greyDark2, fontFamily: medium, fontSize: 15,
+        )),
+      WidgetSpan(
+        child: GestureDetector(
+          onTap: () {
+            Get.to(() => TermAndConditions());
+          },
+          child: Text(
+            privacyPolicy,
+            style: TextStyle(
+              color: primaryApp, fontFamily: medium, fontSize: 15)),
+        ),
+      ),
+    ]),
+  ),
+)
+
               ],
             ),
             controller.isloading.value

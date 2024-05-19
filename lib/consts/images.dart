@@ -39,7 +39,7 @@ const String icPersonSelected =
     "assets/icons/iconsNavbarinapp/icPersonSelected.png";
 
 //other
-const String icLogoApp = "assets/icons/LogoOnApp.png";
+const String icLogoApp = "assets/images/LogoOnApp.png";
 const String bgLogin = "assets/icons/loginBG.png";
 
 // ----------------------------------------------- Home Screen -----------------------------------------------
