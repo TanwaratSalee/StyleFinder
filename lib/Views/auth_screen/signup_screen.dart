@@ -1,4 +1,5 @@
 import 'package:flutter_finalproject/Views/auth_screen/%20termAndConditions.dart';
+import 'package:flutter_finalproject/Views/auth_screen/privacyPolicy.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 import 'package:get/get.dart';
 import 'package:flutter_finalproject/controllers/auth_controller.dart';
@@ -83,43 +84,48 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   },
                 ),
                 Expanded(
-  child: RichText(
-    text: TextSpan(children: [
-      TextSpan(
-        text: iAgree,
-        style: TextStyle(
-          color: greyDark2, fontFamily: medium, fontSize: 15)),
-      WidgetSpan(
-        child: GestureDetector(
-          onTap: () {
-            Get.to(() => TermAndConditions());
-          },
-          child: Text(
-            termAndCond,
-            style: TextStyle(
-              color: primaryApp, fontFamily: medium, fontSize: 15)),
-        ),
-      ),
-      TextSpan(
-        text: " & ",
-        style: TextStyle(
-          color: greyDark2, fontFamily: medium, fontSize: 15,
-        )),
-      WidgetSpan(
-        child: GestureDetector(
-          onTap: () {
-            Get.to(() => TermAndConditions());
-          },
-          child: Text(
-            privacyPolicy,
-            style: TextStyle(
-              color: primaryApp, fontFamily: medium, fontSize: 15)),
-        ),
-      ),
-    ]),
-  ),
-)
-
+                  child: RichText(
+                    text: TextSpan(children: [
+                      TextSpan(
+                          text: iAgree,
+                          style: TextStyle(
+                              color: greyDark2,
+                              fontFamily: medium,
+                              fontSize: 15)),
+                      WidgetSpan(
+                        child: GestureDetector(
+                          onTap: () {
+                            Get.to(() => TermAndConditions());
+                          },
+                          child: Text(termAndCond,
+                              style: TextStyle(
+                                  color: primaryApp,
+                                  fontFamily: medium,
+                                  fontSize: 15)),
+                        ),
+                      ),
+                      TextSpan(
+                          text: " & ",
+                          style: TextStyle(
+                            color: greyDark2,
+                            fontFamily: medium,
+                            fontSize: 15,
+                          )),
+                      WidgetSpan(
+                        child: GestureDetector(
+                          onTap: () {
+                            Get.to(() => PrivacyPolicySceen());
+                          },
+                          child: Text(privacyPolicy,
+                              style: TextStyle(
+                                  color: primaryApp,
+                                  fontFamily: medium,
+                                  fontSize: 15)),
+                        ),
+                      ),
+                    ]),
+                  ),
+                )
               ],
             ),
             controller.isloading.value
