@@ -3,6 +3,7 @@
 import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_finalproject/Views/auth_screen/personal_details_screen.dart';
 import 'package:flutter_finalproject/Views/auth_screen/verifyemail_screen.dart';
 import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
 import 'package:flutter_finalproject/Views/news_screen/component/search_screen.dart';
