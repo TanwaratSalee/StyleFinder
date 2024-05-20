@@ -16,6 +16,8 @@ class MatchDetailScreen extends StatefulWidget {
   final String vendorName1;
   final String vendorName2;
   final String vendor_id;
+  final List<dynamic> collection;
+  final String description;
 
   const MatchDetailScreen({
     this.productName1 = '',
@@ -28,6 +30,8 @@ class MatchDetailScreen extends StatefulWidget {
     this.vendorName1 = '',
     this.vendorName2 = '',
     this.vendor_id= '',
+    required this.collection,
+    this.description= '',
   });
 
   @override
@@ -302,9 +306,38 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                         'Opportunity suitable for',
                       ).text.fontFamily(regular).size(16).make(),
                     ),
-                    Row(children: [
-                      
-                    ]),
+                    Column(
+                      children: [
+                        SizedBox(height: 10),
+                        Container(
+                          height: 50,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: widget.collection.length,
+                            itemBuilder: (context, index) {
+                              String item = widget.collection[index].toString();
+                              return Container(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "${item[0].toUpperCase()}${item.substring(1)}",
+                                )
+                                    .text
+                                    .size(14)
+                                    .color(greyDark1)
+                                    .fontFamily(medium)
+                                    .make(),
+                              )
+                                  .box
+                                  .color(thinPrimaryApp)
+                                  .margin(EdgeInsets.symmetric(horizontal: 6))
+                                  .roundedLg
+                                  .padding(EdgeInsets.symmetric(horizontal: 24, vertical: 12))
+                                  .make();
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                     const SizedBox(
                       height: 10,
                     ),
@@ -314,17 +347,17 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                         width: double.infinity, 
                         height: 150, 
                         decoration: BoxDecoration(
-                          color: thinPrimaryApp, 
+                          color: thinGrey0, 
                           borderRadius: BorderRadius.circular(10), 
                         ),
-                        child: const Align(
+                        child: Align(
                           alignment:
                               Alignment.topLeft, 
                           child: Padding(
                             padding:
                                 EdgeInsets.all(8.0), 
                             child: Text(
-                              'HEllo ',
+                              widget.description,
                               style: TextStyle(
                                 color: blackColor,
                                 fontSize: 11,

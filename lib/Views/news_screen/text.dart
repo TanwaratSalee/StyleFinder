@@ -76,33 +76,46 @@ class MatchProductScreen extends StatelessWidget {
                 var data1 = pair[0].data() as Map<String, dynamic>;
                 var data2 = pair[1].data() as Map<String, dynamic>;
 
-                String price1 = data1['p_price'].toString();
-                String price2 = data2['p_price'].toString();
-                String totalPrice = (int.parse(price1) + int.parse(price2)).toString();
+          String vendorName1 = data1['p_seller'];
+          String vendorName2 = data2['p_seller'];
 
-                String productName1 = data1['p_name'];
-                String productName2 = data2['p_name'];
+          String vendor_id = data1['vendor_id'];
 
-                String productImage1 = data1['p_imgs'][0];
-                String productImage2 = data2['p_imgs'][0];
+          List<dynamic> collectionList = data1['p_mixmatch_collection'];
+          String description = data1['p_mixmatch_desc'];
+          
+          String price1 = data1['p_price'].toString();
+          String price2 = data2['p_price'].toString();
+          String totalPrice = (int.parse(price1) + int.parse(price2)).toString();
 
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MatchDetailScreen(
-                          price1: price1,
-                          price2: price2,
-                          productName1: productName1,
-                          productName2: productName2,
-                          productImage1: productImage1,
-                          productImage2: productImage2,
-                          totalPrice: totalPrice,
-                        ),
-                      ),
-                    );
-                  },
+          String productName1 = data1['p_name'];
+          String productName2 = data2['p_name'];
+
+          String productImage1 = data1['p_imgs'][0];
+          String productImage2 = data2['p_imgs'][0];
+
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MatchDetailScreen(
+                    price1: price1,
+                    price2: price2,
+                    productName1: productName1,
+                    productName2: productName2,
+                    productImage1: productImage1,
+                    productImage2: productImage2,
+                    totalPrice: totalPrice,
+                    vendorName1: vendorName1,
+                    vendorName2: vendorName2,
+                    vendor_id: vendor_id,
+                    collection: collectionList,
+                    description: description,
+                  ),
+                ),
+              );
+            },
                   child: Column(
                     children: [
                       Container(
