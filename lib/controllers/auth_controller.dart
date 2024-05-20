@@ -188,30 +188,29 @@ class AuthController extends GetxController {
     }
   }
 
-  // Login with Google
-  Future<void> signInWithGoogle(BuildContext context) async {
-    isLoading(true);
-    try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
-      final OAuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
-      );
-      final UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
+Future<void> signInWithGoogle(BuildContext context) async {
+  isLoading(true);
+  try {
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+    final OAuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+    final UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
 
-      final String email = userCredential.user?.email ?? "No Email";
-      final String name = userCredential.user?.displayName ?? "No Name";
-      final String uid = userCredential.user?.uid ?? "";
+    final String email = userCredential.user?.email ?? "No Email";
+    final String name = userCredential.user?.displayName ?? "No Name";
+    final String uid = userCredential.user?.uid ?? "";
 
-      final DocumentSnapshot userDoc =
-          await FirebaseFirestore.instance.collection('users').doc(uid).get();
-      if (userDoc.exists) {
-        Get.offAll(() => MainHome());
-        VxToast.show(context, msg: 'Login with Google successful');
-      } else {
+    final DocumentSnapshot userDoc =
+        await FirebaseFirestore.instance.collection('users').doc(uid).get();
+
+    if (userDoc.exists) {
+      final String gender = userDoc['gender'] ?? '';
+      if (gender.isEmpty) {
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -223,15 +222,32 @@ class AuthController extends GetxController {
             ),
           ),
         );
+      } else {
+        Get.offAll(() => MainHome());
+        VxToast.show(context, msg: 'Login with Google successful');
       }
-    } catch (e) {
-      print("Error signing in with Google: $e");
-      VxToast.show(context,
-          msg: 'Error signing in with Google: $e', bgColor: Colors.red);
-    } finally {
-      isLoading(false);
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PersonalDetailsScreenGoogle(
+            email: email,
+            name: name,
+            password: "Not Available",
+            userCredential: userCredential,
+          ),
+        ),
+      );
     }
+  } catch (e) {
+    print("Error signing in with Google: $e");
+    VxToast.show(context,
+        msg: 'Error signing in with Google: $e', bgColor: Colors.red);
+  } finally {
+    isLoading(false);
   }
+}
+
 
   // Login with Facebook
   Future<void> signInWithFacebook() async {
