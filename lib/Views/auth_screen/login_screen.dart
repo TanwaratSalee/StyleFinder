@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/auth_screen/forgot_screen.dart';
 import 'package:flutter_finalproject/Views/auth_screen/register_screen.dart';
 import 'package:flutter_finalproject/Views/home_screen/mainHome.dart';
@@ -41,12 +40,13 @@ class LoginScreen extends StatelessWidget {
                   controller: controller.emailController,
                 ),
                 const SizedBox(height: 15),
-                customPasswordField(
-                  label: 'Password',
+                customTextField(
+                  label: password,
                   isPass: true,
                   readOnly: false,
                   controller: controller.passwordController,
                 ),
+                // ),
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
@@ -66,7 +66,6 @@ class LoginScreen extends StatelessWidget {
                         textColor: whiteColor,
                         onPress: () async {
                           controller.isloading(true);
-
                           await controller
                               .loginMethod(context: context)
                               .then((value) {
@@ -109,7 +108,7 @@ class LoginScreen extends StatelessWidget {
                           }
                         },
                         child: Container(
-                          padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
+                          padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
@@ -122,7 +121,7 @@ class LoginScreen extends StatelessWidget {
                             children: [
                               Image.asset(
                                 socialIconList[index],
-                                height: 24,
+                                height: 20,
                               ),
                               SizedBox(width: 10),
                               Text('Sign in with Google'),
@@ -138,7 +137,7 @@ class LoginScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Don’t have an account? ",
+                      "Don’t have an account?",
                       style: TextStyle(
                         color: blackColor,
                         fontSize: 14,
@@ -147,7 +146,7 @@ class LoginScreen extends StatelessWidget {
                     ),
                     TextButton(
                       child: Text(
-                        'Sign Up',
+                        'Register Now',
                         style: TextStyle(
                           color: primaryApp,
                           fontSize: 14,
