@@ -116,7 +116,7 @@ class NewsScreen extends StatelessWidget {
                         'BRAND'
                             .text
                             .fontFamily(medium)
-                            .color(greyDark2)
+                            .color(greyColor3)
                             .size(22)
                             .make(),
                         Container(
@@ -186,7 +186,7 @@ class NewsScreen extends StatelessWidget {
                                     ),
                                   ),
                                   Divider(
-                                    color: thinGrey01,
+                                    color: greyColor1,
                                   ),
                                   Column(
                                     crossAxisAlignment:
@@ -197,7 +197,7 @@ class NewsScreen extends StatelessWidget {
                                         style: const TextStyle(
                                           fontFamily: medium,
                                           fontSize: 17,
-                                          color: greyDark2,
+                                          color: greyColor3,
                                         ),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
@@ -240,7 +240,7 @@ class NewsScreen extends StatelessWidget {
                             'MATCH BY STORE'
                                 .text
                                 .fontFamily(medium)
-                                .color(greyDark2)
+                                .color(greyColor3)
                                 .size(22)
                                 .make(),
                             Container(
@@ -280,7 +280,7 @@ class NewsScreen extends StatelessWidget {
                               .text
                               .fontFamily(medium)
                               .size(17)
-                              .color(greyDark2)
+                              .color(greyColor3)
                               .make(),
                           10.widthBox,
                           Image.asset(
@@ -301,7 +301,7 @@ class NewsScreen extends StatelessWidget {
                         'PRODUCT'
                             .text
                             .fontFamily(medium)
-                            .color(greyDark2)
+                            .color(greyColor3)
                             .size(22)
                             .make(),
                         Container(
@@ -382,7 +382,7 @@ class NewsScreen extends StatelessWidget {
                                           style: const TextStyle(
                                             fontFamily: medium,
                                             fontSize: 17,
-                                            color: greyDark2,
+                                            color: greyColor3,
                                           ),
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
@@ -392,7 +392,7 @@ class NewsScreen extends StatelessWidget {
                                           style: const TextStyle(
                                             fontFamily: regular,
                                             fontSize: 14,
-                                            color: greyDark2,
+                                            color: greyColor3,
                                           ),
                                         ),
                                         const SizedBox(height: 10),
@@ -432,7 +432,7 @@ class NewsScreen extends StatelessWidget {
                               .text
                               .fontFamily(medium)
                               .size(17)
-                              .color(greyDark2)
+                              .color(greyColor3)
                               .make(),
                           10.widthBox,
                           Image.asset(
@@ -641,7 +641,7 @@ class NewsScreen extends StatelessWidget {
                   ],
                 )
                     .box
-                    .border(color: thinGrey01)
+                    .border(color: greyColor1)
                     .p8
                     .margin(EdgeInsets.all(2))
                     .roundedSM
@@ -695,7 +695,7 @@ class ButtonsGrid extends StatelessWidget {
             },
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(whiteColor),
-              foregroundColor: MaterialStateProperty.all<Color>(greyDark2),
+              foregroundColor: MaterialStateProperty.all<Color>(greyColor3),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),

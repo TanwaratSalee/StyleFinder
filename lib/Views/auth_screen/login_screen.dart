@@ -14,226 +14,171 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var controller = Get.put(AuthController());
-
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       body: GestureDetector(
         onTap: () {
-          FocusScope.of(context).requestFocus(FocusNode());
+          FocusScope.of(context).unfocus();
         },
-        child: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(bgLogin),
-              fit: BoxFit.cover,
+        child: Stack(
+          children: [
+            // Background image
+            Positioned.fill(
+              child: Image.asset(
+                bgLogin,
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          child: Obx(
-            () => Column(
-              children: <Widget>[
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(24.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const SizedBox(height: 150),
-                                Container(
-                                  padding: const EdgeInsets.all(24),
-                                  decoration: BoxDecoration(
-                                    color: whiteColor,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const Text('Log In',
-                                          style: TextStyle(
-                                              fontSize: 32, fontFamily: bold)),
-                                      const SizedBox(height: 5),
-                                      customTextField(
-                                        label: 'Email',
-                                        isPass: false,
-                                        readOnly: false,
-                                        controller: controller.emailController,
-                                      ),
-                                      const SizedBox(height: 5),
-                                      customTextField(
-                                        label: 'Password',
-                                        isPass: true,
-                                        readOnly: false,
-                                        controller:
-                                            controller.passwordController,
-                                      ),
-                                      Align(
-                                        alignment: Alignment.centerRight,
-                                        child: TextButton(
-                                          child: forgotPass.text
-                                              .color(blackColor)
-                                              .make(),
-                                          onPressed: () {
-                                            Get.to(() => ForgotScreen());
-                                          },
-                                        ),
-                                      ),
-                                      const SizedBox(height: 10),
-                                      controller.isloading.value
-                                          ? const CircularProgressIndicator(
-                                              valueColor:
-                                                  AlwaysStoppedAnimation(
-                                                      primaryApp),
-                                            )
-                                          : tapButton(
-                                              color: primaryApp,
-                                              title: 'Login',
-                                              textColor: whiteColor,
-                                              onPress: () async {
-                                                controller.isloading(true);
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Column(
+                      children: [
+                        const Text('Log In',
+                            style: TextStyle(fontSize: 36, fontFamily: bold)),
+                        SizedBox(height: 16),
+                        customTextField(
+                          label: 'Email',
+                          isPass: false,
+                          readOnly: false,
+                          controller: controller.emailController,
+                        ),
+                        const SizedBox(height: 15),
+                        customTextField(
+                          label: 'Password',
+                          isPass: true,
+                          readOnly: false,
+                          controller: controller.passwordController,
+                        ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            child: forgotPass.text.color(blackColor).make(),
+                            onPressed: () {
+                              Get.to(() => ForgotScreen());
+                            },
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                        controller.isloading.value
+                            ? const CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation(primaryApp),
+                              )
+                            : tapButton(
+                                color: primaryApp,
+                                title: 'Login',
+                                textColor: whiteColor,
+                                onPress: () async {
+                                  controller.isloading(true);
 
-                                                await controller
-                                                    .loginMethod(
-                                                        context: context)
-                                                    .then((value) {
-                                                  if (value != null) {
-                                                    VxToast.show(context,
-                                                        msg: successfully);
-                                                    Get.to(() => MainHome());
-                                                  } else {
-                                                    controller.isloading(false);
-                                                  }
-                                                });
-                                              },
-                                            ),
-                                      const SizedBox(height: 24),
-                                      Row(
-                                        children: [
-                                          const Expanded(
-                                            child: Divider(
-                                                color: greyDark1, height: 1),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 15),
-                                            child: loginWith.text
-                                                .color(greyDark2)
-                                                .make(),
-                                          ),
-                                          const Expanded(
-                                            child: Divider(
-                                                color: greyDark1, height: 1),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 24),
-                                      // Row(
-                                      //   mainAxisAlignment:
-                                      //       MainAxisAlignment.spaceEvenly,
-                                      //   children: List.generate(
-                                      //       socialIconList.length,
-                                      //       (index) => Container(
-                                      //             padding:
-                                      //                 const EdgeInsets.fromLTRB(
-                                      //                     50, 15, 50, 15),
-                                      //             decoration: BoxDecoration(
-                                      //               borderRadius:
-                                      //                   BorderRadius.circular(8),
-                                      //               border: Border.all(
-                                      //                 color: thinGrey0,
-                                      //                 width: 1,
-                                      //               ),
-                                      //             ),
-                                      //             child: Image.asset(
-                                      //                 socialIconList[index],
-                                      //                 width: 24,
-                                      //                 height: 24),
-                                      //           )),
-                                      // ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: List.generate(
-                                          socialIconList.length,
-                                          (index) => Expanded(
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                switch (index) {
-                                                  case 0: 
-                                                    controller.signInWithGoogle(
-                                                        context);
-                                                    break;
-                                                }
-                                              },
-                                              child: Container(
-                                                padding: const EdgeInsets.fromLTRB(0, 15, 0,15), 
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                  border: Border.all(
-                                                    color: greyColor,
-                                                    width: 1,
-                                                  ),
-                                                ),
-                                                child: Image.asset(
-                                                  socialIconList[index],
-                                                  width: 80,
-                                                  height: 24,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                  await controller
+                                      .loginMethod(context: context)
+                                      .then((value) {
+                                    if (value != null) {
+                                      VxToast.show(context, msg: successfully);
+                                      Get.to(() => MainHome());
+                                    } else {
+                                      controller.isloading(false);
+                                    }
+                                  });
+                                },
+                              ),
+                        SizedBox(height: 15),
+                        Row(
+                          children: [
+                            const Expanded(
+                              child: Divider(color: greyLine, height: 1),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15),
+                              child: loginWith.text.color(greyColor).make(),
+                            ),
+                            const Expanded(
+                              child: Divider(color: greyLine, height: 1),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 15),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: List.generate(
+                            socialIconList.length,
+                            (index) => Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  switch (index) {
+                                    case 0:
+                                      controller.signInWithGoogle(context);
+                                      break;
+                                  }
+                                },
+                                child: Container(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 15, 0, 15),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                      color: greyLine,
+                                      width: 1,
+                                    ),
+                                  ),
+                                  child: Image.asset(
+                                    socialIconList[index],
+                                    width: 80,
+                                    height: 24,
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
                           ),
                         ),
                       ],
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      const Text(
-                        "Don’t have an account? ",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: regular,
-                          color: whiteColor,
-                        ),
-                      ),
-                      TextButton(
-                        child: const Text(
-                          'Sign Up',
+                    )
+                        .box
+                        .white
+                        .padding(EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 18))
+                        .margin(EdgeInsets.symmetric(horizontal: 24))
+                        .rounded
+                        .make(),
+                        20.heightBox,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Don’t have an account? ",
                           style: TextStyle(
+                            color: whiteColor,
                             fontSize: 16,
                             fontFamily: bold,
-                            color: primaryApp,
                           ),
                         ),
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context) => const SignUpScreen()),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
+                        TextButton(
+                          child: Text(
+                            'Sign Up',
+                            style: TextStyle(
+                              color: primaryApp,
+                              fontSize: 16,
+                              fontFamily: bold,
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) => const SignUpScreen()),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

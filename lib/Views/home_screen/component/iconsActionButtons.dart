@@ -11,7 +11,7 @@ List<Widget> iconsActionButtons() {
       },
     )
         .box
-        .color(thinGrey0.withOpacity(0.4))
+        .color(greyColor0.withOpacity(0.4))
         .padding(const EdgeInsets.all(10.0))
         .roundedFull
         .make(),
@@ -23,7 +23,7 @@ List<Widget> iconsActionButtons() {
       },
     )
         .box
-        .color(thinGrey0.withOpacity(0.4))
+        .color(greyColor0.withOpacity(0.4))
         .padding(const EdgeInsets.all(10.0))
         .roundedFull
         .make(),
@@ -35,7 +35,7 @@ List<Widget> iconsActionButtons() {
       },
     )
         .box
-        .color(thinGrey0.withOpacity(0.4))
+        .color(greyColor0.withOpacity(0.4))
         .padding(const EdgeInsets.all(10.0))
         .roundedFull
         .make(),

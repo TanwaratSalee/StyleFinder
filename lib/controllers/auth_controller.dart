@@ -35,8 +35,9 @@ class AuthController extends GetxController {
       print("Login successful: $userCredential");
       VxToast.show(context, msg: "Login successful");
     } on FirebaseAuthException catch (e) {
-      print("Login failed: $e");
-      VxToast.show(context, msg: "Login failed: $e", bgColor: Colors.red);
+      // VxToast.show(context, msg: "Login failed: $e");
+      VxToast.show(context, msg: "Invalid email or password. Please try again.");
+
     }
 
     return userCredential;
@@ -286,7 +287,7 @@ Future<void> signInWithGoogle(BuildContext context) async {
             child: ListBody(
               children: <Widget>[
                 SizedBox(height: 50),
-                Image.asset(imgPopup),
+                Image.asset(imgPopupPayment),
                 SizedBox(height: 40),
                 Text(
                   'Check your email to reset your password!',

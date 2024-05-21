@@ -81,7 +81,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
       appBar: AppBar(
         title: const Text('Match Detail')
             .text
-            .color(greyDark2)
+            .color(greyColor3)
             .fontFamily(medium)
             .size(24)
             .make(),
@@ -157,7 +157,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                                 overflow: TextOverflow.clip,
                               )
                                   .text
-                                  .color(greyDark1)
+                                  .color(greyDark)
                                   .fontFamily(bold)
                                   .size(16)
                                   .ellipsis
@@ -167,12 +167,12 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                                 "${NumberFormat('#,##0').format(double.parse(widget.price1.toString()).toInt())} Bath",
                               )
                                   .text
-                                  .color(greyDark1)
+                                  .color(greyDark)
                                   .fontFamily(regular)
                                   .size(14)
                                   .make(),
                             ],
-                          ).box.border(color: thinGrey01).rounded.make(),
+                          ).box.border(color: greyColor1).rounded.make(),
                         ),
                         const SizedBox(width: 10),
                         Stack(
@@ -212,7 +212,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                               5.heightBox,
                               Text(widget.productName2)
                                   .text
-                                  .color(greyDark1)
+                                  .color(greyDark)
                                   .fontFamily(bold)
                                   .size(16)
                                   .ellipsis
@@ -222,14 +222,14 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                                 "${NumberFormat('#,##0').format(double.parse(widget.price2.toString()).toInt())} Bath",
                               )
                                   .text
-                                  .color(greyDark1)
+                                  .color(greyDark)
                                   .fontFamily(regular)
                                   .size(14)
                                   .make(),
                             ],
                           )
                               .box
-                              .border(color: thinGrey01)
+                              .border(color: greyColor1)
                               
                               .rounded
                               .make(),
@@ -297,7 +297,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                         .box
                         .height(60)
                         .padding(const EdgeInsets.symmetric(horizontal: 16))
-                        .color(thinGrey0)
+                        .color(greyColor0)
                         .make(),
                         30.heightBox,
                     Align(
@@ -323,7 +323,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                                 )
                                     .text
                                     .size(14)
-                                    .color(greyDark1)
+                                    .color(greyDark)
                                     .fontFamily(medium)
                                     .make(),
                               )
@@ -347,7 +347,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                         width: double.infinity, 
                         height: 150, 
                         decoration: BoxDecoration(
-                          color: thinGrey0, 
+                          color: greyColor0, 
                           borderRadius: BorderRadius.circular(10), 
                         ),
                         child: Align(

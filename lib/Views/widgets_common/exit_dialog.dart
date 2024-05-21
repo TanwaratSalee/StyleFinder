@@ -32,6 +32,6 @@ Widget exitDialog(context) {
           ],
         )
       ],
-    ).box.color(greyDark1).padding(const EdgeInsets.all(12)).roundedSM.make(),
+    ).box.color(greyDark).padding(const EdgeInsets.all(12)).roundedSM.make(),
   );
 }

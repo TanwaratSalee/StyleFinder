@@ -148,7 +148,7 @@
 //                             const Icon(
 //                               Icons.calendar_today,
 //                               size: 24.0,
-//                               color: greyDark2,
+//                               color: greyColor3,
 //                             ),
 //                           ],
 //                         ),
@@ -328,7 +328,7 @@
 //                         TextSpan(
 //                             text: "I agree to the ",
 //                             style: TextStyle(
-//                                 color: greyDark2, fontFamily: bold)),
+//                                 color: greyColor3, fontFamily: bold)),
 //                         TextSpan(
 //                             text: termAndCond,
 //                             style:
@@ -336,7 +336,7 @@
 //                         TextSpan(
 //                             text: " & ",
 //                             style: TextStyle(
-//                               color: greyDark2,
+//                               color: greyColor3,
 //                               fontFamily: bold,
 //                             )),
 //                         TextSpan(
@@ -354,7 +354,7 @@
 //                           valueColor: AlwaysStoppedAnimation(primaryApp),
 //                         )
 //                       : ourButton(
-//                           color: isCheck == true ? primaryApp : greyDark1,
+//                           color: isCheck == true ? primaryApp : greyDark,
 //                           title: 'Next',
 //                           textColor: whiteColor,
 //                           onPress: () async {

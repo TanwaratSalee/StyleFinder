@@ -36,7 +36,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
             .text
             .size(24)
             .fontFamily(medium)
-            .color(greyDark2)
+            .color(greyColor3)
             .make(),
       ),
       body: SingleChildScrollView(
@@ -62,7 +62,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
                             border: Border.all(
                               color: selectedMethod == textPaymentMethods[index]
                                   ? Theme.of(context).primaryColor
-                                  : thinGrey01,
+                                  : greyColor1,
                               width: 2,
                             ),
                             borderRadius: BorderRadius.circular(8),
@@ -113,7 +113,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
                           )
                               .box
                               .margin(EdgeInsets.symmetric(horizontal: 24))
-                              .border(color: thinGrey01)
+                              .border(color: greyColor1)
                               .make(),
                         )),
             ],

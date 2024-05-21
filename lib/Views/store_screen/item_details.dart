@@ -99,7 +99,7 @@ class _ItemDetailsState extends State<ItemDetails> {
         backgroundColor: whiteColor,
         appBar: AppBar(
           // title: widget.title!.text
-          //     .color(greyDark2)
+          //     .color(greyColor3)
           //     .fontFamily(medium)
           //     .size(18)
           //     .make(),
@@ -169,7 +169,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                       isSelectable: false,
                       value: double.parse(widget.data["p_rating"]),
                       onRatingUpdate: (value) {},
-                      normalColor: greyDark2,
+                      normalColor: greyColor3,
                       selectionColor: golden,
                       count: 5,
                       size: 20,
@@ -182,7 +182,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                         "${widget.data['p_aboutProduct']}"
                             .text
                             .fontFamily(regular)
-                            .color(greyDark1)
+                            .color(greyDark)
                             .size(14)
                             .make(),
                         "${NumberFormat('#,##0').format(double.parse(widget.data['p_price']).toInt())} Bath"
@@ -255,7 +255,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                         .box
                         .height(80)
                         .padding(const EdgeInsets.symmetric(horizontal: 16))
-                        .color(thinGrey0)
+                        .color(greyColor0)
                         .make(),
                     20.heightBox,
                     Padding(
@@ -282,7 +282,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                                   )
                                       .text
                                       .size(14)
-                                      .color(greyDark1)
+                                      .color(greyDark)
                                       .fontFamily(medium)
                                       .make(),
                                 )
@@ -390,7 +390,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                           Text(controller.quantity.value.toString())
                               .text
                               .size(20)
-                              .color(greyDark2)
+                              .color(greyColor3)
                               .fontFamily(regular)
                               .make(),
                           IconButton(

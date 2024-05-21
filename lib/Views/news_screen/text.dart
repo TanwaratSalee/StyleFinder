@@ -1,206 +1,228 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
-import 'package:flutter_finalproject/Views/store_screen/mixandmatch_detail.dart';
+import 'package:flutter_finalproject/Views/auth_screen/forgot_screen.dart';
+import 'package:flutter_finalproject/Views/auth_screen/signup_screen.dart';
+import 'package:flutter_finalproject/Views/home_screen/mainHome.dart';
+import 'package:flutter_finalproject/Views/widgets_common/custom_textfield.dart';
+import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
+import 'package:flutter_finalproject/consts/consts.dart';
+import 'package:flutter_finalproject/consts/lists.dart';
+import 'package:flutter_finalproject/controllers/auth_controller.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
-import '../../consts/consts.dart';
-
-class MatchProductScreen extends StatelessWidget {
-  const MatchProductScreen({super.key});
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var controller = Get.put(AuthController());
+
     return Scaffold(
-      backgroundColor: whiteColor, 
-      appBar: AppBar(
-        backgroundColor: whiteColor,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const SizedBox(width: 20),
-            Image.asset(icLogoOnTop, height: 40),
-            IconButton(
-              icon: Image.asset(icCart, width: 21),
-              onPressed: () {
-                Get.to(() => const CartScreen());
-              },
+      resizeToAvoidBottomInset: false,
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(bgLogin),
+              fit: BoxFit.cover,
             ),
-          ],
-        ),
-      ),
-      body: Center(
-        child: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance.collection('products').snapshots(),
-          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (!snapshot.hasData) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
+          ),
+          child: Obx(
+            () => Column(
+              children: <Widget>[
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.all(24),
+                                decoration: BoxDecoration(
+                                  color: whiteColor,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Text('Log In',
+                                        style: TextStyle(
+                                            fontSize: 32, fontFamily: bold)),
+                                    const SizedBox(height: 5),
+                                    customTextField(
+                                      label: 'Email',
+                                      isPass: false,
+                                      readOnly: false,
+                                      controller: controller.emailController,
+                                    ),
+                                    const SizedBox(height: 15),
+                                    customTextField(
+                                      label: 'Password',
+                                      isPass: true,
+                                      readOnly: false,
+                                      controller: controller.passwordController,
+                                    ),
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: TextButton(
+                                        child: forgotPass.text
+                                            .color(blackColor)
+                                            .make(),
+                                        onPressed: () {
+                                          Get.to(() => ForgotScreen());
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    controller.isloading.value
+                                        ? const CircularProgressIndicator(
+                                            valueColor: AlwaysStoppedAnimation(
+                                                primaryApp),
+                                          )
+                                        : tapButton(
+                                            color: primaryApp,
+                                            title: 'Login',
+                                            textColor: whiteColor,
+                                            onPress: () async {
+                                              controller.isloading(true);
 
-            Map<String, List<DocumentSnapshot>> mixMatchMap = {};
-
-            for (var doc in snapshot.data!.docs) {
-              var data = doc.data() as Map<String, dynamic>;
-              if (data['p_mixmatch'] != null) {
-                String mixMatchKey = data['p_mixmatch'];
-                if (!mixMatchMap.containsKey(mixMatchKey)) {
-                  mixMatchMap[mixMatchKey] = [];
-                }
-                mixMatchMap[mixMatchKey]!.add(doc);
-              }
-            }
-
-            var validPairs = mixMatchMap.entries
-                .where((entry) => entry.value.length == 2)
-                .toList();
-
-            if (validPairs.isEmpty) {
-              return const Text('No product'); // No matching pairs found.
-            }
-
-            return GridView.builder(
-              // Removed NeverScrollableScrollPhysics to enable scrolling
-              padding: const EdgeInsets.all(8),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 1,
-                mainAxisSpacing: 5,
-                crossAxisSpacing: 5,
-                mainAxisExtent: 240,
-              ),
-              itemCount: validPairs.length,  // Use the length of validPairs list
-              itemBuilder: (BuildContext context, int index) {
-                var pair = validPairs[index].value;
-
-                var data1 = pair[0].data() as Map<String, dynamic>;
-                var data2 = pair[1].data() as Map<String, dynamic>;
-
-          String vendorName1 = data1['p_seller'];
-          String vendorName2 = data2['p_seller'];
-
-          String vendor_id = data1['vendor_id'];
-
-          List<dynamic> collectionList = data1['p_mixmatch_collection'];
-          String description = data1['p_mixmatch_desc'];
-          
-          String price1 = data1['p_price'].toString();
-          String price2 = data2['p_price'].toString();
-          String totalPrice = (int.parse(price1) + int.parse(price2)).toString();
-
-          String productName1 = data1['p_name'];
-          String productName2 = data2['p_name'];
-
-          String productImage1 = data1['p_imgs'][0];
-          String productImage2 = data2['p_imgs'][0];
-
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MatchDetailScreen(
-                    price1: price1,
-                    price2: price2,
-                    productName1: productName1,
-                    productName2: productName2,
-                    productImage1: productImage1,
-                    productImage2: productImage2,
-                    totalPrice: totalPrice,
-                    vendorName1: vendorName1,
-                    vendorName2: vendorName2,
-                    vendor_id: vendor_id,
-                    collection: collectionList,
-                    description: description,
+                                              await controller
+                                                  .loginMethod(context: context)
+                                                  .then((value) {
+                                                if (value != null) {
+                                                  VxToast.show(context,
+                                                      msg: successfully);
+                                                  Get.to(() => MainHome());
+                                                } else {
+                                                  controller.isloading(false);
+                                                }
+                                              });
+                                            },
+                                          ),
+                                    const SizedBox(height: 24),
+                                    Row(
+                                      children: [
+                                        const Expanded(
+                                          child: Divider(
+                                              color: greyLine, height: 1),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 15),
+                                          child: loginWith.text
+                                              .color(greyColor)
+                                              .make(),
+                                        ),
+                                        const Expanded(
+                                          child: Divider(
+                                              color: greyLine, height: 1),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 24),
+                                    // Row(
+                                    //   mainAxisAlignment:
+                                    //       MainAxisAlignment.spaceEvenly,
+                                    //   children: List.generate(
+                                    //       socialIconList.length,
+                                    //       (index) => Container(
+                                    //             padding:
+                                    //                 const EdgeInsets.fromLTRB(
+                                    //                     50, 15, 50, 15),
+                                    //             decoration: BoxDecoration(
+                                    //               borderRadius:
+                                    //                   BorderRadius.circular(8),
+                                    //               border: Border.all(
+                                    //                 color: greyLine,
+                                    //                 width: 1,
+                                    //               ),
+                                    //             ),
+                                    //             child: Image.asset(
+                                    //                 socialIconList[index],
+                                    //                 width: 24,
+                                    //                 height: 24),
+                                    //           )),
+                                    // ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: List.generate(
+                                        socialIconList.length,
+                                        (index) => Expanded(
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              switch (index) {
+                                                case 0:
+                                                  controller.signInWithGoogle(
+                                                      context);
+                                                  break;
+                                              }
+                                            },
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      0, 15, 0, 15),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                border: Border.all(
+                                                  color: greyLine,
+                                                  width: 1,
+                                                ),
+                                              ),
+                                              child: Image.asset(
+                                                socialIconList[index],
+                                                width: 80,
+                                                height: 24,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              );
-            },
-                  child: Column(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: whiteColor,  // Ensure container background is white
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            const SizedBox(height: 2),
-                            buildProductRow(productName1, productImage1, price1),
-                            buildProductRow(productName2, productImage2, price2),
-                            buildTotalPriceRow(totalPrice),
-                          ],
-                        )
-                        .box
-                        .color(whiteColor)
-                        .padding(const EdgeInsets.all(12))
-                        .rounded
-                        .shadowSm
-                        .make(),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      const Text(
+                        "Don’t have an account? ",
+                      ).text.color(whiteColor).size(16).fontFamily(bold).make(),
+                      TextButton(
+                        child: const Text(
+                          'Sign Up',
+                        ).text.color(primaryApp).size(16).fontFamily(bold).make(),
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => const SignUpScreen()),
+                          );
+                        },
                       ),
                     ],
                   ),
-                );
-              },
-            ).box.margin(EdgeInsets.all(8)).make();
-          },
-        ),
-      ),
-    );
-  }
-
-  Widget buildProductRow(String productName, String productImage, String price) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: Image.network(
-            productImage,
-            width: 80,
-            height: 80,
-            fit: BoxFit.cover,
-          ),
-        ),
-        Expanded(
-          flex: 3,
-          child: Padding(
-            padding: const EdgeInsets.all(25),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  productName,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ).text.color(greyDark2).fontFamily(medium).size(16).make(),
-                Text(
-                  "${NumberFormat('#,##0').format(double.parse(price).toInt())} Bath",
-                ).text.color(greyDark2).fontFamily(regular).size(14).make(),
+                ),
               ],
             ),
           ),
         ),
-      ],
-    );
-  }
-
-  Widget buildTotalPriceRow(String totalPrice) {
-    return Row(
-      children: [
-        const Text(
-          "Price ",
-        ).text.color(greyDark2).fontFamily(regular).size(14).make(),
-        SizedBox(width: 5),
-        Text(
-          "${NumberFormat('#,##0').format(double.parse(totalPrice).toInt())} ",
-        ).text.color(greyDark2).fontFamily(medium).size(16).make(),
-        SizedBox(width: 5),
-        const Text(
-          "Bath",
-        ).text.color(greyDark2).fontFamily(regular).size(14).make(),
-      ],
+      ),
     );
   }
 }

@@ -150,7 +150,8 @@ const String icFav = "assets/icons/icNormal/buttonFavourite.png";
 const String icClickFav = "assets/icons/icNormal/ckickbuttonFavourite.png";
 
 //----------------------------------------------- popup -----------------------------------------------
-const String imgPopup = 'assets/images/Finishpay.PNG';
+const String imgPopupEmail = 'assets/images/sentToEmail.png.PNG';
+const String imgPopupPayment = 'assets/images/paymentSuccessful.png.PNG';
 const String shopError = 'assets/images/ShopError.png';
 const String imgError = 'assets/images/imgError.png';
 const String imgFirstpage = 'assets/images/imgWelcometoStyleFinder.png';

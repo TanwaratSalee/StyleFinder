@@ -138,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             borderRadius: BorderRadius.circular(30),
                           ),
                           suffixIcon:
-                              Icon(Icons.search, color: greyDark1).onTap(() {
+                              Icon(Icons.search, color: greyDark).onTap(() {
                             if (searchController.text.isNotEmpty) {
                               Get.to(() => SearchScreen(
                                     title: searchController.text,
@@ -158,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   IconButton(
                     icon: Icon(
                       Icons.filter_list_rounded,
-                      color: greyDark1,
+                      color: greyDark,
                       size: 30,
                     ),
                     onPressed: () {},
@@ -245,7 +245,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           Text(
                                             "${NumberFormat('#,##0').format(double.parse(product['p_price']).toInt())} Bath",
                                             style: TextStyle(
-                                              color: greyDark2,
+                                              color: greyColor3,
                                               fontSize: 16,
                                             ),
                                           ),

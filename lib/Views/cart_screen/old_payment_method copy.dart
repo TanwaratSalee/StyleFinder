@@ -61,7 +61,7 @@
 //         appBar: AppBar(
 //           title: "Choose Payment "
 //               .text
-//               .color(greyDark2)
+//               .color(greyColor3)
 //               .fontFamily(regular)
 //               .make(),
 //         ),
@@ -196,7 +196,7 @@
 //         ),
 //         appBar: AppBar(
 //           title:
-//               "Choose Payment".text.color(greyDark2).fontFamily(regular).make(),
+//               "Choose Payment".text.color(greyColor3).fontFamily(regular).make(),
 //         ),
 //         body: Padding(
 //           padding: const EdgeInsets.all(20.0),

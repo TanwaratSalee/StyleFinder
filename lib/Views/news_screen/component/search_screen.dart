@@ -55,13 +55,13 @@ class SearchScreen extends StatelessWidget {
               .text
               .fontFamily(medium)
               .size(18)
-              .color(greyDark2)
+              .color(greyColor3)
               .overflow(TextOverflow.ellipsis)
               .softWrap(true)
               .make(),
           "${NumberFormat('#,##0').format(double.parse(currentValue['p_price']).toInt())} Bath"
               .text
-              .color(greyDark1)
+              .color(greyDark)
               .fontFamily(regular)
               .size(14)
               .make(),
@@ -90,7 +90,7 @@ class SearchScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: title!.text.size(24).fontFamily(semiBold).color(greyDark2).make(),
+        title: title!.text.size(24).fontFamily(semiBold).color(greyColor3).make(),
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: fetchProducts(),

@@ -2,8 +2,8 @@ import 'package:flutter_finalproject/consts/consts.dart';
 
 Widget orderStatus(
     {String? icon, Color? color, String? title, bool? showDone}) {
-  final backgroundColor = showDone ?? false ? primaryApp : thinGrey01;
-  final iconColor = showDone ?? false ? whiteColor : greyDark2;
+  final backgroundColor = showDone ?? false ? primaryApp : greyColor1;
+  final iconColor = showDone ?? false ? whiteColor : greyColor3;
 
   return Column(
     children: [
@@ -25,7 +25,7 @@ Widget orderStatus(
       SizedBox(height: 8),
       Text(
         title ?? "",
-        style: TextStyle(color: greyDark2, fontFamily: regular, fontSize: 12),
+        style: TextStyle(color: greyColor3, fontFamily: regular, fontSize: 12),
       ),
     ],
   );

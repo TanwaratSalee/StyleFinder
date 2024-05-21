@@ -17,7 +17,7 @@ class SearchScreenPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: Text(title ?? 'Search').text.size(24).fontFamily(semiBold).color(greyDark2).make(),
+        title: Text(title ?? 'Search').text.size(24).fontFamily(semiBold).color(greyColor3).make(),
       ),
       body: Column(
         children: [
@@ -29,7 +29,7 @@ class SearchScreenPage extends StatelessWidget {
               controller: controller.searchController,
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: thinGrey01),
+                  borderSide: const BorderSide(color: greyColor1),
                   borderRadius: BorderRadius.circular(80),
                 ),
                 focusedBorder: OutlineInputBorder(
@@ -47,7 +47,7 @@ class SearchScreenPage extends StatelessWidget {
                 fillColor: whiteColor,
                 hintText: search,
                 contentPadding: EdgeInsets.symmetric(horizontal: 25),
-                hintStyle: const TextStyle(color: greyDark1),
+                hintStyle: const TextStyle(color: greyDark),
               ),
             ),
           ),

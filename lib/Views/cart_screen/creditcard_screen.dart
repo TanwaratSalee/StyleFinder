@@ -178,7 +178,7 @@ Widget _buildVCCTextField() {
         title: Text(
           "Card Detail",
           
-        ).text.size(24).fontFamily(semiBold).color(greyDark2).make(),
+        ).text.size(24).fontFamily(semiBold).color(greyColor3).make(),
       ),
       body: ListView(
         padding: EdgeInsets.all(16),
