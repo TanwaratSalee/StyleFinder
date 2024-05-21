@@ -32,11 +32,7 @@ class LoginScreen extends StatelessWidget {
                   height: 180,
                 ),
                 SizedBox(height: 20),
-                const Text(login)
-                    .text
-                    .size(28)
-                    .fontFamily(bold)
-                    .make(),
+                const Text(login).text.size(28).fontFamily(bold).make(),
                 SizedBox(height: 20),
                 customTextField(
                   label: email,
@@ -44,9 +40,9 @@ class LoginScreen extends StatelessWidget {
                   readOnly: false,
                   controller: controller.emailController,
                 ),
-                const SizedBox(height: 10),
-                customTextField(
-                  label: password,
+                const SizedBox(height: 15),
+                customPasswordField(
+                  label: 'Password',
                   isPass: true,
                   readOnly: false,
                   controller: controller.passwordController,
@@ -66,7 +62,7 @@ class LoginScreen extends StatelessWidget {
                       )
                     : tapButton(
                         color: primaryApp,
-                        title: ' Register Now',
+                        title: 'Sign in',
                         textColor: whiteColor,
                         onPress: () async {
                           controller.isloading(true);
