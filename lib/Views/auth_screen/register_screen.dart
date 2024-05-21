@@ -1,6 +1,8 @@
+import 'package:flutter_finalproject/Views/auth_screen/login_screen.dart';
 import 'package:flutter_finalproject/Views/auth_screen/termAndConditions.dart';
 import 'package:flutter_finalproject/Views/auth_screen/privacyPolicy.dart';
 import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
+import 'package:flutter_finalproject/consts/lists.dart';
 import 'package:get/get.dart';
 import 'package:flutter_finalproject/controllers/auth_controller.dart';
 import 'package:flutter_finalproject/views/auth_screen/personal_details_screen.dart';
@@ -43,7 +45,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
               height: 200,
             ),
             10.heightBox,
-            Text('Hello! Register to get started').text.size(28).fontFamily(bold).make(),
+            Text('Hello! Register to get started')
+                .text
+                .size(28)
+                .fontFamily(bold)
+                .make(),
             5.heightBox,
             customTextField(
               label: capitalizeFirstLetter(fullname),
@@ -138,8 +144,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   )
                 : tapButton(
                     // Button widget
-                    color: isCheck == true ? primaryApp : greyDark,
-                    title: 'Next',
+                    color: primaryApp,
+                    title: 'Register',
                     textColor: whiteColor,
                     onPress: isCheck
                         ? () {
@@ -158,6 +164,90 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           }
                         : null,
                   ),
+            SizedBox(height: 15),
+            Row(
+              children: [
+                const Expanded(
+                  child: Divider(color: greyLine, height: 1),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: loginWith.text.color(greyColor).make(),
+                ),
+                const Expanded(
+                  child: Divider(color: greyLine, height: 1),
+                ),
+              ],
+            ),
+            SizedBox(height: 15),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: List.generate(
+                socialIconList.length,
+                (index) => Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      switch (index) {
+                        case 0:
+                          controller.signInWithGoogle(context);
+                          break;
+                      }
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: greyLine,
+                          width: 1,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            socialIconList[index],
+                            height: 24,
+                          ),
+                          SizedBox(width: 10),
+                          Text('Sign in with Google'),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "Already have an account? ",
+                  style: TextStyle(
+                    color: blackColor,
+                    fontSize: 14,
+                    fontFamily: regular,
+                  ),
+                ),
+                TextButton(
+                  child: const Text(
+                    'Login Now',
+                    style: TextStyle(
+                      color: primaryApp,
+                      fontSize: 14,
+                      fontFamily: bold,
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => const LoginScreen()),
+                    );
+                  },
+                ),
+              ],
+            ),
           ],
         ),
       ),
