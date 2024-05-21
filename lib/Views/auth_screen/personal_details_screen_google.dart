@@ -84,7 +84,7 @@ class _PersonalDetailsScreenGoogleState
       backgroundColor: whiteColor,
       appBar: AppBar(),
       bottomNavigationBar: SizedBox(
-        height: 90,
+        height: 80,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(20, 0, 20, 35),
           child: tapButton(
@@ -102,7 +102,7 @@ class _PersonalDetailsScreenGoogleState
                     weightController.text.isNotEmpty &&
                     selectedSkinTone != null
                 ? whiteColor
-                : greyDark,
+                : blackColor,
             onPress: () async {
               if (selectedDate == null) {
                 VxToast.show(context, msg: 'Please select your birthday');
@@ -134,6 +134,7 @@ class _PersonalDetailsScreenGoogleState
           children: [
             Text('Let\'s create your information!')
                 .text
+                .black
                 .fontFamily(bold)
                 .size(32)
                 .make(),
@@ -144,7 +145,7 @@ class _PersonalDetailsScreenGoogleState
                   .text
                   .size(16)
                   .fontFamily(regular)
-                  .color(greyColor3)
+                  .color(blackColor)
                   .make(),
             ),
             const SizedBox(height: 10),
@@ -167,7 +168,7 @@ class _PersonalDetailsScreenGoogleState
                   .text
                   .size(16)
                   .fontFamily(regular)
-                  .color(greyColor3)
+                  .color(blackColor)
                   .make(),
             ),
             const SizedBox(height: 10),
@@ -249,7 +250,7 @@ class _PersonalDetailsScreenGoogleState
                         elevation: MaterialStateProperty.all<double>(0),
                         padding: MaterialStateProperty.all<EdgeInsets>(
                           const EdgeInsets.symmetric(
-                              vertical: 15, horizontal: 25),
+                              vertical: 10),
                         ),
                       ),
                     ),
@@ -264,7 +265,7 @@ class _PersonalDetailsScreenGoogleState
                   .text
                   .size(16)
                   .fontFamily(regular)
-                  .color(greyColor3)
+                  .color(blackColor)
                   .make(),
             ),
             const SizedBox(height: 10),
@@ -303,7 +304,7 @@ class _PersonalDetailsScreenGoogleState
                   .text
                   .size(16)
                   .fontFamily(regular)
-                  .color(greyColor3)
+                  .color(blackColor)
                   .make(),
             ),
             const SizedBox(height: 10),

@@ -79,7 +79,7 @@ Future<void> _showSuccessDialog(BuildContext context) async {
                 'Payment was successful!',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
+                  fontFamily: bold,
                   fontSize: 20,
                 ),
               ),
@@ -88,7 +88,7 @@ Future<void> _showSuccessDialog(BuildContext context) async {
                 '${controller.totalP.value} Bath',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
+                  fontFamily: bold,
                   color: Colors.blue,
                   fontSize: 16,
                 ),
@@ -178,7 +178,7 @@ Widget _buildVCCTextField() {
         title: Text(
           "Card Detail",
           
-        ).text.size(24).fontFamily(semiBold).color(greyColor3).make(),
+        ).text.size(24).fontFamily(semiBold).color(greyDark).make(),
       ),
       body: ListView(
         padding: EdgeInsets.all(16),
@@ -422,7 +422,7 @@ Widget _buildVCCTextField() {
 //         //   'Complete!',
 //         //   textAlign: TextAlign.center, // ข้อความอยู่ตรงกลาง
 //         //   style: TextStyle(
-//         //     fontWeight: FontWeight.bold, // ทำให้ตัวหนา
+//         //     fontFamily: bold, // ทำให้ตัวหนา
 //         //   ),
 //         // ),
 //         content: SingleChildScrollView(
@@ -439,7 +439,7 @@ Widget _buildVCCTextField() {
 //                 'Payment was successful!',
 //                 textAlign: TextAlign.center,
 //                 style: TextStyle(
-//                   fontWeight: FontWeight.bold,
+//                   fontFamily: bold,
 //                   fontSize: 20,
 //                 ),
 //               ),
@@ -450,7 +450,7 @@ Widget _buildVCCTextField() {
 //                 '1,400,000 Bath',
 //                 textAlign: TextAlign.center,
 //                 style: TextStyle(
-//                   fontWeight: FontWeight.bold,
+//                   fontFamily: bold,
 //                   color: Colors.blue,
 //                   fontSize: 16,
 //                 ),

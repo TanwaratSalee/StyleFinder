@@ -112,7 +112,7 @@ class MenuSettingScreen extends StatelessWidget {
           ),
         )
             .box
-            .color(greyColor1)
+            .color(greyLine)
             .rounded
             .margin(const EdgeInsets.symmetric(horizontal: 12, vertical: 8))
             .padding(const EdgeInsets.symmetric(horizontal: 8))
@@ -134,7 +134,7 @@ class MenuSettingScreen extends StatelessWidget {
                   .text
                   .size(18)
                   .fontFamily(regular)
-                  .color(greyColor3)
+                  .color(greyDark)
                   .make(),
               45.heightBox,
               const Divider(

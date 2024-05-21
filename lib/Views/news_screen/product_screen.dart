@@ -47,7 +47,7 @@ class ProductScreen extends StatelessWidget {
         children: <Widget>[
           TabBar(
             labelStyle: const TextStyle(
-                fontSize: 15, fontFamily: regular, color: greyColor3),
+                fontSize: 15, fontFamily: regular, color: greyDark),
             unselectedLabelStyle: const TextStyle(
                 fontSize: 14, fontFamily: regular, color: greyDark),
             tabs: [
@@ -57,7 +57,7 @@ class ProductScreen extends StatelessWidget {
             indicatorColor: Theme.of(context).primaryColor,
           ),
           Divider(
-            color: greyColor0,
+            color: greyThin,
             thickness: 2,
             height: 3,
           ),
@@ -86,7 +86,7 @@ class ProductScreen extends StatelessWidget {
                   isScrollable: true,
                   indicatorColor: primaryApp,
                   labelStyle: TextStyle(
-                      fontSize: 13, fontFamily: regular, color: greyColor3),
+                      fontSize: 13, fontFamily: regular, color: greyDark),
                   unselectedLabelStyle: TextStyle(
                       fontSize: 12, fontFamily: regular, color: greyDark),
                   tabs: [
@@ -233,7 +233,7 @@ class ProductScreen extends StatelessWidget {
                   .white
                   .margin(const EdgeInsets.symmetric(horizontal: 3))
                   .rounded
-                  .border(color: greyColor1)
+                  .border(color: greyLine)
                   .make()
                   .onTap(() {
                 Get.to(() => ItemDetails(
@@ -345,7 +345,7 @@ class ProductScreen extends StatelessWidget {
                     .white
                     .margin(const EdgeInsets.symmetric(horizontal: 3))
                     .rounded
-                    .border(color: greyColor1)
+                    .border(color: greyLine)
                     .make()
                     .onTap(() {
                   Get.to(() => ItemDetails(
@@ -565,7 +565,7 @@ class ProductScreen extends StatelessWidget {
                     .padding(EdgeInsets.all(6))
                     .margin(EdgeInsets.symmetric(horizontal: 4, vertical: 6))
                     .roundedSM
-                    .border(color: greyColor1)
+                    .border(color: greyLine)
                     .make());
           },
         );

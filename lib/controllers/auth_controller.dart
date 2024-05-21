@@ -292,7 +292,7 @@ Future<void> signInWithGoogle(BuildContext context) async {
                 Text(
                   'Check your email to reset your password!',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  style: TextStyle(fontFamily: bold, fontSize: 20),
                 ),
               ],
             ),

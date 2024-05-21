@@ -181,7 +181,7 @@ Future<void> _showSuccessDialog(BuildContext context) async {
                 'Payment was successful!',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
+                  fontFamily: bold,
                   fontSize: 20,
                 ),
               ),
@@ -190,7 +190,7 @@ Future<void> _showSuccessDialog(BuildContext context) async {
                 '${controller.totalP.value} Bath',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
+                  fontFamily: bold,
                   color: Colors.blue,
                   fontSize: 16,
                 ),

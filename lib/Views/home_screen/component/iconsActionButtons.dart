@@ -1,5 +1,6 @@
 // ignore_for_file: file_names
 
+import 'package:flutter_finalproject/consts/colors.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 
 List<Widget> iconsActionButtons() {
@@ -11,7 +12,7 @@ List<Widget> iconsActionButtons() {
       },
     )
         .box
-        .color(greyColor0.withOpacity(0.4))
+        .color(greyThin.withOpacity(0.4))
         .padding(const EdgeInsets.all(10.0))
         .roundedFull
         .make(),
@@ -23,7 +24,7 @@ List<Widget> iconsActionButtons() {
       },
     )
         .box
-        .color(greyColor0.withOpacity(0.4))
+        .color(greyThin.withOpacity(0.4))
         .padding(const EdgeInsets.all(10.0))
         .roundedFull
         .make(),
@@ -35,7 +36,7 @@ List<Widget> iconsActionButtons() {
       },
     )
         .box
-        .color(greyColor0.withOpacity(0.4))
+        .color(greyThin.withOpacity(0.4))
         .padding(const EdgeInsets.all(10.0))
         .roundedFull
         .make(),

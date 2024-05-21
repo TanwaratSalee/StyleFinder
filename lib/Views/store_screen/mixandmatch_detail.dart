@@ -81,7 +81,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
       appBar: AppBar(
         title: const Text('Match Detail')
             .text
-            .color(greyColor3)
+            .color(greyDark)
             .fontFamily(medium)
             .size(24)
             .make(),
@@ -172,7 +172,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                                   .size(14)
                                   .make(),
                             ],
-                          ).box.border(color: greyColor1).rounded.make(),
+                          ).box.border(color: greyLine).rounded.make(),
                         ),
                         const SizedBox(width: 10),
                         Stack(
@@ -229,7 +229,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                             ],
                           )
                               .box
-                              .border(color: greyColor1)
+                              .border(color: greyLine)
                               
                               .rounded
                               .make(),
@@ -297,7 +297,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                         .box
                         .height(60)
                         .padding(const EdgeInsets.symmetric(horizontal: 16))
-                        .color(greyColor0)
+                        .color(greyThin)
                         .make(),
                         30.heightBox,
                     Align(
@@ -347,7 +347,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                         width: double.infinity, 
                         height: 150, 
                         decoration: BoxDecoration(
-                          color: greyColor0, 
+                          color: greyThin, 
                           borderRadius: BorderRadius.circular(10), 
                         ),
                         child: Align(

@@ -41,193 +41,200 @@ class _RegisterScreenState extends State<RegisterScreen> {
           children: [
             Image.asset(
               imgregister,
-              height: 170,
+              height: 180,
             ),
-            5.heightBox,
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25),
               child: Column(
                 children: [
-                Text('Hello! Register to get started')
-                  .text
-                  .size(28)
-                  .fontFamily(bold)
-                  .make(),
-              10.heightBox,
-                         customTextField(
-                label: capitalizeFirstLetter(fullname),
-                controller: nameController,
-                isPass: false,
-                readOnly: false,
-              ),
-              const SizedBox(height: 10),
-                         customTextField(
-                label: email,
-                controller: emailController,
-                isPass: false,
-                readOnly: false,
-              ),
-              const SizedBox(height: 10),
-                         customTextField(
-                label: password,
-                controller: passwordController,
-                isPass: true,
-                readOnly: false,
-              ),
-              const SizedBox(height: 10),
-                         customTextField(
-                label: confirmPassword,
-                controller: passwordRetypeController,
-                isPass: true,
-                readOnly: false,
-              ),
-              ],),
-            ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Checkbox(
-                  activeColor: primaryApp,
-                  checkColor: whiteColor,
-                  value: isCheck,
-                  onChanged: (bool? newValue) {
-                    setState(() {
-                      isCheck = newValue ?? false;
-                    });
-                  },
-                ),
-                Expanded(
-                  child: RichText(
-                    text: TextSpan(children: [
-                      TextSpan(
-                          text: iAgree,
-                          style: TextStyle(
-                              color: blackColor,
-                              fontFamily: regular,
-                              fontSize: 13)),
-                      WidgetSpan(
-                        child: GestureDetector(
-                          onTap: () {
-                            Get.to(() => TermAndConditions());
-                          },
-                          child: Text(termAndCond,
-                              style: TextStyle(
-                                  color: primaryApp,
-                                  fontFamily: medium,
-                                  fontSize: 13)),
-                        ),
-                      ),
-                      TextSpan(
-                          text: " & ",
-                          style: TextStyle(
-                            color: blackColor,
-                            fontFamily: regular,
-                            fontSize: 13,
-                          )),
-                      WidgetSpan(
-                        child: GestureDetector(
-                          onTap: () {
-                            Get.to(() => PrivacyPolicySceen());
-                          },
-                          child: Text(privacyPolicy,
-                              style: TextStyle(
-                                  color: primaryApp,
-                                  fontFamily: medium,
-                                  fontSize: 13)),
-                        ),
-                      ),
-                    ]),
+                  Text('Hello! Register to get started')
+                      .text
+                      .size(28)
+                      .fontFamily(bold)
+                      .make(),
+                  8.heightBox,
+                  customTextField(
+                    label: capitalizeFirstLetter(fullname),
+                    controller: nameController,
+                    isPass: false,
+                    readOnly: false,
                   ),
-                )
-              ],
-            ),
-            10.heightBox,
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25),
-              child: Column(children: [
-                controller.isloading.value
-                  ? const CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation(primaryApp),
-                    )
-                  : tapButton(
-                      // Button widget
-                      color: primaryApp,
-                      title: 'Register',
-                      textColor: whiteColor,
-                      onPress: isCheck
-                          ? () {
-                              if (validateInput()) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => PersonalDetailsScreen(
-                                      email: emailController.text,
-                                      name: nameController.text,
-                                      password: passwordController.text,
-                                    ),
-                                  ),
-                                );
-                              }
-                            }
-                          : null,
-                    ),
-              SizedBox(height: 15),
-              Row(
-                children: [
-                  const Expanded(
-                    child: Divider(color: greyLine, height: 1),
+                  const SizedBox(height: 10),
+                  customTextField(
+                    label: email,
+                    controller: emailController,
+                    isPass: false,
+                    readOnly: false,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: loginWith.text.color(greyColor).make(),
+                  const SizedBox(height: 10),
+                  customTextField(
+                    label: password,
+                    controller: passwordController,
+                    isPass: true,
+                    readOnly: false,
                   ),
-                  const Expanded(
-                    child: Divider(color: greyLine, height: 1),
+                  const SizedBox(height: 10),
+                  customTextField(
+                    label: confirmPassword,
+                    controller: passwordRetypeController,
+                    isPass: true,
+                    readOnly: false,
                   ),
                 ],
               ),
-              SizedBox(height: 15),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: List.generate(
-                  socialIconList.length,
-                  (index) => Expanded(
-                    child: GestureDetector(
-                      onTap: () {
-                        switch (index) {
-                          case 0:
-                            controller.signInWithGoogle(context);
-                            break;
-                        }
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color: greyLine,
-                            width: 1,
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              socialIconList[index],
-                              height: 24,
+            ),
+            const SizedBox(height: 5),
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 15),
+                  child: Row(
+                    children: [
+                      Checkbox(
+                        activeColor: primaryApp,
+                        checkColor: whiteColor,
+                        value: isCheck,
+                        onChanged: (bool? newValue) {
+                          setState(() {
+                            isCheck = newValue ?? false;
+                          });
+                        },
+                      ),
+                      Expanded(
+                        child: RichText(
+                          text: TextSpan(children: [
+                            TextSpan(
+                                text: iAgree,
+                                style: TextStyle(
+                                    color: blackColor,
+                                    fontFamily: regular,
+                                    fontSize: 13)),
+                            WidgetSpan(
+                              child: GestureDetector(
+                                onTap: () {
+                                  Get.to(() => TermAndConditions());
+                                },
+                                child: Text(termAndCond,
+                                    style: TextStyle(
+                                        color: primaryApp,
+                                        fontFamily: medium,
+                                        fontSize: 13)),
+                              ),
                             ),
-                            SizedBox(width: 10),
-                            Text('Sign in with Google'),
-                          ],
+                            TextSpan(
+                                text: " & ",
+                                style: TextStyle(
+                                  color: blackColor,
+                                  fontFamily: regular,
+                                  fontSize: 13,
+                                )),
+                            WidgetSpan(
+                              child: GestureDetector(
+                                onTap: () {
+                                  Get.to(() => PrivacyPolicySceen());
+                                },
+                                child: Text(privacyPolicy,
+                                    style: TextStyle(
+                                        color: primaryApp,
+                                        fontFamily: medium,
+                                        fontSize: 13)),
+                              ),
+                            ),
+                          ]),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25),
+              child: Column(
+                children: [
+                  controller.isloading.value
+                      ? const CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation(primaryApp),
+                        )
+                      : tapButton(
+                          // Button widget
+                          color: primaryApp,
+                          title: 'Register',
+                          textColor: whiteColor,
+                          onPress: isCheck
+                              ? () {
+                                  if (validateInput()) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            PersonalDetailsScreen(
+                                          email: emailController.text,
+                                          name: nameController.text,
+                                          password: passwordController.text,
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                }
+                              : null,
+                        ),
+                  SizedBox(height: 15),
+                  Row(
+                    children: [
+                      const Expanded(
+                        child: Divider(color: greyLine, height: 1),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: loginWith.text.color(greyColor).make(),
+                      ),
+                      const Expanded(
+                        child: Divider(color: greyLine, height: 1),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 15),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: List.generate(
+                      socialIconList.length,
+                      (index) => Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            switch (index) {
+                              case 0:
+                                controller.signInWithGoogle(context);
+                                break;
+                            }
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: greyLine,
+                                width: 1,
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  socialIconList[index],
+                                  height: 24,
+                                ),
+                                SizedBox(width: 10),
+                                Text('Sign in with Google'),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
+                ],
               ),
-              ],),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

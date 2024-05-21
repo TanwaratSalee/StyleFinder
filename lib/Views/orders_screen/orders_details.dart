@@ -18,7 +18,7 @@ class OrdersDetails extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           "Order Details",
-        ).text.size(24).fontFamily(semiBold).color(greyColor3).make(),
+        ).text.size(24).fontFamily(semiBold).color(greyDark).make(),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 18),
@@ -35,7 +35,7 @@ class OrdersDetails extends StatelessWidget {
                     )
                         .text
                         .size(20)
-                        .color(greyColor3)
+                        .color(greyDark)
                         .fontFamily(semiBold)
                         .makeCentered(),
                     Row(
@@ -73,7 +73,7 @@ class OrdersDetails extends StatelessWidget {
                     .color(whiteColor)
                     .shadowXs
                     .roundedSM
-                    .border(color: greyColor1)
+                    .border(color: greyLine)
                     .padding(const EdgeInsets.all(12))
                     .make(),
               ),
@@ -100,7 +100,7 @@ class OrdersDetails extends StatelessWidget {
                       .color(whiteColor)
                       .shadowXs
                       .roundedSM
-                      .border(color: greyColor1)
+                      .border(color: greyLine)
                       .padding(const EdgeInsets.symmetric(horizontal: 4))
                       .make(),
                 ],
@@ -192,7 +192,7 @@ class OrdersDetails extends StatelessWidget {
                   .color(whiteColor)
                   .shadowXs
                   .roundedSM
-                  .border(color: greyColor1)
+                  .border(color: greyLine)
                   .padding(const EdgeInsets.all(6))
                   .make(),
               const SizedBox(height: 15),
@@ -204,7 +204,7 @@ class OrdersDetails extends StatelessWidget {
                     )
                         .text
                         .size(20)
-                        .color(greyColor3)
+                        .color(greyDark)
                         .fontFamily(semiBold)
                         .makeCentered(),
                         5.heightBox,
@@ -233,7 +233,7 @@ class OrdersDetails extends StatelessWidget {
                                   'x${data['orders'][index]['qty']}',
                                   style: const TextStyle(
                                       fontSize: 12,
-                                      color: greyColor3,
+                                      color: greyDark,
                                       fontFamily: regular),
                                 ),
                                 const SizedBox(width: 5),
@@ -257,7 +257,7 @@ class OrdersDetails extends StatelessWidget {
                                       Text(
                                         '${NumberFormat('#,##0').format(data['orders'][index]['price'])} Bath',
                                         style:
-                                            const TextStyle(color: greyColor3),
+                                            const TextStyle(color: greyDark),
                                       ),
                                     ],
                                   ),
@@ -275,7 +275,7 @@ class OrdersDetails extends StatelessWidget {
                   .color(whiteColor)
                   .shadowXs
                   .roundedSM
-                  .border(color: greyColor1)
+                  .border(color: greyLine)
                   .padding(const EdgeInsets.all(6))
                   .make(),
               const SizedBox(height: 20),

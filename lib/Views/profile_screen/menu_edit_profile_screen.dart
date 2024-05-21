@@ -168,7 +168,7 @@ class EditProfileScreen extends StatelessWidget {
             .text
             .size(24)
             .fontFamily(medium)
-            .color(greyColor3)
+            .color(greyDark)
             .make(),
         actions: [
           TextButton(
@@ -271,7 +271,7 @@ class EditProfileScreen extends StatelessWidget {
                     .make(),
               ),
               const Divider(
-                color: greyColor0,
+                color: greyThin,
               ),
               5.heightBox,
               editTextField(
@@ -296,7 +296,7 @@ class EditProfileScreen extends StatelessWidget {
                     .make(),
               ),
               const Divider(
-                color: greyColor0,
+                color: greyThin,
               ),
               10.heightBox,
               Row(

@@ -35,7 +35,7 @@ Widget passwordTextField({
           hintStyle: const TextStyle(
               color: greyDark, fontFamily: regular, fontSize: 16),
           filled: true,
-          fillColor: greyColor0,
+          fillColor: greyThin,
           contentPadding:
               const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
           enabledBorder: OutlineInputBorder(

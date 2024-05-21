@@ -99,7 +99,7 @@ class _ItemDetailsState extends State<ItemDetails> {
         backgroundColor: whiteColor,
         appBar: AppBar(
           // title: widget.title!.text
-          //     .color(greyColor3)
+          //     .color(greyDark)
           //     .fontFamily(medium)
           //     .size(18)
           //     .make(),
@@ -169,7 +169,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                       isSelectable: false,
                       value: double.parse(widget.data["p_rating"]),
                       onRatingUpdate: (value) {},
-                      normalColor: greyColor3,
+                      normalColor: greyDark,
                       selectionColor: golden,
                       count: 5,
                       size: 20,
@@ -255,7 +255,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                         .box
                         .height(80)
                         .padding(const EdgeInsets.symmetric(horizontal: 16))
-                        .color(greyColor0)
+                        .color(greyThin)
                         .make(),
                     20.heightBox,
                     Padding(
@@ -390,7 +390,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                           Text(controller.quantity.value.toString())
                               .text
                               .size(20)
-                              .color(greyColor3)
+                              .color(greyDark)
                               .fontFamily(regular)
                               .make(),
                           IconButton(

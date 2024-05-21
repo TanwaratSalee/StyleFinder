@@ -37,7 +37,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   'Welcome to',
                   style: TextStyle(
                     fontSize: 32,
-                    fontWeight: FontWeight.bold,
+                    fontFamily: bold,
                   ),
                 ),
                 5.widthBox,
@@ -45,7 +45,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   'StyleFinder',
                   style: TextStyle(
                     fontSize: 32,
-                    fontWeight: FontWeight.bold,
+                    fontFamily: bold,
                     color: primaryApp,
                   ),
                 ),
