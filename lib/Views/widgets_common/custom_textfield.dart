@@ -52,16 +52,6 @@ Widget customPasswordField({
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      if (title != null)
-        Text(
-          title,
-          style: const TextStyle(
-            color: blackColor,
-            fontFamily: bold,
-            fontSize: 16,
-          ),
-        ),
-      const SizedBox(height: 8),
       StatefulBuilder(
         builder: (context, setState) {
           bool _isObscured = isPass;
@@ -74,13 +64,18 @@ Widget customPasswordField({
               isDense: true,
               labelText: label,
               labelStyle: const TextStyle(
-                  color: greyDark, fontFamily: regular, fontSize: 16),
+                color: greyDark,
+                fontFamily: regular,
+                fontSize: 16,
+              ),
               hintStyle: const TextStyle(
-                  color: greyDark, fontFamily: regular, fontSize: 16),
+                color: greyDark,
+                fontFamily: regular,
+                fontSize: 16,
+              ),
               filled: true,
               fillColor: whiteColor,
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 16, horizontal: 20), // Adjust padding
+              contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide: const BorderSide(color: greyLine),
@@ -92,7 +87,7 @@ Widget customPasswordField({
               suffixIcon: isPass
                   ? IconButton(
                       icon: Icon(
-                        _isObscured ? Icons.visibility : Icons.visibility_off,
+                        _isObscured ? Icons.visibility_off : Icons.visibility,
                         color: greyDark,
                       ),
                       onPressed: () {
