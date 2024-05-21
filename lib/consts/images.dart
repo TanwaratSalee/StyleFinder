@@ -124,16 +124,16 @@ const String icPromptpay = "assets/images/payment/qr.png";
 const String icVisa = "assets/images/payment/card.png";
 const String icmobile = "assets/images/payment/visa.png";
 
-const String icPaymentCard  = "assets/icons/iconsPayment/card.png";
-const String icPaymentDelivery  = "assets/icons/iconsPayment/delivery.png";
-const String icPaymentPromptpay  = "assets/icons/iconsPayment/mobilebanking.png";
+const String icPaymentCard = "assets/icons/iconsPayment/card.png";
+const String icPaymentDelivery = "assets/icons/iconsPayment/delivery.png";
+const String icPaymentPromptpay = "assets/icons/iconsPayment/mobilebanking.png";
 
 //bank
 const String imgkbank = 'assets/images/payment/Kbank.png';
 const String imgscb = 'assets/images/payment/SCE.png';
 const String imgbbl = 'assets/images/payment/BBL.png';
-const String imgktb =  'assets/images/payment/krungthai.png';
-const String imgkbay =  'assets/images/payment/KMA.jpg';
+const String imgktb = 'assets/images/payment/krungthai.png';
+const String imgkbay = 'assets/images/payment/KMA.jpg';
 
 //Order
 const String icPlaced = "assets/icons/icNormal/placed.png";
@@ -153,3 +153,7 @@ const String icClickFav = "assets/icons/icNormal/ckickbuttonFavourite.png";
 const String imgPopup = 'assets/images/Finishpay.PNG';
 const String shopError = 'assets/images/ShopError.png';
 const String imgError = 'assets/images/imgError.png';
+const String imgFirstpage = 'assets/images/imgWelcometoStyleFinder.png';
+const String imglogin = 'assets/images/img2DLogin.png';
+const String imgregister = 'assets/images/img2DRigistor.png';
+const String imgpayment = 'assets/images/payment.png';
