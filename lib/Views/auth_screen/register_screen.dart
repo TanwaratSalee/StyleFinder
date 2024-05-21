@@ -37,49 +37,55 @@ class _RegisterScreenState extends State<RegisterScreen> {
       backgroundColor: whiteColor,
       appBar: AppBar(),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 35),
         child: Column(
           children: [
             Image.asset(
               imgregister,
               height: 170,
             ),
-            10.heightBox,
-            Text('Hello! Register to get started')
-                .text
-                .size(28)
-                .fontFamily(bold)
-                .make(),
             5.heightBox,
-           customTextField(
-              label: capitalizeFirstLetter(fullname),
-              controller: nameController,
-              isPass: false,
-              readOnly: false,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25),
+              child: Column(
+                children: [
+                Text('Hello! Register to get started')
+                  .text
+                  .size(28)
+                  .fontFamily(bold)
+                  .make(),
+              10.heightBox,
+                         customTextField(
+                label: capitalizeFirstLetter(fullname),
+                controller: nameController,
+                isPass: false,
+                readOnly: false,
+              ),
+              const SizedBox(height: 10),
+                         customTextField(
+                label: email,
+                controller: emailController,
+                isPass: false,
+                readOnly: false,
+              ),
+              const SizedBox(height: 10),
+                         customTextField(
+                label: password,
+                controller: passwordController,
+                isPass: true,
+                readOnly: false,
+              ),
+              const SizedBox(height: 10),
+                         customTextField(
+                label: confirmPassword,
+                controller: passwordRetypeController,
+                isPass: true,
+                readOnly: false,
+              ),
+              ],),
             ),
-            const SizedBox(height: 15),
-           customTextField(
-              label: email,
-              controller: emailController,
-              isPass: false,
-              readOnly: false,
-            ),
-            const SizedBox(height: 15),
-           customTextField(
-              label: password,
-              controller: passwordController,
-              isPass: true,
-              readOnly: false,
-            ),
-            const SizedBox(height: 15),
-           customTextField(
-              label: confirmPassword,
-              controller: passwordRetypeController,
-              isPass: true,
-              readOnly: false,
-            ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Checkbox(
@@ -100,7 +106,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           style: TextStyle(
                               color: blackColor,
                               fontFamily: regular,
-                              fontSize: 14)),
+                              fontSize: 13)),
                       WidgetSpan(
                         child: GestureDetector(
                           onTap: () {
@@ -110,7 +116,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               style: TextStyle(
                                   color: primaryApp,
                                   fontFamily: medium,
-                                  fontSize: 14)),
+                                  fontSize: 13)),
                         ),
                       ),
                       TextSpan(
@@ -118,7 +124,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           style: TextStyle(
                             color: blackColor,
                             fontFamily: regular,
-                            fontSize: 14,
+                            fontSize: 13,
                           )),
                       WidgetSpan(
                         child: GestureDetector(
@@ -129,7 +135,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               style: TextStyle(
                                   color: primaryApp,
                                   fontFamily: medium,
-                                  fontSize: 14)),
+                                  fontSize: 13)),
                         ),
                       ),
                     ]),
@@ -138,87 +144,91 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ],
             ),
             10.heightBox,
-            controller.isloading.value
-                ? const CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation(primaryApp),
-                  )
-                : tapButton(
-                    // Button widget
-                    color: primaryApp,
-                    title: 'Register',
-                    textColor: whiteColor,
-                    onPress: isCheck
-                        ? () {
-                            if (validateInput()) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => PersonalDetailsScreen(
-                                    email: emailController.text,
-                                    name: nameController.text,
-                                    password: passwordController.text,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25),
+              child: Column(children: [
+                controller.isloading.value
+                  ? const CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation(primaryApp),
+                    )
+                  : tapButton(
+                      // Button widget
+                      color: primaryApp,
+                      title: 'Register',
+                      textColor: whiteColor,
+                      onPress: isCheck
+                          ? () {
+                              if (validateInput()) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PersonalDetailsScreen(
+                                      email: emailController.text,
+                                      name: nameController.text,
+                                      password: passwordController.text,
+                                    ),
                                   ),
-                                ),
-                              );
+                                );
+                              }
                             }
-                          }
-                        : null,
+                          : null,
+                    ),
+              SizedBox(height: 15),
+              Row(
+                children: [
+                  const Expanded(
+                    child: Divider(color: greyLine, height: 1),
                   ),
-            SizedBox(height: 15),
-            Row(
-              children: [
-                const Expanded(
-                  child: Divider(color: greyLine, height: 1),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: loginWith.text.color(greyColor).make(),
-                ),
-                const Expanded(
-                  child: Divider(color: greyLine, height: 1),
-                ),
-              ],
-            ),
-            SizedBox(height: 15),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: List.generate(
-                socialIconList.length,
-                (index) => Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      switch (index) {
-                        case 0:
-                          controller.signInWithGoogle(context);
-                          break;
-                      }
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: greyLine,
-                          width: 1,
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            socialIconList[index],
-                            height: 24,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: loginWith.text.color(greyColor).make(),
+                  ),
+                  const Expanded(
+                    child: Divider(color: greyLine, height: 1),
+                  ),
+                ],
+              ),
+              SizedBox(height: 15),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: List.generate(
+                  socialIconList.length,
+                  (index) => Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        switch (index) {
+                          case 0:
+                            controller.signInWithGoogle(context);
+                            break;
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: greyLine,
+                            width: 1,
                           ),
-                          SizedBox(width: 10),
-                          Text('Sign in with Google'),
-                        ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              socialIconList[index],
+                              height: 24,
+                            ),
+                            SizedBox(width: 10),
+                            Text('Sign in with Google'),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
+              ],),
             ),
-            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

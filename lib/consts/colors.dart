@@ -9,7 +9,7 @@ const Color redColor = Color.fromARGB(255, 249, 87, 89);
 const Color backGround = Color.fromARGB(242, 242, 242, 242);
 const Color greyLine = Color.fromRGBO(195, 202, 207, 1);
 const Color greyColor = Color.fromRGBO(137, 144, 148, 1);
-const Color greyDark = Color.fromRGBO(126, 126, 131, 1);
+const Color greyDark = Color.fromRGBO(143, 143, 146, 1);
 
 const Color greyColor0 = Color.fromARGB(255, 249, 87, 89);
 const Color greyColor1 = Color.fromARGB(255, 249, 87, 89);

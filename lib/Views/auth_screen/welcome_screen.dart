@@ -74,28 +74,33 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               },
             ).box.margin(EdgeInsets.symmetric(horizontal: 30)).make(),
             SizedBox(height: 15),
-            tapButton(
-              // borderColor: greyColor,
-              color: whiteColor,
-              title: 'Register',
-              textColor: blackColor,
-              onPress: () async {
-                isloading(true);
-                await Get.to(() => RegisterScreen());
-              },
-            ).box.margin(EdgeInsets.symmetric(horizontal: 30)).make(),
             
-            SizedBox(height: 20),
+            TextButton(
+                onPressed: () {
+                  isloading(true);
+                 Get.to(() => RegisterScreen());
+                },
+                style: TextButton.styleFrom(
+                  
+                  textStyle: TextStyle(
+                    fontSize: 16,
+                    fontFamily: medium
+                  ),
+                ),
+                child: Text('Register').text.black.make(),
+              ).box.padding(EdgeInsets.symmetric(horizontal: 125)).roundedSM.border(color: greyDark).make(),
+
+            Spacer(),
             TextButton(
               onPressed: () {
                 
               },
               child: Text(
                 'Continue as a guest',
-                style: TextStyle(fontSize: 16, color: greyDark),
+                style: TextStyle(fontSize: 16, color: blackColor, decoration: TextDecoration.underline,),
               ),
             ),
-            Spacer(),
+            10.heightBox
           ],
         ),
       ),
