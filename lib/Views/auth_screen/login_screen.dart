@@ -35,8 +35,7 @@ class LoginScreen extends StatelessWidget {
                           height: 200,
                         ),
                         SizedBox(height: 20),
-                        const Text(login,
-                            style: TextStyle(fontSize: 28, fontFamily: bold)),
+                        const Text(login,).text.size(28).fontFamily(bold).make(),
                         SizedBox(height: 20),
                         customTextField(
                           label: email,

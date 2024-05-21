@@ -35,13 +35,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
       backgroundColor: whiteColor,
       appBar: AppBar(),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(30),
+        padding: const EdgeInsets.symmetric(horizontal: 35),
         child: Column(
           children: [
             Image.asset(
               imgregister,
               height: 200,
             ),
+            10.heightBox,
+            Text('Hello! Register to get started').text.size(28).fontFamily(bold).make(),
+            5.heightBox,
             customTextField(
               label: capitalizeFirstLetter(fullname),
               controller: nameController,
