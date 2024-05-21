@@ -1,4 +1,4 @@
-import 'package:flutter_finalproject/Views/auth_screen/%20termAndConditions.dart';
+import 'package:flutter_finalproject/Views/auth_screen/termAndConditions.dart';
 import 'package:flutter_finalproject/Views/auth_screen/privacyPolicy.dart';
 import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
 import 'package:get/get.dart';

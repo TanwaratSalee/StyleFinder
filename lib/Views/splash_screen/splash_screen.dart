@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_finalproject/Views/auth_screen/login_screen.dart';
+import 'package:flutter_finalproject/Views/auth_screen/welcome_screen.dart';
 import 'package:flutter_finalproject/Views/home_screen/mainHome.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
@@ -18,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
       auth.authStateChanges().listen((User? user) {
         if (user == null && mounted) {
-          Get.to(() => const LoginScreen());
+          Get.to(() => const WelcomeScreen());
         } else {
           Get.to(() => MainHome());
         }
