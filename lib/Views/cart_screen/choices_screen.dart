@@ -26,7 +26,7 @@ class _ChoicesScreenState extends State<ChoicesScreen> {
       backgroundColor: whiteColor,
       appBar: AppBar(
         title:
-            const Text("Shipping address").text.size(24).fontFamily(semiBold).color(greyDark2).make(),
+            const Text("Shipping address").text.size(24).fontFamily(semiBold).color(greyColor3).make(),
         backgroundColor: whiteColor,
       ),
       body: Padding(
@@ -39,7 +39,7 @@ class _ChoicesScreenState extends State<ChoicesScreen> {
               onTap: () => Navigator.push(context,
                   MaterialPageRoute(builder: (context) => AddressForm())),
             ),
-            const Divider(color: thinGrey0),
+            const Divider(color: greyColor0),
             Expanded(
               child: ListView.builder(
                 itemCount: _addresses.length,

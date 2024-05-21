@@ -18,7 +18,7 @@ class ForgotScreen extends StatelessWidget {
           // title: Text('Forgot Password?'),
           ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(28.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
@@ -28,10 +28,10 @@ class ForgotScreen extends StatelessWidget {
                   .text
                   .size(26)
                   .fontFamily(bold)
-                  .color(greyDark2)
+                  .color(blackColor)
                   .make(),
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 10),
             Align(
               alignment: Alignment.centerLeft,
               child: const Text(
@@ -39,10 +39,10 @@ class ForgotScreen extends StatelessWidget {
                   .text
                   .size(14)
                   .fontFamily(regular)
-                  .color(greyDark2)
+                  .color(greyColor)
                   .make(),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
             customTextField(
               label: 'Enter your email',
               isPass: false,
@@ -55,8 +55,7 @@ class ForgotScreen extends StatelessWidget {
               color: primaryApp,
               textColor: whiteColor,
               onPress: () {
-                _sendPasswordResetEmail(context);
-                popupForgotPassword(context);
+                sendPasswordResetEmail(context);
               },
             ),
           ],
@@ -65,74 +64,64 @@ class ForgotScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _sendPasswordResetEmail(BuildContext context) async {
+  Future<void> sendPasswordResetEmail(BuildContext context) async {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(
         email: _emailController.text.trim(),
       );
-      VxToast.show(context,
-          msg:
-              "Sent a reset password has been sent to ${_emailController.text}");
-      VxToast.show(context,
-          msg: "Reset password sent in your E-mail ${_emailController.text}");
+      popupForgotPassword(context, _emailController.text.trim());
     } catch (e) {
       VxToast.show(context, msg: "$e");
     }
   }
 }
 
-Future<void> popupForgotPassword(BuildContext context) async {
+Future<void> popupForgotPassword(BuildContext context, String email) async {
   return showDialog<void>(
     context: context,
     barrierDismissible: true,
     builder: (BuildContext context) {
-      return Theme(
-        data: ThemeData(
-          dialogBackgroundColor: whiteColor,
-        ),
-        child: AlertDialog(
-          backgroundColor: whiteColor,
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Container(
-                  child: Column(
-                    children: <Widget>[
-                      Image.asset(
-                        imgPopup,
-                        width: 220,
-                        height: 150,
-                        fit: BoxFit.cover,
-                      ),
-                      Text(
-                        'Check your email to reset your password!',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontFamily: medium,
-                          color: greyDark2,
-                          fontSize: 20,
-                        ),
-                      ),
-                      20.heightBox,
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          Get.to(LoginScreen());
-                        },
-                        child: Text(
-                          'Continue',
-                          style: TextStyle(
-                            fontFamily: medium,
-                            fontSize: 16,
-                            color: whiteColor,
-                          ),
-                        ),
-                      ).box.width(context.screenWidth).roundedSM.margin(EdgeInsets.symmetric(horizontal: 10)).color(primaryApp).make(),
-                    ],
+      return AlertDialog(
+        backgroundColor: Colors.white,
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Image.asset(
+                    imgPopupEmail,
+                    width: 220,
+                    height: 150,
+                    fit: BoxFit.cover,
                   ),
-                ),
-              ],
-            ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Check your email to reset your password!',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: medium,
+                      color: blackColor, 
+                      fontSize: 20,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      Get.to(LoginScreen());
+                    },
+                    child: const Text(
+                      'Done',
+                      style: TextStyle(
+                        fontFamily: medium,
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ).box.width(context.screenWidth).roundedSM.margin(const EdgeInsets.symmetric(horizontal: 10)).color(primaryApp).make(),
+                ],
+              ),
+            ],
           ),
         ),
       );

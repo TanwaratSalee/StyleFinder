@@ -60,7 +60,7 @@ class _ProfileScreenState extends State<ProfileScreen>
             labelStyle: const TextStyle(
                 fontSize: 15, fontFamily: medium, color: primaryApp),
             unselectedLabelStyle: const TextStyle(
-                fontSize: 14, fontFamily: regular, color: greyDark1),
+                fontSize: 14, fontFamily: regular, color: greyDark),
             tabs: [
               const Tab(text: 'Product'),
               const Tab(text: 'Match'),
@@ -164,7 +164,7 @@ class _ProfileScreenState extends State<ProfileScreen>
         if (data.isEmpty) {
           return const Center(
             child: Text("No products you liked!",
-                style: TextStyle(color: greyDark2)),
+                style: TextStyle(color: greyColor3)),
           );
         }
         return ListView.separated(
@@ -220,7 +220,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                               style: const TextStyle(
                                   fontSize: 14,
                                   fontFamily: regular,
-                                  color: greyDark1),
+                                  color: greyDark),
                             ),
                           ],
                         ),
@@ -246,7 +246,7 @@ class _ProfileScreenState extends State<ProfileScreen>
           separatorBuilder: (context, index) => Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Divider(
-              color: thinGrey01,
+              color: greyColor1,
               thickness: 1,
             ),
           ),
@@ -268,7 +268,7 @@ class _ProfileScreenState extends State<ProfileScreen>
         if (data.isEmpty) {
           return const Center(
             child: Text("No products you liked!",
-                style: TextStyle(color: greyDark2)),
+                style: TextStyle(color: greyColor3)),
           );
         }
 
@@ -359,7 +359,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                           Text(
                                             "${NumberFormat('#,##0').format(double.parse(price1.toString()).toInt())} Bath",
                                             style: const TextStyle(
-                                                color: greyDark1),
+                                                color: greyDark),
                                           ),
                                         ],
                                       ),
@@ -397,7 +397,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                           Text(
                                             "${NumberFormat('#,##0').format(double.parse(price2.toString()).toInt())} Bath",
                                             style: const TextStyle(
-                                                color: greyDark1),
+                                                color: greyDark),
                                           ),
                                         ],
                                       ),
@@ -410,7 +410,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                     Text(
                                       "Total  ",
                                       style: TextStyle(
-                                        color: greyDark1,
+                                        color: greyDark,
                                         fontFamily: regular,
                                         fontSize: 14,
                                       ),
@@ -426,7 +426,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                     Text(
                                       " Bath",
                                       style: TextStyle(
-                                        color: greyDark1,
+                                        color: greyDark,
                                         fontFamily: regular,
                                         fontSize: 14,
                                       ),
@@ -489,7 +489,7 @@ class _ProfileScreenState extends State<ProfileScreen>
       }
       var wishlistNames = snapshot.data!.docs.map((doc) => doc['p_name']).toList();
       if (wishlistNames.isEmpty) {
-        return Center(child: Text("No products in your wishlist!", style: TextStyle(color: greyDark2)));
+        return Center(child: Text("No products in your wishlist!", style: TextStyle(color: greyColor3)));
       }
 
       return ListView.separated(
@@ -605,7 +605,7 @@ class _ProfileScreenState extends State<ProfileScreen>
         if (documents.isEmpty) {
           return Center(
               child: Text("No products in your wishlist!",
-                  style: TextStyle(color: greyDark2)));
+                  style: TextStyle(color: greyColor3)));
         }
         List<Map<String, dynamic>> pairs = [];
         for (var doc in documents) {
@@ -627,7 +627,7 @@ class _ProfileScreenState extends State<ProfileScreen>
         if (pairs.isEmpty) {
           return Center(
               child: Text("No complete pairs in your wishlist!",
-                  style: TextStyle(color: greyDark2)));
+                  style: TextStyle(color: greyColor3)));
         }
 
         return ListView.builder(
@@ -639,7 +639,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                   horizontal: 10), // เพิ่ม Padding ด้านข้าง
               decoration: BoxDecoration(
                 border: Border(
-                  bottom: BorderSide(color: thinGrey01), // เส้นใต้
+                  bottom: BorderSide(color: greyColor1), // เส้นใต้
                 ),
               ),
               child: Stack(
@@ -685,7 +685,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                         .text
                                         .fontFamily(regular)
                                         .size(14)
-                                        .color(greyDark1)
+                                        .color(greyDark)
                                         .make(),
                                   ],
                                 ),
@@ -730,7 +730,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                       style: const TextStyle(
                                         fontSize: 14,
                                         fontFamily: regular,
-                                        color: greyDark1,
+                                        color: greyDark,
                                       ),
                                     ),
                                   ],
@@ -748,7 +748,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                             Text(
                               "Total  ",
                               style: TextStyle(
-                                color: greyDark2,
+                                color: greyColor3,
                                 fontFamily: regular,
                                 fontSize: 14,
                               ),
@@ -764,7 +764,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                             Text(
                               " Bath",
                               style: TextStyle(
-                                color: greyDark2,
+                                color: greyColor3,
                                 fontFamily: regular,
                                 fontSize: 14,
                               ),
@@ -817,7 +817,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                 borderRadius: BorderRadius.circular(20.0),
                 boxShadow: [
                   BoxShadow(
-                    color: greyDark1,
+                    color: greyDark,
                     blurRadius: 10.0,
                     offset: const Offset(0.0, 10.0),
                   ),
@@ -847,7 +847,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                         },
                         child: Text(
                           "Cancel",
-                          style: TextStyle(color: greyDark1),
+                          style: TextStyle(color: greyDark),
                         ),
                       ),
                       SizedBox(width: 20.0),

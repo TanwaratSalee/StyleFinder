@@ -179,7 +179,7 @@ class _AddressScreenState extends State<AddressScreen> {
                                   ),
                                 ),
                               ),
-                                const Divider(color: thinGrey0).box.margin(EdgeInsets.symmetric(horizontal: 12)).make(),
+                                const Divider(color: greyColor0).box.margin(EdgeInsets.symmetric(horizontal: 12)).make(),
                             ],
                           ),
                         );

@@ -39,7 +39,7 @@ class WriteReviewScreen extends StatelessWidget {
                       SizedBox(height: 10),
                       Text(
                         '${product['price']} Bath',
-                        style: TextStyle(color: greyDark2),
+                        style: TextStyle(color: greyColor3),
                       ),
                       SizedBox(height: 20),
                       // Add your review writing widgets here

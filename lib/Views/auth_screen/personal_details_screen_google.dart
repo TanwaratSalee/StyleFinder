@@ -107,7 +107,7 @@ class _PersonalDetailsScreenGoogleState
                     weightController.text.isNotEmpty &&
                     selectedSkinTone != null
                 ? whiteColor
-                : greyDark1,
+                : greyDark,
             onPress: () async {
               if (selectedDate == null) {
                 VxToast.show(context, msg: 'Please select your birthday');
@@ -143,7 +143,7 @@ class _PersonalDetailsScreenGoogleState
                   .text
                   .size(16)
                   .fontFamily(regular)
-                  .color(greyDark2)
+                  .color(greyColor3)
                   .make(),
             ),
             GestureDetector(
@@ -165,7 +165,7 @@ class _PersonalDetailsScreenGoogleState
                   .text
                   .size(16)
                   .fontFamily(regular)
-                  .color(greyDark2)
+                  .color(greyColor3)
                   .make(),
             ),
             const SizedBox(height: 10),
@@ -263,7 +263,7 @@ class _PersonalDetailsScreenGoogleState
                   .text
                   .size(16)
                   .fontFamily(regular)
-                  .color(greyDark2)
+                  .color(greyColor3)
                   .make(),
             ),
             const SizedBox(height: 10),
@@ -302,7 +302,7 @@ class _PersonalDetailsScreenGoogleState
                   .text
                   .size(16)
                   .fontFamily(regular)
-                  .color(greyDark2)
+                  .color(greyColor3)
                   .make(),
             ),
             const SizedBox(height: 10),

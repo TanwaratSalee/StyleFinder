@@ -15,7 +15,7 @@ class OrdersDetails extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           "Order Details",
-        ).text.size(24).fontFamily(semiBold).color(greyDark2).make(),
+        ).text.size(24).fontFamily(semiBold).color(greyColor3).make(),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

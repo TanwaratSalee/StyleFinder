@@ -40,7 +40,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               .fontFamily(medium)
               .make()),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(15),
+        padding: const EdgeInsets.all(30),
         child: Column(
           children: [
             customTextField(
@@ -49,29 +49,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
               isPass: false,
               readOnly: false,
             ),
-            const SizedBox(height: 3),
+            const SizedBox(height: 15),
             customTextField(
               label: email,
               controller: emailController,
               isPass: false,
               readOnly: false,
             ),
-            const SizedBox(height: 3),
+            const SizedBox(height: 15),
             customTextField(
               label: password,
               controller: passwordController,
               isPass: true,
               readOnly: false,
             ),
-            const SizedBox(height: 3),
+            const SizedBox(height: 15),
             customTextField(
               label: confirmPassword,
               controller: passwordRetypeController,
               isPass: true,
               readOnly: false,
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Checkbox(
                   activeColor: primaryApp,
@@ -85,13 +86,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 Expanded(
                   child: RichText(
-                    text: TextSpan(children: [
+                    text: TextSpan(
+                      children: [
                       TextSpan(
                           text: iAgree,
                           style: TextStyle(
-                              color: greyDark2,
-                              fontFamily: medium,
-                              fontSize: 15)),
+                              color: blackColor,
+                              fontFamily: regular,
+                              fontSize: 14)),
                       WidgetSpan(
                         child: GestureDetector(
                           onTap: () {
@@ -101,15 +103,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               style: TextStyle(
                                   color: primaryApp,
                                   fontFamily: medium,
-                                  fontSize: 15)),
+                                  fontSize: 14)),
                         ),
                       ),
                       TextSpan(
                           text: " & ",
                           style: TextStyle(
-                            color: greyDark2,
-                            fontFamily: medium,
-                            fontSize: 15,
+                            color: blackColor,
+                            fontFamily: regular,
+                            fontSize: 14,
                           )),
                       WidgetSpan(
                         child: GestureDetector(
@@ -120,7 +122,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               style: TextStyle(
                                   color: primaryApp,
                                   fontFamily: medium,
-                                  fontSize: 15)),
+                                  fontSize: 14)),
                         ),
                       ),
                     ]),
@@ -128,18 +130,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 )
               ],
             ),
+            10.heightBox,
             controller.isloading.value
                 ? const CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation(primaryApp),
                   )
                 : tapButton(
                     // Button widget
-                    color: isCheck == true ? primaryApp : greyDark1,
+                    color: isCheck == true ? primaryApp : greyDark,
                     title: 'Next',
                     textColor: whiteColor,
                     onPress: isCheck
                         ? () {
-                            // Validate input before changing the screen
                             if (validateInput()) {
                               Navigator.push(
                                 context,

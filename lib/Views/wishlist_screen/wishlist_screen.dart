@@ -16,7 +16,7 @@ class WishlistScreen extends StatelessWidget {
         title: const Text(
           "Favourite",
           
-        ).text.size(24).fontFamily(semiBold).color(greyDark2).make(),
+        ).text.size(24).fontFamily(semiBold).color(greyColor3).make(),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirestoreServices.getWishlists(),
@@ -28,7 +28,7 @@ class WishlistScreen extends StatelessWidget {
           if (data.isEmpty) {
             return const Center(
                 child:
-                    Text("No orders yet!", style: TextStyle(color: greyDark2)));
+                    Text("No orders yet!", style: TextStyle(color: greyColor3)));
           }
           return ListView.separated(
             itemCount: data.length,

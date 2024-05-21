@@ -40,7 +40,7 @@ class _OrdersScreenState extends State<OrdersScreen>
             .text
             .size(24)
             .fontFamily(semiBold)
-            .color(greyDark2)
+            .color(greyColor3)
             .make(),
         bottom: TabBar(
           controller: _tabController,
@@ -72,7 +72,7 @@ class _OrdersScreenState extends State<OrdersScreen>
           return Center(child: loadingIndicator());
         } else if (snapshot.data!.docs.isEmpty) {
           return const Center(
-              child: Text("No orders yet!", style: TextStyle(color: greyDark2)));
+              child: Text("No orders yet!", style: TextStyle(color: greyColor3)));
         } else {
           var data = snapshot.data!.docs;
           return ListView.builder(
@@ -94,7 +94,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                         Text(
                           "Order code ${orderData['order_code']}",
                           style: const TextStyle(
-                              color: greyDark2, fontFamily: medium, fontSize: 18),
+                              color: greyColor3, fontFamily: medium, fontSize: 18),
                         ),
                         Text(
                           orderData['order_confirmed'] ? "Confirm" : "Pending",
@@ -117,7 +117,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                             Text('x${product['qty']}',
                                 style: const TextStyle(
                                     fontSize: 12,
-                                    color: greyDark2,
+                                    color: greyColor3,
                                     fontFamily: regular)),
                             const SizedBox(width: 5),
                             Image.network(product['img'],
@@ -138,7 +138,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                                   ),
                                   Text(
                                       '${NumberFormat('#,##0').format(product['price'])} Bath',
-                                      style: const TextStyle(color: greyDark2)),
+                                      style: const TextStyle(color: greyColor3)),
                                 ],
                               ),
                             ),
@@ -171,7 +171,7 @@ class _OrdersScreenState extends State<OrdersScreen>
           return Center(child: loadingIndicator());
         } else if (snapshot.data!.docs.isEmpty) {
           return const Center(
-              child: Text("No orders yet!", style: TextStyle(color: greyDark2)));
+              child: Text("No orders yet!", style: TextStyle(color: greyColor3)));
         } else {
           var data = snapshot.data!.docs;
           return ListView.builder(
@@ -193,7 +193,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                         Text(
                           "Order code ${orderData['order_code']}",
                           style: const TextStyle(
-                              color: greyDark2, fontFamily: medium, fontSize: 18),
+                              color: greyColor3, fontFamily: medium, fontSize: 18),
                         ),
                         Text(
                           orderData['order_confirmed'] ? "Confirm" : "Pending",
@@ -216,7 +216,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                             Text('x${product['qty']}',
                                 style: const TextStyle(
                                     fontSize: 12,
-                                    color: greyDark2,
+                                    color: greyColor3,
                                     fontFamily: regular)),
                             const SizedBox(width: 5),
                             Image.network(product['img'],
@@ -237,7 +237,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                                   ),
                                   Text(
                                       '${NumberFormat('#,##0').format(product['price'])} Bath',
-                                      style: const TextStyle(color: greyDark2)),
+                                      style: const TextStyle(color: greyColor3)),
                                 ],
                               ),
                             ),
@@ -270,7 +270,7 @@ class _OrdersScreenState extends State<OrdersScreen>
           return Center(child: loadingIndicator());
         } else if (snapshot.data!.docs.isEmpty) {
           return const Center(
-              child: Text("No orders yet!", style: TextStyle(color: greyDark2)));
+              child: Text("No orders yet!", style: TextStyle(color: greyColor3)));
         } else {
           var data = snapshot.data!.docs;
           return ListView.builder(
@@ -292,7 +292,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                         Text(
                           "Order code ${orderData['order_code']}",
                           style: const TextStyle(
-                              color: greyDark2, fontFamily: medium, fontSize: 18),
+                              color: greyColor3, fontFamily: medium, fontSize: 18),
                         ),
                         Text(
                           orderData['order_confirmed'] ? "Confirm" : "Pending",
@@ -315,7 +315,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                             Text('x${product['qty']}',
                                 style: const TextStyle(
                                     fontSize: 12,
-                                    color: greyDark2,
+                                    color: greyColor3,
                                     fontFamily: regular)),
                             const SizedBox(width: 5),
                             Image.network(product['img'],
@@ -336,7 +336,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                                   ),
                                   Text(
                                       '${NumberFormat('#,##0').format(product['price'])} Bath',
-                                      style: const TextStyle(color: greyDark2)),
+                                      style: const TextStyle(color: greyColor3)),
                                 ],
                               ),
                             ),

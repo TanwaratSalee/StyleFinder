@@ -31,7 +31,7 @@ class _ReviewScreenState extends State<ReviewScreen>
       appBar: AppBar(
         title: Text(
           'Reviews',
-        ).text.size(24).fontFamily(semiBold).color(greyDark2).make(),
+        ).text.size(24).fontFamily(semiBold).color(greyColor3).make(),
         centerTitle: true,
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(50.0),
@@ -106,7 +106,7 @@ Widget _buildReviewCard() {
       borderRadius: BorderRadius.circular(8),
       boxShadow: [
         BoxShadow(
-          color: greyDark1,
+          color: greyDark,
           blurRadius: 4,
           offset: Offset(0, 2),
         ),
@@ -160,7 +160,7 @@ Widget _buildReviewProductCard() {
       borderRadius: BorderRadius.circular(8),
       boxShadow: [
         BoxShadow(
-          color: greyDark1,
+          color: greyDark,
           blurRadius: 4,
           offset: Offset(0, 2),
         ),

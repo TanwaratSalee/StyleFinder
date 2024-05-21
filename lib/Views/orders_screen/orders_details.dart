@@ -18,7 +18,7 @@ class OrdersDetails extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           "Order Details",
-        ).text.size(24).fontFamily(semiBold).color(greyDark2).make(),
+        ).text.size(24).fontFamily(semiBold).color(greyColor3).make(),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 18),
@@ -35,7 +35,7 @@ class OrdersDetails extends StatelessWidget {
                     )
                         .text
                         .size(20)
-                        .color(greyDark2)
+                        .color(greyColor3)
                         .fontFamily(semiBold)
                         .makeCentered(),
                     Row(
@@ -73,7 +73,7 @@ class OrdersDetails extends StatelessWidget {
                     .color(whiteColor)
                     .shadowXs
                     .roundedSM
-                    .border(color: thinGrey01)
+                    .border(color: greyColor1)
                     .padding(const EdgeInsets.all(12))
                     .make(),
               ),
@@ -83,14 +83,14 @@ class OrdersDetails extends StatelessWidget {
                   ListTile(
                     leading: Image.asset(
                       icPerson,
-                      color: greyDark1,
+                      color: greyDark,
                       height: 20,
                     ),
                     title: Text(
                       'Contact Seller',
-                      style: TextStyle(color: greyDark1, fontFamily: medium),
+                      style: TextStyle(color: greyDark, fontFamily: medium),
                     ),
-                    trailing: Icon(Icons.chevron_right, color: greyDark1),
+                    trailing: Icon(Icons.chevron_right, color: greyDark),
                     onTap: () {
                       Get.to(() => const ChatScreen(),
                           arguments: [data['p_seller'], data['vendor_id']]);
@@ -100,7 +100,7 @@ class OrdersDetails extends StatelessWidget {
                       .color(whiteColor)
                       .shadowXs
                       .roundedSM
-                      .border(color: thinGrey01)
+                      .border(color: greyColor1)
                       .padding(const EdgeInsets.symmetric(horizontal: 4))
                       .make(),
                 ],
@@ -168,7 +168,7 @@ class OrdersDetails extends StatelessWidget {
                                   Text(
                                     "${intl.NumberFormat('#,##0').format(data['total_amount'])} ",
                                     style: const TextStyle(
-                                        color: greyDark1,
+                                        color: greyDark,
                                         fontFamily: regular,
                                         fontSize: 24),
                                   ),
@@ -192,7 +192,7 @@ class OrdersDetails extends StatelessWidget {
                   .color(whiteColor)
                   .shadowXs
                   .roundedSM
-                  .border(color: thinGrey01)
+                  .border(color: greyColor1)
                   .padding(const EdgeInsets.all(6))
                   .make(),
               const SizedBox(height: 15),
@@ -204,7 +204,7 @@ class OrdersDetails extends StatelessWidget {
                     )
                         .text
                         .size(20)
-                        .color(greyDark2)
+                        .color(greyColor3)
                         .fontFamily(semiBold)
                         .makeCentered(),
                         5.heightBox,
@@ -233,7 +233,7 @@ class OrdersDetails extends StatelessWidget {
                                   'x${data['orders'][index]['qty']}',
                                   style: const TextStyle(
                                       fontSize: 12,
-                                      color: greyDark2,
+                                      color: greyColor3,
                                       fontFamily: regular),
                                 ),
                                 const SizedBox(width: 5),
@@ -257,7 +257,7 @@ class OrdersDetails extends StatelessWidget {
                                       Text(
                                         '${NumberFormat('#,##0').format(data['orders'][index]['price'])} Bath',
                                         style:
-                                            const TextStyle(color: greyDark2),
+                                            const TextStyle(color: greyColor3),
                                       ),
                                     ],
                                   ),
@@ -275,7 +275,7 @@ class OrdersDetails extends StatelessWidget {
                   .color(whiteColor)
                   .shadowXs
                   .roundedSM
-                  .border(color: thinGrey01)
+                  .border(color: greyColor1)
                   .padding(const EdgeInsets.all(6))
                   .make(),
               const SizedBox(height: 20),

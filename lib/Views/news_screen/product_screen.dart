@@ -47,9 +47,9 @@ class ProductScreen extends StatelessWidget {
         children: <Widget>[
           TabBar(
             labelStyle: const TextStyle(
-                fontSize: 15, fontFamily: regular, color: greyDark2),
+                fontSize: 15, fontFamily: regular, color: greyColor3),
             unselectedLabelStyle: const TextStyle(
-                fontSize: 14, fontFamily: regular, color: greyDark1),
+                fontSize: 14, fontFamily: regular, color: greyDark),
             tabs: [
               const Tab(text: 'Product'),
               const Tab(text: 'Match'),
@@ -57,7 +57,7 @@ class ProductScreen extends StatelessWidget {
             indicatorColor: Theme.of(context).primaryColor,
           ),
           Divider(
-            color: thinGrey0,
+            color: greyColor0,
             thickness: 2,
             height: 3,
           ),
@@ -86,9 +86,9 @@ class ProductScreen extends StatelessWidget {
                   isScrollable: true,
                   indicatorColor: primaryApp,
                   labelStyle: TextStyle(
-                      fontSize: 13, fontFamily: regular, color: greyDark2),
+                      fontSize: 13, fontFamily: regular, color: greyColor3),
                   unselectedLabelStyle: TextStyle(
-                      fontSize: 12, fontFamily: regular, color: greyDark1),
+                      fontSize: 12, fontFamily: regular, color: greyDark),
                   tabs: [
                     Tab(text: 'All'),
                     Tab(text: 'Dresses'),
@@ -220,7 +220,7 @@ class ProductScreen extends StatelessWidget {
                         ),
                         "${NumberFormat('#,##0').format(double.parse(product['p_price']).toInt())} Bath"
                             .text
-                            .color(greyDark1)
+                            .color(greyDark)
                             .fontFamily(regular)
                             .size(14)
                             .make(),
@@ -233,7 +233,7 @@ class ProductScreen extends StatelessWidget {
                   .white
                   .margin(const EdgeInsets.symmetric(horizontal: 3))
                   .rounded
-                  .border(color: thinGrey01)
+                  .border(color: greyColor1)
                   .make()
                   .onTap(() {
                 Get.to(() => ItemDetails(
@@ -332,7 +332,7 @@ class ProductScreen extends StatelessWidget {
                           ),
                           "${NumberFormat('#,##0').format(double.parse(price).toInt())} Bath"
                               .text
-                              .color(greyDark1)
+                              .color(greyDark)
                               .fontFamily(regular)
                               .size(14)
                               .make(),
@@ -345,7 +345,7 @@ class ProductScreen extends StatelessWidget {
                     .white
                     .margin(const EdgeInsets.symmetric(horizontal: 3))
                     .rounded
-                    .border(color: thinGrey01)
+                    .border(color: greyColor1)
                     .make()
                     .onTap(() {
                   Get.to(() => ItemDetails(
@@ -565,7 +565,7 @@ class ProductScreen extends StatelessWidget {
                     .padding(EdgeInsets.all(6))
                     .margin(EdgeInsets.symmetric(horizontal: 4, vertical: 6))
                     .roundedSM
-                    .border(color: thinGrey01)
+                    .border(color: greyColor1)
                     .make());
           },
         );

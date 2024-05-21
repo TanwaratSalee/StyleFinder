@@ -105,7 +105,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                     weightController.text.isNotEmpty &&
                     selectedSkinTone != null
                 ? whiteColor
-                : greyDark1,
+                : greyDark,
             onPress: () async {
               if (selectedDate == null) {
                 VxToast.show(context, msg: 'Please select your birthday');
@@ -145,7 +145,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   .text
                   .size(16)
                   .fontFamily(regular)
-                  .color(greyDark2)
+                  .color(greyColor3)
                   .make(),
             ),
             const SizedBox(height: 10),
@@ -168,7 +168,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   .text
                   .size(16)
                   .fontFamily(regular)
-                  .color(greyDark2)
+                  .color(greyColor3)
                   .make(),
             ),
             const SizedBox(height: 10),
@@ -265,7 +265,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   .text
                   .size(16)
                   .fontFamily(regular)
-                  .color(greyDark2)
+                  .color(greyColor3)
                   .make(),
             ),
             const SizedBox(height: 10),
@@ -304,7 +304,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   .text
                   .size(16)
                   .fontFamily(regular)
-                  .color(greyDark2)
+                  .color(greyColor3)
                   .make(),
             ),
             const SizedBox(height: 10),

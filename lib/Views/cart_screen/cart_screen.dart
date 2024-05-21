@@ -47,7 +47,7 @@ class _CartScreenState extends State<CartScreen> {
         ),
         appBar: AppBar(
           // automaticallyImplyLeading: false,
-          title: "Cart".text.color(greyDark2).fontFamily(regular).make(),
+          title: "Cart".text.color(greyColor3).fontFamily(regular).make(),
         ),
         body: StreamBuilder(
           stream: FirestoreServices.getCart(currentUser!.uid),
@@ -59,7 +59,7 @@ class _CartScreenState extends State<CartScreen> {
               );
             } else if (snapshot.data!.docs.isEmpty) {
               return Center(
-                child: "Cart is empty".text.color(greyDark2).make(),
+                child: "Cart is empty".text.color(greyColor3).make(),
               );
             } else {
               var data = snapshot.data!.docs;
@@ -99,7 +99,7 @@ class _CartScreenState extends State<CartScreen> {
                                                 Text("x${data[index]['qty']}")
                                                     .text
                                                     .size(14)
-                                                    .color(greyDark2)
+                                                    .color(greyColor3)
                                                     .fontFamily(regular)
                                                     .make(),
                                           ),
@@ -115,7 +115,7 @@ class _CartScreenState extends State<CartScreen> {
                                                 ),
                                               ],
                                             ),
-                                          ).box.border(color: thinGrey0).make(),
+                                          ).box.border(color: greyColor0).make(),
                                           SizedBox(width: 10),
                                           Expanded(
                                             child: Column(
@@ -130,7 +130,7 @@ class _CartScreenState extends State<CartScreen> {
                                                         TextOverflow.ellipsis,
                                                     softWrap: false,
                                                     style: TextStyle(
-                                                      color: greyDark2,
+                                                      color: greyColor3,
                                                       fontFamily: medium,
                                                       fontSize: 15,
                                                     ),
@@ -144,7 +144,7 @@ class _CartScreenState extends State<CartScreen> {
                                                     ? Text(
                                                         'Size: ${data[index]['productsize']}',
                                                         style: TextStyle(
-                                                          color: greyDark1,
+                                                          color: greyDark,
                                                           fontFamily: regular,
                                                           fontSize: 14,
                                                         ),
@@ -154,7 +154,7 @@ class _CartScreenState extends State<CartScreen> {
                                                 Text(
                                                   "$formattedPrice Bath",
                                                   style: TextStyle(
-                                                    color: greyDark1,
+                                                    color: greyDark,
                                                     fontFamily: regular,
                                                     fontSize: 14,
                                                   ),
@@ -173,7 +173,7 @@ class _CartScreenState extends State<CartScreen> {
                                         ],
                                       ),
                                       Divider(
-                                        color: thinGrey01,
+                                        color: greyColor1,
                                       )
                                           .box
                                           .padding(EdgeInsets.only(top: 14))
@@ -191,7 +191,7 @@ class _CartScreenState extends State<CartScreen> {
                             "Total price  "
                                 .text
                                 .fontFamily(regular)
-                                .color(greyDark1)
+                                .color(greyDark)
                                 .size(14)
                                 .make(),
                             Obx(
@@ -206,7 +206,7 @@ class _CartScreenState extends State<CartScreen> {
                             "  Bath"
                                 .text
                                 .fontFamily(regular)
-                                .color(greyDark1)
+                                .color(greyDark)
                                 .size(14)
                                 .make(),
                           ],
@@ -218,7 +218,7 @@ class _CartScreenState extends State<CartScreen> {
                         .withDecoration(BoxDecoration(
                           border: Border(
                             top: BorderSide(
-                                color: thinGrey01,
+                                color: greyColor1,
                                 width: 1), // ตั้งค่าเส้นขอบด้านบน
                           ),
                         ))

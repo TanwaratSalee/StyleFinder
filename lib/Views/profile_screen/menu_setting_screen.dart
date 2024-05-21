@@ -72,7 +72,7 @@ class MenuSettingScreen extends StatelessWidget {
           leading: Image.asset(profileButtonsIcon[index], width: 22),
           title: profileButtonsList[index]
               .text
-              .color(greyDark1)
+              .color(greyDark)
               .fontFamily(regular)
               .make(),
           trailing: const Icon(Icons.arrow_forward_ios, size: 16),
@@ -105,14 +105,14 @@ class MenuSettingScreen extends StatelessWidget {
               const SizedBox(width: 8),
               const Text('Logout')
                   .text
-                  .color(greyDark1)
+                  .color(greyDark)
                   .fontFamily(regular)
                   .make(),
             ],
           ),
         )
             .box
-            .color(thinGrey01)
+            .color(greyColor1)
             .rounded
             .margin(const EdgeInsets.symmetric(horizontal: 12, vertical: 8))
             .padding(const EdgeInsets.symmetric(horizontal: 8))
@@ -134,7 +134,7 @@ class MenuSettingScreen extends StatelessWidget {
                   .text
                   .size(18)
                   .fontFamily(regular)
-                  .color(greyDark2)
+                  .color(greyColor3)
                   .make(),
               45.heightBox,
               const Divider(
@@ -155,7 +155,7 @@ class MenuSettingScreen extends StatelessWidget {
                         width: 1, thickness: 1, color: greyColor),
                     Expanded(
                       child: TextButton(
-                        child: const Text('Logout',style: TextStyle(color: greyDark1, fontFamily: medium, fontSize: 14),),
+                        child: const Text('Logout',style: TextStyle(color: greyDark, fontFamily: medium, fontSize: 14),),
                         onPressed: () async {
                           await Get.put(AuthController())
                               .signoutMethod(context);

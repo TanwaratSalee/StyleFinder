@@ -16,7 +16,7 @@ class ChatScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: "${controller.friendName}".text.size(24).fontFamily(semiBold).color(greyDark2).make(),
+        title: "${controller.friendName}".text.size(24).fontFamily(semiBold).color(greyColor3).make(),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -41,7 +41,7 @@ class ChatScreen extends StatelessWidget {
                               return Center(
                                 child: "Send a message..."
                                     .text
-                                    .color(greyDark2)
+                                    .color(greyColor3)
                                     .make(),
                               );
                             } else {
@@ -68,9 +68,9 @@ class ChatScreen extends StatelessWidget {
                   controller: controller.msgController,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(
-                        borderSide: BorderSide(color: greyDark1)),
+                        borderSide: BorderSide(color: greyDark)),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: greyDark1)),
+                        borderSide: BorderSide(color: greyDark)),
                     hintText: "Type a message...",
                   ),
                 )),
