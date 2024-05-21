@@ -1,12 +1,12 @@
 import 'package:flutter_finalproject/Views/auth_screen/login_screen.dart';
 import 'package:flutter_finalproject/Views/auth_screen/termAndConditions.dart';
 import 'package:flutter_finalproject/Views/auth_screen/privacyPolicy.dart';
+import 'package:flutter_finalproject/Views/widgets_common/custom_textfield.dart';
 import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:flutter_finalproject/consts/lists.dart';
 import 'package:get/get.dart';
 import 'package:flutter_finalproject/controllers/auth_controller.dart';
 import 'package:flutter_finalproject/views/auth_screen/personal_details_screen.dart';
-import 'package:flutter_finalproject/views/widgets_common/custom_textfield.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -42,7 +42,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           children: [
             Image.asset(
               imgregister,
-              height: 200,
+              height: 170,
             ),
             10.heightBox,
             Text('Hello! Register to get started')
@@ -51,28 +51,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 .fontFamily(bold)
                 .make(),
             5.heightBox,
-            customTextField(
+           customTextField(
               label: capitalizeFirstLetter(fullname),
               controller: nameController,
               isPass: false,
               readOnly: false,
             ),
             const SizedBox(height: 15),
-            customTextField(
+           customTextField(
               label: email,
               controller: emailController,
               isPass: false,
               readOnly: false,
             ),
             const SizedBox(height: 15),
-            customTextField(
+           customTextField(
               label: password,
               controller: passwordController,
               isPass: true,
               readOnly: false,
             ),
             const SizedBox(height: 15),
-            customTextField(
+           customTextField(
               label: confirmPassword,
               controller: passwordRetypeController,
               isPass: true,

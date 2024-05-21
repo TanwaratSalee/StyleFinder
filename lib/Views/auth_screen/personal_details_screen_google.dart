@@ -156,7 +156,7 @@ class _PersonalDetailsScreenGoogleState
                   controller: TextEditingController(
                       text: DateFormat('EEEE, MMMM d, yyyy')
                           .format(selectedDate)),
-                  isPass: false,
+                  // isPass: false,
                 ),
               ),
             ),
