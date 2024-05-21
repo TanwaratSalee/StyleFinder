@@ -35,7 +35,8 @@ class LoginScreen extends StatelessWidget {
                           height: 200,
                         ),
                         SizedBox(height: 20),
-                        const Text(login,style: TextStyle(fontSize: 28, fontFamily: bold)),
+                        const Text(login,
+                            style: TextStyle(fontSize: 28, fontFamily: bold)),
                         SizedBox(height: 20),
                         customTextField(
                           label: email,
@@ -113,19 +114,25 @@ class LoginScreen extends StatelessWidget {
                                   }
                                 },
                                 child: Container(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 15, 0, 15),
+                                  padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
                                     border: Border.all(
-                                      color: greyLine,
+                                      color:greyLine, 
                                       width: 1,
                                     ),
                                   ),
-                                  child: Image.asset(
-                                    socialIconList[index],
-                                    width: 80,
-                                    height: 24,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image.asset(
+                                        socialIconList[index],
+                                        height: 24,
+                                        
+                                      ),
+                                      SizedBox(width:10), 
+                                      Text('Sign in with Google'),
+                                    ],
                                   ),
                                 ),
                               ),
@@ -141,9 +148,9 @@ class LoginScreen extends StatelessWidget {
                         Text(
                           "Don’t have an account? ",
                           style: TextStyle(
-                            color: whiteColor,
-                            fontSize: 16,
-                            fontFamily: bold,
+                            color: blackColor,
+                            fontSize: 14,
+                            fontFamily: regular,
                           ),
                         ),
                         TextButton(
@@ -151,7 +158,7 @@ class LoginScreen extends StatelessWidget {
                             'Sign Up',
                             style: TextStyle(
                               color: primaryApp,
-                              fontSize: 16,
+                              fontSize: 14,
                               fontFamily: bold,
                             ),
                           ),
