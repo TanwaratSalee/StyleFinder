@@ -11,15 +11,6 @@ Widget customTextField({
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      if (title != null)
-        Text(
-          title,
-          style: const TextStyle(
-            color: blackColor,
-            fontFamily: bold,
-            fontSize: 16,
-          ),
-        ),
       TextField(
         obscureText: isPass,
         controller: controller,
@@ -28,13 +19,13 @@ Widget customTextField({
           isDense: true,
           labelText: label,
           labelStyle: const TextStyle(
-              color: greyDark, fontFamily: regular, fontSize: 16),
+              color: greyDark, fontFamily: regular, fontSize: 18),
           hintStyle: const TextStyle(
-              color: greyDark, fontFamily: regular, fontSize: 16),
+              color: greyDark, fontFamily: regular, fontSize: 14),
           filled: true,
           fillColor: whiteColor,
           contentPadding:
-              const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+              const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: const BorderSide(color: greyLine),
