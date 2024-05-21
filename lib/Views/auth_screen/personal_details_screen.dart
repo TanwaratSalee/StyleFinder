@@ -80,12 +80,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: whiteColor,
-      appBar: AppBar(
-          title: const Text('Personal Details')
-              .text
-              .fontFamily(medium)
-              .size(20)
-              .make()),
+      appBar: AppBar(),
       bottomNavigationBar: SizedBox(
         height: 90,
         child: Padding(
@@ -136,9 +131,15 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 40),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           children: [
+            Text('Let\'s create your information!')
+                .text
+                .fontFamily(bold)
+                .size(32)
+                .make(),
+            const SizedBox(height: 20),
             Align(
               alignment: Alignment.topLeft,
               child: const Text('Birthday')
@@ -199,7 +200,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   fit: FlexFit.tight,
                   child: Padding(
                     padding: EdgeInsets.only(
-                        left: idx != 0 ? 6 : 0, right: idx != 2 ? 6 : 0),
+                        left: idx != 0 ? 13 : 0, right: idx != 2 ? 6 : 0),
                     child: ElevatedButton(
                       onPressed: isSelectable
                           ? () {
@@ -269,7 +270,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   .make(),
             ),
             const SizedBox(height: 10),
-             Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Expanded(
