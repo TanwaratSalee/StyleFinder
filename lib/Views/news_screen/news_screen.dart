@@ -1,6 +1,7 @@
 // ignore_for_file: unused_local_variable, sort_child_properties_last
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/news_screen/matchproduct_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
@@ -108,31 +109,27 @@ class NewsScreen extends StatelessWidget {
                     //     }),
                     50.heightBox,
 
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment
-                          .center, // Ensure alignment if needed
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      // Ensure alignment if needed
                       children: [
-                        'BRAND'
+                        'OFFICIAL STORE'
                             .text
-                            .fontFamily(medium)
+                            .fontFamily(bold)
                             .color(greyColor3)
-                            .size(22)
+                            .size(20)
                             .make(),
-                        Container(
-                          child: GestureDetector(
-                            child: Image.asset(
-                              icUndertext,
-                              width: 170,
-                            ),
-                          ),
-                        ),
+                        'See All >>'
+                            .text
+                            .fontFamily(bold)
+                            .color(greyColor3)
+                            .size(14)
+                            .make(),
                       ],
                     )
                         .box
-                        .color(thinPrimaryApp)
                         .padding(const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 70))
+                            vertical: 5, horizontal: 10))
                         .roundedLg
                         .make(),
 
@@ -159,50 +156,53 @@ class NewsScreen extends StatelessWidget {
                                 const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 4,
                               mainAxisSpacing: 12,
-                              crossAxisSpacing: 8,
-                              mainAxisExtent: 100,
+                              crossAxisSpacing: 11,
+                              mainAxisExtent: 40,
                             ),
                             itemBuilder: (context, index) {
                               return Column(
                                 children: [
                                   Expanded(
                                     child: Center(
-                                      child: Image.network(
-                                        allproductsdata[index]['imageUrl'],
-                                        width: 200,
-                                        height: 220,
-                                        fit: BoxFit.cover,
-                                        errorBuilder: (BuildContext context,
-                                            Object exception,
-                                            StackTrace? stackTrace) {
-                                          return Image.asset(
-                                            shopError,
-                                            width: 200,
-                                            height: 220,
-                                            fit: BoxFit.cover,
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                  Divider(
-                                    color: greyColor1,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "${allproductsdata[index]['vendor_name']}",
-                                        style: const TextStyle(
-                                          fontFamily: medium,
-                                          fontSize: 17,
-                                          color: greyColor3,
+                                        // child: Image.network(
+                                        //   allproductsdata[index]['imageUrl'],
+                                        //   width: 200,
+                                        //   height: 220,
+                                        //   fit: BoxFit.cover,
+                                        //   errorBuilder: (BuildContext context,
+                                        //       Object exception,
+                                        //       StackTrace? stackTrace) {
+                                        //     return Image.asset(
+                                        //       shopError,
+                                        //       width: 200,
+                                        //       height: 220,
+                                        //       fit: BoxFit.cover,
+                                        //     );
+                                        //   },
+                                        // ),
                                         ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
+                                  ),
+                                  // Divider(
+                                  //   color: greyColor1,
+                                  // ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(3.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "${allproductsdata[index]['vendor_name']}",
+                                          style: const TextStyle(
+                                            fontFamily: medium,
+                                            fontSize: 17,
+                                            color: greyColor3,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               )
@@ -216,8 +216,10 @@ class NewsScreen extends StatelessWidget {
                                   .onTap(() {
                                 Get.to(
                                   () {
-                                    var vendorId = allproductsdata[index]['vendor_id']; 
-                                    print("Navigating to StoreScreen with vendor_id: $vendorId"); 
+                                    var vendorId =
+                                        allproductsdata[index]['vendor_id'];
+                                    print(
+                                        "Navigating to StoreScreen with vendor_id: $vendorId");
                                     return StoreScreen(vendorId: vendorId);
                                   },
                                 );
@@ -231,32 +233,28 @@ class NewsScreen extends StatelessWidget {
 
                     Column(
                       mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            'MATCH BY STORE'
+                            'NEW PRODUCT'
                                 .text
-                                .fontFamily(medium)
+                                .fontFamily(bold)
                                 .color(greyColor3)
-                                .size(22)
+                                .size(20)
                                 .make(),
-                            Container(
-                              child: GestureDetector(
-                                child: Image.asset(
-                                  icUndertext,
-                                  width: 170,
-                                ),
-                              ),
-                            ),
+                            'See All >>'
+                                .text
+                                .fontFamily(bold)
+                                .color(greyColor3)
+                                .size(14)
+                                .make(),
                           ],
                         )
                             .box
-                            .color(thinPrimaryApp)
                             .padding(const EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 70))
+                                vertical: 5, horizontal: 10))
                             .roundedLg
                             .make(),
                         const SizedBox(height: 15),
@@ -270,54 +268,95 @@ class NewsScreen extends StatelessWidget {
                       ],
                     ),
                     InkWell(
-                       onTap: () {
+                      onTap: () {
                         Get.to(() => const ProductScreen(initialTabIndex: 1));
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text('Explote More')
-                              .text
-                              .fontFamily(medium)
-                              .size(17)
-                              .color(greyColor3)
-                              .make(),
-                          10.widthBox,
-                          Image.asset(
-                            icNext,
-                            width: 17,
-                          )
-                        ],
+                      ),
+                    ),
+                    50.heightBox,
+
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            'MATCH BY STORE'
+                                .text
+                                .fontFamily(bold)
+                                .color(greyColor3)
+                                .size(20)
+                                .make(),
+                            'See All >>'
+                                .text
+                                .fontFamily(bold)
+                                .color(greyColor3)
+                                .size(14)
+                                .make(),
+                          ],
+                        )
+                            .box
+                            .padding(const EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 10))
+                            .roundedLg
+                            .make(),
+                        const SizedBox(height: 15),
+                        SingleChildScrollView(
+                          physics: const NeverScrollableScrollPhysics(),
+                          child: Container(
+                            height: MediaQuery.of(context).size.height * 0.58,
+                            child: buildProductMathGrids(category),
+                          ),
+                        )
+                      ],
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Get.to(() => const ProductScreen(initialTabIndex: 1));
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        // children: [
+                        //   const Text('Explote More')
+                        //       .text
+                        //       .fontFamily(medium)
+                        //       .size(17)
+                        //       .color(greyColor3)
+                        //       .make(),
+                        //   10.widthBox,
+                        //   Image.asset(
+                        //     icNext,
+                        //     width: 17,
+                        //   )
+                        // ],
                       ),
                     ),
 
                     50.heightBox,
 
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment
-                          .center, 
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         'PRODUCT'
                             .text
-                            .fontFamily(medium)
+                            .fontFamily(bold)
                             .color(greyColor3)
-                            .size(22)
+                            .size(20)
                             .make(),
-                        Container(
-                          child: GestureDetector(
-                            child: Image.asset(
-                              icUndertext,
-                              width: 170,
-                            ),
-                          ),
-                        ),
+                        'See All >> '
+                            .text
+                            .fontFamily(bold)
+                            .color(greyColor3)
+                            .size(14)
+                            .make(),
                       ],
                     )
                         .box
-                        .color(thinPrimaryApp)
                         .padding(const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 70))
+                            vertical: 5, horizontal: 10))
                         .roundedLg
                         .make(),
 
@@ -427,19 +466,19 @@ class NewsScreen extends StatelessWidget {
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text('Explote More')
-                              .text
-                              .fontFamily(medium)
-                              .size(17)
-                              .color(greyColor3)
-                              .make(),
-                          10.widthBox,
-                          Image.asset(
-                            icNext,
-                            width: 17,
-                          )
-                        ],
+                        // children: [
+                        //   const Text('Explote More')
+                        //       .text
+                        //       .fontFamily(medium)
+                        //       .size(17)
+                        //       .color(greyColor3)
+                        //       .make(),
+                        //   10.widthBox,
+                        //   Image.asset(
+                        //     icNext,
+                        //     width: 17,
+                        //   )
+                        // ],
                       ),
                     ),
                     50.heightBox,
@@ -496,46 +535,47 @@ class NewsScreen extends StatelessWidget {
             var data1 = pair[0].data() as Map<String, dynamic>;
             var data2 = pair[1].data() as Map<String, dynamic>;
 
-          String vendorName1 = data1['p_seller'];
-          String vendorName2 = data2['p_seller'];
+            String vendorName1 = data1['p_seller'];
+            String vendorName2 = data2['p_seller'];
 
-          String vendor_id = data1['vendor_id'];
+            String vendor_id = data1['vendor_id'];
 
-          List<dynamic> collectionList = data1['p_mixmatch_collection'];
-          String description = data1['p_mixmatch_desc'];
-          
-          String price1 = data1['p_price'].toString();
-          String price2 = data2['p_price'].toString();
-          String totalPrice = (int.parse(price1) + int.parse(price2)).toString();
+            List<dynamic> collectionList = data1['p_mixmatch_collection'];
+            String description = data1['p_mixmatch_desc'];
 
-          String productName1 = data1['p_name'];
-          String productName2 = data2['p_name'];
+            String price1 = data1['p_price'].toString();
+            String price2 = data2['p_price'].toString();
+            String totalPrice =
+                (int.parse(price1) + int.parse(price2)).toString();
 
-          String productImage1 = data1['p_imgs'][0];
-          String productImage2 = data2['p_imgs'][0];
+            String productName1 = data1['p_name'];
+            String productName2 = data2['p_name'];
 
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MatchDetailScreen(
-                    price1: price1,
-                    price2: price2,
-                    productName1: productName1,
-                    productName2: productName2,
-                    productImage1: productImage1,
-                    productImage2: productImage2,
-                    totalPrice: totalPrice,
-                    vendorName1: vendorName1,
-                    vendorName2: vendorName2,
-                    vendor_id: vendor_id,
-                    collection: collectionList,
-                    description: description,
-                  ),
-                ),
-              );
-            },
+            String productImage1 = data1['p_imgs'][0];
+            String productImage2 = data2['p_imgs'][0];
+
+            return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MatchDetailScreen(
+                        price1: price1,
+                        price2: price2,
+                        productName1: productName1,
+                        productName2: productName2,
+                        productImage1: productImage1,
+                        productImage2: productImage2,
+                        totalPrice: totalPrice,
+                        vendorName1: vendorName1,
+                        vendorName2: vendorName2,
+                        vendor_id: vendor_id,
+                        collection: collectionList,
+                        description: description,
+                      ),
+                    ),
+                  );
+                },
                 child: Column(
                   children: [
                     Row(
