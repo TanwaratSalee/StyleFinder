@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/orders_screen/orders_details.dart';
 import 'package:flutter_finalproject/Views/orders_screen/writeReview_screen.dart';
-import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
+import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';

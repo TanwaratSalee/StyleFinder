@@ -1,25 +1,34 @@
 import 'package:flutter_finalproject/consts/consts.dart';
 
-Widget tapButton(
-    {
-      VoidCallback? onPress, Color? color, Color? textColor, String? title}) {
+Widget tapButton({
+  VoidCallback? onPress,
+  Color? color,
+  Color? textColor,
+  String? title,
+  Color? borderColor, // เพิ่มสีของเส้นรอบปุ่ม
+}) {
   return ElevatedButton(
     style: ElevatedButton.styleFrom(
       backgroundColor: color,
-       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+        side: BorderSide(color: borderColor ?? Colors.transparent, width: 2), // เปลี่ยนสีเส้นรอบปุ่มเป็นสีใส
       ),
       minimumSize: const Size(double.infinity, 45),
     ),
     onPressed: onPress,
-    child: (title ?? '')
-        .text
-        .size(16)
-        .color(textColor ?? blackColor)
-        .fontFamily(medium)
-        .make(),
+    child: Text(
+      title ?? '',
+      style: TextStyle(
+        fontSize: 16,
+        color: textColor ?? Colors.black,
+        fontFamily: medium,
+      ),
+    ),
   );
 }
+
+
 
 // Widget bottomButton(
 //     {VoidCallback? onPress, Color? color, Color? textColor, String? title}) {

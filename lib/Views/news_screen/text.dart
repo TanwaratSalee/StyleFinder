@@ -2,7 +2,7 @@ import 'package:flutter_finalproject/Views/auth_screen/forgot_screen.dart';
 import 'package:flutter_finalproject/Views/auth_screen/signup_screen.dart';
 import 'package:flutter_finalproject/Views/home_screen/mainHome.dart';
 import 'package:flutter_finalproject/Views/widgets_common/custom_textfield.dart';
-import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
+import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/consts/lists.dart';
 import 'package:flutter_finalproject/controllers/auth_controller.dart';
@@ -211,7 +211,7 @@ class LoginScreen extends StatelessWidget {
                         onPressed: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                                builder: (context) => const SignUpScreen()),
+                                builder: (context) => const RegisterScreen()),
                           );
                         },
                       ),
