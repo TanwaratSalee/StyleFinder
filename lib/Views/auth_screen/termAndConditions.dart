@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_finalproject/consts/styles.dart';
 
 class TermAndConditions extends StatelessWidget {
   const TermAndConditions({super.key});
@@ -23,7 +24,7 @@ class TermAndConditions extends StatelessWidget {
             children: const [
               Text(
                 '1. Acceptance of Terms',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style: TextStyle(fontFamily: bold, fontSize: 18),
               ),
               SizedBox(height: 8),
               Text(
@@ -32,7 +33,7 @@ class TermAndConditions extends StatelessWidget {
               SizedBox(height: 16),
               Text(
                 '2. Modifications to Terms',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style: TextStyle(fontFamily: bold, fontSize: 18),
               ),
               SizedBox(height: 8),
               Text(
@@ -41,7 +42,7 @@ class TermAndConditions extends StatelessWidget {
               SizedBox(height: 16),
               Text(
                 '3. Educational Use Only',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style: TextStyle(fontFamily: bold, fontSize: 18),
               ),
               SizedBox(height: 8),
               Text(
@@ -50,7 +51,7 @@ class TermAndConditions extends StatelessWidget {
               SizedBox(height: 16),
               Text(
                 '4. Limitation of Liability',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style: TextStyle(fontFamily: bold, fontSize: 18),
               ),
               SizedBox(height: 8),
               Text(
@@ -59,7 +60,7 @@ class TermAndConditions extends StatelessWidget {
               SizedBox(height: 16),
               Text(
                 '5. Intellectual Property Rights',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style: TextStyle(fontFamily: bold, fontSize: 18),
               ),
               SizedBox(height: 8),
               Text(
@@ -68,7 +69,7 @@ class TermAndConditions extends StatelessWidget {
               SizedBox(height: 16),
               Text(
                 '6. Termination of Use',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style: TextStyle(fontFamily: bold, fontSize: 18),
               ),
               SizedBox(height: 8),
               Text(
@@ -77,7 +78,7 @@ class TermAndConditions extends StatelessWidget {
               SizedBox(height: 16),
               Text(
                 '7. Governing Law',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style: TextStyle(fontFamily: bold, fontSize: 18),
               ),
               SizedBox(height: 8),
               Text(
@@ -86,7 +87,7 @@ class TermAndConditions extends StatelessWidget {
               SizedBox(height: 16),
               Text(
                 '8. Contact Us',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style: TextStyle(fontFamily: bold, fontSize: 18),
               ),
               SizedBox(height: 8),
               Text(

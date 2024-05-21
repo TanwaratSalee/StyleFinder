@@ -13,7 +13,7 @@ class CollectionProductTabs extends StatelessWidget {
           bottom: const TabBar(
             isScrollable: true,
             indicatorColor: primaryApp,
-            labelStyle: TextStyle(fontSize: 13, fontFamily: regular, color: greyColor3),
+            labelStyle: TextStyle(fontSize: 13, fontFamily: regular, color: greyDark),
             unselectedLabelStyle: TextStyle(fontSize: 12, fontFamily: regular, color: greyDark),
             tabs: [
               Tab(text: 'All'),

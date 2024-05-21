@@ -149,7 +149,7 @@ class _ShippingDetailsState extends State<ShippingDetails> {
                 );
               },
             ),
-            const Divider(color: greyColor1),
+            const Divider(color: greyLine),
             Expanded(
               child: StreamBuilder<DocumentSnapshot>(
                 stream: FirebaseService().streamCurrentUserAddress(userId),
@@ -227,7 +227,7 @@ class _ShippingDetailsState extends State<ShippingDetails> {
                         ),
                       );
                     },
-                    separatorBuilder: (context, index) => Divider(color: greyColor1,),
+                    separatorBuilder: (context, index) => Divider(color: greyLine,),
                   );
                 },
               ),

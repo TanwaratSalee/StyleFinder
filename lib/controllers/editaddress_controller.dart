@@ -111,7 +111,7 @@ class _editaddressFormState extends State<editaddress_controller> {
             .text
             .size(24)
             .fontFamily(medium)
-            .color(greyColor3)
+            .color(greyDark)
             .make(),
       ),
       bottomNavigationBar: Padding(

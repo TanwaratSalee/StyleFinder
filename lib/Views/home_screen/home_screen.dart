@@ -245,7 +245,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           Text(
                                             "${NumberFormat('#,##0').format(double.parse(product['p_price']).toInt())} Bath",
                                             style: TextStyle(
-                                              color: greyColor3,
+                                              color: blackColor,
                                               fontSize: 16,
                                             ),
                                           ),

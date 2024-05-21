@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_finalproject/consts/styles.dart';
 
 class PrivacyPolicySceen extends StatelessWidget {
   const PrivacyPolicySceen({super.key});
@@ -16,14 +17,14 @@ class PrivacyPolicySceen extends StatelessWidget {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: const [
               Text(
                 '1. Information Collection',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style: TextStyle(fontFamily: bold, fontSize: 18),
               ),
               SizedBox(height: 8),
               Text(
@@ -32,7 +33,7 @@ class PrivacyPolicySceen extends StatelessWidget {
               SizedBox(height: 16),
               Text(
                 '2. Use of Information',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style: TextStyle(fontFamily: bold, fontSize: 18),
               ),
               SizedBox(height: 8),
               Text(
@@ -41,7 +42,7 @@ class PrivacyPolicySceen extends StatelessWidget {
               SizedBox(height: 16),
               Text(
                 '3. Data Security',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style: TextStyle(fontFamily: bold, fontSize: 18),
               ),
               SizedBox(height: 8),
               Text(
@@ -50,7 +51,7 @@ class PrivacyPolicySceen extends StatelessWidget {
               SizedBox(height: 16),
               Text(
                 '4. Third-Party Disclosure',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style: TextStyle(fontFamily: bold, fontSize: 18),
               ),
               SizedBox(height: 8),
               Text(
@@ -59,7 +60,7 @@ class PrivacyPolicySceen extends StatelessWidget {
               SizedBox(height: 16),
               Text(
                 '5. Cookies',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style: TextStyle(fontFamily: bold, fontSize: 18),
               ),
               SizedBox(height: 8),
               Text(
@@ -68,7 +69,7 @@ class PrivacyPolicySceen extends StatelessWidget {
               SizedBox(height: 16),
               Text(
                 '6. Children\'s Privacy',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style: TextStyle(fontFamily: bold, fontSize: 18),
               ),
               SizedBox(height: 8),
               Text(
@@ -77,7 +78,7 @@ class PrivacyPolicySceen extends StatelessWidget {
               SizedBox(height: 16),
               Text(
                 '7. Changes to This Privacy Policy',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style: TextStyle(fontFamily: bold, fontSize: 18),
               ),
               SizedBox(height: 8),
               Text(
@@ -86,7 +87,7 @@ class PrivacyPolicySceen extends StatelessWidget {
               SizedBox(height: 16),
               Text(
                 '8. Contact Us',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style: TextStyle(fontFamily: bold, fontSize: 18),
               ),
               SizedBox(height: 8),
               Text(

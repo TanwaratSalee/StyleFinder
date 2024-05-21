@@ -6,14 +6,9 @@ const Color whiteColor = Color.fromRGBO(255, 255, 255, 1);
 const Color blackColor = Color.fromARGB(255, 24, 24, 24);
 const Color golden = Color.fromRGBO(245, 214, 50, 1);
 const Color redColor = Color.fromARGB(255, 249, 87, 89);
-const Color backGround = Color.fromARGB(242, 242, 242, 242);
+const Color greyThin = Color.fromARGB(241, 223, 223, 223);
 const Color greyLine = Color.fromRGBO(195, 202, 207, 1);
 const Color greyColor = Color.fromRGBO(137, 144, 148, 1);
-const Color greyDark = Color.fromRGBO(126, 126, 131, 1);
-
-const Color greyColor0 = Color.fromARGB(255, 249, 87, 89);
-const Color greyColor1 = Color.fromARGB(255, 249, 87, 89);
-const Color greyColor3 = Color.fromARGB(255, 249, 87, 89);
-
+const Color greyDark = Color.fromRGBO(91, 91, 93, 1);
 
 const Color whiteOpacity = Color.fromRGBO(255, 255, 255, 0.5);

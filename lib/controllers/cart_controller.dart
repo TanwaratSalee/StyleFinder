@@ -32,6 +32,18 @@ class CartController extends GetxController {
     isMobileBankingExpanded.value = !isMobileBankingExpanded.value;
   }
 
+  var count = 1.obs;
+
+  void incrementCount() {
+    count++;
+  }
+
+  void decrementCount() {
+    if (count > 1) {
+      count--;
+    }
+  }
+
   Map<String, dynamic>? _selectedAddress;
   
   List<Map<String, dynamic>> selectedProducts = [];

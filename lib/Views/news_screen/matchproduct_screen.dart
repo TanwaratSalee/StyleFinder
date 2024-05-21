@@ -173,10 +173,10 @@ class MatchProductScreen extends StatelessWidget {
                   productName,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                ).text.color(greyColor3).fontFamily(medium).size(16).make(),
+                ).text.color(greyDark).fontFamily(medium).size(16).make(),
                 Text(
                   "${NumberFormat('#,##0').format(double.parse(price).toInt())} Bath",
-                ).text.color(greyColor3).fontFamily(regular).size(14).make(),
+                ).text.color(greyDark).fontFamily(regular).size(14).make(),
               ],
             ),
           ),
@@ -190,15 +190,15 @@ class MatchProductScreen extends StatelessWidget {
       children: [
         const Text(
           "Price ",
-        ).text.color(greyColor3).fontFamily(regular).size(14).make(),
+        ).text.color(greyDark).fontFamily(regular).size(14).make(),
         SizedBox(width: 5),
         Text(
           "${NumberFormat('#,##0').format(double.parse(totalPrice).toInt())} ",
-        ).text.color(greyColor3).fontFamily(medium).size(16).make(),
+        ).text.color(greyDark).fontFamily(medium).size(16).make(),
         SizedBox(width: 5),
         const Text(
           "Bath",
-        ).text.color(greyColor3).fontFamily(regular).size(14).make(),
+        ).text.color(greyDark).fontFamily(regular).size(14).make(),
       ],
     );
   }

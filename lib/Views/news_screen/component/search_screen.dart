@@ -55,7 +55,7 @@ class SearchScreen extends StatelessWidget {
               .text
               .fontFamily(medium)
               .size(18)
-              .color(greyColor3)
+              .color(greyDark)
               .overflow(TextOverflow.ellipsis)
               .softWrap(true)
               .make(),
@@ -90,7 +90,7 @@ class SearchScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: title!.text.size(24).fontFamily(semiBold).color(greyColor3).make(),
+        title: title!.text.size(24).fontFamily(semiBold).color(greyDark).make(),
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: fetchProducts(),

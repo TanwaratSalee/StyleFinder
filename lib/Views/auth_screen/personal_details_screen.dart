@@ -82,7 +82,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
       backgroundColor: whiteColor,
       appBar: AppBar(),
       bottomNavigationBar: SizedBox(
-        height: 90,
+        height: 80,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(20, 0, 20, 35),
           child: tapButton(
@@ -92,7 +92,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                     weightController.text.isNotEmpty &&
                     selectedSkinTone != null
                 ? primaryApp
-                : greyColor,
+                : greyThin,
             title: 'Done',
             textColor: selectedDate != null &&
                     selectedGender != null &&
@@ -146,7 +146,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   .text
                   .size(16)
                   .fontFamily(regular)
-                  .color(greyColor3)
+                  .color(greyDark)
                   .make(),
             ),
             const SizedBox(height: 10),
@@ -169,7 +169,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   .text
                   .size(16)
                   .fontFamily(regular)
-                  .color(greyColor3)
+                  .color(greyDark)
                   .make(),
             ),
             const SizedBox(height: 10),
@@ -183,7 +183,6 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 int idx = entry.key;
                 String gender = entry.value;
 
-                // สร้าง Icon ตามเพศ
                 IconData iconData;
                 switch (gender) {
                   case 'Man':
@@ -223,7 +222,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                             gender,
                             style: TextStyle(
                               fontFamily: regular,
-                              fontSize: 16,
+                              fontSize: 14,
                               color: isSelectable && selectedGender == gender
                                   ? primaryApp
                                   : greyColor,
@@ -245,13 +244,13 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                             side: BorderSide(
                                 color: selectedGender == gender
                                     ? primaryApp
-                                    : greyColor),
+                                    : greyLine),
                           ),
                         ),
                         elevation: MaterialStateProperty.all<double>(0),
                         padding: MaterialStateProperty.all<EdgeInsets>(
                           const EdgeInsets.symmetric(
-                              vertical: 15, horizontal: 25),
+                              vertical: 10),
                         ),
                       ),
                     ),
@@ -266,7 +265,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   .text
                   .size(16)
                   .fontFamily(regular)
-                  .color(greyColor3)
+                  .color(greyDark)
                   .make(),
             ),
             const SizedBox(height: 10),
@@ -305,15 +304,14 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   .text
                   .size(16)
                   .fontFamily(regular)
-                  .color(greyColor3)
+                  .color(greyDark)
                   .make(),
             ),
             const SizedBox(height: 10),
             Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment
-                      .start, // แก้ให้เป็น MainAxisAlignment.start
+                  mainAxisAlignment: MainAxisAlignment.start, 
                   children: skinTones.map((tone) {
                     return Row(
                       children: [
@@ -347,7 +345,6 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 40),
           ],
         ),
       ),

@@ -164,10 +164,10 @@ class _ProfileScreenState extends State<ProfileScreen>
         if (data.isEmpty) {
           return const Center(
             child: Text("No products you liked!",
-                style: TextStyle(color: greyColor3)),
+                style: TextStyle(color: greyDark)),
           );
         }
-        return ListView.separated(
+        return ListView.builder(
           itemCount: data.length,
           itemBuilder: (context, index) {
             return GestureDetector(
@@ -183,9 +183,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                 );
               },
               child: Container(
-                margin: const EdgeInsets.symmetric(
-                  horizontal: 4,
-                ),
+                margin: const EdgeInsets.symmetric(horizontal: 4),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -226,30 +224,23 @@ class _ProfileScreenState extends State<ProfileScreen>
                         ),
                       ),
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.favorite, color: Colors.red),
-                      onPressed: () async {
-                        await FirebaseFirestore.instance
-                            .collection(productsCollection)
-                            .doc(data[index].id)
-                            .update({
-                          'p_wishlist': FieldValue.arrayRemove(
-                              [FirebaseAuth.instance.currentUser!.uid])
-                        });
-                      },
-                    ),
+                    // IconButton(
+                    //   icon: const Icon(Icons.favorite, color: Colors.red),
+                    //   onPressed: () async {
+                    //     await FirebaseFirestore.instance
+                    //         .collection(productsCollection)
+                    //         .doc(data[index].id)
+                    //         .update({
+                    //       'p_wishlist': FieldValue.arrayRemove(
+                    //           [FirebaseAuth.instance.currentUser!.uid])
+                    //     });
+                    //   },
+                    // ),
                   ],
-                ),
+                ).box.border(color: greyThin).margin(EdgeInsets.all(12)).make(),
               ),
             );
           },
-          separatorBuilder: (context, index) => Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Divider(
-              color: greyColor1,
-              thickness: 1,
-            ),
-          ),
         );
       },
     );
@@ -268,7 +259,7 @@ class _ProfileScreenState extends State<ProfileScreen>
         if (data.isEmpty) {
           return const Center(
             child: Text("No products you liked!",
-                style: TextStyle(color: greyColor3)),
+                style: TextStyle(color: greyDark)),
           );
         }
 
@@ -489,7 +480,7 @@ class _ProfileScreenState extends State<ProfileScreen>
       }
       var wishlistNames = snapshot.data!.docs.map((doc) => doc['p_name']).toList();
       if (wishlistNames.isEmpty) {
-        return Center(child: Text("No products in your wishlist!", style: TextStyle(color: greyColor3)));
+        return Center(child: Text("No products in your wishlist!", style: TextStyle(color: greyDark)));
       }
 
       return ListView.separated(
@@ -605,7 +596,7 @@ class _ProfileScreenState extends State<ProfileScreen>
         if (documents.isEmpty) {
           return Center(
               child: Text("No products in your wishlist!",
-                  style: TextStyle(color: greyColor3)));
+                  style: TextStyle(color: greyDark)));
         }
         List<Map<String, dynamic>> pairs = [];
         for (var doc in documents) {
@@ -627,7 +618,7 @@ class _ProfileScreenState extends State<ProfileScreen>
         if (pairs.isEmpty) {
           return Center(
               child: Text("No complete pairs in your wishlist!",
-                  style: TextStyle(color: greyColor3)));
+                  style: TextStyle(color: greyDark)));
         }
 
         return ListView.builder(
@@ -639,7 +630,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                   horizontal: 10), // เพิ่ม Padding ด้านข้าง
               decoration: BoxDecoration(
                 border: Border(
-                  bottom: BorderSide(color: greyColor1), // เส้นใต้
+                  bottom: BorderSide(color: greyLine), // เส้นใต้
                 ),
               ),
               child: Stack(
@@ -748,7 +739,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                             Text(
                               "Total  ",
                               style: TextStyle(
-                                color: greyColor3,
+                                color: greyDark,
                                 fontFamily: regular,
                                 fontSize: 14,
                               ),
@@ -764,7 +755,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                             Text(
                               " Bath",
                               style: TextStyle(
-                                color: greyColor3,
+                                color: greyDark,
                                 fontFamily: regular,
                                 fontSize: 14,
                               ),

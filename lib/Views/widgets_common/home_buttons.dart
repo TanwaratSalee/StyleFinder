@@ -14,7 +14,7 @@ Widget homeButtons(
     children: [
       Icon(icon, size: 26),
       10.heightBox,
-      title!.text.fontFamily(regular).color(greyColor3).make(),
+      title!.text.fontFamily(regular).color(greyDark).make(),
     ],
   ).box.rounded.white.size(width, height).shadowSm.make();
 }

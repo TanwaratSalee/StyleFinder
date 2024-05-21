@@ -121,9 +121,9 @@ class NewsScreen extends StatelessWidget {
                             .make(),
                         'See All >>'
                             .text
-                            .fontFamily(bold)
+                            .fontFamily(medium)
                             .color(greyColor3)
-                            .size(14)
+                            .size(22)
                             .make(),
                       ],
                     )
@@ -182,27 +182,24 @@ class NewsScreen extends StatelessWidget {
                                         // ),
                                         ),
                                   ),
-                                  // Divider(
-                                  //   color: greyColor1,
-                                  // ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(3.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "${allproductsdata[index]['vendor_name']}",
-                                          style: const TextStyle(
-                                            fontFamily: medium,
-                                            fontSize: 17,
-                                            color: greyColor3,
-                                          ),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
+                                  Divider(
+                                    color: greyColor1,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "${allproductsdata[index]['vendor_name']}",
+                                        style: const TextStyle(
+                                          fontFamily: medium,
+                                          fontSize: 17,
+                                          color: greyColor3,
                                         ),
-                                      ],
-                                    ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
                                   ),
                                 ],
                               )
@@ -286,15 +283,9 @@ class NewsScreen extends StatelessWidget {
                           children: [
                             'MATCH BY STORE'
                                 .text
-                                .fontFamily(bold)
+                                .fontFamily(medium)
                                 .color(greyColor3)
-                                .size(20)
-                                .make(),
-                            'See All >>'
-                                .text
-                                .fontFamily(bold)
-                                .color(greyColor3)
-                                .size(14)
+                                .size(22)
                                 .make(),
                           ],
                         )
@@ -319,19 +310,19 @@ class NewsScreen extends StatelessWidget {
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        // children: [
-                        //   const Text('Explote More')
-                        //       .text
-                        //       .fontFamily(medium)
-                        //       .size(17)
-                        //       .color(greyColor3)
-                        //       .make(),
-                        //   10.widthBox,
-                        //   Image.asset(
-                        //     icNext,
-                        //     width: 17,
-                        //   )
-                        // ],
+                        children: [
+                          const Text('Explote More')
+                              .text
+                              .fontFamily(medium)
+                              .size(17)
+                              .color(greyColor3)
+                              .make(),
+                          10.widthBox,
+                          Image.asset(
+                            icNext,
+                            width: 17,
+                          )
+                        ],
                       ),
                     ),
 
@@ -342,15 +333,9 @@ class NewsScreen extends StatelessWidget {
                       children: [
                         'PRODUCT'
                             .text
-                            .fontFamily(bold)
+                            .fontFamily(medium)
                             .color(greyColor3)
-                            .size(20)
-                            .make(),
-                        'See All >> '
-                            .text
-                            .fontFamily(bold)
-                            .color(greyColor3)
-                            .size(14)
+                            .size(22)
                             .make(),
                       ],
                     )
@@ -421,7 +406,7 @@ class NewsScreen extends StatelessWidget {
                                           style: const TextStyle(
                                             fontFamily: medium,
                                             fontSize: 17,
-                                            color: greyColor3,
+                                            color: greyDark,
                                           ),
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
@@ -431,7 +416,7 @@ class NewsScreen extends StatelessWidget {
                                           style: const TextStyle(
                                             fontFamily: regular,
                                             fontSize: 14,
-                                            color: greyColor3,
+                                            color: greyDark,
                                           ),
                                         ),
                                         const SizedBox(height: 10),
@@ -466,19 +451,19 @@ class NewsScreen extends StatelessWidget {
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        // children: [
-                        //   const Text('Explote More')
-                        //       .text
-                        //       .fontFamily(medium)
-                        //       .size(17)
-                        //       .color(greyColor3)
-                        //       .make(),
-                        //   10.widthBox,
-                        //   Image.asset(
-                        //     icNext,
-                        //     width: 17,
-                        //   )
-                        // ],
+                        children: [
+                          const Text('Explote More')
+                              .text
+                              .fontFamily(medium)
+                              .size(17)
+                              .color(greyColor3)
+                              .make(),
+                          10.widthBox,
+                          Image.asset(
+                            icNext,
+                            width: 17,
+                          )
+                        ],
                       ),
                     ),
                     50.heightBox,
@@ -681,7 +666,7 @@ class NewsScreen extends StatelessWidget {
                   ],
                 )
                     .box
-                    .border(color: greyColor1)
+                    .border(color: greyLine)
                     .p8
                     .margin(EdgeInsets.all(2))
                     .roundedSM
@@ -735,7 +720,7 @@ class ButtonsGrid extends StatelessWidget {
             },
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(whiteColor),
-              foregroundColor: MaterialStateProperty.all<Color>(greyColor3),
+              foregroundColor: MaterialStateProperty.all<Color>(greyDark),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
