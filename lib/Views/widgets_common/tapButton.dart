@@ -12,7 +12,7 @@ Widget tapButton({
       backgroundColor: color,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
-        side: BorderSide(color: borderColor ?? Colors.transparent, width: 2), // เปลี่ยนสีเส้นรอบปุ่มเป็นสีใส
+        side: BorderSide(color: borderColor ?? Colors.transparent, width: 2), 
       ),
       minimumSize: const Size(double.infinity, 45),
     ),
