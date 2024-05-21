@@ -20,7 +20,6 @@ Widget customTextField({
             fontSize: 16,
           ),
         ),
-      const SizedBox(height: 15),
       TextField(
         obscureText: isPass,
         controller: controller,
