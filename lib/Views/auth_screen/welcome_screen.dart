@@ -1,3 +1,4 @@
+import 'package:flutter_finalproject/Views/auth_screen/login_screen.dart';
 import 'package:flutter_finalproject/Views/auth_screen/signup_screen.dart';
 import 'package:flutter_finalproject/Views/news_screen/text.dart';
 import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
@@ -27,7 +28,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               imgFirstpage,
               height: 300,
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 15),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,

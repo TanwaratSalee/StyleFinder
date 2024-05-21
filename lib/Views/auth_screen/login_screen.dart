@@ -15,39 +15,37 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var controller = Get.put(AuthController());
     return Scaffold(
+      appBar: AppBar(),
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();
         },
         child: Stack(
           children: [
-            // Background image
-            Positioned.fill(
-              child: Image.asset(
-                bgLogin,
-                fit: BoxFit.cover,
-              ),
-            ),
             Center(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+                padding: const EdgeInsets.symmetric(horizontal: 32),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Column(
                       children: [
-                        const Text('Log In',
-                            style: TextStyle(fontSize: 36, fontFamily: bold)),
-                        SizedBox(height: 16),
+                        Image.asset(
+                          imglogin,
+                          height: 200,
+                        ),
+                        SizedBox(height: 20),
+                        const Text(login,style: TextStyle(fontSize: 28, fontFamily: bold)),
+                        SizedBox(height: 20),
                         customTextField(
-                          label: 'Email',
+                          label: email,
                           isPass: false,
                           readOnly: false,
                           controller: controller.emailController,
                         ),
-                        const SizedBox(height: 15),
+                        const SizedBox(height: 10),
                         customTextField(
-                          label: 'Password',
+                          label: password,
                           isPass: true,
                           readOnly: false,
                           controller: controller.passwordController,
@@ -68,7 +66,7 @@ class LoginScreen extends StatelessWidget {
                               )
                             : tapButton(
                                 color: primaryApp,
-                                title: 'Login',
+                                title: 'Sign in',
                                 textColor: whiteColor,
                                 onPress: () async {
                                   controller.isloading(true);
@@ -136,15 +134,8 @@ class LoginScreen extends StatelessWidget {
                           ),
                         ),
                       ],
-                    )
-                        .box
-                        .white
-                        .padding(EdgeInsets.symmetric(
-                            horizontal: 24, vertical: 18))
-                        .margin(EdgeInsets.symmetric(horizontal: 24))
-                        .rounded
-                        .make(),
-                        20.heightBox,
+                    ),
+                    20.heightBox,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
