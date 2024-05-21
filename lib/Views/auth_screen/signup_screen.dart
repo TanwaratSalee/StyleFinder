@@ -1,20 +1,20 @@
 import 'package:flutter_finalproject/Views/auth_screen/termAndConditions.dart';
 import 'package:flutter_finalproject/Views/auth_screen/privacyPolicy.dart';
-import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
+import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:get/get.dart';
 import 'package:flutter_finalproject/controllers/auth_controller.dart';
 import 'package:flutter_finalproject/views/auth_screen/personal_details_screen.dart';
 import 'package:flutter_finalproject/views/widgets_common/custom_textfield.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
 
   @override
-  _SignUpScreenState createState() => _SignUpScreenState();
+  _RegisterScreenState createState() => _RegisterScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   var controller = Get.put(AuthController());
   final TextEditingController emailController = TextEditingController();
   final TextEditingController nameController = TextEditingController();

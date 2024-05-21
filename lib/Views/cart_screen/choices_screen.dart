@@ -2,7 +2,7 @@ import 'package:flutter_finalproject/Views/profile_screen/menu_addAddress_screen
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 import 'package:flutter_finalproject/Views/cart_screen/payment_method.dart';
-import 'package:flutter_finalproject/Views/widgets_common/our_button.dart';
+import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 
 class ChoicesScreen extends StatefulWidget {
   const ChoicesScreen({Key? key}) : super(key: key);
