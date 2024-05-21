@@ -82,12 +82,7 @@ class _PersonalDetailsScreenGoogleState
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: whiteColor,
-      appBar: AppBar(
-          title: const Text('Personal Details')
-              .text
-              .fontFamily(medium)
-              .size(20)
-              .make()),
+      appBar: AppBar(),
       bottomNavigationBar: SizedBox(
         height: 90,
         child: Padding(
@@ -137,6 +132,12 @@ class _PersonalDetailsScreenGoogleState
         padding: const EdgeInsets.symmetric(horizontal: 40),
         child: Column(
           children: [
+            Text('Let\'s create your information!')
+                .text
+                .fontFamily(bold)
+                .size(32)
+                .make(),
+            const SizedBox(height: 20),
             Align(
               alignment: Alignment.topLeft,
               child: const Text('Birthday')
@@ -146,6 +147,7 @@ class _PersonalDetailsScreenGoogleState
                   .color(greyColor3)
                   .make(),
             ),
+            const SizedBox(height: 10),
             GestureDetector(
               onTap: _showDatePicker,
               child: AbsorbPointer(
@@ -196,7 +198,7 @@ class _PersonalDetailsScreenGoogleState
                   fit: FlexFit.tight,
                   child: Padding(
                     padding: EdgeInsets.only(
-                        left: idx != 0 ? 6 : 0, right: idx != 2 ? 6 : 0),
+                        left: idx != 0 ? 13 : 0, right: idx != 2 ? 6 : 0),
                     child: ElevatedButton(
                       onPressed: isSelectable
                           ? () {
@@ -255,7 +257,6 @@ class _PersonalDetailsScreenGoogleState
                 );
               }).toList(),
             ),
-
             const SizedBox(height: 15),
             Align(
               alignment: Alignment.topLeft,
@@ -309,8 +310,7 @@ class _PersonalDetailsScreenGoogleState
             Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment
-                      .start, 
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: skinTones.map((tone) {
                     return Row(
                       children: [
@@ -344,7 +344,7 @@ class _PersonalDetailsScreenGoogleState
                 ),
               ],
             ),
-            ],
+          ],
         ),
       ),
     );
