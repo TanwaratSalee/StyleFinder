@@ -33,16 +33,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: whiteColor,
-      appBar: AppBar(
-          title: const Text('Create Account')
-              .text
-              .size(24)
-              .fontFamily(medium)
-              .make()),
+      appBar: AppBar(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(30),
         child: Column(
           children: [
+            Image.asset(
+              imgregister,
+              height: 200,
+            ),
             customTextField(
               label: capitalizeFirstLetter(fullname),
               controller: nameController,
@@ -86,8 +85,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 Expanded(
                   child: RichText(
-                    text: TextSpan(
-                      children: [
+                    text: TextSpan(children: [
                       TextSpan(
                           text: iAgree,
                           style: TextStyle(
