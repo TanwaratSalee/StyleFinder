@@ -116,13 +116,13 @@ class NewsScreen extends StatelessWidget {
                         'OFFICIAL STORE'
                             .text
                             .fontFamily(bold)
-                            .color(greyColor3)
+                            .color(greyColor)
                             .size(20)
                             .make(),
                         'See All >>'
                             .text
                             .fontFamily(medium)
-                            .color(greyColor3)
+                            .color(greyColor)
                             .size(22)
                             .make(),
                       ],
@@ -183,7 +183,7 @@ class NewsScreen extends StatelessWidget {
                                         ),
                                   ),
                                   Divider(
-                                    color: greyColor1,
+                                    color: greyColor,
                                   ),
                                   Column(
                                     crossAxisAlignment:
@@ -194,7 +194,7 @@ class NewsScreen extends StatelessWidget {
                                         style: const TextStyle(
                                           fontFamily: medium,
                                           fontSize: 17,
-                                          color: greyColor3,
+                                          color: greyColor,
                                         ),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
@@ -238,13 +238,13 @@ class NewsScreen extends StatelessWidget {
                             'NEW PRODUCT'
                                 .text
                                 .fontFamily(bold)
-                                .color(greyColor3)
+                                .color(greyColor)
                                 .size(20)
                                 .make(),
                             'See All >>'
                                 .text
                                 .fontFamily(bold)
-                                .color(greyColor3)
+                                .color(greyColor)
                                 .size(14)
                                 .make(),
                           ],
@@ -284,7 +284,7 @@ class NewsScreen extends StatelessWidget {
                             'MATCH BY STORE'
                                 .text
                                 .fontFamily(medium)
-                                .color(greyColor3)
+                                .color(greyColor)
                                 .size(22)
                                 .make(),
                           ],
@@ -315,7 +315,7 @@ class NewsScreen extends StatelessWidget {
                               .text
                               .fontFamily(medium)
                               .size(17)
-                              .color(greyColor3)
+                              .color(greyColor)
                               .make(),
                           10.widthBox,
                           Image.asset(
@@ -334,7 +334,7 @@ class NewsScreen extends StatelessWidget {
                         'PRODUCT'
                             .text
                             .fontFamily(medium)
-                            .color(greyColor3)
+                            .color(greyColor)
                             .size(22)
                             .make(),
                       ],
@@ -456,7 +456,7 @@ class NewsScreen extends StatelessWidget {
                               .text
                               .fontFamily(medium)
                               .size(17)
-                              .color(greyColor3)
+                              .color(greyColor)
                               .make(),
                           10.widthBox,
                           Image.asset(

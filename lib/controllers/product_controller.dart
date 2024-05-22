@@ -255,12 +255,12 @@ void addToWishlistUserMatch(String productNameTop, String productNameLower, Buil
           if (doc['p_name'] == productNameTop) {
             userData['p_name_top'] = productNameTop;
             userData['p_price_top'] = doc['p_price'];
-            userData['p_imgs_top'] = doc['p_imgs'];
+            userData['p_imgs_top'] = doc['p_imgs'][0];
             userData['vendor_id_top'] = doc['vendor_id'];
           } else if (doc['p_name'] == productNameLower) {
             userData['p_name_lower'] = productNameLower;
             userData['p_price_lower'] = doc['p_price'];
-            userData['p_imgs_lower'] = doc['p_imgs'];
+            userData['p_imgs_lower'] = doc['p_imgs'][0];
             userData['vendor_id_lower'] = doc['vendor_id'];
           }
         }
