@@ -1,19 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
+import 'package:flutter_finalproject/Views/news_screen/component/search_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/store_screen/mixandmatch_detail.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/news_controller.dart';
-import 'package:flutter_finalproject/services/firestore_services.dart';
+import 'package:flutter_finalproject/services/firestore_services.dart'
+    as MyFirestoreServices;
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class ProductScreen extends StatelessWidget {
   final int initialTabIndex;
+  final TextEditingController searchController = TextEditingController();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  const ProductScreen({Key? key, this.initialTabIndex = 0}) : super(key: key);
+  ProductScreen({Key? key, this.initialTabIndex = 0}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,12 +42,53 @@ class ProductScreen extends StatelessWidget {
     );
   }
 
-  Widget ProductMatchTabs(BuildContext context, int initialTabIndex) {
+   Widget ProductMatchTabs(BuildContext context, int initialTabIndex) {
     return DefaultTabController(
       length: 2,
       initialIndex: initialTabIndex,
       child: Column(
         children: <Widget>[
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  alignment: Alignment.center,
+                  child: TextFormField(
+                    controller: searchController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      suffixIcon: Icon(Icons.search, color: greyDark).onTap(() {
+                        if (searchController.text.isNotEmpty) {
+                          Get.to(() => SearchScreen(
+                                title: searchController.text,
+                              ));
+                        }
+                      }),
+                      filled: true,
+                      fillColor: whiteColor,
+                      hintText: 'Search',
+                      hintStyle: TextStyle(color: greyColor),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 25),
+                    ),
+                  ),
+                ).box.border(color: greyColor, width: 0.5).roundedLg.make(),
+              ),
+              10.widthBox,
+              IconButton(
+                icon: Icon(
+                  Icons.filter_list_rounded,
+                  color: greyDark,
+                  size: 30,
+                ),
+                onPressed: () {
+                  _scaffoldKey.currentState?.openEndDrawer();
+                },
+              ).box.border(color: greyColor, width: 0.5).roundedLg.make(),
+            ],
+          ).box.margin(EdgeInsets.fromLTRB(18, 0, 18, 10)).make(),
           TabBar(
             labelStyle: const TextStyle(
                 fontSize: 15, fontFamily: regular, color: greyDark),
@@ -58,8 +102,8 @@ class ProductScreen extends StatelessWidget {
           ),
           Divider(
             color: greyThin,
-            thickness: 2,
-            height: 3,
+            thickness: 1,
+            height: 2,
           ),
           Expanded(
             child: TabBarView(
@@ -111,7 +155,8 @@ class ProductScreen extends StatelessWidget {
                       children: [
                         buildProductGridAll(),
                         buildProductGrid('dresses', 'dresses'),
-                        buildProductGrid('outerwear & Costs', 'outerwear & Costs'),
+                        buildProductGrid(
+                            'outerwear & Costs', 'outerwear & Costs'),
                         buildProductGrid('blazers', 'blazers'),
                         buildProductGrid('suits', 'suits'),
                         buildProductGrid('blouses & Tops', 'blouses & Tops'),
@@ -161,11 +206,10 @@ class ProductScreen extends StatelessWidget {
   }
 
   Widget buildProductGridAll() {
-    var allproducts = '';
     var controller = Get.find<NewsController>();
 
     return StreamBuilder(
-      stream: FirestoreServices.allproducts(),
+      stream: MyFirestoreServices.FirestoreServices.allproducts(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) {
           return Center(
@@ -404,47 +448,48 @@ class ProductScreen extends StatelessWidget {
             }
             var data1 = pair[0].data() as Map<String, dynamic>;
             var data2 = pair[1].data() as Map<String, dynamic>;
-          String vendorName1 = data1['p_seller'];
-          String vendorName2 = data2['p_seller'];
+            String vendorName1 = data1['p_seller'];
+            String vendorName2 = data2['p_seller'];
 
-          String vendor_id = data1['vendor_id'];
+            String vendor_id = data1['vendor_id'];
 
-          List<dynamic> collectionList = data1['p_mixmatch_collection'];
-          String description = data1['p_mixmatch_desc'];
-          
-          String price1 = data1['p_price'].toString();
-          String price2 = data2['p_price'].toString();
-          String totalPrice = (int.parse(price1) + int.parse(price2)).toString();
+            List<dynamic> collectionList = data1['p_mixmatch_collection'];
+            String description = data1['p_mixmatch_desc'];
 
-          String productName1 = data1['p_name'];
-          String productName2 = data2['p_name'];
+            String price1 = data1['p_price'].toString();
+            String price2 = data2['p_price'].toString();
+            String totalPrice =
+                (int.parse(price1) + int.parse(price2)).toString();
 
-          String productImage1 = data1['p_imgs'][0];
-          String productImage2 = data2['p_imgs'][0];
+            String productName1 = data1['p_name'];
+            String productName2 = data2['p_name'];
 
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MatchDetailScreen(
-                    price1: price1,
-                    price2: price2,
-                    productName1: productName1,
-                    productName2: productName2,
-                    productImage1: productImage1,
-                    productImage2: productImage2,
-                    totalPrice: totalPrice,
-                    vendorName1: vendorName1,
-                    vendorName2: vendorName2,
-                    vendor_id: vendor_id,
-                    collection: collectionList,
-                    description: description,
-                  ),
-                ),
-              );
-            },
-              child: Column(
+            String productImage1 = data1['p_imgs'][0];
+            String productImage2 = data2['p_imgs'][0];
+
+            return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MatchDetailScreen(
+                        price1: price1,
+                        price2: price2,
+                        productName1: productName1,
+                        productName2: productName2,
+                        productImage1: productImage1,
+                        productImage2: productImage2,
+                        totalPrice: totalPrice,
+                        vendorName1: vendorName1,
+                        vendorName2: vendorName2,
+                        vendor_id: vendor_id,
+                        collection: collectionList,
+                        description: description,
+                      ),
+                    ),
+                  );
+                },
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[

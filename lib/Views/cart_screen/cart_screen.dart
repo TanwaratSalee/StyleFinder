@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_finalproject/Views/cart_screen/shipping_screen.dart';
@@ -73,39 +72,49 @@ class _CartScreenState extends State<CartScreen> {
                     child: ListView.builder(
                       itemCount: data.length,
                       itemBuilder: (BuildContext context, int index) {
-                        String formattedPrice = NumberFormat('#,##0', 'en_US').format(data[index]['tprice']);
+                        String formattedPrice = NumberFormat('#,##0', 'en_US')
+                            .format(data[index]['tprice']);
 
                         return Slidable(
                           key: Key(data[index].id),
-                          startActionPane: ActionPane(
+                          endActionPane: ActionPane(
                             motion: const ScrollMotion(),
                             children: [
                               SlidableAction(
                                 onPressed: (context) {
                                   FirestoreServices.deleteDocument(data[index].id);
                                 },
-                                backgroundColor: Colors.red,
-                                foregroundColor: Colors.white,
+                                backgroundColor: redColor,
+                                foregroundColor: whiteColor,
                                 icon: Icons.delete,
                                 label: 'Delete',
+                                spacing: 1, 
                               ),
                             ],
                           ),
                           child: InkWell(
                             onTap: () {
-                              navigateToItemDetails(context, data[index]['title']);
+                              navigateToItemDetails(
+                                  context, data[index]['title']);
                             },
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 6, horizontal: 16),
                               child: Column(
                                 children: [
                                   Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Container(
                                         padding: EdgeInsets.only(left: 5),
                                         alignment: Alignment.centerLeft,
-                                        child: Text("x${data[index]['qty']}").text.size(14).color(greyDark).fontFamily(regular).make(),
+                                        child: Text("x${data[index]['qty']}")
+                                            .text
+                                            .size(14)
+                                            .color(greyDark)
+                                            .fontFamily(regular)
+                                            .make(),
                                       ),
                                       15.widthBox,
                                       Container(
@@ -123,7 +132,8 @@ class _CartScreenState extends State<CartScreen> {
                                       SizedBox(width: 10),
                                       Expanded(
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Container(
                                               width: 140,
@@ -138,7 +148,10 @@ class _CartScreenState extends State<CartScreen> {
                                                 ),
                                               ),
                                             ),
-                                            (data[index]['productsize'] != null && data[index]['productsize'].isNotEmpty)
+                                            (data[index]['productsize'] !=
+                                                        null &&
+                                                    data[index]['productsize']
+                                                        .isNotEmpty)
                                                 ? Text(
                                                     'Size: ${data[index]['productsize']}',
                                                     style: TextStyle(
@@ -167,29 +180,34 @@ class _CartScreenState extends State<CartScreen> {
                                             width: 25,
                                             height: 25,
                                             child: FloatingActionButton(
-                                              onPressed: controller.decrementCount,
+                                              onPressed:
+                                                  controller.decrementCount,
                                               tooltip: 'Decrement',
                                               child: Icon(Icons.remove),
                                               backgroundColor: greyThin,
                                               shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(Radius.circular(6)),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(6)),
                                               ),
                                               elevation: 0,
                                             ),
                                           ),
                                           SizedBox(width: 10),
-                                          Obx(() => Text('${controller.count}', style: TextStyle(fontSize: 18))),
+                                          Obx(() => Text('${controller.count}',
+                                              style: TextStyle(fontSize: 18))),
                                           SizedBox(width: 10),
                                           SizedBox(
                                             width: 25,
                                             height: 25,
                                             child: FloatingActionButton(
-                                              onPressed: controller.incrementCount,
+                                              onPressed:
+                                                  controller.incrementCount,
                                               tooltip: 'Increment',
                                               child: Icon(Icons.add),
                                               backgroundColor: primaryApp,
                                               shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(Radius.circular(6)),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(6)),
                                               ),
                                               elevation: 0,
                                             ),
@@ -212,15 +230,37 @@ class _CartScreenState extends State<CartScreen> {
                     children: [
                       Row(
                         children: [
-                          "Total price  ".text.fontFamily(regular).color(greyDark).size(14).make(),
+                          "Total price  "
+                              .text
+                              .fontFamily(regular)
+                              .color(greyDark)
+                              .size(14)
+                              .make(),
                           Obx(
-                            () => "${controller.totalP.value}".numCurrency.text.size(18).fontFamily(medium).color(blackColor).make(),
+                            () => "${controller.totalP.value}"
+                                .numCurrency
+                                .text
+                                .size(18)
+                                .fontFamily(medium)
+                                .color(blackColor)
+                                .make(),
                           ),
-                          "  Bath".text.fontFamily(regular).color(greyDark).size(14).make(),
+                          "  Bath"
+                              .text
+                              .fontFamily(regular)
+                              .color(greyDark)
+                              .size(14)
+                              .make(),
                         ],
                       ),
                     ],
-                  ).box.padding(const EdgeInsets.all(14)).withDecoration(BoxDecoration(border: Border(top: BorderSide(color: greyLine, width: 1)))).make(),
+                  )
+                      .box
+                      .padding(const EdgeInsets.all(14))
+                      .withDecoration(BoxDecoration(
+                          border: Border(
+                              top: BorderSide(color: greyLine, width: 1))))
+                      .make(),
                 ],
               ),
             );
@@ -238,7 +278,8 @@ class _CartScreenState extends State<CartScreen> {
         .get()
         .then((QuerySnapshot querySnapshot) {
       if (querySnapshot.docs.isNotEmpty) {
-        var productData = querySnapshot.docs.first.data() as Map<String, dynamic>;
+        var productData =
+            querySnapshot.docs.first.data() as Map<String, dynamic>;
         Navigator.push(
           context,
           MaterialPageRoute(

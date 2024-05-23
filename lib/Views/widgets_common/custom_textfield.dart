@@ -18,7 +18,7 @@ import 'package:flutter_finalproject/consts/consts.dart';
 //             fontSize: 16,
 //           ),
 //           filled: true,
-//           fillColor: Colors.white,
+//           fillColor: whiteColor,
 //           contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
 //           border: OutlineInputBorder(
 //             borderRadius: BorderRadius.circular(12),

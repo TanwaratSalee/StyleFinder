@@ -298,7 +298,7 @@
 
 // Widget _buildExpandedList(BuildContext context) {
 //   return Card(
-//     color: Colors.white,
+//     color: whiteColor,
 //     shape: RoundedRectangleBorder(
 //       borderRadius: BorderRadius.circular(8.0),
 //       side: BorderSide(color: greyColor),

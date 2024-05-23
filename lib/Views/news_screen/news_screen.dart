@@ -2,7 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_finalproject/Views/news_screen/matchproduct_screen.dart';
+import 'package:flutter_finalproject/Views/news_screen/allStore_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/store_screen/mixandmatch_detail.dart';
@@ -50,21 +50,16 @@ class NewsScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     VxSwiper.builder(
-                        aspectRatio: 16 / 9,
+                        aspectRatio: 16 / 15,
                         autoPlay: true,
-                        height: 170,
+                        height: 195,
                         enlargeCenterPage: true,
                         itemCount: sliderslist.length,
                         itemBuilder: (context, index) {
                           return Image.asset(
-                            sliderslist[index],
+                            secondSlidersList[index],
                             fit: BoxFit.fill,
-                          )
-                              .box
-                              .rounded
-                              .clip(Clip.antiAlias)
-                              .margin(const EdgeInsets.symmetric(horizontal: 8))
-                              .make();
+                          ).box.rounded.make();
                         }),
 
                     // 30.heightBox,
@@ -107,146 +102,41 @@ class NewsScreen extends StatelessWidget {
                     //           .margin(const EdgeInsets.symmetric(horizontal: 8))
                     //           .make();
                     //     }),
-                    50.heightBox,
+                    30.heightBox,
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      // Ensure alignment if needed
-                      children: [
-                        'OFFICIAL STORE'
-                            .text
-                            .fontFamily(bold)
-                            .color(greyColor)
-                            .size(20)
-                            .make(),
-                        'See All >>'
-                            .text
-                            .fontFamily(medium)
-                            .color(greyColor)
-                            .size(22)
-                            .make(),
-                      ],
-                    )
-                        .box
-                        .padding(const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 10))
-                        .roundedLg
-                        .make(),
-
-                    15.heightBox,
-                    StreamBuilder(
-                      stream: FirestoreServices.allmatchbystore(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<QuerySnapshot> snapshot) {
-                        if (!snapshot.hasData) {
-                          return Center(
-                            child: loadingIndicator(),
-                          );
-                        } else {
-                          var allproductsdata = snapshot.data!.docs;
-                          allproductsdata.shuffle(math.Random());
-
-                          int itemCount = math.min(allproductsdata.length, 4);
-
-                          return GridView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: itemCount,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 4,
-                              mainAxisSpacing: 12,
-                              crossAxisSpacing: 11,
-                              mainAxisExtent: 40,
-                            ),
-                            itemBuilder: (context, index) {
-                              return Column(
-                                children: [
-                                  Expanded(
-                                    child: Center(
-                                        // child: Image.network(
-                                        //   allproductsdata[index]['imageUrl'],
-                                        //   width: 200,
-                                        //   height: 220,
-                                        //   fit: BoxFit.cover,
-                                        //   errorBuilder: (BuildContext context,
-                                        //       Object exception,
-                                        //       StackTrace? stackTrace) {
-                                        //     return Image.asset(
-                                        //       shopError,
-                                        //       width: 200,
-                                        //       height: 220,
-                                        //       fit: BoxFit.cover,
-                                        //     );
-                                        //   },
-                                        // ),
-                                        ),
-                                  ),
-                                  Divider(
-                                    color: greyColor,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "${allproductsdata[index]['vendor_name']}",
-                                        style: const TextStyle(
-                                          fontFamily: medium,
-                                          fontSize: 17,
-                                          color: greyColor,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )
-                                  .box
-                                  .white
-                                  .rounded
-                                  .shadowSm
-                                  .margin(
-                                      const EdgeInsets.symmetric(horizontal: 2))
-                                  .make()
-                                  .onTap(() {
-                                Get.to(
-                                  () {
-                                    var vendorId =
-                                        allproductsdata[index]['vendor_id'];
-                                    print(
-                                        "Navigating to StoreScreen with vendor_id: $vendorId");
-                                    return StoreScreen(vendorId: vendorId);
-                                  },
-                                );
-                              });
-                            },
-                          );
-                        }
-                      },
-                    ),
-                    50.heightBox,
-
+                    //No.2
                     Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            'NEW PRODUCT'
+                            'OFFICIAL STORE'
                                 .text
                                 .fontFamily(bold)
-                                .color(greyColor)
+                                .color(blackColor)
                                 .size(20)
                                 .make(),
-                            'See All >>'
-                                .text
-                                .fontFamily(bold)
-                                .color(greyColor)
-                                .size(14)
-                                .make(),
+                            InkWell(
+                              onTap: () {
+                                Get.to(() => AllStoreScreen());
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text('See All')
+                                      .text
+                                      .fontFamily(medium)
+                                      .size(16)
+                                      .color(blackColor)
+                                      .make(),
+                                  10.widthBox,
+                                  Image.asset(
+                                    icSeeall,
+                                    width: 14,
+                                  )
+                                ],
+                              ),
+                            ),
                           ],
                         )
                             .box
@@ -254,89 +144,242 @@ class NewsScreen extends StatelessWidget {
                                 vertical: 5, horizontal: 10))
                             .roundedLg
                             .make(),
-                        const SizedBox(height: 15),
-                        SingleChildScrollView(
-                          physics: const NeverScrollableScrollPhysics(),
-                          child: Container(
-                            height: MediaQuery.of(context).size.height * 0.58,
-                            child: buildProductMathGrids(category),
-                          ),
-                        )
+                        15.heightBox,
+                        StreamBuilder(
+                          stream: FirestoreServices.allmatchbystore(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<QuerySnapshot> snapshot) {
+                            if (!snapshot.hasData) {
+                              return Center(
+                                child: loadingIndicator(),
+                              );
+                            } else {
+                              var allproductsdata = snapshot.data!.docs;
+                              allproductsdata.shuffle(math.Random());
+
+                              int itemCount =
+                                  math.min(allproductsdata.length, 4);
+
+                              return SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: List.generate(itemCount, (index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        var vendorId =
+                                            allproductsdata[index]['vendor_id'];
+                                        print(
+                                            "Navigating to StoreScreen with vendor_id: $vendorId");
+                                        Get.to(() =>
+                                            StoreScreen(vendorId: vendorId));
+                                      },
+                                      child: Container(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "${allproductsdata[index]['vendor_name']}",
+                                              style: const TextStyle(
+                                                fontFamily: medium,
+                                                fontSize: 17,
+                                                color: blackColor,
+                                              ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                          .box
+                                          .white
+                                          .roundedSM
+                                          .border(color: greyLine)
+                                          .margin(const EdgeInsets.symmetric(
+                                              horizontal: 5))
+                                          .padding(const EdgeInsets.symmetric(
+                                              horizontal: 24, vertical: 8))
+                                          .make(),
+                                    );
+                                  }),
+                                ),
+                              );
+                            }
+                          },
+                        ),
                       ],
                     ),
-                    InkWell(
-                      onTap: () {
-                        Get.to(() => const ProductScreen(initialTabIndex: 1));
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                      ),
-                    ),
-                    50.heightBox,
+                    30.heightBox,
 
                     Column(
-                      mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            'MATCH BY STORE'
+                            'POPULAR PRODUCT ON THIS WEEK'
                                 .text
-                                .fontFamily(medium)
-                                .color(greyColor)
-                                .size(22)
+                                .fontFamily(bold)
+                                .color(blackColor)
+                                .size(20)
                                 .make(),
+                                15.heightBox,
+                              Column(
+                                children: [
+                                  StreamBuilder(
+                                    stream: FirebaseFirestore.instance
+                                        .collection(productsCollection)
+                                        .snapshots(),
+                                    builder: (context, snapshot) {
+                                      if (!snapshot.hasData) {
+                                        return Center(
+                                            child: loadingIndicator());
+                                      } else {
+                                        var allproductsdata =
+                                            snapshot.data!.docs;
+
+                                        return GridView.builder(
+                                          shrinkWrap: true,
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          gridDelegate:
+                                              SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 2,
+                                            childAspectRatio: 10 / 4,
+                                            mainAxisSpacing: 5,
+                                            crossAxisSpacing: 10,
+                                          ),
+                                          itemCount: 10,
+                                          itemBuilder: (context, index) {
+                                            var product =
+                                                allproductsdata[index];
+                                            return GestureDetector(
+                                              onTap: () {
+                                                Get.to(() => ItemDetails(
+                                                      title: product['p_name'],
+                                                      data: product,
+                                                    ));
+                                              },
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  ProductCard(
+                                                    rank: index + 1,
+                                                    image:
+                                                        'https://via.placeholder.com/50',
+                                                    price: '1000',
+                                                    likes: 100 - index,
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ],
+                              ),
+                            
                           ],
                         )
                             .box
-                            .padding(const EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 10))
+                            // .padding(const EdgeInsets.symmetric(
+                            //     vertical: 5, horizontal: 10))
                             .roundedLg
                             .make(),
-                        const SizedBox(height: 15),
-                        SingleChildScrollView(
-                          physics: const NeverScrollableScrollPhysics(),
-                          child: Container(
-                            height: MediaQuery.of(context).size.height * 0.58,
-                            child: buildProductMathGrids(category),
-                          ),
-                        )
                       ],
                     ),
-                    InkWell(
-                      onTap: () {
-                        Get.to(() => const ProductScreen(initialTabIndex: 1));
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text('Explote More')
-                              .text
-                              .fontFamily(medium)
-                              .size(17)
-                              .color(greyColor)
-                              .make(),
-                          10.widthBox,
-                          Image.asset(
-                            icNext,
-                            width: 17,
-                          )
-                        ],
-                      ),
-                    ),
 
-                    50.heightBox,
+                    30.heightBox,
+
+                   Column(
+  children: [
+    StreamBuilder(
+      stream: FirebaseFirestore.instance
+          .collection(productsCollection)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(child: loadingIndicator());
+        } else {
+          var allproductsdata = snapshot.data!.docs;
+
+          return GridView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 10 / 4,
+              mainAxisSpacing: 5,
+              crossAxisSpacing: 10,
+            ),
+            itemCount: allproductsdata.length,
+            itemBuilder: (context, index) {
+              var product = allproductsdata[index];
+              return GestureDetector(
+                onTap: () {
+                  Get.to(() => ItemDetails(
+                        title: product['p_name'],
+                        data: product,
+                      ));
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ProductCard(
+                      rank: index + 1,
+                      image: product['p_image'], // ดึงรูปภาพจาก Firestore
+                      price: product['p_price'].toString(), // ดึงราคา
+                      likes: product['p_likes'], // ดึงจำนวนไลค์
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        }
+      },
+    ),
+  ],
+),
+
+                    30.heightBox,
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         'PRODUCT'
                             .text
-                            .fontFamily(medium)
-                            .color(greyColor)
-                            .size(22)
+                            .fontFamily(bold)
+                            .color(blackColor)
+                            .size(20)
                             .make(),
+                        InkWell(
+                          onTap: () {
+                            Get.to(() => ProductScreen(initialTabIndex: 1));
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text('See All')
+                                  .text
+                                  .fontFamily(medium)
+                                  .size(16)
+                                  .color(blackColor)
+                                  .make(),
+                              10.widthBox,
+                              Image.asset(
+                                icSeeall,
+                                width: 14,
+                              )
+                            ],
+                          ),
+                        ),
                       ],
                     )
                         .box
@@ -345,10 +388,7 @@ class NewsScreen extends StatelessWidget {
                         .roundedLg
                         .make(),
 
-                    const SizedBox(
-                      height: 15,
-                    ),
-
+15.heightBox,
                     StreamBuilder(
                       stream: FirestoreServices.allproducts(),
                       builder: (BuildContext context,
@@ -428,7 +468,7 @@ class NewsScreen extends StatelessWidget {
                                   .box
                                   .white
                                   .rounded
-                                  .shadowSm
+                                  .border(color: greyLine)
                                   .margin(
                                       const EdgeInsets.symmetric(horizontal: 2))
                                   .make()
@@ -445,28 +485,6 @@ class NewsScreen extends StatelessWidget {
                       },
                     ),
                     20.heightBox,
-                    InkWell(
-                      onTap: () {
-                        Get.to(() => const ProductScreen());
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text('Explote More')
-                              .text
-                              .fontFamily(medium)
-                              .size(17)
-                              .color(greyColor)
-                              .make(),
-                          10.widthBox,
-                          Image.asset(
-                            icNext,
-                            width: 17,
-                          )
-                        ],
-                      ),
-                    ),
-                    50.heightBox,
                   ],
                 ),
               ),
@@ -507,7 +525,6 @@ class NewsScreen extends StatelessWidget {
         int itemCount = validPairs.length;
         return GridView.builder(
           physics: const NeverScrollableScrollPhysics(),
-          // padding: const EdgeInsets.all(8),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             mainAxisSpacing: 7,
@@ -591,14 +608,14 @@ class NewsScreen extends StatelessWidget {
                               ),
                               Text(
                                 "${NumberFormat('#,##0').format(double.parse(price1).toInt())} Bath",
-                                style: const TextStyle(color: Colors.grey),
+                                style: const TextStyle(color: greyColor),
                               ),
                             ],
                           ),
                         )
                       ],
                     ),
-                    5.heightBox,
+                    3.heightBox,
                     Row(
                       children: [
                         Image.network(
@@ -607,7 +624,7 @@ class NewsScreen extends StatelessWidget {
                           height: 90,
                           fit: BoxFit.cover,
                         ),
-                        5.widthBox,
+                        3.widthBox,
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -627,7 +644,7 @@ class NewsScreen extends StatelessWidget {
                               ),
                               Text(
                                 "${NumberFormat('#,##0').format(double.parse(price2).toInt())} Bath",
-                                style: const TextStyle(color: Colors.grey),
+                                style: const TextStyle(color: greyColor),
                               ),
                             ],
                           ),
@@ -694,8 +711,7 @@ class GridCardExample extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         return Card(
           elevation: 2,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10)), // ขอบมนของการ์ด
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         );
       },
     );
@@ -734,6 +750,79 @@ class ButtonsGrid extends StatelessWidget {
           ),
         );
       }),
+    );
+  }
+}
+
+class ProductCard extends StatelessWidget {
+  final int rank;
+  final String image;
+  final String price;
+  final int likes;
+
+  const ProductCard({
+    Key? key,
+    required this.rank,
+    required this.image,
+    required this.price,
+    required this.likes,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: greyLine),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 24,
+            height: 24,
+            child: CircleAvatar(
+              backgroundColor: greyThin,
+              child: Text(rank.toString()).text.size(10).color(blackColor).make(),
+            ),
+          ),
+          SizedBox(width: 10),
+          Image.network(
+            image,
+            width: 60,
+            height: 65,
+            fit: BoxFit.cover,
+          ),
+          SizedBox(width: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                NumberFormat('#,##0 Bath', 'th').format(double.parse(price)),
+                style: TextStyle(
+                  fontFamily: medium,
+                  fontSize: 16,
+                ),
+              ),
+              Row(
+                children: [
+                  Image.asset(
+                    icTapLike,
+                    width: 25,
+                  ),
+                  SizedBox(width: 5),
+                  Text(
+                    likes.toString(),
+                    style: TextStyle(
+                      fontFamily: regular,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ).box.padding(EdgeInsets.symmetric(horizontal: 6, vertical: 3)).make(),
     );
   }
 }

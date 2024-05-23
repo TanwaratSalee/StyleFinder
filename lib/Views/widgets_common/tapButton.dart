@@ -5,14 +5,16 @@ Widget tapButton({
   Color? color,
   Color? textColor,
   String? title,
-  Color? borderColor, // เพิ่มสีของเส้นรอบปุ่ม
+  Color? borderColor, 
+  double elevation = 2.0,
 }) {
   return ElevatedButton(
     style: ElevatedButton.styleFrom(
       backgroundColor: color,
+      elevation: elevation,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
-        side: BorderSide(color: borderColor ?? Colors.transparent, width: 2), 
+        side: BorderSide(color: borderColor ?? Colors.transparent, width: 1), 
       ),
       minimumSize: const Size(double.infinity, 45),
     ),

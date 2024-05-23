@@ -82,7 +82,6 @@ Future<void> popupForgotPassword(BuildContext context, String email) async {
     barrierDismissible: true,
     builder: (BuildContext context) {
       return AlertDialog(
-        backgroundColor: Colors.white,
         content: SingleChildScrollView(
           child: ListBody(
             children: <Widget>[
@@ -115,7 +114,7 @@ Future<void> popupForgotPassword(BuildContext context, String email) async {
                       style: TextStyle(
                         fontFamily: medium,
                         fontSize: 16,
-                        color: Colors.white,
+                        color: whiteColor,
                       ),
                     ),
                   ).box.width(context.screenWidth).roundedSM.margin(const EdgeInsets.symmetric(horizontal: 10)).color(primaryApp).make(),
@@ -123,7 +122,7 @@ Future<void> popupForgotPassword(BuildContext context, String email) async {
               ),
             ],
           ),
-        ),
+        )
       );
     },
   );

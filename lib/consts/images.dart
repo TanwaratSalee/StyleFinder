@@ -111,6 +111,8 @@ const String icLogout = "assets/icons/iconsAccount/logout.png";
 // News Screen
 const String icNext = "assets/icons/icNormal/Iconnext.png";
 const String icUndertext = "assets/icons/icNormal/undertext.png";
+const String icSeeall = "assets/icons/seeall.png";
+const String icTapLike = "assets/icons/redlike.png";
 
 // Paymet
 const String imgSuccessful = "assets/images/payment/paymentSuccessful.png";
@@ -150,8 +152,8 @@ const String icFav = "assets/icons/icNormal/buttonFavourite.png";
 const String icClickFav = "assets/icons/icNormal/ckickbuttonFavourite.png";
 
 //----------------------------------------------- popup -----------------------------------------------
-const String imgPopupEmail = 'assets/images/sentToEmail.png.PNG';
-const String imgPopupPayment = 'assets/images/paymentSuccessful.png.PNG';
+const String imgPopupEmail = 'assets/images/sentToEmail.png';
+const String imgPopupPayment = 'assets/images/paymentSuccessful.png';
 const String shopError = 'assets/images/ShopError.png';
 const String imgError = 'assets/images/imgError.png';
 const String imgFirstpage = 'assets/images/imgWelcometoStyleFinder.png';

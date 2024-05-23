@@ -18,7 +18,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: whiteColor,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -74,23 +74,19 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               },
             ).box.margin(EdgeInsets.symmetric(horizontal: 30)).make(),
             SizedBox(height: 15),
-            
-            TextButton(
-                onPressed: () {
-                  isloading(true);
-                 Get.to(() => RegisterScreen());
-                },
-                style: TextButton.styleFrom(
-                  
-                  textStyle: TextStyle(
-                    fontSize: 16,
-                    fontFamily: medium
-                  ),
-                ),
-                child: Text('Register').text.black.make(),
-              ).box.padding(EdgeInsets.symmetric(horizontal: 125)).roundedSM.border(color: greyDark).make(),
-
+            tapButton(
+              borderColor: blackColor,
+              color: whiteColor,
+              title: 'Register',
+              textColor: blackColor,
+              elevation: 0,
+              onPress: () async {
+                isloading(true);
+                await Get.to(() => RegisterScreen());
+              },
+            ).box.margin(EdgeInsets.symmetric(horizontal: 30)).make(),
             Spacer(),
+            
             TextButton(
               onPressed: () {
                 

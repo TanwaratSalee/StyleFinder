@@ -252,7 +252,7 @@ class EditProfileScreen extends StatelessWidget {
                         padding: EdgeInsets.all(8),
                         child: Icon(
                           Icons.edit,
-                          color: Colors.white,
+                          color: whiteColor,
                           size: 20,
                         ),
                       ),

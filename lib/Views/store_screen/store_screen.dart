@@ -325,7 +325,7 @@ class StoreScreen extends StatelessWidget {
                 ),
               )
                   .box
-                  .color(Colors.white)
+                  .color(whiteColor)
                   .border(color: Colors.grey[300]!)
                   .margin(EdgeInsets.all(6))
                   .rounded

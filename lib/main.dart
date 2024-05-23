@@ -20,10 +20,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           useMaterial3: true,
-          // Manually defined ColorScheme
           colorScheme: ColorScheme(
             brightness: Brightness.light,
-            primary: thinPrimaryApp,
+            primary: greyColor,
             onPrimary: whiteColor,
             secondary: whiteColor,
             onSecondary: blackColor,
@@ -41,7 +40,12 @@ class MyApp extends StatelessWidget {
               elevation: 0.0,
               backgroundColor: Colors.transparent),
           primaryColor: primaryApp,
-          fontFamily: regular),
+          fontFamily: regular,
+          textSelectionTheme: TextSelectionThemeData(
+            selectionColor: thinPrimaryApp,
+            selectionHandleColor: primaryApp,
+            cursorColor: primaryApp,
+          )),
       home: const SplashScreen(),
     );
   }

@@ -225,7 +225,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   height: 24,
                                 ),
                                 SizedBox(width: 10),
-                                Text('Sign in with Google'),
+                                Text('Register with Google'),
                               ],
                             ),
                           ),

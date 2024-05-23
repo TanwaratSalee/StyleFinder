@@ -30,7 +30,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
     var controller = Get.find<CartController>();
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: whiteColor,
       appBar: AppBar(
         title: Text('Select Payment Method')
             .text

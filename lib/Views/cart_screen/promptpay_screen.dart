@@ -137,9 +137,9 @@ class _PromptpayScreenState extends State<PromptpayScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Display QR Code'),
-        backgroundColor: Colors.white, // สีของ AppBar
+        backgroundColor: whiteColor, // สีของ AppBar
       ),
-      backgroundColor: Colors.white, // สีพื้นหลังของ Scaffold
+      backgroundColor: whiteColor, // สีพื้นหลังของ Scaffold
       body: Center(
         child: Container(
           width: 300, // ความกว้างของสี่เหลี่ยม
