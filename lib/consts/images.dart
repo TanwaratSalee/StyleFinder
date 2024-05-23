@@ -160,3 +160,5 @@ const String imgFirstpage = 'assets/images/imgWelcometoStyleFinder.png';
 const String imglogin = 'assets/images/img2DLogin.png';
 const String imgregister = 'assets/images/img2DRigistor.png';
 const String imgpayment = 'assets/images/payment.png';
+const String icLikematch = 'assets/icons/iconlikematch.png';
+const String icPost = 'assets/icons/iconpost.png';

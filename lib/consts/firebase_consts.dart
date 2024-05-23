@@ -14,3 +14,4 @@ const chatsCollection = 'chats';
 const messagesCollection = 'messages';
 const ordersCollection = 'orders';
 const vendorsCollection = 'vendors';
+const reviewsCollection = 'reviews';

@@ -1,27 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/widgets_common/appbar_ontop.dart';
-import 'package:flutter_finalproject/consts/colors.dart';
+import 'package:flutter_finalproject/Views/widgets_common/filterDrawer.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
-import 'package:flutter_finalproject/consts/firebase_consts.dart';
-import 'package:flutter_finalproject/consts/images.dart';
-import 'package:flutter_finalproject/consts/styles.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
 import 'package:get/get.dart';
-
-class FirestoreServices {
-  static Future<List<Map<String, dynamic>>> getFeaturedProducts() async {
-    try {
-      QuerySnapshot<Map<String, dynamic>> snapshot =
-          await FirebaseFirestore.instance.collection(productsCollection).get();
-      return snapshot.docs.map((doc) => doc.data()).toList();
-    } catch (e) {
-      print("Error fetching featured products: $e");
-      return [];
-    }
-  }
-}
 
 class MatchScreen extends StatefulWidget {
   const MatchScreen({Key? key}) : super(key: key);
@@ -34,6 +17,7 @@ class _MatchScreenState extends State<MatchScreen> {
   late final ProductController controller;
   late final PageController _pageControllerTop, _pageControllerLower;
   late int _currentPageIndexTop, _currentPageIndexLower;
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   late Future<List<Map<String, dynamic>>> _topProductsFuture;
   late Future<List<Map<String, dynamic>>> _lowerProductsFuture;
@@ -79,29 +63,59 @@ class _MatchScreenState extends State<MatchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       backgroundColor: whiteColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: whiteColor,
         title: appbarField(context: context),
-        // elevation: 8.0,
-        // shadowColor: greyColor.withOpacity(0.5),
       ),
+      endDrawer: FilterDrawer(),
       body: CustomScrollView(
         physics: NeverScrollableScrollPhysics(),
         slivers: <Widget>[
           SliverToBoxAdapter(
-            child: Column(
-              children: <Widget>[
-                const SizedBox(height: 50),
-                buildCardSetTop(),
-                const SizedBox(height: 5),
-                buildCardSetLower(),
-                const SizedBox(height: 10),
-                matchWithYouContainer(),
-              ],
-            ),
-          ),
+              child: Column(
+            children: <Widget>[
+              Divider(
+                color: greyThin,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 38),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Match Your Outfit',
+                      style: TextStyle(
+                        fontFamily: medium,
+                        fontSize: 20,
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.filter_list_rounded,
+                          color: greyDark, size: 25),
+                      onPressed: () {
+                        scaffoldKey.currentState!
+                            .openEndDrawer(); // Open the end drawer
+                      },
+                    )
+                        .box
+                        // .padding(EdgeInsets.all(7))
+                        .border(color: greyThin)
+                        .roundedFull
+                        .make(),
+                  ],
+                ),
+              ),
+              5.heightBox,
+              buildCardSetTop(),
+              10.heightBox,
+              buildCardSetLower(),
+              15.heightBox,
+              matchWithYouContainer(),
+            ],
+          )),
         ],
       ),
     );
@@ -109,39 +123,92 @@ class _MatchScreenState extends State<MatchScreen> {
 
   Widget matchWithYouContainer() {
     return Container(
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          const Text(
-            'Match with you',
-            style: TextStyle(fontSize: 18, fontFamily: bold, color: blackColor),
-          ),
-          IconButton(
-            icon: Image.asset(icLikeButton, width: 67),
-            onPressed: () async {
-              final topProducts = await _topProductsFuture;
-              final lowerProducts = await _lowerProductsFuture;
-              if (topProducts.isNotEmpty && lowerProducts.isNotEmpty) {
-                final topProduct = topProducts[_currentPageIndexTop];
-                final lowerProduct = lowerProducts[_currentPageIndexLower];
-                controller.addToWishlistUserMatch(
-                  topProduct['p_name'],
-                  lowerProduct['p_name'],
-                  context,
-                );
-              } else {
-                VxToast.show(
-                  context,
-                  msg:
-                      'Unable to add to favorites, Because the information is not available',
-                );
-              }
-            },
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'Feedback:',
+              ).text.fontFamily(regular).color(blackColor).size(14).make(),
+              8.widthBox,
+              Text(
+                'Great Match!',
+              ).text.fontFamily(semiBold).color(Colors.green).size(22).make(),
+            ],
+          )
+              .box
+              .border(color: greyLine, width: 1)
+              .padding(EdgeInsets.symmetric(vertical: 12))
+              .margin(EdgeInsets.only(bottom: 12))
+              .make(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              InkWell(
+                onTap: () {},
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Image.asset(icPost, width: 22, height: 22),
+                    SizedBox(width: 8),
+                    Text('Post')
+                        .text
+                        .fontFamily(semiBold)
+                        .color(Color.fromARGB(255, 28, 73, 45))
+                        .size(14)
+                        .make(),
+                  ],
+                ),
+              )
+                  .box
+                  .color(const Color.fromRGBO(177, 234, 199, 1))
+                  .padding(EdgeInsets.symmetric(vertical: 12, horizontal: 58))
+                  .border(color: (const Color.fromRGBO(35, 101, 60, 1)))
+                  .rounded
+                  .make(),
+              InkWell(
+                onTap: () async {
+                  final topProducts = await _topProductsFuture;
+                  final lowerProducts = await _lowerProductsFuture;
+                  if (topProducts.isNotEmpty && lowerProducts.isNotEmpty) {
+                    final topProduct = topProducts[_currentPageIndexTop];
+                    final lowerProduct = lowerProducts[_currentPageIndexLower];
+                    controller.addToWishlistUserMatch(
+                      topProduct['p_name'],
+                      lowerProduct['p_name'],
+                      context,
+                    );
+                  } else {
+                    VxToast.show(
+                      context,
+                      msg:
+                          'Unable to add to favorites, Because the information is not available',
+                    );
+                  }
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Image.asset(icLikematch, width: 22, height: 22),
+                    SizedBox(width: 8),
+                    Text('Add to favorite')
+                        .text
+                        .fontFamily(semiBold)
+                        .color(const Color.fromRGBO(87, 12, 12, 1))
+                        .size(14)
+                        .make(),
+                  ],
+                )
+                    .box
+                    .color(const Color.fromRGBO(255, 203, 203, 1))
+                    .padding(EdgeInsets.symmetric(vertical: 12, horizontal: 18))
+                    .border(color: (const Color.fromRGBO(160, 84, 84, 1)))
+                    .rounded
+                    .make(),
+              )
+            ],
           ),
         ],
       ),
@@ -183,7 +250,7 @@ class _MatchScreenState extends State<MatchScreen> {
         }
         final topProducts = snapshot.data!;
         return Container(
-          height: 250.0,
+          height: 240,
           child: PageView.builder(
             controller: _pageControllerTop,
             itemCount: topProducts.length,
@@ -196,19 +263,52 @@ class _MatchScreenState extends State<MatchScreen> {
                         data: product,
                       ));
                 },
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Container(
-                    width: 300.0,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      width: 260,
                       child: Image.network(product['p_imgs'][0],
                           fit: BoxFit.cover),
                     ),
-                  ),
+                    Positioned(
+                      left: 0,
+                      child: IconButton(
+                        icon: Icon(Icons.chevron_left,
+                            size: 32, color: whiteColor),
+                        onPressed: () {
+                          if (_currentPageIndexTop > 0) {
+                            _pageControllerTop.previousPage(
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.easeIn,
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                    Positioned(
+                      right: 0,
+                      child: IconButton(
+                        icon: Icon(Icons.chevron_right,
+                            size: 32, color: whiteColor),
+                        onPressed: () {
+                          if (_currentPageIndexTop < topProducts.length - 1) {
+                            _pageControllerTop.nextPage(
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.easeIn,
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              );
+              )
+                  .box
+                  .color(primaryDark)
+                  .margin(EdgeInsets.symmetric(horizontal: 10))
+                  .rounded
+                  .make();
             },
           ),
         );
@@ -220,7 +320,6 @@ class _MatchScreenState extends State<MatchScreen> {
     return FutureBuilder<List<Map<String, dynamic>>>(
       future: _lowerProductsFuture,
       builder: (context, snapshot) {
-        // ตรวจสอบสถานะการโหลดข้อมูล
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         }
@@ -232,7 +331,7 @@ class _MatchScreenState extends State<MatchScreen> {
         }
         final lowerProducts = snapshot.data!;
         return Container(
-          height: 250.0,
+          height: 240,
           child: PageView.builder(
             controller: _pageControllerLower,
             itemCount: lowerProducts.length,
@@ -245,19 +344,53 @@ class _MatchScreenState extends State<MatchScreen> {
                         data: product,
                       ));
                 },
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Container(
-                    width: 300.0,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      width: 260,
                       child: Image.network(product['p_imgs'][0],
                           fit: BoxFit.cover),
                     ),
-                  ),
+                    Positioned(
+                      left: 0,
+                      child: IconButton(
+                        icon: Icon(Icons.chevron_left,
+                            size: 32, color: whiteColor),
+                        onPressed: () {
+                          if (_currentPageIndexLower > 0) {
+                            _pageControllerLower.previousPage(
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.easeIn,
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                    Positioned(
+                      right: 0,
+                      child: IconButton(
+                        icon: Icon(Icons.chevron_right,
+                            size: 32, color: whiteColor),
+                        onPressed: () {
+                          if (_currentPageIndexLower <
+                              lowerProducts.length - 1) {
+                            _pageControllerLower.nextPage(
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.easeIn,
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              );
+              )
+                  .box
+                  .color(primaryDark)
+                  .margin(EdgeInsets.symmetric(horizontal: 10))
+                  .rounded
+                  .make();
             },
           ),
         );

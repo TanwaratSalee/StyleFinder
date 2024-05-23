@@ -2,7 +2,7 @@ import 'package:flutter_finalproject/consts/consts.dart';
 
 Widget orderStatus(
     {String? icon, Color? color, String? title, bool? showDone}) {
-  final backgroundColor = showDone ?? false ? primaryApp : greyLine;
+  final backgroundColor = showDone ?? false ? primaryApp : greyThin;
   final iconColor = showDone ?? false ? whiteColor : greyDark;
 
   return Column(
@@ -39,10 +39,10 @@ Widget horizontalLine({required bool isActive}) {
         Container(
           width: 40,
           height: 2,
-          color: isActive ? primaryApp : greyColor,
+          color: isActive ? primaryApp : greyThin,
         ),
         20.heightBox,
       ],
     ),
-  ).height(100).make();
+  ).make();
 }

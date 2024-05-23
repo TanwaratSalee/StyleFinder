@@ -137,5 +137,13 @@ class FirestoreServices {
         .snapshots();
   }
 
+  static getReviews(String productId) {
+  return FirebaseFirestore.instance
+      .collection(reviewsCollection)
+      .where('productId', isEqualTo: productId)
+      .snapshots();
+}
+
+
  
 }

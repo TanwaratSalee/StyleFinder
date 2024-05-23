@@ -1,228 +1,268 @@
-// import 'package:flutter_finalproject/Views/auth_screen/forgot_screen.dart';
-// import 'package:flutter_finalproject/Views/auth_screen/signup_screen.dart';
-// import 'package:flutter_finalproject/Views/home_screen/mainHome.dart';
-// import 'package:flutter_finalproject/Views/widgets_common/custom_textfield.dart';
-// import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
+// // import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
+// import 'package:flutter_finalproject/Views/widgets_common/appbar_ontop.dart';
+// import 'package:flutter_finalproject/consts/colors.dart';
 // import 'package:flutter_finalproject/consts/consts.dart';
-// import 'package:flutter_finalproject/consts/lists.dart';
-// import 'package:flutter_finalproject/controllers/auth_controller.dart';
+// import 'package:flutter_finalproject/consts/firebase_consts.dart';
+// import 'package:flutter_finalproject/consts/images.dart';
+// import 'package:flutter_finalproject/consts/styles.dart';
+// import 'package:flutter_finalproject/controllers/product_controller.dart';
 // import 'package:get/get.dart';
 
-// class LoginScreen extends StatelessWidget {
-//   const LoginScreen({super.key});
+// class FirestoreServices {
+//   static Future<List<Map<String, dynamic>>> getFeaturedProducts() async {
+//     try {
+//       QuerySnapshot<Map<String, dynamic>> snapshot =
+//           await FirebaseFirestore.instance.collection(productsCollection).get();
+//       return snapshot.docs.map((doc) => doc.data()).toList();
+//     } catch (e) {
+//       print("Error fetching featured products: $e");
+//       return [];
+//     }
+//   }
+// }
+
+// class MatchScreen extends StatefulWidget {
+//   const MatchScreen({Key? key}) : super(key: key);
+
+//   @override
+//   _MatchScreenState createState() => _MatchScreenState();
+// }
+
+// class _MatchScreenState extends State<MatchScreen> {
+//   late final ProductController controller;
+//   late final PageController _pageControllerTop, _pageControllerLower;
+//   late int _currentPageIndexTop, _currentPageIndexLower;
+
+//   late Future<List<Map<String, dynamic>>> _topProductsFuture;
+//   late Future<List<Map<String, dynamic>>> _lowerProductsFuture;
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     controller = Get.put(ProductController());
+//     _pageControllerTop = PageController(viewportFraction: 0.8);
+//     _pageControllerLower = PageController(viewportFraction: 0.8);
+//     _currentPageIndexTop = 0;
+//     _currentPageIndexLower = 0;
+
+//     _pageControllerTop.addListener(() {
+//       final newPageIndex = _pageControllerTop.page!.round();
+//       if (_currentPageIndexTop != newPageIndex) {
+//         setState(() {
+//           _currentPageIndexTop = newPageIndex;
+//         });
+//       }
+//     });
+
+//     _pageControllerLower.addListener(() {
+//       final newPageIndex = _pageControllerLower.page!.round();
+//       if (_currentPageIndexLower != newPageIndex) {
+//         setState(() {
+//           _currentPageIndexLower = newPageIndex;
+//         });
+//       }
+//     });
+
+//     _topProductsFuture = fetchProductstop();
+//     _lowerProductsFuture = fetchProductslower();
+//   }
+
+//   @override
+//   void dispose() {
+//     _pageControllerTop.dispose();
+//     _pageControllerLower.dispose();
+//     super.dispose();
+//   }
 
 //   @override
 //   Widget build(BuildContext context) {
-//     var controller = Get.put(AuthController());
-
 //     return Scaffold(
-//       resizeToAvoidBottomInset: false,
-//       body: GestureDetector(
-//         onTap: () {
-//           FocusScope.of(context).requestFocus(FocusNode());
-//         },
-//         child: Container(
-//           decoration: const BoxDecoration(
-//             image: DecorationImage(
-//               image: AssetImage(bgLogin),
-//               fit: BoxFit.cover,
-//             ),
-//           ),
-//           child: Obx(
-//             () => Column(
+//       backgroundColor: whiteColor,
+//       appBar: AppBar(
+//         automaticallyImplyLeading: false,
+//         backgroundColor: whiteColor,
+//         title: appbarField(context: context),
+//         // elevation: 8.0,
+//         // shadowColor: greyColor.withOpacity(0.5),
+//       ),
+//       body: CustomScrollView(
+//         physics: NeverScrollableScrollPhysics(),
+//         slivers: <Widget>[
+//           SliverToBoxAdapter(
+//             child: Column(
 //               children: <Widget>[
-//                 Expanded(
-//                   child: SingleChildScrollView(
-//                     child: Column(
-//                       mainAxisAlignment: MainAxisAlignment.center,
-//                       crossAxisAlignment: CrossAxisAlignment.center,
-//                       children: <Widget>[
-//                         Center(
-//                           child: Column(
-//                             mainAxisAlignment: MainAxisAlignment.center,
-//                             crossAxisAlignment: CrossAxisAlignment.center,
-//                             children: [
-//                               Container(
-//                                 margin: const EdgeInsets.all(24),
-//                                 decoration: BoxDecoration(
-//                                   color: whiteColor,
-//                                   borderRadius: BorderRadius.circular(12),
-//                                 ),
-//                                 child: Column(
-//                                   mainAxisSize: MainAxisSize.min,
-//                                   children: [
-//                                     const Text('Log In',
-//                                         style: TextStyle(
-//                                             fontSize: 32, fontFamily: bold)),
-//                                     const SizedBox(height: 5),
-//                                     customTextField(
-//                                       label: 'Email',
-//                                       isPass: false,
-//                                       readOnly: false,
-//                                       controller: controller.emailController,
-//                                     ),
-//                                     const SizedBox(height: 15),
-//                                     customTextField(
-//                                       label: 'Password',
-//                                       isPass: true,
-//                                       readOnly: false,
-//                                       controller: controller.passwordController,
-//                                     ),
-//                                     Align(
-//                                       alignment: Alignment.centerRight,
-//                                       child: TextButton(
-//                                         child: forgotPass.text
-//                                             .color(blackColor)
-//                                             .make(),
-//                                         onPressed: () {
-//                                           Get.to(() => ForgotScreen());
-//                                         },
-//                                       ),
-//                                     ),
-//                                     const SizedBox(height: 10),
-//                                     controller.isloading.value
-//                                         ? const CircularProgressIndicator(
-//                                             valueColor: AlwaysStoppedAnimation(
-//                                                 primaryApp),
-//                                           )
-//                                         : tapButton(
-//                                             color: primaryApp,
-//                                             title: 'Login',
-//                                             textColor: whiteColor,
-//                                             onPress: () async {
-//                                               controller.isloading(true);
-
-//                                               await controller
-//                                                   .loginMethod(context: context)
-//                                                   .then((value) {
-//                                                 if (value != null) {
-//                                                   VxToast.show(context,
-//                                                       msg: successfully);
-//                                                   Get.to(() => MainHome());
-//                                                 } else {
-//                                                   controller.isloading(false);
-//                                                 }
-//                                               });
-//                                             },
-//                                           ),
-//                                     const SizedBox(height: 24),
-//                                     Row(
-//                                       children: [
-//                                         const Expanded(
-//                                           child: Divider(
-//                                               color: greyLine, height: 1),
-//                                         ),
-//                                         Padding(
-//                                           padding: const EdgeInsets.symmetric(
-//                                               horizontal: 15),
-//                                           child: loginWith.text
-//                                               .color(greyColor)
-//                                               .make(),
-//                                         ),
-//                                         const Expanded(
-//                                           child: Divider(
-//                                               color: greyLine, height: 1),
-//                                         ),
-//                                       ],
-//                                     ),
-//                                     const SizedBox(height: 24),
-//                                     // Row(
-//                                     //   mainAxisAlignment:
-//                                     //       MainAxisAlignment.spaceEvenly,
-//                                     //   children: List.generate(
-//                                     //       socialIconList.length,
-//                                     //       (index) => Container(
-//                                     //             padding:
-//                                     //                 const EdgeInsets.fromLTRB(
-//                                     //                     50, 15, 50, 15),
-//                                     //             decoration: BoxDecoration(
-//                                     //               borderRadius:
-//                                     //                   BorderRadius.circular(8),
-//                                     //               border: Border.all(
-//                                     //                 color: greyLine,
-//                                     //                 width: 1,
-//                                     //               ),
-//                                     //             ),
-//                                     //             child: Image.asset(
-//                                     //                 socialIconList[index],
-//                                     //                 width: 24,
-//                                     //                 height: 24),
-//                                     //           )),
-//                                     // ),
-//                                     Row(
-//                                       mainAxisAlignment:
-//                                           MainAxisAlignment.spaceEvenly,
-//                                       children: List.generate(
-//                                         socialIconList.length,
-//                                         (index) => Expanded(
-//                                           child: GestureDetector(
-//                                             onTap: () {
-//                                               switch (index) {
-//                                                 case 0:
-//                                                   controller.signInWithGoogle(
-//                                                       context);
-//                                                   break;
-//                                               }
-//                                             },
-//                                             child: Container(
-//                                               padding:
-//                                                   const EdgeInsets.fromLTRB(
-//                                                       0, 15, 0, 15),
-//                                               decoration: BoxDecoration(
-//                                                 borderRadius:
-//                                                     BorderRadius.circular(8),
-//                                                 border: Border.all(
-//                                                   color: greyLine,
-//                                                   width: 1,
-//                                                 ),
-//                                               ),
-//                                               child: Image.asset(
-//                                                 socialIconList[index],
-//                                                 width: 80,
-//                                                 height: 24,
-//                                               ),
-//                                             ),
-//                                           ),
-//                                         ),
-//                                       ),
-//                                     ),
-//                                   ],
-//                                 ),
-//                               ),
-//                             ],
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                 ),
-//                 Container(
-//                   padding: const EdgeInsets.all(16),
-//                   child: Row(
-//                     mainAxisAlignment: MainAxisAlignment.center,
-//                     children: <Widget>[
-//                       const Text(
-//                         "Don’t have an account? ",
-//                       ).text.color(whiteColor).size(16).fontFamily(bold).make(),
-//                       TextButton(
-//                         child: const Text(
-//                           'Sign Up',
-//                         ).text.color(primaryApp).size(16).fontFamily(bold).make(),
-//                         onPressed: () {
-//                           Navigator.of(context).push(
-//                             MaterialPageRoute(
-//                                 builder: (context) => const RegisterScreen()),
-//                           );
-//                         },
-//                       ),
-//                     ],
-//                   ),
-//                 ),
+//                 const SizedBox(height: 50),
+//                 buildCardSetTop(),
+//                 const SizedBox(height: 5),
+//                 buildCardSetLower(),
+//                 const SizedBox(height: 10),
+//                 matchWithYouContainer(),
 //               ],
 //             ),
 //           ),
-//         ),
+//         ],
 //       ),
+//     );
+//   }
+
+//   Widget matchWithYouContainer() {
+//     return Container(
+//       padding: const EdgeInsets.all(10),
+//       decoration: BoxDecoration(
+//         color: Colors.grey[200],
+//         borderRadius: BorderRadius.circular(10),
+//       ),
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         children: <Widget>[
+//           const Text(
+//             'Match with you',
+//             style: TextStyle(fontSize: 18, fontFamily: bold, color: blackColor),
+//           ),
+//           IconButton(
+//             icon: Image.asset(icLikeButton, width: 67),
+//             onPressed: () async {
+//               final topProducts = await _topProductsFuture;
+//               final lowerProducts = await _lowerProductsFuture;
+//               if (topProducts.isNotEmpty && lowerProducts.isNotEmpty) {
+//                 final topProduct = topProducts[_currentPageIndexTop];
+//                 final lowerProduct = lowerProducts[_currentPageIndexLower];
+//                 controller.addToWishlistUserMatch(
+//                   topProduct['p_name'],
+//                   lowerProduct['p_name'],
+//                   context,
+//                 );
+//               } else {
+//                 VxToast.show(
+//                   context,
+//                   msg:
+//                       'Unable to add to favorites, Because the information is not available',
+//                 );
+//               }
+//             },
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+
+//   Future<List<Map<String, dynamic>>> fetchProductstop() async {
+//     final querySnapshot = await FirebaseFirestore.instance
+//         .collection('products')
+//         .where('p_part', isEqualTo: 'top')
+//         .get();
+//     return querySnapshot.docs
+//         .map((doc) => doc.data() as Map<String, dynamic>)
+//         .toList();
+//   }
+
+//   Future<List<Map<String, dynamic>>> fetchProductslower() async {
+//     final querySnapshot = await FirebaseFirestore.instance
+//         .collection('products')
+//         .where('p_part', isEqualTo: 'lower')
+//         .get();
+//     return querySnapshot.docs
+//         .map((doc) => doc.data() as Map<String, dynamic>)
+//         .toList();
+//   }
+
+//   Widget buildCardSetTop() {
+//     return FutureBuilder<List<Map<String, dynamic>>>(
+//       future: _topProductsFuture,
+//       builder: (context, snapshot) {
+//         if (snapshot.connectionState == ConnectionState.waiting) {
+//           return Center(child: CircularProgressIndicator());
+//         }
+//         if (snapshot.error != null) {
+//           return Center(child: Text('An error occurred: ${snapshot.error}'));
+//         }
+//         if (!snapshot.hasData || snapshot.data!.isEmpty) {
+//           return Center(child: Text('No data available'));
+//         }
+//         final topProducts = snapshot.data!;
+//         return Container(
+//           height: 250.0,
+//           child: PageView.builder(
+//             controller: _pageControllerTop,
+//             itemCount: topProducts.length,
+//             itemBuilder: (context, index) {
+//               final product = topProducts[index];
+//               return GestureDetector(
+//                 onTap: () {
+//                   Get.to(() => ItemDetails(
+//                         title: product['p_name'],
+//                         data: product,
+//                       ));
+//                 },
+//                 child: Card(
+//                   shape: RoundedRectangleBorder(
+//                       borderRadius: BorderRadius.circular(20)),
+//                   child: Container(
+//                     width: 300.0,
+//                     child: ClipRRect(
+//                       borderRadius: BorderRadius.circular(20),
+//                       child: Image.network(product['p_imgs'][0],
+//                           fit: BoxFit.cover),
+//                     ),
+//                   ),
+//                 ),
+//               );
+//             },
+//           ),
+//         );
+//       },
+//     );
+//   }
+
+//   Widget buildCardSetLower() {
+//     return FutureBuilder<List<Map<String, dynamic>>>(
+//       future: _lowerProductsFuture,
+//       builder: (context, snapshot) {
+//         // ตรวจสอบสถานะการโหลดข้อมูล
+//         if (snapshot.connectionState == ConnectionState.waiting) {
+//           return Center(child: CircularProgressIndicator());
+//         }
+//         if (snapshot.error != null) {
+//           return Center(child: Text('An error occurred: ${snapshot.error}'));
+//         }
+//         if (!snapshot.hasData || snapshot.data!.isEmpty) {
+//           return Center(child: Text('No data available'));
+//         }
+//         final lowerProducts = snapshot.data!;
+//         return Container(
+//           height: 250.0,
+//           child: PageView.builder(
+//             controller: _pageControllerLower,
+//             itemCount: lowerProducts.length,
+//             itemBuilder: (context, index) {
+//               final product = lowerProducts[index];
+//               return GestureDetector(
+//                 onTap: () {
+//                   Get.to(() => ItemDetails(
+//                         title: product['p_name'],
+//                         data: product,
+//                       ));
+//                 },
+//                 child: Card(
+//                   shape: RoundedRectangleBorder(
+//                       borderRadius: BorderRadius.circular(20)),
+//                   child: Container(
+//                     width: 300.0,
+//                     child: ClipRRect(
+//                       borderRadius: BorderRadius.circular(20),
+//                       child: Image.network(product['p_imgs'][0],
+//                           fit: BoxFit.cover),
+//                     ),
+//                   ),
+//                 ),
+//               );
+//             },
+//           ),
+//         );
+//       },
 //     );
 //   }
 // }

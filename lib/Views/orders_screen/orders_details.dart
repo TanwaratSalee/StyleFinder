@@ -18,7 +18,7 @@ class OrdersDetails extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           "Order Details",
-        ).text.size(24).fontFamily(semiBold).color(greyDark).make(),
+        ).text.size(24).fontFamily(semiBold).color(blackColor).make(),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 18),
@@ -35,9 +35,10 @@ class OrdersDetails extends StatelessWidget {
                     )
                         .text
                         .size(20)
-                        .color(greyDark)
-                        .fontFamily(semiBold)
+                        .color(blackColor)
+                        .fontFamily(medium)
                         .makeCentered(),
+                        10.heightBox,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -122,12 +123,12 @@ class OrdersDetails extends StatelessWidget {
                     title1: "Order Date",
                     title2: "Payment Method",
                   ),
-                  orderPlaceDetails(
-                    d1: "Unpaid",
-                    d2: "Order Placed",
-                    title1: "Payment Status",
-                    title2: "Delivery Status",
-                  ),
+                  // orderPlaceDetails(
+                  //   d1: "Order Placed",
+                  //   d2: "",
+                  //   title1: "Delivery Status",
+                  //   title2: "",
+                  // ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16.0, vertical: 8.0),
@@ -153,7 +154,7 @@ class OrdersDetails extends StatelessWidget {
                         ),
                         SizedBox(
                           width: 130,
-                          height: 180,
+                          height: 140,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -198,14 +199,13 @@ class OrdersDetails extends StatelessWidget {
               const SizedBox(height: 15),
               Column(
                 children: [
-                  
                     const Text(
                       "Ordered Product",
                     )
                         .text
                         .size(20)
-                        .color(greyDark)
-                        .fontFamily(semiBold)
+                        .color(blackColor)
+                        .fontFamily(medium)
                         .makeCentered(),
                         5.heightBox,
                   ListView.builder(
@@ -222,63 +222,49 @@ class OrdersDetails extends StatelessWidget {
                           //   d1: "${data['orders'][index]['qty']}x",
                           //   d2: "Refundable",
                           // ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 4),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment
-                                  .center, 
-                              children: [
-                                Text(
-                                  'x${data['orders'][index]['qty']}',
-                                  style: const TextStyle(
-                                      fontSize: 12,
-                                      color: greyDark,
-                                      fontFamily: regular),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment
+                                .center, 
+                            children: [
+                              Text(
+                                'x${data['orders'][index]['qty']}',
+                              ).text.size(12).fontFamily(regular).color(greyDark).make(),
+                              const SizedBox(width: 5),
+                              Image.network(data['orders'][index]['img'],
+                                  width: 70, height: 60, fit: BoxFit.cover),
+                              const SizedBox(width: 15),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      data['orders'][index]['title'],
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ).text.size(14).fontFamily(semiBold).color(greyDark).make(),
+                                    Text(
+                                      '${NumberFormat('#,##0').format(data['orders'][index]['price'])} Bath',
+                                      style:
+                                          const TextStyle(color: greyDark),
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(width: 5),
-                                Image.network(data['orders'][index]['img'],
-                                    width: 70, height: 60, fit: BoxFit.cover),
-                                const SizedBox(width: 15),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        data['orders'][index]['title'],
-                                        style: const TextStyle(
-                                          fontFamily: semiBold,
-                                          fontSize: 14,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      Text(
-                                        '${NumberFormat('#,##0').format(data['orders'][index]['price'])} Bath',
-                                        style:
-                                            const TextStyle(color: greyDark),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
+                              ),
+                            ],
+                          ).box.p8.make()
                         ],
                       );
                     },
                   )
                 ],
-              )
-                  .box
+              ).box
+                  .p12
                   .color(whiteColor)
                   .shadowXs
                   .roundedSM
                   .border(color: greyLine)
-                  .padding(const EdgeInsets.all(6))
                   .make(),
-              const SizedBox(height: 20),
             ],
           ),
         ),
