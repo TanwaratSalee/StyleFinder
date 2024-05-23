@@ -14,9 +14,7 @@ import 'package:flutter_finalproject/controllers/news_controller.dart';
 import 'package:flutter_finalproject/services/firestore_services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-
 import 'dart:math' as math;
-
 import '../widgets_common/appbar_ontop.dart';
 
 class NewsScreen extends StatelessWidget {
@@ -43,7 +41,6 @@ class NewsScreen extends StatelessWidget {
         child: SafeArea(
             child: Column(
           children: [
-            // 1nd swiper
             Expanded(
               child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
@@ -61,50 +58,8 @@ class NewsScreen extends StatelessWidget {
                             fit: BoxFit.fill,
                           ).box.rounded.make();
                         }),
-
-                    // 30.heightBox,
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    //   children: List.generate(
-                    //     3,
-                    //     (index) => homeButtons(
-                    //       height: context.screenHeight * 0.1,
-                    //       width: context.screenWidth / 3.5,
-                    //       icon: index == 0
-                    //           ? icTopCategories
-                    //           : index == 1
-                    //               ? icBrand
-                    //               : icTopCategories,
-                    //       title: index == 0
-                    //           ? topCategories
-                    //           : index == 1
-                    //               ? brand
-                    //               : topSellers,
-                    //     ),
-                    //   ),
-                    // ),
-
-                    // 3nd swiper
-                    // VxSwiper.builder(
-                    //     aspectRatio: 16 / 9,
-                    //     autoPlay: true,
-                    //     height: 170,
-                    //     enlargeCenterPage: true,
-                    //     itemCount: secondSlidersList.length,
-                    //     itemBuilder: (context, index) {
-                    //       return Image.asset(
-                    //         secondSlidersList[index],
-                    //         fit: BoxFit.fill,
-                    //       )
-                    //           .box
-                    //           .rounded
-                    //           .clip(Clip.antiAlias)
-                    //           .margin(const EdgeInsets.symmetric(horizontal: 8))
-                    //           .make();
-                    //     }),
                     30.heightBox,
 
-                    //No.2
                     Column(
                       children: [
                         Row(
@@ -226,127 +181,70 @@ class NewsScreen extends StatelessWidget {
                                 .color(blackColor)
                                 .size(20)
                                 .make(),
-                                15.heightBox,
-                              Column(
-                                children: [
-                                  StreamBuilder(
-                                    stream: FirebaseFirestore.instance
-                                        .collection(productsCollection)
-                                        .snapshots(),
-                                    builder: (context, snapshot) {
-                                      if (!snapshot.hasData) {
-                                        return Center(
-                                            child: loadingIndicator());
-                                      } else {
-                                        var allproductsdata =
-                                            snapshot.data!.docs;
+                            15.heightBox,
+                            Column(
+                              children: [
+                                StreamBuilder(
+                                  stream: FirebaseFirestore.instance
+                                      .collection(productsCollection)
+                                      .snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData) {
+                                      return Center(
+                                          child: loadingIndicator());
+                                    } else {
+                                      var allproductsdata =
+                                          snapshot.data!.docs;
 
-                                        return GridView.builder(
-                                          shrinkWrap: true,
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
-                                          gridDelegate:
-                                              SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 2,
-                                            childAspectRatio: 10 / 4,
-                                            mainAxisSpacing: 5,
-                                            crossAxisSpacing: 10,
-                                          ),
-                                          itemCount: 10,
-                                          itemBuilder: (context, index) {
-                                            var product =
-                                                allproductsdata[index];
-                                            return GestureDetector(
-                                              onTap: () {
-                                                Get.to(() => ItemDetails(
-                                                      title: product['p_name'],
-                                                      data: product,
-                                                    ));
-                                              },
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  ProductCard(
-                                                    rank: index + 1,
-                                                    image:
-                                                        'https://via.placeholder.com/50',
-                                                    price: '1000',
-                                                    likes: 100 - index,
-                                                  ),
-                                                ],
-                                              ),
-                                            );
-                                          },
-                                        );
-                                      }
-                                    },
-                                  ),
-                                ],
-                              ),
-                            
+                                      return GridView.builder(
+                                        shrinkWrap: true,
+                                        physics:
+                                            NeverScrollableScrollPhysics(),
+                                        gridDelegate:
+                                            SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2,
+                                          childAspectRatio: 10 / 4,
+                                          mainAxisSpacing: 5,
+                                          crossAxisSpacing: 10,
+                                        ),
+                                        itemCount: 10,
+                                        itemBuilder: (context, index) {
+                                          var product =
+                                              allproductsdata[index];
+                                          return GestureDetector(
+                                            onTap: () {
+                                              Get.to(() => ItemDetails(
+                                                    title: product['p_name'],
+                                                    data: product,
+                                                  ));
+                                            },
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                ProductCard(
+                                                  rank: index + 1,
+                                                  image: product['p_imgs'][0], // ดึงรูปภาพจาก Firestore
+                                                  price: product['p_price'].toString(), // ดึงราคา
+                                                  // likes: product['p_likes'], 
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
                           ],
                         )
                             .box
-                            // .padding(const EdgeInsets.symmetric(
-                            //     vertical: 5, horizontal: 10))
                             .roundedLg
                             .make(),
                       ],
                     ),
-
-                    30.heightBox,
-
-                   Column(
-  children: [
-    StreamBuilder(
-      stream: FirebaseFirestore.instance
-          .collection(productsCollection)
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Center(child: loadingIndicator());
-        } else {
-          var allproductsdata = snapshot.data!.docs;
-
-          return GridView.builder(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 10 / 4,
-              mainAxisSpacing: 5,
-              crossAxisSpacing: 10,
-            ),
-            itemCount: allproductsdata.length,
-            itemBuilder: (context, index) {
-              var product = allproductsdata[index];
-              return GestureDetector(
-                onTap: () {
-                  Get.to(() => ItemDetails(
-                        title: product['p_name'],
-                        data: product,
-                      ));
-                },
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ProductCard(
-                      rank: index + 1,
-                      image: product['p_image'], // ดึงรูปภาพจาก Firestore
-                      price: product['p_price'].toString(), // ดึงราคา
-                      likes: product['p_likes'], // ดึงจำนวนไลค์
-                    ),
-                  ],
-                ),
-              );
-            },
-          );
-        }
-      },
-    ),
-  ],
-),
 
                     30.heightBox,
 
@@ -388,7 +286,7 @@ class NewsScreen extends StatelessWidget {
                         .roundedLg
                         .make(),
 
-15.heightBox,
+                    15.heightBox,
                     StreamBuilder(
                       stream: FirestoreServices.allproducts(),
                       builder: (BuildContext context,
@@ -439,7 +337,6 @@ class NewsScreen extends StatelessWidget {
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
-                                      // mainAxisAlignment: MainAxisAlignment.start,
                                       children: [
                                         Text(
                                           "${allproductsdata[index]['p_name']}",
@@ -758,14 +655,14 @@ class ProductCard extends StatelessWidget {
   final int rank;
   final String image;
   final String price;
-  final int likes;
+  // final int likes;
 
   const ProductCard({
     Key? key,
     required this.rank,
     required this.image,
     required this.price,
-    required this.likes,
+    // required this.likes,
   }) : super(key: key);
 
   @override
@@ -785,14 +682,14 @@ class ProductCard extends StatelessWidget {
               child: Text(rank.toString()).text.size(10).color(blackColor).make(),
             ),
           ),
-          SizedBox(width: 10),
+          SizedBox(width: 5),
           Image.network(
             image,
             width: 60,
             height: 65,
             fit: BoxFit.cover,
           ),
-          SizedBox(width: 10),
+          SizedBox(width: 8),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -800,7 +697,7 @@ class ProductCard extends StatelessWidget {
                 NumberFormat('#,##0 Bath', 'th').format(double.parse(price)),
                 style: TextStyle(
                   fontFamily: medium,
-                  fontSize: 16,
+                  fontSize: 14,
                 ),
               ),
               Row(
@@ -810,13 +707,13 @@ class ProductCard extends StatelessWidget {
                     width: 25,
                   ),
                   SizedBox(width: 5),
-                  Text(
-                    likes.toString(),
-                    style: TextStyle(
-                      fontFamily: regular,
-                      fontSize: 14,
-                    ),
-                  ),
+                  // Text(
+                    // likes.toString(),
+                    // style: TextStyle(
+                    //   fontFamily: regular,
+                    //   fontSize: 14,
+                    // ),
+                  // ),
                 ],
               ),
             ],

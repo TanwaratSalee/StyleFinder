@@ -704,7 +704,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                   Text(
                     "Confirm Deletion",
                     style:
-                        TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600),
+                        TextStyle(fontSize: 22.0, fontFamily: bold,),
                   ),
                   SizedBox(height: 20.0),
                   Text(

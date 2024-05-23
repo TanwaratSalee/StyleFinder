@@ -13,10 +13,25 @@ class _FilterDrawerState extends State<FilterDrawer> {
   bool isSelectedAll = false;
   bool isSelectedMen = false;
   bool isSelectedWomen = false;
+  bool isSelectedDress = false;
+  bool isSelectedOuterwear = false;
+  bool isSelectedTShirts = false;
+  bool isSelectedSuits = false;
+  bool isSelectedKnitwear = false;
+  bool isSelectedActivewear = false;
+  bool isSelectedBlazers = false;
+  bool isSelectedPants = false;
+  bool isSelectedDenim = false;
+  bool isSelectedSkirts = false;
+  bool isSelectedSummer = false;
+  bool isSelectedWinter = false;
+  bool isSelectedAutumn = false;
+  bool isSelectedDinner = false;
+  bool isSelectedEveryday = false;
   var collectionsvalue = ''.obs;
 
   final selectedColorIndexes = <int>[].obs;
-   final List<Map<String, dynamic>> allColors = [
+  final List<Map<String, dynamic>> allColors = [
     {'name': 'Black', 'color': Colors.black},
     {'name': 'Grey', 'color': greyColor},
     {'name': 'White', 'color': whiteColor},
@@ -130,21 +145,41 @@ class _FilterDrawerState extends State<FilterDrawer> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Wrap(
-                spacing: 15,
-                runSpacing: 15,
+                spacing: 20,
+                runSpacing: 10,
                 children: List.generate(
-                  15,
-                  (index) => Container(
-                    width: 30,
-                    height: 30,
-                    decoration: BoxDecoration(
-                      color: Colors.primaries[index % Colors.primaries.length],
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
+                  allColors.length,
+                  (index) {
+                    final color = allColors[index];
+                    final isSelected = selectedColorIndexes.contains(index);
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          if (isSelected) {
+                            selectedColorIndexes.remove(index);
+                          } else {
+                            selectedColorIndexes.add(index);
+                          }
+                        });
+                      },
+                      child: Container(
+                        width: 35,
+                        height: 35,
+                        decoration: BoxDecoration(
+                          color: color['color'],
+                          borderRadius: BorderRadius.circular(2),
+                          border: Border.all(
+                            color: isSelected ? primaryApp : greyThin,
+                            width: 2,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ),
+            10.heightBox,
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -159,110 +194,66 @@ class _FilterDrawerState extends State<FilterDrawer> {
               child: Wrap(
                 spacing: 10,
                 children: [
-                  FilterChip(
-                    label: Text("Dress"),
-                    onSelected: (_) {},
-                    selectedColor: primaryApp,
-                    backgroundColor: thinPrimaryApp,
-                  ),
-                  FilterChip(
-                    label: Text("Outerwear & Coats"),
-                    onSelected: (_) {},
-                    selectedColor: primaryApp,
-                    backgroundColor: thinPrimaryApp,
-                  ),
-                  FilterChip(
-                    label: Text("T-Shirts"),
-                    onSelected: (_) {},
-                    selectedColor: primaryApp,
-                    backgroundColor: thinPrimaryApp,
-                  ),
-                  FilterChip(
-                    label: Text("Suits"),
-                    onSelected: (_) {},
-                    selectedColor: primaryApp,
-                    backgroundColor: thinPrimaryApp,
-                  ),
-                  FilterChip(
-                    label: Text("Knitwear"),
-                    onSelected: (_) {},
-                    selectedColor: primaryApp,
-                    backgroundColor: thinPrimaryApp,
-                  ),
-                  FilterChip(
-                    label: Text("Activewear"),
-                    onSelected: (_) {},
-                    selectedColor: primaryApp,
-                    backgroundColor: thinPrimaryApp,
-                  ),
-                  FilterChip(
-                    label: Text("Blazers"),
-                    onSelected: (_) {},
-                    selectedColor: primaryApp,
-                    backgroundColor: thinPrimaryApp,
-                  ),
-                  FilterChip(
-                    label: Text("Pants"),
-                    onSelected: (_) {},
-                    selectedColor: primaryApp,
-                    backgroundColor: thinPrimaryApp,
-                  ),
-                  FilterChip(
-                    label: Text("Denim"),
-                    onSelected: (_) {},
-                    selectedColor: primaryApp,
-                    backgroundColor: thinPrimaryApp,
-                  ),
-                  FilterChip(
-                    label: Text("Skirts"),
-                    onSelected: (_) {},
-                    selectedColor: primaryApp,
-                    backgroundColor: thinPrimaryApp,
-                  ),
+                  buildFilterChip("Dress", isSelectedDress, (isSelected) {
+                    setState(() => isSelectedDress = isSelected);
+                  }),
+                  buildFilterChip("Outerwear & Coats", isSelectedOuterwear,
+                      (isSelected) {
+                    setState(() => isSelectedOuterwear = isSelected);
+                  }),
+                  buildFilterChip("T-Shirts", isSelectedTShirts, (isSelected) {
+                    setState(() => isSelectedTShirts = isSelected);
+                  }),
+                  buildFilterChip("Suits", isSelectedSuits, (isSelected) {
+                    setState(() => isSelectedSuits = isSelected);
+                  }),
+                  buildFilterChip("Knitwear", isSelectedKnitwear, (isSelected) {
+                    setState(() => isSelectedKnitwear = isSelected);
+                  }),
+                  buildFilterChip("Activewear", isSelectedActivewear,
+                      (isSelected) {
+                    setState(() => isSelectedActivewear = isSelected);
+                  }),
+                  buildFilterChip("Blazers", isSelectedBlazers, (isSelected) {
+                    setState(() => isSelectedBlazers = isSelected);
+                  }),
+                  buildFilterChip("Pants", isSelectedPants, (isSelected) {
+                    setState(() => isSelectedPants = isSelected);
+                  }),
+                  buildFilterChip("Denim", isSelectedDenim, (isSelected) {
+                    setState(() => isSelectedDenim = isSelected);
+                  }),
+                  buildFilterChip("Skirts", isSelectedSkirts, (isSelected) {
+                    setState(() => isSelectedSkirts = isSelected);
+                  }),
                 ],
               ),
             ),
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child:
-                  Text("Collection").text.fontFamily(regular).size(14).make(),
+              child: Text("Collection").text.fontFamily(regular).size(14).make(),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Wrap(
                 spacing: 10,
                 children: [
-                  FilterChip(
-                    label: Text("Summer"),
-                    onSelected: (_) {},
-                    selectedColor: primaryApp,
-                    backgroundColor: thinPrimaryApp,
-                  ),
-                  FilterChip(
-                    label: Text("Winter"),
-                    onSelected: (_) {},
-                    selectedColor: primaryApp,
-                    backgroundColor: thinPrimaryApp,
-                  ),
-                  FilterChip(
-                    label: Text("Autumn"),
-                    onSelected: (_) {},
-                    selectedColor: primaryApp,
-                    backgroundColor: thinPrimaryApp,
-                  ),
-                  FilterChip(
-                    label: Text("Dinner"),
-                    onSelected: (_) {},
-                    selectedColor: primaryApp,
-                    backgroundColor: thinPrimaryApp,
-                  ),
-                  FilterChip(
-                    label: Text("Everyday"),
-                    onSelected: (_) {},
-                    selectedColor: primaryApp,
-                    backgroundColor: thinPrimaryApp,
-                  ),
+                  buildFilterChip("Summer", isSelectedSummer, (isSelected) {
+                    setState(() => isSelectedSummer = isSelected);
+                  }),
+                  buildFilterChip("Winter", isSelectedWinter, (isSelected) {
+                    setState(() => isSelectedWinter = isSelected);
+                  }),
+                  buildFilterChip("Autumn", isSelectedAutumn, (isSelected) {
+                    setState(() => isSelectedAutumn = isSelected);
+                  }),
+                  buildFilterChip("Dinner", isSelectedDinner, (isSelected) {
+                    setState(() => isSelectedDinner = isSelected);
+                  }),
+                  buildFilterChip("Everyday", isSelectedEveryday, (isSelected) {
+                    setState(() => isSelectedEveryday = isSelected);
+                  }),
                 ],
               ),
             ),
@@ -302,7 +293,6 @@ Widget buildFilterChip(
     selected: isSelected,
     onSelected: onSelected,
     showCheckmark: false,
-    // backgroundColor: isSelected ? redColor : greyThin,
     side: BorderSide(color: isSelected ? primaryApp : greyLine),
     selectedColor: thinPrimaryApp,
   );
