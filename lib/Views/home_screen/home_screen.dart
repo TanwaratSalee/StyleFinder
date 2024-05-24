@@ -115,6 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+      drawer: FilterDrawer(),
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).requestFocus(FocusNode());
@@ -161,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       size: 30,
                     ),
                     onPressed: () {
-                      scaffoldKey.currentState?.openEndDrawer();
+                      scaffoldKey.currentState?.openDrawer();
                     },
                   ).box.border(color: greyColor, width: 0.5).roundedLg.make(),
                 ],
@@ -317,7 +318,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      endDrawer: FilterDrawer(),
     );
   }
 }
