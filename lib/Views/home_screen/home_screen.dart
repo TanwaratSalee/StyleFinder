@@ -97,25 +97,18 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: whiteColor,
         automaticallyImplyLeading: false,
         title: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Center(
-                  child: Image.asset(icLogoOnTop, height: 35),
-                ),
-              ),
-              IconButton(
-                icon: Image.asset(icCart, width: 21),
-                onPressed: () {
-                  Get.to(() => const CartScreen());
-                },
-              ),
-            ],
-          ),
+          child: Image.asset(icLogoOnTop, height: 35),
         ),
+        actions: [
+          IconButton(
+            icon: Image.asset(icCart, width: 21),
+            onPressed: () {
+              Get.to(() => const CartScreen());
+            },
+          ),
+        ],
       ),
-      drawer: FilterDrawer(),
+      endDrawer: FilterDrawer(), // Drawer ออกมาจากฝั่งขวา
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).requestFocus(FocusNode());
@@ -162,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       size: 30,
                     ),
                     onPressed: () {
-                      scaffoldKey.currentState?.openDrawer();
+                      scaffoldKey.currentState?.openEndDrawer();
                     },
                   ).box.border(color: greyColor, width: 0.5).roundedLg.make(),
                 ],
@@ -321,3 +314,4 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+

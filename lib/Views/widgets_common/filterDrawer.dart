@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
-import 'package:flutter_finalproject/consts/firebase_consts.dart';
 import 'package:get/get.dart';
 
 class FilterDrawer extends StatefulWidget {
@@ -40,7 +39,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
     {'name': 'Blue', 'color': Colors.lightBlue},
     {'name': 'Blue', 'color': const Color.fromARGB(255, 36, 135, 216)},
     {'name': 'Blue Grey', 'color': const Color.fromARGB(255, 96, 139, 115)},
-    {'name': 'Green', 'color': const Color.fromARGB(255, 17, 82, 50)},
+    {'name': 'Green', 'color': const Color.fromARGB(255, 17, 52, 50)},
     {'name': 'Green', 'color': Colors.green},
     {'name': 'Green Accent', 'color': Colors.greenAccent},
     {'name': 'Yellow', 'color': Colors.yellow},
@@ -63,23 +62,23 @@ class _FilterDrawerState extends State<FilterDrawer> {
               ).text.size(24).makeCentered(),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text("Gender").text.fontFamily(regular).size(14).make(),
             ),
             Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
               child: Row(
                 children: [
-                  SizedBox(width: 8),
+                  SizedBox(width: 5),
                   buildFilterChip("All", isSelectedAll, (isSelected) {
                     setState(() => isSelectedAll = isSelected);
                   }),
-                  SizedBox(width: 8),
+                  SizedBox(width: 5),
                   buildFilterChip("Men", isSelectedMen, (isSelected) {
                     setState(() => isSelectedMen = isSelected);
                   }),
-                  SizedBox(width: 8),
+                  SizedBox(width: 5),
                   buildFilterChip("Women", isSelectedWomen, (isSelected) {
                     setState(() => isSelectedWomen = isSelected);
                   }),
@@ -88,7 +87,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
             ),
             Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
               child: Text("Official Store")
                   .text
                   .fontFamily(regular)
@@ -96,7 +95,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                   .make(),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Wrap(
                 spacing: 10,
                 children: List.generate(
@@ -110,17 +109,17 @@ class _FilterDrawerState extends State<FilterDrawer> {
             ),
             Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
               child: Text("Price").text.fontFamily(regular).size(14).make(),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: SliderTheme(
                 data: SliderTheme.of(context).copyWith(
                   activeTrackColor: primaryApp,
                   inactiveTrackColor: greyLine,
                   thumbColor: greyDark,
-                  overlayColor: Color.fromARGB(255, 81, 150, 175).withAlpha(32),
+                  overlayColor: Color.fromARGB(255, 51, 150, 175).withAlpha(32),
                   trackHeight: 4.0,
                 ),
                 child: Slider(
@@ -139,11 +138,11 @@ class _FilterDrawerState extends State<FilterDrawer> {
             ),
             Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
               child: Text("Color").text.fontFamily(regular).size(14).make(),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Wrap(
                 spacing: 20,
                 runSpacing: 10,
@@ -170,7 +169,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                           borderRadius: BorderRadius.circular(2),
                           border: Border.all(
                             color: isSelected ? primaryApp : greyThin,
-                            width: 2,
+                            width: isSelected ?  2 : 1,
                           ),
                         ),
                       ),
@@ -182,7 +181,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
             10.heightBox,
             Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
               child: Text("Type of product")
                   .text
                   .fontFamily(regular)
@@ -190,7 +189,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                   .make(),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Wrap(
                 spacing: 10,
                 children: [
@@ -231,11 +230,11 @@ class _FilterDrawerState extends State<FilterDrawer> {
             ),
             Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
               child: Text("Collection").text.fontFamily(regular).size(14).make(),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Wrap(
                 spacing: 10,
                 children: [

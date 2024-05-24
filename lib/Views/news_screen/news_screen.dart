@@ -93,12 +93,7 @@ class NewsScreen extends StatelessWidget {
                               ),
                             ),
                           ],
-                        )
-                            .box
-                            .padding(const EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 10))
-                            .roundedLg
-                            .make(),
+                        ),
                         15.heightBox,
                         StreamBuilder(
                           stream: FirestoreServices.allmatchbystore(),
@@ -112,8 +107,7 @@ class NewsScreen extends StatelessWidget {
                               var allproductsdata = snapshot.data!.docs;
                               allproductsdata.shuffle(math.Random());
 
-                              int itemCount =
-                                  math.min(allproductsdata.length, 4);
+                              int itemCount = math.min(allproductsdata.length, 4);
 
                               return SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
@@ -155,7 +149,7 @@ class NewsScreen extends StatelessWidget {
                                           .margin(const EdgeInsets.symmetric(
                                               horizontal: 5))
                                           .padding(const EdgeInsets.symmetric(
-                                              horizontal: 24, vertical: 8))
+                                              horizontal: 24, vertical: 12))
                                           .make(),
                                     );
                                   }),
@@ -204,7 +198,7 @@ class NewsScreen extends StatelessWidget {
                                             SliverGridDelegateWithFixedCrossAxisCount(
                                           crossAxisCount: 2,
                                           childAspectRatio: 10 / 4,
-                                          mainAxisSpacing: 5,
+                                          mainAxisSpacing: 3,
                                           crossAxisSpacing: 10,
                                         ),
                                         itemCount: 10,
@@ -224,8 +218,8 @@ class NewsScreen extends StatelessWidget {
                                               children: [
                                                 ProductCard(
                                                   rank: index + 1,
-                                                  image: product['p_imgs'][0], // ดึงรูปภาพจาก Firestore
-                                                  price: product['p_price'].toString(), // ดึงราคา
+                                                  image: product['p_imgs'][0], 
+                                                  price: product['p_price'].toString(), 
                                                   // likes: product['p_likes'], 
                                                 ),
                                               ],
@@ -240,9 +234,6 @@ class NewsScreen extends StatelessWidget {
                             ),
                           ],
                         )
-                            .box
-                            .roundedLg
-                            .make(),
                       ],
                     ),
 
