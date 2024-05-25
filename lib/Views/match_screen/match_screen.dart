@@ -267,12 +267,12 @@ class _MatchScreenState extends State<MatchScreen> {
                   alignment: Alignment.center,
                   children: [
                     Container(
-                      width: 260,
+                      width: 250,
                       child: Image.network(product['p_imgs'][0],
                           fit: BoxFit.cover),
                     ),
                     Positioned(
-                      left: 0,
+                      left: -10,
                       child: IconButton(
                         icon: Icon(Icons.chevron_left,
                             size: 32, color: whiteColor),
@@ -287,7 +287,7 @@ class _MatchScreenState extends State<MatchScreen> {
                       ),
                     ),
                     Positioned(
-                      right: 0,
+                      right: -10,
                       child: IconButton(
                         icon: Icon(Icons.chevron_right,
                             size: 32, color: whiteColor),
@@ -348,12 +348,12 @@ class _MatchScreenState extends State<MatchScreen> {
                   alignment: Alignment.center,
                   children: [
                     Container(
-                      width: 260,
+                      width: 250,
                       child: Image.network(product['p_imgs'][0],
                           fit: BoxFit.cover),
                     ),
                     Positioned(
-                      left: 0,
+                      left: -10,
                       child: IconButton(
                         icon: Icon(Icons.chevron_left,
                             size: 32, color: whiteColor),
@@ -368,7 +368,7 @@ class _MatchScreenState extends State<MatchScreen> {
                       ),
                     ),
                     Positioned(
-                      right: 0,
+                      right: -10,
                       child: IconButton(
                         icon: Icon(Icons.chevron_right,
                             size: 32, color: whiteColor),

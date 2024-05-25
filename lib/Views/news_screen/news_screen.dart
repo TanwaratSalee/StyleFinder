@@ -59,7 +59,6 @@ class NewsScreen extends StatelessWidget {
                           ).box.rounded.make();
                         }),
                     30.heightBox,
-
                     Column(
                       children: [
                         Row(
@@ -107,7 +106,8 @@ class NewsScreen extends StatelessWidget {
                               var allproductsdata = snapshot.data!.docs;
                               allproductsdata.shuffle(math.Random());
 
-                              int itemCount = math.min(allproductsdata.length, 4);
+                              int itemCount =
+                                  math.min(allproductsdata.length, 4);
 
                               return SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
@@ -161,7 +161,6 @@ class NewsScreen extends StatelessWidget {
                       ],
                     ),
                     30.heightBox,
-
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -184,16 +183,13 @@ class NewsScreen extends StatelessWidget {
                                       .snapshots(),
                                   builder: (context, snapshot) {
                                     if (!snapshot.hasData) {
-                                      return Center(
-                                          child: loadingIndicator());
+                                      return Center(child: loadingIndicator());
                                     } else {
-                                      var allproductsdata =
-                                          snapshot.data!.docs;
+                                      var allproductsdata = snapshot.data!.docs;
 
                                       return GridView.builder(
                                         shrinkWrap: true,
-                                        physics:
-                                            NeverScrollableScrollPhysics(),
+                                        physics: NeverScrollableScrollPhysics(),
                                         gridDelegate:
                                             SliverGridDelegateWithFixedCrossAxisCount(
                                           crossAxisCount: 2,
@@ -203,8 +199,7 @@ class NewsScreen extends StatelessWidget {
                                         ),
                                         itemCount: 10,
                                         itemBuilder: (context, index) {
-                                          var product =
-                                              allproductsdata[index];
+                                          var product = allproductsdata[index];
                                           return GestureDetector(
                                             onTap: () {
                                               Get.to(() => ItemDetails(
@@ -218,9 +213,10 @@ class NewsScreen extends StatelessWidget {
                                               children: [
                                                 ProductCard(
                                                   rank: index + 1,
-                                                  image: product['p_imgs'][0], 
-                                                  price: product['p_price'].toString(), 
-                                                  // likes: product['p_likes'], 
+                                                  image: product['p_imgs'][0],
+                                                  price: product['p_price']
+                                                      .toString(),
+                                                  // likes: product['p_likes'],
                                                 ),
                                               ],
                                             ),
@@ -236,9 +232,7 @@ class NewsScreen extends StatelessWidget {
                         )
                       ],
                     ),
-
                     30.heightBox,
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -276,7 +270,6 @@ class NewsScreen extends StatelessWidget {
                             vertical: 5, horizontal: 10))
                         .roundedLg
                         .make(),
-
                     15.heightBox,
                     StreamBuilder(
                       stream: FirestoreServices.allproducts(),
@@ -670,7 +663,8 @@ class ProductCard extends StatelessWidget {
             height: 24,
             child: CircleAvatar(
               backgroundColor: greyThin,
-              child: Text(rank.toString()).text.size(10).color(blackColor).make(),
+              child:
+                  Text(rank.toString()).text.size(10).color(blackColor).make(),
             ),
           ),
           SizedBox(width: 5),
@@ -686,11 +680,7 @@ class ProductCard extends StatelessWidget {
             children: [
               Text(
                 NumberFormat('#,##0 Bath', 'th').format(double.parse(price)),
-                style: TextStyle(
-                  fontFamily: medium,
-                  fontSize: 14,
-                ),
-              ),
+              ).text.fontFamily(medium).size(13).make(),
               Row(
                 children: [
                   Image.asset(
@@ -699,11 +689,11 @@ class ProductCard extends StatelessWidget {
                   ),
                   SizedBox(width: 5),
                   // Text(
-                    // likes.toString(),
-                    // style: TextStyle(
-                    //   fontFamily: regular,
-                    //   fontSize: 14,
-                    // ),
+                  // likes.toString(),
+                  // style: TextStyle(
+                  //   fontFamily: regular,
+                  //   fontSize: 14,
+                  // ),
                   // ),
                 ],
               ),

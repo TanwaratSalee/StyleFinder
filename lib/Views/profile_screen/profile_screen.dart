@@ -16,7 +16,6 @@ class _ProfileScreenState extends State<ProfileScreen>
     with SingleTickerProviderStateMixin {
   TabController? _tabController;
 
-
   @override
   void initState() {
     super.initState();
@@ -243,7 +242,12 @@ class _ProfileScreenState extends State<ProfileScreen>
                     //   },
                     // ),
                   ],
-                ).box.border(color: greyLine).roundedSM.margin(EdgeInsets.symmetric(horizontal: 12, vertical: 4)).make(),
+                )
+                    .box
+                    .border(color: greyLine)
+                    .roundedSM
+                    .margin(EdgeInsets.symmetric(horizontal: 12, vertical: 4))
+                    .make(),
               ),
             );
           },
@@ -292,7 +296,7 @@ class _ProfileScreenState extends State<ProfileScreen>
         return GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 1,
-            childAspectRatio: 6 / 2.7,
+            childAspectRatio: 6 / 2.9,
           ),
           itemCount: flatList.length ~/ 2,
           itemBuilder: (BuildContext context, int index) {
@@ -475,7 +479,7 @@ class _ProfileScreenState extends State<ProfileScreen>
       },
     );
   }
-  
+
   Widget buildUserMixMatchTab() {
     return StreamBuilder<QuerySnapshot>(
       stream: FirestoreServices.getWishlistsusermixmatchs(),
@@ -518,7 +522,6 @@ class _ProfileScreenState extends State<ProfileScreen>
           itemBuilder: (BuildContext context, int index) {
             var pair = pairs[index];
             return Container(
-              
               child: Stack(
                 children: [
                   Column(
@@ -656,12 +659,13 @@ class _ProfileScreenState extends State<ProfileScreen>
                     ),
                   ),
                 ],
-              ) .box
-                    .roundedSM
-                    .border(color: greyLine)
-                    .margin(EdgeInsets.symmetric(horizontal: 12, vertical: 4))
-                    .padding(EdgeInsets.all(8))
-                    .make(),
+              )
+                  .box
+                  .roundedSM
+                  .border(color: greyLine)
+                  .margin(EdgeInsets.symmetric(horizontal: 12, vertical: 4))
+                  .padding(EdgeInsets.all(8))
+                  .make(),
             );
           },
         );
@@ -703,8 +707,10 @@ class _ProfileScreenState extends State<ProfileScreen>
                 children: [
                   Text(
                     "Confirm Deletion",
-                    style:
-                        TextStyle(fontSize: 22.0, fontFamily: bold,),
+                    style: TextStyle(
+                      fontSize: 22.0,
+                      fontFamily: bold,
+                    ),
                   ),
                   SizedBox(height: 20.0),
                   Text(
