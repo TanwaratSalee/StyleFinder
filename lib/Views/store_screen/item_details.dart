@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
@@ -98,11 +99,15 @@ class _ItemDetailsState extends State<ItemDetails> {
       child: Scaffold(
         backgroundColor: whiteColor,
         appBar: AppBar(
-          // title: widget.title!.text
-          //     .color(greyDark)
-          //     .fontFamily(medium)
-          //     .size(18)
-          //     .make(),
+          backgroundColor: whiteColor,
+          actions: <Widget>[
+            IconButton(
+              icon: Image.asset(icCart, width: 21),
+              onPressed: () {
+                Get.to(() => const CartScreen());
+              },
+            ),
+          ],
         ),
         body: Column(
           children: [
@@ -154,12 +159,9 @@ class _ItemDetailsState extends State<ItemDetails> {
                                     widget.data, _updateIsFav, context);
                               }
                             },
-                            icon: Icon(
-                              controller.isFav.value
-                                  ? Icons.favorite
-                                  : Icons.favorite_outline,
-                              color: controller.isFav.value ? redColor : null,
-                            ),
+                            icon: controller.isFav.value
+                                ? Image.asset(icTapFavoriteButton, width: 40)
+                                : Image.asset(icFavoriteButton, width: 40),
                             iconSize: 28,
                           ),
                         )
@@ -368,12 +370,18 @@ class _ItemDetailsState extends State<ItemDetails> {
                                 .make(),
                           )
                               .box
-                              .padding(EdgeInsets.symmetric(horizontal: 4, vertical: 10))
+                              .padding(EdgeInsets.symmetric(
+                                  horizontal: 4, vertical: 10))
                               .make(),
                         );
                       },
                     ),
-                  ).box.padding(EdgeInsets.only(left: 10,)).make(),
+                  )
+                      .box
+                      .padding(EdgeInsets.only(
+                        left: 10,
+                      ))
+                      .make(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -403,7 +411,10 @@ class _ItemDetailsState extends State<ItemDetails> {
                             icon: const Icon(Icons.add, size: 20),
                           ),
                         ],
-                      ).box.padding(const EdgeInsets.symmetric(horizontal: 8)).make(),
+                      )
+                          .box
+                          .padding(const EdgeInsets.symmetric(horizontal: 8))
+                          .make(),
                       Container(
                         alignment: Alignment.bottomCenter,
                         child: Row(

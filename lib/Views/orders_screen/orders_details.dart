@@ -196,7 +196,7 @@ class OrdersDetails extends StatelessWidget {
                   .border(color: greyLine)
                   .padding(const EdgeInsets.all(6))
                   .make(),
-              const SizedBox(height: 15),
+              15.heightBox,
               Column(
                 children: [
                     const Text(
@@ -207,52 +207,39 @@ class OrdersDetails extends StatelessWidget {
                         .color(blackColor)
                         .fontFamily(medium)
                         .makeCentered(),
-                        5.heightBox,
+
+                        20.heightBox,
                   ListView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: data['orders'].length,
                     itemBuilder: (context, index) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      return Row(
+                        crossAxisAlignment: CrossAxisAlignment.center, 
                         children: [
-                          // orderPlaceDetails(
-                          //   title1: data['orders'][index]['title'],
-                          //   title2: data['orders'][index]['tprice'],
-                          //   d1: "${data['orders'][index]['qty']}x",
-                          //   d2: "Refundable",
-                          // ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment
-                                .center, 
-                            children: [
-                              Text(
-                                'x${data['orders'][index]['qty']}',
-                              ).text.size(12).fontFamily(regular).color(greyDark).make(),
-                              const SizedBox(width: 5),
-                              Image.network(data['orders'][index]['img'],
-                                  width: 70, height: 60, fit: BoxFit.cover),
-                              const SizedBox(width: 15),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      data['orders'][index]['title'],
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ).text.size(14).fontFamily(semiBold).color(greyDark).make(),
-                                    Text(
-                                      '${NumberFormat('#,##0').format(data['orders'][index]['price'])} Bath',
-                                      style:
-                                          const TextStyle(color: greyDark),
-                                    ),
-                                  ],
+                          Text(
+                            'x${data['orders'][index]['qty']}',
+                          ).text.size(12).fontFamily(regular).color(greyDark).make(),
+                          const SizedBox(width: 5),
+                          Image.network(data['orders'][index]['img'],
+                              width: 50, height: 60, fit: BoxFit.cover),
+                          const SizedBox(width: 15),
+                          Expanded(
+                            child: Column(crossAxisAlignment:CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  data['orders'][index]['title'],
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ).text.size(14).fontFamily(semiBold).color(greyDark).make(),
+                                Text(
+                                  '${NumberFormat('#,##0').format(data['orders'][index]['price'])} Bath',
+                                  style:
+                                      const TextStyle(color: greyDark),
                                 ),
-                              ),
-                            ],
-                          ).box.p8.make()
+                              ],
+                            ).box.padding(EdgeInsets.only(bottom: 15)).make(),
+                          ),
                         ],
                       );
                     },

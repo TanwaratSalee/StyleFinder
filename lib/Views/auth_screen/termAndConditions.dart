@@ -9,12 +9,7 @@ class TermAndConditions extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Terms and Conditions'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -55,7 +50,7 @@ class TermAndConditions extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Text(
-                'We shall not be liable for any damages or losses arising from the use or inability to use our application, including but not limited to direct, indirect, incidental, or consequential damages. As this application is intended for educational purposes only, any issues encountered will not result in liability on our part. Users assume full responsibility for any actions taken based on the information provided through the application. We do not warrant that the application will be error-free, uninterrupted, or that it will meet your specific requirements. Use of the application is at your own risk. In no event shall our liability exceed the amount paid by the user, if any, for accessing the application. This limitation of liability applies to the fullest extent permitted by law.',
+                'We shall not be liable for any damages or losses arising from the use or inability to use our application, including but not limited to direct, indirect, incidental, or consequential damages. As this application is intended for educational purposes only, any issues encountered will not result in liability on our part. Users assume full responsibility for any actions taken based on the information provided through the application. We do not warrant that the application will be error-free, uninterrupted, or free from viruses or other harmful components. Users are encouraged to use the application at their own risk. In no event shall our liability exceed the amount paid by the user, if any, for accessing the application. This limitation of liability applies to the fullest extent permitted by law.',
               ),
               SizedBox(height: 16),
               Text(
@@ -73,7 +68,7 @@ class TermAndConditions extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Text(
-                'We reserve the right to terminate your use of the application at any time if you violate these terms and conditions or use the application for non-educational purposes. Termination may occur without prior notice and at our sole discretion. Upon termination, your right to use the application will immediately cease. We also reserve the right to remove or modify any content that violates these terms or is deemed inappropriate. Users are prohibited from attempting to access the application after termination or removal. We shall not be liable to you or any third party for any termination of your access to the application.',
+                'We reserve the right to terminate your use of the application at any time if you violate these terms and conditions or use the application for non-educational purposes. Termination may occur without prior notice and at our sole discretion. Upon termination, your right to use the application will immediately cease. We also reserve the right to remove or modify any content that violates these terms or is deemed inappropriate. Users are prohibited from attempting to circumvent any restrictions or reinstating access after termination. We are not liable for any damages resulting from the termination of your access to the application. If you wish to terminate your account, please contact us.',
               ),
               SizedBox(height: 16),
               Text(
@@ -91,7 +86,7 @@ class TermAndConditions extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Text(
-                'If you have any questions or concerns about these terms and conditions, please contact us at (Mail : nuktaoneyoung@gmail.com ). We are committed to addressing your inquiries and resolving any issues promptly. Your feedback is valuable to us, and we strive to improve our services based on your input. Please provide detailed information about your concern to help us assist you more effectively. We aim to respond to all inquiries within a reasonable timeframe.',
+                'If you have any questions or concerns about these terms and conditions, please contact us at [Mail : nutkatenoeytung@gmail.com ]. We are committed to addressing your inquiries and resolving any issues promptly. Your feedback is valuable to us, and we strive to improve our services based on your input. Please provide detailed information about your concern to help us assist you more effectively. We aim to respond to all inquiries within a reasonable timeframe.',
               ),
             ],
           ),

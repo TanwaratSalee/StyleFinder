@@ -1,5 +1,5 @@
 import 'package:flutter_finalproject/Views/cart_screen/creditcard_screen.dart';
-import 'package:flutter_finalproject/Views/cart_screen/promptpay_screen.dart';
+import 'package:flutter_finalproject/Views/cart_screen/mobileBanking_screen.dart';
 import 'package:flutter_finalproject/Views/home_screen/mainHome.dart';
 import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
@@ -142,7 +142,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
                       Get.offAll(() => MainHome());
                     } else if (selectedMethod == 'Mobile Banking') {
                       if (selectedBank != null) {
-                        Get.to(() => const PromptpayScreen());
+                        Get.to(() => const MobileBankingScreenextends());
                       } else {
                         VxToast.show(context,
                             msg: "Please select a bank first.");

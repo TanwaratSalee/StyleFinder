@@ -112,7 +112,9 @@ const String icLogout = "assets/icons/iconsAccount/logout.png";
 const String icNext = "assets/icons/icNormal/Iconnext.png";
 const String icUndertext = "assets/icons/icNormal/undertext.png";
 const String icSeeall = "assets/icons/seeall.png";
-const String icTapLike = "assets/icons/redlike.png";
+const String icTapFavoriteButton = "assets/icons/redlike.png";
+const String icFavoriteButton = "assets/icons/FavoriteButton.png";
+
 
 // Paymet
 const String imgSuccessful = "assets/images/payment/paymentSuccessful.png";
@@ -162,3 +164,5 @@ const String imgregister = 'assets/images/img2DRigistor.png';
 const String imgpayment = 'assets/images/payment.png';
 const String icLikematch = 'assets/icons/iconlikematch.png';
 const String icPost = 'assets/icons/iconpost.png';
+const String icTrash = "assets/icons/icTrash.png";
+const String imgPaymentSuccful = 'assets/images/imgPaymentsuccful.png';

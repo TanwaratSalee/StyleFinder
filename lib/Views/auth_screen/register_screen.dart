@@ -108,7 +108,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 style: TextStyle(
                                     color: blackColor,
                                     fontFamily: regular,
-                                    fontSize: 13)),
+                                    fontSize: 14)),
                             WidgetSpan(
                               child: GestureDetector(
                                 onTap: () {
@@ -117,8 +117,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 child: Text(termAndCond,
                                     style: TextStyle(
                                         color: primaryApp,
-                                        fontFamily: medium,
-                                        fontSize: 13)),
+                                        fontFamily: bold,
+                                        fontSize: 14)),
                               ),
                             ),
                             TextSpan(
@@ -126,7 +126,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 style: TextStyle(
                                   color: blackColor,
                                   fontFamily: regular,
-                                  fontSize: 13,
+                                  fontSize: 14,
                                 )),
                             WidgetSpan(
                               child: GestureDetector(
@@ -136,8 +136,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 child: Text(privacyPolicy,
                                     style: TextStyle(
                                         color: primaryApp,
-                                        fontFamily: medium,
-                                        fontSize: 13)),
+                                        fontFamily: bold,
+                                        fontSize: 14)),
                               ),
                             ),
                           ]),
@@ -236,6 +236,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ],
               ),
             ),
+            20.heightBox,
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

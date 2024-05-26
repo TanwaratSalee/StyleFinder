@@ -699,7 +699,7 @@ class ProductCard extends StatelessWidget {
               Row(
                 children: [
                   Image.asset(
-                    icTapLike,
+                    icTapFavoriteButton,
                     width: 25,
                   ),
                   SizedBox(width: 5),

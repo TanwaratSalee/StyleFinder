@@ -64,7 +64,7 @@ class PrivacyPolicySceen extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Text(
-                'Our application may use cookies to enhance your experience. Cookies are small files that a site or its service provider transfers to your device\'s hard drive through your web browser (if you allow) that enables the site\'s or service provider\'s systems to recognize your browser and capture and remember certain information. You can choose to disable cookies through your individual browser options. However, disabling cookies may affect your ability to use certain features of our application.',
+                'Our application may use cookies to enhance your experience. Cookies are small files that a site or its service provider transfers to your device\'s hard drive through your web browser (if you allow) that enables the site\'s or service provider\'s systems to recognize your browser and capture and remember certain information. You can choose to disable cookies through your individual browser options. However, disabling cookies may affect your ability to use certain ',
               ),
               SizedBox(height: 16),
               Text(
@@ -82,7 +82,7 @@ class PrivacyPolicySceen extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Text(
-                'We reserve the right to update or change our Privacy Policy at any time. Any changes will be posted on this page, and the date of the latest revision will be indicated at the top of the page. We encourage you to review this Privacy Policy periodically to stay informed about how we are protecting your information. Your continued use of the application after any changes to this policy will constitute your acknowledgment and acceptance of the changes.',
+                'We reserve the right to update or change our Privacy Policy at any time. Any changes will be posted on this page, and the date of the latest revision will be indicated at the top. We encourage you to review this Privacy Policy periodically to stay informed about how we are protecting your information. Your continued use of the application after any changes to this policy will constitute your acknowledgment and acceptance of the changes.',
               ),
               SizedBox(height: 16),
               Text(
@@ -91,7 +91,7 @@ class PrivacyPolicySceen extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Text(
-                'If you have any questions or concerns about this Privacy Policy, please contact us at (Mail : Nutkatenoeytung@gmail.com). We are committed to addressing your inquiries and resolving any issues promptly. Your feedback is valuable to us, and we strive to improve our services based on your input. Please provide detailed information about your concern to help us assist you more effectively. We aim to respond to all inquiries within a reasonable timeframe. For privacy-related questions, please refer to this Privacy Policy for more details on how we handle your personal information.',
+                'If you have any questions or concerns about this Privacy Policy, please contact us at [Mail : Nutkatenoeytung@gmail.com]. We are committed to addressing your inquiries and resolving any issues promptly. Your feedback is valuable to us, and we strive to improve our services based on your input. Please provide detailed information about your concern to help us assist you more effectively. We aim to respond to all inquiries within a reasonable timeframe. For privacy-related questions, please refer to this Privacy Policy for more details on how we handle your personal information.',
               ),
             ],
           ),
