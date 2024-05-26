@@ -42,7 +42,7 @@ class ProductScreen extends StatelessWidget {
     );
   }
 
-   Widget ProductMatchTabs(BuildContext context, int initialTabIndex) {
+  Widget ProductMatchTabs(BuildContext context, int initialTabIndex) {
     return DefaultTabController(
       length: 2,
       initialIndex: initialTabIndex,
@@ -192,7 +192,7 @@ class ProductScreen extends StatelessWidget {
                     height: MediaQuery.of(context).size.height * 0.8,
                     child: TabBarView(
                       children: [
-                        _buildProductMathGrids('All'),
+                        buildProductMathGrids('All'),
                       ],
                     ),
                   ),
@@ -403,7 +403,7 @@ class ProductScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProductMathGrids(String category) {
+  Widget buildProductMathGrids(String category) {
     Query query = FirebaseFirestore.instance
         .collection(productsCollection)
         .where('p_mixmatch', isNotEqualTo: null);

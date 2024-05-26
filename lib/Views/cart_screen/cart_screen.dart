@@ -38,7 +38,7 @@ Widget build(BuildContext context) {
         child: tapButton(
           color: primaryApp,
           onPress: () {
-            Get.to(() => const ShippingDetails());
+            Get.to(() => const ShippingInfoDetails());
           },
           textColor: whiteColor,
           title: "Proceed to shipping",

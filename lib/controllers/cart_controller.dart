@@ -24,7 +24,7 @@ class CartController extends GetxController {
 
   var placingOrder = false.obs;
 
-  var selectedItems = RxMap<String, bool>(); // Tracks selected items by ID
+  var selectedItems = RxMap<String, bool>();
   var selectAll = false.obs; 
   var isMobileBankingExpanded = false.obs;
 

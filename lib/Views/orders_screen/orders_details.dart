@@ -199,9 +199,7 @@ class OrdersDetails extends StatelessWidget {
               15.heightBox,
               Column(
                 children: [
-                    const Text(
-                      "Ordered Product",
-                    )
+                    const Text("Ordered Product",)
                         .text
                         .size(20)
                         .color(blackColor)

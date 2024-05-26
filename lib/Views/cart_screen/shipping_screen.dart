@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_finalproject/Views/cart_screen/detailforshipping.dart';
 import 'package:flutter_finalproject/Views/profile_screen/menu_addAddress_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/cart_controller.dart';
@@ -27,14 +28,14 @@ class FirebaseService {
   }
 }
 
-class ShippingDetails extends StatefulWidget {
-  const ShippingDetails({Key? key}) : super(key: key);
+class ShippingInfoDetails extends StatefulWidget {
+  const ShippingInfoDetails({Key? key}) : super(key: key);
 
   @override
-  _ShippingDetailsState createState() => _ShippingDetailsState();
+  _ShippingInfoDetailsState createState() => _ShippingInfoDetailsState();
 }
 
-class _ShippingDetailsState extends State<ShippingDetails> {
+class _ShippingInfoDetailsState extends State<ShippingInfoDetails> {
   List<Map<String, dynamic>> _addresses = [];
   Map<String, dynamic>? _selectedAddress;
 
@@ -50,25 +51,24 @@ class _ShippingDetailsState extends State<ShippingDetails> {
   }
 
   String formatPhoneNumber(String phone) {
-  String cleaned = phone.replaceAll(RegExp(r'\D'), '');
-  
-  if (cleaned.length == 10) {
-    final RegExp regExp = RegExp(r'(\d{3})(\d{3})(\d{4})');
-    return cleaned.replaceAllMapped(regExp, (Match match) {
-      return '(+66) ${match[1]}-${match[2]}-${match[3]}';
-    });
-  } else if (cleaned.length == 9) {
-    final RegExp regExp = RegExp(r'(\d{2})(\d{3})(\d{4})');
-    return cleaned.replaceAllMapped(regExp, (Match match) {
-      return '(+66) ${match[1]}-${match[2]}-${match[3]}';
-    });
-  }
-  return phone; 
-}
+    String cleaned = phone.replaceAll(RegExp(r'\D'), '');
 
+    if (cleaned.length == 10) {
+      final RegExp regExp = RegExp(r'(\d{3})(\d{3})(\d{4})');
+      return cleaned.replaceAllMapped(regExp, (Match match) {
+        return '(+66) ${match[1]}-${match[2]}-${match[3]}';
+      });
+    } else if (cleaned.length == 9) {
+      final RegExp regExp = RegExp(r'(\d{2})(\d{3})(\d{4})');
+      return cleaned.replaceAllMapped(regExp, (Match match) {
+        return '(+66) ${match[1]}-${match[2]}-${match[3]}';
+      });
+    }
+    return phone;
+  }
 
   Future<void> loadCurrentUserAddress() async {
-    String userId = currentUser!.uid; // Ensure currentUser is not null
+    String userId = currentUser!.uid;
     try {
       DocumentSnapshot documentSnapshot =
           await FirebaseService().getCurrentUserAddress(userId);
@@ -123,7 +123,11 @@ class _ShippingDetailsState extends State<ShippingDetails> {
             onPress: () {
               if (_selectedAddress != null ||
                   controller.addressController.text.isNotEmpty) {
-                Get.to(() => const PaymentMethods());
+                Get.to(() => DetailForShipping(
+                      address: _selectedAddress,
+                      cartItems: controller.productSnapshot,
+                      totalPrice: controller.totalP.value,
+                    ));
               } else {
                 VxToast.show(context, msg: "Choose an address");
               }
@@ -227,7 +231,9 @@ class _ShippingDetailsState extends State<ShippingDetails> {
                         ),
                       );
                     },
-                    separatorBuilder: (context, index) => Divider(color: greyLine,),
+                    separatorBuilder: (context, index) => Divider(
+                      color: greyLine,
+                    ),
                   );
                 },
               ),

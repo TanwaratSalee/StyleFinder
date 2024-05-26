@@ -39,14 +39,14 @@ class NewsScreen extends StatelessWidget {
         width: context.screenWidth,
         height: context.screenHeight,
         child: SafeArea(
-            child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Column(
-                  children: [
-                    VxSwiper.builder(
+          child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    children: [
+                      VxSwiper.builder(
                         aspectRatio: 16 / 15,
                         autoPlay: true,
                         height: 195,
@@ -57,334 +57,399 @@ class NewsScreen extends StatelessWidget {
                             secondSlidersList[index],
                             fit: BoxFit.fill,
                           ).box.rounded.make();
-                        }),
-                    30.heightBox,
-                    Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            'OFFICIAL STORE'
-                                .text
-                                .fontFamily(bold)
-                                .color(blackColor)
-                                .size(20)
-                                .make(),
-                            InkWell(
-                              onTap: () {
-                                Get.to(() => AllStoreScreen());
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Text('See All')
-                                      .text
-                                      .fontFamily(medium)
-                                      .size(16)
-                                      .color(blackColor)
-                                      .make(),
-                                  10.widthBox,
-                                  Image.asset(
-                                    icSeeall,
-                                    width: 14,
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        15.heightBox,
-                        StreamBuilder(
-                          stream: FirestoreServices.allmatchbystore(),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<QuerySnapshot> snapshot) {
-                            if (!snapshot.hasData) {
-                              return Center(
-                                child: loadingIndicator(),
-                              );
-                            } else {
-                              var allproductsdata = snapshot.data!.docs;
-                              allproductsdata.shuffle(math.Random());
-
-                              int itemCount =
-                                  math.min(allproductsdata.length, 4);
-
-                              return SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  children: List.generate(itemCount, (index) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        var vendorId =
-                                            allproductsdata[index]['vendor_id'];
-                                        print(
-                                            "Navigating to StoreScreen with vendor_id: $vendorId");
-                                        Get.to(() =>
-                                            StoreScreen(vendorId: vendorId));
-                                      },
-                                      child: Container(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              "${allproductsdata[index]['vendor_name']}",
-                                              style: const TextStyle(
-                                                fontFamily: medium,
-                                                fontSize: 17,
-                                                color: blackColor,
-                                              ),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                          .box
-                                          .white
-                                          .roundedSM
-                                          .border(color: greyLine)
-                                          .margin(const EdgeInsets.symmetric(
-                                              horizontal: 5))
-                                          .padding(const EdgeInsets.symmetric(
-                                              horizontal: 24, vertical: 12))
-                                          .make(),
-                                    );
-                                  }),
-                                ),
-                              );
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                    30.heightBox,
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            'POPULAR PRODUCT ON THIS WEEK'
-                                .text
-                                .fontFamily(bold)
-                                .color(blackColor)
-                                .size(20)
-                                .make(),
-                            15.heightBox,
-                            Column(
-                              children: [
-                                StreamBuilder(
-                                  stream: FirebaseFirestore.instance
-                                      .collection(productsCollection)
-                                      .snapshots(),
-                                  builder: (context, snapshot) {
-                                    if (!snapshot.hasData) {
-                                      return Center(child: loadingIndicator());
-                                    } else {
-                                      var allProductsData = snapshot.data!.docs;
-
-                                      // Sort the products by the length of p_wishlist in descending order
-                                      allProductsData.sort((a, b) {
-                                        int aWishlistCount = a['p_wishlist'] != null
-                                            ? a['p_wishlist'].length
-                                            : 0;
-                                        int bWishlistCount = b['p_wishlist'] != null
-                                            ? b['p_wishlist'].length
-                                            : 0;
-                                        return bWishlistCount.compareTo(aWishlistCount);
-                                      });
-
-                                      // Limit to top 10 products
-                                      var topProductsData = allProductsData.take(10).toList();
-
-                                      return GridView.builder(
-                                        shrinkWrap: true,
-                                        physics: NeverScrollableScrollPhysics(),
-                                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 2,
-                                          childAspectRatio: 10 / 4,
-                                          mainAxisSpacing: 3,
-                                          crossAxisSpacing: 10,
-                                        ),
-                                        itemCount: topProductsData.length,
-                                        itemBuilder: (context, index) {
-                                          var product = topProductsData[index];
-                                          return GestureDetector(
-                                            onTap: () {
-                                              Get.to(() => ItemDetails(
-                                                    title: product['p_name'],
-                                                    data: product.data() as Map<String, dynamic>,
-                                                  ));
-                                            },
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                ProductCard(
-                                                  rank: index + 1,
-                                                  image: product['p_imgs'][0],
-                                                  price: product['p_price'].toString(),
-                                                  wishlist: product['p_wishlist'] != null
-                                                      ? product['p_wishlist'].length.toString()
-                                                      : '0',
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                      );
-                                    }
-                                  },
-                                ),
-                              ],
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                    30.heightBox,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        'PRODUCT'
-                            .text
-                            .fontFamily(bold)
-                            .color(blackColor)
-                            .size(20)
-                            .make(),
-                        InkWell(
-                          onTap: () {
-                            Get.to(() => ProductScreen(initialTabIndex: 1));
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                        },
+                      ),
+                      30.heightBox,
+                      Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text('See All')
+                              'OFFICIAL STORE'
                                   .text
-                                  .fontFamily(medium)
-                                  .size(16)
+                                  .fontFamily(bold)
                                   .color(blackColor)
+                                  .size(20)
                                   .make(),
-                              10.widthBox,
-                              Image.asset(
-                                icSeeall,
-                                width: 14,
-                              )
+                              InkWell(
+                                onTap: () {
+                                  Get.to(() => AllStoreScreen());
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Text('See All')
+                                        .text
+                                        .fontFamily(medium)
+                                        .size(16)
+                                        .color(blackColor)
+                                        .make(),
+                                    10.widthBox,
+                                    Image.asset(
+                                      icSeeall,
+                                      width: 14,
+                                    )
+                                  ],
+                                ),
+                              ),
                             ],
                           ),
-                        ),
-                      ],
-                    )
-                        .box
-                        .padding(const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 10))
-                        .roundedLg
-                        .make(),
-                    15.heightBox,
-                    StreamBuilder(
-                      stream: FirestoreServices.allproducts(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<QuerySnapshot> snapshot) {
-                        if (!snapshot.hasData) {
-                          return Center(
-                            child: loadingIndicator(),
-                          );
-                        } else {
-                          var allproductsdata = snapshot.data!.docs;
-                          allproductsdata.shuffle(math.Random());
+                          15.heightBox,
+                          StreamBuilder(
+                            stream: FirestoreServices.allmatchbystore(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<QuerySnapshot> snapshot) {
+                              if (!snapshot.hasData) {
+                                return Center(
+                                  child: loadingIndicator(),
+                                );
+                              } else {
+                                var allproductsdata = snapshot.data!.docs;
+                                allproductsdata.shuffle(math.Random());
 
-                          int itemCount = math.min(allproductsdata.length, 4);
+                                int itemCount =
+                                    math.min(allproductsdata.length, 4);
 
-                          return GridView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: itemCount,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              mainAxisSpacing: 12,
-                              crossAxisSpacing: 8,
-                              mainAxisExtent: 280,
-                            ),
-                            itemBuilder: (context, index) {
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                return SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    children: List.generate(itemCount, (index) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          var vendorId =
+                                              allproductsdata[index]
+                                                  ['vendor_id'];
+                                          print(
+                                              "Navigating to StoreScreen with vendor_id: $vendorId");
+                                          Get.to(() =>
+                                              StoreScreen(vendorId: vendorId));
+                                        },
+                                        child: Container(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                "${allproductsdata[index]['vendor_name']}",
+                                                style: const TextStyle(
+                                                  fontFamily: medium,
+                                                  fontSize: 17,
+                                                  color: blackColor,
+                                                ),
+                                                maxLines: 1,
+                                                overflow:
+                                                    TextOverflow.ellipsis,
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                            .box
+                                            .white
+                                            .roundedSM
+                                            .border(color: greyLine)
+                                            .margin(const EdgeInsets.symmetric(
+                                                horizontal: 5))
+                                            .padding(
+                                                const EdgeInsets.symmetric(
+                                                    horizontal: 24,
+                                                    vertical: 12))
+                                            .make(),
+                                      );
+                                    }),
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                      30.heightBox,
+                      //popular product
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              'POPULAR PRODUCT'
+                                  .text
+                                  .fontFamily(bold)
+                                  .color(blackColor)
+                                  .size(20)
+                                  .make(),
+                              15.heightBox,
+                              Column(
                                 children: [
-                                  Expanded(
-                                    child: Center(
-                                      child: ClipRRect(
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(15.0),
-                                          topRight: Radius.circular(15.0),
-                                        ),
-                                        child: Image.network(
-                                          allproductsdata[index]['p_imgs'][0],
-                                          width: 200,
-                                          height: 210,
-                                          fit: BoxFit.cover,
+                                  StreamBuilder(
+                                    stream: FirebaseFirestore.instance
+                                        .collection(productsCollection)
+                                        .snapshots(),
+                                    builder: (context, snapshot) {
+                                      if (!snapshot.hasData) {
+                                        return Center(
+                                            child: loadingIndicator());
+                                      } else {
+                                        var allProductsData =
+                                            snapshot.data!.docs;
+
+                                        // Sort the products by the length of p_wishlist in descending order
+                                        allProductsData.sort((a, b) {
+                                          int aWishlistCount =
+                                              a['p_wishlist'] != null
+                                                  ? a['p_wishlist'].length
+                                                  : 0;
+                                          int bWishlistCount =
+                                              b['p_wishlist'] != null
+                                                  ? b['p_wishlist'].length
+                                                  : 0;
+                                          return bWishlistCount
+                                              .compareTo(aWishlistCount);
+                                        });
+
+                                        // Limit to top 10 products
+                                        var topProductsData =
+                                            allProductsData.take(10).toList();
+
+                                        return GridView.builder(
+                                          shrinkWrap: true,
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          gridDelegate:
+                                              SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 2,
+                                            childAspectRatio: 10 / 4,
+                                            mainAxisSpacing: 3,
+                                            crossAxisSpacing: 10,
+                                          ),
+                                          itemCount: topProductsData.length,
+                                          itemBuilder: (context, index) {
+                                            var product =
+                                                topProductsData[index];
+                                            return GestureDetector(
+                                              onTap: () {
+                                                Get.to(() => ItemDetails(
+                                                      title:
+                                                          product['p_name'],
+                                                      data: product.data()
+                                                          as Map<String,
+                                                              dynamic>,
+                                                    ));
+                                              },
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  ProductCard(
+                                                    rank: index + 1,
+                                                    image: product['p_imgs'][0],
+                                                    price: product['p_price']
+                                                        .toString(),
+                                                    wishlist: product[
+                                                                'p_wishlist'] !=
+                                                            null
+                                                        ? product['p_wishlist']
+                                                            .length
+                                                            .toString()
+                                                        : '0',
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                      30.heightBox,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          'MATCH BY STORE '
+                              .text
+                              .fontFamily(bold)
+                              .color(blackColor)
+                              .size(20)
+                              .make(),
+                          InkWell(
+                            onTap: () {
+                              Get.to(() => ProductScreen(initialTabIndex: 2));
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text('See All')
+                                    .text
+                                    .fontFamily(medium)
+                                    .size(16)
+                                    .color(blackColor)
+                                    .make(),
+                                10.widthBox,
+                                Image.asset(
+                                  icSeeall,
+                                  width: 14,
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      )
+                          .box
+                          .padding(const EdgeInsets.symmetric(
+                              vertical: 5, horizontal: 10))
+                          .roundedLg
+                          .make(),
+                      buildProductMathGrids(category),
+
+                      //Product
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          'PRODUCT'
+                              .text
+                              .fontFamily(bold)
+                              .color(blackColor)
+                              .size(20)
+                              .make(),
+                          InkWell(
+                            onTap: () {
+                              Get.to(() => ProductScreen(initialTabIndex: 1));
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text('See All')
+                                    .text
+                                    .fontFamily(medium)
+                                    .size(16)
+                                    .color(blackColor)
+                                    .make(),
+                                10.widthBox,
+                                Image.asset(
+                                  icSeeall,
+                                  width: 14,
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      )
+                          .box
+                          .padding(const EdgeInsets.fromLTRB(10,45,10,0))
+                          .roundedLg
+                          .make(),
+                      15.heightBox,
+                      StreamBuilder(
+                        stream: FirestoreServices.allproducts(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if (!snapshot.hasData) {
+                            return Center(
+                              child: loadingIndicator(),
+                            );
+                          } else {
+                            var allproductsdata = snapshot.data!.docs;
+                            allproductsdata.shuffle(math.Random());
+
+                            int itemCount = math.min(allproductsdata.length, 4);
+
+                            return GridView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: itemCount,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                mainAxisSpacing: 12,
+                                crossAxisSpacing: 8,
+                                mainAxisExtent: 280,
+                              ),
+                              itemBuilder: (context, index) {
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: Center(
+                                        child: ClipRRect(
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(15.0),
+                                            topRight: Radius.circular(15.0),
+                                          ),
+                                          child: Image.network(
+                                            allproductsdata[index]['p_imgs'][0],
+                                            width: 200,
+                                            height: 210,
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "${allproductsdata[index]['p_name']}",
-                                          style: const TextStyle(
-                                            fontFamily: medium,
-                                            fontSize: 17,
-                                            color: greyDark,
+                                    Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "${allproductsdata[index]['p_name']}",
+                                            style: const TextStyle(
+                                              fontFamily: medium,
+                                              fontSize: 17,
+                                              color: greyDark,
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        Text(
-                                          "${NumberFormat('#,##0').format(double.parse(allproductsdata[index]['p_price']).toInt())} Bath",
-                                          style: const TextStyle(
-                                            fontFamily: regular,
-                                            fontSize: 14,
-                                            color: greyDark,
+                                          Text(
+                                            "${NumberFormat('#,##0').format(double.parse(allproductsdata[index]['p_price']).toInt())} Bath",
+                                            style: const TextStyle(
+                                              fontFamily: regular,
+                                              fontSize: 14,
+                                              color: greyDark,
+                                            ),
                                           ),
-                                        ),
-                                        const SizedBox(height: 10),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              )
-                                  .box
-                                  .white
-                                  .rounded
-                                  .border(color: greyLine)
-                                  .margin(
-                                      const EdgeInsets.symmetric(horizontal: 2))
-                                  .make()
-                                  .onTap(() {
-                                Get.to(() => ItemDetails(
-                                      title:
-                                          "${allproductsdata[index]['p_name']}",
-                                      data:allproductsdata[index].data() as Map<String, dynamic>,
-                                    ));
-                              });
-                            },
-                          );
-                        }
-                      },
-                    ),
-                    20.heightBox,
-                  ],
+                                          const SizedBox(height: 10),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                )
+                                    .box
+                                    .white
+                                    .rounded
+                                    .border(color: greyLine)
+                                    .margin(const EdgeInsets.symmetric(
+                                        horizontal: 2))
+                                    .make()
+                                    .onTap(() {
+                                  Get.to(() => ItemDetails(
+                                        title:
+                                            "${allproductsdata[index]['p_name']}",
+                                        data: allproductsdata[index].data()
+                                            as Map<String, dynamic>,
+                                      ));
+                                });
+                              },
+                            );
+                          }
+                        },
+                      ),
+                      20.heightBox,
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
-        )),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -419,6 +484,7 @@ class NewsScreen extends StatelessWidget {
         int itemCount = validPairs.length;
         return GridView.builder(
           physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             mainAxisSpacing: 7,
@@ -451,141 +517,141 @@ class NewsScreen extends StatelessWidget {
             String productImage2 = data2['p_imgs'][0];
 
             return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MatchDetailScreen(
-                        price1: price1,
-                        price2: price2,
-                        productName1: productName1,
-                        productName2: productName2,
-                        productImage1: productImage1,
-                        productImage2: productImage2,
-                        totalPrice: totalPrice,
-                        vendorName1: vendorName1,
-                        vendorName2: vendorName2,
-                        vendor_id: vendor_id,
-                        collection: collectionList,
-                        description: description,
-                      ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MatchDetailScreen(
+                      price1: price1,
+                      price2: price2,
+                      productName1: productName1,
+                      productName2: productName2,
+                      productImage1: productImage1,
+                      productImage2: productImage2,
+                      totalPrice: totalPrice,
+                      vendorName1: vendorName1,
+                      vendorName2: vendorName2,
+                      vendor_id: vendor_id,
+                      collection: collectionList,
+                      description: description,
                     ),
-                  );
-                },
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Image.network(
-                          productImage1,
-                          width: 80,
-                          height: 90,
-                          fit: BoxFit.cover,
-                        ),
-                        5.widthBox,
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: 200,
-                                child: Text(
-                                  productName1,
-                                  style: const TextStyle(
-                                    fontFamily: medium,
-                                    fontSize: 14,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
+                  ),
+                );
+              },
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Image.network(
+                        productImage1,
+                        width: 80,
+                        height: 90,
+                        fit: BoxFit.cover,
+                      ),
+                      5.widthBox,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 200,
+                              child: Text(
+                                productName1,
+                                style: const TextStyle(
+                                  fontFamily: medium,
+                                  fontSize: 14,
                                 ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
                               ),
-                              Text(
-                                "${NumberFormat('#,##0').format(double.parse(price1).toInt())} Bath",
-                                style: const TextStyle(color: greyColor),
+                            ),
+                            Text(
+                              "${NumberFormat('#,##0').format(double.parse(price1).toInt())} Bath",
+                              style: const TextStyle(color: greyColor),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                  3.heightBox,
+                  Row(
+                    children: [
+                      Image.network(
+                        productImage2,
+                        width: 80,
+                        height: 90,
+                        fit: BoxFit.cover,
+                      ),
+                      3.widthBox,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 200,
+                              child: Text(
+                                productName2,
+                                style: const TextStyle(
+                                  fontFamily: medium,
+                                  fontSize: 14,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
                               ),
-                            ],
-                          ),
-                        )
+                            ),
+                            Text(
+                              "${NumberFormat('#,##0').format(double.parse(price2).toInt())} Bath",
+                              style: const TextStyle(color: greyColor),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: Row(
+                      children: [
+                        Text(
+                          "Price: ",
+                          style: TextStyle(
+                              color: blackColor,
+                              fontFamily: regular,
+                              fontSize: 14),
+                        ),
+                        Text(
+                          "${NumberFormat('#,##0').format(double.parse(totalPrice).toInt())} ",
+                          style: TextStyle(
+                              color: blackColor,
+                              fontFamily: medium,
+                              fontSize: 16),
+                        ),
+                        Text(
+                          "Bath",
+                          style: TextStyle(
+                              color: blackColor,
+                              fontFamily: regular,
+                              fontSize: 14),
+                        ),
                       ],
                     ),
-                    3.heightBox,
-                    Row(
-                      children: [
-                        Image.network(
-                          productImage2,
-                          width: 80,
-                          height: 90,
-                          fit: BoxFit.cover,
-                        ),
-                        3.widthBox,
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: 200,
-                                child: Text(
-                                  productName2,
-                                  style: const TextStyle(
-                                    fontFamily: medium,
-                                    fontSize: 14,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                ),
-                              ),
-                              Text(
-                                "${NumberFormat('#,##0').format(double.parse(price2).toInt())} Bath",
-                                style: const TextStyle(color: greyColor),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Price: ",
-                            style: TextStyle(
-                                color: blackColor,
-                                fontFamily: regular,
-                                fontSize: 14),
-                          ),
-                          Text(
-                            "${NumberFormat('#,##0').format(double.parse(totalPrice).toInt())} ",
-                            style: TextStyle(
-                                color: blackColor,
-                                fontFamily: medium,
-                                fontSize: 16),
-                          ),
-                          Text(
-                            "Bath",
-                            style: TextStyle(
-                                color: blackColor,
-                                fontFamily: regular,
-                                fontSize: 14),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                )
-                    .box
-                    .border(color: greyLine)
-                    .p8
-                    .margin(EdgeInsets.all(2))
-                    .roundedSM
+                  )
+                ],
+              )
+                  .box
+                  .border(color: greyLine)
+                  .p8
+                  .margin(EdgeInsets.all(2))
+                  .roundedSM
                     .make());
           },
           itemCount: 4,
-        );
-      },
+            );
+          },
     );
   }
 }
