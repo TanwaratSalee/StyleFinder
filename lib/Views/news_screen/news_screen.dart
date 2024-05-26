@@ -185,21 +185,34 @@ class NewsScreen extends StatelessWidget {
                                     if (!snapshot.hasData) {
                                       return Center(child: loadingIndicator());
                                     } else {
-                                      var allproductsdata = snapshot.data!.docs;
+                                      var allProductsData = snapshot.data!.docs;
+
+                                      // Sort the products by the length of p_wishlist in descending order
+                                      allProductsData.sort((a, b) {
+                                        int aWishlistCount = a['p_wishlist'] != null
+                                            ? a['p_wishlist'].length
+                                            : 0;
+                                        int bWishlistCount = b['p_wishlist'] != null
+                                            ? b['p_wishlist'].length
+                                            : 0;
+                                        return bWishlistCount.compareTo(aWishlistCount);
+                                      });
+
+                                      // Limit to top 10 products
+                                      var topProductsData = allProductsData.take(10).toList();
 
                                       return GridView.builder(
                                         shrinkWrap: true,
                                         physics: NeverScrollableScrollPhysics(),
-                                        gridDelegate:
-                                            SliverGridDelegateWithFixedCrossAxisCount(
+                                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                                           crossAxisCount: 2,
                                           childAspectRatio: 10 / 4,
                                           mainAxisSpacing: 3,
                                           crossAxisSpacing: 10,
                                         ),
-                                        itemCount: 10,
+                                        itemCount: topProductsData.length,
                                         itemBuilder: (context, index) {
-                                          var product = allproductsdata[index];
+                                          var product = topProductsData[index];
                                           return GestureDetector(
                                             onTap: () {
                                               Get.to(() => ItemDetails(
@@ -208,15 +221,15 @@ class NewsScreen extends StatelessWidget {
                                                   ));
                                             },
                                             child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
+                                              mainAxisAlignment: MainAxisAlignment.center,
                                               children: [
                                                 ProductCard(
                                                   rank: index + 1,
                                                   image: product['p_imgs'][0],
-                                                  price: product['p_price']
-                                                      .toString(),
-                                                  // likes: product['p_likes'],
+                                                  price: product['p_price'].toString(),
+                                                  wishlist: product['p_wishlist'] != null
+                                                      ? product['p_wishlist'].length.toString()
+                                                      : '0',
                                                 ),
                                               ],
                                             ),
@@ -639,6 +652,7 @@ class ProductCard extends StatelessWidget {
   final int rank;
   final String image;
   final String price;
+  final String wishlist;
   // final int likes;
 
   const ProductCard({
@@ -646,6 +660,7 @@ class ProductCard extends StatelessWidget {
     required this.rank,
     required this.image,
     required this.price,
+    required this.wishlist,
     // required this.likes,
   }) : super(key: key);
 
@@ -688,13 +703,13 @@ class ProductCard extends StatelessWidget {
                     width: 25,
                   ),
                   SizedBox(width: 5),
-                  // Text(
-                  // likes.toString(),
-                  // style: TextStyle(
-                  //   fontFamily: regular,
-                  //   fontSize: 14,
-                  // ),
-                  // ),
+                  Text(
+                    wishlist, // Display the wishlist count here
+                    style: TextStyle(
+                      fontFamily: regular,
+                      fontSize: 14,
+                    ),
+                  ),
                 ],
               ),
             ],
