@@ -503,8 +503,8 @@ class _ProfileScreenState extends State<ProfileScreen>
               'lower': data['p_name_lower'],
               'top_price': data['p_price_top'].toString(),
               'lower_price': data['p_price_lower'].toString(),
-              'top_image': data['p_imgs_top'][0],
-              'lower_image': data['p_imgs_lower'][0],
+              'top_image': data['p_imgs_top'],
+              'lower_image': data['p_imgs_lower'],
               'docId_top': doc.id,
               'docId_lower': doc.id
             });
