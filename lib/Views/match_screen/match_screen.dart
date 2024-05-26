@@ -147,7 +147,25 @@ class _MatchScreenState extends State<MatchScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               InkWell(
-                onTap: () {},
+                onTap: () async {
+                  final topProducts = await _topProductsFuture;
+                  final lowerProducts = await _lowerProductsFuture;
+                  if (topProducts.isNotEmpty && lowerProducts.isNotEmpty) {
+                    final topProduct = topProducts[_currentPageIndexTop];
+                    final lowerProduct = lowerProducts[_currentPageIndexLower];
+                    controller.addToWishlistPostUserMatch(
+                      topProduct['p_name'],
+                      lowerProduct['p_name'],
+                      context,
+                    );
+                  } else {
+                    VxToast.show(
+                      context,
+                      msg:
+                          'Unable to add to favorites, Because the information is not available',
+                    );
+                  }
+                },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
