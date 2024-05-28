@@ -281,7 +281,7 @@ class NewsScreen extends StatelessWidget {
                               .make(),
                           InkWell(
                             onTap: () {
-                              Get.to(() => ProductScreen(initialTabIndex: 2));
+                              Get.to(() => ProductScreen(initialTabIndex: 1));
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -321,7 +321,7 @@ class NewsScreen extends StatelessWidget {
                               .make(),
                           InkWell(
                             onTap: () {
-                              Get.to(() => ProductScreen(initialTabIndex: 1));
+                              Get.to(() => ProductScreen(initialTabIndex: 0));
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
