@@ -66,14 +66,14 @@ class _ProfileScreenState extends State<ProfileScreen>
             tabs: [
               Tab(
                 icon: Image.asset(
-                  icTapProfileFav,
+                  icTapPostProfile,
                   width: 30,
                   height: 30,
                 ),
               ),
               Tab(
                 icon: Image.asset(
-                  icTapPostProfile,
+                  icTapProfileFav,
                   width: 30,
                   height: 30,
                 ),
@@ -92,7 +92,7 @@ class _ProfileScreenState extends State<ProfileScreen>
             child: TabBarView(
               controller: _mainTabController,
               children: [
-                Center(child: Text('No')),
+                Center(child: Text('No Product')),
                 Column(
                   children: [
                     TabBar(
