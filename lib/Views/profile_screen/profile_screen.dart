@@ -58,17 +58,22 @@ class _ProfileScreenState extends State<ProfileScreen>
         children: [
           buildUserProfile(),
           TabBar(
+            controller: _mainTabController,
+            labelStyle: const TextStyle(
+                fontSize: 15, fontFamily: 'regular', color: Colors.grey),
+            unselectedLabelStyle: const TextStyle(
+                fontSize: 14, fontFamily: 'regular', color: Colors.grey),
             tabs: [
               Tab(
                 icon: Image.asset(
-                  icTapPostProfile,
+                  icTapProfileFav,
                   width: 30,
                   height: 30,
                 ),
               ),
               Tab(
                 icon: Image.asset(
-                  icTapProfileFav,
+                  icTapPostProfile,
                   width: 30,
                   height: 30,
                 ),
@@ -105,6 +110,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                         const Tab(text: 'Match'),
                         const Tab(text: 'User Match'),
                       ],
+                      unselectedLabelColor: Colors.grey,
+                      labelColor: primaryApp,
                       indicatorColor: Theme.of(context).primaryColor,
                     ),
                     Divider(
