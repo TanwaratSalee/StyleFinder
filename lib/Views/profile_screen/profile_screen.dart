@@ -13,39 +13,32 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen>
-    with TickerProviderStateMixin {
-  TabController? _mainTabController;
-  TabController? _favoriteTabController;
+    with SingleTickerProviderStateMixin {
+  TabController? _tabController;
 
   @override
   void initState() {
     super.initState();
-    _mainTabController = TabController(length: 2, vsync: this);
-    _favoriteTabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: whiteColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: whiteColor,
         automaticallyImplyLeading: false,
         title: const Text(
           'Profile',
           textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 26,
-            fontFamily: 'medium',
-          ),
-        ),
-        shadowColor: Colors.grey.withOpacity(0.5),
+        ).text.size(26).fontFamily(semiBold).color(blackColor).make(),
+        shadowColor: greyColor.withOpacity(0.5),
         actions: <Widget>[
           IconButton(
             icon: const Icon(
               Icons.menu,
-              color: Colors.black,
+              color: blackColor,
             ),
             onPressed: () {
               Get.to(() => const MenuSettingScreen());
@@ -58,22 +51,22 @@ class _ProfileScreenState extends State<ProfileScreen>
         children: [
           buildUserProfile(),
           TabBar(
-            controller: _mainTabController,
+            controller: _tabController,
             labelStyle: const TextStyle(
-                fontSize: 15, fontFamily: 'regular', color: Colors.grey),
+                fontSize: 15, fontFamily: regular, color: greyDark),
             unselectedLabelStyle: const TextStyle(
-                fontSize: 14, fontFamily: 'regular', color: Colors.grey),
+                fontSize: 14, fontFamily: regular, color: greyDark),
             tabs: [
               Tab(
                 icon: Image.asset(
-                  icTapPostProfile,
+                  icTapProfileFav,
                   width: 30,
                   height: 30,
                 ),
               ),
               Tab(
                 icon: Image.asset(
-                  icTapProfileFav,
+                  icTapPostProfile,
                   width: 30,
                   height: 30,
                 ),
@@ -84,15 +77,16 @@ class _ProfileScreenState extends State<ProfileScreen>
             indicatorColor: Theme.of(context).primaryColor,
           ),
           Divider(
-            color: Colors.grey,
+            color: greyThin,
             thickness: 1,
             height: 2,
           ),
+          const SizedBox(height: 10),
           Expanded(
             child: TabBarView(
               controller: _mainTabController,
               children: [
-                Center(child: Text('No Product')),
+                Center(child: Text('No')),
                 Column(
                   children: [
                     TabBar(
@@ -837,5 +831,11 @@ class _ProfileScreenState extends State<ProfileScreen>
         );
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _tabController?.dispose();
+    super.dispose();
   }
 }

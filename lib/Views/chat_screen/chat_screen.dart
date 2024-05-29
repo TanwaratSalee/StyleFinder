@@ -14,14 +14,40 @@ class ChatScreen extends StatelessWidget {
     var controller = Get.put(ChatsController());
 
     return Scaffold(
-      backgroundColor: primaryApp,
-      appBar: AppBar(
-        title: "${controller.friendName}"
-            .text
-            .size(24)
-            .fontFamily(medium)
-            .color(blackColor)
-            .make(),
+      backgroundColor: whiteColor,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(65),
+        child: AppBar(
+          backgroundColor: whiteColor,
+          elevation: 4,
+          title: Row(
+            children: [
+              Container(
+                child: CircleAvatar(
+                  radius: 22,
+                  backgroundColor: primaryApp,
+                  backgroundImage: controller.friendImageUrl.value.isNotEmpty
+                      ? NetworkImage(controller.friendImageUrl.value)
+                      : null,
+                  child: controller.friendImageUrl.value.isEmpty
+                      ? Icon(
+                          Icons.person,
+                          color: whiteColor,
+                          size: 22,
+                        )
+                      : null,
+                ),
+              ),
+              15.widthBox,
+              "${controller.friendName}"
+                  .text
+                  .size(18)
+                  .fontFamily(medium)
+                  .color(blackColor)
+                  .make(),
+            ],
+          ),
+        ),
       ),
       body: Container(
         child: Padding(
