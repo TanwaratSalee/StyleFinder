@@ -165,10 +165,10 @@ class EditProfileScreen extends StatelessWidget {
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: "Edit Profile"
-            .text
-            .size(24)
-            .fontFamily(medium)
-            .color(greyDark)
+           .text
+            .size(28)
+            .fontFamily(semiBold)
+            .color(blackColor)
             .make(),
         actions: [
           TextButton(

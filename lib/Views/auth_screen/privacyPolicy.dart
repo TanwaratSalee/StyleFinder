@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_finalproject/consts/styles.dart';
+import 'package:flutter_finalproject/consts/consts.dart';
 
 class PrivacyPolicySceen extends StatelessWidget {
   const PrivacyPolicySceen({super.key});
@@ -8,7 +7,11 @@ class PrivacyPolicySceen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Privacy Policy'),
+        title: const Text('Privacy Policy').text
+            .size(28)
+            .fontFamily(semiBold)
+            .color(blackColor)
+            .make(),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

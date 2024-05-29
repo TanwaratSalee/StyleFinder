@@ -159,9 +159,9 @@ class _AddressFormState extends State<AddressForm> {
       appBar: AppBar(
         title: "Add Address"
             .text
-            .size(24)
+            .size(28)
             .fontFamily(semiBold)
-            .color(greyDark)
+            .color(blackColor)
             .make(),
       ),
       bottomNavigationBar: SizedBox(

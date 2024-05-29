@@ -41,7 +41,7 @@ import 'package:get/get.dart';
 class NewsController extends GetxController {
   @override
   void onInit() {
-    getUsername(); // Fetch username when the controller is initialized
+    getUsername(); 
     super.onInit();
   }
 
@@ -61,11 +61,9 @@ class NewsController extends GetxController {
           .get();
 
       if (n.docs.isNotEmpty) {
-        // Check if 'name' is not null before accessing it
         username = n.docs.single['name'] ?? '';
       }
     } catch (e) {
-      // Handle any errors that might occur during the username retrieval process
       print('Error fetching username: $e');
     }
   }

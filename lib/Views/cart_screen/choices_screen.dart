@@ -26,7 +26,11 @@ class _ChoicesScreenState extends State<ChoicesScreen> {
       backgroundColor: whiteColor,
       appBar: AppBar(
         title:
-            const Text("Shipping address").text.size(24).fontFamily(semiBold).color(greyDark).make(),
+            const Text("Shipping address").text
+            .size(28)
+            .fontFamily(semiBold)
+            .color(blackColor)
+            .make(),
         backgroundColor: whiteColor,
       ),
       body: Padding(

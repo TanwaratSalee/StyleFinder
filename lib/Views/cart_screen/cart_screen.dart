@@ -46,7 +46,11 @@ Widget build(BuildContext context) {
       ),
     ),
     appBar: AppBar(
-      title: "Cart".text.color(greyDark).fontFamily(regular).make(),
+      title: "Cart".text
+            .size(28)
+            .fontFamily(semiBold)
+            .color(blackColor)
+            .make(),
     ),
     body: StreamBuilder(
       stream: FirestoreServices.getCart(currentUser!.uid),

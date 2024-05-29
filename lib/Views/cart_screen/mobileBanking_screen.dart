@@ -135,7 +135,11 @@ class _MobileBankingScreenextendsState extends State<MobileBankingScreenextends>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mobile Banking'),
+        title: Text('Mobile Banking').text
+            .size(28)
+            .fontFamily(semiBold)
+            .color(blackColor)
+            .make(),
       ),
       body: Center(
         child: Column(

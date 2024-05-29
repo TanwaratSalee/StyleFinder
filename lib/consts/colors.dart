@@ -13,4 +13,4 @@ const Color greyLine = Color.fromRGBO(206, 207, 210, 1);
 const Color greyColor = Color.fromRGBO(110, 115, 119, 1);
 const Color greyDark = Color.fromRGBO(91, 91, 93, 1);
 
-const Color whiteOpacity = Color.fromRGBO(255, 255, 255, 0.5);
+const Color whiteOpacity = Color.fromRGBO(255, 255, 255, 0.92);

@@ -81,9 +81,9 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
       appBar: AppBar(
         title: const Text('Match Detail')
             .text
-            .color(greyDark)
-            .fontFamily(medium)
-            .size(24)
+            .size(28)
+            .fontFamily(semiBold)
+            .color(blackColor)
             .make(),
         centerTitle: true,
         elevation: 0,

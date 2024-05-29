@@ -31,7 +31,11 @@ class _ReviewScreenState extends State<ReviewScreen>
       appBar: AppBar(
         title: Text(
           'Reviews',
-        ).text.size(24).fontFamily(semiBold).color(greyDark).make(),
+        ).text
+            .size(28)
+            .fontFamily(semiBold)
+            .color(blackColor)
+            .make(),
         centerTitle: true,
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(50.0),

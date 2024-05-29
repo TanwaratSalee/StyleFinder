@@ -112,7 +112,11 @@ class _ShippingInfoDetailsState extends State<ShippingInfoDetails> {
       backgroundColor: whiteColor,
       appBar: AppBar(
         title:
-            const Text("Shipping Info").text.size(24).fontFamily(medium).make(),
+            const Text("Shipping Info").text
+            .size(28)
+            .fontFamily(semiBold)
+            .color(blackColor)
+            .make(),
         backgroundColor: whiteColor,
       ),
       bottomNavigationBar: Padding(

@@ -5,13 +5,20 @@ import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
+  late TextEditingController searchController;
   var isFav = false.obs;
 
-  get searchController => null;
+  // get searchController => null;
 
   void onClose() {
     searchController.dispose();
     super.onClose();
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    searchController = TextEditingController();
   }
 
   void addToWishlist(Map<String, dynamic> product) {
