@@ -15,7 +15,7 @@ Widget senderBubble(DocumentSnapshot data) {
       crossAxisAlignment: data['uid'] == currentUser!.uid ? CrossAxisAlignment.end : CrossAxisAlignment.start,
       children: [
         Container(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.fromLTRB(10,12,15,12),
           margin: const EdgeInsets.only(bottom: 8),
           decoration: BoxDecoration(
             color: data['uid'] == currentUser!.uid ? greyMessage : primaryMessage,
