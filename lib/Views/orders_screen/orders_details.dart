@@ -126,12 +126,6 @@ class OrdersDetails extends StatelessWidget {
                     title1: "Order Date",
                     title2: "Payment Method",
                   ),
-                  // orderPlaceDetails(
-                  //   d1: "Order Placed",
-                  //   d2: "",
-                  //   title1: "Delivery Status",
-                  //   title2: "",
-                  // ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16.0, vertical: 8.0),
@@ -147,7 +141,6 @@ class OrdersDetails extends StatelessWidget {
                             ),
                             Text(
                                 "${data['order_by_firstname']} ${data['order_by_surname']}"),
-                            // Text("${data['order_by_email']}"),
                             Text("${data['order_by_address']}"),
                             Text("${data['order_by_city']}"),
                             Text("${data['order_by_state']}"),

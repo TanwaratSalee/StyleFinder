@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/news_controller.dart';
+import 'package:flutter_finalproject/services/firestore_services.dart';
 import 'package:get/get.dart';
 import 'dart:math';
 
 class CartController extends GetxController {
-  var totalP = 0.obs;
 
   //text controllers for shipping details
   var firstnameController = TextEditingController();
@@ -18,7 +18,6 @@ class CartController extends GetxController {
 
   var paymentIndex = 0.obs;
 
-  late dynamic productSnapshot;
   var products = [];
   var vendors = [];
 
@@ -32,17 +31,42 @@ class CartController extends GetxController {
     isMobileBankingExpanded.value = !isMobileBankingExpanded.value;
   }
 
-  var count = 1.obs;
+  var productSnapshot = <QueryDocumentSnapshot>[].obs;
+  var totalP = 0.obs;
 
-  void incrementCount() {
-    count++;
+  void calculate(List<QueryDocumentSnapshot> data) {
+    totalP.value = data.fold<int>(0, (sum, item) => sum + (item['tprice'] as int));
   }
 
-  void decrementCount() {
-    if (count > 1) {
-      count--;
+  void incrementCount(String docId) {
+    var currentItem = productSnapshot.firstWhere((element) => element.id == docId);
+    int currentQty = currentItem['qty'];
+    int price = currentItem['tprice']; // Assuming 'price' is the price of a single unit
+    int newQty = currentQty + 1;
+    int newTprice = price * newQty;
+    FirestoreServices.updateDocumentCart(docId, {'qty': newQty, 'tprice': newTprice});
+    currentItem.reference.update({'qty': newQty, 'tprice': newTprice});
+    recalculateTotalPrice();
+  }
+
+  void decrementCount(String docId) {
+    var currentItem = productSnapshot.firstWhere((element) => element.id == docId);
+    int currentQty = currentItem['qty'];
+    if (currentQty > 1) {
+      int currentTprice = currentItem['tprice'];
+      int unitPrice = currentTprice ~/ currentQty; // Calculate unit price
+      int newQty = currentQty - 1;
+      int newTprice = unitPrice * newQty;
+      FirestoreServices.updateDocumentCart(docId, {'qty': newQty, 'tprice': newTprice});
+      currentItem.reference.update({'qty': newQty, 'tprice': newTprice});
+      recalculateTotalPrice();
     }
   }
+
+  void recalculateTotalPrice() {
+    totalP.value = productSnapshot.fold<int>(0, (sum, item) => sum + (item['tprice'] as int));
+  }
+
 
   Map<String, dynamic>? _selectedAddress;
   
@@ -85,12 +109,12 @@ class CartController extends GetxController {
     return 0.0;
   }
 
-  calculate(data) {
+/*   calculate(data) {
     totalP.value = 0;
     for (var i = 0; i < data.length; i++) {
       totalP.value = totalP.value + int.parse(data[i]['tprice'].toString());
     }
-  }
+  } */
 
   changePaymentIndex(index) {
     paymentIndex.value = index;
@@ -134,6 +158,7 @@ class CartController extends GetxController {
     });
     placingOrder(false);
   }
+
 
   getProductDetails() {
     products.clear();

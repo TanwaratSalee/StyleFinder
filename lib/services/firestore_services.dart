@@ -18,6 +18,14 @@ class FirestoreServices {
         .snapshots();
   }
 
+  static void updateDocumentCart(String docId, Map<String, dynamic> data) {
+    FirebaseFirestore.instance.collection('cart').doc(docId).update(data);
+  }
+
+  static void deleteDocumentCart(String docId) {
+    FirebaseFirestore.instance.collection('cart').doc(docId).delete();
+  }
+
   static getSubCollectionProducts(title) {
     return firestore
         .collection(productsCollection)
@@ -26,10 +34,11 @@ class FirestoreServices {
   }
 
   //get cart
-  static getCart(uid) {
-    return firestore
-        .collection(cartCollection)
-        .where('added_by', isEqualTo: uid)
+
+  static Stream<QuerySnapshot> getCart(String userId) {
+    return FirebaseFirestore.instance
+        .collection('cart')
+        .where('added_by', isEqualTo: userId)
         .snapshots();
   }
 

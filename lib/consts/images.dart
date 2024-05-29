@@ -8,11 +8,6 @@ const String icFacebook = "assets/icons/iconsOtherApp/facebook-icon.png";
 const String icApple = "assets/icons/iconsOtherApp/apple-icon.png";
 const String icGmail = "assets/icons/iconsOtherApp/gmail-icon.png";
 
-//icon nav bar top
-// const IconData icNotification = IconData(0xe451, fontFamily: 'MaterialIcons');
-// const String logoAppOntop = "assets/icons/iconsNavbar/LogoOnApp.jpg";
-// const IconData icsearch = IconData(0xe567, fontFamily: 'MaterialIcons');
-// const IconData iccart = IconData(0xf37d, fontFamily: 'MaterialIcons');
 
 //icon nav bar top
 // const String icNoti = "assets/icons/iconsNavbarinapp/notification.png";
@@ -40,6 +35,7 @@ const String icPersonSelected =
 
 //other
 const String icLogoApp = "assets/images/LogoOnApp.png";
+const String bgMessage = "assets/images/MessageBg.png";
 const String bgLogin = "assets/icons/loginBG.png";
 
 // ----------------------------------------------- Home Screen -----------------------------------------------

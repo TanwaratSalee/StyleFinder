@@ -135,8 +135,8 @@ class _PaymentMethodsState extends State<PaymentMethods> {
                     } else if (selectedMethod == 'Cash on Delivery') {
                       print('Processing Cash on Delivery');
                       await controller.placeMyOrder(
-                          orderPaymentMethod: selectedMethod,
-                          totalAmount: controller.totalP.value);
+                          orderPaymentMethod: selectedMethod?? '',
+                          totalAmount: controller.totalP.value.toDouble());
                       await controller.clearCart();
                       VxToast.show(context, msg: "Order placed successfully");
                       Get.offAll(() => MainHome());
