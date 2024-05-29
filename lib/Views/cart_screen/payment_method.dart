@@ -144,8 +144,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
                       if (selectedBank != null) {
                         Get.to(() => const MobileBankingScreenextends());
                       } else {
-                        VxToast.show(context,
-                            msg: "Please select a bank first.");
+                        VxToast.show(context, msg: "Please select a bank first.");
                       }
                     } else {
                       VxToast.show(context,

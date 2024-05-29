@@ -37,7 +37,7 @@ class _CartScreenState extends State<CartScreen> {
           child: tapButton(
             color: primaryApp,
             onPress: () {
-              Get.to(() => const ShippingInfoDetails());
+              Get.to(() => ShippingInfoDetails());
             },
             textColor: whiteColor,
             title: "Proceed to shipping",
@@ -66,8 +66,8 @@ class _CartScreenState extends State<CartScreen> {
             // Group products by seller
             Map<String, List<DocumentSnapshot>> groupedProducts = {};
             for (var doc in data) {
-              String sellerName = doc['sellername'];
-              if (groupedProducts[sellerName] == null) {
+              String sellerName = doc['sellername'] ?? 'Unknown Seller';
+              if (!groupedProducts.containsKey(sellerName)) {
                 groupedProducts[sellerName] = [];
               }
               groupedProducts[sellerName]!.add(doc);
@@ -296,3 +296,27 @@ class _CartScreenState extends State<CartScreen> {
     });
   }
 }
+
+
+  void navigateToItemDetails(BuildContext context, String productName) {
+    FirebaseFirestore.instance
+        .collection('products')
+        .where('p_name', isEqualTo: productName)
+        .limit(1)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      if (querySnapshot.docs.isNotEmpty) {
+        var productData =
+            querySnapshot.docs.first.data() as Map<String, dynamic>;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ItemDetails(
+              title: productData['p_name'],
+              data: productData,
+            ),
+          ),
+        );
+      }
+    });
+  }

@@ -41,7 +41,7 @@ class CartController extends GetxController {
   void incrementCount(String docId) {
     var currentItem = productSnapshot.firstWhere((element) => element.id == docId);
     int currentQty = currentItem['qty'];
-    int price = currentItem['tprice']; // Assuming 'price' is the price of a single unit
+    int price = currentItem['tprice'];
     int newQty = currentQty + 1;
     int newTprice = price * newQty;
     FirestoreServices.updateDocumentCart(docId, {'qty': newQty, 'tprice': newTprice});
@@ -54,7 +54,7 @@ class CartController extends GetxController {
     int currentQty = currentItem['qty'];
     if (currentQty > 1) {
       int currentTprice = currentItem['tprice'];
-      int unitPrice = currentTprice ~/ currentQty; // Calculate unit price
+      int unitPrice = currentTprice ~/ currentQty;
       int newQty = currentQty - 1;
       int newTprice = unitPrice * newQty;
       FirestoreServices.updateDocumentCart(docId, {'qty': newQty, 'tprice': newTprice});
@@ -120,7 +120,7 @@ class CartController extends GetxController {
     paymentIndex.value = index;
   }
 
-  placeMyOrder({required orderPaymentMethod, required totalAmount}) async {
+/*   placeMyOrder({required orderPaymentMethod, required totalAmount}) async {
     placingOrder(true);
     await getProductDetails();
     String orderCode = generateRandomOrderCode(8);
@@ -157,7 +157,76 @@ class CartController extends GetxController {
       'vendors': FieldValue.arrayUnion(vendors)
     });
     placingOrder(false);
+  } */
+
+placeMyOrder({required orderPaymentMethod, required totalAmount}) async {
+  placingOrder(true);
+  await getProductDetails();
+
+  String firstname = _selectedAddress?['firstname'] ?? '';
+  String surname = _selectedAddress?['surname'] ?? '';
+  String address = _selectedAddress?['address'] ?? '';
+  String state = _selectedAddress?['state'] ?? '';
+  String city = _selectedAddress?['city'] ?? '';
+  String phone = _selectedAddress?['phone'] ?? '';
+  String postalcode = _selectedAddress?['postalCode'] ?? '';
+
+  // Group products by vendor_id
+  Map<String, List<Map<String, dynamic>>> groupedProducts = {};
+  for (var product in products) {
+    String vendorId = product['vendor_id'];
+    if (!groupedProducts.containsKey(vendorId)) {
+      groupedProducts[vendorId] = [];
+    }
+    groupedProducts[vendorId]!.add(product);
   }
+
+  double totalOrderAmount = 0.0;
+
+  // Create separate order documents for each vendor
+  for (var entry in groupedProducts.entries) {
+    String vendorId = entry.key;
+    List<Map<String, dynamic>> vendorProducts = entry.value;
+
+    // Calculate total amount for this vendor
+    double vendorTotalAmount = vendorProducts.fold(0.0, (sum, item) {
+      double itemPrice = item['price'] != null ? item['price'].toDouble() : 0.0;
+      return sum + itemPrice;
+    });
+
+    // Add vendorTotalAmount to the overall total
+    totalOrderAmount += vendorTotalAmount;
+
+    await firestore.collection(ordersCollection).add({
+      'order_code': generateRandomOrderCode(8),
+      'order_date': FieldValue.serverTimestamp(),
+      'order_by': currentUser!.uid,
+      'order_by_name': Get.find<NewsController>().username,
+      'order_by_email': currentUser!.email,
+      'order_by_firstname': firstname,
+      'order_by_surname': surname,
+      'order_by_address': address,
+      'order_by_state': state,
+      'order_by_city': city,
+      'order_by_phone': phone,
+      'order_by_postalcode': postalcode,
+      'shipping_method': "Home Delivery",
+      'payment_method': orderPaymentMethod,
+      'order_placed': true,
+      'order_confirmed': false,
+      'order_delivered': false,
+      'order_on_delivery': false,
+      'total_amount': vendorTotalAmount,
+      'orders': vendorProducts,
+      'vendor': vendorId,
+    });
+  }
+
+  // Update the overall total amount
+  print('Total order amount: $totalOrderAmount');
+
+  placingOrder(false);
+}
 
 
   getProductDetails() {
@@ -170,7 +239,8 @@ class CartController extends GetxController {
         'vendor_id': productSnapshot[i]['vendor_id'],
         'price': productSnapshot[i]['tprice'],
         'qty': productSnapshot[i]['qty'],
-        'title': productSnapshot[i]['title']
+        'title': productSnapshot[i]['title'],
+        'sellername': productSnapshot[i]['sellername'],
       });
       vendors.add(productSnapshot[i]['vendor_id']);
     }
