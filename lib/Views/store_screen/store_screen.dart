@@ -21,7 +21,7 @@ class StoreScreen extends StatelessWidget {
           appBar: AppBar(
             title: Text(title)
                .text
-            .size(28)
+            .size(26)
             .fontFamily(semiBold)
             .color(blackColor)
             .make(),

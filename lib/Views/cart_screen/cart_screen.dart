@@ -47,7 +47,7 @@ Widget build(BuildContext context) {
     ),
     appBar: AppBar(
       title: "Cart".text
-            .size(28)
+            .size(26)
             .fontFamily(semiBold)
             .color(blackColor)
             .make(),

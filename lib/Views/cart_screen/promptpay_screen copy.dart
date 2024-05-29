@@ -137,7 +137,7 @@ class _PromptpayScreenState extends State<PromptpayScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Display QR Code').text
-            .size(28)
+            .size(26)
             .fontFamily(semiBold)
             .color(blackColor)
             .make(),

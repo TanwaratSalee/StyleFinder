@@ -45,12 +45,12 @@ class _CollectionDetailsState extends State<CollectionDetails> {
       appBar: AppBar(
         title: widget.title != null
             ? widget.title!.text
-            .size(28)
+            .size(26)
             .fontFamily(semiBold)
             .color(blackColor)
             .make()
             : const Text('No Title').text
-            .size(28)
+            .size(26)
             .fontFamily(semiBold)
             .color(blackColor)
             .make(),

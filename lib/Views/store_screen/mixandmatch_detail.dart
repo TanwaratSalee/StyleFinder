@@ -81,7 +81,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
       appBar: AppBar(
         title: const Text('Match Detail')
             .text
-            .size(28)
+            .size(26)
             .fontFamily(semiBold)
             .color(blackColor)
             .make(),

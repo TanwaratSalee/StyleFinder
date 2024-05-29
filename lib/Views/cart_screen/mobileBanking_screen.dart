@@ -136,7 +136,7 @@ class _MobileBankingScreenextendsState extends State<MobileBankingScreenextends>
     return Scaffold(
       appBar: AppBar(
         title: Text('Mobile Banking').text
-            .size(28)
+            .size(26)
             .fontFamily(semiBold)
             .color(blackColor)
             .make(),

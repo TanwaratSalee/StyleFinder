@@ -109,7 +109,7 @@ class _editaddressFormState extends State<editaddress_controller> {
       appBar: AppBar(
         title: "Edit Address"
             .text
-            .size(28)
+            .size(26)
             .fontFamily(semiBold)
             .color(blackColor)
             .make(),

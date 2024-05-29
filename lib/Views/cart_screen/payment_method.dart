@@ -34,7 +34,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
       appBar: AppBar(
         title: Text('Select Payment Method')
            .text
-            .size(28)
+            .size(26)
             .fontFamily(semiBold)
             .color(blackColor)
             .make(),

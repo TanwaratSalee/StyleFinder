@@ -41,7 +41,7 @@ class DetailForShipping extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Order Detail").text
-            .size(28)
+            .size(26)
             .fontFamily(semiBold)
             .color(blackColor)
             .make(),

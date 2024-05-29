@@ -32,7 +32,7 @@ class _ReviewScreenState extends State<ReviewScreen>
         title: Text(
           'Reviews',
         ).text
-            .size(28)
+            .size(26)
             .fontFamily(semiBold)
             .color(blackColor)
             .make(),

@@ -20,7 +20,7 @@ class PasswordScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Reset Password",
            ).text
-            .size(28)
+            .size(26)
             .fontFamily(semiBold)
             .color(blackColor)
             .make(),

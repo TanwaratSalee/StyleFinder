@@ -34,7 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen>
           textAlign: TextAlign.center,
          
         ).text
-            .size(28)
+            .size(26)
             .fontFamily(semiBold)
             .color(blackColor)
             .make(),

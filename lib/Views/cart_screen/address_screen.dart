@@ -88,7 +88,7 @@ class _AddressScreenState extends State<AddressScreen> {
       backgroundColor: whiteColor,
       appBar: AppBar(
         title: const Text('Address').text
-            .size(28)
+            .size(26)
             .fontFamily(semiBold)
             .color(blackColor)
             .make(),

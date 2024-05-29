@@ -16,7 +16,7 @@ class MessagesScreen extends StatelessWidget {
       appBar: AppBar(
         title: "Message"
             .text
-            .size(28)
+            .size(26)
             .fontFamily(semiBold)
             .color(blackColor)
             .make(),
@@ -64,10 +64,12 @@ class MessagesScreen extends StatelessWidget {
                           if (now.difference(date).inHours < 24) {
                             formattedDate = DateFormat('HH:mm').format(date);
                           } else {
-                            formattedDate = DateFormat('dd/MM/yyyy').format(date);
+                            formattedDate =
+                                DateFormat('dd/MM/yyyy').format(date);
                           }
 
-                          var friendImageUrl = data[index]['friend_image_url'] ?? '';
+                          var friendImageUrl =
+                              data[index]['friend_image_url'] ?? '';
 
                           return GestureDetector(
                             onTap: () {
@@ -91,6 +93,7 @@ class MessagesScreen extends StatelessWidget {
                               child: Row(
                                 children: [
                                   CircleAvatar(
+                                    radius: 27, 
                                     backgroundColor: primaryApp,
                                     backgroundImage: friendImageUrl.isNotEmpty
                                         ? NetworkImage(friendImageUrl)
@@ -99,10 +102,11 @@ class MessagesScreen extends StatelessWidget {
                                         ? Icon(
                                             Icons.person,
                                             color: whiteColor,
+                                            size: 27, 
                                           )
                                         : null,
                                   ),
-                                  10.widthBox,
+                                  15.widthBox,
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment:
@@ -114,6 +118,7 @@ class MessagesScreen extends StatelessWidget {
                                             .size(16)
                                             .color(blackColor)
                                             .make(),
+                                        5.heightBox,
                                         SizedBox(
                                           width: 250,
                                           child: Text(
@@ -121,11 +126,12 @@ class MessagesScreen extends StatelessWidget {
                                             style: TextStyle(color: greyDark),
                                             overflow: TextOverflow.ellipsis,
                                             maxLines: 1,
-                                          ).text
-                                            .fontFamily(regular)
-                                            .size(12)
-                                            .color(greyColor)
-                                            .make(),
+                                          )
+                                              .text
+                                              .fontFamily(regular)
+                                              .size(14)
+                                              .color(greyColor)
+                                              .make(),
                                         ),
                                       ],
                                     ),

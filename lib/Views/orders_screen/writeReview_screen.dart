@@ -20,7 +20,7 @@ class WriteReviewScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Write Review").text
-            .size(28)
+            .size(26)
             .fontFamily(semiBold)
             .color(blackColor)
             .make(),
