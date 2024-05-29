@@ -103,7 +103,7 @@ Future<void> _showSuccessDialog(BuildContext context) async {
   String selectedPaymentMethod = textpaymentMethods[controller.paymentIndex.value];
   await controller.placeMyOrder(
     orderPaymentMethod: selectedPaymentMethod,
-    totalAmount: controller.totalP.value,
+    totalAmount: controller.totalP.value.toDouble()
   );
 
   await controller.clearCart();

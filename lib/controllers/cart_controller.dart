@@ -159,6 +159,7 @@ class CartController extends GetxController {
     placingOrder(false);
   }
 
+
   getProductDetails() {
     products.clear();
     vendors.clear();

@@ -63,154 +63,185 @@ class _CartScreenState extends State<CartScreen> {
             controller.calculate(data);
             controller.productSnapshot.value = data;
 
+            // Group products by seller
+            Map<String, List<DocumentSnapshot>> groupedProducts = {};
+            for (var doc in data) {
+              String sellerName = doc['sellername'];
+              if (groupedProducts[sellerName] == null) {
+                groupedProducts[sellerName] = [];
+              }
+              groupedProducts[sellerName]!.add(doc);
+            }
+
             return Padding(
               padding: const EdgeInsets.all(6),
               child: Column(
                 children: [
                   Expanded(
-                    child: ListView.builder(
-                      itemCount: data.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        String formattedPrice = NumberFormat('#,##0', 'en_US').format(data[index]['tprice']);
+                    child: ListView(
+                      children: groupedProducts.entries.map((entry) {
+                        String sellerName = entry.key;
+                        List<DocumentSnapshot> sellerProducts = entry.value;
 
-                        return Slidable(
-                          key: Key(data[index].id),
-                          endActionPane: ActionPane(
-                            motion: const ScrollMotion(),
-                            children: [
-                              SlidableAction(
-                                onPressed: (context) {
-                                  FirestoreServices.deleteDocument(data[index].id);
-                                },
-                                backgroundColor: redThinColor,
-                                foregroundColor: redColor,
-                                icon: Icons.delete,
-                                label: 'Delete',
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                sellerName,
+                                style: TextStyle(
+                                  color: blackColor,
+                                  fontFamily: semiBold,
+                                  fontSize: 18,
+                                ),
                               ),
-                            ],
-                          ),
-                          child: InkWell(
-                            onTap: () {
-                              navigateToItemDetails(context, data[index]['title']);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                            ),
+                            Column(
+                              children: sellerProducts.map((product) {
+                                String formattedPrice = NumberFormat('#,##0', 'en_US').format(product['tprice']);
+                                return Slidable(
+                                  key: Key(product.id),
+                                  endActionPane: ActionPane(
+                                    motion: const ScrollMotion(),
                                     children: [
-                                      Container(
-                                        padding: EdgeInsets.only(left: 5),
-                                        alignment: Alignment.centerLeft,
-                                        child: Text("x${data[index]['qty']}")
-                                            .text.size(14).color(greyDark).fontFamily(regular).make(),
-                                      ),
-                                      15.widthBox,
-                                      Container(
-                                        height: 70,
-                                        child: Stack(
-                                          children: [
-                                            Image.network(
-                                              data[index]['img'],
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(width: 10),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              width: 140,
-                                              child: Text(
-                                                data[index]['title'],
-                                                overflow: TextOverflow.ellipsis,
-                                                softWrap: false,
-                                                style: TextStyle(
-                                                  color: blackColor,
-                                                  fontFamily: medium,
-                                                  fontSize: 14,
-                                                ),
-                                              ),
-                                            ),
-                                            if (data[index]['productsize'] != null && data[index]['productsize'].isNotEmpty)
-                                              Text(
-                                                'Size: ${data[index]['productsize']}',
-                                                style: TextStyle(
-                                                  color: greyDark,
-                                                  fontFamily: regular,
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                            SizedBox(height: 3),
-                                            Text(
-                                              "$formattedPrice Bath",
-                                              style: TextStyle(
-                                                color: greyDark,
-                                                fontFamily: regular,
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          SizedBox(
-                                            width: 25,
-                                            height: 25,
-                                            child: FloatingActionButton(
-                                              heroTag: 'decrement-${data[index].id}',
-                                              onPressed: () {
-                                                controller.decrementCount(data[index].id);
-                                              },
-                                              tooltip: 'Decrement',
-                                              child: Icon(Icons.remove),
-                                              backgroundColor: greyThin,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(Radius.circular(6)),
-                                              ),
-                                              elevation: 0,
-                                            ),
-                                          ),
-                                          SizedBox(width: 10),
-                                          Obx(() {
-                                            var currentItem = controller.productSnapshot.firstWhere((element) => element.id == data[index].id);
-                                            return Text('${currentItem['qty']}', style: TextStyle(fontSize: 18));
-                                          }),
-                                          SizedBox(width: 10),
-                                          SizedBox(
-                                            width: 25,
-                                            height: 25,
-                                            child: FloatingActionButton(
-                                              heroTag: 'increment-${data[index].id}',
-                                              onPressed: () {
-                                                controller.incrementCount(data[index].id);
-                                              },
-                                              tooltip: 'Increment',
-                                              child: Icon(Icons.add),
-                                              backgroundColor: primaryApp,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(Radius.circular(6)),
-                                              ),
-                                              elevation: 0,
-                                            ),
-                                          ),
-                                        ],
+                                      SlidableAction(
+                                        onPressed: (context) {
+                                          FirestoreServices.deleteDocument(product.id);
+                                        },
+                                        backgroundColor: redThinColor,
+                                        foregroundColor: redColor,
+                                        icon: Icons.delete,
+                                        label: 'Delete',
                                       ),
                                     ],
                                   ),
-                                  Divider(color: greyThin),
-                                ],
-                              ),
+                                  child: InkWell(
+                                    onTap: () {
+                                      navigateToItemDetails(context, product['title']);
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                padding: EdgeInsets.only(left: 5),
+                                                alignment: Alignment.centerLeft,
+                                                child: Text("x${product['qty']}")
+                                                    .text.size(14).color(greyDark).fontFamily(regular).make(),
+                                              ),
+                                              15.widthBox,
+                                              Container(
+                                                height: 70,
+                                                child: Stack(
+                                                  children: [
+                                                    Image.network(
+                                                      product['img'],
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              SizedBox(width: 10),
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Container(
+                                                      width: 140,
+                                                      child: Text(
+                                                        product['title'],
+                                                        overflow: TextOverflow.ellipsis,
+                                                        softWrap: false,
+                                                        style: TextStyle(
+                                                          color: blackColor,
+                                                          fontFamily: medium,
+                                                          fontSize: 14,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    if (product['productsize'] != null && product['productsize'].isNotEmpty)
+                                                      Text(
+                                                        'Size: ${product['productsize']}',
+                                                        style: TextStyle(
+                                                          color: greyDark,
+                                                          fontFamily: regular,
+                                                          fontSize: 12,
+                                                        ),
+                                                      ),
+                                                    SizedBox(height: 3),
+                                                    Text(
+                                                      "$formattedPrice Bath",
+                                                      style: TextStyle(
+                                                        color: greyDark,
+                                                        fontFamily: regular,
+                                                        fontSize: 12,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: <Widget>[
+                                                  SizedBox(
+                                                    width: 25,
+                                                    height: 25,
+                                                    child: FloatingActionButton(
+                                                      heroTag: 'decrement-${product.id}',
+                                                      onPressed: () {
+                                                        controller.decrementCount(product.id);
+                                                      },
+                                                      tooltip: 'Decrement',
+                                                      child: Icon(Icons.remove),
+                                                      backgroundColor: greyThin,
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.all(Radius.circular(6)),
+                                                      ),
+                                                      elevation: 0,
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 10),
+                                                  Obx(() {
+                                                    var currentItem = controller.productSnapshot.firstWhere((element) => element.id == product.id);
+                                                    return Text('${currentItem['qty']}', style: TextStyle(fontSize: 18));
+                                                  }),
+                                                  SizedBox(width: 10),
+                                                  SizedBox(
+                                                    width: 25,
+                                                    height: 25,
+                                                    child: FloatingActionButton(
+                                                      heroTag: 'increment-${product.id}',
+                                                      onPressed: () {
+                                                        controller.incrementCount(product.id);
+                                                      },
+                                                      tooltip: 'Increment',
+                                                      child: Icon(Icons.add),
+                                                      backgroundColor: primaryApp,
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.all(Radius.circular(6)),
+                                                      ),
+                                                      elevation: 0,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          Divider(color: greyThin),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
                             ),
-                          ),
+                          ],
                         );
-                      },
+                      }).toList(),
                     ),
                   ),
                   Obx(() {
@@ -241,7 +272,6 @@ class _CartScreenState extends State<CartScreen> {
       ),
     );
   }
-
 
   void navigateToItemDetails(BuildContext context, String productName) {
     FirebaseFirestore.instance

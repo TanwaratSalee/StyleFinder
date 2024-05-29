@@ -121,7 +121,7 @@ class _MobileBankingScreenextendsState extends State<MobileBankingScreenextends>
     String selectedPaymentMethod = textpaymentMethods[controller.paymentIndex.value];
     await controller.placeMyOrder(
       orderPaymentMethod: selectedPaymentMethod,
-      totalAmount: controller.totalP.value,
+      totalAmount: controller.totalP.value.toDouble()
     );
 
     await controller.clearCart();
