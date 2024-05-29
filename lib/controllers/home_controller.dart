@@ -7,24 +7,19 @@ import 'package:get/get.dart';
 class HomeController extends GetxController {
   late TextEditingController searchController;
   var isFav = false.obs;
-<<<<<<< HEAD
   var selectedGender = ''.obs;
   var maxPrice = 999999.0.obs;
   var selectedColors = <int>[].obs;
   var selectedTypes = <String>[].obs;
   var selectedCollections = <String>[].obs;
-  get searchController => null;
-=======
 
   // get searchController => null;
->>>>>>> 4850c3898cbeba2a8a23e9d1a3a94dcf3327f46d
 
   void onClose() {
     searchController.dispose();
     super.onClose();
   }
 
-<<<<<<< HEAD
   void updateFilters({
     String? gender,
     double? price,
@@ -48,14 +43,12 @@ class HomeController extends GetxController {
   }
 
 
-=======
   @override
   void onInit() {
     super.onInit();
     searchController = TextEditingController();
   }
 
->>>>>>> 4850c3898cbeba2a8a23e9d1a3a94dcf3327f46d
   void addToWishlist(Map<String, dynamic> product) {
     FirebaseFirestore.instance
         .collection(productsCollection)
