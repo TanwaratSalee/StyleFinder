@@ -30,27 +30,26 @@ class _FilterDrawerState extends State<FilterDrawer> {
   bool isSelectedDinner = false;
   bool isSelectedEveryday = false;
   var collectionsvalue = ''.obs;
+  var vendors = <Map<String, dynamic>>[];
 
   final selectedColorIndexes = <int>[].obs;
   final List<Map<String, dynamic>> allColors = [
-    {'name': 'Black', 'color': Colors.black, 'value': 0},
-    {'name': 'Grey', 'color': greyColor, 'value': 1},
-    {'name': 'White', 'color': whiteColor, 'value': 2},
-    {'name': 'Purple', 'color': Colors.purple, 'value': 3},
-    {'name': 'Deep Purple', 'color': Colors.deepPurple, 'value': 4},
-    {'name': 'Blue', 'color': Colors.lightBlue, 'value': 5},
-    {'name': 'Blue', 'color': const Color.fromARGB(255, 36, 135, 216), 'value': 6},
-    {'name': 'Blue Grey', 'color': const Color.fromARGB(255, 96, 139, 115), 'value': 7},
-    {'name': 'Green', 'color': const Color.fromARGB(255, 17, 52, 50), 'value': 8},
-    {'name': 'Green', 'color': Colors.green, 'value': 9},
-    {'name': 'Green Accent', 'color': Colors.greenAccent, 'value': 10},
-    {'name': 'Yellow', 'color': Colors.yellow, 'value': 11},
-    {'name': 'Orange', 'color': Colors.orange, 'value': 12},
-    {'name': 'Red', 'color': redColor, 'value': 13},
-    {'name': 'Red Accent', 'color': const Color.fromARGB(255, 237, 101, 146), 'value': 14},
+    {'name': 'Black', 'color': Colors.black, 'value': 0xFF000000},
+    {'name': 'Grey', 'color': greyColor, 'value': 0xFF808080},
+    {'name': 'White', 'color': whiteColor, 'value': 0xFFFFFFFF},
+    {'name': 'Purple', 'color': Colors.purple, 'value': 0xFF800080},
+    {'name': 'Deep Purple', 'color': Colors.deepPurple, 'value': 0xFF673AB7},
+    {'name': 'Blue', 'color': Colors.lightBlue, 'value': 0xFF03A9F4},
+    {'name': 'Blue', 'color': const Color.fromARGB(255, 36, 135, 216), 'value': 0xFF2487D8},
+    {'name': 'Blue Grey', 'color': const Color.fromARGB(255, 96, 139, 115), 'value': 0xFF608B73},
+    {'name': 'Green', 'color': const Color.fromARGB(255, 17, 52, 50), 'value': 0xFF113432},
+    {'name': 'Green', 'color': Colors.green, 'value': 0xFF4CAF50},
+    {'name': 'Green Accent', 'color': Colors.greenAccent, 'value': 0xFF69F0AE},
+    {'name': 'Yellow', 'color': Colors.yellow, 'value': 0xFFFFEB3B},
+    {'name': 'Orange', 'color': Colors.orange, 'value': 0xFFFF9800},
+    {'name': 'Red', 'color': redColor, 'value': 0xFFFF0000},
+    {'name': 'Red Accent', 'color': const Color.fromARGB(255, 237, 101, 146), 'value': 0xFFED6592},
   ];
-
-
 
   @override
   void initState() {
@@ -59,9 +58,15 @@ class _FilterDrawerState extends State<FilterDrawer> {
     isSelectedAll = controller.selectedGender.value == '';
     isSelectedMen = controller.selectedGender.value == 'male';
     isSelectedWomen = controller.selectedGender.value == 'female';
-    
+
+    fetchVendors().then((data) {
+      setState(() {
+        vendors = data;
+      });
+    });
+
     selectedColorIndexes.addAll(controller.selectedColors);
-    
+
     isSelectedDress = controller.selectedTypes.contains('dresses');
     isSelectedOuterwear = controller.selectedTypes.contains('outerwear & Costs');
     isSelectedSkirts = controller.selectedTypes.contains('dresses');
@@ -79,8 +84,6 @@ class _FilterDrawerState extends State<FilterDrawer> {
     isSelectedDinner = controller.selectedCollections.contains('dinner');
     isSelectedEveryday = controller.selectedCollections.contains('everydaylook');
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -100,8 +103,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
               child: Text("Gender").text.fontFamily(regular).size(14).make(),
             ),
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
               child: Row(
                 children: [
                   SizedBox(width: 5),
@@ -120,8 +122,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
               ),
             ),
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
               child: Text("Official Store")
                   .text
                   .fontFamily(regular)
@@ -132,18 +133,23 @@ class _FilterDrawerState extends State<FilterDrawer> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Wrap(
                 spacing: 10,
-                children: List.generate(
-                  6,
-                  (index) => CircleAvatar(
-                    radius: 15,
-                    backgroundColor: Colors.grey.shade300,
-                  ),
-                ),
+                children: vendors.map((vendor) {
+                  return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      controller.updateFilters(vendorId: vendor['vendor_id']);
+                    });
+                  },
+                    child: CircleAvatar(
+                      radius: 15,
+                      backgroundImage: NetworkImage(vendor['imageUrl']),
+                    ),
+                  );
+                }).toList(),
               ),
             ),
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
               child: Text("Price").text.fontFamily(regular).size(14).make(),
             ),
             Padding(
@@ -171,51 +177,49 @@ class _FilterDrawerState extends State<FilterDrawer> {
               ),
             ),
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
               child: Text("Color").text.fontFamily(regular).size(14).make(),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Wrap(
-              spacing: 20,
-              runSpacing: 10,
-              children: List.generate(
-                allColors.length,
-                (index) {
-                  final color = allColors[index];
-                  final isSelected = selectedColorIndexes.contains(color['value']);
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        if (isSelected) {
-                          selectedColorIndexes.remove(color['value']);
-                        } else {
-                          selectedColorIndexes.add(color['value']);
-                        }
-                      });
-                    },
-                    child: Container(
-                      width: 35,
-                      height: 35,
-                      decoration: BoxDecoration(
-                        color: color['color'],
-                        borderRadius: BorderRadius.circular(2),
-                        border: Border.all(
-                          color: isSelected ? primaryApp : greyThin,
-                          width: isSelected ?  2 : 1,
+                spacing: 20,
+                runSpacing: 10,
+                children: List.generate(
+                  allColors.length,
+                  (index) {
+                    final color = allColors[index];
+                    final isSelected = selectedColorIndexes.contains(color['value']);
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          if (isSelected) {
+                            selectedColorIndexes.remove(color['value']);
+                          } else {
+                            selectedColorIndexes.add(color['value']);
+                          }
+                        });
+                      },
+                      child: Container(
+                        width: 35,
+                        height: 35,
+                        decoration: BoxDecoration(
+                          color: color['color'],
+                          borderRadius: BorderRadius.circular(2),
+                          border: Border.all(
+                            color: isSelected ? primaryApp : greyThin,
+                            width: isSelected ?  2 : 1,
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
-            ),
             ),
             10.heightBox,
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
               child: Text("Type of product")
                   .text
                   .fontFamily(regular)
@@ -263,8 +267,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
               ),
             ),
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
               child: Text("Collection").text.fontFamily(regular).size(14).make(),
             ),
             Padding(
@@ -327,12 +330,23 @@ class _FilterDrawerState extends State<FilterDrawer> {
 }
 
 
+Future<List<Map<String, dynamic>>> fetchVendors() async {
+  try {
+    QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance.collection('vendors').get();
+    return snapshot.docs.map((doc) => doc.data()).toList();
+  } catch (e) {
+    print("Error fetching vendors: $e");
+    return [];
+  }
+}
+
 Future<List<Map<String, dynamic>>> fetchProducts({
   String? gender,
   double? maxPrice,
   List<int>? selectedColors,
   List<String>? selectedTypes,
   List<String>? selectedCollections,
+  String? vendorId,
 }) async {
   // Fetch initial results with the main condition
   Query<Map<String, dynamic>> query = FirebaseFirestore.instance.collection(productsCollection);
@@ -349,6 +363,11 @@ Future<List<Map<String, dynamic>>> fetchProducts({
     QuerySnapshot<Map<String, dynamic>> snapshot = await query.get();
     List<Map<String, dynamic>> products = snapshot.docs.map((doc) => doc.data()).toList();
 
+
+    if (vendorId != null && vendorId.isNotEmpty) {
+      products = products.where((product) => product['vendor_id'] == vendorId).toList();
+    }
+    
     // Filter by colors
     if (selectedColors != null && selectedColors.isNotEmpty) {
       products = products.where((product) {
@@ -379,6 +398,7 @@ Future<List<Map<String, dynamic>>> fetchProducts({
     return [];
   }
 }
+
 
 
 

@@ -49,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ever(controller.selectedColors, (_) => fetchFilteredProducts());
     ever(controller.selectedTypes, (_) => fetchFilteredProducts());
     ever(controller.selectedCollections, (_) => fetchFilteredProducts());
+    ever(controller.selectedVendorId, (_) => fetchFilteredProducts());
   }
 
   @override
@@ -180,6 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   selectedColors: controller.selectedColors,
                   selectedTypes: controller.selectedTypes,
                   selectedCollections: controller.selectedCollections,
+                  vendorId: controller.selectedVendorId.value,
                 ),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -198,6 +200,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       .where(
                           (product) => !isInWishlist(product, currentUser!.uid))
                       .toList());
+                  
+                  if (productsToShow.isEmpty) {
+                    return const Center(child: Text('No products available'));
+                  }
                   return CardSwiper(
                     scale: 0.5,
                     isLoop: false,
