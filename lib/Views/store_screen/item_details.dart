@@ -220,7 +220,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                   )
                       .box
                       .white
-                      .padding(EdgeInsets.fromLTRB(12,10,12,6))
+                      .padding(EdgeInsets.fromLTRB(12, 10, 12, 6))
                       .make(),
                   5.heightBox,
                   Column(
