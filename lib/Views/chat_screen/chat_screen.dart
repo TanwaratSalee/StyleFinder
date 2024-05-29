@@ -7,6 +7,7 @@ import 'package:flutter_finalproject/controllers/chats_controller.dart';
 import 'package:flutter_finalproject/services/firestore_services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});
@@ -90,7 +91,12 @@ class ChatScreen extends StatelessWidget {
                             Map<String, List<QueryDocumentSnapshot>> groupedMessages = {};
 
                             for (var message in messages) {
-                              String date = formatDate(message['created_at']);
+                              String date;
+                              try {
+                                date = formatDate(message['created_at']);
+                              } catch (e) {
+                                date = 'Unknown Date'; 
+                              }
                               if (!groupedMessages.containsKey(date)) {
                                 groupedMessages[date] = [];
                               }
@@ -138,9 +144,15 @@ class ChatScreen extends StatelessWidget {
                 Expanded(
                   child: TextFormField(
                     controller: controller.msgController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(borderSide: BorderSide(color: greyDark)),
-                      focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: greyDark)),
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(color: greyLine),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(color: greyColor),
+                      ),
                       hintText: "Type a message...",
                     ),
                   ),

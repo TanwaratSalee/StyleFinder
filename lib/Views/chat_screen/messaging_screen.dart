@@ -42,7 +42,7 @@ class MessagesScreen extends StatelessWidget {
                     aTimestamp != null ? aTimestamp.toDate() : DateTime.now();
                 var bDate =
                     bTimestamp != null ? bTimestamp.toDate() : DateTime.now();
-                return bDate.compareTo(aDate); // Descending order
+                return bDate.compareTo(aDate); 
               });
 
               return Padding(

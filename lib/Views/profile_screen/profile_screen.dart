@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/profile_screen/menu_setting_screen.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -25,6 +26,13 @@ class _ProfileScreenState extends State<ProfileScreen>
   }
 
   @override
+  void dispose() {
+    _mainTabController?.dispose();
+    _favoriteTabController?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -37,7 +45,7 @@ class _ProfileScreenState extends State<ProfileScreen>
           style: TextStyle(
             color: Colors.black,
             fontSize: 26,
-            fontFamily: 'medium',
+            fontFamily: medium,
           ),
         ),
         shadowColor: Colors.grey.withOpacity(0.5),
@@ -57,34 +65,50 @@ class _ProfileScreenState extends State<ProfileScreen>
       body: Column(
         children: [
           buildUserProfile(),
-          TabBar(
-            controller: _mainTabController,
-            labelStyle: const TextStyle(
-                fontSize: 15, fontFamily: 'regular', color: Colors.grey),
-            unselectedLabelStyle: const TextStyle(
-                fontSize: 14, fontFamily: 'regular', color: Colors.grey),
-            tabs: [
-              Tab(
-                icon: Image.asset(
-                  icTapPostProfile,
-                  width: 30,
-                  height: 30,
-                ),
-              ),
-              Tab(
-                icon: Image.asset(
-                  icTapProfileFav,
-                  width: 30,
-                  height: 30,
-                ),
-              ),
-            ],
-            unselectedLabelColor: Colors.grey,
-            labelColor: Colors.blue,
-            indicatorColor: Theme.of(context).primaryColor,
+          AnimatedBuilder(
+            animation: _mainTabController!,
+            builder: (context, child) {
+              return TabBar(
+                controller: _mainTabController,
+                labelStyle: const TextStyle(
+                    fontSize: 15, fontFamily: regular, color: greyDark),
+                unselectedLabelStyle: const TextStyle(
+                    fontSize: 14, fontFamily: regular, color: greyDark),
+                tabs: [
+                  Tab(
+                    icon: Image.asset(
+                      icTapPostProfile,
+                      color: _mainTabController?.index == 0
+                          ? primaryApp
+                          : greyLine,
+                      width: 22,
+                      height: 22,
+                    ),
+                  ),
+                  Tab(
+                    icon: Image.asset(
+                      icTapProfileFav,
+                      color: _mainTabController?.index == 1
+                          ? primaryApp
+                          : greyLine,
+                      width: 22,
+                      height: 22,
+                    ),
+                  ),
+                ],
+                unselectedLabelColor: Colors.grey,
+                labelColor: Colors.blue,
+                indicatorColor: Theme.of(context).primaryColor,
+                onTap: (index) {
+                  setState(() {
+                    // Update the state to trigger a rebuild
+                  });
+                },
+              );
+            },
           ),
           Divider(
-            color: Colors.grey,
+            color: greyThin,
             thickness: 1,
             height: 2,
           ),
@@ -99,11 +123,11 @@ class _ProfileScreenState extends State<ProfileScreen>
                       controller: _favoriteTabController,
                       labelStyle: const TextStyle(
                           fontSize: 15,
-                          fontFamily: 'regular',
+                          fontFamily: regular,
                           color: Colors.grey),
                       unselectedLabelStyle: const TextStyle(
                           fontSize: 14,
-                          fontFamily: 'regular',
+                          fontFamily: regular,
                           color: Colors.grey),
                       tabs: [
                         const Tab(text: 'Product'),
@@ -115,7 +139,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                       indicatorColor: Theme.of(context).primaryColor,
                     ),
                     Divider(
-                      color: Colors.grey,
+                      color: greyThin,
                       thickness: 1,
                       height: 2,
                     ),
