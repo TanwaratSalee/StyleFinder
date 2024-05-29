@@ -14,7 +14,7 @@ class ChatScreen extends StatelessWidget {
     var controller = Get.put(ChatsController());
 
     return Scaffold(
-      backgroundColor: primaryApp,
+      backgroundColor: whiteColor,
       appBar: AppBar(
         title: "${controller.friendName}".text
             .size(24)
@@ -22,76 +22,78 @@ class ChatScreen extends StatelessWidget {
             .color(blackColor)
             .make(),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Obx(
-              () => controller.isLoading.value
-                  ? Center(
-                      child: loadingIndicator(),
-                    )
-                  : Expanded(
-                      child: StreamBuilder(
-                          stream: FirestoreServices.getChatMessages(
-                              controller.chatDocId.toString()),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<QuerySnapshot> snapshot) {
-                            if (!snapshot.hasData) {
-                              return Center(
-                                child: loadingIndicator(),
-                              );
-                            } else if (snapshot.data!.docs.isEmpty) {
-                              return Center(
-                                child: "Send a message..."
-                                    .text
-                                    .color(greyDark)
-                                    .make(),
-                              );
-                            } else {
-                              return ListView(
-                                children: snapshot.data!.docs
-                                    .mapIndexed((currentValue, index) {
-                                  var data = snapshot.data!.docs[index];
-                                  return Align(
-                                      alignment: data['uid'] == currentUser!.uid
-                                          ? Alignment.centerLeft
-                                          : Alignment.centerRight,
-                                      child: senderBubble(data));
-                                }).toList(),
-                              );
-                            }
-                          }),
+      body: Container(
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            children: [
+              Obx(
+                () => controller.isLoading.value
+                    ? Center(
+                        child: loadingIndicator(),
+                      )
+                    : Expanded(
+                        child: StreamBuilder(
+                            stream: FirestoreServices.getChatMessages(
+                                controller.chatDocId.toString()),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<QuerySnapshot> snapshot) {
+                              if (!snapshot.hasData) {
+                                return Center(
+                                  child: loadingIndicator(),
+                                );
+                              } else if (snapshot.data!.docs.isEmpty) {
+                                return Center(
+                                  child: "Send a message..."
+                                      .text
+                                      .color(greyDark)
+                                      .make(),
+                                );
+                              } else {
+                                return ListView(
+                                  children: snapshot.data!.docs
+                                      .mapIndexed((currentValue, index) {
+                                    var data = snapshot.data!.docs[index];
+                                    return Align(
+                                        alignment: data['uid'] == currentUser!.uid
+                                            ? Alignment.centerLeft
+                                            : Alignment.centerRight,
+                                        child: senderBubble(data));
+                                  }).toList(),
+                                );
+                              }
+                            }),
+                      ),
+              ),
+              10.heightBox,
+              Row(
+                children: [
+                  Expanded(
+                      child: TextFormField(
+                    controller: controller.msgController,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(color: greyDark)),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: greyDark)),
+                      hintText: "Type a message...",
                     ),
-            ),
-            10.heightBox,
-            Row(
-              children: [
-                Expanded(
-                    child: TextFormField(
-                  controller: controller.msgController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: greyDark)),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: greyDark)),
-                    hintText: "Type a message...",
-                  ),
-                )),
-                IconButton(
-                    onPressed: () {
-                      controller.sendMsg(controller.msgController.text);
-                      controller.msgController.clear();
-                    },
-                    icon: const Icon(Icons.send, color: primaryApp))
-              ],
-            )
-                .box
-                .height(80)
-                .padding(const EdgeInsets.all(12))
-                .margin(const EdgeInsets.only(bottom: 10))
-                .make(),
-          ],
+                  )),
+                  IconButton(
+                      onPressed: () {
+                        controller.sendMsg(controller.msgController.text);
+                        controller.msgController.clear();
+                      },
+                      icon: const Icon(Icons.send, color: primaryApp))
+                ],
+              )
+                  .box
+                  .height(80)
+                  .padding(const EdgeInsets.all(12))
+                  .margin(const EdgeInsets.only(bottom: 10))
+                  .make(),
+            ],
+          ),
         ),
       ),
     );
