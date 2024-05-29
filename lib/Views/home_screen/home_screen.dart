@@ -44,6 +44,11 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     searchController = TextEditingController();
+    ever(controller.selectedGender, (_) => fetchFilteredProducts());
+    ever(controller.maxPrice, (_) => fetchFilteredProducts());
+    ever(controller.selectedColors, (_) => fetchFilteredProducts());
+    ever(controller.selectedTypes, (_) => fetchFilteredProducts());
+    ever(controller.selectedCollections, (_) => fetchFilteredProducts());
   }
 
   @override
@@ -52,6 +57,12 @@ class _HomeScreenState extends State<HomeScreen> {
     searchController.dispose();
     isEmailVerified();
     super.dispose();
+  }
+
+  void fetchFilteredProducts() {
+    if (mounted) {
+      setState(() {}); // Trigger a rebuild
+    }
   }
 
   Future<void> navigateToItemDetails() async {
@@ -163,7 +174,13 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Expanded(
               child: FutureBuilder<List<Map<String, dynamic>>>(
-                future: fetchProducts(),
+                future: fetchProducts(
+                  gender: controller.selectedGender.value,
+                  maxPrice: controller.maxPrice.value,
+                  selectedColors: controller.selectedColors,
+                  selectedTypes: controller.selectedTypes,
+                  selectedCollections: controller.selectedCollections,
+                ),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
@@ -238,7 +255,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                           SizedBox(height: 2),
                                           Text(
-                                            "${NumberFormat('#,##0').format(double.parse(product['p_price']).toInt())} Bath",
+                                            "${NumberFormat('#,##0').format(int.parse(product['p_price']))} Bath",
                                             style: TextStyle(
                                               color: blackColor,
                                               fontSize: 16,

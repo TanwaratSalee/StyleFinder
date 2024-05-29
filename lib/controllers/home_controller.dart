@@ -6,13 +6,40 @@ import 'package:get/get.dart';
 
 class HomeController extends GetxController {
   var isFav = false.obs;
-
+  var selectedGender = ''.obs;
+  var maxPrice = 999999.0.obs;
+  var selectedColors = <int>[].obs;
+  var selectedTypes = <String>[].obs;
+  var selectedCollections = <String>[].obs;
   get searchController => null;
 
   void onClose() {
     searchController.dispose();
     super.onClose();
   }
+
+  void updateFilters({
+    String? gender,
+    double? price,
+    List<int>? colors,
+    List<String>? types,
+    List<String>? collections,
+  }) {
+    if (gender != null) selectedGender.value = gender;
+    if (price != null) maxPrice.value = price;
+    if (colors != null) selectedColors.value = colors;
+    if (types != null) selectedTypes.value = types;
+    if (collections != null) selectedCollections.value = collections;
+  }
+
+  void resetFilters() {
+    selectedGender.value = '';
+    maxPrice.value = 999999.0;
+    selectedColors.clear();
+    selectedTypes.clear();
+    selectedCollections.clear();
+  }
+
 
   void addToWishlist(Map<String, dynamic> product) {
     FirebaseFirestore.instance

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
+import 'package:flutter_finalproject/controllers/home_controller.dart';
 import 'package:get/get.dart';
 
 class FilterDrawer extends StatefulWidget {
@@ -8,6 +9,7 @@ class FilterDrawer extends StatefulWidget {
 }
 
 class _FilterDrawerState extends State<FilterDrawer> {
+  final HomeController controller = Get.find<HomeController>();
   double _currentSliderValue = 0;
   bool isSelectedAll = false;
   bool isSelectedMen = false;
@@ -31,22 +33,54 @@ class _FilterDrawerState extends State<FilterDrawer> {
 
   final selectedColorIndexes = <int>[].obs;
   final List<Map<String, dynamic>> allColors = [
-    {'name': 'Black', 'color': Colors.black},
-    {'name': 'Grey', 'color': greyColor},
-    {'name': 'White', 'color': whiteColor},
-    {'name': 'Purple', 'color': Colors.purple},
-    {'name': 'Deep Purple', 'color': Colors.deepPurple},
-    {'name': 'Blue', 'color': Colors.lightBlue},
-    {'name': 'Blue', 'color': const Color.fromARGB(255, 36, 135, 216)},
-    {'name': 'Blue Grey', 'color': const Color.fromARGB(255, 96, 139, 115)},
-    {'name': 'Green', 'color': const Color.fromARGB(255, 17, 52, 50)},
-    {'name': 'Green', 'color': Colors.green},
-    {'name': 'Green Accent', 'color': Colors.greenAccent},
-    {'name': 'Yellow', 'color': Colors.yellow},
-    {'name': 'Orange', 'color': Colors.orange},
-    {'name': 'Red', 'color': redColor},
-    {'name': 'Red Accent', 'color': const Color.fromARGB(255, 237, 101, 146)},
+    {'name': 'Black', 'color': Colors.black, 'value': 0},
+    {'name': 'Grey', 'color': greyColor, 'value': 1},
+    {'name': 'White', 'color': whiteColor, 'value': 2},
+    {'name': 'Purple', 'color': Colors.purple, 'value': 3},
+    {'name': 'Deep Purple', 'color': Colors.deepPurple, 'value': 4},
+    {'name': 'Blue', 'color': Colors.lightBlue, 'value': 5},
+    {'name': 'Blue', 'color': const Color.fromARGB(255, 36, 135, 216), 'value': 6},
+    {'name': 'Blue Grey', 'color': const Color.fromARGB(255, 96, 139, 115), 'value': 7},
+    {'name': 'Green', 'color': const Color.fromARGB(255, 17, 52, 50), 'value': 8},
+    {'name': 'Green', 'color': Colors.green, 'value': 9},
+    {'name': 'Green Accent', 'color': Colors.greenAccent, 'value': 10},
+    {'name': 'Yellow', 'color': Colors.yellow, 'value': 11},
+    {'name': 'Orange', 'color': Colors.orange, 'value': 12},
+    {'name': 'Red', 'color': redColor, 'value': 13},
+    {'name': 'Red Accent', 'color': const Color.fromARGB(255, 237, 101, 146), 'value': 14},
   ];
+
+
+
+  @override
+  void initState() {
+    super.initState();
+    _currentSliderValue = controller.maxPrice.value;
+    isSelectedAll = controller.selectedGender.value == '';
+    isSelectedMen = controller.selectedGender.value == 'male';
+    isSelectedWomen = controller.selectedGender.value == 'female';
+    
+    selectedColorIndexes.addAll(controller.selectedColors);
+    
+    isSelectedDress = controller.selectedTypes.contains('dresses');
+    isSelectedOuterwear = controller.selectedTypes.contains('outerwear & Costs');
+    isSelectedSkirts = controller.selectedTypes.contains('dresses');
+    isSelectedTShirts = controller.selectedTypes.contains('t-shirts');
+    isSelectedSuits = controller.selectedTypes.contains('suits');
+    isSelectedKnitwear = controller.selectedTypes.contains('knitwear');
+    isSelectedActivewear = controller.selectedTypes.contains('activewear');
+    isSelectedBlazers = controller.selectedTypes.contains('blazers');
+    isSelectedDenim = controller.selectedTypes.contains('denim');
+    isSelectedSkirts = controller.selectedTypes.contains('skirts');
+
+    isSelectedSummer = controller.selectedCollections.contains('summer');
+    isSelectedWinter = controller.selectedCollections.contains('winter');
+    isSelectedAutumn = controller.selectedCollections.contains('autumn');
+    isSelectedDinner = controller.selectedCollections.contains('dinner');
+    isSelectedEveryday = controller.selectedCollections.contains('everydaylook');
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -144,39 +178,39 @@ class _FilterDrawerState extends State<FilterDrawer> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Wrap(
-                spacing: 20,
-                runSpacing: 10,
-                children: List.generate(
-                  allColors.length,
-                  (index) {
-                    final color = allColors[index];
-                    final isSelected = selectedColorIndexes.contains(index);
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          if (isSelected) {
-                            selectedColorIndexes.remove(index);
-                          } else {
-                            selectedColorIndexes.add(index);
-                          }
-                        });
-                      },
-                      child: Container(
-                        width: 35,
-                        height: 35,
-                        decoration: BoxDecoration(
-                          color: color['color'],
-                          borderRadius: BorderRadius.circular(2),
-                          border: Border.all(
-                            color: isSelected ? primaryApp : greyThin,
-                            width: isSelected ?  2 : 1,
-                          ),
+              spacing: 20,
+              runSpacing: 10,
+              children: List.generate(
+                allColors.length,
+                (index) {
+                  final color = allColors[index];
+                  final isSelected = selectedColorIndexes.contains(color['value']);
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (isSelected) {
+                          selectedColorIndexes.remove(color['value']);
+                        } else {
+                          selectedColorIndexes.add(color['value']);
+                        }
+                      });
+                    },
+                    child: Container(
+                      width: 35,
+                      height: 35,
+                      decoration: BoxDecoration(
+                        color: color['color'],
+                        borderRadius: BorderRadius.circular(2),
+                        border: Border.all(
+                          color: isSelected ? primaryApp : greyThin,
+                          width: isSelected ?  2 : 1,
                         ),
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
+            ),
             ),
             10.heightBox,
             Padding(
@@ -256,6 +290,35 @@ class _FilterDrawerState extends State<FilterDrawer> {
                 ],
               ),
             ),
+            ElevatedButton(
+              onPressed: () {
+                Get.find<HomeController>().updateFilters(
+                  gender: isSelectedMen ? 'male' : isSelectedWomen ? 'female' : '',
+                  price: _currentSliderValue,
+                  colors: selectedColorIndexes,
+                  types: [
+                    if (isSelectedDress) 'dresses',
+                    if (isSelectedOuterwear) 'outerwear & Costs',
+                    if (isSelectedSkirts) 'skirts',
+                    if (isSelectedTShirts) 't-shirts',
+                    if (isSelectedSuits) 'suits',
+                    if (isSelectedKnitwear) 'knitwear',
+                    if (isSelectedActivewear) 'activewear',
+                    if (isSelectedBlazers) 'blazers',
+                    if (isSelectedDenim) 'denim',
+                  ],
+                  collections: [
+                    if (isSelectedSummer) 'summer',
+                    if (isSelectedWinter) 'winter',
+                    if (isSelectedAutumn) 'autumn',
+                    if (isSelectedDinner) 'dinner',
+                    if (isSelectedEveryday) 'everydaylook',
+                  ],
+                );
+                Navigator.pop(context);
+              },
+              child: Text('Apply Filters'),
+            ),
           ],
         ).box.white.padding(EdgeInsets.symmetric(vertical: 12)).make(),
       ),
@@ -263,9 +326,65 @@ class _FilterDrawerState extends State<FilterDrawer> {
   }
 }
 
-Future<List<Map<String, dynamic>>> fetchProducts() async {
-  return FirestoreServices.getFeaturedProducts();
+
+Future<List<Map<String, dynamic>>> fetchProducts({
+  String? gender,
+  double? maxPrice,
+  List<int>? selectedColors,
+  List<String>? selectedTypes,
+  List<String>? selectedCollections,
+}) async {
+  // Fetch initial results with the main condition
+  Query<Map<String, dynamic>> query = FirebaseFirestore.instance.collection(productsCollection);
+
+  if (gender != null && gender.isNotEmpty) {
+    query = query.where('p_sex', isEqualTo: gender);
+  }
+  if (maxPrice != null) {
+    String maxPriceString = maxPrice.toStringAsFixed(0);
+    query = query.where('p_price', isLessThanOrEqualTo: maxPriceString);
+  }
+
+  try {
+    QuerySnapshot<Map<String, dynamic>> snapshot = await query.get();
+    List<Map<String, dynamic>> products = snapshot.docs.map((doc) => doc.data()).toList();
+
+    // Filter by colors
+    if (selectedColors != null && selectedColors.isNotEmpty) {
+      products = products.where((product) {
+        List<dynamic> productColors = product['p_colors'];
+        return selectedColors.any((color) => productColors.contains(color));
+      }).toList();
+    }
+
+    // Filter by types
+    if (selectedTypes != null && selectedTypes.isNotEmpty) {
+      products = products.where((product) {
+        String productType = product['p_subcollection'];
+        return selectedTypes.contains(productType);
+      }).toList();
+    }
+
+    // Filter by collections
+    if (selectedCollections != null && selectedCollections.isNotEmpty) {
+      products = products.where((product) {
+        List<dynamic> productCollections = product['p_collection'];
+        return selectedCollections.any((collection) => productCollections.contains(collection));
+      }).toList();
+    }
+
+    return products;
+  } catch (e) {
+    print("Error fetching products: $e");
+    return [];
+  }
 }
+
+
+
+
+
+
 
 class FirestoreServices {
   static Future<List<Map<String, dynamic>>> getFeaturedProducts() async {
