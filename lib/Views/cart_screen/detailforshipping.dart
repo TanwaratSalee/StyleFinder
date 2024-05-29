@@ -40,7 +40,11 @@ class DetailForShipping extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Order Detail").text.size(24).fontFamily(semiBold).make(),
+        title: Text("Order Detail").text
+            .size(26)
+            .fontFamily(semiBold)
+            .color(blackColor)
+            .make(),
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 35),

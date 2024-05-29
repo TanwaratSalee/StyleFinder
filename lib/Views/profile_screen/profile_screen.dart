@@ -32,12 +32,12 @@ class _ProfileScreenState extends State<ProfileScreen>
         title: const Text(
           'Profile',
           textAlign: TextAlign.center,
-          style: TextStyle(
-            color: blackColor,
-            fontSize: 26,
-            fontFamily: medium,
-          ),
-        ),
+         
+        ).text
+            .size(26)
+            .fontFamily(semiBold)
+            .color(blackColor)
+            .make(),
         shadowColor: greyColor.withOpacity(0.5),
         actions: <Widget>[
           IconButton(

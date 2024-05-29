@@ -20,11 +20,11 @@ class StoreScreen extends StatelessWidget {
           backgroundColor: whiteColor,
           appBar: AppBar(
             title: Text(title)
-                .text
-                .color(blackColor)
-                .fontFamily(medium)
-                .size(26)
-                .make(),
+               .text
+            .size(26)
+            .fontFamily(semiBold)
+            .color(blackColor)
+            .make(),
             centerTitle: true,
             elevation: 0,
           ),

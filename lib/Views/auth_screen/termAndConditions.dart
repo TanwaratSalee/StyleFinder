@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/consts/styles.dart';
 
 class TermAndConditions extends StatelessWidget {
@@ -8,7 +9,11 @@ class TermAndConditions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Terms and Conditions'),
+        title: const Text('Terms and Conditions').text
+            .size(26)
+            .fontFamily(semiBold)
+            .color(blackColor)
+            .make(),
         
       ),
       body: Padding(

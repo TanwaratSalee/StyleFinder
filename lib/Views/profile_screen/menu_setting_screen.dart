@@ -26,12 +26,12 @@ class MenuSettingScreen extends StatelessWidget {
           title: const Text(
             'Setting',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              color: blackColor,
-              fontSize: 24,
-              fontFamily: medium,
-            ),
-          ),
+            
+          ).text
+            .size(26)
+            .fontFamily(semiBold)
+            .color(blackColor)
+            .make(),
         ),
         backgroundColor: whiteColor,
         body: SafeArea(

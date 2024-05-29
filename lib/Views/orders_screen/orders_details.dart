@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/chat_screen/chat_screen.dart';
 import 'package:flutter_finalproject/Views/orders_screen/component/order_place_details.dart';
 import 'package:flutter_finalproject/Views/orders_screen/component/orders_status.dart';
@@ -18,7 +17,11 @@ class OrdersDetails extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           "Order Details",
-        ).text.size(24).fontFamily(semiBold).color(blackColor).make(),
+        ).text
+            .size(26)
+            .fontFamily(semiBold)
+            .color(blackColor)
+            .make(),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 18),
@@ -38,7 +41,7 @@ class OrdersDetails extends StatelessWidget {
                         .color(blackColor)
                         .fontFamily(medium)
                         .makeCentered(),
-                        10.heightBox,
+                    10.heightBox,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -94,7 +97,7 @@ class OrdersDetails extends StatelessWidget {
                     trailing: Icon(Icons.chevron_right, color: greyDark),
                     onTap: () {
                       Get.to(() => const ChatScreen(),
-                          arguments: [data['p_seller'], data['vendor_id']]);
+                            arguments: [data['p_seller'], data['vendor_id']]);
                     },
                   )
                       .box
@@ -199,57 +202,69 @@ class OrdersDetails extends StatelessWidget {
               15.heightBox,
               Column(
                 children: [
-                    const Text("Ordered Product",)
-                        .text
-                        .size(20)
-                        .color(blackColor)
-                        .fontFamily(medium)
-                        .makeCentered(),
-
-                        20.heightBox,
+                  const Text(
+                    "Ordered Product",
+                  )
+                      .text
+                      .size(20)
+                      .color(blackColor)
+                      .fontFamily(medium)
+                      .makeCentered(),
+                  10.heightBox,
                   ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
+                    physics: const ClampingScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: data['orders'].length,
                     itemBuilder: (context, index) {
                       return Row(
-                        crossAxisAlignment: CrossAxisAlignment.center, 
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
                             'x${data['orders'][index]['qty']}',
-                          ).text.size(12).fontFamily(regular).color(greyDark).make(),
+                          )
+                              .text
+                              .size(12)
+                              .fontFamily(regular)
+                              .color(greyDark)
+                              .make(),
                           const SizedBox(width: 5),
                           Image.network(data['orders'][index]['img'],
                               width: 50, height: 60, fit: BoxFit.cover),
                           const SizedBox(width: 15),
                           Expanded(
-                            child: Column(crossAxisAlignment:CrossAxisAlignment.start,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   data['orders'][index]['title'],
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
-                                ).text.size(14).fontFamily(semiBold).color(greyDark).make(),
+                                )
+                                    .text
+                                    .size(14)
+                                    .fontFamily(semiBold)
+                                    .color(greyDark)
+                                    .make(),
                                 Text(
                                   '${NumberFormat('#,##0').format(data['orders'][index]['price'])} Bath',
-                                  style:
-                                      const TextStyle(color: greyDark),
+                                  style: const TextStyle(color: greyDark),
                                 ),
                               ],
-                            ).box.padding(EdgeInsets.only(bottom: 15)).make(),
+                            ),
                           ),
                         ],
-                      );
+                      ).box.padding(EdgeInsets.symmetric(vertical: 5)).make();
                     },
                   )
                 ],
-              ).box
-                  .p12
+              )
+                  .box
                   .color(whiteColor)
+                  .padding(EdgeInsets.fromLTRB(20, 10, 20, 0))
                   .shadowXs
                   .roundedSM
                   .border(color: greyLine)
-                  .make(),
+                  .make()
             ],
           ),
         ),

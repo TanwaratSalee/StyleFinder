@@ -19,7 +19,11 @@ class WriteReviewScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Write Review").text.color(whiteColor).make(),
+        title: Text("Write Review").text
+            .size(26)
+            .fontFamily(semiBold)
+            .color(blackColor)
+            .make(),
       ),
       bottomNavigationBar: SizedBox(
         height: 85,

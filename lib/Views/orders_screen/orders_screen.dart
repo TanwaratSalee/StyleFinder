@@ -37,7 +37,7 @@ class _OrdersScreenState extends State<OrdersScreen>
       appBar: AppBar(
         title: const Text("My Orders")
             .text
-            .size(24)
+            .size(26)
             .fontFamily(semiBold)
             .color(blackColor)
             .make(),

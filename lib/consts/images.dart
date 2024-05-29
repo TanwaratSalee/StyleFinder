@@ -100,6 +100,9 @@ const String product4 = "assets/images/product4.png";
 const String product5 = "assets/images/product5.png";
 
 // Profile Screen
+const String icTapProfileFav = "assets/icons/iconsAccount/icTapFavProfile.png";
+const String icTapPostProfile = "assets/icons/iconsAccount/icTapPostProfile.png";
+
 const String imProfile = "assets/images/Profile.png";
 const String icAccount = "assets/icons/iconsAccount/profile.png";
 const String icOrders = "assets/icons/iconsAccount/status.png";

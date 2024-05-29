@@ -4,6 +4,7 @@ import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.d
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/services/firestore_services.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class MessagesScreen extends StatelessWidget {
   const MessagesScreen({super.key});
@@ -13,7 +14,12 @@ class MessagesScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: "Message".text.size(24).fontFamily(semiBold).color(greyDark).make(),
+        title: "Message"
+            .text
+            .size(26)
+            .fontFamily(semiBold)
+            .color(blackColor)
+            .make(),
       ),
       body: StreamBuilder(
           stream: FirestoreServices.getAllMessages(),
@@ -27,40 +33,120 @@ class MessagesScreen extends StatelessWidget {
               return "No messages yet!".text.color(greyDark).makeCentered();
             } else {
               var data = snapshot.data!.docs;
+
+              // Sort data based on 'created_on' timestamp in descending order
+              data.sort((a, b) {
+                var aTimestamp = a['created_on'] as Timestamp?;
+                var bTimestamp = b['created_on'] as Timestamp?;
+                var aDate =
+                    aTimestamp != null ? aTimestamp.toDate() : DateTime.now();
+                var bDate =
+                    bTimestamp != null ? bTimestamp.toDate() : DateTime.now();
+                return bDate.compareTo(aDate); // Descending order
+              });
+
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
                     Expanded(
-                        child: ListView.builder(
-                            itemCount: data.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Card(
-                                child: ListTile(
-                                  onTap: () {
-                                    Get.to(() => const ChatScreen(),
-                                        arguments: [
-                                          data[index]['friend_name'],
-                                          data[index]['toId']
-                                        ]);
-                                  },
-                                  leading: const CircleAvatar(
+                      child: ListView.builder(
+                        itemCount: data.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          var timestamp =
+                              data[index]['created_on'] as Timestamp?;
+                          var date = timestamp != null
+                              ? timestamp.toDate()
+                              : DateTime.now();
+                          var now = DateTime.now();
+                          var formattedDate = '';
+
+                          if (now.difference(date).inHours < 24) {
+                            formattedDate = DateFormat('HH:mm').format(date);
+                          } else {
+                            formattedDate =
+                                DateFormat('dd/MM/yyyy').format(date);
+                          }
+
+                          var friendImageUrl =
+                              data[index]['friend_image_url'] ?? '';
+
+                          return GestureDetector(
+                            onTap: () {
+                              Get.to(() => const ChatScreen(), arguments: [
+                                data[index]['friend_name'],
+                                data[index]['toId']
+                              ]);
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 8),
+                              padding: const EdgeInsets.all(15),
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: greyThin,
+                                    width: 1,
+                                  ),
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 27, 
                                     backgroundColor: primaryApp,
-                                    child: Icon(
-                                      Icons.person,
-                                      color: whiteColor,
+                                    backgroundImage: friendImageUrl.isNotEmpty
+                                        ? NetworkImage(friendImageUrl)
+                                        : null,
+                                    child: friendImageUrl.isEmpty
+                                        ? Icon(
+                                            Icons.person,
+                                            color: whiteColor,
+                                            size: 27, 
+                                          )
+                                        : null,
+                                  ),
+                                  15.widthBox,
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        "${data[index]['friend_name']}"
+                                            .text
+                                            .fontFamily(medium)
+                                            .size(16)
+                                            .color(blackColor)
+                                            .make(),
+                                        5.heightBox,
+                                        SizedBox(
+                                          width: 250,
+                                          child: Text(
+                                            "${data[index]['last_msg']}",
+                                            style: TextStyle(color: greyDark),
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                          )
+                                              .text
+                                              .fontFamily(regular)
+                                              .size(14)
+                                              .color(greyColor)
+                                              .make(),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  title: "${data[index]['friend_name']}"
-                                      .text
-                                      .fontFamily(regular)
-                                      .color(blackColor)
-                                      .make(),
-                                  subtitle:
-                                      "${data[index]['last_msg']}".text.make(),
-                                ),
-                              );
-                            }))
+                                  Text(
+                                    formattedDate,
+                                    style: TextStyle(color: greyDark),
+                                  ),
+                                ],
+                              ).box.make(),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
                   ],
                 ),
               );

@@ -55,6 +55,15 @@ class FirestoreServices {
         .snapshots();
   }
 
+  static Stream<QuerySnapshot> getAllChatMessages(String docId) {
+    return FirebaseFirestore.instance
+        .collection(chatsCollection)
+        .doc(docId)
+        .collection(messagesCollection)
+        .orderBy('created_on', descending: false) 
+        .snapshots();
+  }
+
   static getAllOrders() {
     return firestore
         .collection(ordersCollection)
