@@ -15,12 +15,39 @@ class ChatScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: whiteColor,
-      appBar: AppBar(
-        title: "${controller.friendName}".text
-            .size(24)
-            .fontFamily(medium)
-            .color(blackColor)
-            .make(),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(60.0),
+        child: AppBar(
+          backgroundColor: whiteColor,
+          elevation: 4,
+          title: Row(
+            children: [
+              Container(
+                child: CircleAvatar(
+                  radius: 23,
+                  backgroundColor: primaryApp,
+                  backgroundImage: controller.friendImageUrl.value.isNotEmpty
+                      ? NetworkImage(controller.friendImageUrl.value)
+                      : null,
+                  child: controller.friendImageUrl.value.isEmpty
+                      ? Icon(
+                          Icons.person,
+                          color: whiteColor,
+                          size: 23,
+                        )
+                      : null,
+                ),
+              ),
+              10.widthBox,
+              "${controller.friendName}"
+                  .text
+                  .size(18)
+                  .fontFamily(medium)
+                  .color(blackColor)
+                  .make(),
+            ],
+          ),
+        ),
       ),
       body: Container(
         child: Padding(
@@ -55,9 +82,10 @@ class ChatScreen extends StatelessWidget {
                                       .mapIndexed((currentValue, index) {
                                     var data = snapshot.data!.docs[index];
                                     return Align(
-                                        alignment: data['uid'] == currentUser!.uid
-                                            ? Alignment.centerLeft
-                                            : Alignment.centerRight,
+                                        alignment:
+                                            data['uid'] == currentUser!.uid
+                                                ? Alignment.centerLeft
+                                                : Alignment.centerRight,
                                         child: senderBubble(data));
                                   }).toList(),
                                 );
