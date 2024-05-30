@@ -1,9 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-<<<<<<< HEAD
 import 'package:flutter/material.dart';
-=======
 import 'package:flutter_finalproject/Views/match_screen/postmathscreen.dart';
->>>>>>> 8311d8f (PostMath)
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/widgets_common/appbar_ontop.dart';
 import 'package:flutter_finalproject/Views/widgets_common/filterDrawer.dart';
@@ -75,7 +72,7 @@ class _MatchScreenState extends State<MatchScreen> {
         automaticallyImplyLeading: false,
         backgroundColor: whiteColor,
         title: appbarField(context: context),
-      ), 
+      ),
       body: CustomScrollView(
         physics: NeverScrollableScrollPhysics(),
         slivers: <Widget>[
@@ -108,11 +105,7 @@ class _MatchScreenState extends State<MatchScreen> {
                           },
                         );
                       },
-                    )
-                        .box
-                        .border(color: greyThin)
-                        .roundedFull
-                        .make(),
+                    ).box.border(color: greyThin).roundedFull.make(),
                   ],
                 ),
               ),
@@ -436,7 +429,8 @@ void showModalRightSheet({
     barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
     barrierColor: Colors.black54,
     transitionDuration: Duration(milliseconds: 200),
-    pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+    pageBuilder: (BuildContext context, Animation<double> animation,
+        Animation<double> secondaryAnimation) {
       return Align(
         alignment: Alignment.centerRight,
         child: Material(
@@ -447,7 +441,8 @@ void showModalRightSheet({
         ),
       );
     },
-    transitionBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
+    transitionBuilder: (BuildContext context, Animation<double> animation,
+        Animation<double> secondaryAnimation, Widget child) {
       return SlideTransition(
         position: Tween<Offset>(
           begin: const Offset(1.0, 0.0),
