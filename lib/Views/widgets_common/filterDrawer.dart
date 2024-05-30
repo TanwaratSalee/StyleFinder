@@ -355,6 +355,7 @@ Future<List<Map<String, dynamic>>> fetchProducts({
   if (gender != null && gender.isNotEmpty) {
     query = query.where('p_sex', isEqualTo: gender);
   }
+  
   if (maxPrice != null) {
     String maxPriceString = maxPrice.toStringAsFixed(0);
     query = query.where('p_price', isLessThanOrEqualTo: maxPriceString);

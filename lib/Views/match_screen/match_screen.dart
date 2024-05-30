@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/match_screen/postmathscreen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/widgets_common/appbar_ontop.dart';
-import 'package:flutter_finalproject/Views/widgets_common/filterDrawer.dart';
+import 'package:flutter_finalproject/Views/widgets_common/filterDrawerMatch.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/home_controller.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
@@ -21,9 +21,6 @@ class _MatchScreenState extends State<MatchScreen> {
   late final PageController _pageControllerTop, _pageControllerLower;
   late int _currentPageIndexTop, _currentPageIndexLower;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-
-  late Future<List<Map<String, dynamic>>> _topProductsFuture;
-  late Future<List<Map<String, dynamic>>> _lowerProductsFuture;
 
   @override
   void initState() {
@@ -52,8 +49,9 @@ class _MatchScreenState extends State<MatchScreen> {
       }
     });
 
-    _topProductsFuture = fetchProductstop();
-    _lowerProductsFuture = fetchProductslower();
+    controller.fetchFilteredTopProducts();
+    controller.fetchFilteredLowerProducts();
+    controller.fetchVendors();
   }
 
   @override
@@ -101,7 +99,7 @@ class _MatchScreenState extends State<MatchScreen> {
                         showModalRightSheet(
                           context: context,
                           builder: (BuildContext context) {
-                            return FilterDrawer();
+                            return FilterDrawerMatch();
                           },
                         );
                       },
@@ -110,14 +108,136 @@ class _MatchScreenState extends State<MatchScreen> {
                 ),
               ),
               5.heightBox,
-              buildCardSetTop(),
+              Obx(() => buildCardSetTop(controller.topFilteredProducts)),
               10.heightBox,
-              buildCardSetLower(),
+              Obx(() => buildCardSetLower(controller.lowerFilteredProducts)),
               15.heightBox,
               matchWithYouContainer(),
             ],
           )),
         ],
+      ),
+    );
+  }
+
+  Widget buildCardSetTop(List<Map<String, dynamic>> topProducts) {
+    if (topProducts.isEmpty) {
+      return Center(child: Text('No data available'));
+    }
+    return Container(
+      height: 240,
+      child: PageView.builder(
+        controller: _pageControllerTop,
+        itemCount: topProducts.length,
+        itemBuilder: (context, index) {
+          final product = topProducts[index];
+          return GestureDetector(
+            onTap: () {
+              Get.to(() => ItemDetails(
+                    title: product['p_name'],
+                    data: product,
+                  ));
+            },
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  width: 250,
+                  child: Image.network(product['p_imgs'][0], fit: BoxFit.cover),
+                ),
+                Positioned(
+                  left: -10,
+                  child: IconButton(
+                    icon: Icon(Icons.chevron_left, size: 32, color: whiteColor),
+                    onPressed: () {
+                      if (_currentPageIndexTop > 0) {
+                        _pageControllerTop.previousPage(
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeIn,
+                        );
+                      }
+                    },
+                  ),
+                ),
+                Positioned(
+                  right: -10,
+                  child: IconButton(
+                    icon: Icon(Icons.chevron_right, size: 32, color: whiteColor),
+                    onPressed: () {
+                      if (_currentPageIndexTop < topProducts.length - 1) {
+                        _pageControllerTop.nextPage(
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeIn,
+                        );
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ).box.color(primaryDark).margin(EdgeInsets.symmetric(horizontal: 10)).rounded.make();
+        },
+      ),
+    );
+  }
+
+  Widget buildCardSetLower(List<Map<String, dynamic>> lowerProducts) {
+    if (lowerProducts.isEmpty) {
+      return Center(child: Text('No data available'));
+    }
+    return Container(
+      height: 240,
+      child: PageView.builder(
+        controller: _pageControllerLower,
+        itemCount: lowerProducts.length,
+        itemBuilder: (context, index) {
+          final product = lowerProducts[index];
+          return GestureDetector(
+            onTap: () {
+              Get.to(() => ItemDetails(
+                    title: product['p_name'],
+                    data: product,
+                  ));
+            },
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  width: 250,
+                  child: Image.network(product['p_imgs'][0], fit: BoxFit.cover),
+                ),
+                Positioned(
+                  left: -10,
+                  child: IconButton(
+                    icon: Icon(Icons.chevron_left, size: 32, color: whiteColor),
+                    onPressed: () {
+                      if (_currentPageIndexLower > 0) {
+                        _pageControllerLower.previousPage(
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeIn,
+                        );
+                      }
+                    },
+                  ),
+                ),
+                Positioned(
+                  right: -10,
+                  child: IconButton(
+                    icon: Icon(Icons.chevron_right, size: 32, color: whiteColor),
+                    onPressed: () {
+                      if (_currentPageIndexLower < lowerProducts.length - 1) {
+                        _pageControllerLower.nextPage(
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeIn,
+                        );
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ).box.color(primaryDark).margin(EdgeInsets.symmetric(horizontal: 10)).rounded.make();
+        },
       ),
     );
   }
@@ -149,8 +269,8 @@ class _MatchScreenState extends State<MatchScreen> {
             children: [
               InkWell(
                 onTap: () async {
-                  final topProducts = await _topProductsFuture;
-                  final lowerProducts = await _lowerProductsFuture;
+                  final topProducts = controller.topFilteredProducts;
+                  final lowerProducts = controller.lowerFilteredProducts;
                   if (topProducts.isNotEmpty && lowerProducts.isNotEmpty) {
                     final topProduct = topProducts[_currentPageIndexTop];
                     final lowerProduct = lowerProducts[_currentPageIndexLower];
@@ -190,8 +310,8 @@ class _MatchScreenState extends State<MatchScreen> {
                   .make(),
               InkWell(
                 onTap: () async {
-                  final topProducts = await _topProductsFuture;
-                  final lowerProducts = await _lowerProductsFuture;
+                  final topProducts = controller.topFilteredProducts;
+                  final lowerProducts = controller.lowerFilteredProducts;
                   if (topProducts.isNotEmpty && lowerProducts.isNotEmpty) {
                     final topProduct = topProducts[_currentPageIndexTop];
                     final lowerProduct = lowerProducts[_currentPageIndexLower];
@@ -235,221 +355,39 @@ class _MatchScreenState extends State<MatchScreen> {
     );
   }
 
-  Future<List<Map<String, dynamic>>> fetchProductstop() async {
-    final querySnapshot = await FirebaseFirestore.instance
-        .collection('products')
-        .where('p_part', isEqualTo: 'top')
-        .get();
-    return querySnapshot.docs
-        .map((doc) => doc.data() as Map<String, dynamic>)
-        .toList();
-  }
 
-  Future<List<Map<String, dynamic>>> fetchProductslower() async {
-    final querySnapshot = await FirebaseFirestore.instance
-        .collection('products')
-        .where('p_part', isEqualTo: 'lower')
-        .get();
-    return querySnapshot.docs
-        .map((doc) => doc.data() as Map<String, dynamic>)
-        .toList();
-  }
-
-  Widget buildCardSetTop() {
-    return FutureBuilder<List<Map<String, dynamic>>>(
-      future: _topProductsFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        }
-        if (snapshot.error != null) {
-          return Center(child: Text('An error occurred: ${snapshot.error}'));
-        }
-        if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Center(child: Text('No data available'));
-        }
-        final topProducts = snapshot.data!;
-        return Container(
-          height: 240,
-          child: PageView.builder(
-            controller: _pageControllerTop,
-            itemCount: topProducts.length,
-            itemBuilder: (context, index) {
-              final product = topProducts[index];
-              return GestureDetector(
-                onTap: () {
-                  Get.to(() => ItemDetails(
-                        title: product['p_name'],
-                        data: product,
-                      ));
-                },
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Container(
-                      width: 250,
-                      child: Image.network(product['p_imgs'][0],
-                          fit: BoxFit.cover),
-                    ),
-                    Positioned(
-                      left: -10,
-                      child: IconButton(
-                        icon: Icon(Icons.chevron_left,
-                            size: 32, color: whiteColor),
-                        onPressed: () {
-                          if (_currentPageIndexTop > 0) {
-                            _pageControllerTop.previousPage(
-                              duration: Duration(milliseconds: 300),
-                              curve: Curves.easeIn,
-                            );
-                          }
-                        },
-                      ),
-                    ),
-                    Positioned(
-                      right: -10,
-                      child: IconButton(
-                        icon: Icon(Icons.chevron_right,
-                            size: 32, color: whiteColor),
-                        onPressed: () {
-                          if (_currentPageIndexTop < topProducts.length - 1) {
-                            _pageControllerTop.nextPage(
-                              duration: Duration(milliseconds: 300),
-                              curve: Curves.easeIn,
-                            );
-                          }
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              )
-                  .box
-                  .color(primaryDark)
-                  .margin(EdgeInsets.symmetric(horizontal: 10))
-                  .rounded
-                  .make();
-            },
+  void showModalRightSheet({
+    required BuildContext context,
+    required WidgetBuilder builder,
+  }) {
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      barrierColor: Colors.black54,
+      transitionDuration: Duration(milliseconds: 200),
+      pageBuilder: (BuildContext context, Animation<double> animation,
+          Animation<double> secondaryAnimation) {
+        return Align(
+          alignment: Alignment.centerRight,
+          child: Material(
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.7,
+              child: builder(context),
+            ),
           ),
+        );
+      },
+      transitionBuilder: (BuildContext context, Animation<double> animation,
+          Animation<double> secondaryAnimation, Widget child) {
+        return SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(1.0, 0.0),
+            end: Offset.zero,
+          ).animate(animation),
+          child: child,
         );
       },
     );
   }
-
-  Widget buildCardSetLower() {
-    return FutureBuilder<List<Map<String, dynamic>>>(
-      future: _lowerProductsFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        }
-        if (snapshot.error != null) {
-          return Center(child: Text('An error occurred: ${snapshot.error}'));
-        }
-        if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Center(child: Text('No data available'));
-        }
-        final lowerProducts = snapshot.data!;
-        return Container(
-          height: 240,
-          child: PageView.builder(
-            controller: _pageControllerLower,
-            itemCount: lowerProducts.length,
-            itemBuilder: (context, index) {
-              final product = lowerProducts[index];
-              return GestureDetector(
-                onTap: () {
-                  Get.to(() => ItemDetails(
-                        title: product['p_name'],
-                        data: product,
-                      ));
-                },
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Container(
-                      width: 250,
-                      child: Image.network(product['p_imgs'][0],
-                          fit: BoxFit.cover),
-                    ),
-                    Positioned(
-                      left: -10,
-                      child: IconButton(
-                        icon: Icon(Icons.chevron_left,
-                            size: 32, color: whiteColor),
-                        onPressed: () {
-                          if (_currentPageIndexLower > 0) {
-                            _pageControllerLower.previousPage(
-                              duration: Duration(milliseconds: 300),
-                              curve: Curves.easeIn,
-                            );
-                          }
-                        },
-                      ),
-                    ),
-                    Positioned(
-                      right: -10,
-                      child: IconButton(
-                        icon: Icon(Icons.chevron_right,
-                            size: 32, color: whiteColor),
-                        onPressed: () {
-                          if (_currentPageIndexLower <
-                              lowerProducts.length - 1) {
-                            _pageControllerLower.nextPage(
-                              duration: Duration(milliseconds: 300),
-                              curve: Curves.easeIn,
-                            );
-                          }
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              )
-                  .box
-                  .color(primaryDark)
-                  .margin(EdgeInsets.symmetric(horizontal: 10))
-                  .rounded
-                  .make();
-            },
-          ),
-        );
-      },
-    );
-  }
-}
-
-void showModalRightSheet({
-  required BuildContext context,
-  required WidgetBuilder builder,
-}) {
-  showGeneralDialog(
-    context: context,
-    barrierDismissible: true,
-    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-    barrierColor: Colors.black54,
-    transitionDuration: Duration(milliseconds: 200),
-    pageBuilder: (BuildContext context, Animation<double> animation,
-        Animation<double> secondaryAnimation) {
-      return Align(
-        alignment: Alignment.centerRight,
-        child: Material(
-          child: Container(
-            width: MediaQuery.of(context).size.width * 0.7,
-            child: builder(context),
-          ),
-        ),
-      );
-    },
-    transitionBuilder: (BuildContext context, Animation<double> animation,
-        Animation<double> secondaryAnimation, Widget child) {
-      return SlideTransition(
-        position: Tween<Offset>(
-          begin: const Offset(1.0, 0.0),
-          end: Offset.zero,
-        ).animate(animation),
-        child: child,
-      );
-    },
-  );
 }

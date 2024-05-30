@@ -10,15 +10,144 @@ class ProductController extends GetxController {
   var colorIndex = 0.obs;
   var totalPrice = 0.obs;
   var vendorImageUrl = ''.obs;
-  
+ 
   var subcat = [];
 
   var isFav = false.obs;
+
+ //======Filter
+  var filteredProducts = <Map<String, dynamic>>[].obs;
+  var selectedGender = ''.obs;
+  var maxPrice = 0.0.obs;
+  var selectedColors = <int>[].obs;
+  var selectedTypes = <String>[].obs;
+  var selectedCollections = <String>[].obs;
+  var selectedVendorId = ''.obs;
+  var vendors = <Map<String, dynamic>>[].obs;
+
+void updateFilters({
+  String? gender,
+  double? price,
+  List<int>? colors,
+  List<String>? types,
+  List<String>? collections,
+  String? vendorId,
+}) {
+  selectedGender.value = gender ?? '';
+  maxPrice.value = price ?? 0.0;
+  selectedColors.assignAll(colors ?? []);
+  selectedTypes.assignAll(types ?? []);
+  selectedCollections.assignAll(collections ?? []);
+  if (vendorId != null) {
+    selectedVendorId.value = vendorId;
+  }
+}
+
+
+  var topFilteredProducts = <Map<String, dynamic>>[].obs;
+  var lowerFilteredProducts = <Map<String, dynamic>>[].obs;
+
+  void fetchInitialTopProducts() async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance
+          .collection('products')
+          .where('p_part', isEqualTo: 'top')
+          .get();
+      List<Map<String, dynamic>> products = snapshot.docs.map((doc) => doc.data()).toList();
+      topFilteredProducts.assignAll(products);
+    } catch (e) {
+      print("Error fetching initial top products: $e");
+    }
+  }
+
+  void fetchFilteredTopProducts() async {
+    try {
+      Query<Map<String, dynamic>> query = FirebaseFirestore.instance.collection('products').where('p_part', isEqualTo: 'top');
+
+      if (selectedGender.value.isNotEmpty) {
+        query = query.where('p_sex', isEqualTo: selectedGender.value);
+      }
+
+      if (selectedVendorId.value.isNotEmpty) {
+        query = query.where('vendor_id', isEqualTo: selectedVendorId.value);
+      }
+
+      if (maxPrice.value > 0) {
+        query = query.where('p_price', isLessThanOrEqualTo: maxPrice.value.toString());
+      }
+
+      QuerySnapshot<Map<String, dynamic>> snapshot = await query.get();
+      List<Map<String, dynamic>> products = snapshot.docs.map((doc) => doc.data()).toList();
+      topFilteredProducts.assignAll(products);
+    } catch (e) {
+      print("Error fetching filtered top products: $e");
+    }
+  }
+
+  void fetchInitialLowerProducts() async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance
+          .collection('products')
+          .where('p_part', isEqualTo: 'lower')
+          .get();
+      List<Map<String, dynamic>> products = snapshot.docs.map((doc) => doc.data()).toList();
+      lowerFilteredProducts.assignAll(products);
+    } catch (e) {
+      print("Error fetching initial lower products: $e");
+    }
+  }
+
+
+  void fetchFilteredLowerProducts() async {
+    try {
+      Query<Map<String, dynamic>> query = FirebaseFirestore.instance.collection('products').where('p_part', isEqualTo: 'lower');
+
+      if (selectedGender.value.isNotEmpty) {
+        query = query.where('p_sex', isEqualTo: selectedGender.value);
+      }
+
+      if (selectedVendorId.value.isNotEmpty) {
+        query = query.where('vendor_id', isEqualTo: selectedVendorId.value);
+      }
+
+      if (maxPrice.value > 0) {
+        query = query.where('p_price', isLessThanOrEqualTo: maxPrice.value.toString());
+      }
+
+
+      QuerySnapshot<Map<String, dynamic>> snapshot = await query.get();
+      List<Map<String, dynamic>> products = snapshot.docs.map((doc) => doc.data()).toList();
+      lowerFilteredProducts.assignAll(products);
+    } catch (e) {
+      print("Error fetching filtered lower products: $e");
+    }
+  }
+
+void fetchVendors() async {
+  try {
+    QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance
+        .collection('vendors')
+        .get();
+    List<Map<String, dynamic>> vendorList = snapshot.docs.map((doc) => {
+      'vendor_id': doc.id,
+      'vendor_name': doc['vendor_name']
+    }).toList();
+    vendors.assignAll(vendorList);
+    print("Vendors fetched: $vendorList");
+  } catch (e) {
+    print("Error fetching vendors: $e");
+  }
+}
+
+ //======Filter
 
   @override
   void onInit() {
     super.onInit();
     resetValues();
+    fetchInitialTopProducts();
+    fetchInitialLowerProducts();
+    fetchVendors();
   }
 
   void updateWishlistStatus(String productName, bool isFav) {

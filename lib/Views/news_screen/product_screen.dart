@@ -7,23 +7,46 @@ import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/store_screen/mixandmatch_detail.dart';
 import 'package:flutter_finalproject/Views/widgets_common/filterDrawer.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
-import 'package:flutter_finalproject/controllers/news_controller.dart';
-import 'package:flutter_finalproject/services/firestore_services.dart'
-    as MyFirestoreServices;
+import 'package:flutter_finalproject/controllers/home_controller.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class ProductScreen extends StatelessWidget {
+class ProductScreen extends StatefulWidget {
   final int initialTabIndex;
-  final TextEditingController searchController = TextEditingController();
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   ProductScreen({Key? key, this.initialTabIndex = 0}) : super(key: key);
+
+  @override
+  _ProductScreenState createState() => _ProductScreenState();
+}
+
+class _ProductScreenState extends State<ProductScreen> {
+  final TextEditingController searchController = TextEditingController();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final HomeController controller = Get.put(HomeController());
+
+  @override
+  void initState() {
+    super.initState();
+    ever(controller.selectedGender, (_) => fetchFilteredProducts());
+    ever(controller.maxPrice, (_) => fetchFilteredProducts());
+    ever(controller.selectedColors, (_) => fetchFilteredProducts());
+    ever(controller.selectedTypes, (_) => fetchFilteredProducts());
+    ever(controller.selectedCollections, (_) => fetchFilteredProducts());
+    ever(controller.selectedVendorId, (_) => fetchFilteredProducts());
+  }
+
+  void fetchFilteredProducts() {
+    if (mounted) {
+      setState(() {}); // Trigger a rebuild
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: whiteColor,
+      key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: whiteColor,
         title: Row(
@@ -40,7 +63,7 @@ class ProductScreen extends StatelessWidget {
           ],
         ),
       ),
-      body: ProductMatchTabs(context, initialTabIndex),
+      body: ProductMatchTabs(context, widget.initialTabIndex),
     );
   }
 
@@ -160,19 +183,18 @@ class ProductScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(12),
                     child: TabBarView(
                       children: [
-                        buildProductGridAll(),
-                        buildProductGrid('dresses', 'dresses'),
-                        buildProductGrid(
-                            'outerwear & Costs', 'outerwear & Costs'),
-                        buildProductGrid('blazers', 'blazers'),
-                        buildProductGrid('suits', 'suits'),
-                        buildProductGrid('blouses & Tops', 'blouses & Tops'),
-                        buildProductGrid('knitwear', 'knitwear'),
-                        buildProductGrid('t-shirts', 't-shirts'),
-                        buildProductGrid('skirts', 'skirts'),
-                        buildProductGrid('pants', 'pants'),
-                        buildProductGrid('denim', 'denim'),
-                        buildProductGrid('activewear', 'activewear'),
+                        buildProductGrid('All'),
+                        buildProductGrid('dresses'),
+                        buildProductGrid('outerwear & Costs'),
+                        buildProductGrid('blazers'),
+                        buildProductGrid('suits'),
+                        buildProductGrid('blouses & Tops'),
+                        buildProductGrid('knitwear'),
+                        buildProductGrid('t-shirts'),
+                        buildProductGrid('skirts'),
+                        buildProductGrid('pants'),
+                        buildProductGrid('denim'),
+                        buildProductGrid('activewear'),
                       ],
                     ),
                   ),
@@ -185,125 +207,11 @@ class ProductScreen extends StatelessWidget {
     );
   }
 
-  Widget buildMatchTab(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(5),
-            child: DefaultTabController(
-              length: 1,
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.8,
-                    child: TabBarView(
-                      children: [
-                        buildProductMathGrids('All'),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildProductGridAll() {
-    var controller = Get.find<NewsController>();
-
-    return StreamBuilder(
-      stream: MyFirestoreServices.FirestoreServices.allproducts(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (!snapshot.hasData) {
-          return Center(
-            child: loadingIndicator(),
-          );
-        } else {
-          var allproductsdata = snapshot.data!.docs;
-          return GridView.builder(
-            physics: const AlwaysScrollableScrollPhysics(),
-            itemCount: allproductsdata.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 20,
-              crossAxisSpacing: 8,
-              mainAxisExtent: 260,
-            ),
-            itemBuilder: (context, index) {
-              if (index >= allproductsdata.length) {
-                return Container();
-              }
-              var product = allproductsdata[index];
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(15),
-                      topRight: Radius.circular(15),
-                    ),
-                    child: Image.network(
-                      product['p_imgs'][0],
-                      width: 195,
-                      height: 200,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  10.heightBox,
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          product['p_name'],
-                          style: TextStyle(
-                            fontFamily: medium,
-                            fontSize: 16,
-                            color: blackColor,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        "${NumberFormat('#,##0').format(double.parse(product['p_price']).toInt())} Bath"
-                            .text
-                            .color(greyDark)
-                            .fontFamily(regular)
-                            .size(14)
-                            .make(),
-                      ],
-                    ),
-                  )
-                ],
-              )
-                  .box
-                  .white
-                  .margin(const EdgeInsets.symmetric(horizontal: 3))
-                  .rounded
-                  .border(color: greyLine)
-                  .make()
-                  .onTap(() {
-                Get.to(() => ItemDetails(
-                      title: product['p_name'],
-                      data: product,
-                    ));
-              });
-            },
-          );
-        }
-      },
-    );
-  }
-
-  Widget buildProductGrid(String category, String subcollection) {
+  Widget buildProductGrid(String category) {
     Query query = FirebaseFirestore.instance.collection(productsCollection);
 
-    if (subcollection != 'All') {
-      query = query.where('p_subcollection', isEqualTo: subcollection);
+    if (category != 'All') {
+      query = query.where('p_subcollection', isEqualTo: category);
     }
 
     return FutureBuilder<QuerySnapshot>(
@@ -410,7 +318,7 @@ class ProductScreen extends StatelessWidget {
     );
   }
 
-  Widget buildProductMathGrids(String category) {
+  Widget buildMatchTab(BuildContext context) {
     Query query = FirebaseFirestore.instance
         .collection(productsCollection)
         .where('p_mixmatch', isNotEqualTo: null);
@@ -624,7 +532,42 @@ class ProductScreen extends StatelessWidget {
       },
     );
   }
+
+  void showModalRightSheet({
+    required BuildContext context,
+    required WidgetBuilder builder,
+  }) {
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      barrierColor: Colors.black54,
+      transitionDuration: Duration(milliseconds: 200),
+      pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+        return Align(
+          alignment: Alignment.centerRight,
+          child: Material(
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.7,
+              child: builder(context),
+            ),
+          ),
+        );
+      },
+      transitionBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
+        return SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(1.0, 0.0),
+            end: Offset.zero,
+          ).animate(animation),
+          child: child,
+        );
+      },
+    );
+  }
 }
+
+
 
 void showModalRightSheet({
   required BuildContext context,
