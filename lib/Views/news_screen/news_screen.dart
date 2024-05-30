@@ -115,9 +115,8 @@ class NewsScreen extends StatelessWidget {
                                     children: List.generate(itemCount, (index) {
                                       return GestureDetector(
                                         onTap: () {
-                                          var vendorId =
-                                              allproductsdata[index]
-                                                  ['vendor_id'];
+                                          var vendorId = allproductsdata[index]
+                                              ['vendor_id'];
                                           print(
                                               "Navigating to StoreScreen with vendor_id: $vendorId");
                                           Get.to(() =>
@@ -138,8 +137,7 @@ class NewsScreen extends StatelessWidget {
                                                   color: blackColor,
                                                 ),
                                                 maxLines: 1,
-                                                overflow:
-                                                    TextOverflow.ellipsis,
+                                                overflow: TextOverflow.ellipsis,
                                               ),
                                             ],
                                           ),
@@ -150,10 +148,8 @@ class NewsScreen extends StatelessWidget {
                                             .border(color: greyLine)
                                             .margin(const EdgeInsets.symmetric(
                                                 horizontal: 5))
-                                            .padding(
-                                                const EdgeInsets.symmetric(
-                                                    horizontal: 24,
-                                                    vertical: 12))
+                                            .padding(const EdgeInsets.symmetric(
+                                                horizontal: 24, vertical: 12))
                                             .make(),
                                       );
                                     }),
@@ -230,8 +226,7 @@ class NewsScreen extends StatelessWidget {
                                             return GestureDetector(
                                               onTap: () {
                                                 Get.to(() => ItemDetails(
-                                                      title:
-                                                          product['p_name'],
+                                                      title: product['p_name'],
                                                       data: product.data()
                                                           as Map<String,
                                                               dynamic>,
@@ -342,7 +337,7 @@ class NewsScreen extends StatelessWidget {
                         ],
                       )
                           .box
-                          .padding(const EdgeInsets.fromLTRB(10,45,10,0))
+                          .padding(const EdgeInsets.fromLTRB(10, 45, 10, 0))
                           .roundedLg
                           .make(),
                       15.heightBox,
@@ -516,141 +511,141 @@ class NewsScreen extends StatelessWidget {
             String productImage2 = data2['p_imgs'][0];
 
             return GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MatchDetailScreen(
-                      price1: price1,
-                      price2: price2,
-                      productName1: productName1,
-                      productName2: productName2,
-                      productImage1: productImage1,
-                      productImage2: productImage2,
-                      totalPrice: totalPrice,
-                      vendorName1: vendorName1,
-                      vendorName2: vendorName2,
-                      vendor_id: vendor_id,
-                      collection: collectionList,
-                      description: description,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MatchDetailScreen(
+                        price1: price1,
+                        price2: price2,
+                        productName1: productName1,
+                        productName2: productName2,
+                        productImage1: productImage1,
+                        productImage2: productImage2,
+                        totalPrice: totalPrice,
+                        vendorName1: vendorName1,
+                        vendorName2: vendorName2,
+                        vendor_id: vendor_id,
+                        collection: collectionList,
+                        description: description,
+                      ),
                     ),
-                  ),
-                );
-              },
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Image.network(
-                        productImage1,
-                        width: 80,
-                        height: 90,
-                        fit: BoxFit.cover,
-                      ),
-                      5.widthBox,
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: 200,
-                              child: Text(
-                                productName1,
-                                style: const TextStyle(
-                                  fontFamily: medium,
-                                  fontSize: 14,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                            ),
-                            Text(
-                              "${NumberFormat('#,##0').format(double.parse(price1).toInt())} Bath",
-                              style: const TextStyle(color: greyColor),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                  3.heightBox,
-                  Row(
-                    children: [
-                      Image.network(
-                        productImage2,
-                        width: 80,
-                        height: 90,
-                        fit: BoxFit.cover,
-                      ),
-                      3.widthBox,
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: 200,
-                              child: Text(
-                                productName2,
-                                style: const TextStyle(
-                                  fontFamily: medium,
-                                  fontSize: 14,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                            ),
-                            Text(
-                              "${NumberFormat('#,##0').format(double.parse(price2).toInt())} Bath",
-                              style: const TextStyle(color: greyColor),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: Row(
+                  );
+                },
+                child: Column(
+                  children: [
+                    Row(
                       children: [
-                        Text(
-                          "Price: ",
-                          style: TextStyle(
-                              color: blackColor,
-                              fontFamily: regular,
-                              fontSize: 14),
+                        Image.network(
+                          productImage1,
+                          width: 80,
+                          height: 90,
+                          fit: BoxFit.cover,
                         ),
-                        Text(
-                          "${NumberFormat('#,##0').format(double.parse(totalPrice).toInt())} ",
-                          style: TextStyle(
-                              color: blackColor,
-                              fontFamily: medium,
-                              fontSize: 16),
-                        ),
-                        Text(
-                          "Bath",
-                          style: TextStyle(
-                              color: blackColor,
-                              fontFamily: regular,
-                              fontSize: 14),
-                        ),
+                        5.widthBox,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: 200,
+                                child: Text(
+                                  productName1,
+                                  style: const TextStyle(
+                                    fontFamily: medium,
+                                    fontSize: 14,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                              ),
+                              Text(
+                                "${NumberFormat('#,##0').format(double.parse(price1).toInt())} Bath",
+                                style: const TextStyle(color: greyColor),
+                              ),
+                            ],
+                          ),
+                        )
                       ],
                     ),
-                  )
-                ],
-              )
-                  .box
-                  .border(color: greyLine)
-                  .p8
-                  .margin(EdgeInsets.all(2))
-                  .roundedSM
+                    3.heightBox,
+                    Row(
+                      children: [
+                        Image.network(
+                          productImage2,
+                          width: 80,
+                          height: 90,
+                          fit: BoxFit.cover,
+                        ),
+                        3.widthBox,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: 200,
+                                child: Text(
+                                  productName2,
+                                  style: const TextStyle(
+                                    fontFamily: medium,
+                                    fontSize: 14,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                              ),
+                              Text(
+                                "${NumberFormat('#,##0').format(double.parse(price2).toInt())} Bath",
+                                style: const TextStyle(color: greyColor),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Tatal: ",
+                            style: TextStyle(
+                                color: blackColor,
+                                fontFamily: regular,
+                                fontSize: 14),
+                          ),
+                          Text(
+                            "${NumberFormat('#,##0').format(double.parse(totalPrice).toInt())} ",
+                            style: TextStyle(
+                                color: blackColor,
+                                fontFamily: medium,
+                                fontSize: 16),
+                          ),
+                          Text(
+                            "Bath",
+                            style: TextStyle(
+                                color: blackColor,
+                                fontFamily: regular,
+                                fontSize: 14),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                )
+                    .box
+                    .border(color: greyLine)
+                    .p8
+                    .margin(EdgeInsets.all(2))
+                    .roundedSM
                     .make());
           },
           itemCount: 4,
-            );
-          },
+        );
+      },
     );
   }
 }
