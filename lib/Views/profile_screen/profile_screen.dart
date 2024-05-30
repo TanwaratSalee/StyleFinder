@@ -35,9 +35,9 @@ class _ProfileScreenState extends State<ProfileScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: whiteColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: whiteColor,
         automaticallyImplyLeading: false,
         title: const Text(
           'Profile',
@@ -294,7 +294,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                   ),
                                   softWrap: false,
                                   overflow: TextOverflow.ellipsis,
-                                ).box.width(250).make(),
+                                ).box.width(180).make(),
                                 Text(
                                   "${NumberFormat('#,##0').format(double.parse(data[index]['p_price']).toInt())} Bath",
                                   style: const TextStyle(

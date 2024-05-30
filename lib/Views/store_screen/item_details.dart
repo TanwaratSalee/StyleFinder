@@ -166,7 +166,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                       Row(
                         children: [
                           Container(
-                            width: 340,
+                            width: 290,
                             child: Text(
                               widget.title ?? '',
                               style: const TextStyle(

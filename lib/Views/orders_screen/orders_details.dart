@@ -176,14 +176,24 @@ class OrdersDetails extends StatelessWidget {
                   .make(),
 
               15.heightBox,
-              
+
               Column(
                 children: [
-                  const Text(
-                    "Ordere List",
-                  ).text.size(20).color(blackColor).fontFamily(medium).make(),
-                  Divider(
-                    color: greyLine,
+                  Column(
+                    children: [
+                     Row(
+                            children: [
+                              Image.asset(iconsStore, width: 18,),
+                              10.widthBox,
+                              // Text(sellerName)
+                              //     .text
+                              //     .size(16)
+                              //     .fontFamily(semiBold)
+                              //     .color(blackColor)
+                              //     .make(),
+                            ],
+                          ),
+                    ],
                   ),
                   10.heightBox,
                   ListView.builder(
