@@ -135,15 +135,16 @@ class _FilterDrawerState extends State<FilterDrawer> {
                 spacing: 10,
                 children: vendors.map((vendor) {
                   return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      controller.updateFilters(vendorId: vendor['vendor_id']);
-                    });
-                  },
-                    child: CircleAvatar(
-                      radius: 15,
-                      backgroundImage: NetworkImage(vendor['imageUrl']),
-                    ),
+                    onTap: () {
+                      setState(() {
+                        controller.updateFilters(vendorId: vendor['vendor_id']);
+                      });
+                    },
+                      child: Text(
+                        vendor['vendor_name'] ?? 'Unknown',
+                        style: TextStyle(fontSize: 12), // ปรับขนาดตัวอักษรตามความเหมาะสม
+                        textAlign: TextAlign.center,
+                      ),
                   );
                 }).toList(),
               ),
