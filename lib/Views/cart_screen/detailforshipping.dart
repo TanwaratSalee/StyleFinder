@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/cart_screen/payment_method.dart';
 import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
@@ -38,9 +39,20 @@ class DetailForShipping extends StatelessWidget {
   Widget build(BuildContext context) {
     String formattedPrice = NumberFormat('#,##0', 'en_US').format(totalPrice);
 
+    // Group the cart items by seller name
+    Map<String, List<DocumentSnapshot>> groupedProducts = {};
+    for (var doc in cartItems) {
+      String sellerName = doc['sellername'] ?? 'Unknown Seller';
+      if (!groupedProducts.containsKey(sellerName)) {
+        groupedProducts[sellerName] = [];
+      }
+      groupedProducts[sellerName]!.add(doc);
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("Order Detail").text
+        title: Text("Order Detail")
+            .text
             .size(26)
             .fontFamily(semiBold)
             .color(blackColor)
@@ -71,8 +83,8 @@ class DetailForShipping extends StatelessWidget {
                 SizedBox(height: 8),
                 Text("Shipping Address")
                     .text
-                    .size(18)
-                    .fontFamily(medium)
+                    .size(20)
+                    .fontFamily(semiBold)
                     .make(),
                 SizedBox(height: 8),
                 Row(
@@ -116,80 +128,107 @@ class DetailForShipping extends StatelessWidget {
                 .padding(EdgeInsets.fromLTRB(22, 0, 22, 10))
                 .rounded
                 .make(),
-            SizedBox(height: 16),
+            SizedBox(height: 15),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text("Ordered List")
                     .text
-                    .size(18)
-                    .fontFamily(medium)
+                    .size(20)
+                    .fontFamily(semiBold)
                     .make(),
-                10.heightBox,
-                ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: cartItems.length,
-                  itemBuilder: (context, index) {
-                    var item = cartItems[index];
-                    String itemPrice =
-                        NumberFormat('#,##0', 'en_US').format(item['tprice']);
-                    return Column(
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                Divider(color: greyThin),
+                // Display the grouped products by seller name
+                ...groupedProducts.entries.map((entry) {
+                  String sellerName = entry.key;
+                  List<DocumentSnapshot> products = entry.value;
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        child: Row(
                           children: [
-                            Text(
-                              'x${item['qty']}',
-                            )
+                            Image.asset(iconsStore, width: 18,),
+                            10.widthBox,
+                            Text(sellerName)
                                 .text
-                                .size(12)
-                                .fontFamily(regular)
-                                .color(greyDark)
+                                .size(16)
+                                .fontFamily('semiBold')
+                                .color(Colors.black)
                                 .make(),
-                            const SizedBox(width: 5),
-                            Image.network(item['img'],
-                                width: 50, height: 60, fit: BoxFit.cover),
-                            const SizedBox(width: 15),
-                            Expanded(
-                                child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  item['title'],
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                )
-                                    .text
-                                    .size(14)
-                                    .fontFamily(medium)
-                                    .color(blackColor)
-                                    .make(),
-                                Text(
-                                  '$itemPrice Bath',
-                                  style: const TextStyle(color: greyDark),
-                                ),
-                              ],
-                            )),
                           ],
-                        ).box.padding(EdgeInsets.only(bottom: 5)).make(),
-                      ],
-                    );
-                  },
-                ),
-                // SizedBox(height: 12),
-                Text("Total: $formattedPrice Bath",
-                        style: TextStyle(fontSize: 18, fontFamily: regular))
-                    .box
-                    .padding(EdgeInsets.all(8))
-                    .rounded
+                        ),
+                      ),
+                      ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: products.length,
+                        itemBuilder: (context, index) {
+                          var item = products[index];
+                          String itemPrice = NumberFormat('#,##0', 'en_US')
+                              .format(item['tprice']);
+                          return Column(
+                            children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text('x${item['qty']}')
+                                      .text
+                                      .size(12)
+                                      .fontFamily(regular)
+                                      .color(greyDark)
+                                      .make(),
+                                  const SizedBox(width: 5),
+                                  Image.network(item['img'],
+                                      width: 50, height: 60, fit: BoxFit.cover),
+                                  const SizedBox(width: 15),
+                                  Expanded(
+                                      child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        item['title'],
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      )
+                                          .text
+                                          .size(14)
+                                          .fontFamily(medium)
+                                          .color(blackColor)
+                                          .make(),
+                                      Text(
+                                        '$itemPrice Bath',
+                                        style: const TextStyle(color: greyDark),
+                                      ),
+                                    ],
+                                  )),
+                                ],
+                              ).box.padding(EdgeInsets.only(bottom: 8)).make(),
+                            ],
+                          );
+                        },
+                      ),
+                    ],
+                  );
+                }).toList(),
+                5.heightBox,
+                Divider(color: greyThin),
+                5.heightBox,
+                Text("Total: $formattedPrice Bath",)
+                    .text
+                    .size(18)
+                    .color(greyDark)
+                    .fontFamily(medium)
                     .make(),
               ],
             )
                 .box
                 .white
                 .shadowSm
-                .padding(EdgeInsets.fromLTRB(22, 10, 22, 0))
+                .padding(EdgeInsets.symmetric(horizontal:  22, vertical: 15))
                 .rounded
                 .make()
           ],

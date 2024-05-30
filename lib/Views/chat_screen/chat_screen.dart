@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/chat_screen/component/sender_bubble.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
@@ -7,7 +6,6 @@ import 'package:flutter_finalproject/controllers/chats_controller.dart';
 import 'package:flutter_finalproject/services/firestore_services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});
@@ -115,9 +113,7 @@ class ChatScreen extends StatelessWidget {
                                     Padding(
                                       padding: const EdgeInsets.symmetric(vertical: 10),
                                       child: Center(
-                                        child: Text(
-                                          date,
-                                          style: TextStyle(color: greyDark, fontWeight: FontWeight.bold),
+                                        child: Text( date, style: TextStyle(color: greyDark, fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ),

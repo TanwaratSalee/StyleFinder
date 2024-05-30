@@ -17,21 +17,13 @@ const String icCart = "assets/icons/iconsNavbarinapp/cart.png";
 
 //icon nav bar bottom
 const String icHome = "assets/icons/iconsNavbarinapp/Home.png";
-// const String icCollection = "assets/icons/iconsNavbarinapp/collection.png";
 const String icNews = "assets/icons/iconsNavbarinapp/News.png";
 const String icMatch = "assets/icons/iconsNavbarinapp/match.png";
 const String icPerson = "assets/icons/iconsNavbarinapp/me.png";
-
-//Selected icon navbarbottom
-const String icHomeSelected =
-    "assets/icons/iconsNavbarinapp/icHomeSelected.png";
-// const String icCollection = "assets/icons/iconsNavbarinapp/collection.png";
-const String icNewsSelected =
-    "assets/icons/iconsNavbarinapp/icNewsSelected.png";
-const String icMatchSelected =
-    "assets/icons/iconsNavbarinapp/icMatchSelected.png";
-const String icPersonSelected =
-    "assets/icons/iconsNavbarinapp/icPersonSelected.png";
+const String icHomeSelected = "assets/icons/iconsNavbarinapp/icHomeSelected.png";
+const String icNewsSelected = "assets/icons/iconsNavbarinapp/icNewsSelected.png";
+const String icMatchSelected = "assets/icons/iconsNavbarinapp/icMatchSelected.png";
+const String icPersonSelected = "assets/icons/iconsNavbarinapp/icPersonSelected.png";
 
 //other
 const String icLogoApp = "assets/images/LogoOnApp.png";
@@ -78,16 +70,6 @@ const IconData icTopSellers = FontAwesomeIcons.crown;
 const IconData icBrand = Icons.lightbulb;
 const IconData icTopCategories = IconData(0xf4c7, fontFamily: 'MaterialIcons');
 
-//logo brand
-const String logoBrand1 = "assets/images/hermesLogo.png";
-const String logoBrand2 = "assets/images/cdLogo.png";
-const String logoBrand3 = "assets/images/chanelLogo.png";
-const String logoBrand4 = "assets/images/lousLogo.png";
-const String logoBrand5 = "assets/images/gucciLogo.png";
-const String logoBrand6 = "assets/images/coachLogo.png";
-const String logoBrand7 = "assets/images/balencigaLogo.png";
-const String logoBrand8 = "assets/images/burberryLogo.png";
-
 //Featured Productf
 const String product1 = "assets/images/product1.png";
 const String product2 = "assets/images/product2.png";
@@ -121,6 +103,7 @@ const String imgCash = "assets/images/payment/cashOnDelivery.png";
 const String imgPromptpay = "assets/images/payment/Promptpay.png";
 const String imgVisa = "assets/images/payment/visa.png";
 const String imgmobile = "assets/images/payment/visa.png";
+const String imgbgVisa = 'assets/images/card.png';
 
 const String icCash = "assets/images/payment/card.png";
 const String icPromptpay = "assets/images/payment/qr.png";
@@ -138,7 +121,11 @@ const String imgbbl = 'assets/images/payment/BBL.png';
 const String imgktb = 'assets/images/payment/krungthai.png';
 const String imgkbay = 'assets/images/payment/KMA.jpg';
 
-//Order
+
+// ----------------------------------------------- item Screen -----------------------------------------------
+const String icFav = "assets/icons/icNormal/buttonFavourite.png";
+const String icClickFav = "assets/icons/icNormal/ckickbuttonFavourite.png";
+
 const String icPlaced = "assets/icons/icNormal/placed.png";
 const String icConfirm = "assets/icons/icNormal/confirm.png";
 const String icOnDelivery = "assets/icons/icNormal/onDelivery.png";
@@ -148,9 +135,7 @@ const String icCheckConfirm = "assets/icons/icNormal/delivered.png";
 const String icCheckOnDelivery = "assets/icons/icNormal/checkOnDelivery.png";
 const String icCheckDelivered = "assets/icons/icNormal/checkDelivered.png";
 
-// ----------------------------------------------- item Screen -----------------------------------------------
-const String icFav = "assets/icons/icNormal/buttonFavourite.png";
-const String icClickFav = "assets/icons/icNormal/ckickbuttonFavourite.png";
+const String iconsStore = "assets/icons/iconsStore.png";
 
 //----------------------------------------------- popup -----------------------------------------------
 const String imgPopupEmail = 'assets/images/sentToEmail.png';

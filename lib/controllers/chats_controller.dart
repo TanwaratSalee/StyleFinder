@@ -15,11 +15,11 @@ class ChatsController extends GetxController {
 
   var friendName = Get.arguments[0];
   var friendId = Get.arguments[1];
-  var friendImageUrl = ''.obs; // Variable to store friend's imageUrl
+  var friendImageUrl = ''.obs; 
 
   var senderName = Get.find<NewsController>().username;
   var currentId = currentUser!.uid;
-  var currentUserImageUrl = ''.obs; // Variable to store current user's imageUrl
+  var currentUserImageUrl = ''.obs; 
 
   var msgController = TextEditingController();
 

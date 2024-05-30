@@ -68,8 +68,7 @@ class MessagesScreen extends StatelessWidget {
                                 DateFormat('dd/MM/yyyy').format(date);
                           }
 
-                          var friendImageUrl =
-                              data[index]['friend_image_url'] ?? '';
+                          var friendImageUrl = data[index]['friend_image_url'] ?? '';
 
                           return GestureDetector(
                             onTap: () {
@@ -121,6 +120,7 @@ class MessagesScreen extends StatelessWidget {
                                         5.heightBox,
                                         SizedBox(
                                           width: 250,
+                                          height: 20,
                                           child: Text(
                                             "${data[index]['last_msg']}",
                                             style: TextStyle(color: greyDark),

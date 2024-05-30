@@ -45,87 +45,79 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
     String newNumber = cardNumberController.text;
     setState(() {
       if (newNumber.length > 12) {
-        // ถ้าหมายเลขที่ป้อนมีความยาวมากกว่า 12 ตัวอักษร
-        String visibleDigits =
-            newNumber.substring(0, 12); // เก็บเฉพาะ 12 ตัวอักษรแรก
-        cardNumberMasked = visibleDigits +
-            'X' * (newNumber.length - 12); // เติม 'X' สำหรับตัวเลขที่เหลือ
+        String visibleDigits = newNumber.substring(0, 12);
+        cardNumberMasked = visibleDigits + 'X' * (newNumber.length - 12);
       } else {
-        // ถ้าหมายเลขที่ป้อนมีความยาวน้อยกว่าหรือเท่ากับ 12 ตัวอักษร
         cardNumberMasked = newNumber;
       }
 
-      // จัดรูปแบบหมายเลขบัตรให้มีช่องว่างทุก ๆ 4 ตัวอักษร เพื่อความสะดวกในการอ่าน
       cardNumberMasked = cardNumberMasked
           .replaceAllMapped(RegExp(r".{4}"), (match) => "${match.group(0)} ")
           .trim(); // ตัดช่องว่างที่เหลือท้ายสุดออก
     });
   }
 
-Future<void> _showSuccessDialog(BuildContext context) async {
-  showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        backgroundColor: whiteColor,
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: <Widget>[
-              SizedBox(height: 50),
-              Image.asset(imgSuccessful),
-              SizedBox(height: 40),
-              Text(
-                'Payment was successful!',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: bold,
-                  fontSize: 20,
+  Future<void> _showSuccessDialog(BuildContext context) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: whiteColor,
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                SizedBox(height: 50),
+                Image.asset(imgSuccessful),
+                SizedBox(height: 40),
+                Text(
+                  'Payment was successful!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: bold,
+                    fontSize: 20,
+                  ),
                 ),
-              ),
-              SizedBox(height: 15),
-              Text(
-                '${controller.totalP.value} Bath',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: bold,
-                  color: Colors.blue,
-                  fontSize: 16,
+                SizedBox(height: 15),
+                Text(
+                  '${controller.totalP.value} Bath',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: bold,
+                    color: primaryApp,
+                    fontSize: 16,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      );
-    },
-  );
+        );
+      },
+    );
 
-  String selectedPaymentMethod = textpaymentMethods[controller.paymentIndex.value];
-  await controller.placeMyOrder(
-    orderPaymentMethod: selectedPaymentMethod,
-    totalAmount: controller.totalP.value.toDouble()
-  );
+    String selectedPaymentMethod =
+        textpaymentMethods[controller.paymentIndex.value];
+    await controller.placeMyOrder(
+        orderPaymentMethod: selectedPaymentMethod,
+        totalAmount: controller.totalP.value.toDouble());
 
-  await controller.clearCart();
-  VxToast.show(context, msg: "Order placed successfully");
-  await Future.delayed(Duration(seconds: 4));
-  Get.find<CartController>().totalP.refresh();
-  Get.offAll(() => MainHome());
-}
+    await controller.clearCart();
+    VxToast.show(context, msg: "Order placed successfully");
+    await Future.delayed(Duration(seconds: 4));
+    Get.find<CartController>().totalP.refresh();
+    Get.offAll(() => MainHome());
+  }
 
-
-
-Widget _buildNameTextField() {
-  return TextFormField(
-    controller: nameController,
-    decoration: InputDecoration(
-      border: OutlineInputBorder(),
-      labelText: 'Name',
-    ),
-    onChanged: _updateCardHolderName,
-  );
-}
-
+  Widget _buildNameTextField() {
+    return TextFormField(
+      controller: nameController,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        labelText: 'Name',
+      ),
+      onChanged: _updateCardHolderName,
+    );
+  }
 
   Widget _buildCardNumberTextField() {
     String determineImageAsset() {
@@ -153,22 +145,20 @@ Widget _buildNameTextField() {
     );
   }
 
-Widget _buildVCCTextField() {
-  return TextFormField(
-    controller: cvcController,
-    decoration: InputDecoration(
-      border: OutlineInputBorder(),
-      labelText: 'VCC',
-    ),
-    inputFormatters: <TextInputFormatter>[
-      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-      LengthLimitingTextInputFormatter(3),
-    ],
-    keyboardType: TextInputType.number,
-  );
-}
-
-
+  Widget _buildVCCTextField() {
+    return TextFormField(
+      controller: cvcController,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        labelText: 'VCC',
+      ),
+      inputFormatters: <TextInputFormatter>[
+        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+        LengthLimitingTextInputFormatter(3),
+      ],
+      keyboardType: TextInputType.number,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -177,12 +167,21 @@ Widget _buildVCCTextField() {
       appBar: AppBar(
         title: Text(
           "Card Detail",
-          
-        ).text
-            .size(26)
-            .fontFamily(semiBold)
-            .color(blackColor)
-            .make(),
+        ).text.size(26).fontFamily(semiBold).color(blackColor).make(),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 35),
+        child: SizedBox(
+          height: 50,
+          child: tapButton(
+            onPress: () {
+               getTokenandSourceTest();
+            },
+            color: primaryApp,
+            textColor: whiteColor,
+            title: "Confirm",
+          ),
+        ),
       ),
       body: ListView(
         padding: EdgeInsets.all(16),
@@ -204,11 +203,11 @@ Widget _buildVCCTextField() {
                       border: OutlineInputBorder(),
                       labelText: 'MM',
                     ),
-                        inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                        LengthLimitingTextInputFormatter(2),
-                      ],
-                      keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                      LengthLimitingTextInputFormatter(2),
+                    ],
+                    keyboardType: TextInputType.number,
                   ),
                 ),
               ),
@@ -221,11 +220,11 @@ Widget _buildVCCTextField() {
                       border: OutlineInputBorder(),
                       labelText: 'YY',
                     ),
-                      inputFormatters: <TextInputFormatter>[
+                    inputFormatters: <TextInputFormatter>[
                       FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                       LengthLimitingTextInputFormatter(4),
-                        ],
-                        keyboardType: TextInputType.number,
+                    ],
+                    keyboardType: TextInputType.number,
                   ),
                 ),
               ),
@@ -234,19 +233,18 @@ Widget _buildVCCTextField() {
                 child: _buildVCCTextField(),
               ),
             ],
-            
           ),
           SizedBox(height: 24),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: tapButton(
-                onPress: () {
-                  getTokenandSourceTest();
-                },
-                color: primaryApp,
-                textColor: whiteColor,
-                title: "Comfirm"),
-          )
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 20),
+          //   child: tapButton(
+          //       onPress: () {
+          //         getTokenandSourceTest();
+          //       },
+          //       color: primaryApp,
+          //       textColor: whiteColor,
+          //       title: "Confirm"),
+          // )
         ],
       ),
     );
@@ -264,7 +262,7 @@ Widget _buildVCCTextField() {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           image: DecorationImage(
-            image: AssetImage('assets/images/card.png'),
+            image: AssetImage(imgbgVisa),
             fit: BoxFit.cover,
           ),
         ),
@@ -355,7 +353,6 @@ Widget _buildVCCTextField() {
     );
   }
 
-
   void _updateCardHolderName(String newName) {
     setState(() {
       cardHolderName = newName.isNotEmpty
@@ -365,12 +362,13 @@ Widget _buildVCCTextField() {
   }
 
   getTokenandSourceTest() async {
-  String name = nameController.text;
-  String cardNumber = cardNumberController.text.replaceAll(' ', ''); // ลบช่องว่างออกจากหมายเลขบัตร
-  String expMonth = mmController.text;
-  String expYear = yyController.text;
-  String cvc = cvcController.text;
-  
+    String name = nameController.text;
+    String cardNumber = cardNumberController.text
+        .replaceAll(' ', ''); // ลบช่องว่างออกจากหมายเลขบัตร
+    String expMonth = mmController.text;
+    String expYear = yyController.text;
+    String cvc = cvcController.text;
+
     OmiseFlutter omise = OmiseFlutter('pkey_test_5yzhwpn9nih3syz8e2v');
     await omise.token
         .create(name, cardNumber, expMonth, expYear, cvc)
