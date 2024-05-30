@@ -1,10 +1,7 @@
 import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
 import 'package:flutter_finalproject/Views/auth_screen/login_screen.dart';
-=======
->>>>>>> 7c8290b90b9b55d97f458d9440e8271fbe4b6ff0
 import 'package:flutter_finalproject/Views/auth_screen/verifyemail_screen.dart';
 import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
 import 'package:flutter_finalproject/Views/news_screen/component/search_screen.dart';
@@ -293,14 +290,10 @@ Future<void> navigateToItemDetails() async {
                                             topLeft: Radius.circular(14)),
                                         child: Image.network(
                                           product['p_imgs'][0],
-<<<<<<< HEAD
                                           height: MediaQuery.of(context)
                                                   .size
                                                   .height *
                                               0.47,
-=======
-                                          height: 450,
->>>>>>> 7c8290b90b9b55d97f458d9440e8271fbe4b6ff0
                                           width:
                                               MediaQuery.of(context).size.width,
                                           fit: BoxFit.cover,
@@ -406,8 +399,6 @@ Future<void> navigateToItemDetails() async {
     );
   }
 }
-<<<<<<< HEAD
-=======
 
 void showModalRightSheet({
   required BuildContext context,
@@ -441,4 +432,3 @@ void showModalRightSheet({
     },
   );
 }
->>>>>>> 7c8290b90b9b55d97f458d9440e8271fbe4b6ff0
