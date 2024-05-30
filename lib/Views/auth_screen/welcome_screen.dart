@@ -1,5 +1,6 @@
 import 'package:flutter_finalproject/Views/auth_screen/login_screen.dart';
 import 'package:flutter_finalproject/Views/auth_screen/register_screen.dart';
+import 'package:flutter_finalproject/Views/home_screen/home_screen.dart';
 import 'package:flutter_finalproject/Views/news_screen/text.dart';
 import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
@@ -89,7 +90,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             
             TextButton(
               onPressed: () {
-                
+                Get.to(() => HomeScreen(isGuest: true));
               },
               child: Text(
                 'Continue as a guest',

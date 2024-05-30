@@ -1,5 +1,7 @@
 import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_finalproject/Views/auth_screen/login_screen.dart';
 import 'package:flutter_finalproject/Views/auth_screen/verifyemail_screen.dart';
 import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
 import 'package:flutter_finalproject/Views/news_screen/component/search_screen.dart';
@@ -12,25 +14,18 @@ import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
-  final dynamic data;
-  const HomeScreen({super.key, this.data});
+  final bool isGuest;
+  const HomeScreen({super.key, this.isGuest = false});
 
   @override
-  _HomeScreenState createState() => _HomeScreenState(data);
-}
-
-List<Map<String, dynamic>> getRandomizedList(
-    List<Map<String, dynamic>> originalList) {
-  List<Map<String, dynamic>> list = List.from(originalList); 
-  list.shuffle(Random());
-  return list;
+  _HomeScreenState createState() => _HomeScreenState(isGuest);
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final CardSwiperController controllercard = CardSwiperController();
   var controller = Get.put(HomeController());
-  final dynamic data;
+  final bool isGuest;
   var isFav = false.obs;
   Map<String, dynamic>? selectedProduct;
   Map<String, dynamic>? previousSwipedProduct;
@@ -38,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String? selectedItemDetail;
   late TextEditingController searchController;
 
-  _HomeScreenState(this.data);
+  _HomeScreenState(this.isGuest);
 
   @override
   void initState() {
@@ -51,6 +46,13 @@ class _HomeScreenState extends State<HomeScreen> {
     ever(controller.selectedCollections, (_) => fetchFilteredProducts());
     ever(controller.selectedVendorId, (_) => fetchFilteredProducts());
   }
+
+List<Map<String, dynamic>> getRandomizedList(
+    List<Map<String, dynamic>> originalList) {
+  List<Map<String, dynamic>> list = List.from(originalList); 
+  list.shuffle(Random());
+  return list;
+}
 
   @override
   void dispose() {
@@ -66,20 +68,55 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> navigateToItemDetails() async {
+Future<void> navigateToItemDetails() async {
+  if (isGuest) {
+    showLoginPrompt();
+    return;
+  }
+  if (previousSwipedProduct != null) {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => ItemDetails(
-                title: previousSwipedProduct!['p_name'],
-                data: previousSwipedProduct!,
-              )),
+        builder: (context) => ItemDetails(
+          title: previousSwipedProduct!['p_name'],
+          data: previousSwipedProduct!,
+        ),
+      ),
     );
     if (result != null) {
       setState(() {
         selectedItemDetail = result;
       });
     }
+  }
+}
+
+
+  void showLoginPrompt() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Login Required'),
+          content: Text('Please login to access this feature.'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Login'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Get.off(() => LoginScreen());
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Future<bool> isEmailVerified() async {
@@ -115,7 +152,11 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             icon: Image.asset(icCart, width: 21),
             onPressed: () {
-              Get.to(() => const CartScreen());
+              if (isGuest) {
+                showLoginPrompt();
+              } else {
+                Get.to(() => const CartScreen());
+              }
             },
           ),
         ],
@@ -145,9 +186,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           suffixIcon:
                               Icon(Icons.search, color: greyDark).onTap(() {
                             if (searchController.text.isNotEmpty) {
-                              Get.to(() => SearchScreen(
-                                    title: searchController.text,
-                                  ));
+                              if (isGuest) {
+                                showLoginPrompt();
+                              } else {
+                                Get.to(() => SearchScreen(
+                                      title: searchController.text,
+                                    ));
+                              }
                             }
                           }),
                           filled: true,
@@ -195,17 +240,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     return const Center(child: Text('No data available'));
                   }
 
-                  List<Map<String, dynamic>> products = snapshot.data!;
-                  productsToShow = getRandomizedList(products
-                      .where(
-                          (product) => !isInWishlist(product, currentUser!.uid))
-                      .toList());
+                  List<Map<String, dynamic>> products = snapshot.data ?? [];
+                  if (currentUser != null) {
+                    productsToShow = getRandomizedList(products
+                        .where((product) => !isInWishlist(product, currentUser!.uid))
+                        .toList());
+                  } else {
+                    productsToShow = getRandomizedList(products);
+                  }
                   
                   if (productsToShow.isEmpty) {
                     return const Center(child: Text('No products available'));
                   }
+                  
                   return CardSwiper(
-                    scale: 0.1,
+                    scale: 0.5,
                     isLoop: false,
                     controller: controllercard,
                     allowedSwipeDirection:
@@ -236,11 +285,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                             topLeft: Radius.circular(14)),
                                         child: Image.network(
                                           product['p_imgs'][0],
-                                          // height: MediaQuery.of(context)
-                                          //         .size
-                                          //         .height *
-                                          //     0.47,
-                                          height: 450,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.47,
                                           width:
                                               MediaQuery.of(context).size.width,
                                           fit: BoxFit.cover,
@@ -254,8 +302,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                             product['p_name'],
                                             style: TextStyle(
                                               color: blackColor,
-                                              fontSize: 18,
-                                              fontFamily: semiBold,
+                                              fontSize: 20,
+                                              fontFamily: medium,
                                             ),
                                             overflow: TextOverflow.ellipsis,
                                             maxLines: 1,
@@ -269,14 +317,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ),
                                           ),
                                         ],
-                                      ).box.padding(EdgeInsets.all(4)).make(),
+                                      ).box.padding(EdgeInsets.all(8)).make(),
                                     ],
                                   )
                                       .box
                                       .white
                                       .rounded
                                       .shadowSm
-                                      .padding(EdgeInsets.all(6))
+                                      .padding(EdgeInsets.all(12))
                                       .make(),
                                 ],
                               ),
@@ -288,7 +336,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 IconButton(
                                   icon: Image.asset(
                                     icDislikeButton,
-                                    width: 65,
+                                    width: 60,
                                   ).box.roundedFull.shadowSm.make(),
                                   onPressed: () => controllercard
                                       .swipe(CardSwiperDirection.left),
@@ -297,7 +345,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 IconButton(
                                   icon: Image.asset(
                                     icViewMoreButton,
-                                    width: 65,
+                                    width: 60,
                                   ).box.roundedFull.shadowSm.make(),
                                   onPressed: () => navigateToItemDetails(),
                                 ),
@@ -305,13 +353,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                 IconButton(
                                   icon: Image.asset(
                                     icLikeButton,
-                                    width: 65,
+                                    width: 60,
                                   ).box.roundedFull.shadowSm.make(),
-                                  onPressed: () => [
-                                    controllercard
-                                        .swipe(CardSwiperDirection.right),
-                                    controller.addToWishlist(product),
-                                  ],
+                                  onPressed: () => {
+                                    if (isGuest) {
+                                      showLoginPrompt()
+                                    } else {
+                                      controllercard
+                                          .swipe(CardSwiperDirection.right),
+                                      controller.addToWishlist(product),
+                                    }
+                                  },
                                 ),
                               ],
                             ),
@@ -321,7 +373,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                     onSwipe: (previousIndex, currentIndex, direction) {
                       if (direction == CardSwiperDirection.right) {
-                        controller.addToWishlist(previousSwipedProduct!);
+                        if (!isGuest) {
+                          controller.addToWishlist(previousSwipedProduct!);
+                        } else {
+                          showLoginPrompt();
+                        }
                       } else if (direction == CardSwiperDirection.left) {
                       } else if (direction == CardSwiperDirection.top) {
                         navigateToItemDetails();
@@ -338,4 +394,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
