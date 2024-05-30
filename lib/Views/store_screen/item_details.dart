@@ -98,7 +98,7 @@ class _ItemDetailsState extends State<ItemDetails> {
         return true;
       },
       child: Scaffold(
-        backgroundColor: whiteOpacity,
+        backgroundColor: whiteColor,
         appBar: AppBar(
           actions: <Widget>[
             IconButton(
@@ -223,46 +223,44 @@ class _ItemDetailsState extends State<ItemDetails> {
                       .padding(EdgeInsets.fromLTRB(12, 10, 12, 6))
                       .make(),
                   5.heightBox,
-                  Column(
-                    children: [
-                      Row(
-                        children: [
-                          Text('Product rating')
-                              .text
-                              .fontFamily(medium)
-                              .size(16)
-                              .color(blackColor)
-                              .make(),
-                          const Spacer(),
-                          VxRating(
-                            isSelectable: false,
-                            value: double.parse(widget.data["p_rating"]),
-                            onRatingUpdate: (value) {},
-                            normalColor: greyDark,
-                            selectionColor: golden,
-                            count: 5,
-                            size: 20,
-                            maxRating: 5,
-                          ),
-                        ],
-                      ),
-                      Divider(color: greyThin),
-                      Text('See all')
-                          .text
-                          .fontFamily(medium)
-                          .size(14)
-                          .color(blackColor)
-                          .make(),
-                    ],
-                  )
-                      .box
-                      .white
-                      .color(whiteOpacity)
-                      .padding(
-                          EdgeInsets.symmetric(horizontal: 12, vertical: 6))
-                      .make(),
-
-                  5.heightBox,
+                  // Column(
+                  //   children: [
+                  //     Row(
+                  //       children: [
+                  //         Text('Product rating')
+                  //             .text
+                  //             .fontFamily(medium)
+                  //             .size(16)
+                  //             .color(blackColor)
+                  //             .make(),
+                  //         const Spacer(),
+                  //         VxRating(
+                  //           isSelectable: false,
+                  //           value: double.parse(widget.data["p_rating"]),
+                  //           onRatingUpdate: (value) {},
+                  //           normalColor: greyDark,
+                  //           selectionColor: golden,
+                  //           count: 5,
+                  //           size: 20,
+                  //           maxRating: 5,
+                  //         ),
+                  //       ],
+                  //     ),
+                  //     Divider(color: greyThin),
+                  //     Text('See all')
+                  //         .text
+                  //         .fontFamily(medium)
+                  //         .size(14)
+                  //         .color(blackColor)
+                  //         .make(),
+                  //   ],
+                  // )
+                  //     .box
+                  //     .white
+                  //     .color(whiteColor)
+                  //     .padding(
+                  //         EdgeInsets.symmetric(horizontal: 12, vertical: 6))
+                  //     .make(),
 
                   Row(
                     children: [
@@ -281,7 +279,15 @@ class _ItemDetailsState extends State<ItemDetails> {
                                         fit: BoxFit.cover,
                                       ),
                                     )
-                                  : SizedBox.shrink();
+                                      .box
+                                      .border(color: greyLine)
+                                      .roundedFull
+                                      .make()
+                                  : Icon(
+                                      Icons.person,
+                                      color: whiteColor,
+                                      size: 22,
+                                    );
                             }),
                             10.widthBox,
                             Expanded(
@@ -326,13 +332,13 @@ class _ItemDetailsState extends State<ItemDetails> {
                   )
                       .box
                       .white
-
                       // .height(70)
                       .padding(const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 8))
-                      // .border(color: greyThin, width: 1)
+                      // .border(color: greyThin, width: 1)\
+                      .color(greyThin)
                       .make(),
-
+                      
                   5.heightBox,
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -355,15 +361,15 @@ class _ItemDetailsState extends State<ItemDetails> {
                                 "${widget.data['p_collection'][index].toString()[0].toUpperCase()}${widget.data['p_collection'][index].toString().substring(1)}",
                               )
                                   .text
-                                  .size(14)
-                                  .color(greyDark)
+                                  .size(26)
+                                  .color(blackColor)
                                   .fontFamily(medium)
                                   .make(),
                             )
                                 .box
                                 .white
                                 .color(thinPrimaryApp)
-                                .margin(EdgeInsets.symmetric(horizontal: 6))
+                                .margin(EdgeInsets.symmetric(horizontal: 3))
                                 .roundedLg
                                 .padding(EdgeInsets.symmetric(
                                     horizontal: 24, vertical: 12))
@@ -387,22 +393,22 @@ class _ItemDetailsState extends State<ItemDetails> {
                           .size(12)
                           .fontFamily(regular)
                           .make(),
-                      SizedBox(height: 10),
+                      SizedBox(height: 15),
                       "Size & Fit"
                           .text
                           .color(blackColor)
-                          .size(15)
+                          .size(16)
                           .fontFamily(medium)
                           .make(),
                       SizedBox(height: 5),
                       Text(
                         widget.data['p_size'],
-                        style: TextStyle(
-                          color: blackColor,
-                          fontFamily: regular,
-                          fontSize: 14,
-                        ),
-                      ),
+                        
+                      ).text
+                          .color(blackColor)
+                          .size(12)
+                          .fontFamily(regular)
+                          .make(),
                     ],
                   )
                       .box
