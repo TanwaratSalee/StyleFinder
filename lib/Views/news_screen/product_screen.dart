@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/news_screen/component/search_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/store_screen/mixandmatch_detail.dart';
+import 'package:flutter_finalproject/Views/widgets_common/filterDrawer.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/news_controller.dart';
 import 'package:flutter_finalproject/services/firestore_services.dart'
@@ -84,7 +86,12 @@ class ProductScreen extends StatelessWidget {
                   size: 30,
                 ),
                 onPressed: () {
-                  _scaffoldKey.currentState?.openEndDrawer();
+                  showModalRightSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return FilterDrawer();
+                    },
+                  );
                 },
               ).box.border(color: greyColor, width: 0.5).roundedLg.make(),
             ],
@@ -617,4 +624,37 @@ class ProductScreen extends StatelessWidget {
       },
     );
   }
+}
+
+void showModalRightSheet({
+  required BuildContext context,
+  required WidgetBuilder builder,
+}) {
+  showGeneralDialog(
+    context: context,
+    barrierDismissible: true,
+    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+    barrierColor: Colors.black54,
+    transitionDuration: Duration(milliseconds: 200),
+    pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+      return Align(
+        alignment: Alignment.centerRight,
+        child: Material(
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.7,
+            child: builder(context),
+          ),
+        ),
+      );
+    },
+    transitionBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
+      return SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(1.0, 0.0),
+          end: Offset.zero,
+        ).animate(animation),
+        child: child,
+      );
+    },
+  );
 }
