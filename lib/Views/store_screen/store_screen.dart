@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/store_screen/mixandmatch_detail.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class StoreScreen extends StatelessWidget {
@@ -27,7 +28,16 @@ class StoreScreen extends StatelessWidget {
             .make(),
             centerTitle: true,
             elevation: 0,
+            actions: [
+          IconButton(
+            icon: Image.asset(icCart, width: 21),
+            onPressed: () {
+              Get.to(() => const CartScreen());
+            },
           ),
+        ],
+          ),
+          
           body: SingleChildScrollView(
             child: Column(
               children: [
