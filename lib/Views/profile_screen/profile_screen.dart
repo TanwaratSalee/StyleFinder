@@ -43,7 +43,7 @@ class _ProfileScreenState extends State<ProfileScreen>
           'Profile',
           textAlign: TextAlign.center,
           style: TextStyle(
-            color: Colors.black,
+            color: blackColor,
             fontSize: 26,
             fontFamily: medium,
           ),
@@ -53,7 +53,7 @@ class _ProfileScreenState extends State<ProfileScreen>
           IconButton(
             icon: const Icon(
               Icons.menu,
-              color: Colors.black,
+              color: blackColor,
             ),
             onPressed: () {
               Get.to(() => const MenuSettingScreen());

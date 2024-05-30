@@ -150,7 +150,7 @@ class _PromptpayScreenState extends State<PromptpayScreen> {
           height: 200, // ความสูงของสี่เหลี่ยม
           decoration: BoxDecoration(
             border: Border.all(
-              color: Colors.black, // สีของเส้นกรอบ
+              color: blackColor, // สีของเส้นกรอบ
               width: 2.0, // ความหนาของเส้นกรอบ
             ),
           ),
