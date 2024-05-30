@@ -55,7 +55,7 @@ import 'package:flutter_finalproject/consts/consts.dart';
 //         ),
 //         style: TextStyle(
 //           fontSize: 16,
-//           color: Colors.black,
+//           color: blackColor,
 //         ),
 //       );
 //     },
@@ -87,7 +87,7 @@ Widget customTextField({
           filled: true,
           fillColor: whiteColor,
           contentPadding:
-              const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+              const EdgeInsets.symmetric(vertical: 12.5, horizontal: 20),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: const BorderSide(color: greyLine),

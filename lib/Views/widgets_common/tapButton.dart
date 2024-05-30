@@ -23,7 +23,7 @@ Widget tapButton({
       title ?? '',
       style: TextStyle(
         fontSize: 16,
-        color: textColor ?? Colors.black,
+        color: textColor ?? blackColor,
         fontFamily: medium,
       ),
     ),

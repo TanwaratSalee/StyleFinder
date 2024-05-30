@@ -17,14 +17,10 @@ class OrdersDetails extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           "Order Details",
-        ).text
-            .size(26)
-            .fontFamily(semiBold)
-            .color(blackColor)
-            .make(),
+        ).text.size(26).fontFamily(semiBold).color(blackColor).make(),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 18),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Column(
@@ -75,38 +71,16 @@ class OrdersDetails extends StatelessWidget {
                 )
                     .box
                     .color(whiteColor)
-                    .shadowXs
                     .roundedSM
                     .border(color: greyLine)
-                    .padding(const EdgeInsets.all(12))
+                    .padding(const EdgeInsets.symmetric(horizontal: 28, vertical: 12))
                     .make(),
               ),
-              const SizedBox(height: 15),
               Column(
                 children: [
-                  ListTile(
-                    leading: Image.asset(
-                      icPerson,
-                      color: greyDark,
-                      height: 20,
-                    ),
-                    title: Text(
-                      'Contact Seller',
-                      style: TextStyle(color: greyDark, fontFamily: medium),
-                    ),
-                    trailing: Icon(Icons.chevron_right, color: greyDark),
-                    onTap: () {
-                      Get.to(() => const ChatScreen(),
-                            arguments: [data['p_seller'], data['vendor_id']]);
-                    },
-                  )
-                      .box
-                      .color(whiteColor)
-                      .shadowXs
-                      .roundedSM
-                      .border(color: greyLine)
-                      .padding(const EdgeInsets.symmetric(horizontal: 4))
-                      .make(),
+                   Icon(Icons.location_on_outlined),
+                   10.widthBox,
+
                 ],
               ),
               const SizedBox(height: 15),
@@ -187,7 +161,6 @@ class OrdersDetails extends StatelessWidget {
               )
                   .box
                   .color(whiteColor)
-                  .shadowXs
                   .roundedSM
                   .border(color: greyLine)
                   .padding(const EdgeInsets.all(6))
@@ -196,13 +169,11 @@ class OrdersDetails extends StatelessWidget {
               Column(
                 children: [
                   const Text(
-                    "Ordered Product",
-                  )
-                      .text
-                      .size(20)
-                      .color(blackColor)
-                      .fontFamily(medium)
-                      .makeCentered(),
+                    "Ordere List",
+                  ).text.size(20).color(blackColor).fontFamily(medium).make(),
+                  Divider(
+                    color: greyLine,
+                  ),
                   10.heightBox,
                   ListView.builder(
                     physics: const ClampingScrollPhysics(),
@@ -254,7 +225,6 @@ class OrdersDetails extends StatelessWidget {
                   .box
                   .color(whiteColor)
                   .padding(EdgeInsets.fromLTRB(20, 10, 20, 0))
-                  .shadowXs
                   .roundedSM
                   .border(color: greyLine)
                   .make()

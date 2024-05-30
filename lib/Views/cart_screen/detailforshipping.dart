@@ -51,15 +51,15 @@ class DetailForShipping extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Order Detail")
+        title: Text("Details For Shipping")
             .text
             .size(26)
-            .fontFamily(semiBold)
+            .fontFamily(medium)
             .color(blackColor)
             .make(),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 0, 20, 35),
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
         child: SizedBox(
           height: 50,
           child: tapButton(
@@ -68,170 +68,172 @@ class DetailForShipping extends StatelessWidget {
             },
             color: primaryApp,
             textColor: whiteColor,
-            title: "Confirm order information",
+            title: "Confirm",
           ),
-        ),
+        ).box.padding(EdgeInsets.symmetric(vertical: 12)).white.make(),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 8),
-                Text("Shipping Address")
-                    .text
-                    .size(20)
-                    .fontFamily(semiBold)
-                    .make(),
-                SizedBox(height: 8),
-                Row(
-                  children: [
-                    Icon(Icons.location_on_outlined),
-                    20.widthBox,
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (address != null) ...[
-                          Text('${address!['firstname']} ${address!['surname']}')
-                              .text
-                              .size(14)
-                              .fontFamily(medium)
-                              .make(),
-                          Text('${address!['address']}')
-                              .text
-                              .size(12)
-                              .fontFamily(regular)
-                              .make(),
-                          Text('${address!['city']}, ${address!['state']} ${address!['postalCode']}')
-                              .text
-                              .size(12)
-                              .fontFamily(regular)
-                              .make(),
-                          Text('${formatPhoneNumber(address!['phone'])}')
-                              .text
-                              .size(12)
-                              .fontFamily(regular)
-                              .make(),
-                        ],
-                      ],
-                    )
-                  ],
-                )
-              ],
-            )
-                .box
-                .white
-                .shadowSm
-                .padding(EdgeInsets.fromLTRB(22, 0, 22, 10))
-                .rounded
-                .make(),
-            SizedBox(height: 15),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text("Ordered List")
-                    .text
-                    .size(20)
-                    .fontFamily(semiBold)
-                    .make(),
-                Divider(color: greyThin),
-                // Display the grouped products by seller name
-                ...groupedProducts.entries.map((entry) {
-                  String sellerName = entry.key;
-                  List<DocumentSnapshot> products = entry.value;
-
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 8),
+                  Text("Shipping Address")
+                      .text
+                      .size(20)
+                      .fontFamily(semiBold)
+                      .make(),
+                  SizedBox(height: 8),
+                  Row(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        child: Row(
-                          children: [
-                            Image.asset(iconsStore, width: 18,),
-                            10.widthBox,
-                            Text(sellerName)
+                      Icon(Icons.location_on_outlined),
+                      20.widthBox,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (address != null) ...[
+                            Text('${address!['firstname']} ${address!['surname']}')
                                 .text
-                                .size(16)
-                                .fontFamily('semiBold')
-                                .color(Colors.black)
+                                .size(14)
+                                .fontFamily(medium)
+                                .make(),
+                            Text('${address!['address']}')
+                                .text
+                                .size(12)
+                                .fontFamily(regular)
+                                .make(),
+                            Text('${address!['city']}, ${address!['state']} ${address!['postalCode']}')
+                                .text
+                                .size(12)
+                                .fontFamily(regular)
+                                .make(),
+                            Text('${formatPhoneNumber(address!['phone'])}')
+                                .text
+                                .size(12)
+                                .fontFamily(regular)
                                 .make(),
                           ],
-                        ),
-                      ),
-                      ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: products.length,
-                        itemBuilder: (context, index) {
-                          var item = products[index];
-                          String itemPrice = NumberFormat('#,##0', 'en_US')
-                              .format(item['tprice']);
-                          return Column(
-                            children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text('x${item['qty']}')
-                                      .text
-                                      .size(12)
-                                      .fontFamily(regular)
-                                      .color(greyDark)
-                                      .make(),
-                                  const SizedBox(width: 5),
-                                  Image.network(item['img'],
-                                      width: 50, height: 60, fit: BoxFit.cover),
-                                  const SizedBox(width: 15),
-                                  Expanded(
-                                      child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        item['title'],
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      )
-                                          .text
-                                          .size(14)
-                                          .fontFamily(medium)
-                                          .color(blackColor)
-                                          .make(),
-                                      Text(
-                                        '$itemPrice Bath',
-                                        style: const TextStyle(color: greyDark),
-                                      ),
-                                    ],
-                                  )),
-                                ],
-                              ).box.padding(EdgeInsets.only(bottom: 8)).make(),
-                            ],
-                          );
-                        },
-                      ),
+                        ],
+                      )
                     ],
-                  );
-                }).toList(),
-                5.heightBox,
-                Divider(color: greyThin),
-                5.heightBox,
-                Text("Total: $formattedPrice Bath",)
-                    .text
-                    .size(18)
-                    .color(greyDark)
-                    .fontFamily(medium)
-                    .make(),
-              ],
-            )
-                .box
-                .white
-                .shadowSm
-                .padding(EdgeInsets.symmetric(horizontal:  22, vertical: 15))
-                .rounded
-                .make()
-          ],
+                  )
+                ],
+              )
+                  .box
+                  .white
+                  .border(color: greyThin)
+                  .padding(EdgeInsets.fromLTRB(22, 0, 22, 10))
+                  .rounded
+                  .make(),
+              SizedBox(height: 15),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text("Order List")
+                      .text
+                      .size(20)
+                      .fontFamily(semiBold)
+                      .make(),
+                  Divider(color: greyThin),
+                  // Display the grouped products by seller name
+                  ...groupedProducts.entries.map((entry) {
+                    String sellerName = entry.key;
+                    List<DocumentSnapshot> products = entry.value;
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          child: Row(
+                            children: [
+                              Image.asset(iconsStore, width: 18,),
+                              10.widthBox,
+                              Text(sellerName)
+                                  .text
+                                  .size(16)
+                                  .fontFamily(semiBold)
+                                  .color(blackColor)
+                                  .make(),
+                            ],
+                          ),
+                        ),
+                        ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: products.length,
+                          itemBuilder: (context, index) {
+                            var item = products[index];
+                            String itemPrice = NumberFormat('#,##0', 'en_US')
+                                .format(item['tprice']);
+                            return Column(
+                              children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text('x${item['qty']}')
+                                        .text
+                                        .size(12)
+                                        .fontFamily(regular)
+                                        .color(greyDark)
+                                        .make(),
+                                    const SizedBox(width: 5),
+                                    Image.network(item['img'],
+                                        width: 50, height: 60, fit: BoxFit.cover),
+                                    const SizedBox(width: 15),
+                                    Expanded(
+                                        child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          item['title'],
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        )
+                                            .text
+                                            .size(14)
+                                            .fontFamily(medium)
+                                            .color(blackColor)
+                                            .make(),
+                                        Text(
+                                          '$itemPrice Bath',
+                                          style: const TextStyle(color: greyDark),
+                                        ),
+                                      ],
+                                    )),
+                                  ],
+                                ).box.padding(EdgeInsets.only(bottom: 8)).make(),
+                              ],
+                            );
+                          },
+                        ),
+                      ],
+                    );
+                  }).toList(),
+                  5.heightBox,
+                  Divider(color: greyThin),
+                  5.heightBox,
+                  Text("Total: $formattedPrice Bath",)
+                      .text
+                      .size(18)
+                      .color(greyDark)
+                      .fontFamily(medium)
+                      .make(),
+                ],
+              )
+                  .box
+                  .white
+                  .border(color: greyThin)
+                  .padding(EdgeInsets.symmetric(horizontal:  22, vertical: 15))
+                  .rounded
+                  .make()
+            ],
+          ),
         ),
       ),
     );

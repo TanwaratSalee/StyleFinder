@@ -218,7 +218,7 @@ placeMyOrder({required orderPaymentMethod, required totalAmount}) async {
       'order_on_delivery': false,
       'total_amount': vendorTotalAmount,
       'orders': vendorProducts,
-      'vendor': vendorId,
+      'vendors': vendorId,
     });
   }
 

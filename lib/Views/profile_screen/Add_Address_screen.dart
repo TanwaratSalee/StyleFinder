@@ -1,91 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_finalproject/Views/widgets_common/custom_textfield.dart';
 import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-class FirebaseService {
-  final CollectionReference usersCollection =
-      FirebaseFirestore.instance.collection('users');
-
-  Future<DocumentSnapshot> getCurrentUserAddress() async {
-    try {
-      String userId = currentUser!.uid;
-      DocumentSnapshot documentSnapshot =
-          await usersCollection.doc(userId).get();
-      return documentSnapshot;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  Future<void> updateAddressForCurrentUser(
-      String userId,
-      String firstname,
-      String surname,
-      String address,
-      String city,
-      String state,
-      String postalCode,
-      String phone) async {
-    try {
-      if (firstname.isNotEmpty &&
-          surname.isNotEmpty &&
-          address.isNotEmpty &&
-          city.isNotEmpty &&
-          state.isNotEmpty &&
-          postalCode.isNotEmpty &&
-          phone.isNotEmpty) {
-        DocumentSnapshot documentSnapshot =
-            await usersCollection.doc(currentUser!.uid).get();
-        if (documentSnapshot.exists) {
-          Map<String, dynamic>? userData =
-              documentSnapshot.data() as Map<String, dynamic>?;
-          if (userData != null) {
-            if (userData.containsKey('address')) {
-              List<dynamic>? addressList = List.from(userData['address']);
-              if (addressList == null) {
-                addressList = [];
-              }
-
-              addressList.add({
-                'firstname': firstname,
-                'surname': surname,
-                'address': address,
-                'city': city,
-                'state': state,
-                'postalCode': postalCode,
-                'phone': phone,
-              });
-
-              await usersCollection.doc(currentUser!.uid).update({
-                'address': addressList,
-              });
-            } else {
-              await usersCollection.doc(currentUser!.uid).update({
-                'address': [
-                  {
-                    'firstname': firstname,
-                    'surname': surname,
-                    'address': address,
-                    'city': city,
-                    'state': state,
-                    'postalCode': postalCode,
-                    'phone': phone,
-                  }
-                ],
-              });
-            }
-          }
-        }
-        print('Address updated successfully for user $userId');
-      } else {
-        print('One or more fields are empty. Failed to update address.');
-      }
-    } catch (error) {
-      print('Failed to update address: $error');
-    }
-  }
-}
 
 class AddressForm extends StatefulWidget {
   @override
@@ -107,14 +24,13 @@ class _AddressFormState extends State<AddressForm> {
   }
 
   void saveAddressToFirestore() async {
-    String userId = currentUser!.uid;
+    String userId = FirebaseAuth.instance.currentUser!.uid;
     String firstname = _firstnameController.text;
     String surname = _surnameController.text;
     String address = _addressController.text;
     String city = _cityController.text;
     String state = _stateController.text;
-    String postalCode =
-        _postalCodeController.text.replaceAll(RegExp(r'\D'), '');
+    String postalCode = _postalCodeController.text.replaceAll(RegExp(r'\D'), '');
     String phone = _phoneController.text.replaceAll(RegExp(r'\D'), '');
 
     if (firstname.isNotEmpty &&
@@ -128,8 +44,8 @@ class _AddressFormState extends State<AddressForm> {
         try {
           await FirebaseService().updateAddressForCurrentUser(userId, firstname,
               surname, address, city, state, postalCode, phone);
-          VxToast.show(context, msg: "Suscessful save Address");
-          Navigator.pop(context);
+          VxToast.show(context, msg: "Successful save Address");
+          Navigator.pop(context); // Pop back to AddressScreen
         } catch (e) {
           VxToast.show(context, msg: "Error saving address: ${e.toString()}");
         }
@@ -164,8 +80,8 @@ class _AddressFormState extends State<AddressForm> {
             .color(blackColor)
             .make(),
       ),
-      bottomNavigationBar: SizedBox(
-        height: 70,
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 35),
         child: tapButton(
             onPress: () {
               saveAddressToFirestore();
@@ -176,12 +92,12 @@ class _AddressFormState extends State<AddressForm> {
       ),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
+        child: Container(
+          margin: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
           child: Column(
             children: [
               customTextField(
-                  label: "Firstname",
+                  label: "First name",
                   isPass: false,
                   readOnly: false,
                   controller: _firstnameController),
@@ -227,5 +143,78 @@ class _AddressFormState extends State<AddressForm> {
         ),
       ),
     );
+  }
+}
+
+class FirebaseService {
+  final CollectionReference usersCollection =
+      FirebaseFirestore.instance.collection('users');
+
+  Future<void> updateAddressForCurrentUser(
+      String userId,
+      String firstname,
+      String surname,
+      String address,
+      String city,
+      String state,
+      String postalCode,
+      String phone) async {
+    try {
+      if (firstname.isNotEmpty &&
+          surname.isNotEmpty &&
+          address.isNotEmpty &&
+          city.isNotEmpty &&
+          state.isNotEmpty &&
+          postalCode.isNotEmpty &&
+          phone.isNotEmpty) {
+        DocumentSnapshot documentSnapshot =
+            await usersCollection.doc(userId).get();
+        if (documentSnapshot.exists) {
+          Map<String, dynamic>? userData =
+              documentSnapshot.data() as Map<String, dynamic>?;
+          if (userData != null) {
+            if (userData.containsKey('address')) {
+              List<dynamic>? addressList = List.from(userData['address']);
+              if (addressList == null) {
+                addressList = [];
+              }
+
+              addressList.add({
+                'firstname': firstname,
+                'surname': surname,
+                'address': address,
+                'city': city,
+                'state': state,
+                'postalCode': postalCode,
+                'phone': phone,
+              });
+
+              await usersCollection.doc(userId).update({
+                'address': addressList,
+              });
+            } else {
+              await usersCollection.doc(userId).update({
+                'address': [
+                  {
+                    'firstname': firstname,
+                    'surname': surname,
+                    'address': address,
+                    'city': city,
+                    'state': state,
+                    'postalCode': postalCode,
+                    'phone': phone,
+                  }
+                ],
+              });
+            }
+          }
+        }
+        print('Address updated successfully for user $userId');
+      } else {
+        print('One or more fields are empty. Failed to update address.');
+      }
+    } catch (error) {
+      print('Failed to update address: $error');
+    }
   }
 }
