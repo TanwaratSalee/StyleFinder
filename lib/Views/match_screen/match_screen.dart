@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/widgets_common/appbar_ontop.dart';
 import 'package:flutter_finalproject/Views/widgets_common/filterDrawer.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
+import 'package:flutter_finalproject/controllers/home_controller.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
 import 'package:get/get.dart';
 
@@ -69,8 +71,7 @@ class _MatchScreenState extends State<MatchScreen> {
         automaticallyImplyLeading: false,
         backgroundColor: whiteColor,
         title: appbarField(context: context),
-      ),
-      endDrawer: FilterDrawer(),
+      ), 
       body: CustomScrollView(
         physics: NeverScrollableScrollPhysics(),
         slivers: <Widget>[
@@ -96,12 +97,15 @@ class _MatchScreenState extends State<MatchScreen> {
                       icon: Icon(Icons.filter_list_rounded,
                           color: greyDark, size: 25),
                       onPressed: () {
-                        scaffoldKey.currentState!
-                            .openEndDrawer(); // Open the end drawer
+                        showModalRightSheet(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return FilterDrawer();
+                          },
+                        );
                       },
                     )
                         .box
-                        // .padding(EdgeInsets.all(7))
                         .border(color: greyThin)
                         .roundedFull
                         .make(),
@@ -415,4 +419,37 @@ class _MatchScreenState extends State<MatchScreen> {
       },
     );
   }
+}
+
+void showModalRightSheet({
+  required BuildContext context,
+  required WidgetBuilder builder,
+}) {
+  showGeneralDialog(
+    context: context,
+    barrierDismissible: true,
+    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+    barrierColor: Colors.black54,
+    transitionDuration: Duration(milliseconds: 200),
+    pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+      return Align(
+        alignment: Alignment.centerRight,
+        child: Material(
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.7,
+            child: builder(context),
+          ),
+        ),
+      );
+    },
+    transitionBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
+      return SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(1.0, 0.0),
+          end: Offset.zero,
+        ).animate(animation),
+        child: child,
+      );
+    },
+  );
 }

@@ -765,7 +765,7 @@ class ProductCard extends StatelessWidget {
                 children: [
                   Image.asset(
                     icTapFavoriteButton,
-                    width: 25,
+                    width: 14,
                   ),
                   SizedBox(width: 5),
                   Text(

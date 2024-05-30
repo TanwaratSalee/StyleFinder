@@ -131,33 +131,33 @@ class _ItemDetailsState extends State<ItemDetails> {
                     },
                   ).box.white.make(),
                   10.heightBox,
-                  Column(
-                    children: [
-                      ListTile(
-                        leading:
-                            Image.asset(icPerson, color: greyDark, height: 20),
-                        title: Text('Contact Seller',
-                            style:
-                                TextStyle(color: greyDark, fontFamily: medium)),
-                        trailing: Icon(Icons.chevron_right, color: greyDark),
-                        onTap: () {
-                          Get.to(() => const ChatScreen(), arguments: [
-                            widget.data['p_seller'],
-                            widget.data['vendor_id']
-                          ]);
-                        },
-                      )
-                          .box
-                          .white
-                          .color(whiteColor)
-                          .shadowXs
-                          .roundedSM
-                          .border(color: greyLine)
-                          .padding(const EdgeInsets.symmetric(horizontal: 4))
-                          .make(),
-                    ],
-                  ),
-                  10.heightBox,
+                  // Column(
+                  //   children: [
+                  //     ListTile(
+                  //       leading:
+                  //           Image.asset(icPerson, color: greyDark, height: 20),
+                  //       title: Text('Contact Seller',
+                  //           style:
+                  //               TextStyle(color: greyDark, fontFamily: medium)),
+                  //       trailing: Icon(Icons.chevron_right, color: greyDark),
+                  //       onTap: () {
+                  //         Get.to(() => const ChatScreen(), arguments: [
+                  //           widget.data['p_seller'],
+                  //           widget.data['vendor_id']
+                  //         ]);
+                  //       },
+                  //     )
+                  //         .box
+                  //         .white
+                  //         .color(whiteColor)
+                  //         .shadowXs
+                  //         .roundedSM
+                  //         .border(color: greyLine)
+                  //         .padding(const EdgeInsets.symmetric(horizontal: 4))
+                  //         .make(),
+                  //   ],
+                  // // ),
+                  // 10.heightBox,
 
                   //title of product
                   Column(
@@ -190,8 +190,8 @@ class _ItemDetailsState extends State<ItemDetails> {
                                 }
                               },
                               icon: controller.isFav.value
-                                  ? Image.asset(icTapFavoriteButton, width: 40)
-                                  : Image.asset(icFavoriteButton, width: 40),
+                                  ? Image.asset(icTapFavoriteButton, width: 23)
+                                  : Image.asset(icFavoriteButton, width: 23),
                               iconSize: 28,
                             ),
                           )

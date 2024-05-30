@@ -1,7 +1,10 @@
 import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:flutter_finalproject/Views/auth_screen/login_screen.dart';
+=======
+>>>>>>> 7c8290b90b9b55d97f458d9440e8271fbe4b6ff0
 import 'package:flutter_finalproject/Views/auth_screen/verifyemail_screen.dart';
 import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
 import 'package:flutter_finalproject/Views/news_screen/component/search_screen.dart';
@@ -161,7 +164,7 @@ Future<void> navigateToItemDetails() async {
           ),
         ],
       ),
-      endDrawer: FilterDrawer(),
+      
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).requestFocus(FocusNode());
@@ -212,7 +215,12 @@ Future<void> navigateToItemDetails() async {
                       size: 30,
                     ),
                     onPressed: () {
-                      scaffoldKey.currentState?.openEndDrawer();
+                      showModalRightSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return FilterDrawer();
+                        },
+                      );
                     },
                   ).box.border(color: greyColor, width: 0.5).roundedLg.make(),
                 ],
@@ -285,10 +293,14 @@ Future<void> navigateToItemDetails() async {
                                             topLeft: Radius.circular(14)),
                                         child: Image.network(
                                           product['p_imgs'][0],
+<<<<<<< HEAD
                                           height: MediaQuery.of(context)
                                                   .size
                                                   .height *
                                               0.47,
+=======
+                                          height: 450,
+>>>>>>> 7c8290b90b9b55d97f458d9440e8271fbe4b6ff0
                                           width:
                                               MediaQuery.of(context).size.width,
                                           fit: BoxFit.cover,
@@ -394,3 +406,39 @@ Future<void> navigateToItemDetails() async {
     );
   }
 }
+<<<<<<< HEAD
+=======
+
+void showModalRightSheet({
+  required BuildContext context,
+  required WidgetBuilder builder,
+}) {
+  showGeneralDialog(
+    context: context,
+    barrierDismissible: true,
+    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+    barrierColor: Colors.black54,
+    transitionDuration: Duration(milliseconds: 200),
+    pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+      return Align(
+        alignment: Alignment.centerRight,
+        child: Material(
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.7,
+            child: builder(context),
+          ),
+        ),
+      );
+    },
+    transitionBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
+      return SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(1.0, 0.0),
+          end: Offset.zero,
+        ).animate(animation),
+        child: child,
+      );
+    },
+  );
+}
+>>>>>>> 7c8290b90b9b55d97f458d9440e8271fbe4b6ff0

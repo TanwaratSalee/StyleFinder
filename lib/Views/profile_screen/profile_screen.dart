@@ -48,7 +48,7 @@ class _ProfileScreenState extends State<ProfileScreen>
             fontFamily: medium,
           ),
         ),
-        shadowColor: Colors.grey.withOpacity(0.5),
+        shadowColor: greyColor.withOpacity(0.5),
         actions: <Widget>[
           IconButton(
             icon: const Icon(
@@ -80,7 +80,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                       icTapPostProfile,
                       color: _mainTabController?.index == 0
                           ? primaryApp
-                          : greyLine,
+                          : greyColor,
                       width: 22,
                       height: 22,
                     ),
@@ -90,14 +90,14 @@ class _ProfileScreenState extends State<ProfileScreen>
                       icTapProfileFav,
                       color: _mainTabController?.index == 1
                           ? primaryApp
-                          : greyLine,
+                          : greyColor,
                       width: 22,
                       height: 22,
                     ),
                   ),
                 ],
-                unselectedLabelColor: Colors.grey,
-                labelColor: Colors.blue,
+                unselectedLabelColor: greyColor,
+                labelColor: primaryApp,
                 indicatorColor: Theme.of(context).primaryColor,
                 onTap: (index) {
                   setState(() {
@@ -108,7 +108,7 @@ class _ProfileScreenState extends State<ProfileScreen>
             },
           ),
           Divider(
-            color: greyThin,
+            color: greyLine,
             thickness: 1,
             height: 2,
           ),
@@ -123,23 +123,23 @@ class _ProfileScreenState extends State<ProfileScreen>
                       controller: _favoriteTabController,
                       labelStyle: const TextStyle(
                           fontSize: 15,
-                          fontFamily: regular,
-                          color: Colors.grey),
+                          fontFamily: medium,
+                          color: greyColor),
                       unselectedLabelStyle: const TextStyle(
                           fontSize: 14,
-                          fontFamily: regular,
-                          color: Colors.grey),
+                          fontFamily: medium,
+                          color: greyColor),
                       tabs: [
                         const Tab(text: 'Product'),
                         const Tab(text: 'Match'),
                         const Tab(text: 'User Match'),
                       ],
-                      unselectedLabelColor: Colors.grey,
+                      unselectedLabelColor: greyColor,
                       labelColor: primaryApp,
                       indicatorColor: Theme.of(context).primaryColor,
                     ),
                     Divider(
-                      color: greyThin,
+                      color: greyLine,
                       thickness: 1,
                       height: 2,
                     ),
@@ -281,41 +281,45 @@ class _ProfileScreenState extends State<ProfileScreen>
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              data[index]['p_name'],
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontFamily: medium,
-                              ),
-                              softWrap: true,
-                              overflow: TextOverflow.visible,
-                            ),
-                            Text(
-                              "${NumberFormat('#,##0').format(double.parse(data[index]['p_price']).toInt())} Bath",
-                              style: const TextStyle(
-                                  fontSize: 14,
-                                  fontFamily: regular,
-                                  color: greyDark),
+                        child: Row(
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  data[index]['p_name'],
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontFamily: medium,
+                                  ),
+                                  softWrap: false,
+                                  overflow: TextOverflow.ellipsis,
+                                ).box.width(250).make(),
+                                Text(
+                                  "${NumberFormat('#,##0').format(double.parse(data[index]['p_price']).toInt())} Bath",
+                                  style: const TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: regular,
+                                      color: greyDark),
+                                ),
+                              ],
                             ),
                           ],
                         ),
                       ),
                     ),
-                    // IconButton(
-                    //   icon: const Icon(Icons.favorite, color: Colors.red),
-                    //   onPressed: () async {
-                    //     await FirebaseFirestore.instance
-                    //         .collection(productsCollection)
-                    //         .doc(data[index].id)
-                    //         .update({
-                    //       'p_wishlist': FieldValue.arrayRemove(
-                    //           [FirebaseAuth.instance.currentUser!.uid])
-                    //     });
-                    //   },
-                    // ),
+                    IconButton(
+                      icon: Image.asset(icTapFavoriteButton, width: 20),
+                      onPressed: () async {
+                        await FirebaseFirestore.instance
+                            .collection(productsCollection)
+                            .doc(data[index].id)
+                            .update({
+                          'p_wishlist': FieldValue.arrayRemove(
+                              [FirebaseAuth.instance.currentUser!.uid])
+                        });
+                      },
+                    ),
                   ],
                 )
                     .box
