@@ -1,10 +1,9 @@
 import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/auth_screen/login_screen.dart';
 import 'package:flutter_finalproject/Views/auth_screen/verifyemail_screen.dart';
 import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
-import 'package:flutter_finalproject/Views/news_screen/component/search_screen.dart';
+import 'package:flutter_finalproject/Views/search_screen/recent_search_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/filterDrawer.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/home_controller.dart';
@@ -47,12 +46,12 @@ class _HomeScreenState extends State<HomeScreen> {
     ever(controller.selectedVendorId, (_) => fetchFilteredProducts());
   }
 
-List<Map<String, dynamic>> getRandomizedList(
-    List<Map<String, dynamic>> originalList) {
-  List<Map<String, dynamic>> list = List.from(originalList); 
-  list.shuffle(Random());
-  return list;
-}
+  List<Map<String, dynamic>> getRandomizedList(
+      List<Map<String, dynamic>> originalList) {
+    List<Map<String, dynamic>> list = List.from(originalList);
+    list.shuffle(Random());
+    return list;
+  }
 
   @override
   void dispose() {
@@ -68,29 +67,28 @@ List<Map<String, dynamic>> getRandomizedList(
     }
   }
 
-Future<void> navigateToItemDetails() async {
-  if (isGuest) {
-    showLoginPrompt();
-    return;
-  }
-  if (previousSwipedProduct != null) {
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ItemDetails(
-          title: previousSwipedProduct!['p_name'],
-          data: previousSwipedProduct!,
+  Future<void> navigateToItemDetails() async {
+    if (isGuest) {
+      showLoginPrompt();
+      return;
+    }
+    if (previousSwipedProduct != null) {
+      final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ItemDetails(
+            title: previousSwipedProduct!['p_name'],
+            data: previousSwipedProduct!,
+          ),
         ),
-      ),
-    );
-    if (result != null) {
-      setState(() {
-        selectedItemDetail = result;
-      });
+      );
+      if (result != null) {
+        setState(() {
+          selectedItemDetail = result;
+        });
+      }
     }
   }
-}
-
 
   void showLoginPrompt() {
     showDialog(
@@ -161,239 +159,240 @@ Future<void> navigateToItemDetails() async {
           ),
         ],
       ),
-      
-      body: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).requestFocus(FocusNode());
-        },
-        child: Column(
-          children: [
-            Container(
-              alignment: Alignment.center,
-              padding: EdgeInsets.symmetric(horizontal: 30),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: TextFormField(
-                        controller: searchController,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          suffixIcon:
-                              Icon(Icons.search, color: greyDark).onTap(() {
-                            if (searchController.text.isNotEmpty) {
-                              if (isGuest) {
-                                showLoginPrompt();
-                              } else {
-                                Get.to(() => SearchScreen(
-                                      title: searchController.text,
-                                    ));
-                              }
-                            }
-                          }),
-                          filled: true,
-                          fillColor: whiteColor,
-                          hintText: 'Search',
-                          hintStyle: TextStyle(color: greyColor),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 25),
-                        ),
-                      ),
-                    ).box.border(color: greyColor, width: 0.5).roundedLg.make(),
-                  ),
-                  10.widthBox,
-                  IconButton(
-                    icon: Icon(
-                      Icons.filter_list_rounded,
-                      color: greyDark,
-                      size: 30,
+      body: Center(
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
+          child: Column(
+            children: [
+              Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SearchScreenPage()),
+                        );
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Search')
+                              .text
+                              .fontFamily(medium)
+                              .color(greyDark)
+                              .size(16)
+                              .make(),
+                          200.widthBox,
+                          Icon(Icons.search, color: greyDark),
+                        ],
+                      )
+                          .box
+                          .padding(EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 14))
+                          .border(color: greyLine)
+                          .roundedLg
+                          .make(),
                     ),
-                    onPressed: () {
-                      showModalRightSheet(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return FilterDrawer();
-                        },
-                      );
-                    },
-                  ).box.border(color: greyColor, width: 0.5).roundedLg.make(),
-                ],
-              ),
-            ),
-            Expanded(
-              child: FutureBuilder<List<Map<String, dynamic>>>(
-                future: fetchProducts(
-                  gender: controller.selectedGender.value,
-                  maxPrice: controller.maxPrice.value,
-                  selectedColors: controller.selectedColors,
-                  selectedTypes: controller.selectedTypes,
-                  selectedCollections: controller.selectedCollections,
-                  vendorId: controller.selectedVendorId.value,
+                    10.widthBox,
+                    IconButton(
+                      icon: Icon(
+                        Icons.filter_list_rounded,
+                        color: greyDark,
+                        size: 30,
+                      ),
+                      onPressed: () {
+                        showModalRightSheet(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return FilterDrawer();
+                          },
+                        );
+                      },
+                    ).box.border(color: greyLine).roundedLg.make(),
+                  ],
                 ),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  if (snapshot.error != null) {
-                    return Center(
-                        child: Text('An error occurred: ${snapshot.error}'));
-                  }
-                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Center(child: Text('No data available'));
-                  }
+              ),
+              Expanded(
+                child: FutureBuilder<List<Map<String, dynamic>>>(
+                  future: fetchProducts(
+                    gender: controller.selectedGender.value,
+                    maxPrice: controller.maxPrice.value,
+                    selectedColors: controller.selectedColors,
+                    selectedTypes: controller.selectedTypes,
+                    selectedCollections: controller.selectedCollections,
+                    vendorId: controller.selectedVendorId.value,
+                  ),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    if (snapshot.error != null) {
+                      return Center(
+                          child: Text('An error occurred: ${snapshot.error}'));
+                    }
+                    if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Center(child: Text('No data available'));
+                    }
 
-                  List<Map<String, dynamic>> products = snapshot.data ?? [];
-                  if (currentUser != null) {
-                    productsToShow = getRandomizedList(products
-                        .where((product) => !isInWishlist(product, currentUser!.uid))
-                        .toList());
-                  } else {
-                    productsToShow = getRandomizedList(products);
-                  }
-                  
-                  if (productsToShow.isEmpty) {
-                    return const Center(child: Text('No products available'));
-                  }
-                  
-                  return CardSwiper(
-                    scale: 0.5,
-                    isLoop: false,
-                    controller: controllercard,
-                    allowedSwipeDirection:
-                        AllowedSwipeDirection.only(left: true, right: true),
-                    cardsCount: productsToShow.length,
-                    cardBuilder: (BuildContext context, int index,
-                        int percentThresholdX, int percentThresholdY) {
-                      previousSwipedProduct = selectedProduct;
-                      selectedProduct = productsToShow[index];
-                      Map<String, dynamic> product = productsToShow[index];
+                    List<Map<String, dynamic>> products = snapshot.data ?? [];
+                    if (currentUser != null) {
+                      productsToShow = getRandomizedList(products
+                          .where((product) =>
+                              !isInWishlist(product, currentUser!.uid))
+                          .toList());
+                    } else {
+                      productsToShow = getRandomizedList(products);
+                    }
 
-                      return Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height,
-                        child: Column(
-                          children: [
-                            Container(
-                              child: Stack(
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(height: 1),
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.only(
-                                            topRight: Radius.circular(14),
-                                            topLeft: Radius.circular(14)),
-                                        child: Image.network(
-                                          product['p_imgs'][0],
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.47,
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          fit: BoxFit.cover,
+                    if (productsToShow.isEmpty) {
+                      return const Center(child: Text('No products available'));
+                    }
+
+                    return CardSwiper(
+                      scale: 0.5,
+                      isLoop: false,
+                      controller: controllercard,
+                      allowedSwipeDirection:
+                          AllowedSwipeDirection.only(left: true, right: true),
+                      cardsCount: productsToShow.length,
+                      cardBuilder: (BuildContext context, int index,
+                          int percentThresholdX, int percentThresholdY) {
+                        previousSwipedProduct = selectedProduct;
+                        selectedProduct = productsToShow[index];
+                        Map<String, dynamic> product = productsToShow[index];
+
+                        return Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height,
+                          child: Column(
+                            children: [
+                              Container(
+                                child: Stack(
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(height: 1),
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(14),
+                                              topLeft: Radius.circular(14)),
+                                          child: Image.network(
+                                            product['p_imgs'][0],
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.46,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            product['p_name'],
-                                            style: TextStyle(
-                                              color: blackColor,
-                                              fontSize: 20,
-                                              fontFamily: medium,
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              product['p_name'],
+                                              style: TextStyle(
+                                                color: blackColor,
+                                                fontSize: 20,
+                                                fontFamily: medium,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
                                             ),
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                          ),
-                                          SizedBox(height: 2),
-                                          Text(
-                                            "${NumberFormat('#,##0').format(int.parse(product['p_price']))} Bath",
-                                            style: TextStyle(
-                                              color: blackColor,
-                                              fontSize: 16,
+                                            SizedBox(height: 2),
+                                            Text(
+                                              "${NumberFormat('#,##0').format(int.parse(product['p_price']))} Bath",
+                                              style: TextStyle(
+                                                color: blackColor,
+                                                fontSize: 16,
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      ).box.padding(EdgeInsets.all(8)).make(),
-                                    ],
-                                  )
-                                      .box
-                                      .white
-                                      .rounded
-                                      .shadowSm
-                                      .padding(EdgeInsets.all(12))
-                                      .make(),
+                                          ],
+                                        ).box.padding(EdgeInsets.all(8)).make(),
+                                      ],
+                                    )
+                                        .box
+                                        .white
+                                        .rounded
+                                        .shadowSm
+                                        .padding(EdgeInsets.all(12))
+                                        .make(),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 5),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  IconButton(
+                                    icon: Image.asset(
+                                      icDislikeButton,
+                                      width: 60,
+                                    ).box.roundedFull.shadowSm.make(),
+                                    onPressed: () => controllercard
+                                        .swipe(CardSwiperDirection.left),
+                                  ),
+                                  SizedBox(width: 30),
+                                  IconButton(
+                                    icon: Image.asset(
+                                      icViewMoreButton,
+                                      width: 60,
+                                    ).box.roundedFull.shadowSm.make(),
+                                    onPressed: () => navigateToItemDetails(),
+                                  ),
+                                  SizedBox(width: 30),
+                                  IconButton(
+                                    icon: Image.asset(
+                                      icLikeButton,
+                                      width: 60,
+                                    ).box.roundedFull.shadowSm.make(),
+                                    onPressed: () => {
+                                      if (isGuest)
+                                        {showLoginPrompt()}
+                                      else
+                                        {
+                                          controllercard
+                                              .swipe(CardSwiperDirection.right),
+                                          controller.addToWishlist(product),
+                                        }
+                                    },
+                                  ),
                                 ],
                               ),
-                            ),
-                            SizedBox(height: 5),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                IconButton(
-                                  icon: Image.asset(
-                                    icDislikeButton,
-                                    width: 60,
-                                  ).box.roundedFull.shadowSm.make(),
-                                  onPressed: () => controllercard
-                                      .swipe(CardSwiperDirection.left),
-                                ),
-                                SizedBox(width: 30),
-                                IconButton(
-                                  icon: Image.asset(
-                                    icViewMoreButton,
-                                    width: 60,
-                                  ).box.roundedFull.shadowSm.make(),
-                                  onPressed: () => navigateToItemDetails(),
-                                ),
-                                SizedBox(width: 30),
-                                IconButton(
-                                  icon: Image.asset(
-                                    icLikeButton,
-                                    width: 60,
-                                  ).box.roundedFull.shadowSm.make(),
-                                  onPressed: () => {
-                                    if (isGuest) {
-                                      showLoginPrompt()
-                                    } else {
-                                      controllercard
-                                          .swipe(CardSwiperDirection.right),
-                                      controller.addToWishlist(product),
-                                    }
-                                  },
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                    onSwipe: (previousIndex, currentIndex, direction) {
-                      if (direction == CardSwiperDirection.right) {
-                        if (!isGuest) {
-                          controller.addToWishlist(previousSwipedProduct!);
-                        } else {
-                          showLoginPrompt();
+                            ],
+                          ),
+                        );
+                      },
+                      onSwipe: (previousIndex, currentIndex, direction) {
+                        if (direction == CardSwiperDirection.right) {
+                          if (!isGuest) {
+                            controller.addToWishlist(previousSwipedProduct!);
+                          } else {
+                            showLoginPrompt();
+                          }
+                        } else if (direction == CardSwiperDirection.left) {
+                        } else if (direction == CardSwiperDirection.top) {
+                          navigateToItemDetails();
                         }
-                      } else if (direction == CardSwiperDirection.left) {
-                      } else if (direction == CardSwiperDirection.top) {
-                        navigateToItemDetails();
-                      }
-                      return true;
-                    },
-                  );
-                },
+                        return true;
+                      },
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -410,7 +409,8 @@ void showModalRightSheet({
     barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
     barrierColor: Colors.black54,
     transitionDuration: Duration(milliseconds: 200),
-    pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+    pageBuilder: (BuildContext context, Animation<double> animation,
+        Animation<double> secondaryAnimation) {
       return Align(
         alignment: Alignment.centerRight,
         child: Material(
@@ -421,7 +421,8 @@ void showModalRightSheet({
         ),
       );
     },
-    transitionBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
+    transitionBuilder: (BuildContext context, Animation<double> animation,
+        Animation<double> secondaryAnimation, Widget child) {
       return SlideTransition(
         position: Tween<Offset>(
           begin: const Offset(1.0, 0.0),

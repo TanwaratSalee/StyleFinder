@@ -13,7 +13,7 @@ const Color greyLine = Color.fromRGBO(213, 216, 225, 1);
 const Color greyColor = Color.fromRGBO(135, 138, 141, 1);
 const Color greyDark = Color.fromRGBO(91, 91, 93, 1);
 
-const Color whiteOpacity = Color.fromRGBO(255, 255, 255, 0.92);
+const Color whiteOpacity = Color.fromRGBO(237, 235, 235, 0.918);
 
 const Color greyMessage = Color.fromRGBO(225, 225, 225, 1);
 const Color primaryMessage = Color.fromRGBO(94, 213, 212 ,1);

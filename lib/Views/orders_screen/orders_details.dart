@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_finalproject/Views/chat_screen/chat_screen.dart';
 import 'package:flutter_finalproject/Views/orders_screen/component/order_place_details.dart';
 import 'package:flutter_finalproject/Views/orders_screen/component/orders_status.dart';
@@ -9,6 +11,23 @@ import 'package:intl/intl.dart';
 class OrdersDetails extends StatelessWidget {
   final dynamic data;
   const OrdersDetails({Key? key, this.data}) : super(key: key);
+
+  String formatPhoneNumber(String phone) {
+    String cleaned = phone.replaceAll(RegExp(r'\D'), '');
+
+    if (cleaned.length == 10) {
+      final RegExp regExp = RegExp(r'(\d{3})(\d{3})(\d{4})');
+      return cleaned.replaceAllMapped(regExp, (Match match) {
+        return '(+66) ${match[1]}-${match[2]}-${match[3]}';
+      });
+    } else if (cleaned.length == 9) {
+      final RegExp regExp = RegExp(r'(\d{2})(\d{3})(\d{4})');
+      return cleaned.replaceAllMapped(regExp, (Match match) {
+        return '(+66) ${match[1]}-${match[2]}-${match[3]}';
+      });
+    }
+    return phone;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,91 +92,81 @@ class OrdersDetails extends StatelessWidget {
                     .color(whiteColor)
                     .roundedSM
                     .border(color: greyLine)
-                    .padding(const EdgeInsets.symmetric(horizontal: 28, vertical: 12))
+                    .padding(const EdgeInsets.symmetric(
+                        horizontal: 28, vertical: 12))
                     .make(),
               ),
+              15.heightBox,
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                   Icon(Icons.location_on_outlined),
-                   10.widthBox,
-
+                  const Text(
+                    "Shipping Address",
+                  ).text.size(20).black.fontFamily(medium).make(),
+                  5.heightBox,
+                  Row(
+                    children: [
+                      Icon(Icons.location_on_outlined),
+                      20.widthBox,
+                      Text(
+                          "${data['order_by_firstname']} ${data['order_by_surname']},\n${data['order_by_address']},\n${data['order_by_city']}, ${data['order_by_state']},${data['order_by_postalcode']}\n${formatPhoneNumber(data['order_by_phone'])}"),
+                    ],
+                  ),
                 ],
-              ),
+              )
+                  .box
+                  .color(whiteColor)
+                  .roundedSM
+                  .border(color: greyLine)
+                  .padding(
+                      const EdgeInsets.symmetric(horizontal: 28, vertical: 12))
+                  .make(),
               const SizedBox(height: 15),
-              Column(
-                children: [
-                  orderPlaceDetails(
-                    d1: data['order_code'],
-                    d2: data['shipping_method'],
-                    title1: "Order Code",
-                    title2: "Shipping Method",
-                  ),
-                  orderPlaceDetails(
-                    d1: intl.DateFormat()
-                        .add_yMd()
-                        .format((data['order_date'].toDate())),
-                    d2: data['payment_method'],
-                    title1: "Order Date",
-                    title2: "Payment Method",
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Container(
+                child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    child: Column(
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        Row(
                           children: [
-                            const Text(
-                              "Shipping Address",
-                              style: TextStyle(fontFamily: semiBold),
-                            ),
-                            Text(
-                                "${data['order_by_firstname']} ${data['order_by_surname']}"),
-                            Text("${data['order_by_address']}"),
-                            Text("${data['order_by_city']}"),
-                            Text("${data['order_by_state']}"),
-                            Text("${data['order_by_phone']}"),
-                            Text("${data['order_by_postalcode']}"),
+                            Text('Order Code :    ')
+                                .text
+                                .size(14)
+                                .black
+                                .fontFamily(semiBold)
+                                .make(),
+                            Text(data['order_code'])
                           ],
                         ),
-                        SizedBox(
-                          width: 130,
-                          height: 140,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "Total Amount",
-                                style: TextStyle(fontFamily: semiBold),
-                              ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    "${intl.NumberFormat('#,##0').format(data['total_amount'])} ",
-                                    style: const TextStyle(
-                                        color: greyDark,
-                                        fontFamily: regular,
-                                        fontSize: 24),
-                                  ),
-                                  5.widthBox,
-                                  Text('Bath')
-                                      .text
-                                      .fontFamily(light)
-                                      .size(14)
-                                      .make()
-                                ],
-                              )
-                            ],
-                          ),
+                        5.heightBox,
+                        Row(
+                          children: [
+                            Text('Order Date :    ')
+                                .text
+                                .size(14)
+                                .black
+                                .fontFamily(semiBold)
+                                .make(),
+                            Text(intl.DateFormat()
+                                .add_yMd()
+                                .format((data['order_date'].toDate())))
+                          ],
+                        ),
+                        5.heightBox,
+                        Row(
+                          children: [
+                            Text('Payment Method :    ')
+                                .text
+                                .size(14)
+                                .black
+                                .fontFamily(semiBold)
+                                .make(),
+                            Text(data['shipping_method'])
+                          ],
                         ),
                       ],
-                    ),
-                  )
-                ],
+                    )),
               )
                   .box
                   .color(whiteColor)
@@ -165,14 +174,26 @@ class OrdersDetails extends StatelessWidget {
                   .border(color: greyLine)
                   .padding(const EdgeInsets.all(6))
                   .make(),
+
               15.heightBox,
+
               Column(
                 children: [
-                  const Text(
-                    "Ordere List",
-                  ).text.size(20).color(blackColor).fontFamily(medium).make(),
-                  Divider(
-                    color: greyLine,
+                  Column(
+                    children: [
+                     Row(
+                            children: [
+                              Image.asset(iconsStore, width: 18,),
+                              10.widthBox,
+                              // Text(sellerName)
+                              //     .text
+                              //     .size(16)
+                              //     .fontFamily(semiBold)
+                              //     .color(blackColor)
+                              //     .make(),
+                            ],
+                          ),
+                    ],
                   ),
                   10.heightBox,
                   ListView.builder(

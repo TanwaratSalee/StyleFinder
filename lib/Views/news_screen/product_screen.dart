@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/news_screen/component/search_screen.dart';
+import 'package:flutter_finalproject/Views/search_screen/recent_search_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/store_screen/mixandmatch_detail.dart';
 import 'package:flutter_finalproject/Views/widgets_common/filterDrawer.dart';
@@ -73,52 +74,34 @@ class _ProductScreenState extends State<ProductScreen> {
       initialIndex: initialTabIndex,
       child: Column(
         children: <Widget>[
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  alignment: Alignment.center,
-                  child: TextFormField(
-                    controller: searchController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      suffixIcon: Icon(Icons.search, color: greyDark).onTap(() {
-                        if (searchController.text.isNotEmpty) {
-                          Get.to(() => SearchScreen(
-                                title: searchController.text,
-                              ));
-                        }
-                      }),
-                      filled: true,
-                      fillColor: whiteColor,
-                      hintText: 'Search',
-                      hintStyle: TextStyle(color: greyColor),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 25),
+          GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SearchScreenPage()),
+                        );
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Search')
+                              .text
+                              .fontFamily(medium)
+                              .color(greyDark)
+                              .size(16)
+                              .make(),
+                          // 200.widthBox,
+                          Icon(Icons.search, color: greyDark),
+                        ],
+                      )
+                          .box
+                          .padding(EdgeInsets.symmetric(horizontal: 16, vertical: 10))
+                          .margin(EdgeInsets.symmetric(horizontal: 28,vertical: 8))
+                          .border(color: greyLine)
+                          .roundedLg
+                          .make(),
                     ),
-                  ),
-                ).box.border(color: greyColor, width: 0.5).roundedLg.make(),
-              ),
-              10.widthBox,
-              IconButton(
-                icon: Icon(
-                  Icons.filter_list_rounded,
-                  color: greyDark,
-                  size: 30,
-                ),
-                onPressed: () {
-                  showModalRightSheet(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return FilterDrawer();
-                    },
-                  );
-                },
-              ).box.border(color: greyColor, width: 0.5).roundedLg.make(),
-            ],
-          ).box.margin(EdgeInsets.fromLTRB(18, 0, 18, 10)).make(),
           TabBar(
             labelStyle: const TextStyle(
                 fontSize: 15, fontFamily: regular, color: greyDark),

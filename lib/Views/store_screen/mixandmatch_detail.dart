@@ -109,14 +109,18 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                   });
                   print("isFav after toggling: $isFav"); 
                 },
-                icon: Icon(
-                  controller.isFav.value
-                      ? Icons.favorite
-                      : Icons.favorite_outline,
-                  color: controller.isFav.value ? redColor : null,
-                ),
-                iconSize: 28,
-              )),
+                icon: controller.isFav.value
+                                  ? Image.asset(icTapFavoriteButton, width: 23)
+                                  : Image.asset(icFavoriteButton, width: 23),
+                                  
+                // icon: Icon(
+                //   controller.isFav.value
+                //       ? Icons.favorite
+                //       : Icons.favorite_outline,
+                //   color: controller.isFav.value ? redColor : null,
+                // ),
+                // iconSize: 28,
+              ).box.padding(EdgeInsets.only(right: 10)).make()),
         ],
       ),
       body: Column(

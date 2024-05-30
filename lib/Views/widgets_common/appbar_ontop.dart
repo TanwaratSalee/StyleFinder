@@ -1,14 +1,27 @@
-import 'package:flutter_finalproject/Views/widgets_common/search_icon.dart';
+import 'package:flutter_finalproject/Views/search_screen/recent_search_screen.dart';
+import 'package:flutter_finalproject/Views/store_screen/search_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 
 import '../cart_screen/cart_screen.dart';
 
-Widget appbarField({required BuildContext context}) { // Specify context as required
+Widget appbarField({required BuildContext context}) {
+  // Specify context as required
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
-      IconSearch(context: context),
+      GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SearchScreenPage()),
+            );
+          },
+          child: Row(
+            children: [
+              Icon(Icons.search, color: greyDark, size: 30,),
+            ],
+          )),
       Center(
         child: Image.asset(icLogoOnTop, height: 35),
       ),

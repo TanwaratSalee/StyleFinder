@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/chat_screen/component/sender_bubble.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
@@ -27,6 +28,18 @@ class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var controller = Get.put(ChatsController());
+    ScrollController scrollController = ScrollController();
+    FocusNode focusNode = FocusNode();
+
+    focusNode.addListener(() {
+      if (focusNode.hasFocus) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (scrollController.hasClients) {
+            scrollController.jumpTo(scrollController.position.maxScrollExtent);
+          }
+        });
+      }
+    });
 
     return Scaffold(
       backgroundColor: whiteColor,
@@ -65,74 +78,85 @@ class ChatScreen extends StatelessWidget {
         ),
       ),
       body: Container(
-        padding: const EdgeInsets.all(12),
         child: Column(
           children: [
-            Obx(
-              () => controller.isLoading.value
-                  ? Center(child: loadingIndicator())
-                  : Expanded(
-                      child: StreamBuilder(
-                        stream: FirestoreServices.getChatMessages(controller.chatDocId.toString()),
-                        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                          if (!snapshot.hasData) {
-                            return Center(child: loadingIndicator());
-                          } else if (snapshot.data!.docs.isEmpty) {
-                            return Center(
-                              child: Text(
-                                "Send a message...",
-                                style: TextStyle(color: greyDark),
-                              ),
-                            );
-                          } else {
-                            List<QueryDocumentSnapshot> messages = snapshot.data!.docs;
-                            Map<String, List<QueryDocumentSnapshot>> groupedMessages = {};
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Obx(
+                  () => controller.isLoading.value
+                      ? Center(child: loadingIndicator())
+                      : StreamBuilder(
+                          stream: FirestoreServices.getChatMessages(controller.chatDocId.toString()),
+                          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                            if (!snapshot.hasData) {
+                              return Center(child: loadingIndicator());
+                            } else if (snapshot.data!.docs.isEmpty) {
+                              return Center(
+                                child: Text(
+                                  "Send a message...",
+                                  style: TextStyle(color: greyDark),
+                                ),
+                              );
+                            } else {
+                              List<QueryDocumentSnapshot> messages = snapshot.data!.docs;
+                              Map<String, List<QueryDocumentSnapshot>> groupedMessages = {};
 
-                            for (var message in messages) {
-                              String date;
-                              try {
-                                date = formatDate(message['created_at']);
-                              } catch (e) {
-                                date = 'Unknown Date'; 
+                              for (var message in messages) {
+                                String date;
+                                try {
+                                  date = formatDate(message['created_at']);
+                                } catch (e) {
+                                  date = 'Unknown Date'; 
+                                }
+                                if (!groupedMessages.containsKey(date)) {
+                                  groupedMessages[date] = [];
+                                }
+                                groupedMessages[date]!.add(message);
                               }
-                              if (!groupedMessages.containsKey(date)) {
-                                groupedMessages[date] = [];
-                              }
-                              groupedMessages[date]!.add(message);
-                            }
 
-                            return ListView.builder(
-                              itemCount: groupedMessages.length,
-                              itemBuilder: (context, index) {
-                                String date = groupedMessages.keys.elementAt(index);
-                                List<QueryDocumentSnapshot> dayMessages = groupedMessages[date]!;
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                if (scrollController.hasClients) {
+                                  scrollController.jumpTo(scrollController.position.maxScrollExtent);
+                                }
+                              });
 
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 10),
-                                      child: Center(
-                                        child: Text( date, style: TextStyle(color: greyDark, fontWeight: FontWeight.bold),
+                              return ListView.builder(
+                                controller: scrollController,
+                                itemCount: groupedMessages.length,
+                                itemBuilder: (context, index) {
+                                  String date = groupedMessages.keys.elementAt(index);
+                                  List<QueryDocumentSnapshot> dayMessages = groupedMessages[date]!;
+
+                                  return Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 10),
+                                        child: Center(
+                                          child: Text(
+                                            date,
+                                            style: TextStyle(color: greyDark, fontWeight: FontWeight.bold),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    ...dayMessages.map((data) {
-                                      return Align(
-                                        alignment: data['uid'] == currentUser!.uid
-                                            ? Alignment.centerLeft
-                                            : Alignment.centerRight,
-                                        child: senderBubble(data),
-                                      );
-                                    }).toList(),
-                                  ],
-                                );
-                              },
-                            );
-                          }
-                        },
-                      ),
-                    ),
+                                      ...dayMessages.map((data) {
+                                        return Align(
+                                          alignment: data['uid'] == currentUser!.uid
+                                              ? Alignment.centerRight
+                                              : Alignment.centerLeft,
+                                          child: senderBubble(data),
+                                        );
+                                      }).toList(),
+                                    ],
+                                  );
+                                },
+                              );
+                            }
+                          },
+                        ),
+                ),
+              ),
             ),
             SizedBox(height: 10),
             Row(
@@ -140,16 +164,18 @@ class ChatScreen extends StatelessWidget {
                 Expanded(
                   child: TextFormField(
                     controller: controller.msgController,
+                    focusNode: focusNode,
                     decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(50),
                         borderSide: BorderSide(color: greyLine),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(50),
                         borderSide: BorderSide(color: greyColor),
                       ),
                       hintText: "Type a message...",
+                      contentPadding: EdgeInsets.symmetric(horizontal: 20),
                     ),
                   ),
                 ),
@@ -157,11 +183,16 @@ class ChatScreen extends StatelessWidget {
                   onPressed: () {
                     controller.sendMsg(controller.msgController.text);
                     controller.msgController.clear();
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (scrollController.hasClients) {
+                        scrollController.jumpTo(scrollController.position.maxScrollExtent);
+                      }
+                    });
                   },
                   icon: const Icon(Icons.send, color: primaryApp),
                 ),
               ],
-            ).box.padding(const EdgeInsets.all(12)).margin(const EdgeInsets.only(bottom: 10)).height(80).make(),
+            ).box.border(color: greyLine).padding(const EdgeInsets.all(12)).height(80).make(),
           ],
         ),
       ),

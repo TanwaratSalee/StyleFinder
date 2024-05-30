@@ -92,7 +92,7 @@ const String icLogout = "assets/icons/iconsAccount/logout.png";
 // News Screen
 const String icNext = "assets/icons/icNormal/Iconnext.png";
 const String icUndertext = "assets/icons/icNormal/undertext.png";
-const String icSeeall = "assets/icons/seeall.png";
+const String icSeeAll = "assets/icons/seeall.png";
 const String icTapFavoriteButton = "assets/icons/redlike.png";
 const String icFavoriteButton = "assets/icons/FavoriteButton.png";
 
