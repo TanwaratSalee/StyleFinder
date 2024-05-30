@@ -85,7 +85,7 @@ class NewsScreen extends StatelessWidget {
                                         .make(),
                                     10.widthBox,
                                     Image.asset(
-                                      icSeeall,
+                                      icSeeAll,
                                       width: 14,
                                     )
                                   ],
@@ -288,7 +288,7 @@ class NewsScreen extends StatelessWidget {
                                     .make(),
                                 10.widthBox,
                                 Image.asset(
-                                  icSeeall,
+                                  icSeeAll,
                                   width: 14,
                                 )
                               ],
@@ -328,7 +328,7 @@ class NewsScreen extends StatelessWidget {
                                     .make(),
                                 10.widthBox,
                                 Image.asset(
-                                  icSeeall,
+                                  icSeeAll,
                                   width: 14,
                                 )
                               ],
