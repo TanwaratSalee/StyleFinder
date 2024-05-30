@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/home_screen/mainHome.dart';
 import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
@@ -109,12 +110,10 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
   }
 
   Widget _buildNameTextField() {
-    return TextFormField(
+    return _buildTextField(
+      label: 'Name',
       controller: nameController,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(),
-        labelText: 'Name',
-      ),
+      textColor: greyColor,
       onChanged: _updateCardHolderName,
     );
   }
@@ -136,22 +135,19 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
         ? Image.asset(imageAssetPath, width: 24, height: 24)
         : null;
 
-    return SizedBox(
-      height: 50,
-      child: _buildTextField(
-        label: 'Card number',
-        suffixIcon: suffixIconWidget,
-      ),
+    return _buildTextField(
+      label: 'Card number',
+      controller: cardNumberController,
+      textColor: greyColor,
+      suffixIcon: suffixIconWidget,
     );
   }
 
   Widget _buildVCCTextField() {
-    return TextFormField(
+    return _buildTextField(
+      label: 'VCC',
       controller: cvcController,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(),
-        labelText: 'VCC',
-      ),
+      textColor: greyColor,
       inputFormatters: <TextInputFormatter>[
         FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
         LengthLimitingTextInputFormatter(3),
@@ -175,7 +171,7 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
           height: 50,
           child: tapButton(
             onPress: () {
-               getTokenandSourceTest();
+              getTokenandSourceTest();
             },
             color: primaryApp,
             textColor: whiteColor,
@@ -184,25 +180,23 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
         ),
       ),
       body: ListView(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.fromLTRB(8, 10, 8, 0),
         children: <Widget>[
           _buildCardDetail(),
-          SizedBox(height: 20),
+          SizedBox(height: 25),
           _buildNameTextField(),
-          SizedBox(height: 10),
+          SizedBox(height: 25),
           _buildCardNumberTextField(),
           SizedBox(height: 10),
           Row(
             children: <Widget>[
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: TextFormField(
+                  padding: const EdgeInsets.fromLTRB(8, 10, 8, 0),
+                  child: _buildTextField(
+                    label: 'MM',
                     controller: mmController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'MM',
-                    ),
+                    textColor: greyColor,
                     inputFormatters: <TextInputFormatter>[
                       FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                       LengthLimitingTextInputFormatter(2),
@@ -213,13 +207,11 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: TextFormField(
+                  padding: const EdgeInsets.fromLTRB(8, 10, 8, 0),
+                  child: _buildTextField(
+                    label: 'YY',
                     controller: yyController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'YY',
-                    ),
+                    textColor: greyColor,
                     inputFormatters: <TextInputFormatter>[
                       FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                       LengthLimitingTextInputFormatter(4),
@@ -228,23 +220,14 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                   ),
                 ),
               ),
-              SizedBox(width: 8),
               Expanded(
+                  child: Padding(
+                padding: const EdgeInsets.fromLTRB(8, 10, 8, 0),
                 child: _buildVCCTextField(),
-              ),
+              )),
             ],
           ),
           SizedBox(height: 24),
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 20),
-          //   child: tapButton(
-          //       onPress: () {
-          //         getTokenandSourceTest();
-          //       },
-          //       color: primaryApp,
-          //       textColor: whiteColor,
-          //       title: "Confirm"),
-          // )
         ],
       ),
     );
@@ -272,7 +255,7 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
           children: <Widget>[
             Align(
               alignment: Alignment.centerRight,
-              child: Text('VISA',
+              child: Text('',
                   style: TextStyle(
                     color: whiteColor,
                     fontSize: 24,
@@ -322,34 +305,34 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
 
   Widget _buildTextField({
     required String label,
-    Function(String)? onChanged,
+    TextEditingController? controller,
+    List<TextInputFormatter>? inputFormatters,
+    TextInputType? keyboardType,
     Widget? suffixIcon,
+    Function(String)? onChanged,
+    Color textColor = Colors.black,
   }) {
-    return TextField(
-      controller: label == 'Card number' ? cardNumberController : null,
+    return TextFormField(
+      controller: controller,
       decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: BorderSide(color: greyLine),
         ),
         labelText: label,
-        fillColor: Color.fromARGB(255, 245, 248, 253),
+        labelStyle: TextStyle(color: textColor),
+        fillColor: Colors.white,
         filled: true,
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: greyColor, width: 1.0),
+          borderSide: BorderSide(color: greyColor),
           borderRadius: BorderRadius.circular(8.0),
         ),
         suffixIcon: suffixIcon,
       ),
-      style: TextStyle(),
-      inputFormatters: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-        LengthLimitingTextInputFormatter(16),
-        CreditCardFormatter(separator: '-'),
-      ],
-      keyboardType: TextInputType.number,
-      onChanged: onChanged != null ? onChanged as void Function(String)? : null,
-      maxLines: 1,
-      minLines: 1,
+      style: TextStyle(color: textColor),
+      inputFormatters: inputFormatters,
+      keyboardType: keyboardType,
+      onChanged: onChanged,
     );
   }
 
@@ -413,91 +396,3 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
     });
   }
 }
-
-// Future<void> _showCustomDialog(BuildContext context) async {
-//   return showDialog<void>(
-//     context: context,
-//     barrierDismissible: false,
-//     builder: (BuildContext context) {
-//       return AlertDialog(
-//         // title: Text(
-//         //   'Complete!',
-//         //   textAlign: TextAlign.center, // ข้อความอยู่ตรงกลาง
-//         //   style: TextStyle(
-//         //     fontFamily: bold, // ทำให้ตัวหนา
-//         //   ),
-//         // ),
-//         content: SingleChildScrollView(
-//           child: ListBody(
-//             children: <Widget>[
-//               SizedBox(
-//                 height: 50,
-//               ),
-//               Image.asset('assets/images/Finishpay.PNG'),
-//               SizedBox(
-//                 height: 40,
-//               ),
-//               Text(
-//                 'Payment was successful!',
-//                 textAlign: TextAlign.center,
-//                 style: TextStyle(
-//                   fontFamily: bold,
-//                   fontSize: 20,
-//                 ),
-//               ),
-//               SizedBox(
-//                 height: 20,
-//               ),
-//               Text(
-//                 '1,400,000 Bath',
-//                 textAlign: TextAlign.center,
-//                 style: TextStyle(
-//                   fontFamily: bold,
-//                   color: Colors.blue,
-//                   fontSize: 16,
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ),
-//         actions: <Widget>[
-//           TextButton(
-//             child: Text('OK'),
-//             onPressed: () {
-//               Navigator.of(context).pop();
-//             },
-//           ),
-//         ],
-//         content: Container(
-//           padding: EdgeInsets.all(20.0), // กำหนดขอบรอบของข้อความ
-//           child: Text('Your message here'), // เพิ่มข้อความที่ต้องการแสดงในกรอบ
-//         ),
-//       );
-//     },
-//   );
-// }
-
-
-// class OurButton extends StatelessWidget {
-//   final VoidCallback onPressed;
-//   final Widget child;
-
-//   const OurButton({
-//     Key? key,
-//     required this.onPressed,
-//     required this.child,
-//   }) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return ElevatedButton(
-//       style: ButtonStyle(
-//         backgroundColor: MaterialStateProperty.all<Color>(
-//           Colors.blue,
-//         ),
-//       ),
-//       onPressed: onPressed,
-//       child: child,
-//     );
-//   }
-// }
