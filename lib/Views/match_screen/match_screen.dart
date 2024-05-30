@@ -1,5 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+<<<<<<< HEAD
 import 'package:flutter/material.dart';
+=======
+import 'package:flutter_finalproject/Views/match_screen/postmathscreen.dart';
+>>>>>>> 8311d8f (PostMath)
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/widgets_common/appbar_ontop.dart';
 import 'package:flutter_finalproject/Views/widgets_common/filterDrawer.dart';
@@ -162,6 +166,7 @@ class _MatchScreenState extends State<MatchScreen> {
                       lowerProduct['p_name'],
                       context,
                     );
+                    Get.to(() => PostMatchScreen());
                   } else {
                     VxToast.show(
                       context,
