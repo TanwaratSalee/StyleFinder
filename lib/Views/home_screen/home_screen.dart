@@ -205,7 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     return const Center(child: Text('No products available'));
                   }
                   return CardSwiper(
-                    scale: 0.5,
+                    scale: 0.1,
                     isLoop: false,
                     controller: controllercard,
                     allowedSwipeDirection:
@@ -236,10 +236,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                             topLeft: Radius.circular(14)),
                                         child: Image.network(
                                           product['p_imgs'][0],
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.47,
+                                          // height: MediaQuery.of(context)
+                                          //         .size
+                                          //         .height *
+                                          //     0.47,
+                                          height: 450,
                                           width:
                                               MediaQuery.of(context).size.width,
                                           fit: BoxFit.cover,
@@ -253,8 +254,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                             product['p_name'],
                                             style: TextStyle(
                                               color: blackColor,
-                                              fontSize: 20,
-                                              fontFamily: medium,
+                                              fontSize: 18,
+                                              fontFamily: semiBold,
                                             ),
                                             overflow: TextOverflow.ellipsis,
                                             maxLines: 1,
@@ -268,14 +269,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ),
                                           ),
                                         ],
-                                      ).box.padding(EdgeInsets.all(8)).make(),
+                                      ).box.padding(EdgeInsets.all(4)).make(),
                                     ],
                                   )
                                       .box
                                       .white
                                       .rounded
                                       .shadowSm
-                                      .padding(EdgeInsets.all(12))
+                                      .padding(EdgeInsets.all(6))
                                       .make(),
                                 ],
                               ),
@@ -287,7 +288,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 IconButton(
                                   icon: Image.asset(
                                     icDislikeButton,
-                                    width: 60,
+                                    width: 65,
                                   ).box.roundedFull.shadowSm.make(),
                                   onPressed: () => controllercard
                                       .swipe(CardSwiperDirection.left),
@@ -296,7 +297,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 IconButton(
                                   icon: Image.asset(
                                     icViewMoreButton,
-                                    width: 60,
+                                    width: 65,
                                   ).box.roundedFull.shadowSm.make(),
                                   onPressed: () => navigateToItemDetails(),
                                 ),
@@ -304,7 +305,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 IconButton(
                                   icon: Image.asset(
                                     icLikeButton,
-                                    width: 60,
+                                    width: 65,
                                   ).box.roundedFull.shadowSm.make(),
                                   onPressed: () => [
                                     controllercard
