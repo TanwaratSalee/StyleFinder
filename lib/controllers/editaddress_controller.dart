@@ -86,7 +86,7 @@ class _editaddressFormState extends State<editaddress_controller> {
             await userRef.update({'address': addressesList});
 
             VxToast.show(context,
-                msg: "The new address was successfully added");
+                msg: "The address was successfully updated");
             Navigator.pop(context);
           } else {
             print('Address not found');

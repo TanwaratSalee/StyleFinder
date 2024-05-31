@@ -89,7 +89,7 @@ class _AddressScreenState extends State<AddressScreen> {
                     itemBuilder: (context, index) {
                       var address = addressesList[index];
                       String formattedAddress =
-                          '${address['firstname']} ${address['surname']},\n${address['address']}, ${address['city']}, ${address['state']}, ${address['postalCode']} \n${formatPhoneNumber(address['phone'])}';
+                          '${address['firstname'] ?? ''} ${address['surname'] ?? ''},\n${address['address'] ?? ''}, ${address['city'] ?? ''}, ${address['state'] ?? ''}, ${address['postalCode'] ?? ''} \n${formatPhoneNumber(address['phone'] ?? '')}';
                       return GestureDetector(
                         onTap: () {},
                         child: Column(
@@ -110,18 +110,17 @@ class _AddressScreenState extends State<AddressScreen> {
                                         style: TextStyle(color: primaryApp),
                                       ),
                                       onPressed: () {
-                                        final addressData = formattedAddress.split(', ');
                                         Navigator.push(context,
                                           MaterialPageRoute(
                                             builder: (context) => editaddress_controller(
                                               documentId: snapshot.data!.id,
-                                              firstname: addressData[0],
-                                              surname: addressData[1],
-                                              address: addressData[2],
-                                              city: addressData[3],
-                                              state: addressData[4],
-                                              postalCode: addressData[5],
-                                              phone: addressData[6],
+                                              firstname: address['firstname'] ?? '',
+                                              surname: address['surname'] ?? '',
+                                              address: address['address'] ?? '',
+                                              city: address['city'] ?? '',
+                                              state: address['state'] ?? '',
+                                              postalCode: address['postalCode'] ?? '',
+                                              phone: address['phone'] ?? '',
                                             ),
                                           ),
                                         );
