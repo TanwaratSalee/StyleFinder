@@ -38,12 +38,13 @@ const profileButtonsIcon = [
   icAccount,
   icPassword,
   icAddress,
+  iceye,
   icOrders,
   icMessage
 ];
 
 //Payment
-const paymentIcons = [icPaymentCard,icPaymentDelivery,icPaymentPromptpay];
+const paymentIcons = [icPaymentCard, icPaymentDelivery, icPaymentPromptpay];
 const textpaymentMethods = [cashOnDelivery, card, mobile];
-const imgBank = [imgkbank,imgscb,imgbbl,imgktb,imgkbay];
+const imgBank = [imgkbank, imgscb, imgbbl, imgktb, imgkbay];
 // const textBank = [kbank,scb,bbl,ktb,bay];

@@ -116,19 +116,15 @@ class _ProfileScreenState extends State<ProfileScreen>
             child: TabBarView(
               controller: _mainTabController,
               children: [
-                Center(child: Text('No Product')),
+                buildPostTab(),
                 Column(
                   children: [
                     TabBar(
                       controller: _favoriteTabController,
                       labelStyle: const TextStyle(
-                          fontSize: 15,
-                          fontFamily: medium,
-                          color: greyColor),
+                          fontSize: 15, fontFamily: medium, color: greyColor),
                       unselectedLabelStyle: const TextStyle(
-                          fontSize: 14,
-                          fontFamily: medium,
-                          color: greyColor),
+                          fontSize: 14, fontFamily: medium, color: greyColor),
                       tabs: [
                         const Tab(text: 'Product'),
                         const Tab(text: 'Match'),
@@ -866,4 +862,163 @@ class _ProfileScreenState extends State<ProfileScreen>
       }
     });
   }
+}
+
+Widget buildPostTab() {
+  return Column(
+    children: [
+      Center(
+        child: Container(
+          width: 400,
+          height: 190,
+          margin: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: Colors.grey),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Stack(
+            children: [
+              Positioned(
+                top: 17,
+                left: 20,
+                child: Container(
+                  width: 125,
+                  height: 75,
+                  decoration: BoxDecoration(
+                    color: greyThin,
+                    border: Border.all(color: greyLine),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 97,
+                left: 20,
+                child: Container(
+                  width: 125,
+                  height: 75,
+                  decoration: BoxDecoration(
+                    color: greyThin,
+                    border: Border.all(color: greyLine),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 45,
+                left: 170,
+                child: Row(
+                  children: [
+                    Container(
+                      width: 65,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        color: primaryApp,
+                        border: Border.all(color: greyThin),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        "Summer",
+                        style: TextStyle(
+                          color: greyColor,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Container(
+                      width: 65,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        color: primaryApp,
+                        border: Border.all(color: greyThin),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        "Winter",
+                        style: TextStyle(
+                          color: greyColor,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Container(
+                      width: 65,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        color: primaryApp,
+                        border: Border.all(color: greyThin),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        "Autumn",
+                        style: TextStyle(
+                          color: greyColor,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Positioned(
+                top: 85,
+                left: 165,
+                child: Container(
+                  width: 223,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    color: greyThin,
+                    border: Border.all(color: greyLine),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Text(
+                      "Effortless, timeless, and always in fashion.",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: greyColor,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 15,
+                right: 15,
+                child: Row(
+                  children: [
+                    Image.asset(icTapFavoriteButton, width: 20),
+                    Text(
+                      " 210 ",
+                      style: TextStyle(fontFamily: bold),
+                    ),
+                    SizedBox(width: 10),
+                    Image.asset(iceye, width: 20),
+                    Text(
+                      " 11",
+                      style: TextStyle(fontFamily: bold),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ],
+  );
 }
