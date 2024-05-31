@@ -1,12 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/home_controller.dart';
 import 'package:get/get.dart';
 
-class PostMatchScreen extends StatelessWidget {
+class MatchPostProduct extends StatelessWidget {
   final HomeController controller = Get.find<HomeController>();
   final TextEditingController explanationController = TextEditingController();
 
@@ -48,7 +44,7 @@ class PostMatchScreen extends StatelessWidget {
                           ),
                         ),
                         SizedBox(
-                            height: 5), // เพิ่มช่องว่างระหว่างรูปและข้อความ
+                            height: 5), 
                         Text(
                           'Top',
                           style: TextStyle(
@@ -69,7 +65,7 @@ class PostMatchScreen extends StatelessWidget {
                           height: 27,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: primaryApp, // สีวงกลมด้านหลัง
+                            color: primaryApp, 
                           ),
                         ),
                         Icon(
@@ -93,7 +89,7 @@ class PostMatchScreen extends StatelessWidget {
                           ),
                         ),
                         SizedBox(
-                            height: 5), // เพิ่มช่องว่างระหว่างรูปและข้อความ
+                            height: 5), 
                         Text(
                           'Lower',
                           style: TextStyle(
@@ -207,7 +203,7 @@ class PostMatchScreen extends StatelessWidget {
                     minimumSize: Size(double.infinity, 50),
                     shape: RoundedRectangleBorder(
                       borderRadius:
-                          BorderRadius.circular(8), // ปรับมุมให้เป็น 8 พิกเซล
+                          BorderRadius.circular(8), 
                     ),
                   ),
                 ),
@@ -275,12 +271,12 @@ class GenderSelector extends StatelessWidget {
     return MaterialButton(
       onPressed: () => onSelected(!isSelected),
       child: Text(label),
-      color: isSelected ? thinPrimaryApp : Color.fromARGB(255, 250, 248, 248),
-      textColor: Colors.grey[800],
+      color: isSelected ? thinPrimaryApp : greyThin,
+      textColor: greyColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
         side: BorderSide(
-          color: isSelected ? primaryApp : Color.fromARGB(255, 227, 221, 221),
+          color: isSelected ? primaryApp : greyLine,
         ),
       ),
       elevation: 0,
@@ -328,15 +324,14 @@ class CollectionSelector extends StatelessWidget {
         SizedBox(height: 0),
         Center(
           child: Wrap(
-            spacing: 10, // horizontal space between chips
-            runSpacing: 1, // vertical space between lines
+            spacing: 10, 
+            runSpacing: 1, 
             children: [
               buildFilterChip("Summer ", isSelectedSummer, onSummerSelected),
               buildFilterChip("Winter ", isSelectedWinter, onWinterSelected),
               buildFilterChip("Autumn ", isSelectedAutumn, onAutumnSelected),
               buildFilterChip("Dinner ", isSelectedDinner, onDinnerSelected),
-              buildFilterChip(
-                  "Everydaylook ", isSelectedEveryday, onEverydaySelected),
+              buildFilterChip("Everydaylook ", isSelectedEveryday, onEverydaySelected),
             ],
           ),
         ),
@@ -349,12 +344,12 @@ class CollectionSelector extends StatelessWidget {
     return MaterialButton(
       onPressed: () => onSelected(!isSelected),
       child: Text(label),
-      color: isSelected ? thinPrimaryApp : Color.fromARGB(255, 250, 248, 248),
+      color: isSelected ? thinPrimaryApp : greyThin,
       textColor: greyColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
         side: BorderSide(
-          color: isSelected ? primaryApp : Color.fromARGB(255, 227, 221, 221),
+          color: isSelected ? primaryApp : greyColor,
         ),
       ),
       elevation: 0,

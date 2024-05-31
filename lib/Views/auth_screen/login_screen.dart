@@ -46,7 +46,6 @@ class LoginScreen extends StatelessWidget {
                   readOnly: false,
                   controller: controller.passwordController,
                 ),
-                // ),
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(

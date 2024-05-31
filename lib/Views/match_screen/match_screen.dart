@@ -1,11 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_finalproject/Views/match_screen/postmathscreen.dart';
+import 'package:flutter_finalproject/Views/match_screen/matchpost_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/widgets_common/appbar_ontop.dart';
 import 'package:flutter_finalproject/Views/widgets_common/filterDrawerMatch.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
-import 'package:flutter_finalproject/controllers/home_controller.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
 import 'package:get/get.dart';
 
@@ -271,24 +268,24 @@ Widget buildCardSetLower(List<Map<String, dynamic>> lowerProducts) {
             children: [
               InkWell(
                 onTap: () async {
-                  final topProducts = controller.topFilteredProducts;
-                  final lowerProducts = controller.lowerFilteredProducts;
-                  if (topProducts.isNotEmpty && lowerProducts.isNotEmpty) {
-                    final topProduct = topProducts[_currentPageIndexTop];
-                    final lowerProduct = lowerProducts[_currentPageIndexLower];
-                    controller.addToWishlistPostUserMatch(
-                      topProduct['p_name'],
-                      lowerProduct['p_name'],
-                      context,
-                    );
-                    Get.to(() => PostMatchScreen());
-                  } else {
-                    VxToast.show(
-                      context,
-                      msg:
-                          'Unable to add to favorites, Because the information is not available',
-                    );
-                  }
+                  // final topProducts = controller.topFilteredProducts;
+                  // final lowerProducts = controller.lowerFilteredProducts;
+                  // if (topProducts.isNotEmpty && lowerProducts.isNotEmpty) {
+                  //   final topProduct = topProducts[_currentPageIndexTop];
+                  //   final lowerProduct = lowerProducts[_currentPageIndexLower];
+                  //   controller.addToWishlistPostUserMatch(
+                  //     topProduct['p_name'],
+                  //     lowerProduct['p_name'],
+                  //     context,
+                  //   );
+                    Get.to(() => MatchPostProduct());
+                  // } else {
+                  //   VxToast.show(
+                  //     context,
+                  //     msg:
+                  //         'Unable to add to favorites, Because the information is not available',
+                  //   );
+                  // }
                 },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,

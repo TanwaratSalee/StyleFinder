@@ -38,7 +38,6 @@ const profileButtonsIcon = [
   icAccount,
   icPassword,
   icAddress,
-  iceye,
   icOrders,
   icMessage
 ];

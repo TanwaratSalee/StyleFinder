@@ -223,44 +223,44 @@ class _ItemDetailsState extends State<ItemDetails> {
                       .padding(EdgeInsets.fromLTRB(12, 10, 12, 6))
                       .make(),
                   5.heightBox,
-                  // Column(
-                  //   children: [
-                  //     Row(
-                  //       children: [
-                  //         Text('Product rating')
-                  //             .text
-                  //             .fontFamily(medium)
-                  //             .size(16)
-                  //             .color(blackColor)
-                  //             .make(),
-                  //         const Spacer(),
-                  //         VxRating(
-                  //           isSelectable: false,
-                  //           value: double.parse(widget.data["p_rating"]),
-                  //           onRatingUpdate: (value) {},
-                  //           normalColor: greyDark,
-                  //           selectionColor: golden,
-                  //           count: 5,
-                  //           size: 20,
-                  //           maxRating: 5,
-                  //         ),
-                  //       ],
-                  //     ),
-                  //     Divider(color: greyThin),
-                  //     Text('See all')
-                  //         .text
-                  //         .fontFamily(medium)
-                  //         .size(14)
-                  //         .color(blackColor)
-                  //         .make(),
-                  //   ],
-                  // )
-                  //     .box
-                  //     .white
-                  //     .color(whiteColor)
-                  //     .padding(
-                  //         EdgeInsets.symmetric(horizontal: 12, vertical: 6))
-                  //     .make(),
+                  Column(
+                    children: [
+                      Row(
+                        children: [
+                          Text('Product rating')
+                              .text
+                              .fontFamily(medium)
+                              .size(16)
+                              .color(blackColor)
+                              .make(),
+                          const Spacer(),
+                          VxRating(
+                            isSelectable: false,
+                            value: double.parse(widget.data["p_rating"]),
+                            onRatingUpdate: (value) {},
+                            normalColor: greyDark,
+                            selectionColor: golden,
+                            count: 5,
+                            size: 20,
+                            maxRating: 5,
+                          ),
+                        ],
+                      ),
+                      Divider(color: greyThin),
+                      Text('See all')
+                          .text
+                          .fontFamily(medium)
+                          .size(14)
+                          .color(blackColor)
+                          .make(),
+                    ],
+                  )
+                      .box
+                      .white
+                      .color(whiteColor)
+                      .padding(
+                          EdgeInsets.symmetric(horizontal: 12, vertical: 6))
+                      .make(),
 
                   Row(
                     children: [

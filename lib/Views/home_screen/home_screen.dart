@@ -63,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void fetchFilteredProducts() {
     if (mounted) {
-      setState(() {}); // Trigger a rebuild
+      setState(() {}); 
     }
   }
 
@@ -188,7 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               .color(greyDark)
                               .size(16)
                               .make(),
-                          200.widthBox,
+                          220.widthBox,
                           Icon(Icons.search, color: greyDark),
                         ],
                       )

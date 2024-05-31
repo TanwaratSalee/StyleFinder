@@ -52,7 +52,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       .size(28)
                       .fontFamily(bold)
                       .make(),
-                  8.heightBox,
+                  15.heightBox,
                   customTextField(
                     label: capitalizeFirstLetter(fullname),
                     controller: nameController,

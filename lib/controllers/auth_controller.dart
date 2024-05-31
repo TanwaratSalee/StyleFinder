@@ -168,7 +168,7 @@ class AuthController extends GetxController {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
       VxToast.show(context, msg: 'Password reset email has been sent.');
     } on FirebaseAuthException catch (e) {
-      VxToast.show(context, msg: 'Error: ${e.message}', bgColor: Colors.red);
+      VxToast.show(context, msg: 'Error: ${e.message}');
     }
   }
 
@@ -185,7 +185,7 @@ class AuthController extends GetxController {
       print('Navigated to LoginScreen');
     } catch (e) {
       print('Logout error: $e');
-      VxToast.show(context, msg: 'Logout error: $e', bgColor: Colors.red);
+      VxToast.show(context, msg: 'Logout error: $e');
     }
   }
 
@@ -243,7 +243,7 @@ Future<void> signInWithGoogle(BuildContext context) async {
   } catch (e) {
     print("Error signing in with Google: $e");
     VxToast.show(context,
-        msg: 'Error signing in with Google: $e', bgColor: Colors.red);
+        msg: 'Error signing in with Google: $e');
   } finally {
     isLoading(false);
   }
@@ -265,12 +265,12 @@ Future<void> signInWithGoogle(BuildContext context) async {
       } else {
         print('Error: Access token is null');
         VxToast.show(Get.context!,
-            msg: 'Error: Access token is null', bgColor: Colors.red);
+            msg: 'Error: Access token is null');
       }
     } catch (e) {
       print("Error signing in with Facebook: $e");
       VxToast.show(Get.context!,
-          msg: 'Error signing in with Facebook: $e', bgColor: Colors.red);
+          msg: 'Error signing in with Facebook: $e');
     } finally {
       isLoading(false);
     }
