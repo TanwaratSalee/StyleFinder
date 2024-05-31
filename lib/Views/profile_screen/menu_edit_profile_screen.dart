@@ -207,178 +207,192 @@ class EditProfileScreen extends StatelessWidget {
         ],
       ),
       body: SingleChildScrollView(
-        child: Obx(
-          () => Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Stack(
-                children: [
-                  Container(
-                    child: data['imageUrl'] == '' &&
-                            controller.profileImgPath.isEmpty
-                        ? Image.asset(
-                            'assets/profile.png',
-                            width: 130,
-                            height: 130,
-                            fit: BoxFit.cover,
-                          ).box.roundedFull.clip(Clip.antiAlias).make()
-                        : data['imageUrl'] != '' &&
-                                controller.profileImgPath.isEmpty
-                            ? Image.network(
-                                data['imageUrl'],
-                                width: 130,
-                                height: 130,
-                                fit: BoxFit.cover,
-                              ).box.roundedFull.clip(Clip.antiAlias).make()
-                            : Image.file(
-                                File(controller.profileImgPath.value),
-                                width: 130,
-                                height: 130,
-                                fit: BoxFit.cover,
-                              ).box.roundedFull.clip(Clip.antiAlias).make(),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: GestureDetector(
-                      onTap: () {
-                        controller.changeImage(context);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: primaryApp,
-                          shape: BoxShape.circle,
-                        ),
-                        padding: EdgeInsets.all(8),
-                        child: Icon(
-                          Icons.edit,
-                          color: whiteColor,
-                          size: 20,
-                        ),
-                      ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 28),
+          child: Obx(
+            () => Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      child: data['imageUrl'] == '' &&
+                              controller.profileImgPath.isEmpty
+                          ? Image.asset(imgProfile,
+                              width: 130,
+                              height: 130,
+                              fit: BoxFit.cover,
+                            ).box.roundedFull.clip(Clip.antiAlias).make()
+                          : data['imageUrl'] != '' &&
+                                  controller.profileImgPath.isEmpty
+                              ? Image.network(
+                                  data['imageUrl'],
+                                  width: 130,
+                                  height: 130,
+                                  fit: BoxFit.cover,
+                                ).box.roundedFull.clip(Clip.antiAlias).make()
+                              : Image.file(
+                                  File(controller.profileImgPath.value),
+                                  width: 130,
+                                  height: 130,
+                                  fit: BoxFit.cover,
+                                ).box.roundedFull.clip(Clip.antiAlias).make(),
                     ),
-                  ),
-                ],
-              ),
-              20.heightBox,
-              Align(
-                alignment: Alignment.centerLeft,
-                child: const Text(aboutaccount)
-                    .text
-                    .size(16)
-                    .fontFamily(medium)
-                    .color(blackColor)
-                    .make(),
-              ),
-              const Divider(
-                color: greyThin,
-              ),
-              5.heightBox,
-              editTextField(
-                controller: controller.nameController,
-                label: fullname,
-                isPass: false,
-                readOnly: false,
-              ),
-              editTextField(
-                  controller: controller.emailController,
-                  label: email,
-                  isPass: false,
-                  readOnly: true),
-              20.heightBox,
-              Align(
-                alignment: Alignment.centerLeft,
-                child: const Text(aboutyou)
-                    .text
-                    .size(16)
-                    .fontFamily(medium)
-                    .color(blackColor)
-                    .make(),
-              ),
-              const Divider(
-                color: greyThin,
-              ),
-              10.heightBox,
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text(
-                    'Birthday',
-                    style: TextStyle(
-                      color: blackColor,
-                      fontSize: 14,
-                      fontFamily: regular,
-                    ),
-                  ),
-                  Expanded(
-                    child: TextFormField(
-                      readOnly: true,
-                      controller: controller.birthdayController,
-                      onTap: showDatePicker,
-                      decoration: const InputDecoration(
-                        hintText: 'Select birthday',
-                        hintStyle: TextStyle(
-                          color: greyDark,
-                        ),
-                        contentPadding: EdgeInsets.symmetric(
-                            vertical: 15.0, horizontal: 20.0),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: whiteColor),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: greyColor),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text(
-                    'Gender',
-                    style: TextStyle(
-                      color: blackColor,
-                      fontSize: 14,
-                      fontFamily: regular,
-                    ),
-                  ),
-                  Expanded(
-                    child: InkWell(
-                      onTap: () => showGenderPicker(context),
-                      child: Container(
-                        height: 40,
-                        alignment: Alignment.centerLeft,
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Obx(
-                          () => Text(
-                            controller.selectedGender.value,
-                            style: TextStyle(
-                              color: greyDark,
-                              fontFamily: regular,
-                              fontSize: 16,
-                            ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: GestureDetector(
+                        onTap: () {
+                          controller.changeImage(context);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: primaryApp,
+                            shape: BoxShape.circle,
+                          ),
+                          padding: EdgeInsets.all(8),
+                          child: Icon(
+                            Icons.edit,
+                            color: whiteColor,
+                            size: 20,
                           ),
                         ),
                       ),
                     ),
+                  ],
+                ),
+                20.heightBox,
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: const Text(aboutaccount)
+                      .text
+                      .size(18)
+                      .fontFamily(semiBold)
+                      .color(blackColor)
+                      .make(),
+                ),
+                const Divider(
+                  color: greyThin,
+                ),
+               Padding(
+                 padding: const EdgeInsets.symmetric(horizontal: 10),
+                 child: Column(children: [
+                   editTextField(
+                    controller: controller.nameController,
+                    label: fullname,
+                    isPass: false,
+                    readOnly: false,
                   ),
+                  editTextField(
+                      controller: controller.emailController,
+                      label: email,
+                      isPass: false,
+                      readOnly: true),
+                 ],),
+               ),
+                30.heightBox,
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: const Text(aboutyou)
+                      .text
+                      .size(18)
+                      .fontFamily(semiBold)
+                      .color(blackColor)
+                      .make(),
+                ),
+                const Divider(
+                  color: greyThin,
+                ),
+                
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Column(
+                    children: [
+                      Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Birthday',
+                        style: TextStyle(
+                          color: blackColor,
+                          fontSize: 14,
+                          fontFamily: regular,
+                        ),
+                      ),
+                      Expanded(
+                        child: TextFormField(
+                          readOnly: true,
+                          controller: controller.birthdayController,
+                          onTap: showDatePicker,
+                          decoration: const InputDecoration(
+                            hintText: 'Select birthday',
+                            hintStyle: TextStyle(
+                              color: greyDark,
+                            ),
+                            contentPadding: EdgeInsets.symmetric(
+                            horizontal: 20.0),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: whiteColor),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: greyColor),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Gender',
+                        style: TextStyle(
+                          color: blackColor,
+                          fontSize: 14,
+                          fontFamily: regular,
+                        ),
+                      ),
+                      Expanded(
+                        child: InkWell(
+                          onTap: () => showGenderPicker(context),
+                          child: Container(
+                            height: 35,
+                            alignment: Alignment.centerLeft,
+                            padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 20.0),
+                            child: Obx(
+                              () => Text(
+                                controller.selectedGender.value,
+                                style: TextStyle(
+                                  color: greyDark,
+                                  fontFamily: regular,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  editTextField(
+                    controller: controller.heightController,
+                    label: 'Height',
+                    isPass: false,
+                    readOnly: false,
+                  ),
+                  editTextField(
+                      controller: controller.weightController,
+                      label: 'Weight',
+                      isPass: false,
+                      readOnly: true),
+                                
+                    ],
+                  ),
+                )
                 ],
-              ),
-              editTextField(
-                controller: controller.heightController,
-                label: 'Height',
-                isPass: false,
-                readOnly: false,
-              ),
-              editTextField(
-                  controller: controller.weightController,
-                  label: 'Weight',
-                  isPass: false,
-                  readOnly: true),
-            ],
-          ).paddingAll(16),
+            )
+          ),
         ),
       ),
     );

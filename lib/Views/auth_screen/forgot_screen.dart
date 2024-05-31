@@ -89,10 +89,10 @@ Future<void> popupForgotPassword(BuildContext context, String email) async {
                 children: <Widget>[
                   Image.asset(
                     imgPopupEmail,
-                    width: 220,
-                    height: 150,
+                    width: 250,
+                    height: 250,
                     fit: BoxFit.cover,
-                  ),
+                  ).box.make(),
                   const SizedBox(height: 20),
                   const Text(
                     'Check your email to reset your password!',

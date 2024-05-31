@@ -146,7 +146,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                     .box
                     .color(whiteColor)
                     .roundedSM
-                    .shadowSm
+                    .border(color: greyLine)
                     .margin(const EdgeInsets.symmetric(vertical: 8, horizontal: 18))
                     .p12
                     .make(),
@@ -239,7 +239,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                     .box
                     .color(whiteColor)
                     .roundedSM
-                    .shadowSm
+                    .border(color: greyLine)
                     .margin(const EdgeInsets.symmetric(vertical: 8, horizontal: 18))
                     .p12
                     .make(),
@@ -343,7 +343,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                     .box
                     .color(whiteColor)
                     .roundedSM
-                    .shadowSm
+                    .border(color: greyLine)
                     .margin(const EdgeInsets.symmetric(vertical: 8, horizontal: 18))
                     .p12
                     .make(),
@@ -436,7 +436,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                     .box
                     .color(whiteColor)
                     .roundedSM
-                    .shadowSm
+                    .border(color: greyLine)
                     .margin(const EdgeInsets.symmetric(vertical: 8, horizontal: 18))
                     .p12
                     .make(),

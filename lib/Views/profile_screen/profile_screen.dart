@@ -189,7 +189,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                               ? ClipRRect(
                                   borderRadius: BorderRadius.circular(100),
                                   child: Image.asset(
-                                    imProfile,
+                                    imgProfile,
                                     width: 110,
                                     height: 110,
                                     fit: BoxFit.cover,

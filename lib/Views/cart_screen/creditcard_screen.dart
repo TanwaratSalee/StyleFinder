@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/home_screen/mainHome.dart';
 import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
@@ -9,7 +8,6 @@ import 'package:flutter_finalproject/controllers/cart_controller.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:omise_flutter/omise_flutter.dart';
-import 'package:pattern_formatter/numeric_formatter.dart';
 
 class CreditCardScreen extends StatefulWidget {
   const CreditCardScreen({Key? key}) : super(key: key);
@@ -180,51 +178,44 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
         ),
       ),
       body: ListView(
-        padding: EdgeInsets.fromLTRB(8, 10, 8, 0),
+        padding: EdgeInsets.all(18),
         children: <Widget>[
           _buildCardDetail(),
-          SizedBox(height: 25),
+          SizedBox(height: 15),
           _buildNameTextField(),
-          SizedBox(height: 25),
+          SizedBox(height: 15),
           _buildCardNumberTextField(),
-          SizedBox(height: 10),
+          SizedBox(height: 15),
           Row(
             children: <Widget>[
               Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 10, 8, 0),
-                  child: _buildTextField(
-                    label: 'MM',
-                    controller: mmController,
-                    textColor: greyColor,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                      LengthLimitingTextInputFormatter(2),
-                    ],
-                    keyboardType: TextInputType.number,
-                  ),
+                child: _buildTextField(
+                  label: 'MM',
+                  controller: mmController,
+                  textColor: greyColor,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                    LengthLimitingTextInputFormatter(2),
+                  ],
+                  keyboardType: TextInputType.number,
                 ),
               ),
+              15.widthBox,
               Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 10, 8, 0),
-                  child: _buildTextField(
-                    label: 'YY',
-                    controller: yyController,
-                    textColor: greyColor,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                      LengthLimitingTextInputFormatter(4),
-                    ],
-                    keyboardType: TextInputType.number,
-                  ),
+                child: _buildTextField(
+                  label: 'YY',
+                  controller: yyController,
+                  textColor: greyColor,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                    LengthLimitingTextInputFormatter(4),
+                  ],
+                  keyboardType: TextInputType.number,
                 ),
               ),
+              15.widthBox,
               Expanded(
-                  child: Padding(
-                padding: const EdgeInsets.fromLTRB(8, 10, 8, 0),
-                child: _buildVCCTextField(),
-              )),
+                  child: _buildVCCTextField()),
             ],
           ),
           SizedBox(height: 24),
@@ -245,7 +236,7 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           image: DecorationImage(
-            image: AssetImage(imgbgVisa),
+            image: AssetImage(/* imgbgVisa */imgbgVisa1),
             fit: BoxFit.cover,
           ),
         ),

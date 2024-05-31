@@ -81,11 +81,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            const Icon(
-              Icons.email_outlined,
-              size: 100,
-              color: primaryApp,
-            ),
+            Image.asset(imgVerify, height: 260,),
             const SizedBox(height: 50),
             const Text(
               'Verify your email address',

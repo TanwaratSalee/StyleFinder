@@ -1,4 +1,5 @@
 import 'package:flutter_finalproject/Views/widgets_common/custom_textfield.dart';
+import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:get/get.dart';
 import 'package:flutter_finalproject/controllers/profile_controller.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
@@ -24,22 +25,21 @@ class PasswordScreen extends StatelessWidget {
             .fontFamily(semiBold)
             .color(blackColor)
             .make(),
-        actions: [
-          Obx(() {
-            if (controller.isloading.isTrue) {
-              return const CircularProgressIndicator().p16();
-            }
-            return TextButton(
-              onPressed: () async {
-                // ตรวจสอบว่า New Password กับ Confirm New Password ตรงกันหรือไม่
+       
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 35),
+        child: SizedBox(
+          height: 50,
+          child: tapButton(
+            onPress: () async {
+                // ตรวจสอบว่า New Password กับ Confirm New Password 
                 if (newpassController.text == confirmNewPassController.text) {
                   controller.isloading(true);
-
                   final result = await controller.changeAuthPassword(
                     oldPassword: oldpassController.text,
                     newPassword: newpassController.text,
                   );
-
                   if (result) {
                     VxToast.show(context, msg: "Password updated successfully");
                   } else {
@@ -48,37 +48,38 @@ class PasswordScreen extends StatelessWidget {
 
                   controller.isloading(false);
                 } else {
-                  // แสดงข้อความแจ้งเตือนหากรหัสผ่านใหม่และการยืนยันไม่ตรงกัน
                   VxToast.show(context,
                       msg: "New password and confirmation do not match");
                 }
               },
-              child: "Save".text.color(Colors.blue).make(),
-            );
-          }),
-        ],
+            color: primaryApp,
+            textColor: whiteColor,
+            title: "Save",
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
           child: Column(
             children: [
+              15.heightBox,
               customTextField(
                 label: "Old Password",
                 controller: oldpassController,
                 isPass: true,
                 readOnly: false,
               ).p2(),
-              const SizedBox(height: 15),
+              25.heightBox,
               customTextField(
                 label: "New Password",
                 controller: newpassController,
                 isPass: true,
                 readOnly: false,
               ).p2(),
+              5.heightBox,
               customTextField(
-                label:
-                    "Confirm New Password", // เพิ่ม TextField สำหรับการยืนยันรหัสผ่านใหม่
+                label:"Confirm New Password",
                 controller: confirmNewPassController,
                 isPass: true,
                 readOnly: false,

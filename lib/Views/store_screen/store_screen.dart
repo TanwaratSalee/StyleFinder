@@ -79,7 +79,7 @@ class StoreScreen extends StatelessWidget {
                           ),
                           child: ClipOval(
                             child: Image.asset(
-                              imProfile,
+                              imgProfile,
                               width: 120,
                               height: 120,
                               fit: BoxFit.cover,
@@ -113,7 +113,7 @@ class StoreScreen extends StatelessWidget {
                           ),
                           child: ClipOval(
                             child: Image.asset(
-                              imProfile,
+                              imgProfile,
                               width: 120,
                               height: 120,
                               fit: BoxFit.cover,

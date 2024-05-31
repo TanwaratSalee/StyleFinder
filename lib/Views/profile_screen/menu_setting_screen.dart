@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/Views/auth_screen/login_screen.dart';
-import 'package:flutter_finalproject/Views/cart_screen/address_screen.dart';
+import 'package:flutter_finalproject/Views/cart_screen/menu_address_screen.dart';
 import 'package:flutter_finalproject/Views/chat_screen/messaging_screen.dart';
 import 'package:flutter_finalproject/Views/orders_screen/orders_screen.dart';
 import 'package:flutter_finalproject/Views/profile_screen/menu_edit_profile_screen.dart';
@@ -129,17 +129,17 @@ class MenuSettingScreen extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              45.heightBox,
-              const Text('Are you sure to logout?')
+              35.heightBox,
+              const Text('Are you sure to sign out?')
                   .text
                   .size(18)
                   .fontFamily(regular)
                   .color(greyDark)
                   .make(),
-              45.heightBox,
+              35.heightBox,
               const Divider(
                 height: 1,
-                color: greyColor,
+                color: greyLine,
               ),
               IntrinsicHeight(
                 child: Row(
@@ -151,8 +151,7 @@ class MenuSettingScreen extends StatelessWidget {
                         onPressed: () => Navigator.of(context).pop(),
                       ),
                     ),
-                    const VerticalDivider(
-                        width: 1, thickness: 1, color: greyColor),
+                    const VerticalDivider(width: 1, thickness: 1, color: greyLine),
                     Expanded(
                       child: TextButton(
                         child: const Text('Logout',style: TextStyle(color: greyDark, fontFamily: medium, fontSize: 14),),

@@ -53,8 +53,8 @@ class DetailForShipping extends StatelessWidget {
       appBar: AppBar(
         title: Text("Details For Shipping")
             .text
-            .size(26)
-            .fontFamily(medium)
+            .size(24)
+            .fontFamily(semiBold)
             .color(blackColor)
             .make(),
       ),
@@ -207,7 +207,7 @@ class DetailForShipping extends StatelessWidget {
                                       ],
                                     )),
                                   ],
-                                ).box.padding(EdgeInsets.only(bottom: 8)).make(),
+                                ).box.padding(EdgeInsets.only(bottom: 5)).make(),
                               ],
                             );
                           },
@@ -215,15 +215,18 @@ class DetailForShipping extends StatelessWidget {
                       ],
                     );
                   }).toList(),
-                  5.heightBox,
                   Divider(color: greyThin),
                   5.heightBox,
-                  Text("Total: $formattedPrice Bath",)
-                      .text
-                      .size(18)
-                      .color(greyDark)
-                      .fontFamily(medium)
-                      .make(),
+                  Row(
+                    children: [
+                      Text("Total   $formattedPrice  Bath",)
+                          .text
+                          .size(14)
+                          .color(greyDark)
+                          .fontFamily(medium)
+                          .make(),
+                    ],
+                  ).box.padding(EdgeInsets.only(left: 15)).make(),
                 ],
               )
                   .box

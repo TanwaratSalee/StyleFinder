@@ -128,7 +128,7 @@ class _editaddressFormState extends State<editaddress_controller> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
         child: Column(
           children: [
             customTextField(
@@ -136,32 +136,32 @@ class _editaddressFormState extends State<editaddress_controller> {
                 isPass: false,
                 readOnly: false,
                 controller: _firstnameController),
-            customTextField(
+            15.heightBox, customTextField(
                 label: "Surname",
                 isPass: false,
                 readOnly: false,
                 controller: _surnameController),
-            customTextField(
+            15.heightBox, customTextField(
                 label: "Address",
                 isPass: false,
                 readOnly: false,
                 controller: _addressController),
-            customTextField(
+            15.heightBox, customTextField(
                 label: "City",
                 isPass: false,
                 readOnly: false,
                 controller: _cityController),
-            customTextField(
+            15.heightBox, customTextField(
                 label: "State",
                 isPass: false,
                 readOnly: false,
                 controller: _stateController),
-            customTextField(
+            15.heightBox, customTextField(
                 label: "Postal Code",
                 isPass: false,
                 readOnly: false,
                 controller: _postalCodeController),
-            customTextField(
+            15.heightBox, customTextField(
                 label: "Phone",
                 isPass: false,
                 readOnly: false,

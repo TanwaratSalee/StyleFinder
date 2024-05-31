@@ -20,7 +20,6 @@ Widget editTextField({
             fontSize: 16,
           ),
         ),
-      const SizedBox(height: 8),
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
