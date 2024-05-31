@@ -8,7 +8,6 @@ const String icFacebook = "assets/icons/iconsOtherApp/facebook-icon.png";
 const String icApple = "assets/icons/iconsOtherApp/apple-icon.png";
 const String icGmail = "assets/icons/iconsOtherApp/gmail-icon.png";
 
-
 //icon nav bar top
 // const String icNoti = "assets/icons/iconsNavbarinapp/notification.png";
 const String icLogoOnTop = "assets/icons/iconsNavbarinapp/logoOfApp.png";
@@ -20,10 +19,14 @@ const String icHome = "assets/icons/iconsNavbarinapp/Home.png";
 const String icNews = "assets/icons/iconsNavbarinapp/News.png";
 const String icMatch = "assets/icons/iconsNavbarinapp/match.png";
 const String icPerson = "assets/icons/iconsNavbarinapp/me.png";
-const String icHomeSelected = "assets/icons/iconsNavbarinapp/icHomeSelected.png";
-const String icNewsSelected = "assets/icons/iconsNavbarinapp/icNewsSelected.png";
-const String icMatchSelected = "assets/icons/iconsNavbarinapp/icMatchSelected.png";
-const String icPersonSelected = "assets/icons/iconsNavbarinapp/icPersonSelected.png";
+const String icHomeSelected =
+    "assets/icons/iconsNavbarinapp/icHomeSelected.png";
+const String icNewsSelected =
+    "assets/icons/iconsNavbarinapp/icNewsSelected.png";
+const String icMatchSelected =
+    "assets/icons/iconsNavbarinapp/icMatchSelected.png";
+const String icPersonSelected =
+    "assets/icons/iconsNavbarinapp/icPersonSelected.png";
 
 //other
 const String icLogoApp = "assets/images/LogoOnApp.png";
@@ -79,7 +82,8 @@ const String product5 = "assets/images/product5.png";
 
 // Profile Screen
 const String icTapProfileFav = "assets/icons/iconsAccount/icTapFavProfile.png";
-const String icTapPostProfile = "assets/icons/iconsAccount/icTapPostProfile.png";
+const String icTapPostProfile =
+    "assets/icons/iconsAccount/icTapPostProfile.png";
 
 const String imProfile = "assets/images/Profile.png";
 const String icAccount = "assets/icons/iconsAccount/profile.png";
@@ -95,7 +99,7 @@ const String icUndertext = "assets/icons/icNormal/undertext.png";
 const String icSeeAll = "assets/icons/seeall.png";
 const String icTapFavoriteButton = "assets/icons/redlike.png";
 const String icFavoriteButton = "assets/icons/FavoriteButton.png";
-
+const String iceye = "assets/icons/icNormal/EYEs.png";
 
 // Paymet
 const String imgSuccessful = "assets/images/payment/paymentSuccessful.png";
@@ -120,7 +124,6 @@ const String imgscb = 'assets/images/payment/SCE.png';
 const String imgbbl = 'assets/images/payment/BBL.png';
 const String imgktb = 'assets/images/payment/krungthai.png';
 const String imgkbay = 'assets/images/payment/KMA.jpg';
-
 
 // ----------------------------------------------- item Screen -----------------------------------------------
 const String icFav = "assets/icons/icNormal/buttonFavourite.png";
