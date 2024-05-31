@@ -75,6 +75,18 @@ void updateFilters({
       if (maxPrice.value > 0) {
         query = query.where('p_price', isLessThanOrEqualTo: maxPrice.value.toString());
       }
+  
+      if (selectedColors.isNotEmpty) {
+        query = query.where('p_colors', arrayContainsAny: selectedColors);
+      }
+
+      if (selectedTypes.isNotEmpty) {
+        query = query.where('p_subcollection', whereIn: selectedTypes);
+      }
+
+      if (selectedCollections.isNotEmpty) {
+        query = query.where('p_collection', arrayContainsAny: selectedCollections);
+      }
 
       QuerySnapshot<Map<String, dynamic>> snapshot = await query.get();
       List<Map<String, dynamic>> products = snapshot.docs.map((doc) => doc.data()).toList();
@@ -114,6 +126,17 @@ void updateFilters({
         query = query.where('p_price', isLessThanOrEqualTo: maxPrice.value.toString());
       }
 
+      if (selectedColors.isNotEmpty) {
+        query = query.where('p_colors', arrayContainsAny: selectedColors);
+      }
+
+      if (selectedTypes.isNotEmpty) {
+        query = query.where('p_subcollection', whereIn: selectedTypes);
+      }
+
+      if (selectedCollections.isNotEmpty) {
+        query = query.where('p_collection', arrayContainsAny: selectedCollections);
+      }
 
       QuerySnapshot<Map<String, dynamic>> snapshot = await query.get();
       List<Map<String, dynamic>> products = snapshot.docs.map((doc) => doc.data()).toList();

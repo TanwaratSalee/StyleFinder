@@ -122,7 +122,7 @@ class _MatchScreenState extends State<MatchScreen> {
 
   Widget buildCardSetTop(List<Map<String, dynamic>> topProducts) {
     if (topProducts.isEmpty) {
-      return Center(child: Text('No data available'));
+      return Center(child: Text('No Top available'));
     }
     return Container(
       height: 240,
@@ -183,7 +183,7 @@ class _MatchScreenState extends State<MatchScreen> {
 
   Widget buildCardSetLower(List<Map<String, dynamic>> lowerProducts) {
     if (lowerProducts.isEmpty) {
-      return Center(child: Text('No data available'));
+      return Center(child: Text('No Lower available'));
     }
     return Container(
       height: 240,
