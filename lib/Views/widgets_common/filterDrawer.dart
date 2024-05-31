@@ -123,8 +123,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
             ),
             Center(
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
+                padding:const EdgeInsets.symmetric(horizontal: 18, vertical: 3),
                 child: Row(
                   children: [
                     SizedBox(width: 5),
@@ -161,9 +160,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                 ),
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
+            
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
@@ -195,15 +192,15 @@ class _FilterDrawerState extends State<FilterDrawer> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(
-                          color: isSelected ? Colors.blue : greyLine,
+                          color: isSelected ? primaryApp : greyLine,
                         ),
-                        color: isSelected ? Colors.blue.shade100 : Colors.transparent,
+                        color: isSelected ? thinPrimaryApp : Colors.transparent,
                       ),
                       child: Text(
                         vendor['vendor_name'] ?? 'Unknown',
                         style: TextStyle(
                           fontSize: 12,
-                          color: isSelected ? Colors.blue : blackColor,
+                          color: isSelected ? blackColor : blackColor,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -212,51 +209,45 @@ class _FilterDrawerState extends State<FilterDrawer> {
                 }).toList(),
               ),
             ),
-            SizedBox(
-              height: 20,
-            ),
+            5.heightBox,
             Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
+                  const EdgeInsets.symmetric(horizontal: 16,),
               child: Text("Price").text.fontFamily(regular).size(14).make(),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: SliderTheme(
-                data: SliderTheme.of(context).copyWith(
-                  activeTrackColor: primaryApp,
-                  inactiveTrackColor: greyLine,
-                  thumbColor: greyDark,
-                  overlayColor: Color.fromARGB(255, 51, 150, 175).withAlpha(32),
-                  trackHeight: 4.0,
-                ),
-                child: Slider(
-                  value: _currentSliderValue,
-                  min: 0,
-                  max: 999999,
-                  divisions: 100,
-                  label: "${_currentSliderValue.round()} Bath",
-                  onChanged: (value) {
-                    setState(() {
-                      _currentSliderValue = value;
-                    });
-                  },
-                ),
+            SliderTheme(
+              data: SliderTheme.of(context).copyWith(
+                activeTrackColor: primaryApp,
+                inactiveTrackColor: greyLine,
+                thumbColor: greyDark,
+                overlayColor: thinPrimaryApp,
+                trackHeight: 4.0,
+              ),
+              child: Slider(
+                value: _currentSliderValue,
+                min: 0,
+                max: 999999,
+                divisions: 150,
+                label: "${_currentSliderValue.round()} Bath",
+                onChanged: (value) {
+                  setState(() {
+                    _currentSliderValue = value;
+                  });
+                },
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
+            
             Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
+                  const EdgeInsets.symmetric(horizontal: 16),
               child: Text("Color").text.fontFamily(regular).size(14).make(),
             ),
+            5.heightBox,
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 28),
               child: Wrap(
                 spacing: 20,
-                runSpacing: 10,
+                runSpacing: 5,
                 children: List.generate(
                   allColors.length,
                   (index) {
@@ -290,9 +281,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                 ),
               ),
             ),
-            SizedBox(
-              height: 20,
-            ),
+            5.heightBox,
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
@@ -303,7 +292,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                   .make(),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 18),
               child: Center(
                 child: Wrap(
                   spacing: 5,
@@ -346,9 +335,9 @@ class _FilterDrawerState extends State<FilterDrawer> {
                 ),
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
+
+            5.heightBox,
+            
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
@@ -427,7 +416,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
               ),
             ),
           ],
-        ).box.white.padding(EdgeInsets.symmetric(vertical: 12)).make(),
+        ).box.white.padding(EdgeInsets.symmetric(vertical: 8)).make(),
       ),
     );
   }
@@ -528,18 +517,14 @@ bool isInWishlist(Map<String, dynamic> product, String currentUid) {
 
 Widget buildFilterChip(
     String label, bool isSelected, Function(bool) onSelected) {
-  return ConstrainedBox(
-    constraints: BoxConstraints(
-      minWidth: 30,
-      maxWidth: 160,
-    ),
-    child: FilterChip(
+  return
+     FilterChip(
       label: Text(label),
       selected: isSelected,
       onSelected: onSelected,
       showCheckmark: false,
       side: BorderSide(color: isSelected ? primaryApp : greyLine),
       selectedColor: thinPrimaryApp,
-    ),
+  
   );
 }
