@@ -308,52 +308,107 @@ void fetchVendors() async {
   }
 
 void addToWishlistMixMatch(
-    String productName, Function(bool) updateIsFav, BuildContext context) {
+    String productName1,
+    String productName2,
+    String vendorId,
+    Function(bool) updateIsFav,
+    BuildContext context) {
   FirebaseFirestore.instance
       .collection(productsCollection)
-      .where('p_name', isEqualTo: productName)
+      .where('p_name', whereIn: [productName1, productName2])
       .get()
       .then((QuerySnapshot querySnapshot) {
     if (querySnapshot.docs.isNotEmpty) {
-      DocumentSnapshot doc = querySnapshot.docs.first;
-      List<dynamic> wishlist = doc['p_wishlist'] ?? [];
-      String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
-      if (!wishlist.contains(currentUserUID)) {
-        doc.reference.update({
-          'p_wishlist': FieldValue.arrayUnion([currentUserUID])
-        }).then((value) {
-          updateIsFav(true);
-          VxToast.show(context, msg: "Added from wishlist");
-        }).catchError((error) {
-          print('Error adding $productName to Favorite: $error');
-        });
+      // Find the documents for each product
+      DocumentSnapshot? doc1;
+      DocumentSnapshot? doc2;
+
+      try {
+        doc1 = querySnapshot.docs.firstWhere(
+            (doc) => doc['p_name'] == productName1);
+      } catch (e) {
+        doc1 = null;
       }
+
+      try {
+        doc2 = querySnapshot.docs.firstWhere(
+            (doc) => doc['p_name'] == productName2);
+      } catch (e) {
+        doc2 = null;
+      }
+
+      if (doc1 != null && doc2 != null) {
+        String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
+
+        // Prepare the data to be saved in the new collection
+        Map<String, dynamic> favoriteData = {
+          'vendor_id': vendorId,
+          'user_id': currentUserUID,
+          'product1': {
+            'p_name': doc1['p_name'],
+            'p_price': doc1['p_price'],
+            'p_imgs': doc1['p_imgs'][0],
+          },
+          'product2': {
+            'p_name': doc2['p_name'],
+            'p_price': doc2['p_price'],
+            'p_imgs': doc2['p_imgs'][0],
+          },
+        };
+
+        FirebaseFirestore.instance
+            .collection('favoritemixmatch')
+            .add(favoriteData)
+            .then((value) {
+          updateIsFav(true);
+          VxToast.show(context, msg: "Added to favoritemixmatch");
+        }).catchError((error) {
+          print('Error adding to favoritemixmatch: $error');
+          VxToast.show(context, msg: "Error adding to favoritemixmatch");
+        });
+      } else {
+        VxToast.show(context, msg: "One or both products not found");
+      }
+    } else {
+      VxToast.show(context, msg: "No products found");
     }
+  }).catchError((error) {
+    print('Error retrieving products: $error');
+    VxToast.show(context, msg: "Error retrieving products");
   });
 }
 
+
 void removeToWishlistMixMatch(
-    String productName, Function(bool) updateIsFav, BuildContext context) {
+    String productName1,
+    String productName2,
+    String vendorId,
+    Function(bool) updateIsFav,
+    BuildContext context) {
+  String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
+
   FirebaseFirestore.instance
-      .collection(productsCollection)
-      .where('p_name', isEqualTo: productName)
+      .collection('favoritemixmatch')
+      .where('user_id', isEqualTo: currentUserUID)
+      .where('vendor_id', isEqualTo: vendorId)
       .get()
       .then((QuerySnapshot querySnapshot) {
     if (querySnapshot.docs.isNotEmpty) {
       DocumentSnapshot doc = querySnapshot.docs.first;
-      List<dynamic> wishlist = doc['p_wishlist'] ?? [];
-      String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
-      if (wishlist.contains(currentUserUID)) {
-        doc.reference.update({
-          'p_wishlist': FieldValue.arrayRemove([currentUserUID])
-        }).then((value) {
-          updateIsFav(false); 
-          VxToast.show(context, msg: "Removed from wishlist");
-        }).catchError((error) {
-          print('Error removing $productName from Favorite: $error');
-        });
-      }
+
+      doc.reference.delete().then((value) {
+        updateIsFav(false);
+        VxToast.show(context, msg: "Removed from favoritemixmatch");
+      }).catchError((error) {
+        print('Error removing from favoritemixmatch: $error');
+        VxToast.show(context, msg: "Error removing from favoritemixmatch");
+      });
+    } else {
+      VxToast.show(context, msg: "No matching favoritemixmatch found");
     }
+  }).catchError((error) {
+    print('Error retrieving favoritemixmatch: $error');
+    VxToast.show(context, msg: "Error retrieving favoritemixmatch");
   });
 }
 

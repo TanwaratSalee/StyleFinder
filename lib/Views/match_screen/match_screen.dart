@@ -120,127 +120,129 @@ class _MatchScreenState extends State<MatchScreen> {
     );
   }
 
-  Widget buildCardSetTop(List<Map<String, dynamic>> topProducts) {
-    if (topProducts.isEmpty) {
-      return Center(child: Text('No Top available'));
-    }
-    return Container(
-      height: 240,
-      child: PageView.builder(
-        controller: _pageControllerTop,
-        itemCount: topProducts.length,
-        itemBuilder: (context, index) {
-          final product = topProducts[index];
-          return GestureDetector(
-            onTap: () {
-              Get.to(() => ItemDetails(
-                    title: product['p_name'],
-                    data: product,
-                  ));
-            },
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Container(
-                  width: 250,
-                  child: Image.network(product['p_imgs'][0], fit: BoxFit.cover),
-                ),
-                Positioned(
-                  left: -10,
-                  child: IconButton(
-                    icon: Icon(Icons.chevron_left, size: 32, color: whiteColor),
-                    onPressed: () {
-                      if (_currentPageIndexTop > 0) {
-                        _pageControllerTop.previousPage(
-                          duration: Duration(milliseconds: 300),
-                          curve: Curves.easeIn,
-                        );
-                      }
-                    },
-                  ),
-                ),
-                Positioned(
-                  right: -10,
-                  child: IconButton(
-                    icon: Icon(Icons.chevron_right, size: 32, color: whiteColor),
-                    onPressed: () {
-                      if (_currentPageIndexTop < topProducts.length - 1) {
-                        _pageControllerTop.nextPage(
-                          duration: Duration(milliseconds: 300),
-                          curve: Curves.easeIn,
-                        );
-                      }
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ).box.color(primaryDark).margin(EdgeInsets.symmetric(horizontal: 10)).rounded.make();
-        },
-      ),
-    );
+Widget buildCardSetTop(List<Map<String, dynamic>> topProducts) {
+  if (topProducts.isEmpty) {
+    return Center(child: Text('No Top available'));
   }
+  print('Current Top Page Index: $_currentPageIndexTop');
+  return Container(
+    height: 240,
+    child: PageView.builder(
+      controller: _pageControllerTop,
+      itemCount: topProducts.length,
+      itemBuilder: (context, index) {
+        final product = topProducts[index];
+        return GestureDetector(
+          onTap: () {
+            Get.to(() => ItemDetails(
+              title: product['p_name'],
+              data: product,
+            ));
+          },
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(
+                width: 250,
+                child: Image.network(product['p_imgs'][0], fit: BoxFit.cover),
+              ),
+              Positioned(
+                left: -10,
+                child: IconButton(
+                  icon: Icon(Icons.chevron_left, size: 32, color: whiteColor),
+                  onPressed: () {
+                    if (_currentPageIndexTop > 0) {
+                      _pageControllerTop.previousPage(
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.easeIn,
+                      );
+                    }
+                  },
+                ),
+              ),
+              Positioned(
+                right: -10,
+                child: IconButton(
+                  icon: Icon(Icons.chevron_right, size: 32, color: whiteColor),
+                  onPressed: () {
+                    if (_currentPageIndexTop < topProducts.length - 1) {
+                      _pageControllerTop.nextPage(
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.easeIn,
+                      );
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
+        ).box.color(primaryDark).margin(EdgeInsets.symmetric(horizontal: 10)).rounded.make();
+      },
+    ),
+  );
+}
 
-  Widget buildCardSetLower(List<Map<String, dynamic>> lowerProducts) {
-    if (lowerProducts.isEmpty) {
-      return Center(child: Text('No Lower available'));
-    }
-    return Container(
-      height: 240,
-      child: PageView.builder(
-        controller: _pageControllerLower,
-        itemCount: lowerProducts.length,
-        itemBuilder: (context, index) {
-          final product = lowerProducts[index];
-          return GestureDetector(
-            onTap: () {
-              Get.to(() => ItemDetails(
-                    title: product['p_name'],
-                    data: product,
-                  ));
-            },
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Container(
-                  width: 250,
-                  child: Image.network(product['p_imgs'][0], fit: BoxFit.cover),
-                ),
-                Positioned(
-                  left: -10,
-                  child: IconButton(
-                    icon: Icon(Icons.chevron_left, size: 32, color: whiteColor),
-                    onPressed: () {
-                      if (_currentPageIndexLower > 0) {
-                        _pageControllerLower.previousPage(
-                          duration: Duration(milliseconds: 300),
-                          curve: Curves.easeIn,
-                        );
-                      }
-                    },
-                  ),
-                ),
-                Positioned(
-                  right: -10,
-                  child: IconButton(
-                    icon: Icon(Icons.chevron_right, size: 32, color: whiteColor),
-                    onPressed: () {
-                      if (_currentPageIndexLower < lowerProducts.length - 1) {
-                        _pageControllerLower.nextPage(
-                          duration: Duration(milliseconds: 300),
-                          curve: Curves.easeIn,
-                        );
-                      }
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ).box.color(primaryDark).margin(EdgeInsets.symmetric(horizontal: 10)).rounded.make();
-        },
-      ),
-    );
+Widget buildCardSetLower(List<Map<String, dynamic>> lowerProducts) {
+  if (lowerProducts.isEmpty) {
+    return Center(child: Text('No Lower available'));
   }
+  print('Current Lower Page Index: $_currentPageIndexLower');
+  return Container(
+    height: 240,
+    child: PageView.builder(
+      controller: _pageControllerLower,
+      itemCount: lowerProducts.length,
+      itemBuilder: (context, index) {
+        final product = lowerProducts[index];
+        return GestureDetector(
+          onTap: () {
+            Get.to(() => ItemDetails(
+              title: product['p_name'],
+              data: product,
+            ));
+          },
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(
+                width: 250,
+                child: Image.network(product['p_imgs'][0], fit: BoxFit.cover),
+              ),
+              Positioned(
+                left: -10,
+                child: IconButton(
+                  icon: Icon(Icons.chevron_left, size: 32, color: whiteColor),
+                  onPressed: () {
+                    if (_currentPageIndexLower > 0) {
+                      _pageControllerLower.previousPage(
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.easeIn,
+                      );
+                    }
+                  },
+                ),
+              ),
+              Positioned(
+                right: -10,
+                child: IconButton(
+                  icon: Icon(Icons.chevron_right, size: 32, color: whiteColor),
+                  onPressed: () {
+                    if (_currentPageIndexLower < lowerProducts.length - 1) {
+                      _pageControllerLower.nextPage(
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.easeIn,
+                      );
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
+        ).box.color(primaryDark).margin(EdgeInsets.symmetric(horizontal: 10)).rounded.make();
+      },
+    ),
+  );
+}
 
   Widget matchWithYouContainer() {
     return Container(
@@ -308,46 +310,51 @@ class _MatchScreenState extends State<MatchScreen> {
                   .border(color: (const Color.fromRGBO(35, 101, 60, 1)))
                   .rounded
                   .make(),
-              InkWell(
-                onTap: () async {
-                  final topProducts = controller.topFilteredProducts;
-                  final lowerProducts = controller.lowerFilteredProducts;
-                  if (topProducts.isNotEmpty && lowerProducts.isNotEmpty) {
-                    final topProduct = topProducts[_currentPageIndexTop];
-                    final lowerProduct = lowerProducts[_currentPageIndexLower];
-                    controller.addToWishlistUserMatch(
-                      topProduct['p_name'],
-                      lowerProduct['p_name'],
-                      context,
-                    );
-                  } else {
-                    VxToast.show(
-                      context,
-                      msg:
-                          'Unable to add to favorites, Because the information is not available',
-                    );
-                  }
-                },
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Image.asset(icLikematch, width: 22, height: 22),
-                    SizedBox(width: 8),
-                    Text('Add to favorite')
-                        .text
-                        .fontFamily(semiBold)
-                        .color(const Color.fromRGBO(87, 12, 12, 1))
-                        .size(14)
-                        .make(),
-                  ],
-                )
-                    .box
-                    .color(const Color.fromRGBO(255, 203, 203, 1))
-                    .padding(EdgeInsets.symmetric(vertical: 12, horizontal: 18))
-                    .border(color: (const Color.fromRGBO(160, 84, 84, 1)))
-                    .rounded
-                    .make(),
-              )
+                  InkWell(
+                    onTap: () async {
+                      final topProducts = controller.topFilteredProducts;
+                      final lowerProducts = controller.lowerFilteredProducts;
+                      if (topProducts.isNotEmpty && lowerProducts.isNotEmpty) {
+                        final topProduct = topProducts[_currentPageIndexTop];
+                        final lowerProduct = lowerProducts[_currentPageIndexLower];
+                        print('Top Product: $topProduct, Lower Product: $lowerProduct');  // Debug print
+                        if (topProduct != null && lowerProduct != null) {
+                          controller.addToWishlistUserMatch(
+                            topProduct['p_name'],
+                            lowerProduct['p_name'],
+                            context,
+                          );
+                        } else {
+                          VxToast.show(
+                            context,
+                            msg: 'Unable to add to favorites, Because the information is not available',
+                          );
+                        }
+                      } else {
+                        VxToast.show(
+                          context,
+                          msg: 'Unable to add to favorites, Because the information is not available',
+                        );
+                      }
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Image.asset(icLikematch, width: 22, height: 22),
+                        SizedBox(width: 8),
+                        Text('Add to favorite')
+                            .text
+                            .fontFamily(semiBold)
+                            .color(const Color.fromRGBO(87, 12, 12, 1))
+                            .size(14)
+                            .make(),
+                      ],
+                    ).box.color(const Color.fromRGBO(255, 203, 203, 1))
+                      .padding(EdgeInsets.symmetric(vertical: 12, horizontal: 18))
+                      .border(color: const Color.fromRGBO(160, 84, 84, 1))
+                      .rounded
+                      .make(),
+                  )
             ],
           ),
         ],

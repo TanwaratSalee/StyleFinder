@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
@@ -49,24 +50,37 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
     checkIsInWishlist();
   }
 
-  void checkIsInWishlist() async {
-    FirebaseFirestore.instance
-        .collection(productsCollection)
-        .where('p_name', whereIn: [widget.productName1, widget.productName2])
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-          if (querySnapshot.docs.isNotEmpty) {
-            querySnapshot.docs.forEach((doc) {
-              List<dynamic> wishlist = doc['p_wishlist'] ?? [];
-              if (wishlist.contains(currentUser!.uid)) {
-                controller.isFav(true);
-              } else {
-                controller.isFav(false);
-              }
-            });
-          }
-        });
-  }
+void checkIsInWishlist() async {
+  String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
+
+  FirebaseFirestore.instance
+      .collection('favoritemixmatch')
+      .where('user_id', isEqualTo: currentUserUID)
+      .where('vendor_id', isEqualTo: widget.vendor_id)
+      .get()
+      .then((QuerySnapshot querySnapshot) {
+    if (querySnapshot.docs.isNotEmpty) {
+      bool hasBothProducts = querySnapshot.docs.any((doc) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        return data['product1']['p_name'] == widget.productName1 &&
+               data['product2']['p_name'] == widget.productName2;
+      });
+
+      if (hasBothProducts) {
+        controller.isFav(true);
+      } else {
+        controller.isFav(false);
+      }
+    } else {
+      controller.isFav(false);
+    }
+  }).catchError((error) {
+    print('Error checking wishlist status: $error');
+  });
+}
+
+
+
 
   void _updateIsFav(bool isFav) {
     setState(() {
@@ -91,35 +105,27 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
           Obx(() => IconButton(
                 onPressed: () {
                   print("IconButton pressed");
-                  List<String> productNames = [
-                    widget.productName1,
-                    widget.productName2
-                  ];
-                  bool isFav =
-                      !controller.isFav.value; 
-                  productNames.forEach((productName) {
-                    if (isFav == true) {
-                      controller.addToWishlistMixMatch(
-                          productName, _updateIsFav, context);
-                    }
-                    if (isFav == false) {
-                      controller.removeToWishlistMixMatch(
-                          productName, _updateIsFav, context);
-                    }
-                  });
-                  print("isFav after toggling: $isFav"); 
+                  bool isFav = !controller.isFav.value;
+                  if (isFav == true) {
+                    controller.addToWishlistMixMatch(
+                        widget.productName1,
+                        widget.productName2,
+                        widget.vendor_id,
+                        _updateIsFav,
+                        context);
+                  } else {
+                    controller.removeToWishlistMixMatch(
+                        widget.productName1,
+                        widget.productName2,
+                        widget.vendor_id,
+                        _updateIsFav,
+                        context);
+                  }
+                  print("isFav after toggling: $isFav");
                 },
                 icon: controller.isFav.value
-                                  ? Image.asset(icTapFavoriteButton, width: 23)
-                                  : Image.asset(icFavoriteButton, width: 23),
-                                  
-                // icon: Icon(
-                //   controller.isFav.value
-                //       ? Icons.favorite
-                //       : Icons.favorite_outline,
-                //   color: controller.isFav.value ? redColor : null,
-                // ),
-                // iconSize: 28,
+                    ? Image.asset(icTapFavoriteButton, width: 23)
+                    : Image.asset(icFavoriteButton, width: 23),
               ).box.padding(EdgeInsets.only(right: 10)).make()),
         ],
       ),
