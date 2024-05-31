@@ -144,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: whiteColor,
         automaticallyImplyLeading: false,
         title: Center(
-          child: Image.asset(icLogoOnTop, height: 35),
+          child: Image.asset(icLogoOnTop, height: 35).box.padding(EdgeInsets.only(left: 40)).make(),
         ),
         actions: [
           IconButton(
@@ -199,7 +199,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           .roundedLg
                           .make(),
                     ),
-                    10.widthBox,
+                    Spacer(),
                     IconButton(
                       icon: Icon(
                         Icons.filter_list_rounded,

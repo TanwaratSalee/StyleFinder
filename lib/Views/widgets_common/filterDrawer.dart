@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/home_controller.dart';
 import 'package:get/get.dart';
@@ -32,6 +31,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
   bool isSelectedEveryday = false;
   var collectionsvalue = ''.obs;
   var vendors = <Map<String, dynamic>>[];
+  var selectedVendorIds = <String>[].obs; // List to keep track of selected vendors
 
   final selectedColorIndexes = <int>[].obs;
   final List<Map<String, dynamic>> allColors = [
@@ -178,17 +178,35 @@ class _FilterDrawerState extends State<FilterDrawer> {
               child: Wrap(
                 spacing: 10,
                 children: vendors.map((vendor) {
+                  final isSelected = selectedVendorIds.contains(vendor['vendor_id']);
                   return GestureDetector(
                     onTap: () {
                       setState(() {
-                        controller.updateFilters(vendorId: vendor['vendor_id']);
+                        // controller.updateFilters(vendorId: vendor['vendor_id']);
+                        if (isSelected) {
+                          selectedVendorIds.remove(vendor['vendor_id']);
+                        } else {
+                          selectedVendorIds.add(vendor['vendor_id']);
+                        }
                       });
                     },
-                    child: Text(
-                      vendor['vendor_name'] ?? 'Unknown',
-                      style: TextStyle(
-                          fontSize: 12), // ปรับขนาดตัวอักษรตามความเหมาะสม
-                      textAlign: TextAlign.center,
+                    child: Container(
+                      padding: EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: isSelected ? Colors.blue : greyLine,
+                        ),
+                        color: isSelected ? Colors.blue.shade100 : Colors.transparent,
+                      ),
+                      child: Text(
+                        vendor['vendor_name'] ?? 'Unknown',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: isSelected ? Colors.blue : blackColor,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   );
                 }).toList(),
@@ -363,7 +381,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                 ),
               ),
             ),
-            SizedBox(
+             SizedBox(
               height: 100,
               child: Center(
                 child: ElevatedButton(
