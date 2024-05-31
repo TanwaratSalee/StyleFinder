@@ -84,7 +84,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
             const Icon(
               Icons.email_outlined,
               size: 100,
-              color: Color.fromRGBO(53, 194, 193, 1),
+              color: primaryApp,
             ),
             const SizedBox(height: 50),
             const Text(
@@ -130,7 +130,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromRGBO(53, 194, 193, 1),
+                backgroundColor: primaryApp,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),
@@ -140,7 +140,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
             ),
             TextButton(
               style: TextButton.styleFrom(
-                foregroundColor: const Color.fromRGBO(53, 194, 193, 1),
+                foregroundColor: primaryApp,
               ),
               onPressed: () async {
                 User? user = FirebaseAuth.instance.currentUser;
@@ -152,12 +152,12 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
             ),
             TextButton(
               style: TextButton.styleFrom(
-                foregroundColor: const Color.fromRGBO(53, 194, 193, 1),
+                foregroundColor: primaryApp,
               ),
               onPressed: () {
                 Get.offAll(() => const LoginScreen());
               },
-              child: const Text('← back to login'),
+              child: const Text('← Back to login'),
             ),
           ],
         ),

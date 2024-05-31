@@ -71,12 +71,12 @@ class MessagesScreen extends StatelessWidget {
                           var friendImageUrl = data[index]['friend_image_url'] ?? '';
 
                           return GestureDetector(
-                            onTap: () {
-                              Get.to(() => const ChatScreen(), arguments: [
-                                data[index]['friend_name'],
-                                data[index]['toId']
-                              ]);
-                            },
+                            // onTap: () {
+                            //   Get.to(() => const ChatScreen(vendorId: data[index]['vendor_id']), arguments: [
+                            //     data[index]['friend_name'],
+                            //     data[index]['toId']
+                            //   ]);
+                            // },
                             child: Container(
                               margin: const EdgeInsets.symmetric(
                                   vertical: 5, horizontal: 8),

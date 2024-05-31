@@ -188,6 +188,13 @@ placeMyOrder({required orderPaymentMethod, required totalAmount}) async {
     String vendorId = entry.key;
     List<Map<String, dynamic>> vendorProducts = entry.value;
 
+    // Fetch vendor details
+    var vendorSnapshot = await firestore.collection(vendorsCollection).doc(vendorId).get();
+    String vendorName = 'Unknown Vendor';
+    if (vendorSnapshot.exists) {
+      vendorName = vendorSnapshot['vendor_name'] ?? 'Unknown Vendor';
+    }
+
     // Calculate total amount for this vendor
     double vendorTotalAmount = vendorProducts.fold(0.0, (sum, item) {
       double itemPrice = item['price'] != null ? item['price'].toDouble() : 0.0;
@@ -219,6 +226,7 @@ placeMyOrder({required orderPaymentMethod, required totalAmount}) async {
       'total_amount': vendorTotalAmount,
       'orders': vendorProducts,
       'vendors': vendorId,
+      'vendor_name': vendorName, // Added vendor name
     });
   }
 
@@ -227,7 +235,6 @@ placeMyOrder({required orderPaymentMethod, required totalAmount}) async {
 
   placingOrder(false);
 }
-
 
   getProductDetails() {
     products.clear();

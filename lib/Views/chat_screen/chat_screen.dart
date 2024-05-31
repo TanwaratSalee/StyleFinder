@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class ChatScreen extends StatelessWidget {
-  const ChatScreen({super.key});
+  const ChatScreen({super.key,});
 
   String formatDate(Timestamp timestamp) {
     DateTime date = timestamp.toDate();

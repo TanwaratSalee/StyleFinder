@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_finalproject/Views/chat_screen/chat_screen.dart';
-import 'package:flutter_finalproject/Views/orders_screen/component/order_place_details.dart';
 import 'package:flutter_finalproject/Views/orders_screen/component/orders_status.dart';
+import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart' as intl;
@@ -174,28 +173,80 @@ class OrdersDetails extends StatelessWidget {
                   .border(color: greyLine)
                   .padding(const EdgeInsets.all(6))
                   .make(),
-
               15.heightBox,
-
               Column(
                 children: [
-                  Column(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                     Row(
-                            children: [
-                              Image.asset(iconsStore, width: 18,),
-                              10.widthBox,
-                              // Text(sellerName)
-                              //     .text
-                              //     .size(16)
-                              //     .fontFamily(semiBold)
-                              //     .color(blackColor)
-                              //     .make(),
-                            ],
+                      Row(
+                        children: [
+                          Image.asset(iconsStore, width: 20),
+                          10.widthBox,
+                          Text(data['vendor_name'])
+                              .text
+                              .size(16)
+                              .fontFamily(semiBold)
+                              .color(blackColor)
+                              .make(),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              if (data['vendor_id'] != null) {
+                                Get.to(() => ChatScreen());
+                              } else {
+                                print('Vendor ID is null');
+                              }
+                            },
+                            child: Container(
+                              child: const Text(
+                                'Chat with seller',
+                                style: TextStyle(
+                                    color: whiteColor, fontFamily: medium),
+                              ),
+                            )
+                                .box
+                                .white
+                                .padding(EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 5))
+                                .roundedSM
+                                .color(primaryApp)
+                                .make(),
                           ),
+                          5.widthBox,
+                          GestureDetector(
+                            onTap: () {
+                              if (data['vendors'] != null) {
+                                Get.to(() =>
+                                    StoreScreen(vendorId: data['vendors']));
+                              } else {
+                                print('Vendor ID is null');
+                              }
+                            },
+                            child: Container(
+                              child: const Text(
+                                'See Store',
+                                style: TextStyle(
+                                    color: whiteColor, fontFamily: medium),
+                              ),
+                            )
+                                .box
+                                .white
+                                .padding(EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 5))
+                                .roundedSM
+                                .color(primaryApp)
+                                .make(),
+                          )
+                        ],
+                      )
                     ],
                   ),
-                  10.heightBox,
+                  Divider(color: greyLine),
+                  5.heightBox,
                   ListView.builder(
                     physics: const ClampingScrollPhysics(),
                     shrinkWrap: true,
