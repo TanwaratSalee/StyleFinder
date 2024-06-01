@@ -90,7 +90,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: const Text('Match Detail')
+        title: const Text('Match Product')
             .text
             .size(26)
             .fontFamily(semiBold)

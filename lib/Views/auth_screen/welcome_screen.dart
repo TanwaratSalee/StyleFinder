@@ -66,7 +66,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             SizedBox(height: 30),
             tapButton(
               color: primaryApp,
-              title: 'Login',
+              title: 'Sign In',
               textColor: whiteColor,
               onPress: () async {
                 isloading(true);
@@ -86,14 +86,17 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               },
             ).box.margin(EdgeInsets.symmetric(horizontal: 30)).make(),
             Spacer(),
-            
             TextButton(
               onPressed: () {
                 Get.to(() => HomeScreen(isGuest: true));
               },
               child: Text(
                 'Continue as a guest',
-                style: TextStyle(fontSize: 16, color: blackColor, decoration: TextDecoration.underline,),
+                style: TextStyle(
+                  fontSize: 16,
+                  color: blackColor,
+                  decoration: TextDecoration.underline,
+                ),
               ),
             ),
             10.heightBox
