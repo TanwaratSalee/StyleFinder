@@ -82,8 +82,6 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
   }
 
   void incrementViewCount() async {
-    String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
-
     await FirebaseFirestore.instance
         .collection('postusermixmatchs')
         .where('p_name_top', isEqualTo: widget.productName1)
