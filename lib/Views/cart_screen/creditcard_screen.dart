@@ -119,9 +119,9 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
   Widget _buildCardNumberTextField() {
     String determineImageAsset() {
       if (cardNumberMasked.startsWith('5')) {
-        return 'assets/images/Mastercard-Logo.png';
+        return imgmastercard;
       } else if (cardNumberMasked.startsWith('4')) {
-        return 'assets/images/Visa.png';
+        return imgvisacard;
       } else {
         return '';
       }
@@ -214,8 +214,7 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                 ),
               ),
               15.widthBox,
-              Expanded(
-                  child: _buildVCCTextField()),
+              Expanded(child: _buildVCCTextField()),
             ],
           ),
           SizedBox(height: 24),
@@ -236,7 +235,7 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           image: DecorationImage(
-            image: AssetImage(/* imgbgVisa */imgbgVisa1),
+            image: AssetImage(/* imgbgVisa */ imgbgVisa1),
             fit: BoxFit.cover,
           ),
         ),

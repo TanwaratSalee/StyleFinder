@@ -110,6 +110,8 @@ const String imgVisa = "assets/images/payment/visa.png";
 const String imgmobile = "assets/images/payment/visa.png";
 const String imgbgVisa = 'assets/images/card.png';
 const String imgbgVisa1 = 'assets/images/card1.png';
+const String imgmastercard = "assets/images/Mastercard-Logo.png";
+const String imgvisacard = 'assets/images/Visa.png';
 
 const String icCash = "assets/images/payment/card.png";
 const String icPromptpay = "assets/images/payment/qr.png";
