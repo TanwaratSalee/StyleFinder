@@ -837,90 +837,114 @@ class _ProfileScreenState extends State<ProfileScreen>
       }
     });
   }
-}
 
-Widget buildPostTab() {
-  return LayoutBuilder(
-    builder: (context, constraints) {
-      final itemWidth = (constraints.maxWidth - 6) / 3;
-
-      return SingleChildScrollView(
-        child: Center(
-          child: Wrap(
-            spacing: 2, // ระยะห่างแนวนอนระหว่าง widgets
-            runSpacing: 2, // ระยะห่างแนวตั้งระหว่าง widgets
-            children: List.generate(7, (index) {
-              return Container(
-                width: itemWidth,
-                height: 240,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(0),
-                ),
-                child: Stack(
-                  children: [
-                    Positioned(
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      child: Container(
-                        width: itemWidth,
-                        height: 120,
-                        decoration: BoxDecoration(
-                          color: greyThin,
-                          borderRadius: BorderRadius.circular(0),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+  Widget buildPostTab() {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance.collection('postusermixmatchs').snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(child: CircularProgressIndicator());
+        }
+        var data = snapshot.data!.docs;
+        if (data.isEmpty) {
+          return Center(
+            child: Text("No posts available!", style: TextStyle(color: greyDark)),
+          );
+        }
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final itemWidth = (constraints.maxWidth - 6) / 3;
+            return SingleChildScrollView(
+              child: Center(
+                child: Wrap(
+                  spacing: 2, // Horizontal spacing between widgets
+                  runSpacing: 2, // Vertical spacing between widgets
+                  children: List.generate(data.length, (index) {
+                    var doc = data[index];
+                    var topImage = doc['p_imgs_top'];
+                    var lowerImage = doc['p_imgs_lower'];
+                    return Container(
+                      width: itemWidth,
+                      height: 240,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(0),
                       ),
-                    ),
-                    Positioned(
-                      top: 120,
-                      left: 0,
-                      right: 0,
-                      child: Container(
-                        width: itemWidth,
-                        height: 120,
-                        decoration: BoxDecoration(
-                          color: greyThin,
-                          borderRadius: BorderRadius.circular(0),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
-                    // ไอคอนรูปดวงตาและจำนวนคนดู
-                    Positioned(
-                      top: 215,
-                      left: 5,
-                      child: Row(
+                      child: Stack(
                         children: [
-                          Image.asset(
-                            iceyes, // ใส่ path ของรูปภาพของคุณ
-                            width: 18,
-                            height: 18,
+                          Positioned(
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            child: Container(
+                              width: itemWidth,
+                              height: 120,
+                              decoration: BoxDecoration(
+                                color: greyThin,
+                                borderRadius: BorderRadius.circular(0),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.network(
+                                  topImage,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
                           ),
-                          SizedBox(width: 4),
-                          Text(
-                            '0',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontFamily: bold,
-                              color: Colors.grey,
+                          Positioned(
+                            top: 120,
+                            left: 0,
+                            right: 0,
+                            child: Container(
+                              width: itemWidth,
+                              height: 120,
+                              decoration: BoxDecoration(
+                                color: greyThin,
+                                borderRadius: BorderRadius.circular(0),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.network(
+                                  lowerImage,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ),
+                          // Eye icon and number of views
+                          Positioned(
+                            top: 215,
+                            left: 5,
+                            child: Row(
+                              children: [
+                                Image.asset(
+                                  iceyes, // Path to your image
+                                  width: 18,
+                                  height: 18,
+                                ),
+                                SizedBox(width: 4),
+                                Text(
+                                  '0',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: bold,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
-                    ),
-                  ],
+                    );
+                  }),
                 ),
-              );
-            }),
-          ),
-        ),
-      );
-    },
-  );
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
 }

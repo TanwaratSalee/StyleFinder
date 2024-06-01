@@ -1,14 +1,20 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
-import 'package:flutter_finalproject/controllers/home_controller.dart';
+import 'package:flutter_finalproject/controllers/product_controller.dart';
 import 'package:get/get.dart';
 
 class MatchPostProduct extends StatefulWidget {
+  final Map<String, dynamic> topProduct;
+  final Map<String, dynamic> lowerProduct;
+
+  MatchPostProduct({required this.topProduct, required this.lowerProduct});
+
   @override
   _MatchPostProductState createState() => _MatchPostProductState();
 }
 
 class _MatchPostProductState extends State<MatchPostProduct> {
-  final HomeController controller = Get.find<HomeController>();
+  final ProductController controller = Get.find<ProductController>();
   final TextEditingController explanationController = TextEditingController();
 
   @override
@@ -45,7 +51,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                           height: 125,
                           color: greyColor,
                           child: Center(
-                            child: Text('Image 1'),
+                            child: Image.network(widget.topProduct['p_imgs'][0]),
                           ),
                         ),
                         SizedBox(height: 5),
@@ -85,7 +91,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                           height: 125,
                           color: Colors.grey[300],
                           child: Center(
-                            child: Text('Image 2'),
+                            child: Image.network(widget.lowerProduct['p_imgs'][0]),
                           ),
                         ),
                         SizedBox(height: 5),
@@ -208,7 +214,16 @@ class _MatchPostProductState extends State<MatchPostProduct> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    controller.addToWishlistPostUserMatch(
+                      widget.topProduct['p_name'],
+                      widget.lowerProduct['p_name'],
+                      context,
+                      controller.selectedGender.value,
+                      controller.selectedCollections,
+                      explanationController.text,
+                    );
+                  },
                   child: Text(
                     "Post",
                     style: TextStyle(fontSize: 16, color: Colors.white),

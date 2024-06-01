@@ -443,7 +443,14 @@ void addToWishlistMatch(String productNameTop, String productNameLower, BuildCon
       });
     }
 
-void addToWishlistPostUserMatch(String productNameTop, String productNameLower, BuildContext context) {
+void addToWishlistPostUserMatch(
+  String productNameTop,
+  String productNameLower,
+  BuildContext context,
+  String selectedGender,
+  List<String> selectedCollections,
+  String explanation
+) {
   List<String> productNames = [productNameTop, productNameLower];
   FirebaseFirestore.instance
       .collection(productsCollection)
@@ -453,29 +460,35 @@ void addToWishlistPostUserMatch(String productNameTop, String productNameLower, 
     if (querySnapshot.docs.isNotEmpty) {
       String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
       Map<String, dynamic> userData = {'p_wishlist': [currentUserUID]};
-      
+
       querySnapshot.docs.forEach((doc) {
         var data = doc.data() as Map<String, dynamic>?;
         var wishlist = (data?['p_wishlist'] as List<dynamic>?) ?? [];
-        
+
         if (!wishlist.contains(currentUserUID)) {
           if (doc['p_name'] == productNameTop) {
             userData['p_name_top'] = productNameTop;
             userData['p_price_top'] = doc['p_price'];
             userData['p_imgs_top'] = doc['p_imgs'][0];
             userData['vendor_id_top'] = doc['vendor_id'];
+            userData['p_collection_top'] = selectedCollections;
+            userData['p_sex_top'] = selectedGender;
+            userData['p_desc_top'] = explanation;
           } else if (doc['p_name'] == productNameLower) {
             userData['p_name_lower'] = productNameLower;
             userData['p_price_lower'] = doc['p_price'];
             userData['p_imgs_lower'] = doc['p_imgs'][0];
             userData['vendor_id_lower'] = doc['vendor_id'];
+            userData['p_collection_lower'] = selectedCollections;
+            userData['p_sex_lower'] = selectedGender;
+            userData['p_desc_lower'] = explanation;
           }
         }
       });
 
       if (userData.keys.length > 1) { // Check if any product info was added
         FirebaseFirestore.instance.collection('postusermixmatchs').add(userData).then((documentReference) {
-          VxToast.show(context, msg: "Added post suscessful.");
+          VxToast.show(context, msg: "Added post successful.");
           print('Data added in usermixmatchs collection with document ID: ${documentReference.id}');
         }).catchError((error) {
           print('Error adding data in usermixmatchs collection: $error');
@@ -493,6 +506,7 @@ void addToWishlistPostUserMatch(String productNameTop, String productNameLower, 
     VxToast.show(context, msg: "Error retrieving products.");
   });
 }
+
 
 
 void addToWishlistUserMatch(String productNameTop, String productNameLower, BuildContext context) {

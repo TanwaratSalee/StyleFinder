@@ -267,7 +267,7 @@ Widget buildCardSetLower(List<Map<String, dynamic>> lowerProducts) {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               InkWell(
-                onTap: () async {
+                onTap: () {
                   // final topProducts = controller.topFilteredProducts;
                   // final lowerProducts = controller.lowerFilteredProducts;
                   // if (topProducts.isNotEmpty && lowerProducts.isNotEmpty) {
@@ -278,7 +278,6 @@ Widget buildCardSetLower(List<Map<String, dynamic>> lowerProducts) {
                   //     lowerProduct['p_name'],
                   //     context,
                   //   );
-                    Get.to(() => MatchPostProduct());
                   // } else {
                   //   VxToast.show(
                   //     context,
@@ -286,6 +285,13 @@ Widget buildCardSetLower(List<Map<String, dynamic>> lowerProducts) {
                   //         'Unable to add to favorites, Because the information is not available',
                   //   );
                   // }
+                  final topProduct = controller.topFilteredProducts[_currentPageIndexTop];
+                  final lowerProduct = controller.lowerFilteredProducts[_currentPageIndexLower];
+                  Get.to(() => MatchPostProduct(
+                    topProduct: topProduct,
+                    lowerProduct: lowerProduct,
+                  ));
+                  //Get.to(() => MatchPostProduct());
                 },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
