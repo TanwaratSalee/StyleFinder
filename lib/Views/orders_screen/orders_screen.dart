@@ -67,101 +67,110 @@ class _OrdersScreenState extends State<OrdersScreen>
     );
   }
 
-  Widget buildOrders(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: getOrders(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Center(child: loadingIndicator());
-        } else if (snapshot.data!.docs.isEmpty) {
-          return const Center(
-              child: Text("No orders yet!", style: TextStyle(color: greyDark)));
-        } else {
-          var data = snapshot.data!.docs;
-          return ListView.builder(
-            itemCount: data.length,
-            itemBuilder: (context, index) {
-              var orderData = data[index].data() as Map<String, dynamic>;
-              var products = orderData['orders'] as List<dynamic>;
+Widget buildOrders(BuildContext context) {
+  return StreamBuilder<QuerySnapshot>(
+    stream: getOrders(),
+    builder: (context, snapshot) {
+      if (!snapshot.hasData) {
+        return Center(child: loadingIndicator());
+      } else if (snapshot.data!.docs.isEmpty) {
+        return const Center(
+            child: Text("No orders yet!", style: TextStyle(color: greyDark)));
+      } else {
+        var data = snapshot.data!.docs;
 
-              return InkWell(
-                onTap: () {
-                  Get.to(() => OrdersDetails(data: orderData));
-                },
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Order code ${orderData['order_code']}",
-                        ).text.fontFamily(medium).color(blackColor).size(18).make(),
-                         Text(intl.DateFormat()
-                                .add_yMd()
-                                .format((orderData['order_date'].toDate()))),
-                        Text(
-                          orderData['order_confirmed'] ? "Confirm" : "Pending",
-                          style: TextStyle(
-                              color: orderData['order_confirmed']
-                                  ? Colors.green
-                                  : Colors.orange,
-                              fontFamily: regular,
-                              fontSize: 16),
-                        ),
-                      ],
-                    ).box.padding(EdgeInsets.symmetric(horizontal: 12)).make(),
-                    5.heightBox,
-                    ...products.map((product) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('x${product['qty']}',).text.fontFamily(regular).color(greyColor).size(12).make(),
-                            const SizedBox(width: 5),
-                            Image.network(product['img'],
-                                width: 70, height: 60, fit: BoxFit.cover),
-                            const SizedBox(width: 5),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    product['title'],
-                                    style: const TextStyle(
-                                      fontFamily: medium,
-                                      fontSize: 14,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
+        // Sort data by order_date in descending order
+        data.sort((a, b) {
+          var dateA = (a.data() as Map<String, dynamic>)['order_date'].toDate();
+          var dateB = (b.data() as Map<String, dynamic>)['order_date'].toDate();
+          return dateB.compareTo(dateA);
+        });
+
+        return ListView.builder(
+          itemCount: data.length,
+          itemBuilder: (context, index) {
+            var orderData = data[index].data() as Map<String, dynamic>;
+            var products = orderData['orders'] as List<dynamic>;
+
+            return InkWell(
+              onTap: () {
+                Get.to(() => OrdersDetails(data: orderData));
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Order code ${orderData['order_code']}",
+                      ).text.fontFamily(medium).color(blackColor).size(18).make(),
+                      Text(intl.DateFormat()
+                          .add_yMd()
+                          .format((orderData['order_date'].toDate()))),
+                      Text(
+                        orderData['order_confirmed'] ? "Confirm" : "Pending",
+                        style: TextStyle(
+                            color: orderData['order_confirmed']
+                                ? Colors.green
+                                : Colors.orange,
+                            fontFamily: regular,
+                            fontSize: 16),
+                      ),
+                    ],
+                  ).box.padding(EdgeInsets.symmetric(horizontal: 12)).make(),
+                  5.heightBox,
+                  ...products.map((product) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('x${product['qty']}',).text.fontFamily(regular).color(greyColor).size(12).make(),
+                          const SizedBox(width: 5),
+                          Image.network(product['img'],
+                              width: 70, height: 60, fit: BoxFit.cover),
+                          const SizedBox(width: 5),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  product['title'],
+                                  style: const TextStyle(
+                                    fontFamily: medium,
+                                    fontSize: 14,
                                   ),
-                                  Text(
-                                      '${NumberFormat('#,##0').format(product['price'])} Bath',
-                                      ).text.fontFamily(regular).color(greyColor).size(14).make(),
-                                ],
-                              ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                Text(
+                                    '${NumberFormat('#,##0').format(product['price'])} Bath',
+                                    ).text.fontFamily(regular).color(greyColor).size(14).make(),
+                              ],
                             ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                  ],
-                )
-                    .box
-                    .color(whiteColor)
-                    .roundedSM
-                    .border(color: greyLine)
-                    .margin(const EdgeInsets.symmetric(vertical: 8, horizontal: 18))
-                    .p12
-                    .make(),
-              );
-            },
-          );
-        }
-      },
-    );
-  }
+                          ),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                ],
+              )
+                  .box
+                  .color(whiteColor)
+                  .roundedSM
+                  .border(color: greyLine)
+                  .margin(const EdgeInsets.symmetric(vertical: 8, horizontal: 18))
+                  .p12
+                  .make(),
+            );
+          },
+        );
+      }
+    },
+  );
+}
+
 
   Widget buildDelivery(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
