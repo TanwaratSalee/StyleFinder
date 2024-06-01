@@ -30,9 +30,9 @@ class MatchDetailScreen extends StatefulWidget {
     this.totalPrice = '',
     this.vendorName1 = '',
     this.vendorName2 = '',
-    this.vendor_id= '',
+    this.vendor_id = '',
     required this.collection,
-    this.description= '',
+    this.description = '',
   });
 
   @override
@@ -50,37 +50,34 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
     checkIsInWishlist();
   }
 
-void checkIsInWishlist() async {
-  String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
+  void checkIsInWishlist() async {
+    String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
 
-  FirebaseFirestore.instance
-      .collection('favoritemixmatch')
-      .where('user_id', isEqualTo: currentUserUID)
-      .where('vendor_id', isEqualTo: widget.vendor_id)
-      .get()
-      .then((QuerySnapshot querySnapshot) {
-    if (querySnapshot.docs.isNotEmpty) {
-      bool hasBothProducts = querySnapshot.docs.any((doc) {
-        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-        return data['product1']['p_name'] == widget.productName1 &&
-               data['product2']['p_name'] == widget.productName2;
-      });
+    FirebaseFirestore.instance
+        .collection('favoritemixmatch')
+        .where('user_id', isEqualTo: currentUserUID)
+        .where('vendor_id', isEqualTo: widget.vendor_id)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      if (querySnapshot.docs.isNotEmpty) {
+        bool hasBothProducts = querySnapshot.docs.any((doc) {
+          Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+          return data['product1']['p_name'] == widget.productName1 &&
+              data['product2']['p_name'] == widget.productName2;
+        });
 
-      if (hasBothProducts) {
-        controller.isFav(true);
+        if (hasBothProducts) {
+          controller.isFav(true);
+        } else {
+          controller.isFav(false);
+        }
       } else {
         controller.isFav(false);
       }
-    } else {
-      controller.isFav(false);
-    }
-  }).catchError((error) {
-    print('Error checking wishlist status: $error');
-  });
-}
-
-
-
+    }).catchError((error) {
+      print('Error checking wishlist status: $error');
+    });
+  }
 
   void _updateIsFav(bool isFav) {
     setState(() {
@@ -141,7 +138,6 @@ void checkIsInWishlist() async {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Expanded(
-                          
                           child: Column(
                             children: [
                               Container(
@@ -237,84 +233,155 @@ void checkIsInWishlist() async {
                                   .size(14)
                                   .make(),
                             ],
-                          )
-                              .box
-                              .border(color: greyLine)
-                              
-                              .rounded
-                              .make(),
+                          ).box.border(color: greyLine).rounded.make(),
                         ),
                       ],
                     ),
                     const SizedBox(height: 30),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Row(
-                            children: [
-                              5.widthBox,
-                              Obx(() {
-                                String imageUrl =
-                                    controller.vendorImageUrl.value;
-                                return imageUrl.isNotEmpty
-                                    ? Image.network(
-                                        imageUrl,
-                                        width: 50,
-                                        height: 50,
-                                        fit: BoxFit.cover,
-                                      )
-                                    : SizedBox.shrink();
-                              }),
-                              10.widthBox,
-                              Expanded(
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: widget.vendorName1
-                                      .toUpperCase()
-                                      .text
-                                      .fontFamily(medium)
-                                      .color(blackColor)
-                                      .size(18)
-                                      .make(),
+                    Container(
+                      padding:
+                          const EdgeInsets.all(8.0), // เพิ่ม padding ถ้าจำเป็น
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: greyLine, width: 2),
+                        borderRadius: BorderRadius.circular(
+                            10), // เพิ่ม border radius ถ้าต้องการ
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Row(
+                              children: [
+                                SizedBox(width: 5),
+                                Obx(() {
+                                  String imageUrl =
+                                      controller.vendorImageUrl.value;
+                                  return imageUrl.isNotEmpty
+                                      ? Container(
+                                          width: 50,
+                                          height: 50,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: greyLine, width: 2),
+                                            color: Colors.white,
+                                          ),
+                                          child: Image.network(
+                                            imageUrl,
+                                            width: 50,
+                                            height: 50,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        )
+                                      : SizedBox.shrink();
+                                }),
+                                SizedBox(width: 10),
+                                Expanded(
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      widget.vendorName1.toUpperCase(),
+                                      style: TextStyle(
+                                        fontFamily: 'medium',
+                                        color: Colors.black,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ),
                                 ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(width: 10), // ใช้ SizedBox แทน 10.widthBox
+                          GestureDetector(
+                            onTap: () {
+                              Get.to(
+                                () => StoreScreen(vendorId: widget.vendor_id),
+                              );
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 10),
+                              decoration: BoxDecoration(
+                                color: primaryApp,
+                                borderRadius: BorderRadius.circular(20),
                               ),
-                            ],
+                              child: const Text(
+                                'See Store',
+                                style: TextStyle(
+                                    color: whiteColor, fontFamily: 'regular'),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 50, 0, 0),
+                      child: Row(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Suitable for gender',
+                              style: TextStyle(
+                                fontFamily: 'regular',
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Column(
+                      children: [
+                        Container(
+                          height: 50,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: widget.collection.length,
+                            itemBuilder: (context, index) {
+                              String item = widget.collection[index].toString();
+                              return Container(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "${item[0].toUpperCase()}${item.substring(1)}",
+                                )
+                                    .text
+                                    .size(14)
+                                    .color(greyDark)
+                                    .fontFamily(medium)
+                                    .make(),
+                              )
+                                  .box
+                                  .color(thinPrimaryApp)
+                                  .margin(EdgeInsets.symmetric(horizontal: 6))
+                                  .roundedLg
+                                  .padding(EdgeInsets.symmetric(
+                                      horizontal: 24, vertical: 12))
+                                  .make();
+                            },
                           ),
                         ),
-                        10.widthBox,
-                        GestureDetector(
-                          onTap: () {
-                            Get.to(
-                              () => StoreScreen(vendorId: widget.vendor_id),
-                            );
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 10),
-                            decoration: BoxDecoration(
-                              color: primaryApp,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: const Text(
-                              'See Store',
-                              style: TextStyle(
-                                  color: whiteColor, fontFamily: regular),
-                            ),
-                          ),
-                        )
                       ],
-                    )
-                        .box
-                        .height(60)
-                        .padding(const EdgeInsets.symmetric(horizontal: 16))
-                        .color(greyThin)
-                        .make(),
-                        30.heightBox,
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Opportunity suitable for',
-                      ).text.fontFamily(regular).size(16).make(),
+                    ),
+                    10.heightBox,
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 20, 0, 0),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Opportunity suitable for',
+                        ).text.fontFamily(regular).size(16).make(),
+                      ),
                     ),
                     Column(
                       children: [
@@ -341,7 +408,8 @@ void checkIsInWishlist() async {
                                   .color(thinPrimaryApp)
                                   .margin(EdgeInsets.symmetric(horizontal: 6))
                                   .roundedLg
-                                  .padding(EdgeInsets.symmetric(horizontal: 24, vertical: 12))
+                                  .padding(EdgeInsets.symmetric(
+                                      horizontal: 24, vertical: 12))
                                   .make();
                             },
                           ),
@@ -353,28 +421,42 @@ void checkIsInWishlist() async {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(10),
-                      child: Container(
-                        width: double.infinity, 
-                        height: 150, 
-                        decoration: BoxDecoration(
-                          color: greyThin, 
-                          borderRadius: BorderRadius.circular(10), 
-                        ),
-                        child: Align(
-                          alignment:
-                              Alignment.topLeft, 
-                          child: Padding(
-                            padding:
-                                EdgeInsets.all(8.0), 
-                            child: Text(
-                              widget.description,
-                              style: TextStyle(
-                                color: blackColor,
-                                fontSize: 11,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'The reason for match',
+                            style: TextStyle(
+                              fontFamily: 'regular',
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                          ),
+                          SizedBox(
+                              height:
+                                  8), // เพิ่มระยะห่างระหว่างหัวข้อและ Container
+                          Container(
+                            width: double.infinity,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              color: greyThin,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  widget.description,
+                                  style: TextStyle(
+                                    color: blackColor,
+                                    fontSize: 11,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
+                        ],
                       ),
                     )
                   ],
