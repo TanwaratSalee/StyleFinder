@@ -237,7 +237,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Text('An error occurred: ${snapshot.error}'));
                     }
                     if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return const Center(child: Text('No data available'));
+                      return const Center(child: Text('Product not found'));
                     }
 
                     List<Map<String, dynamic>> products = snapshot.data ?? [];
@@ -251,7 +251,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     }
 
                     if (productsToShow.isEmpty) {
-                      return const Center(child: Text('No products available'));
+                      return const Center(child: Text('Product not found'));
                     }
 
                     return CardSwiper(

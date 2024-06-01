@@ -543,6 +543,22 @@ Widget buildProductMathGrids(String category) {
           String productImage1 = data1['p_imgs'][0];
           String productImage2 = data2['p_imgs'][0];
 
+          bool isTop1 = data1['p_part'] == 'top';
+          bool isTop2 = data2['p_part'] == 'top';
+
+          // Ensure top items are displayed at the top
+          var topProductData = isTop1 ? data1 : data2;
+          var lowerProductData = isTop1 ? data2 : data1;
+
+          var topProductImage = isTop1 ? productImage1 : productImage2;
+          var lowerProductImage = isTop1 ? productImage2 : productImage1;
+
+          var topProductName = isTop1 ? productName1 : productName2;
+          var lowerProductName = isTop1 ? productName2 : productName1;
+
+          var topPrice = isTop1 ? price1 : price2;
+          var lowerPrice = isTop1 ? price2 : price1;
+
           return GestureDetector(
             onTap: () {
               Navigator.push(
@@ -574,7 +590,7 @@ Widget buildProductMathGrids(String category) {
                     Row(
                       children: [
                         Image.network(
-                          productImage1.isNotEmpty ? productImage1 : imgError,
+                          topProductImage.isNotEmpty ? topProductImage : imgError,
                           width: 80,
                           height: 90,
                           fit: BoxFit.cover,
@@ -593,7 +609,7 @@ Widget buildProductMathGrids(String category) {
                               Container(
                                 width: 200,
                                 child: Text(
-                                  productName1,
+                                  topProductName,
                                   style: const TextStyle(
                                     fontFamily: medium,
                                     fontSize: 14,
@@ -603,7 +619,7 @@ Widget buildProductMathGrids(String category) {
                                 ),
                               ),
                               Text(
-                                "${NumberFormat('#,##0').format(double.parse(price1).toInt())} Bath",
+                                "${NumberFormat('#,##0').format(double.parse(topPrice).toInt())} Bath",
                                 style: const TextStyle(color: greyDark),
                               ),
                             ],
@@ -615,7 +631,7 @@ Widget buildProductMathGrids(String category) {
                     Row(
                       children: [
                         Image.network(
-                          productImage2,
+                          lowerProductImage,
                           width: 80,
                           height: 90,
                           fit: BoxFit.cover,
@@ -629,7 +645,7 @@ Widget buildProductMathGrids(String category) {
                               Container(
                                 width: 200,
                                 child: Text(
-                                  productName2,
+                                  lowerProductName,
                                   style: const TextStyle(
                                     fontFamily: medium,
                                     fontSize: 14,
@@ -639,7 +655,7 @@ Widget buildProductMathGrids(String category) {
                                 ),
                               ),
                               Text(
-                                "${NumberFormat('#,##0').format(double.parse(price2).toInt())} Bath",
+                                "${NumberFormat('#,##0').format(double.parse(lowerPrice).toInt())} Bath",
                                 style: const TextStyle(color: greyDark),
                               ),
                             ],
@@ -692,4 +708,5 @@ Widget buildProductMathGrids(String category) {
     },
   );
 }
+
 }
