@@ -199,7 +199,7 @@ class OrdersDetails extends StatelessWidget {
                               print('vendor_id: ${data['vendor_id']}');
                               Get.to(() => ChatScreen(), arguments: {
                                 'vendor_name': data['vendor_name'],
-                                'vendor_id': data['vendor_id']
+                                'vendor_id': data['vendor_id'] ?? ''
                               });
                             },
                             child: Container(
