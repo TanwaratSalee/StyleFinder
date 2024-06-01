@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_finalproject/Views/match_screen/matchpost_details.dart';
 import 'package:flutter_finalproject/Views/profile_screen/menu_setting_screen.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -838,32 +839,58 @@ class _ProfileScreenState extends State<ProfileScreen>
     });
   }
 
-  Widget buildPostTab() {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('postusermixmatchs').snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Center(child: CircularProgressIndicator());
-        }
-        var data = snapshot.data!.docs;
-        if (data.isEmpty) {
-          return Center(
-            child: Text("No posts available!", style: TextStyle(color: greyDark)),
-          );
-        }
-        return LayoutBuilder(
-          builder: (context, constraints) {
-            final itemWidth = (constraints.maxWidth - 6) / 3;
-            return SingleChildScrollView(
-              child: Center(
-                child: Wrap(
-                  spacing: 2, // Horizontal spacing between widgets
-                  runSpacing: 2, // Vertical spacing between widgets
-                  children: List.generate(data.length, (index) {
-                    var doc = data[index];
-                    var topImage = doc['p_imgs_top'];
-                    var lowerImage = doc['p_imgs_lower'];
-                    return Container(
+Widget buildPostTab() {
+  return StreamBuilder<QuerySnapshot>(
+    stream: FirebaseFirestore.instance.collection('postusermixmatchs').snapshots(),
+    builder: (context, snapshot) {
+      if (!snapshot.hasData) {
+        return Center(child: CircularProgressIndicator());
+      }
+      var data = snapshot.data!.docs;
+      if (data.isEmpty) {
+        return Center(
+          child: Text("No posts available!", style: TextStyle(color: greyDark)),
+        );
+      }
+      return LayoutBuilder(
+        builder: (context, constraints) {
+          final itemWidth = (constraints.maxWidth - 6) / 3;
+          return SingleChildScrollView(
+            child: Center(
+              child: Wrap(
+                spacing: 2, // Horizontal spacing between widgets
+                runSpacing: 2, // Vertical spacing between widgets
+                children: List.generate(data.length, (index) {
+                  var doc = data[index];
+                  var docData = doc.data() as Map<String, dynamic>;
+                  var topImage = docData['p_imgs_top'] ?? '';
+                  var lowerImage = docData['p_imgs_lower'] ?? '';
+                  var productNameTop = docData['p_name_top'] ?? '';
+                  var productNameLower = docData['p_name_lower'] ?? '';
+                  var priceTop = docData['p_price_top']?.toString() ?? '0';
+                  var priceLower = docData['p_price_lower']?.toString() ?? '0';
+                  var vendorId = docData['vendor_id'] ?? '';
+                  var collections = docData['p_collection_top'] != null ? List<String>.from(docData['p_collection_top']) : [];
+                  var description = docData['p_desc_top'] ?? '';
+
+                  return GestureDetector(
+                    onTap: () {
+                      Get.to(() => MatchPostsDetails(
+                        productName1: productNameTop,
+                        productName2: productNameLower,
+                        price1: priceTop,
+                        price2: priceLower,
+                        productImage1: topImage,
+                        productImage2: lowerImage,
+                        totalPrice: (int.parse(priceTop) + int.parse(priceLower)).toString(),
+                        vendorName1: 'Vendor Name 1', // Replace with actual vendor name if available
+                        vendorName2: 'Vendor Name 2', // Replace with actual vendor name if available
+                        vendor_id: vendorId,
+                        collection: collections,
+                        description: description,
+                      ));
+                    },
+                    child: Container(
                       width: itemWidth,
                       height: 240,
                       decoration: BoxDecoration(
@@ -937,14 +964,19 @@ class _ProfileScreenState extends State<ProfileScreen>
                           ),
                         ],
                       ),
-                    );
-                  }),
-                ),
+                    ),
+                  );
+                }),
               ),
-            );
-          },
-        );
-      },
-    );
-  }
+            ),
+          );
+        },
+      );
+    },
+  );
+}
+
+
+
+
 }
