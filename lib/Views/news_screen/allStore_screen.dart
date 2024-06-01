@@ -33,11 +33,17 @@ class AllStoreScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
         child: ListView(
           children: [
-            'OFFICIAL STORE'.text.fontFamily(semiBold).color(blackColor).size(20).make(),
-            SizedBox(height: 10), 
+            'OFFICIAL STORE'
+                .text
+                .fontFamily(semiBold)
+                .color(blackColor)
+                .size(20)
+                .make(),
+            SizedBox(height: 10),
             StreamBuilder(
               stream: FirestoreServices.allmatchbystore(),
-              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (!snapshot.hasData) {
                   return Center(
                     child: loadingIndicator(),
@@ -55,7 +61,12 @@ class AllStoreScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           // 150.heightBox,
-                          'Coming Soon'.text.fontFamily(regular).color(blackColor).size(18).make(),
+                          'Coming Soon'
+                              .text
+                              .fontFamily(regular)
+                              .color(blackColor)
+                              .size(18)
+                              .make(),
                         ],
                       ),
                     );
@@ -63,22 +74,24 @@ class AllStoreScreen extends StatelessWidget {
                     officialProducts.shuffle(math.Random());
 
                     return GridView.builder(
-                      shrinkWrap: true, 
-                      physics: NeverScrollableScrollPhysics(), 
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
                       padding: const EdgeInsets.all(12),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
                         crossAxisSpacing: 8,
                         mainAxisSpacing: 8,
-                        childAspectRatio: 1 / 1,
+                        childAspectRatio: 1 / 1.1,
                       ),
                       itemCount: officialProducts.length,
                       itemBuilder: (context, index) {
-                        var productData = officialProducts[index].data() as Map<String, dynamic>;
+                        var productData = officialProducts[index].data()
+                            as Map<String, dynamic>;
                         return GestureDetector(
                           onTap: () {
                             var vendorId = productData['vendor_id'];
-                            print("Navigating to StoreScreen with vendor_id: $vendorId");
+                            print(
+                                "Navigating to StoreScreen with vendor_id: $vendorId");
                             Get.to(() => StoreScreen(vendorId: vendorId));
                           },
                           child: Container(
@@ -90,10 +103,15 @@ class AllStoreScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(8),
                                   child: Image.network(
                                     productData['imageUrl'],
-                                    height: 80 ,
+                                    height: 80,
                                     width: 110,
                                     fit: BoxFit.cover,
-                                  ).box.white.roundedSM.border(color: greyLine).make(),
+                                  )
+                                      .box
+                                      .white
+                                      .roundedSM
+                                      .border(color: greyLine)
+                                      .make(),
                                 ),
                                 3.heightBox,
                                 Text(
@@ -114,14 +132,18 @@ class AllStoreScreen extends StatelessWidget {
                 }
               },
             ),
-          30.heightBox,
-
-             'NEW STORE'.text.fontFamily(semiBold).color(blackColor).size(20).make(),
-            SizedBox(height: 10), 
-            
+            30.heightBox,
+            'NEW STORE'
+                .text
+                .fontFamily(semiBold)
+                .color(blackColor)
+                .size(20)
+                .make(),
+            SizedBox(height: 10),
             StreamBuilder(
               stream: FirestoreServices.allmatchbystore(),
-              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (!snapshot.hasData) {
                   return Center(
                     child: loadingIndicator(),
@@ -139,7 +161,12 @@ class AllStoreScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           100.heightBox,
-                          'Coming Soon'.text.fontFamily(regular).color(blackColor).size(18).make(),
+                          'Coming Soon'
+                              .text
+                              .fontFamily(regular)
+                              .color(blackColor)
+                              .size(18)
+                              .make(),
                         ],
                       ),
                     );
@@ -147,8 +174,8 @@ class AllStoreScreen extends StatelessWidget {
                     officialProducts.shuffle(math.Random());
 
                     return GridView.builder(
-                      shrinkWrap: true, 
-                      physics: NeverScrollableScrollPhysics(), 
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
                       padding: const EdgeInsets.all(12),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
@@ -158,11 +185,13 @@ class AllStoreScreen extends StatelessWidget {
                       ),
                       itemCount: officialProducts.length,
                       itemBuilder: (context, index) {
-                        var productData = officialProducts[index].data() as Map<String, dynamic>;
+                        var productData = officialProducts[index].data()
+                            as Map<String, dynamic>;
                         return GestureDetector(
                           onTap: () {
                             var vendorId = productData['vendor_id'];
-                            print("Navigating to StoreScreen with vendor_id: $vendorId");
+                            print(
+                                "Navigating to StoreScreen with vendor_id: $vendorId");
                             Get.to(() => StoreScreen(vendorId: vendorId));
                           },
                           child: Container(
@@ -174,10 +203,15 @@ class AllStoreScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(8.0),
                                   child: Image.network(
                                     productData['imageUrl'],
-                                    height: 80 ,
+                                    height: 80,
                                     width: 100,
                                     fit: BoxFit.cover,
-                                  ).box.white.roundedSM.border(color: greyLine).make(),
+                                  )
+                                      .box
+                                      .white
+                                      .roundedSM
+                                      .border(color: greyLine)
+                                      .make(),
                                 ),
                                 3.heightBox,
                                 Text(
@@ -198,7 +232,6 @@ class AllStoreScreen extends StatelessWidget {
                 }
               },
             ),
-          
           ],
         ),
       ),
