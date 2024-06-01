@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class ChatScreen extends StatelessWidget {
-  const ChatScreen({super.key,});
+  const ChatScreen({super.key});
 
   String formatDate(Timestamp timestamp) {
     DateTime date = timestamp.toDate();
@@ -57,11 +57,7 @@ class ChatScreen extends StatelessWidget {
                     ? NetworkImage(controller.friendImageUrl.value)
                     : null,
                 child: controller.friendImageUrl.value.isEmpty
-                    ? Icon(
-                        Icons.person,
-                        color: whiteColor,
-                        size: 22,
-                      )
+                    ? loadingIndicator()
                     : null,
               ),
               SizedBox(width: 15),
@@ -105,7 +101,12 @@ class ChatScreen extends StatelessWidget {
                               for (var message in messages) {
                                 String date;
                                 try {
-                                  date = formatDate(message['created_at']);
+                                  var data = message.data() as Map<String, dynamic>;
+                                  if (data['created_on'] != null) {
+                                    date = formatDate(data['created_on'] as Timestamp);
+                                  } else {
+                                    date = 'Unknown Date';
+                                  }
                                 } catch (e) {
                                   date = 'Unknown Date'; 
                                 }
@@ -132,19 +133,19 @@ class ChatScreen extends StatelessWidget {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 10),
+                                        padding: const EdgeInsets.symmetric(vertical: 20),
                                         child: Center(
                                           child: Text(
                                             date,
-                                            style: TextStyle(color: greyDark, fontWeight: FontWeight.bold),
+                                            style: TextStyle(color: greyDark, fontFamily: regular),
                                           ),
                                         ),
                                       ),
                                       ...dayMessages.map((data) {
                                         return Align(
                                           alignment: data['uid'] == currentUser!.uid
-                                              ? Alignment.centerRight
-                                              : Alignment.centerLeft,
+                                              ? Alignment.centerLeft
+                                              : Alignment.centerRight,
                                           child: senderBubble(data),
                                         );
                                       }).toList(),

@@ -150,7 +150,7 @@ class NewsScreen extends StatelessWidget {
                                             .margin(const EdgeInsets.symmetric(
                                                 horizontal: 5))
                                             .padding(const EdgeInsets.symmetric(
-                                                horizontal: 24, vertical: 12))
+                                                horizontal: 22, vertical: 8))
                                             .make(),
                                       );
                                     }),
