@@ -57,7 +57,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     controllercard.dispose();
     searchController.dispose();
-    isEmailVerified();
+    if (!isGuest) {
+      isEmailVerified();
+    }
     super.dispose();
   }
 
