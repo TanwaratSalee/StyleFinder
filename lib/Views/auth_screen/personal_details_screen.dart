@@ -72,7 +72,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
 
   final List<Color> skinTones = [
     Color.fromRGBO(255, 231, 218, 1),
-    Color.fromRGBO(229, 202, 176, 1),
+    Color.fromRGBO(248, 201, 156, 1),
     Color.fromRGBO(185, 135, 98, 1),
     Color.fromRGBO(116, 78, 60, 1),
   ];

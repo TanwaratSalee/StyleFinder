@@ -1,32 +1,17 @@
-import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
-import 'package:flutter_finalproject/consts/colors.dart';
-import 'package:flutter_finalproject/consts/images.dart';
+import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
+import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
+import 'package:flutter_finalproject/consts/consts.dart';
+import 'package:flutter_finalproject/services/firestore_services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+import 'dart:math' as math;
 
 class AllStoreScreen extends StatelessWidget {
   const AllStoreScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    List<String> officialBrandNames = [
-      'DIOR',
-      'BALENCIAGA',
-      'VERSACE',
-      'LV',
-      'CHANEL',
-      'H'
-    ];
-    List<String> newBrandNames = [
-      'GUCCI',
-      'PRADA',
-      'FENDI',
-      'BURBERRY',
-      'SAINT LAURENT',
-      'VALENTINO'
-    ];
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: whiteColor,
@@ -44,94 +29,171 @@ class AllStoreScreen extends StatelessWidget {
           ],
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'OFFICIAL STORE',
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline6
-                      ?.copyWith(color: Colors.black),
-                ),
-              ),
-              GridView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  childAspectRatio: 1.1,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                ),
-                itemCount: officialBrandNames.length,
-                itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Text(officialBrandNames[index]),
-                      ),
-                    ],
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+        child: ListView(
+          children: [
+            'OFFICIAL STORE'.text.fontFamily(bold).color(blackColor).size(20).make(),
+            SizedBox(height: 10), 
+            StreamBuilder(
+              stream: FirestoreServices.allmatchbystore(),
+              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(
+                    child: loadingIndicator(),
                   );
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'NEW STORE',
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline6
-                      ?.copyWith(color: Colors.black),
-                ),
-              ),
-              GridView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  childAspectRatio: 1.1,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                ),
-                itemCount: newBrandNames.length,
-                itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(10),
+                } else {
+                  var allproductsdata = snapshot.data!.docs;
+                  var officialProducts = allproductsdata.where((doc) {
+                    var productData = doc.data() as Map<String, dynamic>;
+                    return productData['vendor_official'] == true;
+                  }).toList();
+
+                  if (officialProducts.isEmpty) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // 150.heightBox,
+                          'Coming Soon'.text.fontFamily(regular).color(blackColor).size(18).make(),
+                        ],
+                      ),
+                    );
+                  } else {
+                    officialProducts.shuffle(math.Random());
+
+                    return GridView.builder(
+                      shrinkWrap: true, 
+                      physics: NeverScrollableScrollPhysics(), 
+                      padding: const EdgeInsets.all(12),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        crossAxisSpacing: 8,
+                        mainAxisSpacing: 8,
+                        childAspectRatio: 1 / 1,
+                      ),
+                      itemCount: officialProducts.length,
+                      itemBuilder: (context, index) {
+                        var productData = officialProducts[index].data() as Map<String, dynamic>;
+                        return GestureDetector(
+                          onTap: () {
+                            var vendorId = productData['vendor_id'];
+                            print("Navigating to StoreScreen with vendor_id: $vendorId");
+                            Get.to(() => StoreScreen(vendorId: vendorId));
+                          },
+                          child: Container(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.network(
+                                  productData['imageUrl'],
+                                  height: 80 ,
+                                  width: 100,
+                                  fit: BoxFit.cover,
+                                ).box.white.roundedSM.border(color: greyLine).make(),
+                                3.heightBox,
+                                Text(
+                                  "${productData['vendor_name']}",
+                                  style: const TextStyle(
+                                    fontFamily: medium,
+                                    fontSize: 16,
+                                    color: blackColor,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Text(newBrandNames[index]),
-                      ),
-                    ],
+                        );
+                      },
+                    );
+                  }
+                }
+              },
+            ),
+            15.heightBox,
+
+             'NEW STORE'.text.fontFamily(bold).color(blackColor).size(20).make(),
+            SizedBox(height: 10), 
+            
+            StreamBuilder(
+              stream: FirestoreServices.allmatchbystore(),
+              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(
+                    child: loadingIndicator(),
                   );
-                },
-              ),
-            ],
-          ),
+                } else {
+                  var allproductsdata = snapshot.data!.docs;
+                  var officialProducts = allproductsdata.where((doc) {
+                    var productData = doc.data() as Map<String, dynamic>;
+                    return productData['vendor_official'] == false;
+                  }).toList();
+
+                  if (officialProducts.isEmpty) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          150.heightBox,
+                          'Coming Soon'.text.fontFamily(regular).color(blackColor).size(18).make(),
+                        ],
+                      ),
+                    );
+                  } else {
+                    officialProducts.shuffle(math.Random());
+
+                    return GridView.builder(
+                      shrinkWrap: true, 
+                      physics: NeverScrollableScrollPhysics(), 
+                      padding: const EdgeInsets.all(12),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        crossAxisSpacing: 8,
+                        mainAxisSpacing: 8,
+                        childAspectRatio: 1 / 1,
+                      ),
+                      itemCount: officialProducts.length,
+                      itemBuilder: (context, index) {
+                        var productData = officialProducts[index].data() as Map<String, dynamic>;
+                        return GestureDetector(
+                          onTap: () {
+                            var vendorId = productData['vendor_id'];
+                            print("Navigating to StoreScreen with vendor_id: $vendorId");
+                            Get.to(() => StoreScreen(vendorId: vendorId));
+                          },
+                          child: Container(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.network(
+                                  productData['imageUrl'],
+                                  height: 80 ,
+                                  width: 100,
+                                  fit: BoxFit.cover,
+                                ).box.white.roundedSM.border(color: greyLine).make(),
+                                3.heightBox,
+                                Text(
+                                  "${productData['vendor_name']}",
+                                  style: const TextStyle(
+                                    fontFamily: medium,
+                                    fontSize: 16,
+                                    color: blackColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  }
+                }
+              },
+            ),
+          
+          ],
         ),
       ),
     );

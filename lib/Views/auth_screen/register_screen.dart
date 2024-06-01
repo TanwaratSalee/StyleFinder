@@ -9,7 +9,6 @@ import 'package:flutter_finalproject/controllers/auth_controller.dart';
 import 'package:flutter_finalproject/views/auth_screen/personal_details_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:vxstate/vxstate.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -169,7 +168,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           valueColor: AlwaysStoppedAnimation(primaryApp),
                         )
                       : tapButton(
-                          // Button widget
                           color: primaryApp,
                           title: 'Register',
                           textColor: whiteColor,
