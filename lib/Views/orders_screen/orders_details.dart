@@ -195,11 +195,12 @@ class OrdersDetails extends StatelessWidget {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              if (data['vendor_id'] != null) {
-                                Get.to(() => ChatScreen());
-                              } else {
-                                print('Vendor ID is null');
-                              }
+                              print('vendor_name: ${data['vendor_name']}');
+                          print('vendor_id: ${data['vendor_id']}');
+                              Get.to(() => const ChatScreen(), arguments: [
+                            data['vendor_name'],
+                            data['vendor_id']
+                          ]);
                             },
                             child: Container(
                               child: const Text(
@@ -219,9 +220,9 @@ class OrdersDetails extends StatelessWidget {
                           5.widthBox,
                           GestureDetector(
                             onTap: () {
-                              if (data['vendors'] != null) {
+                              if (data['vendor_id'] != null) {
                                 Get.to(() =>
-                                    StoreScreen(vendorId: data['vendors']));
+                                    StoreScreen(vendorId: data['vendor_id']));
                               } else {
                                 print('Vendor ID is null');
                               }

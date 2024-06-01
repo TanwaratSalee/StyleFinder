@@ -1,10 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_finalproject/Views/widgets_common/filterDrawer.dart';
-import 'package:flutter_finalproject/Views/widgets_common/filterDrawerMatch.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class FilterDrawerMatch extends StatefulWidget {
   @override
@@ -128,7 +124,7 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5.0),
               child: Text("Official Store")
                   .text
                   .fontFamily(regular)
@@ -158,6 +154,7 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
                 );
               }),
             ),
+            5.heightBox,
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
               child: Text("Price").text.fontFamily(regular).size(14).make(),
@@ -169,7 +166,7 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
                   activeTrackColor: primaryApp,
                   inactiveTrackColor: greyLine,
                   thumbColor: greyDark,
-                  overlayColor: Color.fromARGB(255, 51, 150, 175).withAlpha(32),
+                  overlayColor: thinPrimaryApp,
                   trackHeight: 4.0,
                 ),
                 child: Slider(
@@ -186,9 +183,7 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
                 ),
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
+            5.heightBox,
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
@@ -198,7 +193,7 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Wrap(
                 spacing: 20,
-                runSpacing: 10,
+                runSpacing: 5,
                 children: List.generate(
                   allColors.length,
                   (index) {
@@ -232,9 +227,7 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
                 ),
               ),
             ),
-            SizedBox(
-              height: 20,
-            ),
+            5.heightBox,
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
@@ -244,53 +237,48 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
                   .size(14)
                   .make(),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Center(
-                child: Wrap(
-                  spacing: 5,
-                  children: [
-                    buildFilterChip("Dress", isSelectedDress, (isSelected) {
-                      setState(() => isSelectedDress = isSelected);
-                    }),
-                    buildFilterChip("Outerwear & Coats", isSelectedOuterwear,
-                        (isSelected) {
-                      setState(() => isSelectedOuterwear = isSelected);
-                    }),
-                    buildFilterChip("T-Shirts", isSelectedTShirts,
-                        (isSelected) {
-                      setState(() => isSelectedTShirts = isSelected);
-                    }),
-                    buildFilterChip("Suits", isSelectedSuits, (isSelected) {
-                      setState(() => isSelectedSuits = isSelected);
-                    }),
-                    buildFilterChip("Knitwear", isSelectedKnitwear,
-                        (isSelected) {
-                      setState(() => isSelectedKnitwear = isSelected);
-                    }),
-                    buildFilterChip("Activewear", isSelectedActivewear,
-                        (isSelected) {
-                      setState(() => isSelectedActivewear = isSelected);
-                    }),
-                    buildFilterChip("Blazers", isSelectedBlazers, (isSelected) {
-                      setState(() => isSelectedBlazers = isSelected);
-                    }),
-                    buildFilterChip("Pants", isSelectedPants, (isSelected) {
-                      setState(() => isSelectedPants = isSelected);
-                    }),
-                    buildFilterChip("Denim", isSelectedDenim, (isSelected) {
-                      setState(() => isSelectedDenim = isSelected);
-                    }),
-                    buildFilterChip("Skirts", isSelectedSkirts, (isSelected) {
-                      setState(() => isSelectedSkirts = isSelected);
-                    }),
-                  ],
-                ),
+            Center(
+              child: Wrap(
+                spacing: 5,
+                children: [
+                  buildFilterChip("Dress", isSelectedDress, (isSelected) {
+                    setState(() => isSelectedDress = isSelected);
+                  }),
+                  buildFilterChip("Outerwear & Coats", isSelectedOuterwear,
+                      (isSelected) {
+                    setState(() => isSelectedOuterwear = isSelected);
+                  }),
+                  buildFilterChip("T-Shirts", isSelectedTShirts,
+                      (isSelected) {
+                    setState(() => isSelectedTShirts = isSelected);
+                  }),
+                  buildFilterChip("Suits", isSelectedSuits, (isSelected) {
+                    setState(() => isSelectedSuits = isSelected);
+                  }),
+                  buildFilterChip("Knitwear", isSelectedKnitwear,
+                      (isSelected) {
+                    setState(() => isSelectedKnitwear = isSelected);
+                  }),
+                  buildFilterChip("Activewear", isSelectedActivewear,
+                      (isSelected) {
+                    setState(() => isSelectedActivewear = isSelected);
+                  }),
+                  buildFilterChip("Blazers", isSelectedBlazers, (isSelected) {
+                    setState(() => isSelectedBlazers = isSelected);
+                  }),
+                  buildFilterChip("Pants", isSelectedPants, (isSelected) {
+                    setState(() => isSelectedPants = isSelected);
+                  }),
+                  buildFilterChip("Denim", isSelectedDenim, (isSelected) {
+                    setState(() => isSelectedDenim = isSelected);
+                  }),
+                  buildFilterChip("Skirts", isSelectedSkirts, (isSelected) {
+                    setState(() => isSelectedSkirts = isSelected);
+                  }),
+                ],
               ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
+            ).paddingOnly(left: 13),
+            
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
@@ -298,31 +286,28 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
                   Text("Collection").text.fontFamily(regular).size(14).make(),
             ),
             Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Wrap(
-                  spacing: 5,
-                  children: [
-                    buildFilterChip("Summer", isSelectedSummer, (isSelected) {
-                      setState(() => isSelectedSummer = isSelected);
-                    }),
-                    buildFilterChip("Winter", isSelectedWinter, (isSelected) {
-                      setState(() => isSelectedWinter = isSelected);
-                    }),
-                    buildFilterChip("Autumn", isSelectedAutumn, (isSelected) {
-                      setState(() => isSelectedAutumn = isSelected);
-                    }),
-                    buildFilterChip("Dinner", isSelectedDinner, (isSelected) {
-                      setState(() => isSelectedDinner = isSelected);
-                    }),
-                    buildFilterChip("Everyday", isSelectedEveryday,
-                        (isSelected) {
-                      setState(() => isSelectedEveryday = isSelected);
-                    }),
-                  ],
-                ),
+              child: Wrap(
+                spacing: 5,
+                children: [
+                  buildFilterChip("Summer", isSelectedSummer, (isSelected) {
+                    setState(() => isSelectedSummer = isSelected);
+                  }),
+                  buildFilterChip("Winter", isSelectedWinter, (isSelected) {
+                    setState(() => isSelectedWinter = isSelected);
+                  }),
+                  buildFilterChip("Autumn", isSelectedAutumn, (isSelected) {
+                    setState(() => isSelectedAutumn = isSelected);
+                  }),
+                  buildFilterChip("Dinner", isSelectedDinner, (isSelected) {
+                    setState(() => isSelectedDinner = isSelected);
+                  }),
+                  buildFilterChip("Everyday", isSelectedEveryday,
+                      (isSelected) {
+                    setState(() => isSelectedEveryday = isSelected);
+                  }),
+                ],
               ),
-            ),
+            ).paddingOnly(left: 6),
 
 
           ElevatedButton(
@@ -371,8 +356,14 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
 
               Navigator.pop(context);
             },
-            child: Text('Apply Filters'),
-          ),
+            
+            child: Text('Save',).text.white.make(),
+            style: ElevatedButton.styleFrom(
+                        backgroundColor: primaryApp,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ))
+          ).box.makeCentered()
           ],
         ).box.white.padding(EdgeInsets.symmetric(vertical: 12)).make(),
       ),
@@ -380,14 +371,15 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
   }
 
 
-  Widget buildFilterChip(String label, bool isSelected, Function(bool) onSelected) {
-    return FilterChip(
-      label: Text(label),
-      selected: isSelected,
-      onSelected: onSelected,
-      showCheckmark: false,
-      side: BorderSide(color: isSelected ? primaryApp : greyLine),
-      selectedColor: thinPrimaryApp,
-    );
-  }
-}
+   Widget buildFilterChip(String label, bool isSelected, Function(bool) onSelected) {
+  return FilterChip(
+    label: Text(label),
+    selected: isSelected,
+    onSelected: onSelected,
+    showCheckmark: false,
+    side: BorderSide(color: isSelected ? primaryApp : greyLine),
+    selectedColor: thinPrimaryApp,
+    padding: EdgeInsets.symmetric(horizontal: 3), 
+  );
+
+}}

@@ -247,7 +247,7 @@ Widget buildCardSetLower(List<Map<String, dynamic>> lowerProducts) {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Text(
                 'Feedback:',
@@ -260,7 +260,7 @@ Widget buildCardSetLower(List<Map<String, dynamic>> lowerProducts) {
           )
               .box
               .border(color: greyLine, width: 1)
-              .padding(EdgeInsets.symmetric(vertical: 12))
+              .padding(EdgeInsets.symmetric(vertical: 12,horizontal: 32))
               .margin(EdgeInsets.only(bottom: 12))
               .make(),
           Row(
