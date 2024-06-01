@@ -237,15 +237,15 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 50),
                     Container(
-                      padding:
-                          const EdgeInsets.all(8.0), // เพิ่ม padding ถ้าจำเป็น
+                      width: double.infinity,
+                      height: 80,
+                      padding: const EdgeInsets.all(8.0),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         border: Border.all(color: greyLine, width: 2),
-                        borderRadius: BorderRadius.circular(
-                            10), // เพิ่ม border radius ถ้าต้องการ
+                        borderRadius: BorderRadius.circular(10),
                       ),
                       child: Row(
                         children: [
@@ -291,7 +291,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                               ],
                             ),
                           ),
-                          SizedBox(width: 10), // ใช้ SizedBox แทน 10.widthBox
+                          SizedBox(width: 10),
                           GestureDetector(
                             onTap: () {
                               Get.to(
@@ -300,7 +300,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                             },
                             child: Container(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10),
+                                  horizontal: 20, vertical: 8),
                               decoration: BoxDecoration(
                                 color: primaryApp,
                                 borderRadius: BorderRadius.circular(20),
@@ -316,7 +316,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 50, 0, 0),
+                      padding: const EdgeInsets.fromLTRB(8, 30, 0, 0),
                       child: Row(
                         children: [
                           Align(
@@ -344,7 +344,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                     Column(
                       children: [
                         Container(
-                          height: 50,
+                          height: 40,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemCount: widget.collection.length,
@@ -387,7 +387,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                       children: [
                         SizedBox(height: 10),
                         Container(
-                          height: 50,
+                          height: 40,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemCount: widget.collection.length,
@@ -427,14 +427,11 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                           Text(
                             'The reason for match',
                             style: TextStyle(
-                              fontFamily: 'regular',
+                              fontFamily: regular,
                               fontSize: 16,
-                              color: Colors.black,
                             ),
                           ),
-                          SizedBox(
-                              height:
-                                  8), // เพิ่มระยะห่างระหว่างหัวข้อและ Container
+                          SizedBox(height: 8),
                           Container(
                             width: double.infinity,
                             height: 100,
