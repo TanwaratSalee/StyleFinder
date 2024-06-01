@@ -137,7 +137,7 @@ class ChatScreen extends StatelessWidget {
                                         child: Center(
                                           child: Text(
                                             date,
-                                            style: TextStyle(color: greyDark, fontFamily: regular),
+                                            style: TextStyle(color: greyDark, fontFamily: medium),
                                           ),
                                         ),
                                       ),

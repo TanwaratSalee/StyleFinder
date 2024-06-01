@@ -196,11 +196,11 @@ class OrdersDetails extends StatelessWidget {
                           GestureDetector(
                             onTap: () {
                               print('vendor_name: ${data['vendor_name']}');
-                          print('vendor_id: ${data['vendor_id']}');
-                              Get.to(() => const ChatScreen(), arguments: [
-                            data['vendor_name'],
-                            data['vendor_id']
-                          ]);
+                              print('vendor_id: ${data['vendor_id']}');
+                              Get.to(() => ChatScreen(), arguments: {
+                                'vendor_name': data['vendor_name'],
+                                'vendor_id': data['vendor_id']
+                              });
                             },
                             child: Container(
                               child: const Text(
