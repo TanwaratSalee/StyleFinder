@@ -17,9 +17,22 @@ class WriteReviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Print product details for debugging
+    print('Product Details:');
+    product.forEach((key, value) {
+      print('$key: $value');
+    });
+
+    // Ensure non-null values for required fields
+    final String productId = product['id'] ?? '';
+    final String productTitle = product['title'] ?? '';
+    final String productImg = product['img'] ?? '';
+    final double productPrice = (product['price'] ?? 0).toDouble();
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("Write Review").text
+        title: Text("Write Review")
+            .text
             .size(26)
             .fontFamily(semiBold)
             .color(blackColor)
@@ -32,19 +45,35 @@ class WriteReviewScreen extends StatelessWidget {
           child: tapButton(
             color: primaryApp,
             onPress: () {
-              if (_rating == 0.0) {
-                VxToast.show(context, msg: "Please provide a rating", position: VxToastPosition.bottom);
-              } else {
-                reviewsController.saveReview(
-                  product,
-                  _reviewController.text,
+              String reviewText = _reviewController.text;
+              print('Review Text: $reviewText'); // Debugging print
+              print('Rating: $_rating'); // Debugging print
+
+              if (reviewText.isNotEmpty && _rating > 0 && productId.isNotEmpty) {
+                reviewsController.submitReview(
+                  productId,
+                  productTitle,
+                  productImg,
+                  productPrice,
+                  reviewText,
                   _rating,
                 );
-                VxToast.show(context, msg: "Review submitted successfully", position: VxToastPosition.bottom);
-                _reviewController.clear();
-                Future.delayed(Duration(seconds: 2), () {
-                  Get.back(); // Navigate back to the previous screen
-                });
+              } else {
+                // Determine the missing information
+                String errorMessage = 'Please provide the following information:\n';
+                if (reviewText.isEmpty) errorMessage += '- Write a review\n';
+                if (_rating <= 0) errorMessage += '- Provide a rating\n';
+                if (productId.isEmpty) errorMessage += '- Product ID\n';
+
+                // Print missing information for debugging
+                print(errorMessage);
+
+                // แสดงข้อความแจ้งเตือนเมื่อกรอกข้อมูลไม่ครบ
+                Get.snackbar(
+                  'Error',
+                  errorMessage,
+                  snackPosition: SnackPosition.BOTTOM,
+                );
               }
             },
             textColor: whiteColor,
@@ -58,14 +87,14 @@ class WriteReviewScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              product['title'],
+              productTitle,
               style: TextStyle(fontFamily: medium, fontSize: 18),
             ),
             SizedBox(height: 10),
-            Image.network(product['img'], width: 100, height: 100, fit: BoxFit.cover),
+            Image.network(productImg, width: 100, height: 100, fit: BoxFit.cover),
             SizedBox(height: 10),
             Text(
-              '${product['price']} Bath',
+              '${productPrice} Bath',
               style: TextStyle(color: greyDark),
             ),
             SizedBox(height: 10),
@@ -82,6 +111,7 @@ class WriteReviewScreen extends StatelessWidget {
               ),
               onRatingUpdate: (rating) {
                 _rating = rating;
+                print('Rating Updated: $_rating'); // Debugging print
               },
             ),
             SizedBox(height: 20),

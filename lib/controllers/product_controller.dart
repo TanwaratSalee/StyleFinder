@@ -224,22 +224,30 @@ void fetchVendors() async {
   totalPrice.value = quantity.value * price;
  }
 
+  
   addToCart(
-      {title, img, sellername, color, qty, tprice, context, vendorID, productsize}) async {
-    await firestore.collection(cartCollection).doc().set({
+    {title, img, sellername, qty, tprice, context, vendorID, productsize}) async {
+  try {
+    DocumentReference docRef = await firestore.collection(cartCollection).add({
       'title': title,
       'img': img,
       'sellername': sellername,
-      'color': color,
       'qty': qty,
       'vendor_id': vendorID,
       'tprice': tprice,
       'added_by': currentUser!.uid,
       'productsize': productsize,
-    }).catchError((error) {
-      VxToast.show(context, msg: error.toString());
     });
+    
+    await docRef.update({'product_id': docRef.id});
+    
+    VxToast.show(context, msg: "Add to your cart");
+  } catch (error) {
+    VxToast.show(context, msg: error.toString());
   }
+}
+
+
 
   resetValues() {
     totalPrice.value = 0;

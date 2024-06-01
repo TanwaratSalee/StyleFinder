@@ -204,7 +204,8 @@ placeMyOrder({required orderPaymentMethod, required totalAmount}) async {
     // Add vendorTotalAmount to the overall total
     totalOrderAmount += vendorTotalAmount;
 
-    await firestore.collection(ordersCollection).add({
+    // Create a new document and get its ID
+    var orderRef = await firestore.collection(ordersCollection).add({
       'order_code': generateRandomOrderCode(8),
       'order_date': FieldValue.serverTimestamp(),
       'order_by': currentUser!.uid,
@@ -226,8 +227,11 @@ placeMyOrder({required orderPaymentMethod, required totalAmount}) async {
       'total_amount': vendorTotalAmount,
       'orders': vendorProducts,
       'vendor_id': vendorId,
-      'vendor_name': vendorName, // Added vendor name
+      'vendor_name': vendorName,
     });
+
+    // Update the document with its ID
+    await orderRef.update({'id': orderRef.id});
   }
 
   // Update the overall total amount
@@ -241,7 +245,6 @@ placeMyOrder({required orderPaymentMethod, required totalAmount}) async {
     vendors.clear();
     for (var i = 0; i < productSnapshot.length; i++) {
       products.add({
-        'color': productSnapshot[i]['color'],
         'img': productSnapshot[i]['img'],
         'vendor_id': productSnapshot[i]['vendor_id'],
         'price': productSnapshot[i]['tprice'],

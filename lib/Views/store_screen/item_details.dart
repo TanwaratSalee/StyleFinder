@@ -501,31 +501,32 @@ class _ItemDetailsState extends State<ItemDetails> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(20, 0, 20, 35),
                       child: tapButton(
-                          color: primaryApp,
-                          onPress: () {
-                            if (controller.quantity.value > 0 &&
-                                selectedIndex != null) {
-                              String selectedSize =
-                                  widget.data['p_productsize'][selectedIndex!];
-                              controller.addToCart(
-                                context: context,
-                                vendorID: widget.data['vendor_id'],
-                                img: widget.data['p_imgs'][0],
-                                qty: controller.quantity.value,
-                                sellername: widget.data['p_seller'],
-                                title: widget.data['p_name'],
-                                tprice: controller.totalPrice.value,
-                                productsize: selectedSize,
-                              );
-                              VxToast.show(context, msg: "Add to your cart");
-                            } else {
-                              VxToast.show(context,
-                                  msg:
-                                      "Please select the quantity and size of the products");
-                            }
-                          },
-                          textColor: whiteColor,
-                          title: "Add to your cart"),
+                        color: primaryApp,
+                        onPress: () {
+                          if (controller.quantity.value > 0 &&
+                              selectedIndex != null) {
+                            String selectedSize =
+                                widget.data['p_productsize'][selectedIndex!];
+                            controller.addToCart(
+                              context: context,
+                              vendorID: widget.data['vendor_id'],
+                              img: widget.data['p_imgs'][0],
+                              qty: controller.quantity.value,
+                              sellername: widget.data['p_seller'],
+                              title: widget.data['p_name'],
+                              tprice: controller.totalPrice.value,
+                              productsize: selectedSize,
+                            );
+                            VxToast.show(context, msg: "Add to your cart");
+                          } else {
+                            VxToast.show(context,
+                                msg:
+                                    "Please select the quantity and size of the products");
+                          }
+                        },
+                        textColor: whiteColor,
+                        title: "Add to your cart",
+                      ),
                     ),
                   ),
                 ],
