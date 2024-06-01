@@ -216,8 +216,8 @@ class _ProductScreenState extends State<ProductScreen> {
           physics: const AlwaysScrollableScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              mainAxisSpacing: 20,
-              crossAxisSpacing: 8,
+              mainAxisSpacing: 15,
+                crossAxisSpacing: 15,
               mainAxisExtent: 260),
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (BuildContext context, int index) {

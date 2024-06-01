@@ -258,8 +258,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                       .box
                       .white
                       .color(whiteColor)
-                      .padding(
-                          EdgeInsets.symmetric(horizontal: 12, vertical: 6))
+                      .padding(EdgeInsets.symmetric(horizontal: 12, vertical: 6))
                       .make(),
 
                   Row(
@@ -309,8 +308,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                       GestureDetector(
                         onTap: () {
                           Get.to(
-                            () =>
-                                StoreScreen(vendorId: widget.data['vendor_id']),
+                            () => StoreScreen(vendorId: widget.data['vendor_id']),
                           );
                         },
                         child: Container(

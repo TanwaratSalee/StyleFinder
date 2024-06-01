@@ -8,6 +8,8 @@ import 'package:get/get.dart';
 import 'package:flutter_finalproject/controllers/auth_controller.dart';
 import 'package:flutter_finalproject/views/auth_screen/personal_details_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:vxstate/vxstate.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -30,6 +32,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   bool isCheck = false;
+
+  Future<bool> isEmailAlreadyUsed(String email) async {
+    final QuerySnapshot result = await FirebaseFirestore.instance
+        .collection('users')
+        .where('email', isEqualTo: email)
+        .limit(1)
+        .get();
+    final List<DocumentSnapshot> documents = result.docs;
+    return documents.isNotEmpty;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -162,19 +174,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           title: 'Register',
                           textColor: whiteColor,
                           onPress: isCheck
-                              ? () {
+                              ? () async {
                                   if (validateInput()) {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            PersonalDetailsScreen(
-                                          email: emailController.text,
-                                          name: nameController.text,
-                                          password: passwordController.text,
+                                    if (await isEmailAlreadyUsed(
+                                        emailController.text)) {
+                                      VxToast.show(context,
+                                          msg: "This email is already in use.");
+                                    } else {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              PersonalDetailsScreen(
+                                            email: emailController.text,
+                                            name: nameController.text,
+                                            password:
+                                                passwordController.text,
+                                          ),
                                         ),
-                                      ),
-                                    );
+                                      );
+                                    }
                                   }
                                 }
                               : null,

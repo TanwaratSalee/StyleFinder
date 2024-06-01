@@ -31,7 +31,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
   bool isSelectedEveryday = false;
   var collectionsvalue = ''.obs;
   var vendors = <Map<String, dynamic>>[];
-  var selectedVendorIds = <String>[].obs; // List to keep track of selected vendors
+  var selectedVendorIds = <String>[].obs; 
 
   final selectedColorIndexes = <int>[].obs;
   final List<Map<String, dynamic>> allColors = [
@@ -111,11 +111,11 @@ class _FilterDrawerState extends State<FilterDrawer> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            35.heightBox,
+            40.heightBox,
             ListTile(
               title: Text(
                 "Filter products",
-              ).text.size(24).makeCentered(),
+              ).text.size(24).fontFamily(medium).makeCentered(),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -171,7 +171,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                   .make(),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Wrap(
                 spacing: 10,
                 children: vendors.map((vendor) {
@@ -188,7 +188,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                       });
                     },
                     child: Container(
-                      padding: EdgeInsets.all(12),
+                      padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(

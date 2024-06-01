@@ -327,7 +327,7 @@ class StoreScreen extends StatelessWidget {
                           Text(
                               "${NumberFormat('#,##0').format(double.parse(price).toInt())} Bath",
                               style: TextStyle(
-                                  color: Colors.grey[800],
+                                  color: greyColor,
                                   fontFamily: regular)),
                         ],
                       ),
@@ -337,7 +337,7 @@ class StoreScreen extends StatelessWidget {
               )
                   .box
                   .color(whiteColor)
-                  .border(color: Colors.grey[300]!)
+                  .border(color: greyLine)
                   .margin(EdgeInsets.all(6))
                   .rounded
                   .make(),
@@ -516,7 +516,7 @@ Widget buildProductMathGrids(String category) {
       return GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 1 / 1.25,
+          childAspectRatio: 1 / 1.19,
         ),
         itemCount: itemCount,
         itemBuilder: (BuildContext context, int index) {
@@ -604,7 +604,7 @@ Widget buildProductMathGrids(String category) {
                               ),
                               Text(
                                 "${NumberFormat('#,##0').format(double.parse(price1).toInt())} Bath",
-                                style: const TextStyle(color: Colors.grey),
+                                style: const TextStyle(color: greyDark),
                               ),
                             ],
                           ),
@@ -640,7 +640,7 @@ Widget buildProductMathGrids(String category) {
                               ),
                               Text(
                                 "${NumberFormat('#,##0').format(double.parse(price2).toInt())} Bath",
-                                style: const TextStyle(color: Colors.grey),
+                                style: const TextStyle(color: greyDark),
                               ),
                             ],
                           ),
@@ -651,13 +651,13 @@ Widget buildProductMathGrids(String category) {
                 ),
                 const SizedBox(height: 10),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  padding: const EdgeInsets.only(left: 16),
                   child: Row(
                     children: [
                       Text(
-                        "Price: ",
+                        "Total  ",
                         style: TextStyle(
-                            color: blackColor,
+                            color: greyDark,
                             fontFamily: regular,
                             fontSize: 14),
                       ),
@@ -669,7 +669,7 @@ Widget buildProductMathGrids(String category) {
                             fontSize: 16),
                       ),
                       Text(
-                        "Bath",
+                        " Bath",
                         style: TextStyle(
                             color: blackColor,
                             fontFamily: regular,

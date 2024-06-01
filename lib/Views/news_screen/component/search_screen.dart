@@ -42,39 +42,46 @@ class SearchScreen extends StatelessWidget {
             ),
             child: Image.network(
               currentValue['p_imgs'][0],
-              height: 210,
-              width: 200,
+              height: 200,
+              width: 195,
               fit: BoxFit.cover,
             ),
           ),
-          15.heightBox,
+          5.heightBox,
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              "${currentValue['p_name']}"
-              .text
-              .fontFamily(medium)
-              .size(18)
-              .color(greyDark)
-              .overflow(TextOverflow.ellipsis)
-              .softWrap(true)
-              .make(),
-          "${NumberFormat('#,##0').format(double.parse(currentValue['p_price']).toInt())} Bath"
-              .text
-              .color(greyDark)
-              .fontFamily(regular)
-              .size(14)
-              .make(),
+              Text(
+                "${currentValue['p_name']}",
+                style: const TextStyle(
+                  fontFamily: medium,
+                  fontSize: 14,
+                ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              ),
+              // .text
+              // .fontFamily(medium)
+              // .size(18)
+              // .color(greyDark)
+              // .overflow(TextOverflow.ellipsis)
+              // .softWrap(true)
+              // .make(),
+              "${NumberFormat('#,##0').format(double.parse(currentValue['p_price']).toInt())} Bath"
+                  .text
+                  .color(greyDark)
+                  .fontFamily(regular)
+                  .size(14)
+                  .make(),
             ],
-          ).box.padding(EdgeInsets.symmetric(horizontal: 8)).make(),
+          ).box.padding(EdgeInsets.symmetric(horizontal: 12, vertical: 5)).make(), //ชื่อ ราคา
         ],
       )
           .box
           .white
-          .shadowMd
-          .margin(const EdgeInsets.symmetric(horizontal: 4))
+          // .margin(const EdgeInsets.all(4))
           .roundedSM
-          // .padding(const EdgeInsets.all(12))
+          .border(color: greyLine)
           .make()
           .onTap(() {
         Get.to(() => ItemDetails(
@@ -90,11 +97,8 @@ class SearchScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: title!.text
-            .size(26)
-            .fontFamily(semiBold)
-            .color(blackColor)
-            .make(),
+        title:
+            title!.text.size(26).fontFamily(semiBold).color(blackColor).make(),
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: fetchProducts(),
@@ -119,13 +123,13 @@ class SearchScreen extends StatelessWidget {
               .toList();
 
           return Padding(
-            padding: const EdgeInsets.all(6.0),
+            padding: const EdgeInsets.all(18),
             child: GridView(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 8,
-                crossAxisSpacing: 8,
-                mainAxisExtent: 280,
+               crossAxisCount: 2,
+                mainAxisSpacing: 15,
+                crossAxisSpacing: 15,
+                mainAxisExtent: 260,
               ),
               children: buildGridView(filtered),
             ),
