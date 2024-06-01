@@ -15,7 +15,7 @@ Widget senderBubble(DocumentSnapshot data) {
     textDirection: isCurrentUser ? TextDirection.ltr : TextDirection.ltr,
     child: Column(
       crossAxisAlignment:
-          isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          isCurrentUser ? CrossAxisAlignment.start : CrossAxisAlignment.end,
       children: [
         Container(
           padding: const EdgeInsets.fromLTRB(12, 8, 14, 8),

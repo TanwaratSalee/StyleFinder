@@ -43,7 +43,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                         Container(
                           width: 125,
                           height: 125,
-                          color: Colors.grey[300],
+                          color: greyColor,
                           child: Center(
                             child: Text('Image 1'),
                           ),
