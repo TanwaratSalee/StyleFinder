@@ -33,7 +33,7 @@ class AllStoreScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
         child: ListView(
           children: [
-            'OFFICIAL STORE'.text.fontFamily(bold).color(blackColor).size(20).make(),
+            'OFFICIAL STORE'.text.fontFamily(semiBold).color(blackColor).size(20).make(),
             SizedBox(height: 10), 
             StreamBuilder(
               stream: FirestoreServices.allmatchbystore(),
@@ -86,12 +86,15 @@ class AllStoreScreen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Image.network(
-                                  productData['imageUrl'],
-                                  height: 80 ,
-                                  width: 100,
-                                  fit: BoxFit.cover,
-                                ).box.white.roundedSM.border(color: greyLine).make(),
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.network(
+                                    productData['imageUrl'],
+                                    height: 80 ,
+                                    width: 110,
+                                    fit: BoxFit.cover,
+                                  ).box.white.roundedSM.border(color: greyLine).make(),
+                                ),
                                 3.heightBox,
                                 Text(
                                   "${productData['vendor_name']}",
@@ -111,9 +114,9 @@ class AllStoreScreen extends StatelessWidget {
                 }
               },
             ),
-            15.heightBox,
+          30.heightBox,
 
-             'NEW STORE'.text.fontFamily(bold).color(blackColor).size(20).make(),
+             'NEW STORE'.text.fontFamily(semiBold).color(blackColor).size(20).make(),
             SizedBox(height: 10), 
             
             StreamBuilder(
@@ -135,7 +138,7 @@ class AllStoreScreen extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          150.heightBox,
+                          100.heightBox,
                           'Coming Soon'.text.fontFamily(regular).color(blackColor).size(18).make(),
                         ],
                       ),
@@ -167,12 +170,15 @@ class AllStoreScreen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Image.network(
-                                  productData['imageUrl'],
-                                  height: 80 ,
-                                  width: 100,
-                                  fit: BoxFit.cover,
-                                ).box.white.roundedSM.border(color: greyLine).make(),
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  child: Image.network(
+                                    productData['imageUrl'],
+                                    height: 80 ,
+                                    width: 100,
+                                    fit: BoxFit.cover,
+                                  ).box.white.roundedSM.border(color: greyLine).make(),
+                                ),
                                 3.heightBox,
                                 Text(
                                   "${productData['vendor_name']}",
