@@ -29,18 +29,6 @@ class _ProductScreenState extends State<ProductScreen> {
   @override
   void initState() {
     super.initState();
-    ever(controller.selectedGender, (_) => fetchFilteredProducts());
-    ever(controller.maxPrice, (_) => fetchFilteredProducts());
-    ever(controller.selectedColors, (_) => fetchFilteredProducts());
-    ever(controller.selectedTypes, (_) => fetchFilteredProducts());
-    ever(controller.selectedCollections, (_) => fetchFilteredProducts());
-    ever(controller.selectedVendorId, (_) => fetchFilteredProducts());
-  }
-
-  void fetchFilteredProducts() {
-    if (mounted) {
-      setState(() {}); // Trigger a rebuild
-    }
   }
 
   @override

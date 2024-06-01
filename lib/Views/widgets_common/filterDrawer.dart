@@ -82,6 +82,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
       });
     });
 
+    selectedVendorIds.addAll(controller.selectedVendorIds);
     selectedColorIndexes.addAll(controller.selectedColors);
 
     isSelectedDress = controller.selectedTypes.contains('dresses');
@@ -123,7 +124,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
             ),
             Center(
               child: Padding(
-                padding:const EdgeInsets.symmetric(horizontal: 18, vertical: 3),
+                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 3),
                 child: Row(
                   children: [
                     SizedBox(width: 5),
@@ -162,8 +163,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
             ),
             
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
               child: Text("Official Store")
                   .text
                   .fontFamily(regular)
@@ -179,12 +179,12 @@ class _FilterDrawerState extends State<FilterDrawer> {
                   return GestureDetector(
                     onTap: () {
                       setState(() {
-                        // controller.updateFilters(vendorId: vendor['vendor_id']);
                         if (isSelected) {
                           selectedVendorIds.remove(vendor['vendor_id']);
                         } else {
                           selectedVendorIds.add(vendor['vendor_id']);
                         }
+                        controller.updateFilters(vendorIds: selectedVendorIds);
                       });
                     },
                     child: Container(
@@ -212,7 +212,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
             5.heightBox,
             Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 16,),
+                  const EdgeInsets.symmetric(horizontal: 16),
               child: Text("Price").text.fontFamily(regular).size(14).make(),
             ),
             SliderTheme(
@@ -262,6 +262,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                           } else {
                             selectedColorIndexes.add(color['value']);
                           }
+                          controller.updateFilters(colors: selectedColorIndexes);
                         });
                       },
                       child: Container(
@@ -283,8 +284,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
             ),
             5.heightBox,
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
               child: Text("Type of product")
                   .text
                   .fontFamily(regular)
@@ -298,38 +298,68 @@ class _FilterDrawerState extends State<FilterDrawer> {
                   spacing: 5,
                   children: [
                     buildFilterChip("Dress", isSelectedDress, (isSelected) {
-                      setState(() => isSelectedDress = isSelected);
+                      setState(() {
+                        isSelectedDress = isSelected;
+                        updateFilterTypes();
+                      });
                     }),
                     buildFilterChip("Outerwear & Coats", isSelectedOuterwear,
                         (isSelected) {
-                      setState(() => isSelectedOuterwear = isSelected);
+                      setState(() {
+                        isSelectedOuterwear = isSelected;
+                        updateFilterTypes();
+                      });
                     }),
                     buildFilterChip("T-Shirts", isSelectedTShirts,
                         (isSelected) {
-                      setState(() => isSelectedTShirts = isSelected);
+                      setState(() {
+                        isSelectedTShirts = isSelected;
+                        updateFilterTypes();
+                      });
                     }),
                     buildFilterChip("Suits", isSelectedSuits, (isSelected) {
-                      setState(() => isSelectedSuits = isSelected);
+                      setState(() {
+                        isSelectedSuits = isSelected;
+                        updateFilterTypes();
+                      });
                     }),
                     buildFilterChip("Knitwear", isSelectedKnitwear,
                         (isSelected) {
-                      setState(() => isSelectedKnitwear = isSelected);
+                      setState(() {
+                        isSelectedKnitwear = isSelected;
+                        updateFilterTypes();
+                      });
                     }),
                     buildFilterChip("Activewear", isSelectedActivewear,
                         (isSelected) {
-                      setState(() => isSelectedActivewear = isSelected);
+                      setState(() {
+                        isSelectedActivewear = isSelected;
+                        updateFilterTypes();
+                      });
                     }),
                     buildFilterChip("Blazers", isSelectedBlazers, (isSelected) {
-                      setState(() => isSelectedBlazers = isSelected);
+                      setState(() {
+                        isSelectedBlazers = isSelected;
+                        updateFilterTypes();
+                      });
                     }),
                     buildFilterChip("Pants", isSelectedPants, (isSelected) {
-                      setState(() => isSelectedPants = isSelected);
+                      setState(() {
+                        isSelectedPants = isSelected;
+                        updateFilterTypes();
+                      });
                     }),
                     buildFilterChip("Denim", isSelectedDenim, (isSelected) {
-                      setState(() => isSelectedDenim = isSelected);
+                      setState(() {
+                        isSelectedDenim = isSelected;
+                        updateFilterTypes();
+                      });
                     }),
                     buildFilterChip("Skirts", isSelectedSkirts, (isSelected) {
-                      setState(() => isSelectedSkirts = isSelected);
+                      setState(() {
+                        isSelectedSkirts = isSelected;
+                        updateFilterTypes();
+                      });
                     }),
                   ],
                 ),
@@ -339,10 +369,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
             5.heightBox,
             
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
-              child:
-                  Text("Collection").text.fontFamily(regular).size(14).make(),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
+              child: Text("Collection").text.fontFamily(regular).size(14).make(),
             ),
             Center(
               child: Padding(
@@ -351,20 +379,35 @@ class _FilterDrawerState extends State<FilterDrawer> {
                   spacing: 5,
                   children: [
                     buildFilterChip("Summer", isSelectedSummer, (isSelected) {
-                      setState(() => isSelectedSummer = isSelected);
+                      setState(() {
+                        isSelectedSummer = isSelected;
+                        updateFilterCollections();
+                      });
                     }),
                     buildFilterChip("Winter", isSelectedWinter, (isSelected) {
-                      setState(() => isSelectedWinter = isSelected);
+                      setState(() {
+                        isSelectedWinter = isSelected;
+                        updateFilterCollections();
+                      });
                     }),
                     buildFilterChip("Autumn", isSelectedAutumn, (isSelected) {
-                      setState(() => isSelectedAutumn = isSelected);
+                      setState(() {
+                        isSelectedAutumn = isSelected;
+                        updateFilterCollections();
+                      });
                     }),
                     buildFilterChip("Dinner", isSelectedDinner, (isSelected) {
-                      setState(() => isSelectedDinner = isSelected);
+                      setState(() {
+                        isSelectedDinner = isSelected;
+                        updateFilterCollections();
+                      });
                     }),
                     buildFilterChip("Everyday", isSelectedEveryday,
                         (isSelected) {
-                      setState(() => isSelectedEveryday = isSelected);
+                      setState(() {
+                        isSelectedEveryday = isSelected;
+                        updateFilterCollections();
+                      });
                     }),
                   ],
                 ),
@@ -401,6 +444,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                           if (isSelectedDinner) 'dinner',
                           if (isSelectedEveryday) 'everydaylook',
                         ],
+                        vendorIds: selectedVendorIds,
                       );
                       Navigator.pop(context);
                     },
@@ -420,7 +464,6 @@ class _FilterDrawerState extends State<FilterDrawer> {
       ),
     );
   }
-}
 
 Future<List<Map<String, dynamic>>> fetchVendors() async {
   try {
@@ -433,22 +476,47 @@ Future<List<Map<String, dynamic>>> fetchVendors() async {
   }
 }
 
+  void updateFilterTypes() {
+    List<String> types = [];
+    if (isSelectedDress) types.add('dresses');
+    if (isSelectedOuterwear) types.add('outerwear & Costs');
+    if (isSelectedSkirts) types.add('skirts');
+    if (isSelectedTShirts) types.add('t-shirts');
+    if (isSelectedSuits) types.add('suits');
+    if (isSelectedKnitwear) types.add('knitwear');
+    if (isSelectedActivewear) types.add('activewear');
+    if (isSelectedBlazers) types.add('blazers');
+    if (isSelectedDenim) types.add('denim');
+
+    controller.updateFilters(types: types);
+  }
+
+  void updateFilterCollections() {
+    List<String> collections = [];
+    if (isSelectedSummer) collections.add('summer');
+    if (isSelectedWinter) collections.add('winter');
+    if (isSelectedAutumn) collections.add('autumn');
+    if (isSelectedDinner) collections.add('dinner');
+    if (isSelectedEveryday) collections.add('everydaylook');
+
+    controller.updateFilters(collections: collections);
+  }
+}
+
 Future<List<Map<String, dynamic>>> fetchProducts({
   String? gender,
   double? maxPrice,
   List<int>? selectedColors,
   List<String>? selectedTypes,
   List<String>? selectedCollections,
-  String? vendorId,
+  List<String>? vendorIds,
 }) async {
-  // Fetch initial results with the main condition
-  Query<Map<String, dynamic>> query =
-      FirebaseFirestore.instance.collection(productsCollection);
+  Query<Map<String, dynamic>> query = FirebaseFirestore.instance.collection(productsCollection);
 
   if (gender != null && gender.isNotEmpty) {
     query = query.where('p_sex', isEqualTo: gender);
   }
-  
+
   if (maxPrice != null) {
     String maxPriceString = maxPrice.toStringAsFixed(0);
     query = query.where('p_price', isLessThanOrEqualTo: maxPriceString);
@@ -456,14 +524,7 @@ Future<List<Map<String, dynamic>>> fetchProducts({
 
   try {
     QuerySnapshot<Map<String, dynamic>> snapshot = await query.get();
-    List<Map<String, dynamic>> products =
-        snapshot.docs.map((doc) => doc.data()).toList();
-
-    if (vendorId != null && vendorId.isNotEmpty) {
-      products = products
-          .where((product) => product['vendor_id'] == vendorId)
-          .toList();
-    }
+    List<Map<String, dynamic>> products = snapshot.docs.map((doc) => doc.data()).toList();
 
     // Filter by colors
     if (selectedColors != null && selectedColors.isNotEmpty) {
@@ -481,12 +542,17 @@ Future<List<Map<String, dynamic>>> fetchProducts({
       }).toList();
     }
 
+    if (vendorIds != null && vendorIds.isNotEmpty) {
+      products = products.where((product) {
+        return vendorIds.contains(product['vendor_id']);
+      }).toList();
+    }
+
     // Filter by collections
     if (selectedCollections != null && selectedCollections.isNotEmpty) {
       products = products.where((product) {
         List<dynamic> productCollections = product['p_collection'];
-        return selectedCollections
-            .any((collection) => productCollections.contains(collection));
+        return selectedCollections.any((collection) => productCollections.contains(collection));
       }).toList();
     }
 
@@ -496,6 +562,7 @@ Future<List<Map<String, dynamic>>> fetchProducts({
     return [];
   }
 }
+
 
 class FirestoreServices {
   static Future<List<Map<String, dynamic>>> getFeaturedProducts() async {

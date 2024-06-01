@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ever(controller.selectedColors, (_) => fetchFilteredProducts());
     ever(controller.selectedTypes, (_) => fetchFilteredProducts());
     ever(controller.selectedCollections, (_) => fetchFilteredProducts());
-    ever(controller.selectedVendorId, (_) => fetchFilteredProducts());
+    ever(controller.selectedVendorIds, (_) => fetchFilteredProducts());
   }
 
   List<Map<String, dynamic>> getRandomizedList(
@@ -226,7 +226,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     selectedColors: controller.selectedColors,
                     selectedTypes: controller.selectedTypes,
                     selectedCollections: controller.selectedCollections,
-                    vendorId: controller.selectedVendorId.value,
+                    vendorIds: controller.selectedVendorIds,
                   ),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {

@@ -12,9 +12,7 @@ class HomeController extends GetxController {
   var selectedColors = <int>[].obs;
   var selectedTypes = <String>[].obs;
   var selectedCollections = <String>[].obs;
-  var selectedVendorId = ''.obs;
-
-  // get searchController => null;
+  var selectedVendorIds = <String>[].obs;
 
   void onClose() {
     searchController.dispose();
@@ -27,14 +25,14 @@ class HomeController extends GetxController {
     List<int>? colors,
     List<String>? types,
     List<String>? collections,
-    String? vendorId,
+    List<String>? vendorIds,
   }) {
     if (gender != null) selectedGender.value = gender;
     if (price != null) maxPrice.value = price;
     if (colors != null) selectedColors.value = colors;
     if (types != null) selectedTypes.value = types;
     if (collections != null) selectedCollections.value = collections;
-    if (vendorId != null) selectedVendorId.value = vendorId;
+    if (vendorIds != null) selectedVendorIds.value = vendorIds;
   }
 
   void resetFilters() {
@@ -43,8 +41,8 @@ class HomeController extends GetxController {
     selectedColors.clear();
     selectedTypes.clear();
     selectedCollections.clear();
+    selectedVendorIds.clear();
   }
-
 
   @override
   void onInit() {
