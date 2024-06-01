@@ -240,12 +240,20 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                     const SizedBox(height: 50),
                     Container(
                       width: double.infinity,
-                      height: 80,
+                      height: 87,
                       padding: const EdgeInsets.all(8.0),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         border: Border.all(color: greyLine, width: 2),
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            spreadRadius: 0.1,
+                            blurRadius: 4,
+                            offset: Offset(0, 0),
+                          ),
+                        ],
                       ),
                       child: Row(
                         children: [
