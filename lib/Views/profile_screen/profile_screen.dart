@@ -841,7 +841,10 @@ class _ProfileScreenState extends State<ProfileScreen>
 
 Widget buildPostTab() {
   return StreamBuilder<QuerySnapshot>(
-    stream: FirebaseFirestore.instance.collection('postusermixmatchs').snapshots(),
+    stream: FirebaseFirestore.instance
+        .collection('postusermixmatchs')
+        .orderBy('views', descending: true) // Order by views in descending order
+        .snapshots(),
     builder: (context, snapshot) {
       if (!snapshot.hasData) {
         return Center(child: CircularProgressIndicator());
@@ -872,6 +875,7 @@ Widget buildPostTab() {
                   var vendorId = docData['vendor_id'] ?? '';
                   var collections = docData['p_collection_top'] != null ? List<String>.from(docData['p_collection_top']) : [];
                   var description = docData['p_desc_top'] ?? '';
+                  var views = docData['views'] ?? 0;
 
                   return GestureDetector(
                     onTap: () {
@@ -952,7 +956,7 @@ Widget buildPostTab() {
                                 ),
                                 SizedBox(width: 4),
                                 Text(
-                                  '0',
+                                  views.toString(),
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontFamily: bold,
@@ -975,6 +979,8 @@ Widget buildPostTab() {
     },
   );
 }
+
+
 
 
 

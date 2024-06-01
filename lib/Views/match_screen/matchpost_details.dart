@@ -49,6 +49,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
     super.initState();
     controller = Get.put(ProductController());
     checkIsInWishlist();
+    incrementViewCount();
   }
 
   void checkIsInWishlist() async {
@@ -77,6 +78,30 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
       }
     }).catchError((error) {
       print('Error checking wishlist status: $error');
+    });
+  }
+
+  void incrementViewCount() async {
+    String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
+
+    await FirebaseFirestore.instance
+        .collection('postusermixmatchs')
+        .where('p_name_top', isEqualTo: widget.productName1)
+        .where('p_name_lower', isEqualTo: widget.productName2)
+        .limit(1)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      if (querySnapshot.docs.isNotEmpty) {
+        var doc = querySnapshot.docs.first;
+        FirebaseFirestore.instance
+            .collection('postusermixmatchs')
+            .doc(doc.id)
+            .update({
+          'views': FieldValue.increment(1),
+        });
+      }
+    }).catchError((error) {
+      print('Error incrementing view count: $error');
     });
   }
 

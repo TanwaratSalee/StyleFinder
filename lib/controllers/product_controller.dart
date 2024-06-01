@@ -466,6 +466,7 @@ void addToWishlistPostUserMatch(
         var wishlist = (data?['p_wishlist'] as List<dynamic>?) ?? [];
 
         if (!wishlist.contains(currentUserUID)) {
+          userData['views'] = 0;
           if (doc['p_name'] == productNameTop) {
             userData['p_name_top'] = productNameTop;
             userData['p_price_top'] = doc['p_price'];
