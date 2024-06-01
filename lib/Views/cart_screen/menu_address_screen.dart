@@ -37,7 +37,8 @@ class _AddressScreenState extends State<AddressScreen> {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: const Text('Address').text
+        title: const Text('Address')
+            .text
             .size(26)
             .fontFamily(semiBold)
             .color(blackColor)
@@ -66,7 +67,10 @@ class _AddressScreenState extends State<AddressScreen> {
                 },
               ),
             ),
-            Divider(color: greyThin).box.padding(EdgeInsets.symmetric(horizontal: 12)).make(),
+            Divider(color: greyThin)
+                .box
+                .padding(EdgeInsets.symmetric(horizontal: 12))
+                .make(),
             Expanded(
               child: Container(
                 color: whiteColor,
@@ -82,10 +86,11 @@ class _AddressScreenState extends State<AddressScreen> {
                     if (!snapshot.hasData || !snapshot.data!.exists) {
                       return const Center(child: Text('No addresses found.'));
                     }
-        
-                    Map<String, dynamic>? data = snapshot.data!.data() as Map<String, dynamic>?;
+
+                    Map<String, dynamic>? data =
+                        snapshot.data!.data() as Map<String, dynamic>?;
                     List<dynamic> addressesList = data?['address'] ?? [];
-        
+
                     return ListView.builder(
                       itemCount: addressesList.length,
                       itemBuilder: (context, index) {
@@ -102,26 +107,32 @@ class _AddressScreenState extends State<AddressScreen> {
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                                 child: ListTile(
-                                  title: Text(formattedAddress),
+                                  title: Text(formattedAddress).text.fontFamily(regular).color(greyDark).make(),
                                   trailing: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       TextButton(
                                         child: const Text(
                                           'Edit',
-                                          style: TextStyle(color: primaryApp),
-                                        ),
+                                        )
+                                            .text
+                                            .size(16)
+                                            .fontFamily(medium)
+                                            .color(primaryApp)
+                                            .make(),
                                         onPressed: () {
-                                          Navigator.push(context,
+                                          Navigator.push(
+                                            context,
                                             MaterialPageRoute(
-                                              builder: (context) => editaddress_controller(
+                                              builder: (context) =>
+                                                  editaddress_controller(
                                                 documentId: snapshot.data!.id,
-                                                firstname: address['firstname'] ?? '',
-                                                surname: address['surname'] ?? '',
-                                                address: address['address'] ?? '',
+                                                firstname:address['firstname'] ?? '',
+                                                surname:address['surname'] ?? '',
+                                                address:address['address'] ?? '',
                                                 city: address['city'] ?? '',
                                                 state: address['state'] ?? '',
-                                                postalCode: address['postalCode'] ?? '',
+                                                postalCode:address['postalCode'] ?? '',
                                                 phone: address['phone'] ?? '',
                                               ),
                                             ),
@@ -131,8 +142,12 @@ class _AddressScreenState extends State<AddressScreen> {
                                       TextButton(
                                         child: const Text(
                                           'Remove',
-                                          style: TextStyle(color: redColor),
-                                        ),
+                                        )
+                                            .text
+                                            .size(16)
+                                            .fontFamily(medium)
+                                            .color(redColor)
+                                            .make(),
                                         onPressed: () async {
                                           await removeAddress(index);
                                         },

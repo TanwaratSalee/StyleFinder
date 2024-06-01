@@ -356,7 +356,7 @@ Widget buildMatchTab() {
       return GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 1,
-          childAspectRatio: 6 / 2.9,
+          childAspectRatio: 6 / 2.75,
         ),
         itemCount: userDocs.length,
         itemBuilder: (BuildContext context, int index) {

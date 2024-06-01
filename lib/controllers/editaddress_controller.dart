@@ -127,47 +127,49 @@ class _editaddressFormState extends State<editaddress_controller> {
               title: "Save"),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
-        child: Column(
-          children: [
-            customTextField(
-                label: "Firstname",
-                isPass: false,
-                readOnly: false,
-                controller: _firstnameController),
-            15.heightBox, customTextField(
-                label: "Surname",
-                isPass: false,
-                readOnly: false,
-                controller: _surnameController),
-            15.heightBox, customTextField(
-                label: "Address",
-                isPass: false,
-                readOnly: false,
-                controller: _addressController),
-            15.heightBox, customTextField(
-                label: "City",
-                isPass: false,
-                readOnly: false,
-                controller: _cityController),
-            15.heightBox, customTextField(
-                label: "State",
-                isPass: false,
-                readOnly: false,
-                controller: _stateController),
-            15.heightBox, customTextField(
-                label: "Postal Code",
-                isPass: false,
-                readOnly: false,
-                controller: _postalCodeController),
-            15.heightBox, customTextField(
-                label: "Phone",
-                isPass: false,
-                readOnly: false,
-                controller: _phoneController),
-            const SizedBox(height: 20),
-          ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+          child: Column(
+            children: [
+              customTextField(
+                  label: "Firstname",
+                  isPass: false,
+                  readOnly: false,
+                  controller: _firstnameController),
+              15.heightBox, customTextField(
+                  label: "Surname",
+                  isPass: false,
+                  readOnly: false,
+                  controller: _surnameController),
+              15.heightBox, customTextField(
+                  label: "Address",
+                  isPass: false,
+                  readOnly: false,
+                  controller: _addressController),
+              15.heightBox, customTextField(
+                  label: "City",
+                  isPass: false,
+                  readOnly: false,
+                  controller: _cityController),
+              15.heightBox, customTextField(
+                  label: "State",
+                  isPass: false,
+                  readOnly: false,
+                  controller: _stateController),
+              15.heightBox, customTextField(
+                  label: "Postal Code",
+                  isPass: false,
+                  readOnly: false,
+                  controller: _postalCodeController),
+              15.heightBox, customTextField(
+                  label: "Phone",
+                  isPass: false,
+                  readOnly: false,
+                  controller: _phoneController),
+              const SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );

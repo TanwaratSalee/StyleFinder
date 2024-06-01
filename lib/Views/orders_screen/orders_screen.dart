@@ -5,6 +5,8 @@ import 'package:flutter_finalproject/Views/orders_screen/writeReview_screen.dart
 import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
+
+import 'package:intl/intl.dart' as intl;
 import 'package:intl/intl.dart';
 
 class OrdersScreen extends StatefulWidget {
@@ -95,6 +97,9 @@ class _OrdersScreenState extends State<OrdersScreen>
                         Text(
                           "Order code ${orderData['order_code']}",
                         ).text.fontFamily(medium).color(blackColor).size(18).make(),
+                         Text(intl.DateFormat()
+                                .add_yMd()
+                                .format((orderData['order_date'].toDate()))),
                         Text(
                           orderData['order_confirmed'] ? "Confirm" : "Pending",
                           style: TextStyle(

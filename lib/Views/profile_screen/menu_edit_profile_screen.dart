@@ -385,8 +385,8 @@ class EditProfileScreen extends StatelessWidget {
                       controller: controller.weightController,
                       label: 'Weight',
                       isPass: false,
-                      readOnly: true),
-                                
+                      readOnly: false),
+                      30.heightBox
                     ],
                   ),
                 )

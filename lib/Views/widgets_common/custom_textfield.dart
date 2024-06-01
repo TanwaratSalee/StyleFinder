@@ -87,7 +87,7 @@ Widget customTextField({
           filled: true,
           fillColor: whiteColor,
           contentPadding:
-              const EdgeInsets.symmetric(vertical: 12.5, horizontal: 20),
+              const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: const BorderSide(color: greyLine),
