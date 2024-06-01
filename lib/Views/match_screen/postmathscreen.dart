@@ -1,13 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/home_controller.dart';
 import 'package:get/get.dart';
 
-class MatchPostProduct extends StatefulWidget {
+class PostMatchScreen extends StatefulWidget {
   @override
-  _MatchPostProductState createState() => _MatchPostProductState();
+  _PostMatchScreenState createState() => _PostMatchScreenState();
 }
 
-class _MatchPostProductState extends State<MatchPostProduct> {
+class _PostMatchScreenState extends State<PostMatchScreen> {
   final HomeController controller = Get.find<HomeController>();
   final TextEditingController explanationController = TextEditingController();
 
@@ -48,7 +52,8 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                             child: Text('Image 1'),
                           ),
                         ),
-                        SizedBox(height: 5),
+                        SizedBox(
+                            height: 5), // เพิ่มช่องว่างระหว่างรูปและข้อความ
                         Text(
                           'Top',
                           style: TextStyle(
@@ -67,7 +72,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                           height: 27,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: primaryApp,
+                            color: primaryApp, // สีวงกลมด้านหลัง
                           ),
                         ),
                         Icon(
@@ -88,7 +93,8 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                             child: Text('Image 2'),
                           ),
                         ),
-                        SizedBox(height: 5),
+                        SizedBox(
+                            height: 5), // เพิ่มช่องว่างระหว่างรูปและข้อความ
                         Text(
                           'Lower',
                           style: TextStyle(
@@ -217,7 +223,8 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                     backgroundColor: primaryApp,
                     minimumSize: Size(double.infinity, 50),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius:
+                          BorderRadius.circular(8), // ปรับมุมให้เป็น 8 พิกเซล
                     ),
                   ),
                 ),
@@ -285,12 +292,12 @@ class GenderSelector extends StatelessWidget {
     return MaterialButton(
       onPressed: () => onSelected(!isSelected),
       child: Text(label),
-      color: isSelected ? thinPrimaryApp : greyThin,
-      textColor: greyColor,
+      color: isSelected ? thinPrimaryApp : Color.fromARGB(255, 250, 248, 248),
+      textColor: Colors.grey[800],
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
         side: BorderSide(
-          color: isSelected ? primaryApp : greyLine,
+          color: isSelected ? primaryApp : Color.fromARGB(255, 227, 221, 221),
         ),
       ),
       elevation: 0,
@@ -338,8 +345,8 @@ class CollectionSelector extends StatelessWidget {
         SizedBox(height: 0),
         Center(
           child: Wrap(
-            spacing: 10,
-            runSpacing: 1,
+            spacing: 10, // horizontal space between chips
+            runSpacing: 1, // vertical space between lines
             children: [
               buildFilterChip("Summer ", isSelectedSummer, onSummerSelected),
               buildFilterChip("Winter ", isSelectedWinter, onWinterSelected),
@@ -359,12 +366,12 @@ class CollectionSelector extends StatelessWidget {
     return MaterialButton(
       onPressed: () => onSelected(!isSelected),
       child: Text(label),
-      color: isSelected ? thinPrimaryApp : greyThin,
+      color: isSelected ? thinPrimaryApp : Color.fromARGB(255, 250, 248, 248),
       textColor: greyColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
         side: BorderSide(
-          color: isSelected ? primaryApp : greyColor,
+          color: isSelected ? primaryApp : Color.fromARGB(255, 227, 221, 221),
         ),
       ),
       elevation: 0,
