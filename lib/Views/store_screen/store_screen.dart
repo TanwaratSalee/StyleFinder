@@ -21,23 +21,22 @@ class StoreScreen extends StatelessWidget {
           backgroundColor: whiteColor,
           appBar: AppBar(
             title: Text(title)
-               .text
-            .size(26)
-            .fontFamily(semiBold)
-            .color(blackColor)
-            .make(),
+                .text
+                .size(26)
+                .fontFamily(semiBold)
+                .color(blackColor)
+                .make(),
             centerTitle: true,
             elevation: 0,
             actions: [
-          IconButton(
-            icon: Image.asset(icCart, width: 21),
-            onPressed: () {
-              Get.to(() => const CartScreen());
-            },
+              IconButton(
+                icon: Image.asset(icCart, width: 21),
+                onPressed: () {
+                  Get.to(() => const CartScreen());
+                },
+              ),
+            ],
           ),
-        ],
-          ),
-          
           body: SingleChildScrollView(
             child: Column(
               children: [
@@ -125,7 +124,6 @@ class StoreScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10),
-                
               ],
             ),
           ),
@@ -135,46 +133,45 @@ class StoreScreen extends StatelessWidget {
   }
 
   Widget ProductMatchTabs(BuildContext context) {
-  return DefaultTabController(
-    length: 2,
-    child: Column(
-      children: <Widget>[
-        Container(
-          child: Column(
-            children: [
-              TabBar(
-                labelStyle: const TextStyle(
-                    fontSize: 15, fontFamily: regular, color: greyDark),
-                unselectedLabelStyle: const TextStyle(
-                    fontSize: 14, fontFamily: regular, color: greyDark),
-                tabs: [
-                  const Tab(text: 'Product'),
-                  const Tab(text: 'Match'),
-                ],
-                indicatorColor: Theme.of(context).primaryColor,
-              ),
-                 Divider(
-                  color: greyThin, 
-                  thickness: 2, 
-                  height: 3, 
-              ),
-            ],
+    return DefaultTabController(
+      length: 2,
+      child: Column(
+        children: <Widget>[
+          Container(
+            child: Column(
+              children: [
+                TabBar(
+                  labelStyle: const TextStyle(
+                      fontSize: 15, fontFamily: regular, color: greyDark),
+                  unselectedLabelStyle: const TextStyle(
+                      fontSize: 14, fontFamily: regular, color: greyDark),
+                  tabs: [
+                    const Tab(text: 'Product'),
+                    const Tab(text: 'Match'),
+                  ],
+                  indicatorColor: Theme.of(context).primaryColor,
+                ),
+                Divider(
+                  color: greyThin,
+                  thickness: 2,
+                  height: 3,
+                ),
+              ],
+            ),
           ),
-        ),
-        Container(
-          height: MediaQuery.of(context).size.height * 0.67,
-          child: TabBarView(
-            children: [
-              buildProductTab(context),
-              buildMatchTab(context),
-            ],
+          Container(
+            height: MediaQuery.of(context).size.height * 0.67,
+            child: TabBarView(
+              children: [
+                buildProductTab(context),
+                buildMatchTab(context),
+              ],
+            ),
           ),
-        ),
-      ],
-    ),
-  );
-}
-
+        ],
+      ),
+    );
+  }
 
   Widget buildProductTab(BuildContext context) {
     return Column(
@@ -211,7 +208,8 @@ class StoreScreen extends StatelessWidget {
                     children: [
                       buildProductGridAll(),
                       buildProductGrid('dresses', 'dresses'),
-                      buildProductGrid('outerwear & Costs', 'outerwear & Costs'),
+                      buildProductGrid(
+                          'outerwear & Costs', 'outerwear & Costs'),
                       buildProductGrid('blazers', 'blazers'),
                       buildProductGrid('suits', 'suits'),
                       buildProductGrid('blouses & Tops', 'blouses & Tops'),
@@ -327,8 +325,7 @@ class StoreScreen extends StatelessWidget {
                           Text(
                               "${NumberFormat('#,##0').format(double.parse(price).toInt())} Bath",
                               style: TextStyle(
-                                  color: greyColor,
-                                  fontFamily: regular)),
+                                  color: greyColor, fontFamily: regular)),
                         ],
                       ),
                     ),
@@ -478,235 +475,237 @@ class StoreScreen extends StatelessWidget {
     }
   }
 
-Widget buildProductMathGrids(String category) {
-  Query query = FirebaseFirestore.instance
-      .collection(productsCollection)
-      .where('vendor_id', isEqualTo: vendorId)
-      .where('p_mixmatch', isNotEqualTo: null);
+  Widget buildProductMathGrids(String category) {
+    Query query = FirebaseFirestore.instance
+        .collection(productsCollection)
+        .where('vendor_id', isEqualTo: vendorId)
+        .where('p_mixmatch', isNotEqualTo: null);
 
-  return StreamBuilder<QuerySnapshot>(
-    stream: query.snapshots(),
-    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-      if (!snapshot.hasData) {
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      }
-
-      Map<String, List<DocumentSnapshot>> mixMatchMap = {};
-
-      for (var doc in snapshot.data!.docs) {
-        var data = doc.data() as Map<String, dynamic>;
-
-        if (data['vendor_id'] == vendorId && data['p_mixmatch'] != null) {
-          String mixMatchKey = data['p_mixmatch'];
-          if (!mixMatchMap.containsKey(mixMatchKey)) {
-            mixMatchMap[mixMatchKey] = [];
-          }
-          mixMatchMap[mixMatchKey]!.add(doc);
+    return StreamBuilder<QuerySnapshot>(
+      stream: query.snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (!snapshot.hasData) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
         }
-      }
 
-      var validPairs = mixMatchMap.entries
-          .where((entry) => entry.value.length == 2)
-          .toList();
+        Map<String, List<DocumentSnapshot>> mixMatchMap = {};
 
-      int itemCount = validPairs.length;
+        for (var doc in snapshot.data!.docs) {
+          var data = doc.data() as Map<String, dynamic>;
 
-      return GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 1 / 1.19,
-        ),
-        itemCount: itemCount,
-        itemBuilder: (BuildContext context, int index) {
-          var pair = validPairs[index].value;
+          if (data['vendor_id'] == vendorId && data['p_mixmatch'] != null) {
+            String mixMatchKey = data['p_mixmatch'];
+            if (!mixMatchMap.containsKey(mixMatchKey)) {
+              mixMatchMap[mixMatchKey] = [];
+            }
+            mixMatchMap[mixMatchKey]!.add(doc);
+          }
+        }
 
-          var data1 = pair[0].data() as Map<String, dynamic>;
-          var data2 = pair[1].data() as Map<String, dynamic>;
+        var validPairs = mixMatchMap.entries
+            .where((entry) => entry.value.length == 2)
+            .toList();
 
-          String vendorName1 = data1['p_seller'];
-          String vendorName2 = data2['p_seller'];
+        int itemCount = validPairs.length;
 
-          String vendor_id = data1['vendor_id'];
+        return GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 1 / 1.22,
+          ),
+          itemCount: itemCount,
+          itemBuilder: (BuildContext context, int index) {
+            var pair = validPairs[index].value;
 
-          List<dynamic> collectionList = data1['p_mixmatch_collection'];
-          String description = data1['p_mixmatch_desc'];
-          
-          String price1 = data1['p_price'].toString();
-          String price2 = data2['p_price'].toString();
-          String totalPrice = (int.parse(price1) + int.parse(price2)).toString();
+            var data1 = pair[0].data() as Map<String, dynamic>;
+            var data2 = pair[1].data() as Map<String, dynamic>;
 
-          String productName1 = data1['p_name'];
-          String productName2 = data2['p_name'];
+            String vendorName1 = data1['p_seller'];
+            String vendorName2 = data2['p_seller'];
 
-          String productImage1 = data1['p_imgs'][0];
-          String productImage2 = data2['p_imgs'][0];
+            String vendor_id = data1['vendor_id'];
 
-          bool isTop1 = data1['p_part'] == 'top';
-          bool isTop2 = data2['p_part'] == 'top';
+            List<dynamic> collectionList = data1['p_mixmatch_collection'];
+            String description = data1['p_mixmatch_desc'];
 
-          // Ensure top items are displayed at the top
-          var topProductData = isTop1 ? data1 : data2;
-          var lowerProductData = isTop1 ? data2 : data1;
+            String price1 = data1['p_price'].toString();
+            String price2 = data2['p_price'].toString();
+            String totalPrice =
+                (int.parse(price1) + int.parse(price2)).toString();
 
-          var topProductImage = isTop1 ? productImage1 : productImage2;
-          var lowerProductImage = isTop1 ? productImage2 : productImage1;
+            String productName1 = data1['p_name'];
+            String productName2 = data2['p_name'];
 
-          var topProductName = isTop1 ? productName1 : productName2;
-          var lowerProductName = isTop1 ? productName2 : productName1;
+            String productImage1 = data1['p_imgs'][0];
+            String productImage2 = data2['p_imgs'][0];
 
-          var topPrice = isTop1 ? price1 : price2;
-          var lowerPrice = isTop1 ? price2 : price1;
+            bool isTop1 = data1['p_part'] == 'top';
+            bool isTop2 = data2['p_part'] == 'top';
 
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MatchDetailScreen(
-                    price1: price1,
-                    price2: price2,
-                    productName1: productName1,
-                    productName2: productName2,
-                    productImage1: productImage1,
-                    productImage2: productImage2,
-                    totalPrice: totalPrice,
-                    vendorName1: vendorName1,
-                    vendorName2: vendorName2,
-                    vendor_id: vendor_id,
-                    collection: collectionList,
-                    description: description,
+            // Ensure top items are displayed at the top
+            var topProductData = isTop1 ? data1 : data2;
+            var lowerProductData = isTop1 ? data2 : data1;
+
+            var topProductImage = isTop1 ? productImage1 : productImage2;
+            var lowerProductImage = isTop1 ? productImage2 : productImage1;
+
+            var topProductName = isTop1 ? productName1 : productName2;
+            var lowerProductName = isTop1 ? productName2 : productName1;
+
+            var topPrice = isTop1 ? price1 : price2;
+            var lowerPrice = isTop1 ? price2 : price1;
+
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MatchDetailScreen(
+                      price1: price1,
+                      price2: price2,
+                      productName1: productName1,
+                      productName2: productName2,
+                      productImage1: productImage1,
+                      productImage2: productImage2,
+                      totalPrice: totalPrice,
+                      vendorName1: vendorName1,
+                      vendorName2: vendorName2,
+                      vendor_id: vendor_id,
+                      collection: collectionList,
+                      description: description,
+                    ),
                   ),
-                ),
-              );
-            },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Column(
-                  children: [
-                    Row(
-                      children: [
-                        Image.network(
-                          topProductImage.isNotEmpty ? topProductImage : imgError,
-                          width: 80,
-                          height: 90,
-                          fit: BoxFit.cover,
-                          errorBuilder: (BuildContext context,
-                              Object exception, StackTrace? stackTrace) {
-                            return Image.asset(imgError,
-                                width: 80, height: 90, fit: BoxFit.cover);
-                          },
-                        ),
-                        5.widthBox,
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: 200,
-                                child: Text(
-                                  topProductName,
-                                  style: const TextStyle(
-                                    fontFamily: medium,
-                                    fontSize: 14,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                ),
-                              ),
-                              Text(
-                                "${NumberFormat('#,##0').format(double.parse(topPrice).toInt())} Bath",
-                                style: const TextStyle(color: greyDark),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                    5.heightBox,
-                    Row(
-                      children: [
-                        Image.network(
-                          lowerProductImage,
-                          width: 80,
-                          height: 90,
-                          fit: BoxFit.cover,
-                        ),
-                        5.widthBox,
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: 200,
-                                child: Text(
-                                  lowerProductName,
-                                  style: const TextStyle(
-                                    fontFamily: medium,
-                                    fontSize: 14,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                ),
-                              ),
-                              Text(
-                                "${NumberFormat('#,##0').format(double.parse(lowerPrice).toInt())} Bath",
-                                style: const TextStyle(color: greyDark),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.only(left: 16),
-                  child: Row(
+                );
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Column(
                     children: [
-                      Text(
-                        "Total  ",
-                        style: TextStyle(
-                            color: greyDark,
-                            fontFamily: regular,
-                            fontSize: 14),
+                      Row(
+                        children: [
+                          Image.network(
+                            topProductImage.isNotEmpty
+                                ? topProductImage
+                                : imgError,
+                            width: 80,
+                            height: 90,
+                            fit: BoxFit.cover,
+                            errorBuilder: (BuildContext context,
+                                Object exception, StackTrace? stackTrace) {
+                              return Image.asset(imgError,
+                                  width: 80, height: 90, fit: BoxFit.cover);
+                            },
+                          ),
+                          5.widthBox,
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: 200,
+                                  child: Text(
+                                    topProductName,
+                                    style: const TextStyle(
+                                      fontFamily: medium,
+                                      fontSize: 14,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
+                                ),
+                                Text(
+                                  "${NumberFormat('#,##0').format(double.parse(topPrice).toInt())} Bath",
+                                  style: const TextStyle(color: greyDark),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
                       ),
-                      Text(
-                        "${NumberFormat('#,##0').format(double.parse(totalPrice).toInt())} ",
-                        style: TextStyle(
-                            color: blackColor,
-                            fontFamily: medium,
-                            fontSize: 16),
-                      ),
-                      Text(
-                        " Bath",
-                        style: TextStyle(
-                            color: blackColor,
-                            fontFamily: regular,
-                            fontSize: 14),
+                      5.heightBox,
+                      Row(
+                        children: [
+                          Image.network(
+                            lowerProductImage,
+                            width: 80,
+                            height: 90,
+                            fit: BoxFit.cover,
+                          ),
+                          5.widthBox,
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: 200,
+                                  child: Text(
+                                    lowerProductName,
+                                    style: const TextStyle(
+                                      fontFamily: medium,
+                                      fontSize: 14,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
+                                ),
+                                Text(
+                                  "${NumberFormat('#,##0').format(double.parse(lowerPrice).toInt())} Bath",
+                                  style: const TextStyle(color: greyDark),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
                       ),
                     ],
                   ),
-                )
-              ],
-            )
-                .box
-                .padding(EdgeInsets.all(6))
-                .margin(EdgeInsets.symmetric(horizontal: 4, vertical: 6))
-                .roundedSM
-                .border(color: greyLine)
-                .make(),
-          );
-        },
-      );
-    },
-  );
-}
-
+                  const SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16),
+                    child: Row(
+                      children: [
+                        Text(
+                          "Total  ",
+                          style: TextStyle(
+                              color: greyDark,
+                              fontFamily: regular,
+                              fontSize: 14),
+                        ),
+                        Text(
+                          "${NumberFormat('#,##0').format(double.parse(totalPrice).toInt())} ",
+                          style: TextStyle(
+                              color: blackColor,
+                              fontFamily: medium,
+                              fontSize: 16),
+                        ),
+                        Text(
+                          " Bath",
+                          style: TextStyle(
+                              color: blackColor,
+                              fontFamily: regular,
+                              fontSize: 14),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              )
+                  .box
+                  .padding(EdgeInsets.all(6))
+                  .margin(EdgeInsets.symmetric(horizontal: 4, vertical: 6))
+                  .roundedSM
+                  .border(color: greyLine)
+                  .make(),
+            );
+          },
+        );
+      },
+    );
+  }
 }
