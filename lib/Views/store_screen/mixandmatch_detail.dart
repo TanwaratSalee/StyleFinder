@@ -244,7 +244,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                       padding: const EdgeInsets.all(8.0),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        border: Border.all(color: greyLine, width: 2),
+                        border: Border.all(color: greyLine, width: 1),
                         borderRadius: BorderRadius.circular(8),
                         boxShadow: [
                           BoxShadow(
