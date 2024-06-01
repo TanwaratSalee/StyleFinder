@@ -289,220 +289,234 @@ class _ProductScreenState extends State<ProductScreen> {
     );
   }
 
-  Widget buildMatchTab(BuildContext context) {
-    Query query = FirebaseFirestore.instance
-        .collection(productsCollection)
-        .where('p_mixmatch', isNotEqualTo: null);
+Widget buildMatchTab(BuildContext context) {
+  Query query = FirebaseFirestore.instance
+      .collection(productsCollection)
+      .where('p_mixmatch', isNotEqualTo: null);
 
-    return StreamBuilder<QuerySnapshot>(
-      stream: query.snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (!snapshot.hasData) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+  return StreamBuilder<QuerySnapshot>(
+    stream: query.snapshots(),
+    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+      if (!snapshot.hasData) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+
+      Map<String, List<DocumentSnapshot>> mixMatchMap = {};
+
+      for (var doc in snapshot.data!.docs) {
+        var data = doc.data() as Map<String, dynamic>;
+        String mixMatchKey = data['p_mixmatch'];
+        if (!mixMatchMap.containsKey(mixMatchKey)) {
+          mixMatchMap[mixMatchKey] = [];
         }
+        mixMatchMap[mixMatchKey]!.add(doc);
+      }
 
-        Map<String, List<DocumentSnapshot>> mixMatchMap = {};
+      var validPairs = mixMatchMap.entries
+          .where((entry) => entry.value.length == 2)
+          .toList();
 
-        for (var doc in snapshot.data!.docs) {
-          var data = doc.data() as Map<String, dynamic>;
-          String mixMatchKey = data['p_mixmatch'];
-          if (!mixMatchMap.containsKey(mixMatchKey)) {
-            mixMatchMap[mixMatchKey] = [];
+      // Sort pairs to ensure 'top' appears before 'lower'
+      for (var entry in validPairs) {
+        entry.value.sort((a, b) {
+          var dataA = a.data() as Map<String, dynamic>;
+          var dataB = b.data() as Map<String, dynamic>;
+          if (dataA['p_part'] == 'top' && dataB['p_part'] == 'lower') {
+            return -1;
+          } else if (dataA['p_part'] == 'lower' && dataB['p_part'] == 'top') {
+            return 1;
           }
-          mixMatchMap[mixMatchKey]!.add(doc);
-        }
+          return 0;
+        });
+      }
 
-        var validPairs = mixMatchMap.entries
-            .where((entry) => entry.value.length == 2)
-            .toList();
+      return GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 1 / 1.25,
+        ),
+        itemCount: validPairs.length,
+        itemBuilder: (BuildContext context, int index) {
+          if (index >= validPairs.length) {
+            return Container();
+          }
+          var pair = validPairs[index].value;
+          if (pair.length < 2) {
+            return Container();
+          }
+          var data1 = pair[0].data() as Map<String, dynamic>;
+          var data2 = pair[1].data() as Map<String, dynamic>;
+          String vendorName1 = data1['p_seller'];
+          String vendorName2 = data2['p_seller'];
 
-        return GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 1 / 1.25,
-          ),
-          itemCount: validPairs.length,
-          itemBuilder: (BuildContext context, int index) {
-            if (index >= validPairs.length) {
-              return Container();
-            }
-            var pair = validPairs[index].value;
-            if (pair.length < 2) {
-              return Container();
-            }
-            var data1 = pair[0].data() as Map<String, dynamic>;
-            var data2 = pair[1].data() as Map<String, dynamic>;
-            String vendorName1 = data1['p_seller'];
-            String vendorName2 = data2['p_seller'];
+          String vendor_id = data1['vendor_id'];
 
-            String vendor_id = data1['vendor_id'];
+          List<dynamic> collectionList = data1['p_mixmatch_collection'];
+          String description = data1['p_mixmatch_desc'];
 
-            List<dynamic> collectionList = data1['p_mixmatch_collection'];
-            String description = data1['p_mixmatch_desc'];
+          String price1 = data1['p_price'].toString();
+          String price2 = data2['p_price'].toString();
+          String totalPrice =
+              (int.parse(price1) + int.parse(price2)).toString();
 
-            String price1 = data1['p_price'].toString();
-            String price2 = data2['p_price'].toString();
-            String totalPrice =
-                (int.parse(price1) + int.parse(price2)).toString();
+          String productName1 = data1['p_name'];
+          String productName2 = data2['p_name'];
 
-            String productName1 = data1['p_name'];
-            String productName2 = data2['p_name'];
+          String productImage1 = data1['p_imgs'][0];
+          String productImage2 = data2['p_imgs'][0];
 
-            String productImage1 = data1['p_imgs'][0];
-            String productImage2 = data2['p_imgs'][0];
-
-            return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MatchDetailScreen(
-                        price1: price1,
-                        price2: price2,
-                        productName1: productName1,
-                        productName2: productName2,
-                        productImage1: productImage1,
-                        productImage2: productImage2,
-                        totalPrice: totalPrice,
-                        vendorName1: vendorName1,
-                        vendorName2: vendorName2,
-                        vendor_id: vendor_id,
-                        collection: collectionList,
-                        description: description,
-                      ),
+          return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MatchDetailScreen(
+                      price1: price1,
+                      price2: price2,
+                      productName1: productName1,
+                      productName2: productName2,
+                      productImage1: productImage1,
+                      productImage2: productImage2,
+                      totalPrice: totalPrice,
+                      vendorName1: vendorName1,
+                      vendorName2: vendorName2,
+                      vendor_id: vendor_id,
+                      collection: collectionList,
+                      description: description,
                     ),
-                  );
-                },
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Column(
+                  ),
+                );
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Column(
+                    children: [
+                      Row(
+                        children: [
+                          Image.network(
+                            productImage1.isNotEmpty
+                                ? productImage1
+                                : imgError,
+                            width: 80,
+                            height: 90,
+                            fit: BoxFit.cover,
+                            errorBuilder: (BuildContext context,
+                                Object exception, StackTrace? stackTrace) {
+                              return Image.asset(imgError,
+                                  width: 80, height: 90, fit: BoxFit.cover);
+                            },
+                          ),
+                          5.widthBox,
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: 200,
+                                  child: Text(
+                                    productName1,
+                                    style: const TextStyle(
+                                      fontFamily: medium,
+                                      fontSize: 14,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
+                                ),
+                                Text(
+                                  "${NumberFormat('#,##0').format(double.parse(price1).toInt())} Bath",
+                                  style: const TextStyle(color: Colors.grey),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                      5.heightBox,
+                      Row(
+                        children: [
+                          Image.network(
+                            productImage2,
+                            width: 80,
+                            height: 90,
+                            fit: BoxFit.cover,
+                          ),
+                          5.widthBox,
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: 200,
+                                  child: Text(
+                                    productName2,
+                                    style: const TextStyle(
+                                      fontFamily: medium,
+                                      fontSize: 14,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
+                                ),
+                                Text(
+                                  "${NumberFormat('#,##0').format(double.parse(price2).toInt())} Bath",
+                                  style: const TextStyle(color: Colors.grey),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: Row(
                       children: [
-                        Row(
-                          children: [
-                            Image.network(
-                              productImage1.isNotEmpty
-                                  ? productImage1
-                                  : imgError,
-                              width: 80,
-                              height: 90,
-                              fit: BoxFit.cover,
-                              errorBuilder: (BuildContext context,
-                                  Object exception, StackTrace? stackTrace) {
-                                return Image.asset(imgError,
-                                    width: 80, height: 90, fit: BoxFit.cover);
-                              },
-                            ),
-                            5.widthBox,
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    width: 200,
-                                    child: Text(
-                                      productName1,
-                                      style: const TextStyle(
-                                        fontFamily: medium,
-                                        fontSize: 14,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                    ),
-                                  ),
-                                  Text(
-                                    "${NumberFormat('#,##0').format(double.parse(price1).toInt())} Bath",
-                                    style: const TextStyle(color: Colors.grey),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
+                        Text(
+                          "Price: ",
+                          style: TextStyle(
+                              color: blackColor,
+                              fontFamily: regular,
+                              fontSize: 14),
                         ),
-                        5.heightBox,
-                        Row(
-                          children: [
-                            Image.network(
-                              productImage2,
-                              width: 80,
-                              height: 90,
-                              fit: BoxFit.cover,
-                            ),
-                            5.widthBox,
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    width: 200,
-                                    child: Text(
-                                      productName2,
-                                      style: const TextStyle(
-                                        fontFamily: medium,
-                                        fontSize: 14,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                    ),
-                                  ),
-                                  Text(
-                                    "${NumberFormat('#,##0').format(double.parse(price2).toInt())} Bath",
-                                    style: const TextStyle(color: Colors.grey),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
+                        Text(
+                          "${NumberFormat('#,##0').format(double.parse(totalPrice).toInt())} ",
+                          style: TextStyle(
+                              color: blackColor,
+                              fontFamily: medium,
+                              fontSize: 16),
+                        ),
+                        Text(
+                          "Bath",
+                          style: TextStyle(
+                              color: blackColor,
+                              fontFamily: regular,
+                              fontSize: 14),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Price: ",
-                            style: TextStyle(
-                                color: blackColor,
-                                fontFamily: regular,
-                                fontSize: 14),
-                          ),
-                          Text(
-                            "${NumberFormat('#,##0').format(double.parse(totalPrice).toInt())} ",
-                            style: TextStyle(
-                                color: blackColor,
-                                fontFamily: medium,
-                                fontSize: 16),
-                          ),
-                          Text(
-                            "Bath",
-                            style: TextStyle(
-                                color: blackColor,
-                                fontFamily: regular,
-                                fontSize: 14),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                )
-                    .box
-                    .padding(EdgeInsets.all(6))
-                    .margin(EdgeInsets.symmetric(horizontal: 4, vertical: 6))
-                    .roundedSM
-                    .border(color: greyLine)
-                    .make());
-          },
-        );
-      },
-    );
-  }
+                  )
+                ],
+              )
+                  .box
+                  .padding(EdgeInsets.all(6))
+                  .margin(EdgeInsets.symmetric(horizontal: 4, vertical: 6))
+                  .roundedSM
+                  .border(color: greyLine)
+                  .make());
+        },
+      );
+    },
+  );
+}
 
   void showModalRightSheet({
     required BuildContext context,
