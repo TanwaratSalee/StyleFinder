@@ -331,202 +331,204 @@ class _ProfileScreenState extends State<ProfileScreen>
     );
   }
 
-Widget buildMatchTab() {
-  return StreamBuilder<QuerySnapshot>(
-    stream: FirebaseFirestore.instance.collection('favoritemixmatch').snapshots(),
-    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-      if (!snapshot.hasData) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      }
-      final data = snapshot.data!.docs;
-      if (data.isEmpty) {
-        return const Center(
-          child: Text("No products you liked!",
-              style: TextStyle(color: greyDark)),
-        );
-      }
+  Widget buildMatchTab() {
+    return StreamBuilder<QuerySnapshot>(
+      stream:
+          FirebaseFirestore.instance.collection('favoritemixmatch').snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        final data = snapshot.data!.docs;
+        if (data.isEmpty) {
+          return const Center(
+            child: Text("No products you liked!",
+                style: TextStyle(color: greyDark)),
+          );
+        }
 
-      final currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
-      
-      // Filter the documents for the current user
-      var userDocs = data.where((doc) => doc['user_id'] == currentUserUID).toList();
-      
-      return GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 1,
-          childAspectRatio: 6 / 2.75,
-        ),
-        itemCount: userDocs.length,
-        itemBuilder: (BuildContext context, int index) {
-          var docData = userDocs[index].data() as Map<String, dynamic>;
-          var product1 = docData['product1'] as Map<String, dynamic>;
-          var product2 = docData['product2'] as Map<String, dynamic>;
+        final currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
 
-          String productName1 = product1['p_name'];
-          String productName2 = product2['p_name'];
-          String price1 = product1['p_price'].toString();
-          String price2 = product2['p_price'].toString();
-          String productImage1 = product1['p_imgs'];
-          String productImage2 = product2['p_imgs'];
-          String totalPrice =
-              (int.parse(price1) + int.parse(price2)).toString();
+        // Filter the documents for the current user
+        var userDocs =
+            data.where((doc) => doc['user_id'] == currentUserUID).toList();
 
-          return GestureDetector(
-            onTap: () {
-              // Navigate to detail page if needed
-            },
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: whiteColor,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Stack(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Image.network(
-                                productImage1,
-                                width: 60,
-                                height: 65,
-                                fit: BoxFit.cover,
-                              ),
-                              15.widthBox,
-                              Expanded(
-                                flex: 3,
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      productName1,
-                                      style: const TextStyle(
-                                        fontFamily: medium,
-                                        fontSize: 14,
-                                        color: blackColor,
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    Text(
-                                      "${NumberFormat('#,##0').format(double.parse(price1).toInt())} Bath",
-                                      style: const TextStyle(color: greyDark),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          5.heightBox,
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ClipRRect(
-                                child: Image.network(
-                                  productImage2,
+        return GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 1,
+            childAspectRatio: 6 / 2.75,
+          ),
+          itemCount: userDocs.length,
+          itemBuilder: (BuildContext context, int index) {
+            var docData = userDocs[index].data() as Map<String, dynamic>;
+            var product1 = docData['product1'] as Map<String, dynamic>;
+            var product2 = docData['product2'] as Map<String, dynamic>;
+
+            String productName1 = product1['p_name'];
+            String productName2 = product2['p_name'];
+            String price1 = product1['p_price'].toString();
+            String price2 = product2['p_price'].toString();
+            String productImage1 = product1['p_imgs'];
+            String productImage2 = product2['p_imgs'];
+            String totalPrice =
+                (int.parse(price1) + int.parse(price2)).toString();
+
+            return GestureDetector(
+              onTap: () {
+                // Navigate to detail page if needed
+              },
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: whiteColor,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Stack(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Image.network(
+                                  productImage1,
                                   width: 60,
                                   height: 65,
                                   fit: BoxFit.cover,
                                 ),
-                              ),
-                              15.widthBox,
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      productName2,
-                                      style: const TextStyle(
-                                        fontFamily: medium,
-                                        fontSize: 14,
-                                        color: blackColor,
+                                15.widthBox,
+                                Expanded(
+                                  flex: 3,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        productName1,
+                                        style: const TextStyle(
+                                          fontFamily: medium,
+                                          fontSize: 14,
+                                          color: blackColor,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    Text(
-                                      "${NumberFormat('#,##0').format(double.parse(price2).toInt())} Bath",
-                                      style: const TextStyle(color: greyDark),
-                                    ),
-                                  ],
+                                      Text(
+                                        "${NumberFormat('#,##0').format(double.parse(price1).toInt())} Bath",
+                                        style: const TextStyle(color: greyDark),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          5.heightBox,
-                          Row(
-                            children: [
-                              Text(
-                                "Total  ",
-                                style: TextStyle(
-                                  color: greyDark,
-                                  fontFamily: regular,
-                                  fontSize: 14,
+                              ],
+                            ),
+                            5.heightBox,
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ClipRRect(
+                                  child: Image.network(
+                                    productImage2,
+                                    width: 60,
+                                    height: 65,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                "${NumberFormat('#,##0').format(double.parse(totalPrice).toInt())} ",
-                                style: TextStyle(
-                                  color: blackColor,
-                                  fontFamily: medium,
-                                  fontSize: 18,
+                                15.widthBox,
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        productName2,
+                                        style: const TextStyle(
+                                          fontFamily: medium,
+                                          fontSize: 14,
+                                          color: blackColor,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      Text(
+                                        "${NumberFormat('#,##0').format(double.parse(price2).toInt())} Bath",
+                                        style: const TextStyle(color: greyDark),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                " Bath",
-                                style: TextStyle(
-                                  color: greyDark,
-                                  fontFamily: regular,
-                                  fontSize: 14,
+                              ],
+                            ),
+                            5.heightBox,
+                            Row(
+                              children: [
+                                Text(
+                                  "Total  ",
+                                  style: TextStyle(
+                                    color: greyDark,
+                                    fontFamily: regular,
+                                    fontSize: 14,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: IconButton(
-                          icon: Icon(Icons.favorite, color: redColor),
-                          onPressed: () async {
-                            await FirebaseFirestore.instance
-                                .collection('favoritemixmatch')
-                                .doc(userDocs[index].id)
-                                .delete()
-                                .then((value) {
-                              print('Removed from favoritemixmatch');
-                            }).catchError((error) {
-                              print('Error removing from favoritemixmatch: $error');
-                            });
-                          },
+                                Text(
+                                  "${NumberFormat('#,##0').format(double.parse(totalPrice).toInt())} ",
+                                  style: TextStyle(
+                                    color: blackColor,
+                                    fontFamily: medium,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                Text(
+                                  " Bath",
+                                  style: TextStyle(
+                                    color: greyDark,
+                                    fontFamily: regular,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
                         ),
-                      ),
-                    ],
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: IconButton(
+                            icon: Icon(Icons.favorite, color: redColor),
+                            onPressed: () async {
+                              await FirebaseFirestore.instance
+                                  .collection('favoritemixmatch')
+                                  .doc(userDocs[index].id)
+                                  .delete()
+                                  .then((value) {
+                                print('Removed from favoritemixmatch');
+                              }).catchError((error) {
+                                print(
+                                    'Error removing from favoritemixmatch: $error');
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            )
-                .box
-                .roundedSM
-                .border(color: greyLine)
-                .margin(EdgeInsets.symmetric(horizontal: 12, vertical: 4))
-                .padding(EdgeInsets.all(8))
-                .make(),
-          );
-        },
-      );
-    },
-  );
-}
-
+                ],
+              )
+                  .box
+                  .roundedSM
+                  .border(color: greyLine)
+                  .margin(EdgeInsets.symmetric(horizontal: 12, vertical: 4))
+                  .padding(EdgeInsets.all(8))
+                  .make(),
+            );
+          },
+        );
+      },
+    );
+  }
 
   Widget buildUserMixMatchTab() {
     return StreamBuilder<QuerySnapshot>(
@@ -838,160 +840,87 @@ Widget buildMatchTab() {
 }
 
 Widget buildPostTab() {
-  return Column(
-    children: [
-      Center(
-        child: Container(
-          width: 400,
-          height: 190,
-          margin: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: Colors.grey),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Stack(
-            children: [
-              Positioned(
-                top: 17,
-                left: 20,
-                child: Container(
-                  width: 125,
-                  height: 75,
-                  decoration: BoxDecoration(
-                    color: greyThin,
-                    border: Border.all(color: greyLine),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+  return LayoutBuilder(
+    builder: (context, constraints) {
+      final itemWidth = (constraints.maxWidth - 6) / 3;
+
+      return SingleChildScrollView(
+        child: Center(
+          child: Wrap(
+            spacing: 2, // ระยะห่างแนวนอนระหว่าง widgets
+            runSpacing: 2, // ระยะห่างแนวตั้งระหว่าง widgets
+            children: List.generate(7, (index) {
+              return Container(
+                width: itemWidth,
+                height: 240,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(0),
                 ),
-              ),
-              Positioned(
-                top: 97,
-                left: 20,
-                child: Container(
-                  width: 125,
-                  height: 75,
-                  decoration: BoxDecoration(
-                    color: greyThin,
-                    border: Border.all(color: greyLine),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              Positioned(
-                top: 45,
-                left: 170,
-                child: Row(
+                child: Stack(
                   children: [
-                    Container(
-                      width: 65,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        color: primaryApp,
-                        border: Border.all(color: greyThin),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        "Summer",
-                        style: TextStyle(
-                          color: greyColor,
-                          fontSize: 12,
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      child: Container(
+                        width: itemWidth,
+                        height: 120,
+                        decoration: BoxDecoration(
+                          color: greyThin,
+                          borderRadius: BorderRadius.circular(0),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                     ),
-                    SizedBox(width: 10),
-                    Container(
-                      width: 65,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        color: primaryApp,
-                        border: Border.all(color: greyThin),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        "Winter",
-                        style: TextStyle(
-                          color: greyColor,
-                          fontSize: 12,
+                    Positioned(
+                      top: 120,
+                      left: 0,
+                      right: 0,
+                      child: Container(
+                        width: itemWidth,
+                        height: 120,
+                        decoration: BoxDecoration(
+                          color: greyThin,
+                          borderRadius: BorderRadius.circular(0),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                     ),
-                    SizedBox(width: 10),
-                    Container(
-                      width: 65,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        color: primaryApp,
-                        border: Border.all(color: greyThin),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        "Autumn",
-                        style: TextStyle(
-                          color: greyColor,
-                          fontSize: 12,
-                        ),
+                    // ไอคอนรูปดวงตาและจำนวนคนดู
+                    Positioned(
+                      top: 215,
+                      left: 5,
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            iceyes, // ใส่ path ของรูปภาพของคุณ
+                            width: 18,
+                            height: 18,
+                          ),
+                          SizedBox(width: 4),
+                          Text(
+                            '0',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: bold,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
-              ),
-              Positioned(
-                top: 85,
-                left: 165,
-                child: Container(
-                  width: 223,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    color: greyThin,
-                    border: Border.all(color: greyLine),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(8),
-                    child: Text(
-                      "Effortless, timeless, and always in fashion.",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: greyColor,
-                      ),
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                top: 15,
-                right: 15,
-                child: Row(
-                  children: [
-                    Image.asset(icTapFavoriteButton, width: 20),
-                    Text(
-                      " 210 ",
-                      style: TextStyle(fontFamily: bold),
-                    ),
-                    SizedBox(width: 10),
-                    Image.asset(iceye, width: 20),
-                    Text(
-                      " 11",
-                      style: TextStyle(fontFamily: bold),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+              );
+            }),
           ),
         ),
-      ),
-    ],
+      );
+    },
   );
 }

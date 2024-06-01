@@ -84,6 +84,7 @@ const String product5 = "assets/images/product5.png";
 const String icTapProfileFav = "assets/icons/iconsAccount/icTapFavProfile.png";
 const String icTapPostProfile =
     "assets/icons/iconsAccount/icTapPostProfile.png";
+const String iceyes = "assets/icons/icNormal/EYEs.png";
 
 const String imgProfile = "assets/images/Profile.png";
 const String icAccount = "assets/icons/iconsAccount/profile.png";
@@ -109,7 +110,6 @@ const String imgVisa = "assets/images/payment/visa.png";
 const String imgmobile = "assets/images/payment/visa.png";
 const String imgbgVisa = 'assets/images/card.png';
 const String imgbgVisa1 = 'assets/images/card1.png';
-
 
 const String icCash = "assets/images/payment/card.png";
 const String icPromptpay = "assets/images/payment/qr.png";
@@ -156,4 +156,3 @@ const String icPost = 'assets/icons/iconpost.png';
 const String icTrash = "assets/icons/icTrash.png";
 const String imgPaymentSuccful = 'assets/images/imgPaymentsuccful.png';
 const String imgVerify = 'assets/images/imgVerify.png';
-
