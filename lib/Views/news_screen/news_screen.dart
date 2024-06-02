@@ -264,45 +264,6 @@ class NewsScreen extends StatelessWidget {
                           )
                         ],
                       ),
-                      30.heightBox,
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          'MATCH BY STORE '
-                              .text
-                              .fontFamily(bold)
-                              .color(blackColor)
-                              .size(20)
-                              .make(),
-                          InkWell(
-                            onTap: () {
-                              Get.to(() => ProductScreen(initialTabIndex: 1));
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Text('See All')
-                                    .text
-                                    .fontFamily(medium)
-                                    .size(16)
-                                    .color(blackColor)
-                                    .make(),
-                                10.widthBox,
-                                Image.asset(
-                                  icSeeAll,
-                                  width: 14,
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                      )
-                          .box
-                          .padding(const EdgeInsets.symmetric(
-                              vertical: 5, horizontal: 10))
-                          .roundedLg
-                          .make(),
-                      buildProductMathGrids(category),
 
                       //Product
                       Row(
@@ -438,6 +399,45 @@ class NewsScreen extends StatelessWidget {
                         },
                       ),
                       20.heightBox,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          'MATCH BY STORE '
+                              .text
+                              .fontFamily(bold)
+                              .color(blackColor)
+                              .size(20)
+                              .make(),
+                          InkWell(
+                            onTap: () {
+                              Get.to(() => ProductScreen(initialTabIndex: 1));
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text('See All')
+                                    .text
+                                    .fontFamily(medium)
+                                    .size(16)
+                                    .color(blackColor)
+                                    .make(),
+                                10.widthBox,
+                                Image.asset(
+                                  icSeeAll,
+                                  width: 14,
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      )
+                          .box
+                          .padding(const EdgeInsets.symmetric(
+                              vertical: 5, horizontal: 10))
+                          .roundedLg
+                          .make(),
+                      buildProductMathGrids(category),
+                      30.heightBox,
                     ],
                   ),
                 ),
@@ -682,6 +682,7 @@ Widget buildProductMathGrids(String category) {
     },
   );
 }
+
 }
 
 class GridCardExample extends StatelessWidget {
