@@ -374,7 +374,7 @@ Widget buildCardSetLower(List<Map<String, dynamic>> lowerProducts) {
       context: context,
       barrierDismissible: true,
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-      barrierColor: Colors.black54,
+      barrierColor: blackColor,
       transitionDuration: Duration(milliseconds: 200),
       pageBuilder: (BuildContext context, Animation<double> animation,
           Animation<double> secondaryAnimation) {

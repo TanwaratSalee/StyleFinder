@@ -300,7 +300,7 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
     TextInputType? keyboardType,
     Widget? suffixIcon,
     Function(String)? onChanged,
-    Color textColor = Colors.black,
+    Color textColor = blackColor,
   }) {
     return TextFormField(
       controller: controller,

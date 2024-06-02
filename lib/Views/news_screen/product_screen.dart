@@ -352,7 +352,13 @@ Widget buildMatchTab(BuildContext context) {
             String vendorName1 = data1['p_seller'];
             String vendorName2 = data2['p_seller'];
 
+<<<<<<< HEAD
             String vendor_id = data1['vendor_id'];
+=======
+          List<dynamic> collectionList = data1['p_mixmatch_collection'];
+          String description = data1['p_mixmatch_desc'];
+          String genderMatch = data1['p_mixmatch_sex'];
+>>>>>>> d0e99ee (MatchDetailScreen gender)
 
             List<dynamic> collectionList = data1['p_mixmatch_collection'];
             String description = data1['p_mixmatch_desc'];
@@ -404,7 +410,11 @@ Widget buildMatchTab(BuildContext context) {
                       vendor_id: vendor_id,
                       collection: collectionList,
                       description: description,
+<<<<<<< HEAD
                       gender: gender,
+=======
+                      genderMatch: genderMatch,
+>>>>>>> d0e99ee (MatchDetailScreen gender)
                     ),
                   ),
                 );
@@ -546,7 +556,7 @@ Widget buildMatchTab(BuildContext context) {
       context: context,
       barrierDismissible: true,
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-      barrierColor: Colors.black54,
+      barrierColor: blackColor,
       transitionDuration: Duration(milliseconds: 200),
       pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
         return Align(
@@ -582,7 +592,7 @@ void showModalRightSheet({
     context: context,
     barrierDismissible: true,
     barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-    barrierColor: Colors.black54,
+    barrierColor: blackColor,
     transitionDuration: Duration(milliseconds: 200),
     pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
       return Align(

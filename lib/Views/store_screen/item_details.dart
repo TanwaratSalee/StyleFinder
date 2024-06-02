@@ -250,7 +250,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                   //     .box
                   //     .white
                   //     .color(whiteColor)
-                  //     .shadowXs
+                  //     .outerShadow
                   //     .roundedSM
                   //     .border(color: greyLine)
                   //     .padding(const EdgeInsets.symmetric(horizontal: 4))
@@ -552,7 +552,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                     ),
                   ),
                 ],
-              ).box.white.shadowSm.make(),
+              ).box.white.outerShadow.make(),
             ),
           ],
         ),

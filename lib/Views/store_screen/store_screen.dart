@@ -529,6 +529,8 @@ class StoreScreen extends StatelessWidget {
 
             List<dynamic> collectionList = data1['p_mixmatch_collection'];
             String description = data1['p_mixmatch_desc'];
+            String genderMatch = data1['p_mixmatch_sex'];
+
 
             String price1 = data1['p_price'].toString();
             String price2 = data2['p_price'].toString();
@@ -540,8 +542,6 @@ class StoreScreen extends StatelessWidget {
 
             String productImage1 = data1['p_imgs'][0];
             String productImage2 = data2['p_imgs'][0];
-
-            String gender = data1['p_mixmatch_sex'];
 
             bool isTop1 = data1['p_part'] == 'top';
             bool isTop2 = data2['p_part'] == 'top';
@@ -577,7 +577,6 @@ class StoreScreen extends StatelessWidget {
                       vendor_id: vendor_id,
                       collection: collectionList,
                       description: description,
-                      gender: gender,
                     ),
                   ),
                 );

@@ -328,7 +328,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         .box
                                         .white
                                         .rounded
-                                        .shadowSm
+                                        .outerShadow
                                         .padding(EdgeInsets.all(12))
                                         .make(),
                                   ],
@@ -342,7 +342,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     icon: Image.asset(
                                       icDislikeButton,
                                       width: 60,
-                                    ).box.roundedFull.shadowSm.make(),
+                                    ).box.roundedFull.outerShadow.make(),
                                     onPressed: () => controllercard
                                         .swipe(CardSwiperDirection.left),
                                   ),
@@ -351,7 +351,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     icon: Image.asset(
                                       icViewMoreButton,
                                       width: 60,
-                                    ).box.roundedFull.shadowSm.make(),
+                                    ).box.roundedFull.outerShadow.make(),
                                     onPressed: () => navigateToItemDetails(),
                                   ),
                                   SizedBox(width: 30),
@@ -359,7 +359,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     icon: Image.asset(
                                       icLikeButton,
                                       width: 60,
-                                    ).box.roundedFull.shadowSm.make(),
+                                    ).box.roundedFull.outerShadow.make(),
                                     onPressed: () => {
                                       if (isGuest)
                                         {showLoginPrompt()}
@@ -410,7 +410,7 @@ void showModalRightSheet({
     context: context,
     barrierDismissible: true,
     barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-    barrierColor: Colors.black54,
+    barrierColor: blackColor,
     transitionDuration: Duration(milliseconds: 200),
     pageBuilder: (BuildContext context, Animation<double> animation,
         Animation<double> secondaryAnimation) {

@@ -511,8 +511,14 @@ Widget buildProductMathGrids(String category) {
 
             String vendor_id = data1['vendor_id'];
 
+<<<<<<< HEAD
             List<dynamic> collectionList = data1['p_mixmatch_collection'];
             String description = data1['p_mixmatch_desc'];
+=======
+          List<dynamic> collectionList = data1['p_mixmatch_collection'];
+          String description = data1['p_mixmatch_desc'];
+          String genderMatch = data1['p_mixmatch_sex'];
+>>>>>>> d0e99ee (MatchDetailScreen gender)
 
             String price1 = data1['p_price'].toString();
             String price2 = data2['p_price'].toString();
@@ -561,7 +567,11 @@ Widget buildProductMathGrids(String category) {
                       vendor_id: vendor_id,
                       collection: collectionList,
                       description: description,
+<<<<<<< HEAD
                       gender: gender,
+=======
+                      genderMatch: genderMatch,
+>>>>>>> d0e99ee (MatchDetailScreen gender)
                     ),
                   ),
                 );
