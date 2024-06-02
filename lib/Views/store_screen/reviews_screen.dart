@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart'; // Add this import for date formatting
 
 class ReviewScreen extends StatefulWidget {
   @override
@@ -24,6 +27,19 @@ class _ReviewScreenState extends State<ReviewScreen>
     super.dispose();
   }
 
+  Widget buildStars(int rating) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: List.generate(5, (index) {
+        return Icon(
+          index < rating ? Icons.star : Icons.star_border,
+          color: Colors.yellow,
+          size: 16,
+        );
+      }),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,233 +47,114 @@ class _ReviewScreenState extends State<ReviewScreen>
       appBar: AppBar(
         title: Text(
           'Reviews',
-        ).text
-            .size(26)
-            .fontFamily(semiBold)
-            .color(blackColor)
-            .make(),
-        centerTitle: true,
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(50.0),
-          child: TabBar(
-            controller: _tabController,
-            tabs: [
-              Tab(text: 'Shop'),
-              Tab(text: 'Product'),
-            ],
-          ),
-        ),
+        ).text.size(26).fontFamily(semiBold).color(blackColor).make(),
       ),
-      body: Expanded(
-        child: TabBarView(
-          controller: _tabController,
-          children: <Widget>[_buildReviewShop(), _buildReviewProduct(context)],
-        ),
-      ),
-    );
-  }
-}
-
-Widget _buildReviewProduct(BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: Column(
-      children: <Widget>[
-        YourWidget(),
-        Padding(
-          padding: const EdgeInsets.all(5),
-          child: _buildReviewHigh(),
-        ),
-      ],
-    ),
-  );
-}
-
-Widget _buildReviewShop() {
-  return Container(
-    height: 600,
-    margin: EdgeInsets.only(top: 0.5),
-    child: ListView.builder(
-      itemCount: 10,
-      itemBuilder: (context, index) {
-        return _buildReviewCard();
-      },
-    ),
-  );
-}
-
-Widget _buildReviewHigh() {
-  return Container(
-    height: 600,
-    margin: EdgeInsets.only(top: 0.5),
-    child: ListView.builder(
-      itemCount: 10,
-      itemBuilder: (context, index) {
-        return _buildReviewProductCard();
-      },
-    ),
-  );
-}
-
-Widget _buildReviewCard() {
-  return Container(
-    height: 142,
-    width: 387,
-    margin: EdgeInsets.all(5.0),
-    padding: EdgeInsets.all(10.0),
-    decoration: BoxDecoration(
-      color: whiteColor,
-      borderRadius: BorderRadius.circular(8),
-      boxShadow: [
-        BoxShadow(
-          color: greyDark,
-          blurRadius: 4,
-          offset: Offset(0, 2),
-        ),
-      ],
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            CircleAvatar(
-              radius: 20,
-              backgroundImage: NetworkImage('your_image_url_here'),
-            ),
-            SizedBox(width: 10),
-            Text('Reviewer Name',
-                style: TextStyle(fontSize: 16, fontFamily: bold)),
-          ],
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Row(
-          children: List.generate(5, (index) {
-            return Icon(
-              index < 4 ? Icons.star : Icons.star_border,
-              color: Colors.amber,
-              size: 20,
-            );
-          }),
-        ),
-        Text(
-          'The review text goes here...',
-          style: TextStyle(fontSize: 14),
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ],
-    ),
-  );
-}
-
-Widget _buildReviewProductCard() {
-  return Container(
-    height: 142,
-    width: 387,
-    margin: EdgeInsets.all(5.0),
-    padding: EdgeInsets.all(10.0),
-    decoration: BoxDecoration(
-      color: whiteColor,
-      borderRadius: BorderRadius.circular(8),
-      boxShadow: [
-        BoxShadow(
-          color: greyDark,
-          blurRadius: 4,
-          offset: Offset(0, 2),
-        ),
-      ],
-    ),
-    child: Row(
-      children: [
-        Container(
-          height: 122,
-          width: 122,
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Icon(Icons.photo, color: Colors.grey[500]),
-        ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 10.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Reviewer Name',
-                    style: TextStyle(fontSize: 16, fontFamily: bold)),
-                SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: List.generate(5, (index) {
-                    return Icon(
-                      index < 4 ? Icons.star : Icons.star_border,
-                      color: Colors.amber,
-                      size: 20,
+      body: Column(
+        children: [
+          Expanded(
+            child: StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance.collection('reviews').snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                var reviews = snapshot.data!.docs;
+                return ListView.builder(
+                  itemCount: reviews.length,
+                  itemBuilder: (context, index) {
+                    var review = reviews[index];
+                    var timestamp = review['review_date'] as Timestamp;
+                    var date = DateFormat('yyyy-MM-dd').format(timestamp.toDate());
+                    var rating = review['rating'] is double
+                        ? (review['rating'] as double).toInt()
+                        : review['rating'] as int;
+                    return Container(
+                      padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              CircleAvatar(
+                                backgroundImage: NetworkImage(review['user_img']),
+                              ),
+                              SizedBox(width: 10),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          review['user_name'],
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        Text(
+                                          date,
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        buildStars(rating),
+                                        5.widthBox,
+                                     Text('${review['rating']}'),
+                                     Text('/5.0')
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 10),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      review['review_text'],
+                                      style: TextStyle(fontSize: 14),
+                                    ),
+                                    SizedBox(height: 10),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 10),
+                        ],
+                      ),
                     );
-                  }),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  'The review text goes here...',
-                  style: TextStyle(fontSize: 14),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
+                  },
+                );
+              },
             ),
           ),
-        ),
-      ],
-    ),
-  );
-}
-
-class YourWidget extends StatefulWidget {
-  @override
-  _YourWidgetState createState() => _YourWidgetState();
-}
-
-class _YourWidgetState extends State<YourWidget> {
-  String buttonText = 'New';
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.centerRight,
-      margin: EdgeInsets.fromLTRB(0, 10, 10, 0),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          foregroundColor: Colors.grey,
-          backgroundColor: whiteColor,
-          shadowColor: Colors.grey,
-          elevation: 4,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          fixedSize: Size(110, 28),
-        ),
-        onPressed: () {
-          setState(() {
-            buttonText = buttonText == 'New' ? 'Oldest' : 'New';
-          });
-        },
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              buttonText == 'New' ? Icons.arrow_upward : Icons.arrow_downward,
-              size: 16,
-              color: Colors.grey,
-            ),
-            SizedBox(width: 4),
-            Text(buttonText),
-          ],
-        ),
+        ],
       ),
     );
   }

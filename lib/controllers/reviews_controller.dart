@@ -19,7 +19,7 @@ class ReviewsController extends GetxController {
         'product_img': productImg,
         'product_price': productPrice,
         'user_id': currentUser.uid,
-        'review': reviewText,
+        'review_text': reviewText,
         'rating': rating,
         'timestamp': FieldValue.serverTimestamp(),
       }).then((value) {

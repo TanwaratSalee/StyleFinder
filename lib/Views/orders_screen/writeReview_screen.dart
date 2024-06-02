@@ -104,7 +104,7 @@ class _WriteReviewScreenState extends State<WriteReviewScreen> {
                 'product_id': product['product_id'],  // Ensure product_id is not null
                 'product_title': product['title'],
                 'product_img': product['img'],
-                'rating': _ratings[index],
+                'rating_text': _ratings[index],
                 'review': _reviewControllers[index].text,
                 'review_date': DateTime.now(),
                 'user_id': currentUser.uid,

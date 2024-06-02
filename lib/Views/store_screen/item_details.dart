@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
 import 'package:flutter_finalproject/Views/chat_screen/chat_screen.dart';
+import 'package:flutter_finalproject/Views/store_screen/reviews_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
@@ -192,47 +193,10 @@ class _ItemDetailsState extends State<ItemDetails> {
                   )
                       .box
                       .white
-                      .padding(EdgeInsets.fromLTRB(12, 10, 12, 6))
+                      .padding(EdgeInsets.fromLTRB(16, 10, 16, 6))
                       .make(),
                   5.heightBox,
-                  Column(
-                    children: [
-                      Row(
-                        children: [
-                          Text('Product rating')
-                              .text
-                              .fontFamily(medium)
-                              .size(16)
-                              .color(blackColor)
-                              .make(),
-                          const Spacer(),
-                          VxRating(
-                            isSelectable: false,
-                            value: double.parse(widget.data["p_rating"]),
-                            onRatingUpdate: (value) {},
-                            normalColor: greyDark,
-                            selectionColor: golden,
-                            count: 5,
-                            size: 20,
-                            maxRating: 5,
-                          ),
-                        ],
-                      ),
-                      Divider(color: greyThin),
-                      Text('See all')
-                          .text
-                          .fontFamily(medium)
-                          .size(14)
-                          .color(blackColor)
-                          .make(),
-                    ],
-                  )
-                      .box
-                      .white
-                      .color(whiteColor)
-                      .padding(
-                          EdgeInsets.symmetric(horizontal: 12, vertical: 6))
-                      .make(),
+
                   // ListTile(
                   //   leading: Image.asset(icPerson, color: greyDark, height: 20),
                   //   title: Text('Contact Seller',
@@ -325,11 +289,12 @@ class _ItemDetailsState extends State<ItemDetails> {
                   )
                       .box
                       .white
-                      // .height(70)
                       .padding(const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 8))
-                      // .border(color: greyThin, width: 1)\
-                      .color(greyThin)
+                      .margin(const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 7))
+                      .outerShadow
+                      .roundedSM
                       .make(),
 
                   5.heightBox,
@@ -406,7 +371,58 @@ class _ItemDetailsState extends State<ItemDetails> {
                   )
                       .box
                       .white
-                      .padding(const EdgeInsets.fromLTRB(18, 10, 12, 50))
+                      .padding(const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8))
+                      .margin(const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 7))
+                      .outerShadow
+                      .roundedSM
+                      .make(),
+                  Column(
+                    children: [
+                      Row(
+                        children: [
+                          Text('Product rating')
+                              .text
+                              .fontFamily(medium)
+                              .size(16)
+                              .color(blackColor)
+                              .make(),
+                          const Spacer(),
+                          VxRating(
+                            isSelectable: false,
+                            value: double.parse(widget.data["p_rating"]),
+                            onRatingUpdate: (value) {},
+                            normalColor: greyDark,
+                            selectionColor: golden,
+                            count: 5,
+                            size: 20,
+                            maxRating: 5,
+                          ),
+                        ],
+                      ),
+                      Divider(color: greyThin),
+                      InkWell(
+                        onTap: () {
+                          Get.to(() => ReviewScreen());
+                        },
+                        child: Text('See all')
+                            .text
+                            .fontFamily(medium)
+                            .size(14)
+                            .color(blackColor)
+                            .make(),
+                      )
+                    ],
+                  )
+                      .box
+                      .white
+                      .padding(const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8))
+                      .margin(const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 7))
+                      .outerShadow
+                      .roundedSM
                       .make(),
                 ],
               ),
@@ -429,7 +445,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                               borderRadius: BorderRadius.circular(10),
                               border: isSelected
                                   ? Border.all(color: primaryApp, width: 2)
-                                  : Border.all(color: greyColor, width: 1),
+                                  : Border.all(color: greyLine, width: 1),
                             ),
                             child: Text(
                               sizes[index],

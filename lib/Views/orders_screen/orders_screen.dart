@@ -469,7 +469,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                                                     product['title'],
                                                 'product_img': product['img'],
                                                 'rating': rating,
-                                                'review': reviewController.text,
+                                                'review_text': reviewController.text,
                                                 'review_date': DateTime.now(),
                                                 'user_id': currentUser.uid,
                                                 'user_name':
