@@ -1,14 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/orders_screen/orders_details.dart';
 import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
-
 import 'package:intl/intl.dart' as intl;
 import 'package:intl/intl.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 class OrdersScreen extends StatefulWidget {
   const OrdersScreen({Key? key}) : super(key: key);
@@ -306,190 +307,227 @@ class _OrdersScreenState extends State<OrdersScreen>
   }
 
   Widget buildReview(BuildContext context) {
-  return StreamBuilder<QuerySnapshot>(
-    stream: getOrderHistory(),
-    builder: (context, snapshot) {
-      if (!snapshot.hasData) {
-        return Center(child: loadingIndicator());
-      } else if (snapshot.data!.docs.isEmpty) {
-        return const Center(
-            child: Text("No orders yet!", style: TextStyle(color: greyDark)));
-      } else {
-        var data = snapshot.data!.docs;
-        return ListView.builder(
-          itemCount: data.length,
-          itemBuilder: (context, index) {
-            var orderData = data[index].data() as Map<String, dynamic>;
-            var products = orderData['orders'] as List<dynamic>;
+    return StreamBuilder<QuerySnapshot>(
+      stream: getOrderHistory(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(child: loadingIndicator());
+        } else if (snapshot.data!.docs.isEmpty) {
+          return const Center(
+              child: Text("No orders yet!", style: TextStyle(color: greyDark)));
+        } else {
+          var data = snapshot.data!.docs;
+          return ListView.builder(
+            itemCount: data.length,
+            itemBuilder: (context, index) {
+              var orderDoc = data[index];
+              var orderData = orderDoc.data() as Map<String, dynamic>;
+              var products = orderData['orders'] as List<dynamic>;
 
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Order code ${orderData['order_code']}",
-                    )
-                        .text
-                        .fontFamily(medium)
-                        .color(blackColor)
-                        .size(18)
-                        .make(),
-                    
-                  ],
-                ).box.padding(EdgeInsets.symmetric(horizontal: 12)).make(),
-                5.heightBox,
-                ...products.map((product) {
-                  var reviewController = TextEditingController();
-                  var rating = 0.0;
+              // Filter products that have 'reviews' set to false
+              var productsToReview = products
+                  .where((product) => product['reviews'] == false)
+                  .toList();
 
-                  return StatefulBuilder(
-                    builder: (context, setState) {
-                      return Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Image.network(
-                                      product['img'],
-                                      width: 85,
-                                      height: 85,
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            product['title'],
-                                            style: TextStyle(
-                                              fontFamily: medium,
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                          Text(
-                                            '${NumberFormat('#,##0').format(product['price'])} Bath',
-                                          )
-                                              .text
-                                              .fontFamily(regular)
-                                              .color(greyColor)
-                                              .size(14)
-                                              .make(),
-                                          RatingBar.builder(
-                                            initialRating: 0,
-                                            minRating: 1,
-                                            direction: Axis.horizontal,
-                                            allowHalfRating: true,
-                                            itemCount: 5,
-                                            itemSize: 30,
-                                            itemBuilder: (context, _) => Icon(
-                                              Icons.star,
-                                              color: Colors.amber,
-                                            ),
-                                            onRatingUpdate: (ratingValue) {
-                                              setState(() {
-                                                rating = ratingValue;
-                                              });
-                                            },
-                                          ),
-                                        ],
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (productsToReview.isNotEmpty)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Order code ${orderData['order_code']}",
+                        )
+                            .text
+                            .fontFamily(medium)
+                            .color(blackColor)
+                            .size(18)
+                            .make(),
+                      ],
+                    ).box.padding(EdgeInsets.symmetric(horizontal: 12)).make(),
+                  5.heightBox,
+                  ...productsToReview.asMap().entries.map((entry) {
+                    int productIndex = entry.key;
+                    var product = entry.value;
+                    var reviewController = TextEditingController();
+                    var rating = 0.0;
+
+                    return StatefulBuilder(
+                      builder: (context, setState) {
+                        return Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Image.network(
+                                        product['img'],
+                                        width: 85,
+                                        height: 85,
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 10),
-                                TextField(
-                                  controller: reviewController,
-                                  maxLines: 2,
-                                  decoration: InputDecoration(
-                                    hintText: 'Write your review here',
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      borderSide: BorderSide(color: greyLine),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      borderSide: BorderSide(
-                                        color: greyLine,
-                                        width: 2.0,
+                                      const SizedBox(width: 10),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              product['title'],
+                                              style: TextStyle(
+                                                fontFamily: medium,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            Text(
+                                              '${NumberFormat('#,##0').format(product['price'])} Bath',
+                                            )
+                                                .text
+                                                .fontFamily(regular)
+                                                .color(greyColor)
+                                                .size(14)
+                                                .make(),
+                                            RatingBar.builder(
+                                              initialRating: 0,
+                                              minRating: 1,
+                                              direction: Axis.horizontal,
+                                              allowHalfRating: true,
+                                              itemCount: 5,
+                                              itemSize: 20.0, // Smaller stars
+                                              itemBuilder: (context, _) => Icon(
+                                                Icons.star,
+                                                color: Colors.amber,
+                                              ),
+                                              onRatingUpdate: (ratingValue) {
+                                                setState(() {
+                                                  rating = ratingValue;
+                                                });
+                                              },
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      borderSide: BorderSide(
-                                        color: greyThin,
-                                        width: 1.0,
+                                    ],
+                                  ),
+                                  const SizedBox(height: 10),
+                                  TextField(
+                                    controller: reviewController,
+                                    maxLines: 2,
+                                    decoration: InputDecoration(
+                                      hintText: 'Write your review here',
+                                      border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                        borderSide: BorderSide(color: greyLine),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                        borderSide: BorderSide(
+                                          color: greyLine,
+                                          width: 2.0,
+                                        ),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                        borderSide: BorderSide(
+                                          color: greyThin,
+                                          width: 1.0,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                const SizedBox(height: 10),
-                                tapButton(
-                                  onPress: rating > 0
-                                      ? () async {
-                                          var currentUser =
-                                              FirebaseAuth.instance.currentUser;
-                                          if (currentUser != null) {
-                                            var reviewData = {
-                                              'product_id': product['product_id'],
-                                              'product_title': product['title'],
-                                              'product_img': product['img'],
-                                              'rating': rating,
-                                              'review': reviewController.text,
-                                              'review_date': DateTime.now(),
-                                              'user_id': currentUser.uid,
-                                              'user_name': currentUser.displayName ??
-                                                  'Anonymous',
-                                              'user_img': currentUser.photoURL ??
-                                                  'default_user_image_url',
-                                            };
+                                  const SizedBox(height: 10),
+                                  tapButton(
+                                    onPress: rating > 0
+                                        ? () async {
+                                            var currentUser = FirebaseAuth
+                                                .instance.currentUser;
+                                            if (currentUser != null) {
+                                              var reviewData = {
+                                                'product_id':
+                                                    product['product_id'],
+                                                'product_title':
+                                                    product['title'],
+                                                'product_img': product['img'],
+                                                'rating': rating,
+                                                'review': reviewController.text,
+                                                'review_date': DateTime.now(),
+                                                'user_id': currentUser.uid,
+                                                'user_name':
+                                                    currentUser.displayName ??
+                                                        'Anonymous',
+                                                'user_img': currentUser
+                                                        .photoURL ??
+                                                    'default_user_image_url',
+                                              };
 
-                                            await FirebaseFirestore.instance
-                                                .collection('reviews')
-                                                .add(reviewData);
+                                              await FirebaseFirestore.instance
+                                                  .collection('reviews')
+                                                  .add(reviewData);
 
-                                            VxToast.show(context,
-                                                msg:
-                                                    'Review Submitted: Thank you for your feedback!',
-                                                position: VxToastPosition.bottom);
+                                              // Update the product's review status in Firestore
+                                              var updatedProducts =
+                                                  products.map((p) {
+                                                if (p['product_id'] ==
+                                                    product['product_id']) {
+                                                  p['reviews'] = true;
+                                                }
+                                                return p;
+                                              }).toList();
 
-                                            setState(() {
-                                              products.remove(product);
-                                            });
-                                          } else {
-                                            VxToast.show(context,
-                                                msg:'Error: You need to be logged in to submit a review',
-                                                position: VxToastPosition.bottom);
+                                              await orderDoc.reference.update(
+                                                  {'orders': updatedProducts});
+
+                                              VxToast.show(context,
+                                                  msg:
+                                                      'Review Submitted: Thank you for your feedback!',
+                                                  position:
+                                                      VxToastPosition.bottom);
+
+                                              setState(() {
+                                                productsToReview
+                                                    .removeAt(productIndex);
+                                              });
+                                            } else {
+                                              VxToast.show(context,
+                                                  msg:
+                                                      'Error: You need to be logged in to submit a review',
+                                                  position:
+                                                      VxToastPosition.bottom);
+                                            }
                                           }
-                                        }
-                                      : null,
-                                  color: primaryApp,
-                                  textColor: whiteColor,
-                                  title: "Submit",
-                                ),
-                              ],
+                                        : null,
+                                    color: primaryApp,
+                                    textColor: whiteColor,
+                                    title: "Submit",
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
-                      ).box.border(color: greyLine).roundedSM.margin(
-                          const EdgeInsets.symmetric(vertical: 8, horizontal: 12)).make();
-                    },
-                  );
-                }).toList(),
-              ],
-            );
-          },
-        );
-      }
-    },
-  );
-}
+                          ],
+                        )
+                            .box
+                            .border(color: greyLine)
+                            .roundedSM
+                            .margin(const EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 12))
+                            .make();
+                      },
+                    );
+                  }).toList(),
+                ],
+              );
+            },
+          );
+        }
+      },
+    );
+  }
 
   Widget buildHistory(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -628,10 +666,10 @@ class _OrdersScreenState extends State<OrdersScreen>
   }
 
   static Stream<QuerySnapshot> getOrderHistory() {
-    return firestore
+    return FirebaseFirestore.instance
         .collection(ordersCollection)
         .where('order_delivered', isEqualTo: true)
-        .where('order_by', isEqualTo: currentUser!.uid)
+        .where('order_by', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
         .snapshots();
   }
 
@@ -639,6 +677,15 @@ class _OrdersScreenState extends State<OrdersScreen>
     return firestore
         .collection(ordersCollection)
         .where('order_delivered', isEqualTo: true)
+        .where('order_by', isEqualTo: currentUser!.uid)
+        .snapshots();
+  }
+
+  static Stream<QuerySnapshot> getReviewOrders() {
+    return firestore
+        .collection(ordersCollection)
+        .where('order_delivered', isEqualTo: true)
+        .where('reviews', isEqualTo: false)
         .where('order_by', isEqualTo: currentUser!.uid)
         .snapshots();
   }
