@@ -843,7 +843,7 @@ Widget buildPostTab() {
   return StreamBuilder<QuerySnapshot>(
     stream: FirebaseFirestore.instance
         .collection('postusermixmatchs')
-        .orderBy('views', descending: true) // Order by views in descending order
+        .orderBy('views', descending: true)
         .snapshots(),
     builder: (context, snapshot) {
       if (!snapshot.hasData) {
@@ -876,6 +876,7 @@ Widget buildPostTab() {
                   var collections = docData['p_collection_top'] != null ? List<String>.from(docData['p_collection_top']) : [];
                   var description = docData['p_desc_top'] ?? '';
                   var views = docData['views'] ?? 0;
+                  var gender = docData['p_sex_top'] ?? '';
 
                   return GestureDetector(
                     onTap: () {
@@ -892,6 +893,7 @@ Widget buildPostTab() {
                         vendor_id: vendorId,
                         collection: collections,
                         description: description,
+                        gender: gender,
                       ));
                     },
                     child: Container(

@@ -503,29 +503,47 @@ Widget buildProductMathGrids(String category) {
         itemBuilder: (BuildContext context, int index) {
           var pair = validPairs[index].value;
 
-          var data1 = pair[0].data() as Map<String, dynamic>;
-          var data2 = pair[1].data() as Map<String, dynamic>;
+            var data1 = pair[0].data() as Map<String, dynamic>;
+            var data2 = pair[1].data() as Map<String, dynamic>;
 
-          String vendorName1 = data1['p_seller'];
-          String vendorName2 = data2['p_seller'];
+            String vendorName1 = data1['p_seller'];
+            String vendorName2 = data2['p_seller'];
 
-          String vendor_id = data1['vendor_id'];
+            String vendor_id = data1['vendor_id'];
 
-          List<dynamic> collectionList = data1['p_mixmatch_collection'];
-          String description = data1['p_mixmatch_desc'];
+            List<dynamic> collectionList = data1['p_mixmatch_collection'];
+            String description = data1['p_mixmatch_desc'];
 
-          String price1 = data1['p_price'].toString();
-          String price2 = data2['p_price'].toString();
-          String totalPrice =
-              (int.parse(price1) + int.parse(price2)).toString();
+            String price1 = data1['p_price'].toString();
+            String price2 = data2['p_price'].toString();
+            String totalPrice =
+                (int.parse(price1) + int.parse(price2)).toString();
 
-          String productName1 = data1['p_name'];
-          String productName2 = data2['p_name'];
+            String productName1 = data1['p_name'];
+            String productName2 = data2['p_name'];
 
-          String productImage1 = data1['p_imgs'][0];
-          String productImage2 = data2['p_imgs'][0];
+            String productImage1 = data1['p_imgs'][0];
+            String productImage2 = data2['p_imgs'][0];
 
-          return GestureDetector(
+            String gender = data1['p_mixmatch_sex'];
+
+            bool isTop1 = data1['p_part'] == 'top';
+            bool isTop2 = data2['p_part'] == 'top';
+
+            // Ensure top items are displayed at the top
+            var topProductData = isTop1 ? data1 : data2;
+            var lowerProductData = isTop1 ? data2 : data1;
+
+            var topProductImage = isTop1 ? productImage1 : productImage2;
+            var lowerProductImage = isTop1 ? productImage2 : productImage1;
+
+            var topProductName = isTop1 ? productName1 : productName2;
+            var lowerProductName = isTop1 ? productName2 : productName1;
+
+            var topPrice = isTop1 ? price1 : price2;
+            var lowerPrice = isTop1 ? price2 : price1;
+
+            return GestureDetector(
               onTap: () {
                 Navigator.push(
                   context,
@@ -543,6 +561,7 @@ Widget buildProductMathGrids(String category) {
                       vendor_id: vendor_id,
                       collection: collectionList,
                       description: description,
+                      gender: gender,
                     ),
                   ),
                 );

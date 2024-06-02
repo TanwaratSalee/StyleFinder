@@ -19,6 +19,7 @@ class MatchDetailScreen extends StatefulWidget {
   final String vendor_id;
   final List<dynamic> collection;
   final String description;
+  final String gender;
 
   const MatchDetailScreen({
     this.productName1 = '',
@@ -33,6 +34,7 @@ class MatchDetailScreen extends StatefulWidget {
     this.vendor_id = '',
     required this.collection,
     this.description = '',
+    required this.gender,
   });
 
   @override
@@ -351,19 +353,18 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                     ),
                     Column(
                       children: [
+                        SizedBox(height: 10),
                         Container(
-                          height: 40,
+                          height: 50,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
-                            itemCount: widget.collection.length,
+                            itemCount: widget.gender.split(' ').length,
                             itemBuilder: (context, index) {
-                              String item = widget.collection[index].toString();
+                              String item = widget.gender.split(' ')[index];
+                              String capitalizedItem = item[0].toUpperCase() + item.substring(1);
                               return Container(
                                 alignment: Alignment.center,
-                                child: Text(
-                                  "${item[0].toUpperCase()}${item.substring(1)}",
-                                )
-                                    .text
+                                child: capitalizedItem.text
                                     .size(14)
                                     .color(greyDark)
                                     .fontFamily(medium)
@@ -373,8 +374,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                                   .color(thinPrimaryApp)
                                   .margin(EdgeInsets.symmetric(horizontal: 6))
                                   .roundedLg
-                                  .padding(EdgeInsets.symmetric(
-                                      horizontal: 24, vertical: 12))
+                                  .padding(EdgeInsets.symmetric(horizontal: 24, vertical: 12))
                                   .make();
                             },
                           ),

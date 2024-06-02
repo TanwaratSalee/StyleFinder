@@ -20,6 +20,7 @@ class MatchPostsDetails extends StatefulWidget {
   final String vendor_id;
   final List<dynamic> collection;
   final String description;
+  final String gender;
 
   const MatchPostsDetails({
     required this.productName1,
@@ -34,6 +35,7 @@ class MatchPostsDetails extends StatefulWidget {
     required this.vendor_id,
     required this.collection,
     required this.description,
+    required this.gender,
   });
 
   @override
@@ -329,6 +331,45 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                         .color(greyThin)
                         .make(),
                     30.heightBox,
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Suitable for gender',
+                      ).text.fontFamily(regular).size(16).make(),
+                    ),
+                    Column(
+                      children: [
+                        SizedBox(height: 10),
+                        Container(
+                          height: 50,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: widget.gender.split(' ').length,
+                            itemBuilder: (context, index) {
+                              String item = widget.gender.split(' ')[index];
+                              String capitalizedItem = item[0].toUpperCase() + item.substring(1);
+                              return Container(
+                                alignment: Alignment.center,
+                                child: capitalizedItem.text
+                                    .size(14)
+                                    .color(greyDark)
+                                    .fontFamily(medium)
+                                    .make(),
+                              )
+                                  .box
+                                  .color(thinPrimaryApp)
+                                  .margin(EdgeInsets.symmetric(horizontal: 6))
+                                  .roundedLg
+                                  .padding(EdgeInsets.symmetric(horizontal: 24, vertical: 12))
+                                  .make();
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
