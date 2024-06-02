@@ -267,69 +267,6 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 30),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Row(
-                            children: [
-                              5.widthBox,
-                              Obx(() {
-                                String imageUrl =
-                                    controller.vendorImageUrl.value;
-                                return imageUrl.isNotEmpty
-                                    ? Image.network(
-                                        imageUrl,
-                                        width: 50,
-                                        height: 50,
-                                        fit: BoxFit.cover,
-                                      )
-                                    : SizedBox.shrink();
-                              }),
-                              10.widthBox,
-                              Expanded(
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: widget.vendorName1
-                                      .toUpperCase()
-                                      .text
-                                      .fontFamily(medium)
-                                      .color(blackColor)
-                                      .size(18)
-                                      .make(),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        10.widthBox,
-                        GestureDetector(
-                          onTap: () {
-                            Get.to(
-                              () => StoreScreen(vendorId: widget.vendor_id),
-                            );
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 10),
-                            decoration: BoxDecoration(
-                              color: primaryApp,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: const Text(
-                              'See Store',
-                              style: TextStyle(
-                                  color: whiteColor, fontFamily: regular),
-                            ),
-                          ),
-                        )
-                      ],
-                    )
-                        .box
-                        .height(60)
-                        .padding(const EdgeInsets.symmetric(horizontal: 16))
-                        .color(greyThin)
-                        .make(),
                     30.heightBox,
                     Align(
                       alignment: Alignment.centerLeft,
