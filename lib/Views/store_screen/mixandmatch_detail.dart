@@ -19,11 +19,7 @@ class MatchDetailScreen extends StatefulWidget {
   final String vendor_id;
   final List<dynamic> collection;
   final String description;
-<<<<<<< HEAD
   final String gender;
-=======
-  final String genderMatch;
->>>>>>> d0e99ee (MatchDetailScreen gender)
 
   const MatchDetailScreen({
     this.productName1 = '',
@@ -38,11 +34,7 @@ class MatchDetailScreen extends StatefulWidget {
     this.vendor_id = '',
     required this.collection,
     this.description = '',
-<<<<<<< HEAD
-    required this.gender,
-=======
-    this.genderMatch = '',
->>>>>>> d0e99ee (MatchDetailScreen gender)
+    this.gender = '',
   });
 
   @override
@@ -346,50 +338,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                                 fontSize: 16,
                               ),
                             ),
-<<<<<<< HEAD
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Column(
-                      children: [
-                        SizedBox(height: 10),
-                        Container(
-                          height: 50,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: widget.gender.split(' ').length,
-                            itemBuilder: (context, index) {
-                              String item = widget.gender.split(' ')[index];
-                              String capitalizedItem = item[0].toUpperCase() + item.substring(1);
-                              return Container(
-                                alignment: Alignment.center,
-                                child: capitalizedItem.text
-                                    .size(14)
-                                    .color(greyDark)
-                                    .fontFamily(medium)
-                                    .make(),
-                              )
-                                  .box
-                                  .color(thinPrimaryApp)
-                                  .margin(EdgeInsets.symmetric(horizontal: 6))
-                                  .roundedLg
-                                  .padding(EdgeInsets.symmetric(horizontal: 24, vertical: 12))
-                                  .make();
-                            },
-                          ),
-=======
                           ],
->>>>>>> d0e99ee (MatchDetailScreen gender)
                         ),
                         SizedBox(
                           height: 10,
@@ -402,8 +351,8 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                                 scrollDirection: Axis.horizontal,
                                 itemCount: 1,
                                 itemBuilder: (context, index) {
-                                  String item = widget.genderMatch.toString();
-                                  print(widget.genderMatch);
+                                  String item = widget.gender.toString();
+                                  print(widget.gender);
                                   return Container(
                                     alignment: Alignment.center,
                                     child: Text(

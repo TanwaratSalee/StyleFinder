@@ -42,7 +42,7 @@ class MessagesScreen extends StatelessWidget {
                     aTimestamp != null ? aTimestamp.toDate() : DateTime.now();
                 var bDate =
                     bTimestamp != null ? bTimestamp.toDate() : DateTime.now();
-                return bDate.compareTo(aDate); 
+                return bDate.compareTo(aDate);
               });
 
               return Padding(
@@ -53,8 +53,7 @@ class MessagesScreen extends StatelessWidget {
                       child: ListView.builder(
                         itemCount: data.length,
                         itemBuilder: (BuildContext context, int index) {
-                          var timestamp =
-                              data[index]['created_on'] as Timestamp?;
+                          var timestamp = data[index]['created_on'] as Timestamp?;
                           var date = timestamp != null
                               ? timestamp.toDate()
                               : DateTime.now();
@@ -68,12 +67,13 @@ class MessagesScreen extends StatelessWidget {
                                 DateFormat('dd/MM/yyyy').format(date);
                           }
 
-                          var friendImageUrl = data[index]['friend_image_url'] ?? '';
+                          var friendImageUrl =
+                              data[index]['friend_image_url'] ?? '';
 
                           return GestureDetector(
                             onTap: () {
-                               print('p_seller: ${data[index]['friend_name']}');
-                          print('vendor_id: ${data[index]['toId']}');
+                              print('p_seller: ${data[index]['friend_name']}');
+                              print('vendor_id: ${data[index]['toId']}');
                               Get.to(() => const ChatScreen(), arguments: [
                                 data[index]['friend_name'],
                                 data[index]['toId']
@@ -94,7 +94,7 @@ class MessagesScreen extends StatelessWidget {
                               child: Row(
                                 children: [
                                   CircleAvatar(
-                                    radius: 27, 
+                                    radius: 27,
                                     backgroundColor: primaryApp,
                                     backgroundImage: friendImageUrl.isNotEmpty
                                         ? NetworkImage(friendImageUrl)
@@ -103,7 +103,7 @@ class MessagesScreen extends StatelessWidget {
                                         ? Icon(
                                             Icons.person,
                                             color: whiteColor,
-                                            size: 27, 
+                                            size: 27,
                                           )
                                         : null,
                                   ),
