@@ -72,6 +72,8 @@ class MessagesScreen extends StatelessWidget {
 
                           return GestureDetector(
                             onTap: () {
+                               print('p_seller: ${data[index]['friend_name']}');
+                          print('vendor_id: ${data[index]['toId']}');
                               Get.to(() => const ChatScreen(), arguments: [
                                 data[index]['friend_name'],
                                 data[index]['toId']

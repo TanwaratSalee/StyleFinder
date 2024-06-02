@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
+import 'package:flutter_finalproject/Views/chat_screen/chat_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
@@ -232,7 +233,28 @@ class _ItemDetailsState extends State<ItemDetails> {
                       .padding(
                           EdgeInsets.symmetric(horizontal: 12, vertical: 6))
                       .make(),
-
+                  // ListTile(
+                  //   leading: Image.asset(icPerson, color: greyDark, height: 20),
+                  //   title: Text('Contact Seller',
+                  //       style: TextStyle(color: greyDark, fontFamily: medium)),
+                  //   trailing: Icon(Icons.chevron_right, color: greyDark),
+                  //   onTap: () {
+                  //     print('p_seller: ${widget.data['p_seller']}');
+                  //     print('vendor_id: ${widget.data['vendor_id']}');
+                  //     Get.to(() => const ChatScreen(), arguments: [
+                  //       widget.data['p_seller'],
+                  //       widget.data['vendor_id']
+                  //     ]);
+                  //   },
+                  // )
+                  //     .box
+                  //     .white
+                  //     .color(whiteColor)
+                  //     .shadowXs
+                  //     .roundedSM
+                  //     .border(color: greyLine)
+                  //     .padding(const EdgeInsets.symmetric(horizontal: 4))
+                  //     .make(),
                   Row(
                     children: [
                       Expanded(
