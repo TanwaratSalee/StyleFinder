@@ -40,7 +40,7 @@ class LoginScreen extends StatelessWidget {
                   controller: controller.emailController,
                 ),
                 const SizedBox(height: 15),
-                customTextField(
+                CustomTextField2(
                   label: password,
                   isPass: true,
                   readOnly: false,
