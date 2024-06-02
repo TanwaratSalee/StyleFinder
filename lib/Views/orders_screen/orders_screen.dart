@@ -317,10 +317,24 @@ class _OrdersScreenState extends State<OrdersScreen>
               child: Text("No orders yet!", style: TextStyle(color: greyDark)));
         } else {
           var data = snapshot.data!.docs;
+
+          // Filter orders that have at least one product with 'reviews' set to false
+          var ordersWithProductsToReview = data.where((orderDoc) {
+            var orderData = orderDoc.data() as Map<String, dynamic>;
+            var products = orderData['orders'] as List<dynamic>;
+            return products.any((product) => product['reviews'] == false);
+          }).toList();
+
+          if (ordersWithProductsToReview.isEmpty) {
+            return const Center(
+                child:
+                    Text("No orders yet!", style: TextStyle(color: greyDark)));
+          }
+
           return ListView.builder(
-            itemCount: data.length,
+            itemCount: ordersWithProductsToReview.length,
             itemBuilder: (context, index) {
-              var orderDoc = data[index];
+              var orderDoc = ordersWithProductsToReview[index];
               var orderData = orderDoc.data() as Map<String, dynamic>;
               var products = orderData['orders'] as List<dynamic>;
 
@@ -492,6 +506,10 @@ class _OrdersScreenState extends State<OrdersScreen>
                                               setState(() {
                                                 productsToReview
                                                     .removeAt(productIndex);
+                                                if (productsToReview.isEmpty) {
+                                                  ordersWithProductsToReview
+                                                      .removeAt(index);
+                                                }
                                               });
                                             } else {
                                               VxToast.show(context,
@@ -565,17 +583,12 @@ class _OrdersScreenState extends State<OrdersScreen>
                             .color(blackColor)
                             .size(18)
                             .make(),
-                        Text(
-                          orderData['order_confirmed'] ? "Confirm" : "Pending",
-                          style: TextStyle(
-                              color: orderData['order_confirmed']
-                                  ? Colors.green
-                                  : Colors.orange,
-                              fontFamily: regular,
-                              fontSize: 16),
-                        ),
+                        Text(intl.DateFormat()
+                                .add_yMd()
+                                .format((orderData['order_date'].toDate())))
                       ],
                     ).box.padding(EdgeInsets.symmetric(horizontal: 12)).make(),
+                    Divider(color: greyLine,),
                     5.heightBox,
                     ...products.map((product) {
                       return Padding(
