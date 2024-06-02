@@ -263,6 +263,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       allowedSwipeDirection:
                           AllowedSwipeDirection.only(left: true, right: true),
                       cardsCount: productsToShow.length,
+                      numberOfCardsDisplayed: min(3, productsToShow.length),
                       cardBuilder: (BuildContext context, int index,
                           int percentThresholdX, int percentThresholdY) {
                         previousSwipedProduct = selectedProduct;
