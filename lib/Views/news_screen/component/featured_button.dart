@@ -19,7 +19,7 @@ Widget featuredButton({String? title, icon}) {
       .white
       .padding(const EdgeInsets.all(4))
       .roundedSM
-      .outerShadowSm
+      .outerShadow
       .make()
       .onTap(() {
     Get.to(() => CollectionDetails(title: title));

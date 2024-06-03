@@ -143,7 +143,7 @@ class _CollectionDetailsState extends State<CollectionDetails> {
                             .white
                             .margin(const EdgeInsets.symmetric(horizontal: 6))
                             .roundedSM
-                            .outerShadowSm
+                            .outerShadow
                             .padding(const EdgeInsets.all(12))
                             .make()
                             .onTap(() {

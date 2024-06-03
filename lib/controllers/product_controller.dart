@@ -10,10 +10,14 @@ class ProductController extends GetxController {
   var colorIndex = 0.obs;
   var totalPrice = 0.obs;
   var vendorImageUrl = ''.obs;
- 
   var subcat = [];
 
   var isFav = false.obs;
+  var documentId = ''.obs;
+
+  void setDocumentId(String id) {
+    documentId.value = id;
+  }
 
  //======Filter
   var filteredProducts = <Map<String, dynamic>>[].obs;
@@ -225,27 +229,37 @@ void fetchVendors() async {
  }
 
   
-  addToCart(
-    {title, img, sellername, qty, tprice, context, vendorID, productsize}) async {
+  void addToCart({
+  title,
+  img,
+  sellername,
+  qty,
+  tprice,
+  context,
+  vendorID,
+  productsize,
+  documentId, 
+}) async {
   try {
-    DocumentReference docRef = await firestore.collection(cartCollection).add({
+    DocumentReference docRef = await FirebaseFirestore.instance.collection(cartCollection).add({
       'title': title,
       'img': img,
       'sellername': sellername,
       'qty': qty,
       'vendor_id': vendorID,
-      'tprice': tprice,
+      'tprice': tprice, // ยืนยันว่าใช้ double
       'added_by': currentUser!.uid,
       'productsize': productsize,
+      'document_id': documentId, // เพิ่ม Document ID ใน Firestore
     });
-    
-    await docRef.update({'product_id': docRef.id});
-    
+        
     VxToast.show(context, msg: "Add to your cart");
   } catch (error) {
     VxToast.show(context, msg: error.toString());
   }
-}
+ }
+
+
 
 
 

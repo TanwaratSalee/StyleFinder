@@ -52,7 +52,7 @@ class CollectionScreen extends StatelessWidget {
                   .rounded
                   .clip(Clip.antiAlias)
                   .color(whiteColor)
-                  .outerShadowSm
+                  .outerShadow
                   .make()
                   .onTap(() {
                 controller.getSubCollection(collectionList[index]);

@@ -38,7 +38,7 @@ Widget horizontalLine({required bool isActive}) {
       children: [
         Container(
           width: 40,
-          height: 2,
+          height: 3,
           color: isActive ? primaryApp : greyThin,
         ),
         20.heightBox,

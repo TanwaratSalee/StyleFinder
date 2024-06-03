@@ -86,7 +86,7 @@
 //         backgroundColor: whiteColor,
 //         title: appbarField(context: context),
 //         // elevation: 8.0,
-//         // shadowColor: greyColor.withOpacity(0.5),
+//         // outerShadowColor: greyColor.withOpacity(0.5),
 //       ),
 //       body: CustomScrollView(
 //         physics: NeverScrollableScrollPhysics(),

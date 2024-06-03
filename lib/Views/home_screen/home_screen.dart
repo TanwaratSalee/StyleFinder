@@ -190,18 +190,18 @@ class _HomeScreenState extends State<HomeScreen> {
                               .color(greyDark)
                               .size(16)
                               .make(),
-                          200.widthBox,
                           Icon(Icons.search, color: greyDark),
                         ],
                       )
                           .box
+                          .width(context.screenWidth - 140)
                           .padding(EdgeInsets.symmetric(
                               horizontal: 16, vertical: 14))
                           .border(color: greyLine)
                           .roundedLg
                           .make(),
                     ),
-                    Spacer(),
+                    15.widthBox,
                     IconButton(
                       icon: Icon(
                         Icons.filter_list_rounded,
@@ -218,7 +218,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                     ).box.border(color: greyLine).roundedLg.make(),
                   ],
-                ),
+                ).paddingSymmetric(horizontal: 12)
               ),
               Expanded(
                 child: FutureBuilder<List<Map<String, dynamic>>>(

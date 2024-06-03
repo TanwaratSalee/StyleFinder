@@ -53,8 +53,8 @@ class OrdersDetails extends StatelessWidget {
                         .text
                         .size(20)
                         .color(blackColor)
-                        .fontFamily(medium)
-                        .makeCentered(),
+                        .fontFamily(semiBold)
+                        .make(),
                     10.heightBox,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -92,7 +92,7 @@ class OrdersDetails extends StatelessWidget {
                     .roundedSM
                     .border(color: greyLine)
                     .padding(const EdgeInsets.symmetric(
-                        horizontal: 28, vertical: 12))
+                        horizontal: 32, vertical: 12))
                     .make(),
               ),
               15.heightBox,

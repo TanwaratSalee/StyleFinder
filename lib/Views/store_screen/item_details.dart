@@ -23,6 +23,7 @@ class ItemDetails extends StatefulWidget {
 class _ItemDetailsState extends State<ItemDetails> {
   late final ProductController controller;
   int? selectedSizeIndex;
+  List<dynamic> reviews = [];
 
   @override
   void initState() {
@@ -32,6 +33,7 @@ class _ItemDetailsState extends State<ItemDetails> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       int productPrice = int.parse(widget.data['p_price']);
       controller.calculateTotalPrice(productPrice);
+      fetchReviews(); // Fetch reviews when the widget is initialized
     });
   }
 
@@ -44,6 +46,7 @@ class _ItemDetailsState extends State<ItemDetails> {
       if (querySnapshot.docs.isNotEmpty) {
         DocumentSnapshot doc = querySnapshot.docs.first;
         List<dynamic> wishlist = doc['p_wishlist'];
+        controller.setDocumentId(doc.id); // เก็บ Document ID ใน controller
         if (wishlist.contains(currentUser!.uid)) {
           controller.isFav(true);
         } else {
@@ -53,6 +56,17 @@ class _ItemDetailsState extends State<ItemDetails> {
     });
 
     fetchVendorImageUrl(widget.data['vendor_id']);
+  }
+
+  void fetchReviews() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('reviewCollection')
+        .where('product_id', isEqualTo: controller.documentId.value)
+        .get();
+
+    setState(() {
+      reviews = querySnapshot.docs.map((doc) => doc.data()).toList();
+    });
   }
 
   int? selectedIndex;
@@ -93,6 +107,7 @@ class _ItemDetailsState extends State<ItemDetails> {
     List<String> sizeOrder = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
     List<String> sizes = widget.data['p_productsize'].cast<String>().toList();
     sizes.sort((a, b) => sizeOrder.indexOf(a).compareTo(sizeOrder.indexOf(b)));
+
     return WillPopScope(
       onWillPop: () async {
         controller.resetValues();
@@ -113,320 +128,429 @@ class _ItemDetailsState extends State<ItemDetails> {
         body: Column(
           children: [
             Expanded(
-                child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  VxSwiper.builder(
-                    autoPlay: true,
-                    height: 420,
-                    itemCount: widget.data['p_imgs'].length ?? 0,
-                    aspectRatio: 16 / 9,
-                    viewportFraction: 1.0,
-                    itemBuilder: (context, index) {
-                      return Image.network(
-                        widget.data['p_imgs'][index],
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                      );
-                    },
-                  ).box.white.make(),
-                  10.heightBox,
-                  //title of product
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            width: 290,
-                            child: Text(
-                              widget.title ?? '',
-                              style: const TextStyle(
-                                color: blackColor,
-                                fontFamily: semiBold,
-                                fontSize: 22,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    VxSwiper.builder(
+                      autoPlay: true,
+                      height: 420,
+                      itemCount: widget.data['p_imgs'].length ?? 0,
+                      aspectRatio: 16 / 9,
+                      viewportFraction: 1.0,
+                      itemBuilder: (context, index) {
+                        return Image.network(
+                          widget.data['p_imgs'][index],
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        );
+                      },
+                    ).box.white.make(),
+                    10.heightBox,
+                    // Title of product
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              width: 290,
+                              child: Text(
+                                widget.title ?? '',
+                                style: const TextStyle(
+                                  color: blackColor,
+                                  fontFamily: semiBold,
+                                  fontSize: 22,
+                                ),
+                                softWrap: true,
                               ),
-                              softWrap: true,
                             ),
+                            const Spacer(),
+                            Obx(
+                              () => IconButton(
+                                onPressed: () {
+                                  if (controller.isFav.value) {
+                                    controller.removeToWishlistDetail(
+                                        widget.data, _updateIsFav, context);
+                                  } else {
+                                    controller.addToWishlistDetail(
+                                        widget.data, _updateIsFav, context);
+                                  }
+                                },
+                                icon: controller.isFav.value
+                                    ? Image.asset(icTapFavoriteButton,
+                                        width: 23)
+                                    : Image.asset(icFavoriteButton, width: 23),
+                                iconSize: 28,
+                              ),
+                            )
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            "${widget.data['p_aboutProduct']}"
+                                .text
+                                .fontFamily(regular)
+                                .color(greyDark)
+                                .size(14)
+                                .make(),
+                            "${NumberFormat('#,##0').format(double.parse(widget.data['p_price']).toInt())} Bath"
+                                .text
+                                .color(primaryApp)
+                                .fontFamily(medium)
+                                .size(20)
+                                .make(),
+                          ],
+                        )
+                      ],
+                    )
+                        .box
+                        .white
+                        .padding(EdgeInsets.fromLTRB(16, 10, 16, 6))
+                        .make(),
+                    5.heightBox,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Row(
+                            children: [
+                              5.widthBox,
+                              Obx(() {
+                                String imageUrl =
+                                    controller.vendorImageUrl.value;
+                                return imageUrl.isNotEmpty
+                                    ? ClipOval(
+                                        child: Image.network(
+                                          imageUrl,
+                                          width: 45,
+                                          height: 45,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                        .box
+                                        .border(color: greyLine)
+                                        .roundedFull
+                                        .make()
+                                    : Icon(
+                                        Icons.person,
+                                        color: whiteColor,
+                                        size: 22,
+                                      );
+                              }),
+                              10.widthBox,
+                              Expanded(
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: "${widget.data['p_seller']}"
+                                      .toUpperCase()
+                                      .text
+                                      .fontFamily(medium)
+                                      .color(blackColor)
+                                      .size(18)
+                                      .make(),
+                                ),
+                              ),
+                            ],
                           ),
-                          const Spacer(),
-                          Obx(
-                            () => IconButton(
-                              onPressed: () {
-                                if (controller.isFav.value) {
-                                  controller.removeToWishlistDetail(
-                                      widget.data, _updateIsFav, context);
-                                } else {
-                                  controller.addToWishlistDetail(
-                                      widget.data, _updateIsFav, context);
-                                }
-                              },
-                              icon: controller.isFav.value
-                                  ? Image.asset(icTapFavoriteButton, width: 23)
-                                  : Image.asset(icFavoriteButton, width: 23),
-                              iconSize: 28,
+                        ),
+                        10.widthBox,
+                        GestureDetector(
+                          onTap: () {
+                            Get.to(
+                              () => StoreScreen(
+                                  vendorId: widget.data['vendor_id']),
+                            );
+                          },
+                          child: Container(
+                            child: const Text(
+                              'See Store',
+                              style: TextStyle(
+                                  color: whiteColor, fontFamily: regular),
                             ),
                           )
-                        ],
-                      ),
-
-                      // 5.heightBox,
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          "${widget.data['p_aboutProduct']}"
-                              .text
-                              .fontFamily(regular)
-                              .color(greyDark)
-                              .size(14)
-                              .make(),
-                          "${NumberFormat('#,##0').format(double.parse(widget.data['p_price']).toInt())} Bath"
-                              .text
+                              .box
+                              .white
+                              .padding(EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 10))
+                              .roundedLg
                               .color(primaryApp)
-                              .fontFamily(medium)
-                              .size(20)
                               .make(),
-                        ],
-                      )
-                    ],
-                  )
-                      .box
-                      .white
-                      .padding(EdgeInsets.fromLTRB(16, 10, 16, 6))
-                      .make(),
-                  5.heightBox,
-
-                  // ListTile(
-                  //   leading: Image.asset(icPerson, color: greyDark, height: 20),
-                  //   title: Text('Contact Seller',
-                  //       style: TextStyle(color: greyDark, fontFamily: medium)),
-                  //   trailing: Icon(Icons.chevron_right, color: greyDark),
-                  //   onTap: () {
-                  //     print('p_seller: ${widget.data['p_seller']}');
-                  //     print('vendor_id: ${widget.data['vendor_id']}');
-                  //     Get.to(() => const ChatScreen(), arguments: [
-                  //       widget.data['p_seller'],
-                  //       widget.data['vendor_id']
-                  //     ]);
-                  //   },
-                  // )
-                  //     .box
-                  //     .white
-                  //     .color(whiteColor)
-                  //     .outerShadow
-                  //     .roundedSM
-                  //     .border(color: greyLine)
-                  //     .padding(const EdgeInsets.symmetric(horizontal: 4))
-                  //     .make(),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Row(
-                          children: [
-                            5.widthBox,
-                            Obx(() {
-                              String imageUrl = controller.vendorImageUrl.value;
-                              return imageUrl.isNotEmpty
-                                  ? ClipOval(
-                                      child: Image.network(
-                                        imageUrl,
-                                        width: 45,
-                                        height: 45,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    )
-                                      .box
-                                      .border(color: greyLine)
-                                      .roundedFull
-                                      .make()
-                                  : Icon(
-                                      Icons.person,
-                                      color: whiteColor,
-                                      size: 22,
-                                    );
-                            }),
-                            10.widthBox,
-                            Expanded(
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: "${widget.data['p_seller']}"
-                                    .toUpperCase()
+                        )
+                      ],
+                    )
+                        .box
+                        .white
+                        .padding(const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 8))
+                        .margin(const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 7))
+                        .outerShadow
+                        .roundedSM
+                        .make(),
+                    5.heightBox,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        "Collection"
+                            .text
+                            .color(blackColor)
+                            .size(16)
+                            .fontFamily(medium)
+                            .make(),
+                        SizedBox(height: 5),
+                        Container(
+                          height: 40,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: widget.data['p_collection'].length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                child: Text(
+                                  "${widget.data['p_collection'][index].toString()[0].toUpperCase()}${widget.data['p_collection'][index].toString().substring(1)}",
+                                )
                                     .text
-                                    .fontFamily(medium)
+                                    .size(26)
                                     .color(blackColor)
-                                    .size(18)
+                                    .fontFamily(medium)
                                     .make(),
+                              )
+                                  .box
+                                  .white
+                                  .color(thinPrimaryApp)
+                                  .margin(EdgeInsets.symmetric(horizontal: 3))
+                                  .roundedLg
+                                  .padding(EdgeInsets.symmetric(
+                                      horizontal: 24, vertical: 12))
+                                  .make();
+                            },
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        "Description"
+                            .text
+                            .color(blackColor)
+                            .size(16)
+                            .fontFamily(medium)
+                            .make(),
+                        SizedBox(height: 5),
+                        Text(
+                          widget.data['p_desc'],
+                        )
+                            .text
+                            .color(blackColor)
+                            .size(12)
+                            .fontFamily(regular)
+                            .make(),
+                        SizedBox(height: 15),
+                        "Size & Fit"
+                            .text
+                            .color(blackColor)
+                            .size(16)
+                            .fontFamily(medium)
+                            .make(),
+                        SizedBox(height: 5),
+                        Text(
+                          widget.data['p_size'],
+                        )
+                            .text
+                            .color(blackColor)
+                            .size(12)
+                            .fontFamily(regular)
+                            .make(),
+                      ],
+                    )
+                        .box
+                        .white
+                        .padding(const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 8))
+                        .margin(const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 7))
+                        .outerShadow
+                        .roundedSM
+                        .make(),
+                    Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Product rating')
+                                      .text
+                                      .fontFamily(medium)
+                                      .size(18)
+                                      .color(blackColor)
+                                      .make(),
+                                  VxRating(
+                                    isSelectable: false,
+                                    value:
+                                        double.parse(widget.data["p_rating"]),
+                                    onRatingUpdate: (value) {},
+                                    normalColor: greyDark,
+                                    selectionColor: golden,
+                                    count: 5,
+                                    size: 20,
+                                    maxRating: 5,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Get.to(() => ReviewScreen(
+                                    productId: controller.documentId.value));
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text('See All')
+                                      .text
+                                      .fontFamily(medium)
+                                      .size(14)
+                                      .color(blackColor)
+                                      .make(),
+                                  10.widthBox,
+                                  Image.asset(
+                                    icSeeAll,
+                                    width: 12,
+                                  )
+                                ],
                               ),
                             ),
                           ],
-                        ),
-                      ),
-                      10.widthBox,
-                      GestureDetector(
-                        onTap: () {
-                          Get.to(
-                            () =>
-                                StoreScreen(vendorId: widget.data['vendor_id']),
-                          );
-                        },
-                        child: Container(
-                          child: const Text(
-                            'See Store',
-                            style: TextStyle(
-                                color: whiteColor, fontFamily: regular),
-                          ),
-                        )
-                            .box
-                            .white
-                            .padding(EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 10))
-                            .roundedLg
-                            .color(primaryApp)
-                            .make(),
-                      )
-                    ],
-                  )
-                      .box
-                      .white
-                      .padding(const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 8))
-                      .margin(const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 7))
-                      .outerShadow
-                      .roundedSM
-                      .make(),
-
-                  5.heightBox,
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      "Collection"
-                          .text
-                          .color(blackColor)
-                          .size(16)
-                          .fontFamily(medium)
-                          .make(),
-                      SizedBox(height: 5),
-                      Container(
-                        height: 40,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: widget.data['p_collection'].length,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              child: Text(
-                                "${widget.data['p_collection'][index].toString()[0].toUpperCase()}${widget.data['p_collection'][index].toString().substring(1)}",
-                              )
-                                  .text
-                                  .size(26)
-                                  .color(blackColor)
-                                  .fontFamily(medium)
-                                  .make(),
+                        ).box.padding(EdgeInsets.symmetric(vertical: 5)).make(),
+                        Divider(color: greyThin),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            StreamBuilder<QuerySnapshot>(
+                              stream: FirebaseFirestore.instance
+                                  .collection('reviews')
+                                  .where('product_id',
+                                      isEqualTo: controller.documentId.value)
+                                  .snapshots(),
+                              builder: (context, snapshot) {
+                                if (!snapshot.hasData) {
+                                  return Center(
+                                      child: CircularProgressIndicator());
+                                }
+                                var reviews = snapshot.data!.docs;
+                                if (reviews.isEmpty) {
+                                  return Center(
+                                    child: Text(
+                                            'The product has not been reviewed yet.')
+                                        .text
+                                        .size(16)
+                                        .color(Colors.grey)
+                                        .make(),
+                                  );
+                                }
+                                return ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemCount:
+                                      reviews.length > 3 ? 3 : reviews.length,
+                                  itemBuilder: (context, index) {
+                                    var review = reviews[index];
+                                    var timestamp =
+                                        review['review_date'] as Timestamp;
+                                    var date = DateFormat('yyyy-MM-dd')
+                                        .format(timestamp.toDate());
+                                    var rating = review['rating'] is double
+                                        ? (review['rating'] as double).toInt()
+                                        : review['rating'] as int;
+                                    return Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            CircleAvatar(
+                                              backgroundImage: NetworkImage(
+                                                  review['user_img']),
+                                            ),
+                                            SizedBox(width: 10),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                        review['user_name'],
+                                                        style: TextStyle(
+                                                          fontFamily: semiBold,
+                                                          fontSize: 16,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        date,
+                                                        style: TextStyle(
+                                                          color: greyColor,
+                                                          fontSize: 12,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  buildStars(rating),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 10),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    review['review_text'],
+                                                    style:
+                                                        TextStyle(fontSize: 14),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                            .box
+                                            .padding(EdgeInsets.only(left: 55))
+                                            .make(),
+                                      ],
+                                    )
+                                        .box
+                                        .padding(EdgeInsets.symmetric(
+                                            vertical: 14, horizontal: 8))
+                                        .make();
+                                  },
+                                );
+                              },
                             )
-                                .box
-                                .white
-                                .color(thinPrimaryApp)
-                                .margin(EdgeInsets.symmetric(horizontal: 3))
-                                .roundedLg
-                                .padding(EdgeInsets.symmetric(
-                                    horizontal: 24, vertical: 12))
-                                .make();
-                          },
+                          ],
                         ),
-                      ),
-                      SizedBox(height: 10),
-                      "Description"
-                          .text
-                          .color(blackColor)
-                          .size(16)
-                          .fontFamily(medium)
-                          .make(),
-                      SizedBox(height: 5),
-                      Text(
-                        widget.data['p_desc'],
-                      )
-                          .text
-                          .color(blackColor)
-                          .size(12)
-                          .fontFamily(regular)
-                          .make(),
-                      SizedBox(height: 15),
-                      "Size & Fit"
-                          .text
-                          .color(blackColor)
-                          .size(16)
-                          .fontFamily(medium)
-                          .make(),
-                      SizedBox(height: 5),
-                      Text(
-                        widget.data['p_size'],
-                      )
-                          .text
-                          .color(blackColor)
-                          .size(12)
-                          .fontFamily(regular)
-                          .make(),
-                    ],
-                  )
-                      .box
-                      .white
-                      .padding(const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 8))
-                      .margin(const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 7))
-                      .outerShadow
-                      .roundedSM
-                      .make(),
-                  Column(
-                    children: [
-                      Row(
-                        children: [
-                          Text('Product rating')
-                              .text
-                              .fontFamily(medium)
-                              .size(16)
-                              .color(blackColor)
-                              .make(),
-                          const Spacer(),
-                          VxRating(
-                            isSelectable: false,
-                            value: double.parse(widget.data["p_rating"]),
-                            onRatingUpdate: (value) {},
-                            normalColor: greyDark,
-                            selectionColor: golden,
-                            count: 5,
-                            size: 20,
-                            maxRating: 5,
-                          ),
-                        ],
-                      ),
-                      Divider(color: greyThin),
-                      InkWell(
-                        onTap: () {
-                          Get.to(() => ReviewScreen());
-                        },
-                        child: Text('See all')
-                            .text
-                            .fontFamily(medium)
-                            .size(14)
-                            .color(blackColor)
-                            .make(),
-                      )
-                    ],
-                  )
-                      .box
-                      .white
-                      .padding(const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 8))
-                      .margin(const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 7))
-                      .outerShadow
-                      .roundedSM
-                      .make(),
-                ],
+                      ],
+                    )
+                        .box
+                        .padding(EdgeInsets.all(12))
+                        .margin(const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 7))
+                        .white
+                        .outerShadow
+                        .roundedSM
+                        .make(),
+                  ],
+                ),
               ),
-            )),
+            ),
             Obx(
               () => Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -554,6 +678,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                               title: widget.data['p_name'],
                               tprice: controller.totalPrice.value,
                               productsize: selectedSize,
+                              documentId: controller.documentId.value,
                             );
                             VxToast.show(context, msg: "Add to your cart");
                           } else {
@@ -573,6 +698,19 @@ class _ItemDetailsState extends State<ItemDetails> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget buildStars(int rating) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: List.generate(5, (index) {
+        return Icon(
+          index < rating ? Icons.star : Icons.star_border,
+          color: Colors.yellow,
+          size: 16,
+        );
+      }),
     );
   }
 }
