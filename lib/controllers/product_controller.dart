@@ -11,12 +11,53 @@ class ProductController extends GetxController {
   var totalPrice = 0.obs;
   var vendorImageUrl = ''.obs;
   var subcat = [];
-
   var isFav = false.obs;
   var documentId = ''.obs;
 
+  var averageRating = 0.0.obs;
+  var reviewCount = 0.obs;
+  var totalRating = 0.obs; 
+
+  void updateAverageRating(double rating) {
+    averageRating.value = rating;
+  }
+
+  void updateTotalRating(int rating) {
+    totalRating.value = rating;
+  }
+
   void setDocumentId(String id) {
     documentId.value = id;
+  }
+
+  void setReviewCount(int count) {
+    reviewCount.value = count;
+  }
+
+  void resetReviewCount() {
+    reviewCount.value = 0;
+  }
+
+  void updateReviewCount(int count) {
+  reviewCount.value = count;
+}
+
+
+//reviewscreen
+  void loadProductReviews(String productId) async {
+    documentId.value = productId;
+    var reviewsSnapshot = await FirebaseFirestore.instance
+        .collection('reviews')
+        .where('product_id', isEqualTo: productId)
+        .get();
+    
+    if (reviewsSnapshot.docs.isNotEmpty) {
+      var totalRating = reviewsSnapshot.docs.fold<double>(
+          0.0, (sum, doc) => sum + doc['rating']);
+      averageRating.value = totalRating / reviewsSnapshot.docs.length;
+    } else {
+      averageRating.value = 0.0;
+    }
   }
 
  //======Filter

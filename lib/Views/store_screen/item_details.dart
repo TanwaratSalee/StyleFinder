@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
-import 'package:flutter_finalproject/Views/chat_screen/chat_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/reviews_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
@@ -59,14 +59,37 @@ class _ItemDetailsState extends State<ItemDetails> {
   }
 
   void fetchReviews() async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('reviewCollection')
-        .where('product_id', isEqualTo: controller.documentId.value)
-        .get();
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('reviewCollection')
+          .where('product_id', isEqualTo: controller.documentId.value)
+          .get();
 
-    setState(() {
-      reviews = querySnapshot.docs.map((doc) => doc.data()).toList();
-    });
+      setState(() {
+        reviews = querySnapshot.docs.map((doc) => doc.data()).toList();
+        double totalRating = 0;
+        int reviewCount = reviews.length;
+
+        for (var review in reviews) {
+          totalRating += review['rating'];
+        }
+
+        double averageRating = reviewCount > 0 ? totalRating / reviewCount : 0;
+        controller.updateAverageRating(averageRating);
+        controller.updateReviewCount(reviewCount);
+        controller.updateTotalRating(totalRating.toInt());
+        controller.setReviewCount(reviews.length); // Update review count
+      });
+    } catch (e) {
+      print("Error fetching reviews: $e");
+      setState(() {
+        reviews = [];
+        controller.updateAverageRating(0);
+        controller.updateReviewCount(0);
+        controller.updateTotalRating(0);
+        controller.resetReviewCount(); // Reset review count
+      });
+    }
   }
 
   int? selectedIndex;
@@ -383,17 +406,25 @@ class _ItemDetailsState extends State<ItemDetails> {
                                       .size(18)
                                       .color(blackColor)
                                       .make(),
-                                  VxRating(
-                                    isSelectable: false,
-                                    value:
-                                        double.parse(widget.data["p_rating"]),
-                                    onRatingUpdate: (value) {},
-                                    normalColor: greyDark,
-                                    selectionColor: golden,
-                                    count: 5,
-                                    size: 20,
-                                    maxRating: 5,
-                                  ),
+                                  Obx(() {
+                                    double rating =
+                                        controller.averageRating.value;
+                                    int reviewCount = controller.reviewCount.value;
+                                    return Row(
+                                      children: [
+                                        buildCustomRating(rating, 20),
+                                        SizedBox(width: 8),
+                                        Text(
+                                          '${rating.toStringAsFixed(1)}/5.0 ($reviewCount reviews)',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: blackColor,
+                                            fontFamily: medium,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }),
                                 ],
                               ),
                             ),
@@ -415,7 +446,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                                   Image.asset(
                                     icSeeAll,
                                     width: 12,
-                                  )
+                                  ),
                                 ],
                               ),
                             ),
@@ -447,6 +478,11 @@ class _ItemDetailsState extends State<ItemDetails> {
                                         .make(),
                                   );
                                 }
+
+                                WidgetsBinding.instance.addPostFrameCallback((_) {
+                                  controller.setReviewCount(reviews.length); // Update review count from stream
+                                });
+
                                 return ListView.builder(
                                   shrinkWrap: true,
                                   physics: NeverScrollableScrollPhysics(),
@@ -561,7 +597,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                       scrollDirection: Axis.horizontal,
                       itemCount: sizes.length,
                       itemBuilder: (context, index) {
-                        bool isSelected = index == selectedIndex;
+                        bool isSelected = index == selectedSizeIndex;
                         return GestureDetector(
                           onTap: () => selectItem(index),
                           child: Container(
@@ -710,6 +746,31 @@ class _ItemDetailsState extends State<ItemDetails> {
           color: Colors.yellow,
           size: 16,
         );
+      }),
+    );
+  }
+
+  Widget buildCustomRating(double rating, double size) {
+    int filledStars = rating.floor();
+    bool hasHalfStar = rating - filledStars > 0;
+
+    return Row(
+      children: List.generate(5, (index) {
+        return Stack(
+          alignment: Alignment.center,
+          children: [
+            Icon(
+              Icons.star_border,
+              color: Colors.yellow,
+              size: size,
+            ),
+            Icon(
+              Icons.star,
+              color: index < filledStars ? Colors.yellow : Colors.transparent,
+              size: size - 2,
+            ),
+          ],
+        ).marginOnly(right: 4);
       }),
     );
   }
