@@ -48,15 +48,15 @@ class _ReviewScreenState extends State<ReviewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Reviews"),
+        title: Text("Reviews").text.size(24).fontFamily(semiBold).make(),
       ),
       body: Column(
         children: [
           Row(
             children: [
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('Product rating')
                         .text
@@ -64,16 +64,27 @@ class _ReviewScreenState extends State<ReviewScreen> {
                         .size(18)
                         .color(blackColor)
                         .make(),
-                    Obx(() {
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Obx(() {
                       double rating = controller.averageRating.value;
-                      return buildCustomRating(rating, 20);
+                      return Row(
+                        children: [
+                          buildCustomRating(rating, 22),
+                          5.widthBox,
+                          Text('${rating.toStringAsFixed(1)}/5.0')
+                        ],
+                      );
                     }),
-                    Text('Total Reviews: $reviewCount') // Display the count of reviews
+                    Text('($reviewCount reviews)') // Display the count of reviews
                         .text
                         .fontFamily(medium)
-                        .size(16)
+                        .size(14)
                         .color(blackColor)
                         .make(),
+                      ],
+                    )
                   ],
                 ),
               ),
@@ -141,7 +152,13 @@ class _ReviewScreenState extends State<ReviewScreen> {
                                       ),
                                     ],
                                   ),
-                                  buildStars(rating),
+                                  Row(
+                                    children: [
+                                      buildStars(rating),
+                                      5.widthBox,
+                                      Text('${rating.toStringAsFixed(1)}/5.0')
+                                    ],
+                                  ),
                                 ],
                               ),
                             ),

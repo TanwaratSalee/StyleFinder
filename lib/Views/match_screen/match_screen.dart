@@ -273,7 +273,7 @@ Widget buildCardSetLower(List<Map<String, dynamic>> lowerProducts) {
                   // if (topProducts.isNotEmpty && lowerProducts.isNotEmpty) {
                   //   final topProduct = topProducts[_currentPageIndexTop];
                   //   final lowerProduct = lowerProducts[_currentPageIndexLower];
-                  //   controller.addToWishlistPostUserMatch(
+                  //   controller.addToPostByUserMatch(
                   //     topProduct['p_name'],
                   //     lowerProduct['p_name'],
                   //     context,

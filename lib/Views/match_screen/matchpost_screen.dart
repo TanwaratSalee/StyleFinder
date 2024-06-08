@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
 import 'package:get/get.dart';
@@ -26,8 +25,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
     bool isSelectedWinter = controller.selectedCollections.contains('winter');
     bool isSelectedAutumn = controller.selectedCollections.contains('autumn');
     bool isSelectedDinner = controller.selectedCollections.contains('dinner');
-    bool isSelectedEveryday =
-        controller.selectedCollections.contains('everydaylook');
+    bool isSelectedEveryday = controller.selectedCollections.contains('everydaylook');
 
     return Scaffold(
       appBar: AppBar(
@@ -215,7 +213,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: ElevatedButton(
                   onPressed: () {
-                    controller.addToWishlistPostUserMatch(
+                    controller.addToPostByUserMatch(
                       widget.topProduct['p_name'],
                       widget.lowerProduct['p_name'],
                       context,
@@ -360,8 +358,7 @@ class CollectionSelector extends StatelessWidget {
               buildFilterChip("Winter ", isSelectedWinter, onWinterSelected),
               buildFilterChip("Autumn ", isSelectedAutumn, onAutumnSelected),
               buildFilterChip("Dinner ", isSelectedDinner, onDinnerSelected),
-              buildFilterChip(
-                  "Everydaylook ", isSelectedEveryday, onEverydaySelected),
+              buildFilterChip("Everydaylook ", isSelectedEveryday, onEverydaySelected),
             ],
           ),
         ),

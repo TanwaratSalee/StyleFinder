@@ -82,9 +82,8 @@ const String product5 = "assets/images/product5.png";
 
 // Profile Screen
 const String icTapProfileFav = "assets/icons/iconsAccount/icTapFavProfile.png";
-const String icTapPostProfile =
-    "assets/icons/iconsAccount/icTapPostProfile.png";
-const String iceyes = "assets/icons/icNormal/EYEs.png";
+const String icTapPostProfile = "assets/icons/iconsAccount/icTapPostProfile.png";
+const String icEyes = "assets/icons/icNormal/EYEs.png";
 
 const String imgProfile = "assets/images/Profile.png";
 const String icAccount = "assets/icons/iconsAccount/profile.png";
