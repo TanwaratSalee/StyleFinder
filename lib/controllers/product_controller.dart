@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/models/collection_model.dart';
 import 'package:get/get.dart';
+import 'package:path/path.dart';
 
 class ProductController extends GetxController {
   var quantity = 0.obs;
@@ -515,62 +516,82 @@ void addToPostByUserMatch(
   String explanation
 ) {
   List<String> productNames = [productNameTop, productNameLower];
+  String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
+
+  // ดึงข้อมูลจาก collection users โดยใช้ currentUserUID
   FirebaseFirestore.instance
-      .collection(productsCollection)
-      .where('p_name', whereIn: productNames)
+      .collection('users')
+      .doc(currentUserUID)
       .get()
-      .then((QuerySnapshot querySnapshot) {
-    if (querySnapshot.docs.isNotEmpty) {
-      String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
-      Map<String, dynamic> userData = {
-        'p_wishlist': FieldValue.arrayUnion([currentUser!.uid]),
-        'p_collection': selectedCollections,
-        'p_sex': selectedGender,
-        'p_desc': explanation,
-        'posted_by': currentUserUID,
-      };
+      .then((DocumentSnapshot userDoc) {
+    if (userDoc.exists) {
+      String userName = userDoc['name']; // สมมุติว่า field ชื่อว่า 'name'
+      
+      FirebaseFirestore.instance
+          .collection(productsCollection)
+          .where('p_name', whereIn: productNames)
+          .get()
+          .then((QuerySnapshot querySnapshot) {
+        if (querySnapshot.docs.isNotEmpty) {
+          Map<String, dynamic> userData = {
+            'p_collection': selectedCollections,
+            'p_sex': selectedGender,
+            'p_desc': explanation,
+            'posted_by': currentUserUID,
+            'posted_name': userName,
+          };
 
-      querySnapshot.docs.forEach((doc) {
-        var data = doc.data() as Map<String, dynamic>?;
-        var wishlist = (data?['p_wishlist'] as List<dynamic>?) ?? [];
+          querySnapshot.docs.forEach((doc) {
+            var data = doc.data() as Map<String, dynamic>?;
+            var wishlist = (data?['p_wishlist'] as List<dynamic>?) ?? [];
 
-        if (!wishlist.contains(currentUserUID)) {
-          userData['views'] = 0;
-          userData['favorite'] = 0;
-          if (doc['p_name'] == productNameTop) {
-            userData['p_name_top'] = productNameTop;
-            userData['p_price_top'] = doc['p_price'];
-            userData['p_imgs_top'] = doc['p_imgs'][0];
-            userData['vendor_id_top'] = doc['vendor_id'];
-          } else if (doc['p_name'] == productNameLower) {
-            userData['p_name_lower'] = productNameLower;
-            userData['p_price_lower'] = doc['p_price'];
-            userData['p_imgs_lower'] = doc['p_imgs'][0];
-            userData['vendor_id_lower'] = doc['vendor_id'];
+            if (!wishlist.contains(currentUserUID)) {
+              userData['views'] = 0;
+              userData['favorite'] = 0;
+              if (doc['p_name'] == productNameTop) {
+                userData['p_name_top'] = productNameTop;
+                userData['p_price_top'] = doc['p_price'];
+                userData['p_imgs_top'] = doc['p_imgs'][0];
+                userData['vendor_id_top'] = doc['vendor_id'];
+              } else if (doc['p_name'] == productNameLower) {
+                userData['p_name_lower'] = productNameLower;
+                userData['p_price_lower'] = doc['p_price'];
+                userData['p_imgs_lower'] = doc['p_imgs'][0];
+                userData['vendor_id_lower'] = doc['vendor_id'];
+              }
+            }
+          });
+
+          if (userData.keys.length > 1) { // Check if any product info was added
+            FirebaseFirestore.instance.collection('postusermixmatchs').add(userData).then((documentReference) {
+              VxToast.show(context, msg: "Added post successful.");
+              print('Data added in usermixmatchs collection with document ID: ${documentReference.id}');
+              Navigator.pop(context);
+            }).catchError((error) {
+              print('Error adding data in usermixmatchs collection: $error');
+              VxToast.show(context, msg: "Error post.");
+            });
+          } else {
+            VxToast.show(context, msg: "Products already in wishlist.");
           }
+        } else {
+          print('No products found matching the names.');
+          VxToast.show(context, msg: "No products found.");
         }
+      }).catchError((error) {
+        print('Error retrieving products: $error');
+        VxToast.show(context, msg: "Error retrieving products.");
       });
-
-      if (userData.keys.length > 1) { // Check if any product info was added
-        FirebaseFirestore.instance.collection('postusermixmatchs').add(userData).then((documentReference) {
-          VxToast.show(context, msg: "Added post successful.");
-          print('Data added in usermixmatchs collection with document ID: ${documentReference.id}');
-        }).catchError((error) {
-          print('Error adding data in usermixmatchs collection: $error');
-          VxToast.show(context, msg: "Error post.");
-        });
-      } else {
-        VxToast.show(context, msg: "Products already in wishlist.");
-      }
     } else {
-      print('No products found matching the names.');
-      VxToast.show(context, msg: "No products found.");
+      print('User not found.');
+      VxToast.show(context, msg: "User not found.");
     }
   }).catchError((error) {
-    print('Error retrieving products: $error');
-    VxToast.show(context, msg: "Error retrieving products.");
+    print('Error retrieving user: $error');
+    VxToast.show(context, msg: "Error retrieving user.");
   });
 }
+
 
 void addToWishlistUserMatch(String productNameTop, String productNameLower, BuildContext context) {
   List<String> productNames = [productNameTop, productNameLower];
