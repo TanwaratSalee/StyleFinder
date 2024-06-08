@@ -142,7 +142,7 @@ Widget buildCardSetTop(List<Map<String, dynamic>> topProducts) {
               Container(
                 width: 250,
                 child: Image.network(product['p_imgs'][0], fit: BoxFit.cover),
-              ),
+              ).box.color(Color.fromARGB(255, 244, 244, 245)).make(),
               Positioned(
                 left: -10,
                 child: IconButton(
@@ -204,7 +204,7 @@ Widget buildCardSetLower(List<Map<String, dynamic>> lowerProducts) {
               Container(
                 width: 250,
                 child: Image.network(product['p_imgs'][0], fit: BoxFit.cover),
-              ),
+              ).box.color(Color.fromARGB(255, 244, 244, 245)).make(),
               Positioned(
                 left: -10,
                 child: IconButton(

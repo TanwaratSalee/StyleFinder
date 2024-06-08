@@ -34,38 +34,22 @@ class _FilterDrawerState extends State<FilterDrawer> {
   var selectedVendorIds = <String>[].obs; 
 
   final selectedColorIndexes = <int>[].obs;
-  final List<Map<String, dynamic>> allColors = [
-    {'name': 'Black', 'color': blackColor, 'value': 0xFF000000},
-    {'name': 'Grey', 'color': greyColor, 'value': 0xFF808080},
-    {'name': 'White', 'color': whiteColor, 'value': 0xFFFFFFFF},
-    {'name': 'Purple', 'color': Colors.purple, 'value': 0xFF800080},
-    {'name': 'Deep Purple', 'color': Colors.deepPurple, 'value': 0xFF673AB7},
-    {'name': 'Blue', 'color': Colors.lightBlue, 'value': 0xFF03A9F4},
-    {
-      'name': 'Blue',
-      'color': const Color.fromARGB(255, 36, 135, 216),
-      'value': 0xFF2487D8
-    },
-    {
-      'name': 'Blue Grey',
-      'color': const Color.fromARGB(255, 96, 139, 115),
-      'value': 0xFF608B73
-    },
-    {
-      'name': 'Green',
-      'color': const Color.fromARGB(255, 17, 52, 50),
-      'value': 0xFF113432
-    },
-    {'name': 'Green', 'color': Colors.green, 'value': 0xFF4CAF50},
-    {'name': 'Green Accent', 'color': Colors.greenAccent, 'value': 0xFF69F0AE},
-    {'name': 'Yellow', 'color': Colors.yellow, 'value': 0xFFFFEB3B},
-    {'name': 'Orange', 'color': Colors.orange, 'value': 0xFFFF9800},
-    {'name': 'Red', 'color': redColor, 'value': 0xFFFF0000},
-    {
-      'name': 'Red Accent',
-      'color': const Color.fromARGB(255, 237, 101, 146),
-      'value': 0xFFED6592
-    },
+ final List<Map<String, dynamic>> allColors = [
+    {'name': 'Black', 'color': Colors.black},
+    {'name': 'Grey', 'color': Colors.grey},
+    {'name': 'White', 'color': Colors.white},
+    {'name': 'Purple', 'color': const Color.fromRGBO(98, 28, 141, 1)},
+    {'name': 'Deep Purple', 'color': const Color.fromRGBO(202, 147, 235, 1)},
+    {'name': 'Blue', 'color': Color.fromRGBO(32, 47, 179, 1)},
+    {'name': 'Blue', 'color': const Color.fromRGBO(48, 176, 232, 1)},
+    {'name': 'Blue Grey', 'color': const Color.fromRGBO(83, 205, 191, 1)},
+    {'name': 'Green', 'color': const Color.fromRGBO(23, 119, 15, 1)},
+    {'name': 'Green', 'color': Color.fromRGBO(98, 207, 47, 1)},
+    {'name': 'Yellow', 'color': Colors.yellow},
+    {'name': 'Orange', 'color': Colors.orange},
+    {'name': 'Pink', 'color': Colors.pinkAccent},
+    {'name': 'Red', 'color': Colors.red},
+    {'name': 'Brown', 'color': Color.fromARGB(255, 121, 58, 31)},
   ];
 
   @override
@@ -595,3 +579,4 @@ Widget buildFilterChip(
   
   );
 }
+
