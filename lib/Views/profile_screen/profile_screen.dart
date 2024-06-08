@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/match_screen/matchpost_details.dart';
 import 'package:flutter_finalproject/Views/profile_screen/menu_setting_screen.dart';
@@ -102,9 +101,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                 labelColor: primaryApp,
                 indicatorColor: Theme.of(context).primaryColor,
                 onTap: (index) {
-                  setState(() {
-                    // Update the state to trigger a rebuild
-                  });
+                  setState(() {});
                 },
               );
             },
@@ -353,7 +350,6 @@ class _ProfileScreenState extends State<ProfileScreen>
 
         final currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
 
-        // Filter the documents for the current user
         var userDocs =
             data.where((doc) => doc['user_id'] == currentUserUID).toList();
 
@@ -378,9 +374,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                 (int.parse(price1) + int.parse(price2)).toString();
 
             return GestureDetector(
-              onTap: () {
-                // Navigate to detail page if needed
-              },
+              onTap: () {},
               child: Column(
                 children: [
                   Container(
@@ -579,7 +573,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Product 1
+                      
                       GestureDetector(
                         onTap: () {
                           navigateToItemDetails(context, pair['top']);
@@ -840,7 +834,7 @@ class _ProfileScreenState extends State<ProfileScreen>
     });
   }
 
-Widget buildPostTab() {
+  Widget buildPostTab() {
   return StreamBuilder<QuerySnapshot>(
     stream: FirebaseFirestore.instance
         .collection('postusermixmatchs')
@@ -851,130 +845,167 @@ Widget buildPostTab() {
         return Center(child: CircularProgressIndicator());
       }
       var data = snapshot.data!.docs;
-      if (data.isEmpty) {
+
+      String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
+
+      // Filter posts by current user ID
+      var filteredData = data.where((doc) {
+        var docData = doc.data() as Map<String, dynamic>;
+        return docData['posted_by'] == currentUserUID;
+      }).toList();
+
+      if (filteredData.isEmpty) {
         return Center(
           child: Text("No posts available!", style: TextStyle(color: greyDark)),
         );
       }
-      return LayoutBuilder(
-        builder: (context, constraints) {
-          final itemWidth = (constraints.maxWidth - 6) / 3;
-          return SingleChildScrollView(
-            child: Center(
-              child: Wrap(
-                spacing: 2, // Horizontal spacing between widgets
-                runSpacing: 2, // Vertical spacing between widgets
-                children: List.generate(data.length, (index) {
-                  var doc = data[index];
-                  var docData = doc.data() as Map<String, dynamic>;
-                  var topImage = docData['p_imgs_top'] ?? '';
-                  var lowerImage = docData['p_imgs_lower'] ?? '';
-                  var productNameTop = docData['p_name_top'] ?? '';
-                  var productNameLower = docData['p_name_lower'] ?? '';
-                  var priceTop = docData['p_price_top']?.toString() ?? '0';
-                  var priceLower = docData['p_price_lower']?.toString() ?? '0';
-                  var vendorId = docData['vendor_id'] ?? '';
-                  var collections = docData['p_collection_top'] != null ? List<String>.from(docData['p_collection_top']) : [];
-                  var description = docData['p_desc_top'] ?? '';
-                  var views = docData['views'] ?? 0;
-                  var gender = docData['p_sex_top'] ?? '';
 
-                  return GestureDetector(
-                    onTap: () {
-                      Get.to(() => MatchPostsDetails(
-                        productName1: productNameTop,
-                        productName2: productNameLower,
-                        price1: priceTop,
-                        price2: priceLower,
-                        productImage1: topImage,
-                        productImage2: lowerImage,
-                        totalPrice: (int.parse(priceTop) + int.parse(priceLower)).toString(),
-                        vendorName1: 'Vendor Name 1', // Replace with actual vendor name if available
-                        vendorName2: 'Vendor Name 2', // Replace with actual vendor name if available
-                        vendor_id: vendorId,
-                        collection: collections,
-                        description: description,
-                        gender: gender,
-                      ));
-                    },
-                    child: Container(
-                      width: itemWidth,
-                      height: 240,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(0),
+      return GridView.builder(
+        padding: EdgeInsets.all(12),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, 
+          crossAxisSpacing: 8,
+          mainAxisSpacing: 8,
+          childAspectRatio: 8 / 9, 
+        ),
+        itemCount: filteredData.length,
+        itemBuilder: (context, index) {
+          var doc = filteredData[index];
+          var docData = doc.data() as Map<String, dynamic>;
+          var topImage = docData['p_imgs_top'] ?? '';
+          var lowerImage = docData['p_imgs_lower'] ?? '';
+          var productNameTop = docData['p_name_top'] ?? '';
+          var productNameLower = docData['p_name_lower'] ?? '';
+          var priceTop = docData['p_price_top']?.toString() ?? '0';
+          var priceLower = docData['p_price_lower']?.toString() ?? '0';
+          var vendorId = docData['vendor_id'] ?? '';
+          var collections = docData['p_collection'] != null
+              ? List<String>.from(docData['p_collection'])
+              : [];
+          var description = docData['p_desc'] ?? '';
+          var views = docData['views'] ?? 0;
+          var gender = docData['p_sex'] ?? '';
+
+          return GestureDetector(
+            onTap: () {
+              Get.to(() => MatchPostsDetails(
+                    productName1: productNameTop,
+                    productName2: productNameLower,
+                    price1: priceTop,
+                    price2: priceLower,
+                    productImage1: topImage,
+                    productImage2: lowerImage,
+                    totalPrice: (int.parse(priceTop) + int.parse(priceLower)).toString(),
+                    vendorName1: 'Vendor Name 1',
+                    vendorName2: 'Vendor Name 2',
+                    vendor_id: vendorId,
+                    collection: collections,
+                    description: description,
+                    gender: gender,
+                  ));
+            },
+            child: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 75,
+                        height: 80,
+                        child: Image.network(
+                          topImage,
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            child: Container(
-                              width: itemWidth,
-                              height: 120,
-                              decoration: BoxDecoration(
-                                color: greyThin,
-                                borderRadius: BorderRadius.circular(0),
+                      SizedBox(width: 5),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              productNameTop,
+                              style: const TextStyle(
+                                fontFamily: medium,
+                                fontSize: 14,
                               ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.network(
-                                  topImage,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
                             ),
-                          ),
-                          Positioned(
-                            top: 120,
-                            left: 0,
-                            right: 0,
-                            child: Container(
-                              width: itemWidth,
-                              height: 120,
-                              decoration: BoxDecoration(
-                                color: greyThin,
-                                borderRadius: BorderRadius.circular(0),
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.network(
-                                  lowerImage,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
+                            Text(
+                              "${NumberFormat('#,##0').format(double.parse(priceTop).toInt())} Bath",
+                              style: const TextStyle(color: greyColor),
                             ),
-                          ),
-                          // Eye icon and number of views
-                          Positioned(
-                            top: 215,
-                            left: 5,
-                            child: Row(
-                              children: [
-                                Image.asset(
-                                  iceyes, // Path to your image
-                                  width: 18,
-                                  height: 18,
-                                ),
-                                SizedBox(width: 4),
-                                Text(
-                                  views.toString(),
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontFamily: bold,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                }),
-              ),
+                      SizedBox(width: 8),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 75,
+                        height: 80,
+                        child: Image.network(
+                          lowerImage,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      SizedBox(width: 5),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              productNameLower,
+                              style: const TextStyle(
+                                fontFamily: medium,
+                                fontSize: 14,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                            Text(
+                              "${NumberFormat('#,##0').format(double.parse(priceLower).toInt())} Bath",
+                              style: const TextStyle(color: greyColor),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Image.asset(
+                        icEyes,
+                        width: 16,
+                        height: 10,
+                        color: greyDark,
+                      ),
+                      SizedBox(width: 4),
+                      Text(
+                        views.toString(),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: regular,
+                          color: greyColor,
+                        ),
+                      ),
+                    ],
+                  ).paddingSymmetric(horizontal: 8),
+                ],
+              )
+                  .box
+                  .border(color: greyLine)
+                  .rounded
+                  .padding(EdgeInsets.all(8))
+                  .make(),
             ),
           );
         },
@@ -982,10 +1013,5 @@ Widget buildPostTab() {
     },
   );
 }
-
-
-
-
-
 
 }

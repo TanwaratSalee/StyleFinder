@@ -24,6 +24,7 @@ class _ItemDetailsState extends State<ItemDetails> {
   late final ProductController controller;
   int? selectedSizeIndex;
   List<dynamic> reviews = [];
+  int reviewCount = 0;
 
   @override
   void initState() {
@@ -33,7 +34,7 @@ class _ItemDetailsState extends State<ItemDetails> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       int productPrice = int.parse(widget.data['p_price']);
       controller.calculateTotalPrice(productPrice);
-      fetchReviews(); // Fetch reviews when the widget is initialized
+      fetchReviews();
     });
   }
 
@@ -46,7 +47,7 @@ class _ItemDetailsState extends State<ItemDetails> {
       if (querySnapshot.docs.isNotEmpty) {
         DocumentSnapshot doc = querySnapshot.docs.first;
         List<dynamic> wishlist = doc['p_wishlist'];
-        controller.setDocumentId(doc.id); // เก็บ Document ID ใน controller
+        controller.setDocumentId(doc.id);
         if (wishlist.contains(currentUser!.uid)) {
           controller.isFav(true);
         } else {
@@ -78,7 +79,7 @@ class _ItemDetailsState extends State<ItemDetails> {
         controller.updateAverageRating(averageRating);
         controller.updateReviewCount(reviewCount);
         controller.updateTotalRating(totalRating.toInt());
-        controller.setReviewCount(reviews.length); // Update review count
+        this.reviewCount = reviewCount;
       });
     } catch (e) {
       print("Error fetching reviews: $e");
@@ -87,17 +88,9 @@ class _ItemDetailsState extends State<ItemDetails> {
         controller.updateAverageRating(0);
         controller.updateReviewCount(0);
         controller.updateTotalRating(0);
-        controller.resetReviewCount(); // Reset review count
+        this.reviewCount = 0;
       });
     }
-  }
-
-  int? selectedIndex;
-
-  void selectItem(int index) {
-    setState(() {
-      selectedIndex = index;
-    });
   }
 
   void fetchVendorImageUrl(String vendorId) async {
@@ -117,6 +110,12 @@ class _ItemDetailsState extends State<ItemDetails> {
     } catch (e) {
       print('Error fetching vendor image: $e');
     }
+  }
+
+  void selectItem(int index) {
+    setState(() {
+      selectedSizeIndex = index;
+    });
   }
 
   void _updateIsFav(bool isFav) {
@@ -409,7 +408,8 @@ class _ItemDetailsState extends State<ItemDetails> {
                                   Obx(() {
                                     double rating =
                                         controller.averageRating.value;
-                                    int reviewCount = controller.reviewCount.value;
+                                    int reviewCount =
+                                        controller.reviewCount.value;
                                     return Row(
                                       children: [
                                         buildCustomRating(rating, 20),
@@ -454,7 +454,6 @@ class _ItemDetailsState extends State<ItemDetails> {
                         ).box.padding(EdgeInsets.symmetric(vertical: 5)).make(),
                         Divider(color: greyThin),
                         Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             StreamBuilder<QuerySnapshot>(
                               stream: FirebaseFirestore.instance
@@ -478,11 +477,6 @@ class _ItemDetailsState extends State<ItemDetails> {
                                         .make(),
                                   );
                                 }
-
-                                WidgetsBinding.instance.addPostFrameCallback((_) {
-                                  controller.setReviewCount(reviews.length); // Update review count from stream
-                                });
-
                                 return ListView.builder(
                                   shrinkWrap: true,
                                   physics: NeverScrollableScrollPhysics(),
@@ -534,7 +528,14 @@ class _ItemDetailsState extends State<ItemDetails> {
                                                       ),
                                                     ],
                                                   ),
-                                                  buildStars(rating),
+                                                  Row(
+                                                    children: [
+                                                      buildStars(rating),
+                                                      5.widthBox,
+                                                      Text(
+                                                          '${rating.toStringAsFixed(1)}/5.0')
+                                                    ],
+                                                  ),
                                                 ],
                                               ),
                                             ),
@@ -550,27 +551,20 @@ class _ItemDetailsState extends State<ItemDetails> {
                                                 children: [
                                                   Text(
                                                     review['review_text'],
-                                                    style:
-                                                        TextStyle(fontSize: 14),
+                                                    style: TextStyle(
+                                                        fontSize: 14),
                                                   ),
                                                 ],
                                               ),
                                             ),
                                           ],
-                                        )
-                                            .box
-                                            .padding(EdgeInsets.only(left: 55))
-                                            .make(),
+                                        ).box.padding(EdgeInsets.only(left: 55)).make(),
                                       ],
-                                    )
-                                        .box
-                                        .padding(EdgeInsets.symmetric(
-                                            vertical: 14, horizontal: 8))
-                                        .make();
+                                    ).box.padding(EdgeInsets.symmetric(vertical: 14, horizontal: 8)).make();
                                   },
                                 );
                               },
-                            )
+                            ),
                           ],
                         ),
                       ],
@@ -702,9 +696,9 @@ class _ItemDetailsState extends State<ItemDetails> {
                         color: primaryApp,
                         onPress: () {
                           if (controller.quantity.value > 0 &&
-                              selectedIndex != null) {
+                              selectedSizeIndex != null) {
                             String selectedSize =
-                                widget.data['p_productsize'][selectedIndex!];
+                                widget.data['p_productsize'][selectedSizeIndex!];
                             controller.addToCart(
                               context: context,
                               vendorID: widget.data['vendor_id'],
