@@ -21,6 +21,7 @@ class MatchPostsDetails extends StatefulWidget {
   final List<dynamic> collection;
   final String description;
   final String gender;
+  final String posted_by;
 
   const MatchPostsDetails({
     required this.productName1,
@@ -36,6 +37,7 @@ class MatchPostsDetails extends StatefulWidget {
     required this.collection,
     required this.description,
     required this.gender,
+    required this.posted_by
   });
 
   @override
@@ -268,6 +270,85 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                       ],
                     ),
                     30.heightBox,
+                    Container(
+                    width: double.infinity,
+                    height: 70,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Row(
+                            children: [
+                              SizedBox(width: 12),
+                              Obx(() {
+                                String imageUrl = controller.vendorImageUrl.value;
+                                return imageUrl.isNotEmpty
+                                    ? Container(
+                                        width: 50,
+                                        height: 50,
+                                        child: ClipOval(
+                                          child: Image.network(
+                                            imageUrl,
+                                            width: 50,
+                                            height: 50,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      )
+                                        .box
+                                        .border(color: greyLine, width: 1.5)
+                                        .roundedFull
+                                        .make()
+                                    : SizedBox.shrink();
+                              }),
+                              SizedBox(width: 10),
+                              Expanded(
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    widget.posted_by.toUpperCase(),
+                                    style: TextStyle(
+                                      fontFamily: medium,
+                                      color: blackColor,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        GestureDetector(
+                          onTap: () {
+                            Get.to(
+                              () => StoreScreen(vendorId: widget.vendor_id),
+                            );
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(right: 12),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: primaryApp,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: const Text(
+                              'See Store',
+                              style: TextStyle(
+                                  color: whiteColor, fontFamily: regular),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                        .box
+                        .white
+                        .roundedSM
+                        .outerShadow
+                        .margin(EdgeInsets.symmetric(horizontal: 12))
+                        .make(),
+                  ),
+                  30.heightBox,
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
