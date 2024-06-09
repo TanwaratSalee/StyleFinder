@@ -25,8 +25,8 @@ class _MatchScreenState extends State<MatchScreen> {
     controller = Get.put(ProductController());
     _pageControllerTop = PageController(viewportFraction: 0.8, initialPage: 1);
     _pageControllerLower = PageController(viewportFraction: 0.8, initialPage: 1);
-    _currentPageIndexTop = 0;
-    _currentPageIndexLower = 0;
+    _currentPageIndexTop = 1;
+    _currentPageIndexLower = 1;
 
     controller.fetchFilteredTopProducts();
     controller.fetchFilteredLowerProducts();
@@ -53,6 +53,16 @@ class _MatchScreenState extends State<MatchScreen> {
       _pageControllerLower.jumpToPage(itemCount);
     } else if (index == itemCount + 1) {
       _pageControllerLower.jumpToPage(1);
+    }
+  }
+
+  int getActualIndex(int index, int itemCount) {
+    if (index == 0) {
+      return itemCount - 1;
+    } else if (index == itemCount + 1) {
+      return 0;
+    } else {
+      return index - 1;
     }
   }
 
@@ -134,13 +144,8 @@ class _MatchScreenState extends State<MatchScreen> {
         },
         itemCount: itemCount + 2,
         itemBuilder: (context, index) {
-          if (index == 0) {
-            return buildCardItem(topProducts[itemCount - 1]);
-          } else if (index == itemCount + 1) {
-            return buildCardItem(topProducts[0]);
-          } else {
-            return buildCardItem(topProducts[index - 1]);
-          }
+          final actualIndex = getActualIndex(index, itemCount);
+          return buildCardItem(topProducts[actualIndex]);
         },
       ),
     );
@@ -165,13 +170,8 @@ class _MatchScreenState extends State<MatchScreen> {
         },
         itemCount: itemCount + 2,
         itemBuilder: (context, index) {
-          if (index == 0) {
-            return buildCardItem(lowerProducts[itemCount - 1]);
-          } else if (index == itemCount + 1) {
-            return buildCardItem(lowerProducts[0]);
-          } else {
-            return buildCardItem(lowerProducts[index - 1]);
-          }
+          final actualIndex = getActualIndex(index, itemCount);
+          return buildCardItem(lowerProducts[actualIndex]);
         },
       ),
     );
@@ -256,8 +256,10 @@ class _MatchScreenState extends State<MatchScreen> {
             children: [
               InkWell(
                 onTap: () {
-                  final topProduct = controller.topFilteredProducts[_currentPageIndexTop - 1];
-                  final lowerProduct = controller.lowerFilteredProducts[_currentPageIndexLower - 1];
+                  final topProductIndex = getActualIndex(_currentPageIndexTop, controller.topFilteredProducts.length);
+                  final lowerProductIndex = getActualIndex(_currentPageIndexLower, controller.lowerFilteredProducts.length);
+                  final topProduct = controller.topFilteredProducts[topProductIndex];
+                  final lowerProduct = controller.lowerFilteredProducts[lowerProductIndex];
                   Get.to(() => MatchPostProduct(
                     topProduct: topProduct,
                     lowerProduct: lowerProduct,
@@ -288,8 +290,10 @@ class _MatchScreenState extends State<MatchScreen> {
                   final topProducts = controller.topFilteredProducts;
                   final lowerProducts = controller.lowerFilteredProducts;
                   if (topProducts.isNotEmpty && lowerProducts.isNotEmpty) {
-                    final topProduct = topProducts[_currentPageIndexTop - 1];
-                    final lowerProduct = lowerProducts[_currentPageIndexLower - 1];
+                    final topProductIndex = getActualIndex(_currentPageIndexTop, topProducts.length);
+                    final lowerProductIndex = getActualIndex(_currentPageIndexLower, lowerProducts.length);
+                    final topProduct = topProducts[topProductIndex];
+                    final lowerProduct = lowerProducts[lowerProductIndex];
                     print('Top Product: $topProduct, Lower Product: $lowerProduct');  // Debug print
                     if (topProduct != null && lowerProduct != null) {
                       controller.addToWishlistUserMatch(
