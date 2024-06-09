@@ -859,7 +859,7 @@ Widget buildMatchTab() {
       // Filter posts by current user ID
       var filteredData = data.where((doc) {
         var docData = doc.data() as Map<String, dynamic>;
-        return docData['posted_by'] == currentUserUID;
+        return docData['posted_name'] == currentUserUID;
       }).toList();
 
       if (filteredData.isEmpty) {
@@ -893,7 +893,9 @@ Widget buildMatchTab() {
           var description = docData['p_desc'] ?? '';
           var views = docData['views'] ?? 0;
           var gender = docData['p_sex'] ?? '';
+          var posted_name = docData['posted_name'] ?? '';
           var posted_by = docData['posted_by'] ?? '';
+          var posted_img = docData['posted_img'] ?? '';
 
           return GestureDetector(
             onTap: () {
@@ -912,6 +914,8 @@ Widget buildMatchTab() {
                     description: description,
                     gender: gender,
                     posted_by: posted_by,
+                    posted_name: posted_name,
+                    posted_img: posted_img,
                   ));
             },
             child: Container(

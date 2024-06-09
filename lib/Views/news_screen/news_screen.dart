@@ -819,8 +819,9 @@ class NewsScreen extends StatelessWidget {
           var gender = docData['p_sex'] ?? '';
 
           String totalPrice = (int.parse(docData['p_price_top']) + int.parse(docData['p_price_lower'])).toString();
-
           var posted_by = currentUserUID;
+          var posted_name = docData['posted_name'];
+          var posted_img = docData['posted_img'];
 
           return GestureDetector(
             onTap: () {
@@ -839,6 +840,8 @@ class NewsScreen extends StatelessWidget {
                     description: description,
                     gender: gender,
                     posted_by: posted_by,
+                    posted_name: posted_name,
+                    posted_img: posted_img
                   ));
             },
             child: Container(

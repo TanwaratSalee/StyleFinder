@@ -242,7 +242,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                             fontFamily: medium,
                           ),
                         ),
-                        SizedBox(height: 8),
+                        8.heightBox,
                         TextField(
                           controller: explanationController,
                           maxLines: 3,
@@ -304,7 +304,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
             fontFamily: medium,
           ),
         ),
-        SizedBox(height: 8),
+        8.heightBox,
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -339,7 +339,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
           "Collection",
           style: TextStyle(fontSize: 16, fontFamily: medium),
         ),
-        SizedBox(height: 8),
+        8.heightBox,
         Center(
           child: Wrap(
             spacing: 10,

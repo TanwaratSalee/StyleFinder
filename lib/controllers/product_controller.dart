@@ -526,6 +526,7 @@ void addToPostByUserMatch(
       .then((DocumentSnapshot userDoc) {
     if (userDoc.exists) {
       String userName = userDoc['name'];
+      String userImg = userDoc['imageUrl'];
 
       // Retrieve product details
       FirebaseFirestore.instance
@@ -540,6 +541,7 @@ void addToPostByUserMatch(
             'p_desc': explanation,
             'posted_by': currentUserUID,
             'posted_name': userName,
+            'posted_img': userImg,
           };
 
           querySnapshot.docs.forEach((doc) {

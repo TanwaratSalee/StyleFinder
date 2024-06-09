@@ -22,7 +22,9 @@ class MatchPostsDetails extends StatefulWidget {
   final List<dynamic> collection;
   final String description;
   final String gender;
+  final String posted_name;
   final String posted_by;
+  final String posted_img;
 
   const MatchPostsDetails(
       {required this.productName1,
@@ -38,7 +40,9 @@ class MatchPostsDetails extends StatefulWidget {
       required this.collection,
       required this.description,
       required this.gender,
-      required this.posted_by});
+      required this.posted_by,
+      required this.posted_name,
+      required this.posted_img});
 
   @override
   _MatchPostsDetailsState createState() => _MatchPostsDetailsState();
@@ -154,141 +158,140 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
               ).box.padding(EdgeInsets.only(right: 10)).make()),
         ],
       ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          children: [
-                            Container(
-                              child: Center(
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(14),
-                                    topLeft: Radius.circular(14),
-                                  ),
-                                  child: Image.network(
-                                    widget.productImage1,
-                                    height: 150,
-                                    width: 165,
-                                    fit: BoxFit.cover,
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Container(
+                                child: Center(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(14),
+                                      topLeft: Radius.circular(14),
+                                    ),
+                                    child: Image.network(
+                                      widget.productImage1,
+                                      height: 150,
+                                      width: 165,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            5.heightBox,
-                            SizedBox(
-                              width: 135,
-                              child: Text(
-                                widget.productName1,
-                                softWrap: true,
-                                overflow: TextOverflow.clip,
+                              5.heightBox,
+                              SizedBox(
+                                width: 135,
+                                child: Text(
+                                  widget.productName1,
+                                  softWrap: true,
+                                  overflow: TextOverflow.clip,
+                                )
+                                    .text
+                                    .color(greyDark)
+                                    .fontFamily(bold)
+                                    .size(16)
+                                    .ellipsis
+                                    .maxLines(1)
+                                    .make(),
+                              ),
+                              Text(
+                                "${NumberFormat('#,##0').format(double.parse(widget.price1).toInt())} Bath",
                               )
                                   .text
                                   .color(greyDark)
-                                  .fontFamily(bold)
-                                  .size(16)
-                                  .ellipsis
-                                  .maxLines(1)
+                                  .fontFamily(regular)
+                                  .size(14)
                                   .make(),
-                            ),
-                            Text(
-                              "${NumberFormat('#,##0').format(double.parse(widget.price1).toInt())} Bath",
+                            ],
+                          ).box.border(color: greyLine).rounded.make(),
+                        ),
+                        const SizedBox(width: 10),
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            const Icon(
+                              Icons.add,
+                              color: whiteColor,
                             )
-                                .text
-                                .color(greyDark)
-                                .fontFamily(regular)
-                                .size(14)
+                                .box
+                                .color(primaryApp)
+                                .roundedFull
+                                .padding(EdgeInsets.all(4))
                                 .make(),
                           ],
-                        ).box.border(color: greyLine).rounded.make(),
-                      ),
-                      const SizedBox(width: 10),
-                      Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          const Icon(
-                            Icons.add,
-                            color: whiteColor,
-                          )
-                              .box
-                              .color(primaryApp)
-                              .roundedFull
-                              .padding(EdgeInsets.all(4))
-                              .make(),
-                        ],
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Column(
-                          children: [
-                            Container(
-                              child: Center(
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(14),
-                                    topLeft: Radius.circular(14),
-                                  ),
-                                  child: Image.network(
-                                    widget.productImage2,
-                                    height: 150,
-                                    width: 165,
-                                    fit: BoxFit.cover,
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Container(
+                                child: Center(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(14),
+                                      topLeft: Radius.circular(14),
+                                    ),
+                                    child: Image.network(
+                                      widget.productImage2,
+                                      height: 150,
+                                      width: 165,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            5.heightBox,
-                            SizedBox(
-                              width: 135,
-                              child: Text(widget.productName2)
+                              5.heightBox,
+                              SizedBox(
+                                width: 135,
+                                child: Text(widget.productName2)
+                                    .text
+                                    .color(greyDark)
+                                    .fontFamily(bold)
+                                    .size(18)
+                                    .ellipsis
+                                    .maxLines(1)
+                                    .make(),
+                              ),
+                              Text(
+                                "${NumberFormat('#,##0').format(double.parse(widget.price2).toInt())} Bath",
+                              )
                                   .text
                                   .color(greyDark)
-                                  .fontFamily(bold)
-                                  .size(18)
-                                  .ellipsis
-                                  .maxLines(1)
+                                  .fontFamily(regular)
+                                  .size(14)
                                   .make(),
-                            ),
-                            Text(
-                              "${NumberFormat('#,##0').format(double.parse(widget.price2).toInt())} Bath",
-                            )
-                                .text
-                                .color(greyDark)
-                                .fontFamily(regular)
-                                .size(14)
-                                .make(),
-                          ],
-                        ).box.border(color: greyLine).rounded.make(),
-                      ),
-                    ],
-                  ),
-                  30.heightBox,
-                  Container(
-                    width: double.infinity,
-                    height: 70,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Row(
-                            children: [
-                              SizedBox(width: 12),
-                              Obx(() {
-                                String imageUrl =
-                                    controller.vendorImageUrl.value;
-                                return imageUrl.isNotEmpty
+                            ],
+                          ).box.border(color: greyLine).rounded.make(),
+                        ),
+                      ],
+                    ),
+                    30.heightBox,
+                    Container(
+                      width: double.infinity,
+                      height: 70,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Row(
+                              children: [
+                                SizedBox(width: 12),
+                                widget.posted_img.isNotEmpty
                                     ? Container(
                                         width: 50,
                                         height: 50,
                                         child: ClipOval(
                                           child: Image.network(
-                                            imageUrl,
+                                            widget.posted_img,
                                             width: 50,
                                             height: 50,
                                             fit: BoxFit.cover,
@@ -299,172 +302,171 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                                         .border(color: greyLine, width: 1.5)
                                         .roundedFull
                                         .make()
-                                    : SizedBox.shrink();
-                              }),
-                              SizedBox(width: 10),
-                              Expanded(
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    widget.posted_by.toUpperCase(),
-                                    style: TextStyle(
-                                      fontFamily: medium,
-                                      color: blackColor,
-                                      fontSize: 18,
+                                    : SizedBox.shrink(),
+                                SizedBox(width: 10),
+                                Expanded(
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      widget.posted_name.toUpperCase(),
+                                      style: TextStyle(
+                                        fontFamily: medium,
+                                        color: blackColor,
+                                        fontSize: 18,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        SizedBox(width: 10),
-                        GestureDetector(
-                          onTap: () {
-                            // Get.to(
-                            //   () => StoreScreen(vendorId: widget.vendor_id),
-                            // );
-                          },
-                          child: Container(
-                            margin: EdgeInsets.only(right: 12),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 8),
-                            decoration: BoxDecoration(
-                              color: primaryApp,
-                              borderRadius: BorderRadius.circular(20),
+                          SizedBox(width: 10),
+                          GestureDetector(
+                            onTap: () {
+                              // Get.to(
+                              //   () => StoreScreen(vendorId: widget.vendor_id),
+                              // );
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(right: 12),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 8),
+                              decoration: BoxDecoration(
+                                color: primaryApp,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: const Text(
+                                'See Store',
+                                style: TextStyle(
+                                    color: whiteColor, fontFamily: regular),
+                              ),
                             ),
-                            child: const Text(
-                              'See Store',
-                              style: TextStyle(
-                                  color: whiteColor, fontFamily: regular),
-                            ),
+                          ),
+                        ],
+                      )
+                          .box
+                          .white
+                          .roundedSM
+                          .outerShadow
+                          .make(),
+                    ),
+                    20.heightBox,
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Suitable for gender',
+                      ).text.fontFamily(regular).size(16).make(),
+                    ),
+                    Column(
+                      children: [
+                        SizedBox(height: 10),
+                        Container(
+                          height: 40,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: widget.gender.split(' ').length,
+                            itemBuilder: (context, index) {
+                              String item = widget.gender.split(' ')[index];
+                              String capitalizedItem =
+                                  item[0].toUpperCase() + item.substring(1);
+                              return Container(
+                                alignment: Alignment.center,
+                                child: capitalizedItem.text
+                                    .size(14)
+                                    .color(greyDark)
+                                    .fontFamily(medium)
+                                    .make(),
+                              )
+                                  .box
+                                  .color(thinPrimaryApp)
+                                  .margin(EdgeInsets.symmetric(horizontal: 6))
+                                  .roundedLg
+                                  .padding(EdgeInsets.symmetric(
+                                      horizontal: 24, vertical: 12))
+                                  .make();
+                            },
                           ),
                         ),
                       ],
-                    )
-                        .box
-                        .white
-                        .roundedSM
-                        .outerShadow
-                        .margin(EdgeInsets.symmetric(horizontal: 12))
-                        .make(),
-                  ),
-                  20.heightBox,
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Suitable for gender',
-                    ).text.fontFamily(regular).size(16).make(),
-                  ),
-                  Column(
-                    children: [
-                      SizedBox(height: 10),
-                      Container(
-                        height: 40,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: widget.gender.split(' ').length,
-                          itemBuilder: (context, index) {
-                            String item = widget.gender.split(' ')[index];
-                            String capitalizedItem =
-                                item[0].toUpperCase() + item.substring(1);
-                            return Container(
-                              alignment: Alignment.center,
-                              child: capitalizedItem.text
-                                  .size(14)
-                                  .color(greyDark)
-                                  .fontFamily(medium)
-                                  .make(),
-                            )
-                                .box
-                                .color(thinPrimaryApp)
-                                .margin(EdgeInsets.symmetric(horizontal: 6))
-                                .roundedLg
-                                .padding(EdgeInsets.symmetric(
-                                    horizontal: 24, vertical: 12))
-                                .make();
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                  10.heightBox,
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Opportunity suitable for',
-                    ).text.fontFamily(regular).size(16).make(),
-                  ),
-                  Column(
-                    children: [
-                      SizedBox(height: 10),
-                      Container(
-                        height: 40,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: widget.collection.length,
-                          itemBuilder: (context, index) {
-                            String item = widget.collection[index].toString();
-                            return Container(
-                              alignment: Alignment.center,
-                              child: Text(
-                                "${item[0].toUpperCase()}${item.substring(1)}",
+                    ),
+                    10.heightBox,
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Opportunity suitable for',
+                      ).text.fontFamily(regular).size(16).make(),
+                    ),
+                    Column(
+                      children: [
+                        SizedBox(height: 10),
+                        Container(
+                          height: 40,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: widget.collection.length,
+                            itemBuilder: (context, index) {
+                              String item = widget.collection[index].toString();
+                              return Container(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "${item[0].toUpperCase()}${item.substring(1)}",
+                                )
+                                    .text
+                                    .size(14)
+                                    .color(greyDark)
+                                    .fontFamily(medium)
+                                    .make(),
                               )
-                                  .text
-                                  .size(14)
-                                  .color(greyDark)
-                                  .fontFamily(medium)
-                                  .make(),
-                            )
-                                .box
-                                .color(thinPrimaryApp)
-                                .margin(EdgeInsets.symmetric(horizontal: 6))
-                                .roundedLg
-                                .padding(EdgeInsets.symmetric(
-                                    horizontal: 24, vertical: 12))
-                                .make();
-                          },
+                                  .box
+                                  .color(thinPrimaryApp)
+                                  .margin(EdgeInsets.symmetric(horizontal: 6))
+                                  .roundedLg
+                                  .padding(EdgeInsets.symmetric(
+                                      horizontal: 24, vertical: 12))
+                                  .make();
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    10.heightBox,
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'The reason for match',
+                        style: TextStyle(
+                          fontFamily: regular,
+                          fontSize: 16,
                         ),
                       ),
-                    ],
-                  ),
-                  10.heightBox,
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'The reason for match',
-                      style: TextStyle(
-                        fontFamily: regular,
-                        fontSize: 16,
+                    ),
+                    Container(
+                      width: double.infinity,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        color: greyThin,
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                    ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    height: 150,
-                    decoration: BoxDecoration(
-                      color: greyThin,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          widget.description,
-                          style: TextStyle(
-                            color: blackColor,
-                            fontSize: 11,
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Padding(
+                          padding: EdgeInsets.all(12),
+                          child: Text(
+                            widget.description,
+                            style: TextStyle(
+                              color: blackColor,
+                              fontSize: 11,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

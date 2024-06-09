@@ -427,18 +427,24 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                       fontSize: 16,
                     ),
                   ),
-                  SizedBox(height: 8),
+                  8.heightBox,
                   Container(
-                    padding: EdgeInsets.all(8),
                     width: double.infinity,
                     height: 100,
                     decoration: BoxDecoration(
                       color: greyThin,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Text(
-                      widget.description,
-                    ).text.size(14).black.make(),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Text(
+                        widget.description,
+                        style: TextStyle(
+                              color: blackColor,
+                              fontSize: 11,
+                            ),
+                      ),
+                    )
                   )
                       ],
                     ),
