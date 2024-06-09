@@ -312,7 +312,7 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
         ),
         labelText: label,
         labelStyle: TextStyle(color: textColor),
-        fillColor: Colors.white,
+        fillColor: whiteColor,
         filled: true,
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(color: greyColor),

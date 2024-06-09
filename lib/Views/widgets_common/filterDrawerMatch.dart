@@ -34,7 +34,7 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
  final List<Map<String, dynamic>> allColors = [
     {'name': 'Black', 'color': Colors.black},
     {'name': 'Grey', 'color': Colors.grey},
-    {'name': 'White', 'color': Colors.white},
+    {'name': 'White', 'color': whiteColor},
     {'name': 'Purple', 'color': const Color.fromRGBO(98, 28, 141, 1)},
     {'name': 'Deep Purple', 'color': const Color.fromRGBO(202, 147, 235, 1)},
     {'name': 'Blue', 'color': Color.fromRGBO(32, 47, 179, 1)},

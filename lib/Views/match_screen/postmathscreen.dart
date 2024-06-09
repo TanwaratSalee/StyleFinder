@@ -78,7 +78,7 @@ class _PostMatchScreenState extends State<PostMatchScreen> {
                         Icon(
                           Icons.add,
                           size: 24,
-                          color: Colors.white,
+                          color: whiteColor,
                         ),
                       ],
                     ),
@@ -217,7 +217,7 @@ class _PostMatchScreenState extends State<PostMatchScreen> {
                   onPressed: () {},
                   child: Text(
                     "Post",
-                    style: TextStyle(fontSize: 16, color: Colors.white),
+                    style: TextStyle(fontSize: 16, color: whiteColor),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primaryApp,

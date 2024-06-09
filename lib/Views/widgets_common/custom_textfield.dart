@@ -107,7 +107,7 @@ Widget customTextField({
   );
 }
 
-class CustomTextField2 extends StatefulWidget {
+class customTextFieldPassword extends StatefulWidget {
   final String? title;
   final String? label;
   final TextEditingController? controller;
@@ -115,7 +115,7 @@ class CustomTextField2 extends StatefulWidget {
   final bool readOnly;
   final VoidCallback? onTap;
 
-  const CustomTextField2({
+  const customTextFieldPassword({
     Key? key,
     this.title,
     this.label,
@@ -126,10 +126,10 @@ class CustomTextField2 extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CustomTextField2State createState() => _CustomTextField2State();
+  _customTextFieldPasswordState createState() => _customTextFieldPasswordState();
 }
 
-class _CustomTextField2State extends State<CustomTextField2> {
+class _customTextFieldPasswordState extends State<customTextFieldPassword> {
   bool _obscureText = true;
 
   @override

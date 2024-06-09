@@ -77,7 +77,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                         Icon(
                           Icons.add,
                           size: 24,
-                          color: Colors.white,
+                          color: whiteColor,
                         ),
                       ],
                     ),
@@ -108,7 +108,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
               SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: GenderSelector(
+                child: buildGenderSelector(
                   isSelectedAll: isSelectedAll,
                   isSelectedMen: isSelectedMen,
                   isSelectedWomen: isSelectedWomen,
@@ -141,7 +141,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
               SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: CollectionSelector(
+                child: buildCollectionSelector(
                   isSelectedSummer: isSelectedSummer,
                   isSelectedWinter: isSelectedWinter,
                   isSelectedAutumn: isSelectedAutumn,
@@ -190,10 +190,10 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                       "Explain clothing matching",
                       style: TextStyle(
                         fontSize: 16,
-                        fontFamily: regular,
+                        fontFamily: medium,
                       ),
                     ),
-                    SizedBox(height: 0),
+                    SizedBox(height: 8),
                     TextField(
                       controller: explanationController,
                       maxLines: 3,
@@ -202,7 +202,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                           borderSide: BorderSide.none,
                         ),
                         filled: true,
-                        fillColor: Color.fromARGB(255, 250, 248, 248),
+                        fillColor: greyMessage,
                       ),
                     ),
                   ],
@@ -224,7 +224,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                   },
                   child: Text(
                     "Post",
-                    style: TextStyle(fontSize: 16, color: Colors.white),
+                    style: TextStyle(fontSize: 16, color: whiteColor),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primaryApp,
@@ -249,36 +249,24 @@ class _MatchPostProductState extends State<MatchPostProduct> {
       controller.selectedCollections.remove(collection);
     }
   }
-}
 
-class GenderSelector extends StatelessWidget {
-  final bool isSelectedAll;
-  final bool isSelectedMen;
-  final bool isSelectedWomen;
-  final Function(bool) onAllSelected;
-  final Function(bool) onMenSelected;
-  final Function(bool) onWomenSelected;
-
-  GenderSelector({
-    required this.isSelectedAll,
-    required this.isSelectedMen,
-    required this.isSelectedWomen,
-    required this.onAllSelected,
-    required this.onMenSelected,
-    required this.onWomenSelected,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+  Widget buildGenderSelector({
+    required bool isSelectedAll,
+    required bool isSelectedMen,
+    required bool isSelectedWomen,
+    required Function(bool) onAllSelected,
+    required Function(bool) onMenSelected,
+    required Function(bool) onWomenSelected,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: 10),
         Text(
           "Suitable for gender",
-          style: TextStyle(fontSize: 16, fontFamily: regular),
+          style: TextStyle(fontSize: 16, fontFamily: medium,),
         ),
-        SizedBox(height: 0),
+        SizedBox(height: 8),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -293,62 +281,27 @@ class GenderSelector extends StatelessWidget {
     );
   }
 
-  Widget buildFilterChip(
-      String label, bool isSelected, Function(bool) onSelected) {
-    return MaterialButton(
-      onPressed: () => onSelected(!isSelected),
-      child: Text(label),
-      color: isSelected ? thinPrimaryApp : greyThin,
-      textColor: greyColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-        side: BorderSide(
-          color: isSelected ? primaryApp : greyLine,
-        ),
-      ),
-      elevation: 0,
-      minWidth: 100,
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-    );
-  }
-}
-
-class CollectionSelector extends StatelessWidget {
-  final bool isSelectedSummer;
-  final bool isSelectedWinter;
-  final bool isSelectedAutumn;
-  final bool isSelectedDinner;
-  final bool isSelectedEveryday;
-  final Function(bool) onSummerSelected;
-  final Function(bool) onWinterSelected;
-  final Function(bool) onAutumnSelected;
-  final Function(bool) onDinnerSelected;
-  final Function(bool) onEverydaySelected;
-
-  CollectionSelector({
-    required this.isSelectedSummer,
-    required this.isSelectedWinter,
-    required this.isSelectedAutumn,
-    required this.isSelectedDinner,
-    required this.isSelectedEveryday,
-    required this.onSummerSelected,
-    required this.onWinterSelected,
-    required this.onAutumnSelected,
-    required this.onDinnerSelected,
-    required this.onEverydaySelected,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+  Widget buildCollectionSelector({
+    required bool isSelectedSummer,
+    required bool isSelectedWinter,
+    required bool isSelectedAutumn,
+    required bool isSelectedDinner,
+    required bool isSelectedEveryday,
+    required Function(bool) onSummerSelected,
+    required Function(bool) onWinterSelected,
+    required Function(bool) onAutumnSelected,
+    required Function(bool) onDinnerSelected,
+    required Function(bool) onEverydaySelected,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: 10),
         Text(
           "Collection",
-          style: TextStyle(fontSize: 16, fontFamily: regular),
+          style: TextStyle(fontSize: 16, fontFamily: medium),
         ),
-        SizedBox(height: 0),
+        SizedBox(height: 8),
         Center(
           child: Wrap(
             spacing: 10,
@@ -366,22 +319,31 @@ class CollectionSelector extends StatelessWidget {
     );
   }
 
-  Widget buildFilterChip(
-      String label, bool isSelected, Function(bool) onSelected) {
-    return MaterialButton(
+  Widget buildFilterChip(String label, bool isSelected, Function(bool) onSelected) {
+    final BorderSide borderSide = BorderSide(
+      color: isSelected ? primaryApp : greyLine,
+      width: 2.0,
+    );
+
+    return TextButton(
       onPressed: () => onSelected(!isSelected),
-      child: Text(label),
-      color: isSelected ? thinPrimaryApp : greyThin,
-      textColor: greyColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-        side: BorderSide(
-          color: isSelected ? primaryApp : greyColor,
+      style: TextButton.styleFrom(
+        backgroundColor: isSelected ? thinPrimaryApp : whiteColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+          side: borderSide,
+        ),
+        minimumSize: Size(120, 40), 
+        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+        splashFactory: NoSplash.splashFactory,
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontFamily: isSelected ? semiBold : regular,
+          color: greyColor,
         ),
       ),
-      elevation: 0,
-      minWidth: 150,
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
     );
   }
 }

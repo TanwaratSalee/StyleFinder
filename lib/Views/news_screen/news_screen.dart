@@ -443,7 +443,7 @@ class NewsScreen extends StatelessWidget {
                         width: double.infinity,
                         height: 570,
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: whiteColor,
                         ),
                         child: DefaultTabController(
                           length: 2,
