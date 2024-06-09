@@ -419,9 +419,7 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                             ),
                           ],
                         ),
-                        const SizedBox(
-                    height: 10,
-                  ),
+                         10.heightBox,
                   Text(
                     'The reason for match',
                     style: TextStyle(

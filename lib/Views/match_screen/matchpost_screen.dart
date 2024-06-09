@@ -45,13 +45,13 @@ class _MatchPostProductState extends State<MatchPostProduct> {
               color: primaryApp,
               title: 'Post',
               textColor: whiteColor,
-              onPress: () async {
+              onPress: () {
                 controller.addToPostByUserMatch(
                   widget.topProduct['p_name'],
                   widget.lowerProduct['p_name'],
                   context,
                   controller.selectedGender.value,
-                  controller.selectedCollections,
+                  List.from(controller.selectedCollections), // Ensure a copy is passed
                   explanationController.text,
                 );
                 resetSelections();
@@ -115,7 +115,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                                 ),
                               ],
                             ),
-                            15.heightBox,
+                            SizedBox(height: 15),
                           ],
                         ),
                         SizedBox(width: 15),
@@ -275,18 +275,14 @@ class _MatchPostProductState extends State<MatchPostProduct> {
     });
   }
 
-  void resetCollections() {
-    setState(() {
-      controller.selectedCollections.clear();
-    });
-  }
-
   void updateCollection(String collection, bool isSelected) {
-    if (isSelected) {
-      controller.selectedCollections.add(collection);
-    } else {
-      controller.selectedCollections.remove(collection);
-    }
+    setState(() {
+      if (isSelected) {
+        controller.selectedCollections.add(collection);
+      } else {
+        controller.selectedCollections.remove(collection);
+      }
+    });
   }
 
   Widget buildGenderSelector({

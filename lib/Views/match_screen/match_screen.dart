@@ -23,28 +23,10 @@ class _MatchScreenState extends State<MatchScreen> {
   void initState() {
     super.initState();
     controller = Get.put(ProductController());
-    _pageControllerTop = PageController(viewportFraction: 0.8);
-    _pageControllerLower = PageController(viewportFraction: 0.8);
+    _pageControllerTop = PageController(viewportFraction: 0.8, initialPage: 1);
+    _pageControllerLower = PageController(viewportFraction: 0.8, initialPage: 1);
     _currentPageIndexTop = 0;
     _currentPageIndexLower = 0;
-
-    _pageControllerTop.addListener(() {
-      final newPageIndex = _pageControllerTop.page!.round();
-      if (_currentPageIndexTop != newPageIndex) {
-        setState(() {
-          _currentPageIndexTop = newPageIndex;
-        });
-      }
-    });
-
-    _pageControllerLower.addListener(() {
-      final newPageIndex = _pageControllerLower.page!.round();
-      if (_currentPageIndexLower != newPageIndex) {
-        setState(() {
-          _currentPageIndexLower = newPageIndex;
-        });
-      }
-    });
 
     controller.fetchFilteredTopProducts();
     controller.fetchFilteredLowerProducts();
@@ -56,6 +38,22 @@ class _MatchScreenState extends State<MatchScreen> {
     _pageControllerTop.dispose();
     _pageControllerLower.dispose();
     super.dispose();
+  }
+
+  void handlePageChangeTop(int index, int itemCount) {
+    if (index == 0) {
+      _pageControllerTop.jumpToPage(itemCount);
+    } else if (index == itemCount + 1) {
+      _pageControllerTop.jumpToPage(1);
+    }
+  }
+
+  void handlePageChangeLower(int index, int itemCount) {
+    if (index == 0) {
+      _pageControllerLower.jumpToPage(itemCount);
+    } else if (index == itemCount + 1) {
+      _pageControllerLower.jumpToPage(1);
+    }
   }
 
   @override
@@ -117,129 +115,119 @@ class _MatchScreenState extends State<MatchScreen> {
     );
   }
 
-Widget buildCardSetTop(List<Map<String, dynamic>> topProducts) {
-  if (topProducts.isEmpty) {
-    return Center(child: Text('No Top available'));
-  }
-  print('Current Top Page Index: $_currentPageIndexTop');
-  return Container(
-    height: 240,
-    child: PageView.builder(
-      controller: _pageControllerTop,
-      itemCount: topProducts.length,
-      itemBuilder: (context, index) {
-        final product = topProducts[index];
-        return GestureDetector(
-          onTap: () {
-            Get.to(() => ItemDetails(
-              title: product['p_name'],
-              data: product,
-            ));
-          },
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Container(
-                width: 250,
-                child: Image.network(product['p_imgs'][0], fit: BoxFit.cover),
-              ).box.color(Color.fromARGB(255, 244, 244, 245)).make(),
-              Positioned(
-                left: -10,
-                child: IconButton(
-                  icon: Icon(Icons.chevron_left, size: 32, color: whiteColor),
-                  onPressed: () {
-                    if (_currentPageIndexTop > 0) {
-                      _pageControllerTop.previousPage(
-                        duration: Duration(milliseconds: 300),
-                        curve: Curves.easeIn,
-                      );
-                    }
-                  },
-                ),
-              ),
-              Positioned(
-                right: -10,
-                child: IconButton(
-                  icon: Icon(Icons.chevron_right, size: 32, color: whiteColor),
-                  onPressed: () {
-                    if (_currentPageIndexTop < topProducts.length - 1) {
-                      _pageControllerTop.nextPage(
-                        duration: Duration(milliseconds: 300),
-                        curve: Curves.easeIn,
-                      );
-                    }
-                  },
-                ),
-              ),
-            ],
-          ),
-        ).box.color(primaryDark).margin(EdgeInsets.symmetric(horizontal: 10)).rounded.make();
-      },
-    ),
-  );
-}
+  Widget buildCardSetTop(List<Map<String, dynamic>> topProducts) {
+    if (topProducts.isEmpty) {
+      return Center(child: Text('No Top available'));
+    }
 
-Widget buildCardSetLower(List<Map<String, dynamic>> lowerProducts) {
-  if (lowerProducts.isEmpty) {
-    return Center(child: Text('No Lower available'));
+    final itemCount = topProducts.length;
+
+    return Container(
+      height: 240,
+      child: PageView.builder(
+        controller: _pageControllerTop,
+        onPageChanged: (index) {
+          setState(() {
+            _currentPageIndexTop = index;
+          });
+          handlePageChangeTop(index, itemCount);
+        },
+        itemCount: itemCount + 2,
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return buildCardItem(topProducts[itemCount - 1]);
+          } else if (index == itemCount + 1) {
+            return buildCardItem(topProducts[0]);
+          } else {
+            return buildCardItem(topProducts[index - 1]);
+          }
+        },
+      ),
+    );
   }
-  print('Current Lower Page Index: $_currentPageIndexLower');
-  return Container(
-    height: 240,
-    child: PageView.builder(
-      controller: _pageControllerLower,
-      itemCount: lowerProducts.length,
-      itemBuilder: (context, index) {
-        final product = lowerProducts[index];
-        return GestureDetector(
-          onTap: () {
-            Get.to(() => ItemDetails(
+
+  Widget buildCardSetLower(List<Map<String, dynamic>> lowerProducts) {
+    if (lowerProducts.isEmpty) {
+      return Center(child: Text('No Lower available'));
+    }
+
+    final itemCount = lowerProducts.length;
+
+    return Container(
+      height: 240,
+      child: PageView.builder(
+        controller: _pageControllerLower,
+        onPageChanged: (index) {
+          setState(() {
+            _currentPageIndexLower = index;
+          });
+          handlePageChangeLower(index, itemCount);
+        },
+        itemCount: itemCount + 2,
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return buildCardItem(lowerProducts[itemCount - 1]);
+          } else if (index == itemCount + 1) {
+            return buildCardItem(lowerProducts[0]);
+          } else {
+            return buildCardItem(lowerProducts[index - 1]);
+          }
+        },
+      ),
+    );
+  }
+
+  Widget buildCardItem(Map<String, dynamic> product) {
+    return GestureDetector(
+      onTap: () {
+        Get.to(() => ItemDetails(
               title: product['p_name'],
               data: product,
             ));
-          },
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Container(
-                width: 250,
-                child: Image.network(product['p_imgs'][0], fit: BoxFit.cover),
-              ).box.color(Color.fromARGB(255, 244, 244, 245)).make(),
-              Positioned(
-                left: -10,
-                child: IconButton(
-                  icon: Icon(Icons.chevron_left, size: 32, color: whiteColor),
-                  onPressed: () {
-                    if (_currentPageIndexLower > 0) {
-                      _pageControllerLower.previousPage(
-                        duration: Duration(milliseconds: 300),
-                        curve: Curves.easeIn,
-                      );
-                    }
-                  },
-                ),
-              ),
-              Positioned(
-                right: -10,
-                child: IconButton(
-                  icon: Icon(Icons.chevron_right, size: 32, color: whiteColor),
-                  onPressed: () {
-                    if (_currentPageIndexLower < lowerProducts.length - 1) {
-                      _pageControllerLower.nextPage(
-                        duration: Duration(milliseconds: 300),
-                        curve: Curves.easeIn,
-                      );
-                    }
-                  },
-                ),
-              ),
-            ],
-          ),
-        ).box.color(primaryDark).margin(EdgeInsets.symmetric(horizontal: 10)).rounded.make();
       },
-    ),
-  );
-}
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Container(
+            width: 250,
+            child: Image.network(product['p_imgs'][0], fit: BoxFit.cover),
+          ).box.color(Color.fromARGB(255, 244, 244, 245)).make(),
+          Positioned(
+            left: -10,
+            child: IconButton(
+              icon: Icon(Icons.chevron_left, size: 32, color: whiteColor),
+              onPressed: () {
+                if (_currentPageIndexTop > 0) {
+                  _pageControllerTop.previousPage(
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.easeIn,
+                  );
+                } else {
+                  _pageControllerTop.jumpToPage(product.length - 1);
+                }
+              },
+            ),
+          ),
+          Positioned(
+            right: -10,
+            child: IconButton(
+              icon: Icon(Icons.chevron_right, size: 32, color: whiteColor),
+              onPressed: () {
+                if (_currentPageIndexTop < product.length - 1) {
+                  _pageControllerTop.nextPage(
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.easeIn,
+                  );
+                } else {
+                  _pageControllerTop.jumpToPage(0);
+                }
+              },
+            ),
+          ),
+        ],
+      ),
+    ).box.color(primaryDark).margin(EdgeInsets.symmetric(horizontal: 10)).rounded.make();
+  }
 
   Widget matchWithYouContainer() {
     return Container(
@@ -268,30 +256,12 @@ Widget buildCardSetLower(List<Map<String, dynamic>> lowerProducts) {
             children: [
               InkWell(
                 onTap: () {
-                  // final topProducts = controller.topFilteredProducts;
-                  // final lowerProducts = controller.lowerFilteredProducts;
-                  // if (topProducts.isNotEmpty && lowerProducts.isNotEmpty) {
-                  //   final topProduct = topProducts[_currentPageIndexTop];
-                  //   final lowerProduct = lowerProducts[_currentPageIndexLower];
-                  //   controller.addToPostByUserMatch(
-                  //     topProduct['p_name'],
-                  //     lowerProduct['p_name'],
-                  //     context,
-                  //   );
-                  // } else {
-                  //   VxToast.show(
-                  //     context,
-                  //     msg:
-                  //         'Unable to add to favorites, Because the information is not available',
-                  //   );
-                  // }
-                  final topProduct = controller.topFilteredProducts[_currentPageIndexTop];
-                  final lowerProduct = controller.lowerFilteredProducts[_currentPageIndexLower];
+                  final topProduct = controller.topFilteredProducts[_currentPageIndexTop - 1];
+                  final lowerProduct = controller.lowerFilteredProducts[_currentPageIndexLower - 1];
                   Get.to(() => MatchPostProduct(
                     topProduct: topProduct,
                     lowerProduct: lowerProduct,
                   ));
-                  //Get.to(() => MatchPostProduct());
                 },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -313,58 +283,57 @@ Widget buildCardSetLower(List<Map<String, dynamic>> lowerProducts) {
                   .make(),
               ),
                   
-                  InkWell(
-                    onTap: () async {
-                      final topProducts = controller.topFilteredProducts;
-                      final lowerProducts = controller.lowerFilteredProducts;
-                      if (topProducts.isNotEmpty && lowerProducts.isNotEmpty) {
-                        final topProduct = topProducts[_currentPageIndexTop];
-                        final lowerProduct = lowerProducts[_currentPageIndexLower];
-                        print('Top Product: $topProduct, Lower Product: $lowerProduct');  // Debug print
-                        if (topProduct != null && lowerProduct != null) {
-                          controller.addToWishlistUserMatch(
-                            topProduct['p_name'],
-                            lowerProduct['p_name'],
-                            context,
-                          );
-                        } else {
-                          VxToast.show(
-                            context,
-                            msg: 'Unable to add to favorites, Because the information is not available',
-                          );
-                        }
-                      } else {
-                        VxToast.show(
-                          context,
-                          msg: 'Unable to add to favorites, Because the information is not available',
-                        );
-                      }
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Image.asset(icLikematch, width: 22, height: 22),
-                        SizedBox(width: 8),
-                        Text('Add to favorite')
-                            .text
-                            .fontFamily(semiBold)
-                            .color(const Color.fromRGBO(87, 12, 12, 1))
-                            .size(14)
-                            .make(),
-                      ],
-                    ).box.color(const Color.fromRGBO(255, 203, 203, 1))
-                      .padding(EdgeInsets.symmetric(vertical: 12, horizontal: 18))
-                      .border(color: const Color.fromRGBO(160, 84, 84, 1))
-                      .rounded
-                      .make(),
-                  )
+              InkWell(
+                onTap: () async {
+                  final topProducts = controller.topFilteredProducts;
+                  final lowerProducts = controller.lowerFilteredProducts;
+                  if (topProducts.isNotEmpty && lowerProducts.isNotEmpty) {
+                    final topProduct = topProducts[_currentPageIndexTop - 1];
+                    final lowerProduct = lowerProducts[_currentPageIndexLower - 1];
+                    print('Top Product: $topProduct, Lower Product: $lowerProduct');  // Debug print
+                    if (topProduct != null && lowerProduct != null) {
+                      controller.addToWishlistUserMatch(
+                        topProduct['p_name'],
+                        lowerProduct['p_name'],
+                        context,
+                      );
+                    } else {
+                      VxToast.show(
+                        context,
+                        msg: 'Unable to add to favorites, Because the information is not available',
+                      );
+                    }
+                  } else {
+                    VxToast.show(
+                      context,
+                      msg: 'Unable to add to favorites, Because the information is not available',
+                    );
+                  }
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Image.asset(icLikematch, width: 22, height: 22),
+                    SizedBox(width: 8),
+                    Text('Add to favorite')
+                        .text
+                        .fontFamily(semiBold)
+                        .color(const Color.fromRGBO(87, 12, 12, 1))
+                        .size(14)
+                        .make(),
+                  ],
+                ).box.color(const Color.fromRGBO(255, 203, 203, 1))
+                  .padding(EdgeInsets.symmetric(vertical: 12, horizontal: 18))
+                  .border(color: const Color.fromRGBO(160, 84, 84, 1))
+                  .rounded
+                  .make(),
+              )
             ],
           ),
         ],
       ),
     );
   }
-
 
   void showModalRightSheet({
     required BuildContext context,

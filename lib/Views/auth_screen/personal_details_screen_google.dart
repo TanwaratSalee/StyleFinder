@@ -138,7 +138,7 @@ class _PersonalDetailsScreenGoogleState
                 .fontFamily(bold)
                 .size(32)
                 .make(),
-            const SizedBox(height: 20),
+            20.heightBox,
             Align(
               alignment: Alignment.topLeft,
               child: const Text('Birthday')
@@ -161,7 +161,7 @@ class _PersonalDetailsScreenGoogleState
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            20.heightBox,
             Align(
               alignment: Alignment.topLeft,
               child: const Text('Gender')

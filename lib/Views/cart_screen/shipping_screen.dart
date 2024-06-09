@@ -216,7 +216,7 @@ class _AddressFormState extends State<AddressForm> {
                   isPass: false,
                   readOnly: false,
                   controller: _phoneController),
-              const SizedBox(height: 20),
+              20.heightBox,
             ],
           ),
         ),

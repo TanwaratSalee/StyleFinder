@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
@@ -23,22 +24,21 @@ class MatchPostsDetails extends StatefulWidget {
   final String gender;
   final String posted_by;
 
-  const MatchPostsDetails({
-    required this.productName1,
-    required this.productName2,
-    required this.price1,
-    required this.price2,
-    required this.productImage1,
-    required this.productImage2,
-    required this.totalPrice,
-    required this.vendorName1,
-    required this.vendorName2,
-    required this.vendor_id,
-    required this.collection,
-    required this.description,
-    required this.gender,
-    required this.posted_by
-  });
+  const MatchPostsDetails(
+      {required this.productName1,
+      required this.productName2,
+      required this.price1,
+      required this.price2,
+      required this.productImage1,
+      required this.productImage2,
+      required this.totalPrice,
+      required this.vendorName1,
+      required this.vendorName2,
+      required this.vendor_id,
+      required this.collection,
+      required this.description,
+      required this.gender,
+      required this.posted_by});
 
   @override
   _MatchPostsDetailsState createState() => _MatchPostsDetailsState();
@@ -87,7 +87,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
 
   void incrementViewCount() async {
     await FirebaseFirestore.instance
-        .collection('postusermixmatchs')
+        .collection('usermixandmatch')
         .where('p_name_top', isEqualTo: widget.productName1)
         .where('p_name_lower', isEqualTo: widget.productName2)
         .limit(1)
@@ -96,7 +96,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
       if (querySnapshot.docs.isNotEmpty) {
         var doc = querySnapshot.docs.first;
         FirebaseFirestore.instance
-            .collection('postusermixmatchs')
+            .collection('usermixandmatch')
             .doc(doc.id)
             .update({
           'views': FieldValue.increment(1),
@@ -118,7 +118,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: const Text('Match Detail')
+        title: const Text('Match Product')
             .text
             .size(26)
             .fontFamily(semiBold)
@@ -158,34 +158,34 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
         children: <Widget>[
           Expanded(
             child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(10, 25, 10, 0),
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Container(
-                                child: Center(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(14),
-                                      topLeft: Radius.circular(14),
-                                    ),
-                                    child: Image.network(
-                                      widget.productImage1,
-                                      height: 160,
-                                      width: 220,
-                                      fit: BoxFit.cover,
-                                    ),
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Container(
+                              child: Center(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(14),
+                                    topLeft: Radius.circular(14),
+                                  ),
+                                  child: Image.network(
+                                    widget.productImage1,
+                                    height: 150,
+                                    width: 165,
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
-                              5.heightBox,
-                              Text(
+                            ),
+                            5.heightBox,
+                            SizedBox(
+                              width: 135,
+                              child: Text(
                                 widget.productName1,
                                 softWrap: true,
                                 overflow: TextOverflow.clip,
@@ -197,80 +197,80 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                                   .ellipsis
                                   .maxLines(1)
                                   .make(),
-                              Text(
-                                "${NumberFormat('#,##0').format(double.parse(widget.price1).toInt())} Bath",
-                              )
-                                  .text
-                                  .color(greyDark)
-                                  .fontFamily(regular)
-                                  .size(14)
-                                  .make(),
-                            ],
-                          ).box.border(color: greyLine).rounded.make(),
-                        ),
-                        const SizedBox(width: 10),
-                        Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            const Icon(
-                              Icons.add,
-                              color: whiteColor,
+                            ),
+                            Text(
+                              "${NumberFormat('#,##0').format(double.parse(widget.price1).toInt())} Bath",
                             )
-                                .box
-                                .color(primaryApp)
-                                .roundedFull
-                                .padding(EdgeInsets.all(4))
+                                .text
+                                .color(greyDark)
+                                .fontFamily(regular)
+                                .size(14)
                                 .make(),
                           ],
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Container(
-                                child: Center(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(14),
-                                      topLeft: Radius.circular(14),
-                                    ),
-                                    child: Image.network(
-                                      widget.productImage2,
-                                      height: 160,
-                                      width: 220,
-                                      fit: BoxFit.cover,
-                                    ),
+                        ).box.border(color: greyLine).rounded.make(),
+                      ),
+                      const SizedBox(width: 10),
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          const Icon(
+                            Icons.add,
+                            color: whiteColor,
+                          )
+                              .box
+                              .color(primaryApp)
+                              .roundedFull
+                              .padding(EdgeInsets.all(4))
+                              .make(),
+                        ],
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Container(
+                              child: Center(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(14),
+                                    topLeft: Radius.circular(14),
+                                  ),
+                                  child: Image.network(
+                                    widget.productImage2,
+                                    height: 150,
+                                    width: 165,
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
-                              5.heightBox,
-                              Text(widget.productName2)
+                            ),
+                            5.heightBox,
+                            SizedBox(
+                              width: 135,
+                              child: Text(widget.productName2)
                                   .text
                                   .color(greyDark)
                                   .fontFamily(bold)
-                                  .size(16)
+                                  .size(18)
                                   .ellipsis
                                   .maxLines(1)
                                   .make(),
-                              Text(
-                                "${NumberFormat('#,##0').format(double.parse(widget.price2).toInt())} Bath",
-                              )
-                                  .text
-                                  .color(greyDark)
-                                  .fontFamily(regular)
-                                  .size(14)
-                                  .make(),
-                            ],
-                          )
-                              .box
-                              .border(color: greyLine)
-                              .rounded
-                              .make(),
-                        ),
-                      ],
-                    ),
-                    30.heightBox,
-                    Container(
+                            ),
+                            Text(
+                              "${NumberFormat('#,##0').format(double.parse(widget.price2).toInt())} Bath",
+                            )
+                                .text
+                                .color(greyDark)
+                                .fontFamily(regular)
+                                .size(14)
+                                .make(),
+                          ],
+                        ).box.border(color: greyLine).rounded.make(),
+                      ),
+                    ],
+                  ),
+                  30.heightBox,
+                  Container(
                     width: double.infinity,
                     height: 70,
                     child: Row(
@@ -280,7 +280,8 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                             children: [
                               SizedBox(width: 12),
                               Obx(() {
-                                String imageUrl = controller.vendorImageUrl.value;
+                                String imageUrl =
+                                    controller.vendorImageUrl.value;
                                 return imageUrl.isNotEmpty
                                     ? Container(
                                         width: 50,
@@ -320,9 +321,9 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                         SizedBox(width: 10),
                         GestureDetector(
                           onTap: () {
-                            Get.to(
-                              () => StoreScreen(vendorId: widget.vendor_id),
-                            );
+                            // Get.to(
+                            //   () => StoreScreen(vendorId: widget.vendor_id),
+                            // );
                           },
                           child: Container(
                             margin: EdgeInsets.only(right: 12),
@@ -348,114 +349,118 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                         .margin(EdgeInsets.symmetric(horizontal: 12))
                         .make(),
                   ),
-                  30.heightBox,
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Suitable for gender',
-                      ).text.fontFamily(regular).size(16).make(),
-                    ),
-                    Column(
-                      children: [
-                        SizedBox(height: 10),
-                        Container(
-                          height: 50,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: widget.gender.split(' ').length,
-                            itemBuilder: (context, index) {
-                              String item = widget.gender.split(' ')[index];
-                              String capitalizedItem = item[0].toUpperCase() + item.substring(1);
-                              return Container(
-                                alignment: Alignment.center,
-                                child: capitalizedItem.text
-                                    .size(14)
-                                    .color(greyDark)
-                                    .fontFamily(medium)
-                                    .make(),
+                  20.heightBox,
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Suitable for gender',
+                    ).text.fontFamily(regular).size(16).make(),
+                  ),
+                  Column(
+                    children: [
+                      SizedBox(height: 10),
+                      Container(
+                        height: 40,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: widget.gender.split(' ').length,
+                          itemBuilder: (context, index) {
+                            String item = widget.gender.split(' ')[index];
+                            String capitalizedItem =
+                                item[0].toUpperCase() + item.substring(1);
+                            return Container(
+                              alignment: Alignment.center,
+                              child: capitalizedItem.text
+                                  .size(14)
+                                  .color(greyDark)
+                                  .fontFamily(medium)
+                                  .make(),
+                            )
+                                .box
+                                .color(thinPrimaryApp)
+                                .margin(EdgeInsets.symmetric(horizontal: 6))
+                                .roundedLg
+                                .padding(EdgeInsets.symmetric(
+                                    horizontal: 24, vertical: 12))
+                                .make();
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  10.heightBox,
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Opportunity suitable for',
+                    ).text.fontFamily(regular).size(16).make(),
+                  ),
+                  Column(
+                    children: [
+                      SizedBox(height: 10),
+                      Container(
+                        height: 40,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: widget.collection.length,
+                          itemBuilder: (context, index) {
+                            String item = widget.collection[index].toString();
+                            return Container(
+                              alignment: Alignment.center,
+                              child: Text(
+                                "${item[0].toUpperCase()}${item.substring(1)}",
                               )
-                                  .box
-                                  .color(thinPrimaryApp)
-                                  .margin(EdgeInsets.symmetric(horizontal: 6))
-                                  .roundedLg
-                                  .padding(EdgeInsets.symmetric(horizontal: 24, vertical: 12))
-                                  .make();
-                            },
-                          ),
+                                  .text
+                                  .size(14)
+                                  .color(greyDark)
+                                  .fontFamily(medium)
+                                  .make(),
+                            )
+                                .box
+                                .color(thinPrimaryApp)
+                                .margin(EdgeInsets.symmetric(horizontal: 6))
+                                .roundedLg
+                                .padding(EdgeInsets.symmetric(
+                                    horizontal: 24, vertical: 12))
+                                .make();
+                          },
                         ),
-                      ],
+                      ),
+                    ],
+                  ),
+                  10.heightBox,
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'The reason for match',
+                      style: TextStyle(
+                        fontFamily: regular,
+                        fontSize: 16,
+                      ),
                     ),
-                    const SizedBox(
-                      height: 10,
+                  ),
+                  Container(
+                    width: double.infinity,
+                    height: 150,
+                    decoration: BoxDecoration(
+                      color: greyThin,
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Opportunity suitable for',
-                      ).text.fontFamily(regular).size(16).make(),
-                    ),
-                    Column(
-                      children: [
-                        SizedBox(height: 10),
-                        Container(
-                          height: 50,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: widget.collection.length,
-                            itemBuilder: (context, index) {
-                              String item = widget.collection[index].toString();
-                              return Container(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "${item[0].toUpperCase()}${item.substring(1)}",
-                                )
-                                    .text
-                                    .size(14)
-                                    .color(greyDark)
-                                    .fontFamily(medium)
-                                    .make(),
-                              )
-                                  .box
-                                  .color(thinPrimaryApp)
-                                  .margin(EdgeInsets.symmetric(horizontal: 6))
-                                  .roundedLg
-                                  .padding(EdgeInsets.symmetric(
-                                      horizontal: 24, vertical: 12))
-                                  .make();
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Container(
-                        width: double.infinity,
-                        height: 150,
-                        decoration: BoxDecoration(
-                          color: greyThin,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              widget.description,
-                              style: TextStyle(
-                                color: blackColor,
-                                fontSize: 11,
-                              ),
-                            ),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          widget.description,
+                          style: TextStyle(
+                            color: blackColor,
+                            fontSize: 11,
                           ),
                         ),
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  )
+                ],
               ),
             ),
           ),

@@ -518,15 +518,16 @@ void addToPostByUserMatch(
   List<String> productNames = [productNameTop, productNameLower];
   String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
 
-  // ดึงข้อมูลจาก collection users โดยใช้ currentUserUID
+  // Retrieve user details
   FirebaseFirestore.instance
       .collection('users')
       .doc(currentUserUID)
       .get()
       .then((DocumentSnapshot userDoc) {
     if (userDoc.exists) {
-      String userName = userDoc['name']; // สมมุติว่า field ชื่อว่า 'name'
-      
+      String userName = userDoc['name'];
+
+      // Retrieve product details
       FirebaseFirestore.instance
           .collection(productsCollection)
           .where('p_name', whereIn: productNames)
@@ -563,7 +564,7 @@ void addToPostByUserMatch(
           });
 
           if (userData.keys.length > 1) { // Check if any product info was added
-            FirebaseFirestore.instance.collection('postusermixmatchs').add(userData).then((documentReference) {
+            FirebaseFirestore.instance.collection('usermixandmatch').add(userData).then((documentReference) {
               VxToast.show(context, msg: "Added post successful.");
               print('Data added in usermixmatchs collection with document ID: ${documentReference.id}');
               Navigator.pop(context);

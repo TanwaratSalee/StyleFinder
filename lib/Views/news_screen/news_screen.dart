@@ -503,7 +503,7 @@ class NewsScreen extends StatelessWidget {
                                           backgroundColor:
                                               tabController.index == 0
                                                   ? primaryApp
-                                                  : greyColor,
+                                                  : Colors.grey,
                                         ),
                                         SizedBox(width: 10),
                                         CircleAvatar(
@@ -511,7 +511,7 @@ class NewsScreen extends StatelessWidget {
                                           backgroundColor:
                                               tabController.index == 1
                                                   ? primaryApp
-                                                  : greyColor,
+                                                  : Colors.grey,
                                         ),
                                       ],
                                     );
@@ -770,7 +770,7 @@ class NewsScreen extends StatelessWidget {
   Widget buildMatchGeneralTab() {
   return StreamBuilder<QuerySnapshot>(
     stream: FirebaseFirestore.instance
-        .collection('postusermixmatchs')
+        .collection('usermixandmatch')
         .orderBy('views', descending: true)
         .snapshots(),
     builder: (context, snapshot) {

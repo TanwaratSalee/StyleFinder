@@ -845,7 +845,7 @@ Widget buildMatchTab() {
   Widget buildPostTab() {
   return StreamBuilder<QuerySnapshot>(
     stream: FirebaseFirestore.instance
-        .collection('postusermixmatchs')
+        .collection('usermixandmatch')
         .orderBy('views', descending: true)
         .snapshots(),
     builder: (context, snapshot) {

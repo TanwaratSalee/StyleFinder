@@ -91,7 +91,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                 fontFamily: bold,
               ),
             ),
-            const SizedBox(height: 20),
+            20.heightBox,
             const Text(
               'We have just sent an email verification link to your email. Please check your email and click on the link to verify your Email address.',
               textAlign: TextAlign.center,
@@ -99,7 +99,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                 fontSize: 16,
               ),
             ),
-            const SizedBox(height: 20),
+            20.heightBox,
             const Text(
               'If not auto redirected after verification, click on the Continue button.',
               textAlign: TextAlign.center,
