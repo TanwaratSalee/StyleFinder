@@ -859,7 +859,7 @@ Widget buildMatchTab() {
       // Filter posts by current user ID
       var filteredData = data.where((doc) {
         var docData = doc.data() as Map<String, dynamic>;
-        return docData['posted_name'] == currentUserUID;
+        return docData['posted_by'] == currentUserUID;
       }).toList();
 
       if (filteredData.isEmpty) {
