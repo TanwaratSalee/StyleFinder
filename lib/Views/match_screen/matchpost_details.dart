@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
@@ -26,30 +25,30 @@ class MatchPostsDetails extends StatefulWidget {
   final String posted_by;
   final String posted_img;
 
-  const MatchPostsDetails(
-      {required this.productName1,
-      required this.productName2,
-      required this.price1,
-      required this.price2,
-      required this.productImage1,
-      required this.productImage2,
-      required this.totalPrice,
-      required this.vendorName1,
-      required this.vendorName2,
-      required this.vendor_id,
-      required this.collection,
-      required this.description,
-      required this.gender,
-      required this.posted_by,
-      required this.posted_name,
-      required this.posted_img});
+  const MatchPostsDetails({
+    required this.productName1,
+    required this.productName2,
+    required this.price1,
+    required this.price2,
+    required this.productImage1,
+    required this.productImage2,
+    required this.totalPrice,
+    required this.vendorName1,
+    required this.vendorName2,
+    required this.vendor_id,
+    required this.collection,
+    required this.description,
+    required this.gender,
+    required this.posted_by,
+    required this.posted_name,
+    required this.posted_img,
+  });
 
   @override
   _MatchPostsDetailsState createState() => _MatchPostsDetailsState();
 }
 
 class _MatchPostsDetailsState extends State<MatchPostsDetails> {
-  bool isFavorited = false;
   late final ProductController controller;
 
   @override
@@ -119,6 +118,8 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
 
   @override
   Widget build(BuildContext context) {
+    bool isCurrentUser = widget.posted_by == FirebaseAuth.instance.currentUser?.uid;
+
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
@@ -131,31 +132,54 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
         centerTitle: true,
         elevation: 0,
         actions: <Widget>[
-          Obx(() => IconButton(
-                onPressed: () {
-                  print("IconButton pressed");
-                  bool isFav = !controller.isFav.value;
-                  if (isFav == true) {
-                    controller.addToWishlistMixMatch(
-                        widget.productName1,
-                        widget.productName2,
-                        widget.vendor_id,
-                        _updateIsFav,
-                        context);
-                  } else {
-                    controller.removeToWishlistMixMatch(
-                        widget.productName1,
-                        widget.productName2,
-                        widget.vendor_id,
-                        _updateIsFav,
-                        context);
-                  }
-                  print("isFav after toggling: $isFav");
-                },
-                icon: controller.isFav.value
-                    ? Image.asset(icTapFavoriteButton, width: 23)
-                    : Image.asset(icFavoriteButton, width: 23),
-              ).box.padding(EdgeInsets.only(right: 10)).make()),
+          if (isCurrentUser)
+            PopupMenuButton<String>(
+              onSelected: (value) {
+                switch (value) {
+                  case 'Edit':
+                    // เพิ่มโค้ดสำหรับการแก้ไข
+                    break;
+                  case 'Delete':
+                    // เพิ่มโค้ดสำหรับการลบ
+                    break;
+                }
+              },
+              itemBuilder: (BuildContext context) {
+                return {'Edit', 'Delete'}.map((String choice) {
+                  return PopupMenuItem<String>(
+                    value: choice,
+                    child: Text(choice),
+                  );
+                }).toList();
+              },
+              icon: Icon(Icons.more_vert),
+            )
+          else
+            Obx(() => IconButton(
+                  onPressed: () {
+                    print("IconButton pressed");
+                    bool isFav = !controller.isFav.value;
+                    if (isFav == true) {
+                      controller.addToWishlistMixMatch(
+                          widget.productName1,
+                          widget.productName2,
+                          widget.vendor_id,
+                          _updateIsFav,
+                          context);
+                    } else {
+                      controller.removeToWishlistMixMatch(
+                          widget.productName1,
+                          widget.productName2,
+                          widget.vendor_id,
+                          _updateIsFav,
+                          context);
+                    }
+                    print("isFav after toggling: $isFav");
+                  },
+                  icon: controller.isFav.value
+                      ? Image.asset(icTapFavoriteButton, width: 23)
+                      : Image.asset(icFavoriteButton, width: 23),
+                ).box.padding(EdgeInsets.only(right: 10)).make()),
         ],
       ),
       body: Padding(
@@ -455,7 +479,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                             widget.description,
                             style: TextStyle(
                               color: blackColor,
-                              fontSize: 11,
+                              fontSize: 14,
                             ),
                           ),
                         ),

@@ -441,7 +441,7 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                         widget.description,
                         style: TextStyle(
                               color: blackColor,
-                              fontSize: 11,
+                              fontSize: 14,
                             ),
                       ),
                     )
