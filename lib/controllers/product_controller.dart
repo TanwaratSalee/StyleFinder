@@ -492,7 +492,7 @@ void addToWishlistMatch(String productNameTop, String productNameLower, BuildCon
               doc.reference.update({
                 'p_wishlist': FieldValue.arrayUnion([currentUserUID])
               }).then((value) {
-         VxToast.show(context, msg: "Added from wishlist", bgColor: Colors.grey.withOpacity(0.8));
+         VxToast.show(context, msg: "Added from wishlist", bgColor: greyColor.withOpacity(0.8));
 
         }).catchError((error) {
                 print('Error adding to Favorite: $error');

@@ -6,7 +6,7 @@ import 'package:flutter_finalproject/controllers/product_controller.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class MatchDetailScreen extends StatefulWidget {
+class MatchStoreDetailScreen extends StatefulWidget {
   final String productName1;
   final String productName2;
   final String price1;
@@ -21,7 +21,7 @@ class MatchDetailScreen extends StatefulWidget {
   final String description;
   final String gender;
 
-  const MatchDetailScreen({
+  const MatchStoreDetailScreen({
     this.productName1 = '',
     this.productName2 = '',
     this.price1 = '',
@@ -38,10 +38,10 @@ class MatchDetailScreen extends StatefulWidget {
   });
 
   @override
-  _MatchDetailScreenState createState() => _MatchDetailScreenState();
+  _MatchStoreDetailScreenState createState() => _MatchStoreDetailScreenState();
 }
 
-class _MatchDetailScreenState extends State<MatchDetailScreen> {
+class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
   bool isFavorited = false;
   late final ProductController controller;
 
@@ -254,8 +254,7 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                             children: [
                               SizedBox(width: 12),
                               Obx(() {
-                                String imageUrl =
-                                    controller.vendorImageUrl.value;
+                                String imageUrl = controller.vendorImageUrl.value;
                                 return imageUrl.isNotEmpty
                                     ? Container(
                                         width: 50,
@@ -273,7 +272,11 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
                                         .border(color: greyLine, width: 1.5)
                                         .roundedFull
                                         .make()
-                                    : SizedBox.shrink();
+                                    : Icon(
+                                            Icons.person,
+                                            color: whiteColor,
+                                            size: 27,
+                                          );
                               }),
                               SizedBox(width: 10),
                               Expanded(

@@ -49,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 child: Text(
                   appversion,
                   style: TextStyle(
-                    color: Colors.grey,
+                    color: greyColor,
                   ),
                 ),
               ),

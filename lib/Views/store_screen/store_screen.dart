@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
-import 'package:flutter_finalproject/Views/store_screen/mixandmatch_detail.dart';
+import 'package:flutter_finalproject/Views/store_screen/matchstore_detail.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -564,7 +564,7 @@ class StoreScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MatchDetailScreen(
+                    builder: (context) => MatchStoreDetailScreen(
                       price1: price1,
                       price2: price2,
                       productName1: productName1,

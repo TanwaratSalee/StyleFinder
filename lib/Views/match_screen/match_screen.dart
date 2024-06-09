@@ -305,14 +305,14 @@ Widget buildCardSetLower(List<Map<String, dynamic>> lowerProducts) {
                         .size(14)
                         .make(),
                   ],
-                ),
-              )
-                  .box
+                ).box
                   .color(const Color.fromRGBO(177, 234, 199, 1))
                   .padding(EdgeInsets.symmetric(vertical: 12, horizontal: 58))
                   .border(color: (const Color.fromRGBO(35, 101, 60, 1)))
                   .rounded
                   .make(),
+              ),
+                  
                   InkWell(
                     onTap: () async {
                       final topProducts = controller.topFilteredProducts;

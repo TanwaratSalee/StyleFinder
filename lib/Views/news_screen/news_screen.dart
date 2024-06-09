@@ -5,7 +5,7 @@ import 'package:flutter_finalproject/Views/match_screen/matchpost_details.dart';
 import 'package:flutter_finalproject/Views/news_screen/allstore_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
-import 'package:flutter_finalproject/Views/store_screen/mixandmatch_detail.dart';
+import 'package:flutter_finalproject/Views/store_screen/matchstore_detail.dart';
 import 'package:flutter_finalproject/Views/news_screen/product_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
@@ -478,12 +478,12 @@ class NewsScreen extends StatelessWidget {
                                 Expanded(
                                   child: Padding(
                                     padding:
-                                        const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                                        const EdgeInsets.only(top: 15),
                                     child: TabBarView(
                                       controller: tabController,
                                       children: [
                                         buildProductMathGrids(category),
-                                        buildPostTab(),
+                                        buildMatchGeneralTab(),
                                       ],
                                     ),
                                   ),
@@ -503,7 +503,7 @@ class NewsScreen extends StatelessWidget {
                                           backgroundColor:
                                               tabController.index == 0
                                                   ? primaryApp
-                                                  : Colors.grey,
+                                                  : greyColor,
                                         ),
                                         SizedBox(width: 10),
                                         CircleAvatar(
@@ -511,7 +511,7 @@ class NewsScreen extends StatelessWidget {
                                           backgroundColor:
                                               tabController.index == 1
                                                   ? primaryApp
-                                                  : Colors.grey,
+                                                  : greyColor,
                                         ),
                                       ],
                                     );
@@ -632,7 +632,7 @@ class NewsScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => MatchDetailScreen(
+                      builder: (context) => MatchStoreDetailScreen(
                         price1: price1,
                         price2: price2,
                         productName1: productName1,
@@ -656,8 +656,8 @@ class NewsScreen extends StatelessWidget {
                       children: [
                         Image.network(
                           productImage1,
-                          width: 80,
-                          height: 90,
+                          width: 75,
+                        height: 80,
                           fit: BoxFit.cover,
                         ),
                         5.widthBox,
@@ -692,8 +692,8 @@ class NewsScreen extends StatelessWidget {
                       children: [
                         Image.network(
                           productImage2,
-                          width: 80,
-                          height: 90,
+                           width: 75,
+                        height: 80,
                           fit: BoxFit.cover,
                         ),
                         3.widthBox,
@@ -767,7 +767,7 @@ class NewsScreen extends StatelessWidget {
     );
   }
 
-  Widget buildPostTab() {
+  Widget buildMatchGeneralTab() {
   return StreamBuilder<QuerySnapshot>(
     stream: FirebaseFirestore.instance
         .collection('postusermixmatchs')
@@ -794,12 +794,11 @@ class NewsScreen extends StatelessWidget {
       }
 
       return GridView.builder(
-        padding: EdgeInsets.all(12),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, 
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 8,
-          childAspectRatio: 8 / 9, 
+          crossAxisCount: 2,
+            mainAxisSpacing: 7,
+            crossAxisSpacing: 7,
+            mainAxisExtent: 240,
         ),
         itemCount: filteredData.length,
         itemBuilder: (context, index) {
@@ -818,6 +817,8 @@ class NewsScreen extends StatelessWidget {
           var description = docData['p_desc'] ?? '';
           var views = docData['views'] ?? 0;
           var gender = docData['p_sex'] ?? '';
+
+          String totalPrice = (int.parse(docData['p_price_top']) + int.parse(docData['p_price_lower'])).toString();
 
           var posted_by = currentUserUID;
 
@@ -915,33 +916,42 @@ class NewsScreen extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Image.asset(
-                        icEyes,
-                        width: 16,
-                        height: 10,
-                        color: greyDark,
+                  Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Total: ",
+                            style: TextStyle(
+                                color: blackColor,
+                                fontFamily: regular,
+                                fontSize: 14),
+                          ),
+                          Text(
+                            "${NumberFormat('#,##0').format(double.parse(totalPrice).toInt())} ",
+                            style: TextStyle(
+                                color: blackColor,
+                                fontFamily: medium,
+                                fontSize: 16),
+                          ),
+                          Text(
+                            "Bath",
+                            style: TextStyle(
+                                color: blackColor,
+                                fontFamily: regular,
+                                fontSize: 14),
+                          ),
+                        ],
                       ),
-                      SizedBox(width: 4),
-                      Text(
-                        views.toString(),
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: regular,
-                          color: greyColor,
-                        ),
-                      ),
-                    ],
-                  ).paddingSymmetric(horizontal: 8),
+                    )
                 ],
               )
                   .box
-                  .border(color: greyLine)
-                  .rounded
-                  .padding(EdgeInsets.all(8))
-                  .make(),
+                    .border(color: greyLine)
+                    .p8
+                    .margin(EdgeInsets.all(2))
+                    .roundedSM
+                    .make(),
             ),
           );
         },
@@ -982,6 +992,7 @@ class ButtonsGrid extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       crossAxisSpacing: 10,
       mainAxisSpacing: 10,
+      
       children: List.generate(4, (index) {
         return Padding(
           padding: const EdgeInsets.all(10),

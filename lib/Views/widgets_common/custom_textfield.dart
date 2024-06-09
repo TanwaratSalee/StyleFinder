@@ -14,7 +14,7 @@ import 'package:flutter_finalproject/consts/consts.dart';
 //         decoration: InputDecoration(
 //           labelText: label,
 //           labelStyle: TextStyle(
-//             color: Colors.grey,
+//             color: greyColor,
 //             fontSize: 16,
 //           ),
 //           filled: true,
@@ -23,28 +23,28 @@ import 'package:flutter_finalproject/consts/consts.dart';
 //           border: OutlineInputBorder(
 //             borderRadius: BorderRadius.circular(12),
 //             borderSide: BorderSide(
-//               color: Colors.grey,
+//               color: greyColor,
 //               width: 1,
 //             ),
 //           ),
 //           enabledBorder: OutlineInputBorder(
 //             borderRadius: BorderRadius.circular(12),
 //             borderSide: BorderSide(
-//               color: Colors.grey,
+//               color: greyColor,
 //               width: 1,
 //             ),
 //           ),
 //           focusedBorder: OutlineInputBorder(
 //             borderRadius: BorderRadius.circular(12),
 //             borderSide: BorderSide(
-//               color: Colors.grey,
+//               color: greyColor,
 //               width: 1,
 //             ),
 //           ),
 //           suffixIcon: IconButton(
 //             icon: Icon(
 //               _isObscured ? Icons.visibility_off : Icons.visibility,
-//               color: Colors.grey,
+//               color: greyColor,
 //             ),
 //             onPressed: () {
 //               setState(() {
@@ -165,7 +165,7 @@ class _customTextFieldPasswordState extends State<customTextFieldPassword> {
                 ? IconButton(
                     icon: Icon(
                       _obscureText ? Icons.visibility_off : Icons.visibility,
-                      color: Colors.grey,
+                      color: greyColor,
                     ),
                     onPressed: () {
                       setState(() {

@@ -105,7 +105,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
-                color: Colors.grey,
+                color: greyColor,
               ),
             ),
             const SizedBox(height: 30),

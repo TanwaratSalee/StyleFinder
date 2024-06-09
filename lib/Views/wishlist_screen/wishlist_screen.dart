@@ -115,7 +115,7 @@ class WishlistScreen extends StatelessWidget {
             separatorBuilder: (context, index) => Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Divider(
-                color: Colors.grey[200],
+                color: greyColor,
                 thickness: 1,
               ),
             ),

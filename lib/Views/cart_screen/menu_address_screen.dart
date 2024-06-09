@@ -46,7 +46,7 @@ class _AddressScreenState extends State<AddressScreen> {
         centerTitle: true,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(4.0),
-          child: Container(color: Colors.grey.shade200, height: 1.0),
+          child: Container(color: greyColor, height: 1.0),
         ),
       ),
       body: Padding(

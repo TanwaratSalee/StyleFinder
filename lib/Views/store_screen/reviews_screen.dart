@@ -107,7 +107,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                     child: Text('The product has not been reviewed yet.')
                         .text
                         .size(16)
-                        .color(Colors.grey)
+                        .color(greyColor)
                         .make(),
                   );
                 }

@@ -47,7 +47,7 @@ class _PostMatchScreenState extends State<PostMatchScreen> {
                         Container(
                           width: 125,
                           height: 125,
-                          color: Colors.grey[300],
+                          color: greyColor,
                           child: Center(
                             child: Text('Image 1'),
                           ),
@@ -88,7 +88,7 @@ class _PostMatchScreenState extends State<PostMatchScreen> {
                         Container(
                           width: 125,
                           height: 125,
-                          color: Colors.grey[300],
+                          color: greyColor,
                           child: Center(
                             child: Text('Image 2'),
                           ),
@@ -293,7 +293,7 @@ class GenderSelector extends StatelessWidget {
       onPressed: () => onSelected(!isSelected),
       child: Text(label),
       color: isSelected ? thinPrimaryApp : Color.fromARGB(255, 250, 248, 248),
-      textColor: Colors.grey[800],
+      textColor: greyColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
         side: BorderSide(

@@ -473,7 +473,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                                             'The product has not been reviewed yet.')
                                         .text
                                         .size(16)
-                                        .color(Colors.grey)
+                                        .color(greyColor)
                                         .make(),
                                   );
                                 }

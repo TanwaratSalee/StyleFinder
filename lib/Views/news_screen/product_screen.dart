@@ -5,7 +5,7 @@ import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.d
 import 'package:flutter_finalproject/Views/news_screen/component/search_screen.dart';
 import 'package:flutter_finalproject/Views/search_screen/recent_search_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
-import 'package:flutter_finalproject/Views/store_screen/mixandmatch_detail.dart';
+import 'package:flutter_finalproject/Views/store_screen/matchstore_detail.dart';
 import 'package:flutter_finalproject/Views/widgets_common/filterDrawer.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/home_controller.dart';
@@ -391,7 +391,7 @@ Widget buildMatchTab(BuildContext context) {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MatchDetailScreen(
+                    builder: (context) => MatchStoreDetailScreen(
                       price1: price1,
                       price2: price2,
                       productName1: productName1,
@@ -450,7 +450,7 @@ Widget buildMatchTab(BuildContext context) {
                                 ),
                                 Text(
                                   "${NumberFormat('#,##0').format(double.parse(price1).toInt())} Bath",
-                                  style: const TextStyle(color: Colors.grey),
+                                  style: const TextStyle(color: greyColor),
                                 ),
                               ],
                             ),
@@ -486,7 +486,7 @@ Widget buildMatchTab(BuildContext context) {
                                 ),
                                 Text(
                                   "${NumberFormat('#,##0').format(double.parse(price2).toInt())} Bath",
-                                  style: const TextStyle(color: Colors.grey),
+                                  style: const TextStyle(color: greyColor),
                                 ),
                               ],
                             ),
