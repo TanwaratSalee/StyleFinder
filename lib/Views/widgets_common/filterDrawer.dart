@@ -174,12 +174,13 @@ class _FilterDrawerState extends State<FilterDrawer> {
                     },
                     child: Container(
                       padding: EdgeInsets.all(8),
+                      margin: EdgeInsets.symmetric(vertical: 4),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(
                           color: isSelected ? primaryApp : greyLine,
                         ),
-                        color: isSelected ? thinPrimaryApp : Colors.transparent,
+                        // color: isSelected ? thinPrimaryApp : Colors.transparent,
                       ),
                       child: Text(
                         vendor['vendor_name'] ?? 'Unknown',
@@ -251,14 +252,14 @@ class _FilterDrawerState extends State<FilterDrawer> {
                         });
                       },
                       child: Container(
-                        width: 30,
-                        height: 30,
+                        width: 32,
+                        height: 32,
                         decoration: BoxDecoration(
                           color: color['color'],
                           borderRadius: BorderRadius.circular(4),
                           border: Border.all(
                             color: isSelected ? primaryApp : greyThin,
-                            width: isSelected ? 2 : 1,
+                            width: isSelected ? 3 : 2,
                           ),
                         ),
                       ),

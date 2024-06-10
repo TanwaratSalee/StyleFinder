@@ -44,10 +44,10 @@ class _AddressScreenState extends State<AddressScreen> {
             .color(blackColor)
             .make(),
         centerTitle: true,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(4.0),
-          child: Container(color: greyColor, height: 1.0),
-        ),
+        // bottom: PreferredSize(
+        //   preferredSize: const Size.fromHeight(4.0),
+        //   child: Container(color: greyColor, height: 1.0),
+        // ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
