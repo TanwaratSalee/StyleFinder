@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/match_screen/matchpost_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/widgets_common/appbar_ontop.dart';
@@ -178,10 +179,13 @@ class _MatchScreenState extends State<MatchScreen> {
   }
 
   Widget buildCardItem(Map<String, dynamic> product) {
+    final productName = product['p_name'] ?? 'No Name';
+    final productImages = product['p_imgs'] ?? [''];
+
     return GestureDetector(
       onTap: () {
         Get.to(() => ItemDetails(
-              title: product['p_name'],
+              title: productName,
               data: product,
             ));
       },
@@ -190,7 +194,7 @@ class _MatchScreenState extends State<MatchScreen> {
         children: [
           Container(
             width: 250,
-            child: Image.network(product['p_imgs'][0], fit: BoxFit.cover),
+            child: Image.network(productImages[0], fit: BoxFit.cover),
           ).box.color(Color.fromARGB(255, 244, 244, 245)).make(),
           Positioned(
             left: -10,
@@ -230,6 +234,12 @@ class _MatchScreenState extends State<MatchScreen> {
   }
 
   Widget matchWithYouContainer() {
+    final topProductIndex = getActualIndex(_currentPageIndexTop, controller.topFilteredProducts.length);
+    final lowerProductIndex = getActualIndex(_currentPageIndexLower, controller.lowerFilteredProducts.length);
+    final topProduct = controller.topFilteredProducts[topProductIndex];
+    final lowerProduct = controller.lowerFilteredProducts[lowerProductIndex];
+    bool isGreatMatch = checkMatch(topProduct['p_colors'], lowerProduct['p_colors']);
+
     return Container(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -242,13 +252,13 @@ class _MatchScreenState extends State<MatchScreen> {
               ).text.fontFamily(regular).color(blackColor).size(14).make(),
               8.widthBox,
               Text(
-                'Great Match!',
-              ).text.fontFamily(semiBold).color(Colors.green).size(22).make(),
+                isGreatMatch ? 'Great Match!' : 'Not a Match',
+              ).text.fontFamily(semiBold).color(isGreatMatch ? Colors.green : Colors.red).size(22).make(),
             ],
           )
               .box
               .border(color: greyLine, width: 1)
-              .padding(EdgeInsets.symmetric(vertical: 12,horizontal: 32))
+              .padding(EdgeInsets.symmetric(vertical: 12, horizontal: 32))
               .margin(EdgeInsets.only(bottom: 12))
               .make(),
           Row(
@@ -280,7 +290,7 @@ class _MatchScreenState extends State<MatchScreen> {
                 ).box
                   .color(const Color.fromRGBO(177, 234, 199, 1))
                   .padding(EdgeInsets.symmetric(vertical: 12, horizontal: 58))
-                  .border(color: (const Color.fromRGBO(35, 101, 60, 1)))
+                  .border(color: const Color.fromRGBO(35, 101, 60, 1))
                   .rounded
                   .make(),
               ),
@@ -337,6 +347,21 @@ class _MatchScreenState extends State<MatchScreen> {
         ],
       ),
     );
+  }
+
+  bool checkMatch(List<dynamic> topColors, List<dynamic> lowerColors) {
+    if (topColors.isEmpty || lowerColors.isEmpty) {
+      return false;
+    }
+
+    // Example matching logic: Check if any color from topColors is in lowerColors
+    for (var topColor in topColors) {
+      if (lowerColors.contains(topColor)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   void showModalRightSheet({
