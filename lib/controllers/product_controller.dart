@@ -627,11 +627,11 @@ void addToWishlistUserMatch(String productNameTop, String productNameLower, Buil
       });
 
       if (userData.keys.length > 1) { // Check if any product info was added
-        FirebaseFirestore.instance.collection('usermixmatchs').add(userData).then((documentReference) {
+        FirebaseFirestore.instance.collection('usermixandmatchs').add(userData).then((documentReference) {
           VxToast.show(context, msg: "Added to wishlist and user mix-match.");
-          print('Data added in usermixmatchs collection with document ID: ${documentReference.id}');
+          print('Data added in usermixandmatchs collection with document ID: ${documentReference.id}');
         }).catchError((error) {
-          print('Error adding data in usermixmatchs collection: $error');
+          print('Error adding data in usermixandmatchs collection: $error');
           VxToast.show(context, msg: "Error adding to wishlist.");
         });
       } else {

@@ -789,11 +789,11 @@ Widget buildMatchTab() {
                       TextButton(
                         onPressed: () async {
                           await FirebaseFirestore.instance
-                              .collection('usermixmatchs')
+                              .collection('usermixandmatchs')
                               .doc(docIdTop)
                               .delete();
                           await FirebaseFirestore.instance
-                              .collection('usermixmatchs')
+                              .collection('usermixandmatchs')
                               .doc(docIdLower)
                               .delete();
                           Navigator.of(context).pop(); // Close the dialog

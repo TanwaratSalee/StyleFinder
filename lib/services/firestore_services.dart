@@ -89,7 +89,7 @@ class FirestoreServices {
 
   static getWishlistsusermixmatchs() {
     return firestore
-        .collection(usermixmatchCollection)
+        .collection(usermixandmatchCollection)
         .where('p_wishlist', arrayContains: currentUser!.uid)
         .snapshots();
   }
