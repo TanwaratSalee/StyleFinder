@@ -137,10 +137,10 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
               onSelected: (value) {
                 switch (value) {
                   case 'Edit':
-                    // เพิ่มโค้ดสำหรับการแก้ไข
+                    // โค้ดสำหรับการแก้ไข
                     break;
                   case 'Delete':
-                    // เพิ่มโค้ดสำหรับการลบ
+                    // โค้ดสำหรับการลบ
                     break;
                 }
               },
@@ -234,7 +234,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                                   .text
                                   .color(greyDark)
                                   .fontFamily(regular)
-                                  .size(14)
+                                  .size(16)
                                   .make(),
                             ],
                           ).box.border(color: greyLine).rounded.make(),
@@ -292,7 +292,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                                   .text
                                   .color(greyDark)
                                   .fontFamily(regular)
-                                  .size(14)
+                                  .size(16)
                                   .make(),
                             ],
                           ).box.border(color: greyLine).rounded.make(),
@@ -379,7 +379,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         'Suitable for gender',
-                      ).text.fontFamily(regular).size(16).make(),
+                      ).text.fontFamily(medium).size(16).make(),
                     ),
                     Column(
                       children: [
@@ -396,7 +396,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                               return Container(
                                 alignment: Alignment.center,
                                 child: capitalizedItem.text
-                                    .size(14)
+                                    .size(16)
                                     .color(greyDark)
                                     .fontFamily(medium)
                                     .make(),
@@ -405,8 +405,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                                   .color(thinPrimaryApp)
                                   .margin(EdgeInsets.symmetric(horizontal: 6))
                                   .roundedLg
-                                  .padding(EdgeInsets.symmetric(
-                                      horizontal: 24, vertical: 12))
+                                  .padding(EdgeInsets.symmetric(horizontal: 24, vertical: 12))
                                   .make();
                             },
                           ),
@@ -436,7 +435,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                                   "${item[0].toUpperCase()}${item.substring(1)}",
                                 )
                                     .text
-                                    .size(14)
+                                    .size(16)
                                     .color(greyDark)
                                     .fontFamily(medium)
                                     .make(),
@@ -445,8 +444,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                                   .color(thinPrimaryApp)
                                   .margin(EdgeInsets.symmetric(horizontal: 6))
                                   .roundedLg
-                                  .padding(EdgeInsets.symmetric(
-                                      horizontal: 24, vertical: 12))
+                                  .padding(EdgeInsets.symmetric(horizontal: 24, vertical: 12))
                                   .make();
                             },
                           ),
@@ -466,9 +464,9 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                     ),
                     Container(
                       width: double.infinity,
-                      height: 100,
+                      height: 180,
                       decoration: BoxDecoration(
-                        color: greyThin,
+                        color: greyMessage,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Align(

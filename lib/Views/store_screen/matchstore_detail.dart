@@ -178,7 +178,7 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                                 .text
                                 .color(greyDark)
                                 .fontFamily(regular)
-                                .size(14)
+                                .size(16)
                                 .make(),
                           ],
                         ).box.border(color: greyLine).rounded.make(),
@@ -236,7 +236,7 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                                 .text
                                 .color(greyDark)
                                 .fontFamily(regular)
-                                .size(14)
+                                .size(16)
                                 .make(),
                           ],
                         ).box.border(color: greyLine).rounded.make(),
@@ -336,11 +336,8 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                           children: [
                             Text(
                               'Suitable for gender',
-                              style: TextStyle(
-                                fontFamily: regular,
-                                fontSize: 16,
-                              ),
-                            ),
+                              
+                            ).text.fontFamily(medium).size(16).make(),
                           ],
                         ),
                         SizedBox(
@@ -362,7 +359,7 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                                       "${item[0].toUpperCase()}${item.substring(1)}",
                                     )
                                         .text
-                                        .size(14)
+                                        .size(16)
                                         .color(greyDark)
                                         .fontFamily(medium)
                                         .make(),
@@ -401,7 +398,7 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                                       "${item[0].toUpperCase()}${item.substring(1)}",
                                     )
                                         .text
-                                        .size(14)
+                                        .size(16)
                                         .color(greyDark)
                                         .fontFamily(medium)
                                         .make(),
