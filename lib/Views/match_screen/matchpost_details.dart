@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
@@ -116,6 +117,21 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
     });
   }
 
+  void navigateToItemDetails(String productName) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('products')
+        .where('p_name', isEqualTo: productName)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      var productData = querySnapshot.docs.first.data();
+      Get.to(() => ItemDetails(title: productName, data: productData));
+    } else {
+      // Handle product not found
+      print('Product not found');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isCurrentUser = widget.posted_by == FirebaseAuth.instance.currentUser?.uid;
@@ -196,7 +212,9 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                         Expanded(
                           child: Column(
                             children: [
-                              Container(
+                              GestureDetector(
+                              onTap: () => navigateToItemDetails(widget.productName1),
+                              child: Container(
                                 child: Center(
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.only(
@@ -211,7 +229,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                                     ),
                                   ),
                                 ),
-                              ),
+                              ),),
                               5.heightBox,
                               SizedBox(
                                 width: 135,
@@ -258,7 +276,9 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                         Expanded(
                           child: Column(
                             children: [
-                              Container(
+                              GestureDetector(
+                              onTap: () => navigateToItemDetails(widget.productName2),
+                              child: Container(
                                 child: Center(
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.only(
@@ -273,6 +293,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                                     ),
                                   ),
                                 ),
+                              ),
                               ),
                               5.heightBox,
                               SizedBox(
