@@ -568,10 +568,10 @@ void addToPostByUserMatch(
           if (userData.keys.length > 1) { // Check if any product info was added
             FirebaseFirestore.instance.collection('usermixandmatch').add(userData).then((documentReference) {
               VxToast.show(context, msg: "Added post successful.");
-              print('Data added in usermixmatchs collection with document ID: ${documentReference.id}');
+              print('Data added in usermixandmatch collection with document ID: ${documentReference.id}');
               Navigator.pop(context);
             }).catchError((error) {
-              print('Error adding data in usermixmatchs collection: $error');
+              print('Error adding data in usermixandmatch collection: $error');
               VxToast.show(context, msg: "Error post.");
             });
           } else {

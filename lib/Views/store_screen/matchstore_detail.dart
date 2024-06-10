@@ -158,20 +158,19 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                             ),
                             5.heightBox,
                             SizedBox(
-                              width: 135,
-                              child: Text(
-                                widget.productName1,
-                                softWrap: true,
-                                overflow: TextOverflow.clip,
-                              )
-                                  .text
-                                  .color(greyDark)
-                                  .fontFamily(bold)
-                                  .size(16)
-                                  .ellipsis
-                                  .maxLines(1)
-                                  .make(),
-                            ),
+                                width: 135,
+                                child: Text(
+                                  widget.productName1,
+                                  softWrap: true,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: greyDark,
+                                    fontSize: 14,
+                                    fontFamily: semiBold,
+                                  ),
+                                  maxLines: 1,
+                                ),
+                              ),
                             Text(
                               "${NumberFormat('#,##0').format(double.parse(widget.price1.toString()).toInt())} Bath",
                             )

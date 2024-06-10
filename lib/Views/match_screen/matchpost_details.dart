@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
 import 'package:get/get.dart';
@@ -118,7 +116,8 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
 
   @override
   Widget build(BuildContext context) {
-    bool isCurrentUser = widget.posted_by == FirebaseAuth.instance.currentUser?.uid;
+    bool isCurrentUser =
+        widget.posted_by == FirebaseAuth.instance.currentUser?.uid;
 
     return Scaffold(
       backgroundColor: whiteColor,
@@ -182,133 +181,130 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                 ).box.padding(EdgeInsets.only(right: 10)).make()),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Container(
-                                child: Center(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(14),
-                                      topLeft: Radius.circular(14),
-                                    ),
-                                    child: Image.network(
-                                      widget.productImage1,
-                                      height: 150,
-                                      width: 165,
-                                      fit: BoxFit.cover,
-                                    ),
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Container(
+                              child: Center(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(14),
+                                    topLeft: Radius.circular(14),
+                                  ),
+                                  child: Image.network(
+                                    widget.productImage1,
+                                    height: 150,
+                                    width: 165,
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
-                              5.heightBox,
-                              SizedBox(
+                            ),
+                            5.heightBox,
+                            SizedBox(
                                 width: 135,
                                 child: Text(
                                   widget.productName1,
                                   softWrap: true,
-                                  overflow: TextOverflow.clip,
-                                )
-                                    .text
-                                    .color(greyDark)
-                                    .fontFamily(bold)
-                                    .size(16)
-                                    .ellipsis
-                                    .maxLines(1)
-                                    .make(),
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: greyDark,
+                                    fontSize: 16,
+                                    fontFamily: semiBold,
+                                  ),
+                                  maxLines: 1,
+                                ),
                               ),
-                              Text(
+                            Text(
                                 "${NumberFormat('#,##0').format(double.parse(widget.price1).toInt())} Bath",
-                              )
-                                  .text
-                                  .color(greyDark)
-                                  .fontFamily(regular)
-                                  .size(16)
-                                  .make(),
-                            ],
-                          ).box.border(color: greyLine).rounded.make(),
-                        ),
-                        const SizedBox(width: 10),
-                        Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            const Icon(
-                              Icons.add,
-                              color: whiteColor,
                             )
-                                .box
-                                .color(primaryApp)
-                                .roundedFull
-                                .padding(EdgeInsets.all(4))
+                                .text
+                                .color(greyDark)
+                                .fontFamily(regular)
+                                .size(16)
                                 .make(),
                           ],
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Container(
-                                child: Center(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(14),
-                                      topLeft: Radius.circular(14),
-                                    ),
-                                    child: Image.network(
-                                      widget.productImage2,
-                                      height: 150,
-                                      width: 165,
-                                      fit: BoxFit.cover,
-                                    ),
+                        ).box.border(color: greyLine).rounded.make(),
+                      ),
+                      const SizedBox(width: 10),
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          const Icon(
+                            Icons.add,
+                            color: whiteColor,
+                          )
+                              .box
+                              .color(primaryApp)
+                              .roundedFull
+                              .padding(EdgeInsets.all(4))
+                              .make(),
+                        ],
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Container(
+                              child: Center(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(14),
+                                    topLeft: Radius.circular(14),
+                                  ),
+                                  child: Image.network(
+                                    widget.productImage2,
+                                    height: 150,
+                                    width: 165,
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
-                              5.heightBox,
-                              SizedBox(
-                                width: 135,
-                                child: Text(widget.productName2)
-                                    .text
-                                    .color(greyDark)
-                                    .fontFamily(bold)
-                                    .size(18)
-                                    .ellipsis
-                                    .maxLines(1)
-                                    .make(),
-                              ),
-                              Text(
-                                "${NumberFormat('#,##0').format(double.parse(widget.price2).toInt())} Bath",
-                              )
+                            ),
+                            5.heightBox,
+                            SizedBox(
+                              width: 135,
+                              child: Text(widget.productName2)
                                   .text
                                   .color(greyDark)
-                                  .fontFamily(regular)
-                                  .size(16)
+                                  .fontFamily(bold)
+                                  .size(18)
+                                  .ellipsis
+                                  .maxLines(1)
                                   .make(),
-                            ],
-                          ).box.border(color: greyLine).rounded.make(),
-                        ),
-                      ],
-                    ),
-                    30.heightBox,
-                    Container(
-                      width: double.infinity,
-                      height: 70,
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Row(
-                              children: [
-                                SizedBox(width: 12),
+                            ),
+                            Text(
+                                "${NumberFormat('#,##0').format(double.parse(widget.price2).toInt())} Bath",
+                            )
+                                .text
+                                .color(greyDark)
+                                .fontFamily(regular)
+                                .size(16)
+                                .make(),
+                          ],
+                        ).box.border(color: greyLine).rounded.make(),
+                      ),
+                    ],
+                  ).box.margin(EdgeInsets.symmetric(horizontal: 22)).make(),
+                  30.heightBox,
+                  Container(
+                    width: double.infinity,
+                    height: 70,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Row(
+                            children: [
+                              SizedBox(width: 12),
                                 widget.posted_img.isNotEmpty
                                     ? Container(
                                         width: 50,
@@ -326,169 +322,185 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                                         .border(color: greyLine, width: 1.5)
                                         .roundedFull
                                         .make()
-                                    : SizedBox.shrink(),
-                                SizedBox(width: 10),
-                                Expanded(
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
+                                    : Icon(
+                                            Icons.person,
+                                            color: whiteColor,
+                                            size: 27,
+                                          ),
+                              SizedBox(width: 10),
+                              Expanded(
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
                                       widget.posted_name.toUpperCase(),
-                                      style: TextStyle(
-                                        fontFamily: medium,
-                                        color: blackColor,
-                                        fontSize: 18,
-                                      ),
+                                    style: TextStyle(
+                                      fontFamily: medium,
+                                      color: blackColor,
+                                      fontSize: 18,
                                     ),
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(width: 10),
-                          GestureDetector(
-                            onTap: () {
-                              // Get.to(
-                              //   () => StoreScreen(vendorId: widget.vendor_id),
-                              // );
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(right: 12),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 8),
-                              decoration: BoxDecoration(
-                                color: primaryApp,
-                                borderRadius: BorderRadius.circular(20),
                               ),
-                              child: const Text(
-                                'See Store',
-                                style: TextStyle(
-                                    color: whiteColor, fontFamily: regular),
-                              ),
-                            ),
+                            ],
                           ),
-                        ],
-                      )
-                          .box
-                          .white
-                          .roundedSM
-                          .outerShadow
-                          .make(),
-                    ),
-                    20.heightBox,
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Suitable for gender',
-                      ).text.fontFamily(medium).size(16).make(),
-                    ),
-                    Column(
-                      children: [
-                        SizedBox(height: 10),
-                        Container(
-                          height: 40,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: widget.gender.split(' ').length,
-                            itemBuilder: (context, index) {
-                              String item = widget.gender.split(' ')[index];
-                              String capitalizedItem =
-                                  item[0].toUpperCase() + item.substring(1);
-                              return Container(
-                                alignment: Alignment.center,
-                                child: capitalizedItem.text
-                                    .size(16)
-                                    .color(greyDark)
-                                    .fontFamily(medium)
-                                    .make(),
-                              )
-                                  .box
-                                  .color(thinPrimaryApp)
-                                  .margin(EdgeInsets.symmetric(horizontal: 6))
-                                  .roundedLg
-                                  .padding(EdgeInsets.symmetric(horizontal: 24, vertical: 12))
-                                  .make();
-                            },
+                        ),
+                        SizedBox(width: 10),
+                        GestureDetector(
+                          onTap: () {
+                            // Get.to(
+                            //   () => StoreScreen(vendorId: widget.vendor_id),
+                            // );
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(right: 12),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: primaryApp,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: const Text(
+                              'See Store',
+                              style: TextStyle(
+                                  color: whiteColor, fontFamily: regular),
+                            ),
                           ),
                         ),
                       ],
-                    ),
-                    10.heightBox,
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Opportunity suitable for',
-                      ).text.fontFamily(regular).size(16).make(),
-                    ),
-                    Column(
+                    )
+                        .box
+                        .white
+                        .roundedSM
+                        .outerShadow
+                        .margin(EdgeInsets.symmetric(horizontal: 12))
+                        .make(),
+                  ),
+                  20.heightBox,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 18),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 10),
-                        Container(
-                          height: 40,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: widget.collection.length,
-                            itemBuilder: (context, index) {
-                              String item = widget.collection[index].toString();
-                              return Container(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "${item[0].toUpperCase()}${item.substring(1)}",
-                                )
-                                    .text
-                                    .size(16)
-                                    .color(greyDark)
-                                    .fontFamily(medium)
-                                    .make(),
-                              )
-                                  .box
-                                  .color(thinPrimaryApp)
-                                  .margin(EdgeInsets.symmetric(horizontal: 6))
-                                  .roundedLg
-                                  .padding(EdgeInsets.symmetric(horizontal: 24, vertical: 12))
-                                  .make();
-                            },
-                          ),
+                        Row(
+                          children: [
+                            Text(
+                              'Suitable for gender',
+                              
+                            ).text.fontFamily(medium).size(16).make(),
+                          ],
                         ),
-                      ],
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Column(
+                          children: [
+                            Container(
+                              height: 40,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: 1,
+                                itemBuilder: (context, index) {
+                                  String item = widget.gender.toString();
+                                  print(widget.gender);
+                                  return Container(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "${item[0].toUpperCase()}${item.substring(1)}",
+                                    )
+                                        .text
+                                        .size(16)
+                                        .color(greyDark)
+                                        .fontFamily(medium)
+                                        .make(),
+                                  )
+                                      .box
+                                      .color(thinPrimaryApp)
+                                      .margin(
+                                          EdgeInsets.symmetric(horizontal: 6))
+                                      .roundedLg
+                                      .padding(EdgeInsets.symmetric(
+                                          horizontal: 24, vertical: 12))
+                                      .make();
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        10.heightBox,
+                        Text(
+                          'Opportunity suitable for',
+                        ).text.fontFamily(regular).size(16).make(),
+                        Column(
+                          children: [
+                            SizedBox(height: 10),
+                            Container(
+                              height: 40,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: widget.collection.length,
+                                itemBuilder: (context, index) {
+                                  String item =
+                                      widget.collection[index].toString();
+                                  return Container(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "${item[0].toUpperCase()}${item.substring(1)}",
+                                    )
+                                        .text
+                                        .size(16)
+                                        .color(greyDark)
+                                        .fontFamily(medium)
+                                        .make(),
+                                  )
+                                      .box
+                                      .color(thinPrimaryApp)
+                                      .margin(
+                                          EdgeInsets.symmetric(horizontal: 6))
+                                      .roundedLg
+                                      .padding(EdgeInsets.symmetric(
+                                          horizontal: 24, vertical: 12))
+                                      .make();
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                         10.heightBox,
+                  Text(
+                    'The reason for match',
+                    style: TextStyle(
+                      fontFamily: regular,
+                      fontSize: 16,
                     ),
-                    10.heightBox,
-                    Align(
-                      alignment: Alignment.centerLeft,
+                  ),
+                  8.heightBox,
+                  Container(
+                    width: double.infinity,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      color: greyThin,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
                       child: Text(
-                        'The reason for match',
+                        widget.description,
                         style: TextStyle(
-                          fontFamily: regular,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: double.infinity,
-                      height: 180,
-                      decoration: BoxDecoration(
-                        color: greyMessage,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: Padding(
-                          padding: EdgeInsets.all(12),
-                          child: Text(
-                            widget.description,
-                            style: TextStyle(
                               color: blackColor,
                               fontSize: 14,
                             ),
-                          ),
-                        ),
                       ),
                     )
-                  ],
-                ),
+                  )
+                      ],
+                    ),
+                  ),
+                  
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
