@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_finalproject/Views/match_screen/matchpost_details.dart';
 import 'package:flutter_finalproject/Views/news_screen/allstore_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
@@ -215,7 +214,7 @@ class NewsScreen extends StatelessWidget {
                                           gridDelegate:
                                               SliverGridDelegateWithFixedCrossAxisCount(
                                             crossAxisCount: 2,
-                                            childAspectRatio: 9.5 / 4,
+                                            childAspectRatio: 9 / 4,
                                             mainAxisSpacing: 8,
                                             crossAxisSpacing: 10,
                                           ),

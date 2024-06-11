@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_finalproject/Views/profile_screen/userprofile_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
-import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
 import 'package:get/get.dart';
@@ -132,9 +131,16 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
     }
   }
 
+  void navigateToUserProfile(
+      String userId, String postedName, String postedImg) {
+    Get.to(() => UserProfileScreen(
+        userId: userId, postedName: postedName, postedImg: postedImg));
+  }
+
   @override
   Widget build(BuildContext context) {
-    bool isCurrentUser = widget.posted_by == FirebaseAuth.instance.currentUser?.uid;
+    bool isCurrentUser =
+        widget.posted_by == FirebaseAuth.instance.currentUser?.uid;
 
     return Scaffold(
       backgroundColor: whiteColor,
@@ -213,23 +219,25 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                           child: Column(
                             children: [
                               GestureDetector(
-                              onTap: () => navigateToItemDetails(widget.productName1),
-                              child: Container(
-                                child: Center(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(14),
-                                      topLeft: Radius.circular(14),
-                                    ),
-                                    child: Image.network(
-                                      widget.productImage1,
-                                      height: 150,
-                                      width: 165,
-                                      fit: BoxFit.cover,
+                                onTap: () =>
+                                    navigateToItemDetails(widget.productName1),
+                                child: Container(
+                                  child: Center(
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(14),
+                                        topLeft: Radius.circular(14),
+                                      ),
+                                      child: Image.network(
+                                        widget.productImage1,
+                                        height: 150,
+                                        width: 165,
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),),
+                              ),
                               5.heightBox,
                               SizedBox(
                                 width: 135,
@@ -277,23 +285,24 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                           child: Column(
                             children: [
                               GestureDetector(
-                              onTap: () => navigateToItemDetails(widget.productName2),
-                              child: Container(
-                                child: Center(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(14),
-                                      topLeft: Radius.circular(14),
-                                    ),
-                                    child: Image.network(
-                                      widget.productImage2,
-                                      height: 150,
-                                      width: 165,
-                                      fit: BoxFit.cover,
+                                onTap: () =>
+                                    navigateToItemDetails(widget.productName2),
+                                child: Container(
+                                  child: Center(
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(14),
+                                        topLeft: Radius.circular(14),
+                                      ),
+                                      child: Image.network(
+                                        widget.productImage2,
+                                        height: 150,
+                                        width: 165,
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
                               ),
                               5.heightBox,
                               SizedBox(
@@ -335,12 +344,16 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                                         width: 50,
                                         height: 50,
                                         child: ClipOval(
-                                          child: Image.network(
-                                            widget.posted_img,
-                                            width: 50,
-                                            height: 50,
-                                            fit: BoxFit.cover,
-                                          ),
+                                          child: widget.posted_img != null
+                                              ? Image.network(
+                                                  widget.posted_img,
+                                                  fit: BoxFit.cover,
+                                                )
+                                              : Icon(
+                                                  Icons.person,
+                                                  size: 50,
+                                                  color: Colors.grey,
+                                                ),
                                         ),
                                       )
                                         .box
@@ -368,9 +381,8 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                           SizedBox(width: 10),
                           GestureDetector(
                             onTap: () {
-                              // Get.to(
-                              //   () => StoreScreen(vendorId: widget.vendor_id),
-                              // );
+                              navigateToUserProfile(widget.posted_by,
+                                  widget.posted_name, widget.posted_img);
                             },
                             child: Container(
                               margin: EdgeInsets.only(right: 12),
@@ -388,12 +400,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                             ),
                           ),
                         ],
-                      )
-                          .box
-                          .white
-                          .roundedSM
-                          .outerShadow
-                          .make(),
+                      ).box.white.roundedSM.outerShadow.make(),
                     ),
                     20.heightBox,
                     Align(
