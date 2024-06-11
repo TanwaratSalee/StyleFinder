@@ -129,14 +129,21 @@ class MenuSettingScreen extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              35.heightBox,
-              const Text('Are you sure to sign out?')
+              25.heightBox,
+              const Text('Confirm Logout')
                   .text
-                  .size(18)
+                  .size(22)
+                  .fontFamily(semiBold)
+                  .color(greyDark)
+                  .make(),
+                  10.heightBox,
+              const Text('Are you sure you want to log out?')
+                  .text
+                  .size(14)
                   .fontFamily(regular)
                   .color(greyDark)
                   .make(),
-              35.heightBox,
+              25.heightBox,
               const Divider(
                 height: 1,
                 color: greyLine,

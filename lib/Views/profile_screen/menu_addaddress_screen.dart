@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_finalproject/Views/cart_screen/shipping_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/custom_textfield.dart';
 import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
+import 'package:flutter/services.dart';
+
 
 class AddressForm extends StatefulWidget {
   @override
@@ -130,13 +133,15 @@ class _AddressFormState extends State<AddressForm> {
                   label: "Postal Code",
                   isPass: false,
                   readOnly: false,
-                  controller: _postalCodeController),
+                  controller: _postalCodeController,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly]),
               15.heightBox,
               customTextField(
                   label: "Phone",
                   isPass: false,
                   readOnly: false,
-                  controller: _phoneController),
+                  controller: _phoneController,
+                  inputFormatters: [PhoneNumberInputFormatter()]),
               20.heightBox,
             ],
           ),
@@ -146,75 +151,27 @@ class _AddressFormState extends State<AddressForm> {
   }
 }
 
-class FirebaseService {
-  final CollectionReference usersCollection =
-      FirebaseFirestore.instance.collection('users');
 
-  Future<void> updateAddressForCurrentUser(
-      String userId,
-      String firstname,
-      String surname,
-      String address,
-      String city,
-      String state,
-      String postalCode,
-      String phone) async {
-    try {
-      if (firstname.isNotEmpty &&
-          surname.isNotEmpty &&
-          address.isNotEmpty &&
-          city.isNotEmpty &&
-          state.isNotEmpty &&
-          postalCode.isNotEmpty &&
-          phone.isNotEmpty) {
-        DocumentSnapshot documentSnapshot =
-            await usersCollection.doc(userId).get();
-        if (documentSnapshot.exists) {
-          Map<String, dynamic>? userData =
-              documentSnapshot.data() as Map<String, dynamic>?;
-          if (userData != null) {
-            if (userData.containsKey('address')) {
-              List<dynamic>? addressList = List.from(userData['address']);
-              if (addressList == null) {
-                addressList = [];
-              }
+class PhoneNumberInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    final newText = newValue.text;
 
-              addressList.add({
-                'firstname': firstname,
-                'surname': surname,
-                'address': address,
-                'city': city,
-                'state': state,
-                'postalCode': postalCode,
-                'phone': phone,
-              });
+    // สตริงที่ได้จากการลบตัวอักษรทั้งหมดที่ไม่ใช่ตัวเลขออก
+    final digitsOnly = newText.replaceAll(RegExp(r'\D'), '');
 
-              await usersCollection.doc(userId).update({
-                'address': addressList,
-              });
-            } else {
-              await usersCollection.doc(userId).update({
-                'address': [
-                  {
-                    'firstname': firstname,
-                    'surname': surname,
-                    'address': address,
-                    'city': city,
-                    'state': state,
-                    'postalCode': postalCode,
-                    'phone': phone,
-                  }
-                ],
-              });
-            }
-          }
-        }
-        print('Address updated successfully for user $userId');
-      } else {
-        print('One or more fields are empty. Failed to update address.');
+    // 3 หรือ 6 (i == 3 หรือ i == 6), จะเพิ่มขีดกลาง (-) 
+    String formatted = '';
+    for (int i = 0; i < digitsOnly.length; i++) {
+      if (i == 3 || i == 6) {
+        formatted += '-';
       }
-    } catch (error) {
-      print('Failed to update address: $error');
+      formatted += digitsOnly[i];
     }
+
+    return TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: formatted.length),
+    );
   }
 }

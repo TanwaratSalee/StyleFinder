@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_finalproject/Views/profile_screen/Add_Address_screen.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_finalproject/Views/profile_screen/menu_addaddress_screen.dart';
 import 'package:flutter_finalproject/controllers/editaddress_controller.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
@@ -44,10 +46,6 @@ class _AddressScreenState extends State<AddressScreen> {
             .color(blackColor)
             .make(),
         centerTitle: true,
-        // bottom: PreferredSize(
-        //   preferredSize: const Size.fromHeight(4.0),
-        //   child: Container(color: greyColor, height: 1.0),
-        // ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -107,7 +105,11 @@ class _AddressScreenState extends State<AddressScreen> {
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                                 child: ListTile(
-                                  title: Text(formattedAddress).text.fontFamily(regular).color(greyDark).make(),
+                                  title: Text(formattedAddress)
+                                      .text
+                                      .fontFamily(regular)
+                                      .color(greyDark)
+                                      .make(),
                                   trailing: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
@@ -127,12 +129,16 @@ class _AddressScreenState extends State<AddressScreen> {
                                               builder: (context) =>
                                                   editaddress_controller(
                                                 documentId: snapshot.data!.id,
-                                                firstname:address['firstname'] ?? '',
-                                                surname:address['surname'] ?? '',
-                                                address:address['address'] ?? '',
+                                                firstname:
+                                                    address['firstname'] ?? '',
+                                                surname:
+                                                    address['surname'] ?? '',
+                                                address:
+                                                    address['address'] ?? '',
                                                 city: address['city'] ?? '',
                                                 state: address['state'] ?? '',
-                                                postalCode:address['postalCode'] ?? '',
+                                                postalCode:
+                                                    address['postalCode'] ?? '',
                                                 phone: address['phone'] ?? '',
                                               ),
                                             ),
@@ -149,7 +155,7 @@ class _AddressScreenState extends State<AddressScreen> {
                                             .color(redColor)
                                             .make(),
                                         onPressed: () async {
-                                          await removeAddress(index);
+                                          popupDeleteAddress(context, index);
                                         },
                                       ),
                                     ],
@@ -194,10 +200,91 @@ class _AddressScreenState extends State<AddressScreen> {
           addressesList.removeAt(index);
 
           await docRef.update({'address': addressesList});
+
+          // Show toast notification
+          VxToast.show(context, msg: "Address deleted successfully");
         }
       }
     } catch (error) {
       print("Error removing address: $error");
     }
+  }
+
+  void popupDeleteAddress(BuildContext context, int index) {
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return Dialog(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              15.heightBox,
+              const Text('Delete Address')
+                  .text
+                  .size(24)
+                  .fontFamily(semiBold)
+                  .color(blackColor)
+                  .makeCentered(),
+              10.heightBox,
+              const Text('Are you sure you want to delete this address?')
+                  .text
+                  .size(14)
+                  .fontFamily(regular)
+                  .color(greyDark)
+                  .makeCentered(),
+              5.heightBox,
+              Center(
+                child: const Text(
+                        'This action cannot be undone.')
+                    .text
+                    .size(12)
+                    .fontFamily(regular)
+                    .color(greyDark)
+                    .makeCentered(),
+              ),
+              15.heightBox,
+              const Divider(
+                height: 1,
+                color: greyLine,
+              ),
+              IntrinsicHeight(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
+                      child: TextButton(
+                        child: const Text('Cancel',
+                            style: TextStyle(
+                                color: greyDark,
+                                fontFamily: medium,
+                                fontSize: 14)),
+                        onPressed: () => Navigator.of(context).pop(),
+                      ),
+                    ),
+                    const VerticalDivider(
+                        width: 1, thickness: 1, color: greyLine),
+                    Expanded(
+                      child: TextButton(
+                        child: const Text(
+                          'Delete',
+                          style: TextStyle(
+                              color: redColor,
+                              fontFamily: medium,
+                              fontSize: 14),
+                        ),
+                        onPressed: () async {
+                          await removeAddress(index);
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

@@ -11,7 +11,7 @@ const Color redColor = Color.fromRGBO(249, 109, 109, 1);
 const Color greyThin = Color.fromARGB(240, 236, 232, 232);
 const Color greyLine = Color.fromRGBO(213, 216, 225, 1);
 const Color greyColor = Color.fromRGBO(135, 138, 141, 1);
-const Color greyDark = Color.fromRGBO(51, 51, 51, 1);
+const Color greyDark = Color.fromRGBO(77, 76, 76, 1);
 
 const Color whiteOpacity = Color.fromRGBO(237, 235, 235, 0.918);
 

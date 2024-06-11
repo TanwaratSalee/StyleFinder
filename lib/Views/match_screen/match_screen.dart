@@ -126,57 +126,59 @@ class _MatchScreenState extends State<MatchScreen> {
     );
   }
 
-  Widget buildCardSetTop(List<Map<String, dynamic>> topProducts) {
-    if (topProducts.isEmpty) {
-      return Center(child: Text('No Top available'));
-    }
-
-    final itemCount = topProducts.length;
-
-    return Container(
-      height: 240,
-      child: PageView.builder(
-        controller: _pageControllerTop,
-        onPageChanged: (index) {
-          setState(() {
-            _currentPageIndexTop = index;
-          });
-          handlePageChangeTop(index, itemCount);
-        },
-        itemCount: itemCount + 2,
-        itemBuilder: (context, index) {
-          final actualIndex = getActualIndex(index, itemCount);
-          return buildCardItem(topProducts[actualIndex]);
-        },
-      ),
-    );
+Widget buildCardSetTop(List<Map<String, dynamic>> topProducts) {
+  if (topProducts.isEmpty) {
+    return Center(child: Text('No Top available'));
   }
 
-  Widget buildCardSetLower(List<Map<String, dynamic>> lowerProducts) {
-    if (lowerProducts.isEmpty) {
-      return Center(child: Text('No Lower available'));
-    }
+  final itemCount = topProducts.length;
+  double containerHeight = MediaQuery.of(context).size.height * 0.25; 
 
-    final itemCount = lowerProducts.length;
+  return Container(
+    height: containerHeight,
+    child: PageView.builder(
+      controller: _pageControllerTop,
+      onPageChanged: (index) {
+        setState(() {
+          _currentPageIndexTop = index;
+        });
+        handlePageChangeTop(index, itemCount);
+      },
+      itemCount: itemCount + 2,
+      itemBuilder: (context, index) {
+        final actualIndex = getActualIndex(index, itemCount);
+        return buildCardItem(topProducts[actualIndex]);
+      },
+    ),
+  );
+}
 
-    return Container(
-      height: 240,
-      child: PageView.builder(
-        controller: _pageControllerLower,
-        onPageChanged: (index) {
-          setState(() {
-            _currentPageIndexLower = index;
-          });
-          handlePageChangeLower(index, itemCount);
-        },
-        itemCount: itemCount + 2,
-        itemBuilder: (context, index) {
-          final actualIndex = getActualIndex(index, itemCount);
-          return buildCardItem(lowerProducts[actualIndex]);
-        },
-      ),
-    );
+Widget buildCardSetLower(List<Map<String, dynamic>> lowerProducts) {
+  if (lowerProducts.isEmpty) {
+    return Center(child: Text('No Lower available'));
   }
+
+  final itemCount = lowerProducts.length;
+  double containerHeight = MediaQuery.of(context).size.height * 0.25; 
+
+  return Container(
+    height: containerHeight,
+    child: PageView.builder(
+      controller: _pageControllerLower,
+      onPageChanged: (index) {
+        setState(() {
+          _currentPageIndexLower = index;
+        });
+        handlePageChangeLower(index, itemCount);
+      },
+      itemCount: itemCount + 2,
+      itemBuilder: (context, index) {
+        final actualIndex = getActualIndex(index, itemCount);
+        return buildCardItem(lowerProducts[actualIndex]);
+      },
+    ),
+  );
+}
 
   Widget buildCardItem(Map<String, dynamic> product) {
     final productName = product['p_name'] ?? 'No Name';

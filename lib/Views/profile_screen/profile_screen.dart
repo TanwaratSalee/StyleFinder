@@ -121,13 +121,13 @@ class _ProfileScreenState extends State<ProfileScreen>
                     TabBar(
                       controller: _favoriteTabController,
                       labelStyle: const TextStyle(
-                          fontSize: 15, fontFamily: medium, color: greyColor),
+                          fontSize: 16, fontFamily: medium, color: greyColor),
                       unselectedLabelStyle: const TextStyle(
                           fontSize: 14, fontFamily: medium, color: greyColor),
                       tabs: [
                         const Tab(text: 'Product'),
-                        const Tab(text: 'Match'),
-                        const Tab(text: 'User Match'),
+                        const Tab(text: 'Online Matchs'),
+                        const Tab(text: 'My Matches'),
                       ],
                       unselectedLabelColor: greyColor,
                       labelColor: primaryApp,
@@ -874,7 +874,7 @@ Widget buildMatchTab() {
           crossAxisCount: 2, 
           crossAxisSpacing: 8,
           mainAxisSpacing: 8,
-          childAspectRatio: 8 / 9, 
+          childAspectRatio: 8 / 10, 
         ),
         itemCount: filteredData.length,
         itemBuilder: (context, index) {

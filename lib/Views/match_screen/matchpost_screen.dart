@@ -2,6 +2,7 @@ import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 
 class MatchPostProduct extends StatefulWidget {
   final Map<String, dynamic> topProduct;
@@ -46,15 +47,17 @@ class _MatchPostProductState extends State<MatchPostProduct> {
               title: 'Post',
               textColor: whiteColor,
               onPress: () {
-                controller.addToPostByUserMatch(
-                  widget.topProduct['p_name'],
-                  widget.lowerProduct['p_name'],
-                  context,
-                  controller.selectedGender.value,
-                  List.from(controller.selectedCollections), // Ensure a copy is passed
-                  explanationController.text,
-                );
-                resetSelections();
+                if (validateInputs()) {
+                  controller.addToPostByUserMatch(
+                    widget.topProduct['p_name'],
+                    widget.lowerProduct['p_name'],
+                    context,
+                    controller.selectedGender.value,
+                    List.from(controller.selectedCollections), // Ensure a copy is passed
+                    explanationController.text,
+                  );
+                  resetSelections();
+                }
               },
             ),
           ),
@@ -283,6 +286,32 @@ class _MatchPostProductState extends State<MatchPostProduct> {
         controller.selectedCollections.remove(collection);
       }
     });
+  }
+
+  bool validateInputs() {
+    if (controller.selectedGender.value.isEmpty) {
+      showSnackbar('Please select a suitable gender.');
+      return false;
+    }
+    if (controller.selectedCollections.isEmpty) {
+      showSnackbar('Please select a collection suitable for the outfit.');
+      return false;
+    }
+    if (explanationController.text.isEmpty) {
+      showSnackbar('Please explain the clothing matching.');
+      return false;
+    }
+    return true;
+  }
+
+  void showSnackbar(String message) {
+    Get.snackbar(
+      'Error',
+      message,
+      backgroundColor: Colors.red,
+      colorText: Colors.white,
+      snackPosition: SnackPosition.BOTTOM,
+    );
   }
 
   Widget buildGenderSelector({

@@ -265,7 +265,9 @@ Widget build(BuildContext context) {
                                         borderRadius: BorderRadius.only(topRight: Radius.circular(14), topLeft: Radius.circular(14)),
                                         child: Image.network(
                                           product['p_imgs'][0],
-                                          height: MediaQuery.of(context).size.height * 0.46,
+                                          height: MediaQuery.of(context).size.height < 855
+                                            ? MediaQuery.of(context).size.height * 0.41 
+                                            : MediaQuery.of(context).size.height * 0.46,
                                           width: MediaQuery.of(context).size.width,
                                           fit: BoxFit.cover,
                                         ),
