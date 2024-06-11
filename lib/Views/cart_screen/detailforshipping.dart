@@ -68,7 +68,7 @@ class DetailForShipping extends StatelessWidget {
             },
             color: primaryApp,
             textColor: whiteColor,
-            title: "Confirm",
+            title: "Confirm order information",
           ),
         ).box.padding(EdgeInsets.symmetric(vertical: 12)).white.make(),
       ),
@@ -151,7 +151,10 @@ class DetailForShipping extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 12),
                           child: Row(
                             children: [
-                              Image.asset(iconsStore, width: 18,),
+                              Image.asset(
+                                iconsStore,
+                                width: 18,
+                              ),
                               10.widthBox,
                               Text(sellerName)
                                   .text
@@ -183,7 +186,9 @@ class DetailForShipping extends StatelessWidget {
                                         .make(),
                                     const SizedBox(width: 5),
                                     Image.network(item['img'],
-                                        width: 50, height: 60, fit: BoxFit.cover),
+                                        width: 50,
+                                        height: 60,
+                                        fit: BoxFit.cover),
                                     const SizedBox(width: 15),
                                     Expanded(
                                         child: Column(
@@ -202,12 +207,16 @@ class DetailForShipping extends StatelessWidget {
                                             .make(),
                                         Text(
                                           '$itemPrice Bath',
-                                          style: const TextStyle(color: greyDark),
+                                          style:
+                                              const TextStyle(color: greyDark),
                                         ),
                                       ],
                                     )),
                                   ],
-                                ).box.padding(EdgeInsets.only(bottom: 5)).make(),
+                                )
+                                    .box
+                                    .padding(EdgeInsets.only(bottom: 5))
+                                    .make(),
                               ],
                             );
                           },
@@ -219,12 +228,9 @@ class DetailForShipping extends StatelessWidget {
                   5.heightBox,
                   Row(
                     children: [
-                      Text("Total   $formattedPrice  Bath",)
-                          .text
-                          .size(14)
-                          .color(greyDark)
-                          .fontFamily(medium)
-                          .make(),
+                      Text(
+                        "Total   $formattedPrice  Bath",
+                      ).text.size(14).color(greyDark).fontFamily(medium).make(),
                     ],
                   ).box.padding(EdgeInsets.only(left: 15)).make(),
                 ],
@@ -232,7 +238,7 @@ class DetailForShipping extends StatelessWidget {
                   .box
                   .white
                   .border(color: greyThin)
-                  .padding(EdgeInsets.symmetric(horizontal:  22, vertical: 15))
+                  .padding(EdgeInsets.symmetric(horizontal: 22, vertical: 15))
                   .rounded
                   .make()
             ],
