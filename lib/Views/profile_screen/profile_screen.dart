@@ -777,7 +777,7 @@ Widget buildMatchTab() {
                     children: [
                       TextButton(
                         onPressed: () {
-                          Navigator.of(context).pop(); // Close the dialog
+                          Navigator.of(context).pop(); 
                         },
                         child: Text(
                           "Cancel",
@@ -788,14 +788,14 @@ Widget buildMatchTab() {
                       TextButton(
                         onPressed: () async {
                           await FirebaseFirestore.instance
-                              .collection('usermixandmatchs')
+                              .collection('usermixandmatch')
                               .doc(docIdTop)
                               .delete();
                           await FirebaseFirestore.instance
-                              .collection('usermixandmatchs')
+                              .collection('usermixandmatch')
                               .doc(docIdLower)
                               .delete();
-                          Navigator.of(context).pop(); // Close the dialog
+                          Navigator.of(context).pop(); 
                         },
                         child: Text(
                           "Delete",

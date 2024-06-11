@@ -969,21 +969,17 @@ class NewsScreen extends StatelessWidget {
 //         return Center(child: CircularProgressIndicator());
 //       }
 //       var data = snapshot.data!.docs;
-
 //       String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
-
 //       // Filter posts by current user ID
 //       var filteredData = data.where((doc) {
 //         var docData = doc.data() as Map<String, dynamic>;
 //         return docData['posted_by'] == currentUserUID;
 //       }).toList();
-
 //       if (filteredData.isEmpty) {
 //         return Center(
 //           child: Text("No posts available!", style: TextStyle(color: greyDark)),
 //         );
 //       }
-
 //       return GridView.builder(
 //         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
 //           crossAxisCount: 2,
@@ -1008,12 +1004,10 @@ class NewsScreen extends StatelessWidget {
 //           var description = docData['p_desc'] ?? '';
 //           var views = docData['views'] ?? 0;
 //           var gender = docData['p_sex'] ?? '';
-
 //           String totalPrice = (int.parse(docData['p_price_top']) + int.parse(docData['p_price_lower'])).toString();
 //           var posted_by = currentUserUID;
 //           var posted_name = docData['posted_name'];
 //           var posted_img = docData['posted_img'];
-
 //           return GestureDetector(
 //             onTap: () {
 //               Get.to(() => MatchPostsDetails(

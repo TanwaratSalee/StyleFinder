@@ -131,16 +131,13 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
     }
   }
 
-  void navigateToUserProfile(
-      String userId, String postedName, String postedImg) {
-    Get.to(() => UserProfileScreen(
-        userId: userId, postedName: postedName, postedImg: postedImg));
+  void navigateToUserProfile(String userId, String postedName, String postedImg) {
+    Get.to(() => UserProfileScreen(userId: userId, postedName: postedName, postedImg: postedImg));
   }
 
   @override
   Widget build(BuildContext context) {
-    bool isCurrentUser =
-        widget.posted_by == FirebaseAuth.instance.currentUser?.uid;
+    bool isCurrentUser = widget.posted_by == FirebaseAuth.instance.currentUser?.uid;
 
     return Scaffold(
       backgroundColor: whiteColor,
@@ -219,8 +216,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                           child: Column(
                             children: [
                               GestureDetector(
-                                onTap: () =>
-                                    navigateToItemDetails(widget.productName1),
+                                onTap: () => navigateToItemDetails(widget.productName1),
                                 child: Container(
                                   child: Center(
                                     child: ClipRRect(
@@ -285,8 +281,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                           child: Column(
                             children: [
                               GestureDetector(
-                                onTap: () =>
-                                    navigateToItemDetails(widget.productName2),
+                                onTap: () => navigateToItemDetails(widget.productName2),
                                 child: Container(
                                   child: Center(
                                     child: ClipRRect(
@@ -344,16 +339,12 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                                         width: 50,
                                         height: 50,
                                         child: ClipOval(
-                                          child: widget.posted_img != null
-                                              ? Image.network(
-                                                  widget.posted_img,
-                                                  fit: BoxFit.cover,
-                                                )
-                                              : Icon(
-                                                  Icons.person,
-                                                  size: 50,
-                                                  color: Colors.grey,
-                                                ),
+                                          child: Image.network(
+                                            widget.posted_img,
+                                            width: 50,
+                                            height: 50,
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
                                       )
                                         .box
@@ -381,8 +372,10 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                           SizedBox(width: 10),
                           GestureDetector(
                             onTap: () {
-                              navigateToUserProfile(widget.posted_by,
-                                  widget.posted_name, widget.posted_img);
+                              navigateToUserProfile(
+                                  widget.posted_by,
+                                  widget.posted_name,
+                                  widget.posted_img);
                             },
                             child: Container(
                               margin: EdgeInsets.only(right: 12),
