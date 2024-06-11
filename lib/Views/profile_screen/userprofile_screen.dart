@@ -30,14 +30,21 @@ class UserProfileScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(height: 10),
-                      postedImg.isNotEmpty
-                          ? Image.network(
-                              postedImg,
-                              height: 150,
-                              width: 165,
-                              fit: BoxFit.cover,
-                            )
-                          : SizedBox(height: 150, width: 165, child: Icon(Icons.person, size: 100)),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(100),
+                        child: postedImg.isNotEmpty
+                            ? Image.network(
+                                postedImg,
+                                height: 150,
+                                width: 165,
+                                fit: BoxFit.cover,
+                              )
+                            : SizedBox(
+                                height: 150,
+                                width: 165,
+                                child: Icon(Icons.person, size: 100),
+                              ),
+                      ),
                       const SizedBox(height: 10),
                       Text(
                         postedName,
