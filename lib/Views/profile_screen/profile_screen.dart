@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/match_screen/matchpost_details.dart';
 import 'package:flutter_finalproject/Views/profile_screen/menu_setting_screen.dart';
 import 'package:get/get.dart';
@@ -121,13 +120,13 @@ class _ProfileScreenState extends State<ProfileScreen>
                     TabBar(
                       controller: _favoriteTabController,
                       labelStyle: const TextStyle(
-                          fontSize: 15, fontFamily: medium, color: greyColor),
+                          fontSize: 16, fontFamily: medium, color: greyColor),
                       unselectedLabelStyle: const TextStyle(
                           fontSize: 14, fontFamily: medium, color: greyColor),
                       tabs: [
                         const Tab(text: 'Product'),
-                        const Tab(text: 'Match'),
-                        const Tab(text: 'User Match'),
+                        const Tab(text: 'Online Matchs'),
+                        const Tab(text: 'My Matches'),
                       ],
                       unselectedLabelColor: greyColor,
                       labelColor: primaryApp,
@@ -789,11 +788,11 @@ Widget buildMatchTab() {
                       TextButton(
                         onPressed: () async {
                           await FirebaseFirestore.instance
-                              .collection('usermixmatchs')
+                              .collection('usermixandmatchs')
                               .doc(docIdTop)
                               .delete();
                           await FirebaseFirestore.instance
-                              .collection('usermixmatchs')
+                              .collection('usermixandmatchs')
                               .doc(docIdLower)
                               .delete();
                           Navigator.of(context).pop(); // Close the dialog
@@ -845,7 +844,7 @@ Widget buildMatchTab() {
   Widget buildPostTab() {
   return StreamBuilder<QuerySnapshot>(
     stream: FirebaseFirestore.instance
-        .collection('postusermixmatchs')
+        .collection('usermixandmatch')
         .orderBy('views', descending: true)
         .snapshots(),
     builder: (context, snapshot) {
@@ -874,7 +873,7 @@ Widget buildMatchTab() {
           crossAxisCount: 2, 
           crossAxisSpacing: 8,
           mainAxisSpacing: 8,
-          childAspectRatio: 8 / 9, 
+          childAspectRatio: 8 / 10, 
         ),
         itemCount: filteredData.length,
         itemBuilder: (context, index) {
@@ -893,7 +892,9 @@ Widget buildMatchTab() {
           var description = docData['p_desc'] ?? '';
           var views = docData['views'] ?? 0;
           var gender = docData['p_sex'] ?? '';
+          var posted_name = docData['posted_name'] ?? '';
           var posted_by = docData['posted_by'] ?? '';
+          var posted_img = docData['posted_img'] ?? '';
 
           return GestureDetector(
             onTap: () {
@@ -912,6 +913,8 @@ Widget buildMatchTab() {
                     description: description,
                     gender: gender,
                     posted_by: posted_by,
+                    posted_name: posted_name,
+                    posted_img: posted_img,
                   ));
             },
             child: Container(

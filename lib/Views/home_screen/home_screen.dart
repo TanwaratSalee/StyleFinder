@@ -265,7 +265,9 @@ Widget build(BuildContext context) {
                                         borderRadius: BorderRadius.only(topRight: Radius.circular(14), topLeft: Radius.circular(14)),
                                         child: Image.network(
                                           product['p_imgs'][0],
-                                          height: MediaQuery.of(context).size.height * 0.46,
+                                          height: MediaQuery.of(context).size.height < 855
+                                            ? MediaQuery.of(context).size.height * 0.41 
+                                            : MediaQuery.of(context).size.height * 0.47,
                                           width: MediaQuery.of(context).size.width,
                                           fit: BoxFit.cover,
                                         ),
@@ -357,7 +359,7 @@ void showModalRightSheet({
     context: context,
     barrierDismissible: true,
     barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-    barrierColor: blackColor,
+    barrierColor: Colors.black.withOpacity(0.5), 
     transitionDuration: Duration(milliseconds: 200),
     pageBuilder: (BuildContext context, Animation<double> animation,
         Animation<double> secondaryAnimation) {

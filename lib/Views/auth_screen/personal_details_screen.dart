@@ -137,7 +137,7 @@ Widget build(BuildContext context) {
               .fontFamily(bold)
               .size(32)
               .make(),
-          const SizedBox(height: 20),
+          20.heightBox,
           Align(
             alignment: Alignment.topLeft,
             child: const Text('Birthday')

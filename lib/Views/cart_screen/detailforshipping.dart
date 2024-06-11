@@ -81,13 +81,13 @@ class DetailForShipping extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 8),
+                  8.heightBox,
                   Text("Shipping Address")
                       .text
                       .size(20)
                       .fontFamily(semiBold)
                       .make(),
-                  SizedBox(height: 8),
+                  8.heightBox,
                   Row(
                     children: [
                       Icon(Icons.location_on_outlined),

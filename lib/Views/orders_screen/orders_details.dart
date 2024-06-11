@@ -266,7 +266,7 @@ class OrdersDetails extends StatelessWidget {
                               .make(),
                           const SizedBox(width: 5),
                           Image.network(data['orders'][index]['img'],
-                              width: 50, height: 60, fit: BoxFit.cover),
+                              width: 70, height: 80, fit: BoxFit.cover),
                           const SizedBox(width: 15),
                           Expanded(
                             child: Column(

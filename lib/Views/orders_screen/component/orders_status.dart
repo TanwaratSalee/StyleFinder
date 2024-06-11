@@ -22,7 +22,7 @@ Widget orderStatus(
               )
             : SizedBox.shrink(),
       ),
-      SizedBox(height: 8),
+      8.heightBox,
       Text(
         title ?? "",
         style: TextStyle(color: greyDark, fontFamily: regular, fontSize: 12),

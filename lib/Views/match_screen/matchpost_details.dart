@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
+import 'package:flutter_finalproject/Views/profile_screen/userprofile_screen.dart';
+import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
 import 'package:get/get.dart';
@@ -21,7 +21,9 @@ class MatchPostsDetails extends StatefulWidget {
   final List<dynamic> collection;
   final String description;
   final String gender;
+  final String posted_name;
   final String posted_by;
+  final String posted_img;
 
   const MatchPostsDetails({
     required this.productName1,
@@ -37,7 +39,9 @@ class MatchPostsDetails extends StatefulWidget {
     required this.collection,
     required this.description,
     required this.gender,
-    required this.posted_by
+    required this.posted_by,
+    required this.posted_name,
+    required this.posted_img,
   });
 
   @override
@@ -45,7 +49,6 @@ class MatchPostsDetails extends StatefulWidget {
 }
 
 class _MatchPostsDetailsState extends State<MatchPostsDetails> {
-  bool isFavorited = false;
   late final ProductController controller;
 
   @override
@@ -87,7 +90,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
 
   void incrementViewCount() async {
     await FirebaseFirestore.instance
-        .collection('postusermixmatchs')
+        .collection('usermixandmatch')
         .where('p_name_top', isEqualTo: widget.productName1)
         .where('p_name_lower', isEqualTo: widget.productName2)
         .limit(1)
@@ -96,7 +99,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
       if (querySnapshot.docs.isNotEmpty) {
         var doc = querySnapshot.docs.first;
         FirebaseFirestore.instance
-            .collection('postusermixmatchs')
+            .collection('usermixandmatch')
             .doc(doc.id)
             .update({
           'views': FieldValue.increment(1),
@@ -113,12 +116,36 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
     });
   }
 
+  void navigateToItemDetails(String productName) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('products')
+        .where('p_name', isEqualTo: productName)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      var productData = querySnapshot.docs.first.data();
+      Get.to(() => ItemDetails(title: productName, data: productData));
+    } else {
+      // Handle product not found
+      print('Product not found');
+    }
+  }
+
+  void navigateToUserProfile(
+      String userId, String postedName, String postedImg) {
+    Get.to(() => UserProfileScreen(
+        userId: userId, postedName: postedName, postedImg: postedImg));
+  }
+
   @override
   Widget build(BuildContext context) {
+    bool isCurrentUser =
+        widget.posted_by == FirebaseAuth.instance.currentUser?.uid;
+
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: const Text('Match Detail')
+        title: const Text('Match Product')
             .text
             .size(26)
             .fontFamily(semiBold)
@@ -127,39 +154,62 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
         centerTitle: true,
         elevation: 0,
         actions: <Widget>[
-          Obx(() => IconButton(
-                onPressed: () {
-                  print("IconButton pressed");
-                  bool isFav = !controller.isFav.value;
-                  if (isFav == true) {
-                    controller.addToWishlistMixMatch(
-                        widget.productName1,
-                        widget.productName2,
-                        widget.vendor_id,
-                        _updateIsFav,
-                        context);
-                  } else {
-                    controller.removeToWishlistMixMatch(
-                        widget.productName1,
-                        widget.productName2,
-                        widget.vendor_id,
-                        _updateIsFav,
-                        context);
-                  }
-                  print("isFav after toggling: $isFav");
-                },
-                icon: controller.isFav.value
-                    ? Image.asset(icTapFavoriteButton, width: 23)
-                    : Image.asset(icFavoriteButton, width: 23),
-              ).box.padding(EdgeInsets.only(right: 10)).make()),
+          if (isCurrentUser)
+            PopupMenuButton<String>(
+              onSelected: (value) {
+                switch (value) {
+                  case 'Edit':
+                    // เพิ่มโค้ดสำหรับการแก้ไข
+                    break;
+                  case 'Delete':
+                    // เพิ่มโค้ดสำหรับการลบ
+                    break;
+                }
+              },
+              itemBuilder: (BuildContext context) {
+                return {'Edit', 'Delete'}.map((String choice) {
+                  return PopupMenuItem<String>(
+                    value: choice,
+                    child: Text(choice),
+                  );
+                }).toList();
+              },
+              icon: Icon(Icons.more_vert),
+            )
+          else
+            Obx(() => IconButton(
+                  onPressed: () {
+                    print("IconButton pressed");
+                    bool isFav = !controller.isFav.value;
+                    if (isFav == true) {
+                      controller.addToWishlistMixMatch(
+                          widget.productName1,
+                          widget.productName2,
+                          widget.vendor_id,
+                          _updateIsFav,
+                          context);
+                    } else {
+                      controller.removeToWishlistMixMatch(
+                          widget.productName1,
+                          widget.productName2,
+                          widget.vendor_id,
+                          _updateIsFav,
+                          context);
+                    }
+                    print("isFav after toggling: $isFav");
+                  },
+                  icon: controller.isFav.value
+                      ? Image.asset(icTapFavoriteButton, width: 23)
+                      : Image.asset(icFavoriteButton, width: 23),
+                ).box.padding(EdgeInsets.only(right: 10)).make()),
         ],
       ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(10, 25, 10, 0),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
                     Row(
@@ -168,35 +218,42 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                         Expanded(
                           child: Column(
                             children: [
-                              Container(
-                                child: Center(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(14),
-                                      topLeft: Radius.circular(14),
-                                    ),
-                                    child: Image.network(
-                                      widget.productImage1,
-                                      height: 160,
-                                      width: 220,
-                                      fit: BoxFit.cover,
+                              GestureDetector(
+                                onTap: () =>
+                                    navigateToItemDetails(widget.productName1),
+                                child: Container(
+                                  child: Center(
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(14),
+                                        topLeft: Radius.circular(14),
+                                      ),
+                                      child: Image.network(
+                                        widget.productImage1,
+                                        height: 150,
+                                        width: 165,
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                               5.heightBox,
-                              Text(
-                                widget.productName1,
-                                softWrap: true,
-                                overflow: TextOverflow.clip,
-                              )
-                                  .text
-                                  .color(greyDark)
-                                  .fontFamily(bold)
-                                  .size(16)
-                                  .ellipsis
-                                  .maxLines(1)
-                                  .make(),
+                              SizedBox(
+                                width: 135,
+                                child: Text(
+                                  widget.productName1,
+                                  softWrap: true,
+                                  overflow: TextOverflow.clip,
+                                )
+                                    .text
+                                    .color(greyDark)
+                                    .fontFamily(bold)
+                                    .size(16)
+                                    .ellipsis
+                                    .maxLines(1)
+                                    .make(),
+                              ),
                               Text(
                                 "${NumberFormat('#,##0').format(double.parse(widget.price1).toInt())} Bath",
                               )
@@ -227,31 +284,38 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                         Expanded(
                           child: Column(
                             children: [
-                              Container(
-                                child: Center(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(14),
-                                      topLeft: Radius.circular(14),
-                                    ),
-                                    child: Image.network(
-                                      widget.productImage2,
-                                      height: 160,
-                                      width: 220,
-                                      fit: BoxFit.cover,
+                              GestureDetector(
+                                onTap: () =>
+                                    navigateToItemDetails(widget.productName2),
+                                child: Container(
+                                  child: Center(
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(14),
+                                        topLeft: Radius.circular(14),
+                                      ),
+                                      child: Image.network(
+                                        widget.productImage2,
+                                        height: 150,
+                                        width: 165,
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                               5.heightBox,
-                              Text(widget.productName2)
-                                  .text
-                                  .color(greyDark)
-                                  .fontFamily(bold)
-                                  .size(16)
-                                  .ellipsis
-                                  .maxLines(1)
-                                  .make(),
+                              SizedBox(
+                                width: 135,
+                                child: Text(widget.productName2)
+                                    .text
+                                    .color(greyDark)
+                                    .fontFamily(bold)
+                                    .size(18)
+                                    .ellipsis
+                                    .maxLines(1)
+                                    .make(),
+                              ),
                               Text(
                                 "${NumberFormat('#,##0').format(double.parse(widget.price2).toInt())} Bath",
                               )
@@ -261,94 +325,84 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                                   .size(14)
                                   .make(),
                             ],
-                          )
-                              .box
-                              .border(color: greyLine)
-                              .rounded
-                              .make(),
+                          ).box.border(color: greyLine).rounded.make(),
                         ),
                       ],
                     ),
                     30.heightBox,
                     Container(
-                    width: double.infinity,
-                    height: 70,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Row(
-                            children: [
-                              SizedBox(width: 12),
-                              Obx(() {
-                                String imageUrl = controller.vendorImageUrl.value;
-                                return imageUrl.isNotEmpty
+                      width: double.infinity,
+                      height: 70,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Row(
+                              children: [
+                                SizedBox(width: 12),
+                                widget.posted_img.isNotEmpty
                                     ? Container(
                                         width: 50,
                                         height: 50,
                                         child: ClipOval(
-                                          child: Image.network(
-                                            imageUrl,
-                                            width: 50,
-                                            height: 50,
-                                            fit: BoxFit.cover,
-                                          ),
+                                          child: widget.posted_img != null
+                                              ? Image.network(
+                                                  widget.posted_img,
+                                                  fit: BoxFit.cover,
+                                                )
+                                              : Icon(
+                                                  Icons.person,
+                                                  size: 50,
+                                                  color: Colors.grey,
+                                                ),
                                         ),
                                       )
                                         .box
                                         .border(color: greyLine, width: 1.5)
                                         .roundedFull
                                         .make()
-                                    : SizedBox.shrink();
-                              }),
-                              SizedBox(width: 10),
-                              Expanded(
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    widget.posted_by.toUpperCase(),
-                                    style: TextStyle(
-                                      fontFamily: medium,
-                                      color: blackColor,
-                                      fontSize: 18,
+                                    : SizedBox.shrink(),
+                                SizedBox(width: 10),
+                                Expanded(
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      widget.posted_name.toUpperCase(),
+                                      style: TextStyle(
+                                        fontFamily: medium,
+                                        color: blackColor,
+                                        fontSize: 18,
+                                      ),
                                     ),
                                   ),
                                 ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          GestureDetector(
+                            onTap: () {
+                              navigateToUserProfile(widget.posted_by,
+                                  widget.posted_name, widget.posted_img);
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(right: 12),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 8),
+                              decoration: BoxDecoration(
+                                color: primaryApp,
+                                borderRadius: BorderRadius.circular(20),
                               ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        GestureDetector(
-                          onTap: () {
-                            Get.to(
-                              () => StoreScreen(vendorId: widget.vendor_id),
-                            );
-                          },
-                          child: Container(
-                            margin: EdgeInsets.only(right: 12),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 8),
-                            decoration: BoxDecoration(
-                              color: primaryApp,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: const Text(
-                              'See Store',
-                              style: TextStyle(
-                                  color: whiteColor, fontFamily: regular),
+                              child: const Text(
+                                'See Store',
+                                style: TextStyle(
+                                    color: whiteColor, fontFamily: regular),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    )
-                        .box
-                        .white
-                        .roundedSM
-                        .outerShadow
-                        .margin(EdgeInsets.symmetric(horizontal: 12))
-                        .make(),
-                  ),
-                  30.heightBox,
+                        ],
+                      ).box.white.roundedSM.outerShadow.make(),
+                    ),
+                    20.heightBox,
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -359,13 +413,14 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                       children: [
                         SizedBox(height: 10),
                         Container(
-                          height: 50,
+                          height: 40,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemCount: widget.gender.split(' ').length,
                             itemBuilder: (context, index) {
                               String item = widget.gender.split(' ')[index];
-                              String capitalizedItem = item[0].toUpperCase() + item.substring(1);
+                              String capitalizedItem =
+                                  item[0].toUpperCase() + item.substring(1);
                               return Container(
                                 alignment: Alignment.center,
                                 child: capitalizedItem.text
@@ -378,16 +433,15 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                                   .color(thinPrimaryApp)
                                   .margin(EdgeInsets.symmetric(horizontal: 6))
                                   .roundedLg
-                                  .padding(EdgeInsets.symmetric(horizontal: 24, vertical: 12))
+                                  .padding(EdgeInsets.symmetric(
+                                      horizontal: 24, vertical: 12))
                                   .make();
                             },
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    10.heightBox,
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -398,7 +452,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                       children: [
                         SizedBox(height: 10),
                         Container(
-                          height: 50,
+                          height: 40,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemCount: widget.collection.length,
@@ -427,28 +481,33 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Container(
-                        width: double.infinity,
-                        height: 150,
-                        decoration: BoxDecoration(
-                          color: greyThin,
-                          borderRadius: BorderRadius.circular(10),
+                    10.heightBox,
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'The reason for match',
+                        style: TextStyle(
+                          fontFamily: regular,
+                          fontSize: 16,
                         ),
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              widget.description,
-                              style: TextStyle(
-                                color: blackColor,
-                                fontSize: 11,
-                              ),
+                      ),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        color: greyThin,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Padding(
+                          padding: EdgeInsets.all(12),
+                          child: Text(
+                            widget.description,
+                            style: TextStyle(
+                              color: blackColor,
+                              fontSize: 14,
                             ),
                           ),
                         ),
@@ -458,8 +517,8 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

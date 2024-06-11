@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
@@ -87,6 +89,21 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
     });
   }
 
+  void navigateToItemDetails(String productName) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('products')
+        .where('p_name', isEqualTo: productName)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      var productData = querySnapshot.docs.first.data();
+      Get.to(() => ItemDetails(title: productName, data: productData));
+    } else {
+      // Handle product not found
+      print('Product not found');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -140,45 +157,47 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                       Expanded(
                         child: Column(
                           children: [
-                            Container(
-                              child: Center(
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(14),
-                                    topLeft: Radius.circular(14),
-                                  ),
-                                  child: Image.network(
-                                    widget.productImage1,
-                                    height: 150,
-                                    width: 165,
-                                    fit: BoxFit.cover,
+                            GestureDetector(
+                              onTap: () => navigateToItemDetails(widget.productName1),
+                              child: Container(
+                                child: Center(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(14),
+                                      topLeft: Radius.circular(14),
+                                    ),
+                                    child: Image.network(
+                                      widget.productImage1,
+                                      height: 150,
+                                      width: 165,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                             5.heightBox,
                             SizedBox(
-                              width: 135,
-                              child: Text(
-                                widget.productName1,
-                                softWrap: true,
-                                overflow: TextOverflow.clip,
-                              )
-                                  .text
-                                  .color(greyDark)
-                                  .fontFamily(bold)
-                                  .size(16)
-                                  .ellipsis
-                                  .maxLines(1)
-                                  .make(),
-                            ),
+                                width: 135,
+                                child: Text(
+                                  widget.productName1,
+                                  softWrap: true,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: greyDark,
+                                    fontSize: 14,
+                                    fontFamily: semiBold,
+                                  ),
+                                  maxLines: 1,
+                                ),
+                              ),
                             Text(
                               "${NumberFormat('#,##0').format(double.parse(widget.price1.toString()).toInt())} Bath",
                             )
                                 .text
                                 .color(greyDark)
                                 .fontFamily(regular)
-                                .size(14)
+                                .size(16)
                                 .make(),
                           ],
                         ).box.border(color: greyLine).rounded.make(),
@@ -202,18 +221,21 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                       Expanded(
                         child: Column(
                           children: [
-                            Container(
-                              child: Center(
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(14),
-                                    topLeft: Radius.circular(14),
-                                  ),
-                                  child: Image.network(
-                                    widget.productImage2,
-                                    height: 150,
-                                    width: 165,
-                                    fit: BoxFit.cover,
+                            GestureDetector(
+                              onTap: () => navigateToItemDetails(widget.productName2),
+                              child: Container(
+                                child: Center(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(14),
+                                      topLeft: Radius.circular(14),
+                                    ),
+                                    child: Image.network(
+                                      widget.productImage2,
+                                      height: 150,
+                                      width: 165,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -236,7 +258,7 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                                 .text
                                 .color(greyDark)
                                 .fontFamily(regular)
-                                .size(14)
+                                .size(16)
                                 .make(),
                           ],
                         ).box.border(color: greyLine).rounded.make(),
@@ -336,11 +358,8 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                           children: [
                             Text(
                               'Suitable for gender',
-                              style: TextStyle(
-                                fontFamily: regular,
-                                fontSize: 16,
-                              ),
-                            ),
+                              
+                            ).text.fontFamily(medium).size(16).make(),
                           ],
                         ),
                         SizedBox(
@@ -362,7 +381,7 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                                       "${item[0].toUpperCase()}${item.substring(1)}",
                                     )
                                         .text
-                                        .size(14)
+                                        .size(16)
                                         .color(greyDark)
                                         .fontFamily(medium)
                                         .make(),
@@ -401,7 +420,7 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                                       "${item[0].toUpperCase()}${item.substring(1)}",
                                     )
                                         .text
-                                        .size(14)
+                                        .size(16)
                                         .color(greyDark)
                                         .fontFamily(medium)
                                         .make(),
@@ -419,9 +438,7 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                             ),
                           ],
                         ),
-                        const SizedBox(
-                    height: 10,
-                  ),
+                         10.heightBox,
                   Text(
                     'The reason for match',
                     style: TextStyle(
@@ -429,18 +446,24 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                       fontSize: 16,
                     ),
                   ),
-                  SizedBox(height: 8),
+                  8.heightBox,
                   Container(
-                    padding: EdgeInsets.all(8),
                     width: double.infinity,
                     height: 100,
                     decoration: BoxDecoration(
                       color: greyThin,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Text(
-                      widget.description,
-                    ).text.size(14).black.make(),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Text(
+                        widget.description,
+                        style: TextStyle(
+                              color: blackColor,
+                              fontSize: 14,
+                            ),
+                      ),
+                    )
                   )
                       ],
                     ),

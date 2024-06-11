@@ -49,7 +49,7 @@ class ForgotScreen extends StatelessWidget {
               readOnly: false,
               controller: _emailController,
             ),
-            const SizedBox(height: 20),
+            20.heightBox,
             tapButton(
               title: 'Send Code',
               color: primaryApp,
@@ -93,7 +93,7 @@ Future<void> popupForgotPassword(BuildContext context, String email) async {
                     height: 250,
                     fit: BoxFit.cover,
                   ).box.make(),
-                  const SizedBox(height: 20),
+                  20.heightBox,
                   const Text(
                     'Check your email to reset your password!',
                     textAlign: TextAlign.center,
@@ -103,7 +103,7 @@ Future<void> popupForgotPassword(BuildContext context, String email) async {
                       fontSize: 20,
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  20.heightBox,
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();

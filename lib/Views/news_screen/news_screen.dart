@@ -1,6 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/match_screen/matchpost_details.dart';
 import 'package:flutter_finalproject/Views/news_screen/allstore_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
@@ -49,7 +47,7 @@ class NewsScreen extends StatelessWidget {
                       VxSwiper.builder(
                         aspectRatio: 16 / 15,
                         autoPlay: true,
-                        height: 195,
+                        height: 180,
                         enlargeCenterPage: true,
                         itemCount: sliderslist.length,
                         itemBuilder: (context, index) {
@@ -216,8 +214,8 @@ class NewsScreen extends StatelessWidget {
                                           gridDelegate:
                                               SliverGridDelegateWithFixedCrossAxisCount(
                                             crossAxisCount: 2,
-                                            childAspectRatio: 10 / 4,
-                                            mainAxisSpacing: 3,
+                                            childAspectRatio: 9 / 4,
+                                            mainAxisSpacing: 8,
                                             crossAxisSpacing: 10,
                                           ),
                                           itemCount: topProductsData.length,
@@ -477,13 +475,12 @@ class NewsScreen extends StatelessWidget {
                                 ),
                                 Expanded(
                                   child: Padding(
-                                    padding:
-                                        const EdgeInsets.only(top: 15),
+                                    padding: const EdgeInsets.only(top: 15),
                                     child: TabBarView(
                                       controller: tabController,
                                       children: [
-                                        buildProductMathGrids(category),
-                                        buildMatchGeneralTab(),
+                                        buildProductMatch(category),
+                                        buildGeneralMatch(),
                                       ],
                                     ),
                                   ),
@@ -503,7 +500,7 @@ class NewsScreen extends StatelessWidget {
                                           backgroundColor:
                                               tabController.index == 0
                                                   ? primaryApp
-                                                  : greyColor,
+                                                  : Colors.grey,
                                         ),
                                         SizedBox(width: 10),
                                         CircleAvatar(
@@ -511,7 +508,7 @@ class NewsScreen extends StatelessWidget {
                                           backgroundColor:
                                               tabController.index == 1
                                                   ? primaryApp
-                                                  : greyColor,
+                                                  : Colors.grey,
                                         ),
                                       ],
                                     );
@@ -533,7 +530,7 @@ class NewsScreen extends StatelessWidget {
     );
   }
 
-  Widget buildProductMathGrids(String category) {
+  Widget buildProductMatch(String category) {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance.collection('products').snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -657,7 +654,7 @@ class NewsScreen extends StatelessWidget {
                         Image.network(
                           productImage1,
                           width: 75,
-                        height: 80,
+                          height: 80,
                           fit: BoxFit.cover,
                         ),
                         5.widthBox,
@@ -692,8 +689,8 @@ class NewsScreen extends StatelessWidget {
                       children: [
                         Image.network(
                           productImage2,
-                           width: 75,
-                        height: 80,
+                          width: 75,
+                          height: 80,
                           fit: BoxFit.cover,
                         ),
                         3.widthBox,
@@ -767,71 +764,70 @@ class NewsScreen extends StatelessWidget {
     );
   }
 
-  Widget buildMatchGeneralTab() {
-  return StreamBuilder<QuerySnapshot>(
-    stream: FirebaseFirestore.instance
-        .collection('postusermixmatchs')
-        .orderBy('views', descending: true)
-        .snapshots(),
-    builder: (context, snapshot) {
-      if (!snapshot.hasData) {
-        return Center(child: CircularProgressIndicator());
-      }
-      var data = snapshot.data!.docs;
+  Widget buildGeneralMatch() {
+    return StreamBuilder<QuerySnapshot>(
+      stream:
+          FirebaseFirestore.instance.collection('usermixandmatch').snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(child: CircularProgressIndicator());
+        }
+        var data = snapshot.data!.docs;
 
-      String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
+        if (data.isEmpty) {
+          return Center(
+            child:
+                Text("No posts available!", style: TextStyle(color: greyDark)),
+          );
+        }
+        data.shuffle();
+        var limitedData = data.take(4).toList();
 
-      // Filter posts by current user ID
-      var filteredData = data.where((doc) {
-        var docData = doc.data() as Map<String, dynamic>;
-        return docData['posted_by'] == currentUserUID;
-      }).toList();
-
-      if (filteredData.isEmpty) {
-        return Center(
-          child: Text("No posts available!", style: TextStyle(color: greyDark)),
-        );
-      }
-
-      return GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
+        return GridView.builder(
+          physics: const NeverScrollableScrollPhysics(), // Disable scrolling
+          shrinkWrap: true, // Allow the grid to shrink to fit its content
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
             mainAxisSpacing: 7,
             crossAxisSpacing: 7,
             mainAxisExtent: 240,
-        ),
-        itemCount: filteredData.length,
-        itemBuilder: (context, index) {
-          var doc = filteredData[index];
-          var docData = doc.data() as Map<String, dynamic>;
-          var topImage = docData['p_imgs_top'] ?? '';
-          var lowerImage = docData['p_imgs_lower'] ?? '';
-          var productNameTop = docData['p_name_top'] ?? '';
-          var productNameLower = docData['p_name_lower'] ?? '';
-          var priceTop = docData['p_price_top']?.toString() ?? '0';
-          var priceLower = docData['p_price_lower']?.toString() ?? '0';
-          var vendorId = docData['vendor_id'] ?? '';
-          var collections = docData['p_collection'] != null
-              ? List<String>.from(docData['p_collection'])
-              : [];
-          var description = docData['p_desc'] ?? '';
-          var views = docData['views'] ?? 0;
-          var gender = docData['p_sex'] ?? '';
+          ),
+          itemCount: limitedData.length,
+          itemBuilder: (context, index) {
+            var doc = limitedData[index];
+            var docData = doc.data() as Map<String, dynamic>;
+            var topImage = docData['p_imgs_top'] ?? '';
+            var lowerImage = docData['p_imgs_lower'] ?? '';
+            var productNameTop = docData['p_name_top'] ?? '';
+            var productNameLower = docData['p_name_lower'] ?? '';
+            var priceTop = docData['p_price_top']?.toString() ?? '0';
+            var priceLower = docData['p_price_lower']?.toString() ?? '0';
+            var vendorId = docData['vendor_id'] ?? '';
+            var collections = docData['p_collection'] != null
+                ? List<String>.from(docData['p_collection'])
+                : [];
+            var description = docData['p_desc'] ?? '';
+            var views = docData['views'] ?? 0;
+            var gender = docData['p_sex'] ?? '';
 
-          String totalPrice = (int.parse(docData['p_price_top']) + int.parse(docData['p_price_lower'])).toString();
+            String totalPrice = (int.parse(docData['p_price_top']) +
+                    int.parse(docData['p_price_lower']))
+                .toString();
+            var posted_by = docData['posted_by'] ?? '';
+            var posted_name = docData['posted_name'];
+            var posted_img = docData['posted_img'];
 
-          var posted_by = currentUserUID;
-
-          return GestureDetector(
-            onTap: () {
-              Get.to(() => MatchPostsDetails(
+            return GestureDetector(
+              onTap: () {
+                Get.to(() => MatchPostsDetails(
                     productName1: productNameTop,
                     productName2: productNameLower,
                     price1: priceTop,
                     price2: priceLower,
                     productImage1: topImage,
                     productImage2: lowerImage,
-                    totalPrice: (int.parse(priceTop) + int.parse(priceLower)).toString(),
+                    totalPrice: (int.parse(priceTop) + int.parse(priceLower))
+                        .toString(),
                     vendorName1: 'Vendor Name 1',
                     vendorName2: 'Vendor Name 2',
                     vendor_id: vendorId,
@@ -839,84 +835,85 @@ class NewsScreen extends StatelessWidget {
                     description: description,
                     gender: gender,
                     posted_by: posted_by,
-                  ));
-            },
-            child: Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 75,
-                        height: 80,
-                        child: Image.network(
-                          topImage,
-                          fit: BoxFit.cover,
+                    posted_name: posted_name,
+                    posted_img: posted_img));
+              },
+              child: Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 75,
+                          height: 80,
+                          child: Image.network(
+                            topImage,
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 5),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              productNameTop,
-                              style: const TextStyle(
-                                fontFamily: medium,
-                                fontSize: 14,
+                        SizedBox(width: 5),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                productNameTop,
+                                style: const TextStyle(
+                                  fontFamily: medium,
+                                  fontSize: 14,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
                               ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
-                            Text(
-                              "${NumberFormat('#,##0').format(double.parse(priceTop).toInt())} Bath",
-                              style: const TextStyle(color: greyColor),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(width: 8),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 75,
-                        height: 80,
-                        child: Image.network(
-                          lowerImage,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              productNameLower,
-                              style: const TextStyle(
-                                fontFamily: medium,
-                                fontSize: 14,
+                              Text(
+                                "${NumberFormat('#,##0').format(double.parse(priceTop).toInt())} Bath",
+                                style: const TextStyle(color: greyColor),
                               ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
-                            Text(
-                              "${NumberFormat('#,##0').format(double.parse(priceLower).toInt())} Bath",
-                              style: const TextStyle(color: greyColor),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Padding(
+                        SizedBox(width: 8),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 75,
+                          height: 80,
+                          child: Image.network(
+                            lowerImage,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        SizedBox(width: 5),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                productNameLower,
+                                style: const TextStyle(
+                                  fontFamily: medium,
+                                  fontSize: 14,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                              Text(
+                                "${NumberFormat('#,##0').format(double.parse(priceLower).toInt())} Bath",
+                                style: const TextStyle(color: greyColor),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4),
                       child: Row(
                         children: [
@@ -944,22 +941,218 @@ class NewsScreen extends StatelessWidget {
                         ],
                       ),
                     )
-                ],
-              )
-                  .box
+                  ],
+                )
+                    .box
                     .border(color: greyLine)
                     .p8
                     .margin(EdgeInsets.all(2))
                     .roundedSM
                     .make(),
-            ),
-          );
-        },
-      );
-    },
-  );
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
 }
-}
+
+//   Widget buildGeneralMatch() {
+//   return StreamBuilder<QuerySnapshot>(
+//     stream: FirebaseFirestore.instance
+//         .collection('usermixandmatch')
+//         .orderBy('views', descending: true)
+//         .snapshots(),
+//     builder: (context, snapshot) {
+//       if (!snapshot.hasData) {
+//         return Center(child: CircularProgressIndicator());
+//       }
+//       var data = snapshot.data!.docs;
+
+//       String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
+
+//       // Filter posts by current user ID
+//       var filteredData = data.where((doc) {
+//         var docData = doc.data() as Map<String, dynamic>;
+//         return docData['posted_by'] == currentUserUID;
+//       }).toList();
+
+//       if (filteredData.isEmpty) {
+//         return Center(
+//           child: Text("No posts available!", style: TextStyle(color: greyDark)),
+//         );
+//       }
+
+//       return GridView.builder(
+//         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+//           crossAxisCount: 2,
+//             mainAxisSpacing: 7,
+//             crossAxisSpacing: 7,
+//             mainAxisExtent: 240,
+//         ),
+//         itemCount: filteredData.length,
+//         itemBuilder: (context, index) {
+//           var doc = filteredData[index];
+//           var docData = doc.data() as Map<String, dynamic>;
+//           var topImage = docData['p_imgs_top'] ?? '';
+//           var lowerImage = docData['p_imgs_lower'] ?? '';
+//           var productNameTop = docData['p_name_top'] ?? '';
+//           var productNameLower = docData['p_name_lower'] ?? '';
+//           var priceTop = docData['p_price_top']?.toString() ?? '0';
+//           var priceLower = docData['p_price_lower']?.toString() ?? '0';
+//           var vendorId = docData['vendor_id'] ?? '';
+//           var collections = docData['p_collection'] != null
+//               ? List<String>.from(docData['p_collection'])
+//               : [];
+//           var description = docData['p_desc'] ?? '';
+//           var views = docData['views'] ?? 0;
+//           var gender = docData['p_sex'] ?? '';
+
+//           String totalPrice = (int.parse(docData['p_price_top']) + int.parse(docData['p_price_lower'])).toString();
+//           var posted_by = currentUserUID;
+//           var posted_name = docData['posted_name'];
+//           var posted_img = docData['posted_img'];
+
+//           return GestureDetector(
+//             onTap: () {
+//               Get.to(() => MatchPostsDetails(
+//                     productName1: productNameTop,
+//                     productName2: productNameLower,
+//                     price1: priceTop,
+//                     price2: priceLower,
+//                     productImage1: topImage,
+//                     productImage2: lowerImage,
+//                     totalPrice: (int.parse(priceTop) + int.parse(priceLower)).toString(),
+//                     vendorName1: 'Vendor Name 1',
+//                     vendorName2: 'Vendor Name 2',
+//                     vendor_id: vendorId,
+//                     collection: collections,
+//                     description: description,
+//                     gender: gender,
+//                     posted_by: posted_by,
+//                     posted_name: posted_name,
+//                     posted_img: posted_img
+//                   ));
+//             },
+//             child: Container(
+//               child: Column(
+//                 mainAxisAlignment: MainAxisAlignment.start,
+//                 children: [
+//                   Row(
+//                     children: [
+//                       SizedBox(
+//                         width: 75,
+//                         height: 80,
+//                         child: Image.network(
+//                           topImage,
+//                           fit: BoxFit.cover,
+//                         ),
+//                       ),
+//                       SizedBox(width: 5),
+//                       Expanded(
+//                         child: Column(
+//                           crossAxisAlignment: CrossAxisAlignment.start,
+//                           mainAxisAlignment: MainAxisAlignment.start,
+//                           children: [
+//                             Text(
+//                               productNameTop,
+//                               style: const TextStyle(
+//                                 fontFamily: medium,
+//                                 fontSize: 14,
+//                               ),
+//                               overflow: TextOverflow.ellipsis,
+//                               maxLines: 1,
+//                             ),
+//                             Text(
+//                               "${NumberFormat('#,##0').format(double.parse(priceTop).toInt())} Bath",
+//                               style: const TextStyle(color: greyColor),
+//                             ),
+//                           ],
+//                         ),
+//                       ),
+//                       SizedBox(width: 8),
+//                     ],
+//                   ),
+//                   SizedBox(height: 10),
+//                   Row(
+//                     children: [
+//                       SizedBox(
+//                         width: 75,
+//                         height: 80,
+//                         child: Image.network(
+//                           lowerImage,
+//                           fit: BoxFit.cover,
+//                         ),
+//                       ),
+//                       SizedBox(width: 5),
+//                       Expanded(
+//                         child: Column(
+//                           crossAxisAlignment: CrossAxisAlignment.start,
+//                           mainAxisAlignment: MainAxisAlignment.start,
+//                           children: [
+//                             Text(
+//                               productNameLower,
+//                               style: const TextStyle(
+//                                 fontFamily: medium,
+//                                 fontSize: 14,
+//                               ),
+//                               overflow: TextOverflow.ellipsis,
+//                               maxLines: 1,
+//                             ),
+//                             Text(
+//                               "${NumberFormat('#,##0').format(double.parse(priceLower).toInt())} Bath",
+//                               style: const TextStyle(color: greyColor),
+//                             ),
+//                           ],
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                   SizedBox(height: 10),
+//                   Padding(
+//                       padding: const EdgeInsets.symmetric(horizontal: 4),
+//                       child: Row(
+//                         children: [
+//                           Text(
+//                             "Total: ",
+//                             style: TextStyle(
+//                                 color: blackColor,
+//                                 fontFamily: regular,
+//                                 fontSize: 14),
+//                           ),
+//                           Text(
+//                             "${NumberFormat('#,##0').format(double.parse(totalPrice).toInt())} ",
+//                             style: TextStyle(
+//                                 color: blackColor,
+//                                 fontFamily: medium,
+//                                 fontSize: 16),
+//                           ),
+//                           Text(
+//                             "Bath",
+//                             style: TextStyle(
+//                                 color: blackColor,
+//                                 fontFamily: regular,
+//                                 fontSize: 14),
+//                           ),
+//                         ],
+//                       ),
+//                     )
+//                 ],
+//               )
+//                   .box
+//                     .border(color: greyLine)
+//                     .p8
+//                     .margin(EdgeInsets.all(2))
+//                     .roundedSM
+//                     .make(),
+//             ),
+//           );
+//         },
+//       );
+//     },
+//   );
+// }
 
 class GridCardExample extends StatelessWidget {
   @override
@@ -992,7 +1185,6 @@ class ButtonsGrid extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       crossAxisSpacing: 10,
       mainAxisSpacing: 10,
-      
       children: List.generate(4, (index) {
         return Padding(
           padding: const EdgeInsets.all(10),
@@ -1057,7 +1249,7 @@ class ProductCard extends StatelessWidget {
           SizedBox(width: 5),
           Image.network(
             image,
-            width: 60,
+            width: 55,
             height: 65,
             fit: BoxFit.cover,
           ),
@@ -1065,9 +1257,17 @@ class ProductCard extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                NumberFormat('#,##0 Bath', 'th').format(double.parse(price)),
-              ).text.fontFamily(medium).size(13).make(),
+              Row(
+                children: [
+                  Text(
+                    NumberFormat('#,##0', 'th').format(double.parse(price)),
+                  ).text.fontFamily(medium).size(12).make(),
+                  3.widthBox,
+                  Text(
+                    ('Bath'),
+                  ).text.fontFamily(medium).size(12).make(),
+                ],
+              ),
               Row(
                 children: [
                   Image.asset(

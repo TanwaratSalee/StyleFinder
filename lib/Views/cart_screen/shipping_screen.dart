@@ -1,95 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_finalproject/Views/cart_screen/detailforshipping.dart';
+import 'package:flutter_finalproject/Views/profile_screen/menu_addaddress_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/cart_controller.dart';
 import 'package:get/get.dart';
 import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:flutter_finalproject/Views/widgets_common/custom_textfield.dart';
-
-class FirebaseService {
-  final CollectionReference usersCollection = FirebaseFirestore.instance.collection('users');
-
-  // Real-time stream
-  Stream<DocumentSnapshot> streamCurrentUserAddress(String userId) {
-    return usersCollection.doc(userId).snapshots();
-  }
-
-  Future<DocumentSnapshot> getCurrentUserAddress(String userId) async {
-    try {
-      DocumentSnapshot documentSnapshot = await usersCollection.doc(userId).get();
-      return documentSnapshot;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  Future<void> updateAddressForCurrentUser(
-      String userId,
-      String firstname,
-      String surname,
-      String address,
-      String city,
-      String state,
-      String postalCode,
-      String phone) async {
-    try {
-      if (firstname.isNotEmpty &&
-          surname.isNotEmpty &&
-          address.isNotEmpty &&
-          city.isNotEmpty &&
-          state.isNotEmpty &&
-          postalCode.isNotEmpty &&
-          phone.isNotEmpty) {
-        DocumentSnapshot documentSnapshot = await usersCollection.doc(userId).get();
-        if (documentSnapshot.exists) {
-          Map<String, dynamic>? userData = documentSnapshot.data() as Map<String, dynamic>?;
-          if (userData != null) {
-            if (userData.containsKey('address')) {
-              List<dynamic>? addressList = List.from(userData['address']);
-              if (addressList == null) {
-                addressList = [];
-              }
-
-              addressList.add({
-                'firstname': firstname,
-                'surname': surname,
-                'address': address,
-                'city': city,
-                'state': state,
-                'postalCode': postalCode,
-                'phone': phone,
-              });
-
-              await usersCollection.doc(userId).update({
-                'address': addressList,
-              });
-            } else {
-              await usersCollection.doc(userId).update({
-                'address': [
-                  {
-                    'firstname': firstname,
-                    'surname': surname,
-                    'address': address,
-                    'city': city,
-                    'state': state,
-                    'postalCode': postalCode,
-                    'phone': phone,
-                  }
-                ],
-              });
-            }
-          }
-        }
-        print('Address updated successfully for user $userId');
-      } else {
-        print('One or more fields are empty. Failed to update address.');
-      }
-    } catch (error) {
-      print('Failed to update address: $error');
-    }
-  }
-}
 
 class AddressForm extends StatefulWidget {
   @override
@@ -215,8 +132,9 @@ class _AddressFormState extends State<AddressForm> {
                   label: "Phone",
                   isPass: false,
                   readOnly: false,
-                  controller: _phoneController),
-              const SizedBox(height: 20),
+                  controller: _phoneController,
+                   inputFormatters: [PhoneNumberInputFormatter()]),
+              20.heightBox,
             ],
           ),
         ),
@@ -421,3 +339,87 @@ class _ShippingInfoDetailsState extends State<ShippingInfoDetails> {
     );
   }
 }
+class FirebaseService {
+  final CollectionReference usersCollection = FirebaseFirestore.instance.collection('users');
+
+  // Real-time stream
+  Stream<DocumentSnapshot> streamCurrentUserAddress(String userId) {
+    return usersCollection.doc(userId).snapshots();
+  }
+
+  Future<DocumentSnapshot> getCurrentUserAddress(String userId) async {
+    try {
+      DocumentSnapshot documentSnapshot = await usersCollection.doc(userId).get();
+      return documentSnapshot;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  Future<void> updateAddressForCurrentUser(
+      String userId,
+      String firstname,
+      String surname,
+      String address,
+      String city,
+      String state,
+      String postalCode,
+      String phone) async {
+    try {
+      if (firstname.isNotEmpty &&
+          surname.isNotEmpty &&
+          address.isNotEmpty &&
+          city.isNotEmpty &&
+          state.isNotEmpty &&
+          postalCode.isNotEmpty &&
+          phone.isNotEmpty) {
+        DocumentSnapshot documentSnapshot = await usersCollection.doc(userId).get();
+        if (documentSnapshot.exists) {
+          Map<String, dynamic>? userData = documentSnapshot.data() as Map<String, dynamic>?;
+          if (userData != null) {
+            if (userData.containsKey('address')) {
+              List<dynamic>? addressList = List.from(userData['address']);
+              if (addressList == null) {
+                addressList = [];
+              }
+
+              addressList.add({
+                'firstname': firstname,
+                'surname': surname,
+                'address': address,
+                'city': city,
+                'state': state,
+                'postalCode': postalCode,
+                'phone': phone,
+              });
+
+              await usersCollection.doc(userId).update({
+                'address': addressList,
+              });
+            } else {
+              await usersCollection.doc(userId).update({
+                'address': [
+                  {
+                    'firstname': firstname,
+                    'surname': surname,
+                    'address': address,
+                    'city': city,
+                    'state': state,
+                    'postalCode': postalCode,
+                    'phone': phone,
+                  }
+                ],
+              });
+            }
+          }
+        }
+        print('Address updated successfully for user $userId');
+      } else {
+        print('One or more fields are empty. Failed to update address.');
+      }
+    } catch (error) {
+      print('Failed to update address: $error');
+    }
+  }
+}
+

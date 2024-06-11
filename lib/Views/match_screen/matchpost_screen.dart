@@ -2,6 +2,7 @@ import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 
 class MatchPostProduct extends StatefulWidget {
   final Map<String, dynamic> topProduct;
@@ -26,7 +27,8 @@ class _MatchPostProductState extends State<MatchPostProduct> {
     bool isSelectedWinter = controller.selectedCollections.contains('winter');
     bool isSelectedAutumn = controller.selectedCollections.contains('autumn');
     bool isSelectedDinner = controller.selectedCollections.contains('dinner');
-    bool isSelectedEveryday = controller.selectedCollections.contains('everydaylook');
+    bool isSelectedEveryday =
+        controller.selectedCollections.contains('everydaylook');
 
     return WillPopScope(
       onWillPop: () async {
@@ -45,16 +47,18 @@ class _MatchPostProductState extends State<MatchPostProduct> {
               color: primaryApp,
               title: 'Post',
               textColor: whiteColor,
-              onPress: () async {
-                controller.addToPostByUserMatch(
-                  widget.topProduct['p_name'],
-                  widget.lowerProduct['p_name'],
-                  context,
-                  controller.selectedGender.value,
-                  controller.selectedCollections,
-                  explanationController.text,
-                );
-                resetSelections();
+              onPress: () {
+                if (validateInputs()) {
+                  controller.addToPostByUserMatch(
+                    widget.topProduct['p_name'],
+                    widget.lowerProduct['p_name'],
+                    context,
+                    controller.selectedGender.value,
+                    List.from(controller.selectedCollections),
+                    explanationController.text,
+                  );
+                  resetSelections();
+                }
               },
             ),
           ),
@@ -77,11 +81,12 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                         Column(
                           children: [
                             Container(
-                              width: 160,
+                              width: 140,
                               height: 150,
                               color: whiteColor,
                               child: Center(
-                                child: Image.network(widget.topProduct['p_imgs'][0]),
+                                child: Image.network(
+                                    widget.topProduct['p_imgs'][0]),
                               ).box.border(color: greyLine).rounded.make(),
                             ),
                             SizedBox(height: 5),
@@ -94,7 +99,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                             ),
                           ],
                         ),
-                        SizedBox(width: 15),
+                        SizedBox(width: 10),
                         Column(
                           children: [
                             Stack(
@@ -115,18 +120,19 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                                 ),
                               ],
                             ),
-                            15.heightBox,
+                            SizedBox(height: 10),
                           ],
                         ),
                         SizedBox(width: 15),
                         Column(
                           children: [
                             Container(
-                              width: 160,
+                              width: 140,
                               height: 150,
                               color: whiteColor,
                               child: Center(
-                                child: Image.network(widget.lowerProduct['p_imgs'][0]),
+                                child: Image.network(
+                                    widget.lowerProduct['p_imgs'][0]),
                               ).box.border(color: greyLine).rounded.make(),
                             ),
                             SizedBox(height: 5),
@@ -142,7 +148,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 15),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: buildGenderSelector(
@@ -187,7 +193,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                       },
                     ),
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 15),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: buildCollectionSelector(
@@ -228,7 +234,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                       },
                     ),
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 15),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Column(
@@ -242,16 +248,22 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                             fontFamily: medium,
                           ),
                         ),
-                        SizedBox(height: 8),
+                        8.heightBox,
                         TextField(
                           controller: explanationController,
                           maxLines: 3,
                           decoration: InputDecoration(
+                            hintText: 'Enter your explanation here',
                             border: OutlineInputBorder(
                               borderSide: BorderSide.none,
                             ),
                             filled: true,
                             fillColor: Color.fromRGBO(240, 240, 240, 1),
+                          ),
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            fontFamily: regular,
+                            color: Colors.black,
                           ),
                         ),
                       ],
@@ -275,18 +287,36 @@ class _MatchPostProductState extends State<MatchPostProduct> {
     });
   }
 
-  void resetCollections() {
+  void updateCollection(String collection, bool isSelected) {
     setState(() {
-      controller.selectedCollections.clear();
+      if (isSelected) {
+        controller.selectedCollections.add(collection);
+      } else {
+        controller.selectedCollections.remove(collection);
+      }
     });
   }
 
-  void updateCollection(String collection, bool isSelected) {
-    if (isSelected) {
-      controller.selectedCollections.add(collection);
-    } else {
-      controller.selectedCollections.remove(collection);
+  bool validateInputs() {
+    if (controller.selectedGender.value.isEmpty) {
+      showSnackbar('Please select a suitable gender.');
+      return false;
     }
+    if (controller.selectedCollections.isEmpty) {
+      showSnackbar('Please select a collection suitable for the outfit.');
+      return false;
+    }
+    return true;
+  }
+
+  void showSnackbar(String message) {
+    Get.snackbar(
+      'Error',
+      message,
+      backgroundColor: Colors.red,
+      colorText: Colors.white,
+      snackPosition: SnackPosition.BOTTOM,
+    );
   }
 
   Widget buildGenderSelector({
@@ -308,7 +338,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
             fontFamily: medium,
           ),
         ),
-        SizedBox(height: 8),
+        8.heightBox,
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -343,7 +373,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
           "Collection",
           style: TextStyle(fontSize: 16, fontFamily: medium),
         ),
-        SizedBox(height: 8),
+        8.heightBox,
         Center(
           child: Wrap(
             spacing: 10,
@@ -353,7 +383,8 @@ class _MatchPostProductState extends State<MatchPostProduct> {
               buildFilterChip("Winter ", isSelectedWinter, onWinterSelected),
               buildFilterChip("Autumn ", isSelectedAutumn, onAutumnSelected),
               buildFilterChip("Dinner ", isSelectedDinner, onDinnerSelected),
-              buildFilterChip("Everydaylook ", isSelectedEveryday, onEverydaySelected),
+              buildFilterChip(
+                  "Everydaylook ", isSelectedEveryday, onEverydaySelected),
             ],
           ),
         ),
@@ -361,7 +392,8 @@ class _MatchPostProductState extends State<MatchPostProduct> {
     );
   }
 
-  Widget buildFilterChip(String label, bool isSelected, Function(bool) onSelected) {
+  Widget buildFilterChip(
+      String label, bool isSelected, Function(bool) onSelected) {
     final BorderSide borderSide = BorderSide(
       color: isSelected ? primaryApp : greyLine,
       width: 2.0,
@@ -375,8 +407,8 @@ class _MatchPostProductState extends State<MatchPostProduct> {
           borderRadius: BorderRadius.circular(8),
           side: borderSide,
         ),
-        minimumSize: Size(120, 40),
-        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+        minimumSize: Size(105, 40),
+        padding: EdgeInsets.symmetric(horizontal: 6, vertical: 5),
         splashFactory: NoSplash.splashFactory,
       ),
       child: Text(

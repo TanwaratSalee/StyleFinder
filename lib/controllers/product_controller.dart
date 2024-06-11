@@ -518,15 +518,17 @@ void addToPostByUserMatch(
   List<String> productNames = [productNameTop, productNameLower];
   String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
 
-  // ดึงข้อมูลจาก collection users โดยใช้ currentUserUID
+  // Retrieve user details
   FirebaseFirestore.instance
       .collection('users')
       .doc(currentUserUID)
       .get()
       .then((DocumentSnapshot userDoc) {
     if (userDoc.exists) {
-      String userName = userDoc['name']; // สมมุติว่า field ชื่อว่า 'name'
-      
+      String userName = userDoc['name'];
+      String userImg = userDoc['imageUrl'];
+
+      // Retrieve product details
       FirebaseFirestore.instance
           .collection(productsCollection)
           .where('p_name', whereIn: productNames)
@@ -539,6 +541,7 @@ void addToPostByUserMatch(
             'p_desc': explanation,
             'posted_by': currentUserUID,
             'posted_name': userName,
+            'posted_img': userImg,
           };
 
           querySnapshot.docs.forEach((doc) {
@@ -563,12 +566,12 @@ void addToPostByUserMatch(
           });
 
           if (userData.keys.length > 1) { // Check if any product info was added
-            FirebaseFirestore.instance.collection('postusermixmatchs').add(userData).then((documentReference) {
+            FirebaseFirestore.instance.collection('usermixandmatch').add(userData).then((documentReference) {
               VxToast.show(context, msg: "Added post successful.");
-              print('Data added in usermixmatchs collection with document ID: ${documentReference.id}');
+              print('Data added in usermixandmatch collection with document ID: ${documentReference.id}');
               Navigator.pop(context);
             }).catchError((error) {
-              print('Error adding data in usermixmatchs collection: $error');
+              print('Error adding data in usermixandmatch collection: $error');
               VxToast.show(context, msg: "Error post.");
             });
           } else {
@@ -624,11 +627,11 @@ void addToWishlistUserMatch(String productNameTop, String productNameLower, Buil
       });
 
       if (userData.keys.length > 1) { // Check if any product info was added
-        FirebaseFirestore.instance.collection('usermixmatchs').add(userData).then((documentReference) {
+        FirebaseFirestore.instance.collection('usermixandmatchs').add(userData).then((documentReference) {
           VxToast.show(context, msg: "Added to wishlist and user mix-match.");
-          print('Data added in usermixmatchs collection with document ID: ${documentReference.id}');
+          print('Data added in usermixandmatchs collection with document ID: ${documentReference.id}');
         }).catchError((error) {
-          print('Error adding data in usermixmatchs collection: $error');
+          print('Error adding data in usermixandmatchs collection: $error');
           VxToast.show(context, msg: "Error adding to wishlist.");
         });
       } else {

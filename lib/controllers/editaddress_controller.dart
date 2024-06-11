@@ -167,7 +167,7 @@ class _editaddressFormState extends State<editaddress_controller> {
                   isPass: false,
                   readOnly: false,
                   controller: _phoneController),
-              const SizedBox(height: 20),
+              20.heightBox,
             ],
           ),
         ),

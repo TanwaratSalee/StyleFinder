@@ -1,4 +1,6 @@
 import 'package:flutter_finalproject/consts/consts.dart';
+import 'package:flutter/services.dart';
+
 
 // Widget customPasswordField({
 //   required TextEditingController controller,
@@ -62,6 +64,7 @@ import 'package:flutter_finalproject/consts/consts.dart';
 //   );
 // }
 
+
 Widget customTextField({
   String? title,
   String? label,
@@ -69,6 +72,7 @@ Widget customTextField({
   bool isPass = false,
   bool readOnly = false,
   VoidCallback? onTap,
+  List<TextInputFormatter>? inputFormatters,
 }) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,6 +81,7 @@ Widget customTextField({
         obscureText: isPass,
         controller: controller,
         readOnly: readOnly,
+        inputFormatters: inputFormatters,
         decoration: InputDecoration(
           isDense: true,
           labelText: label,
@@ -86,15 +91,14 @@ Widget customTextField({
               color: greyDark, fontFamily: regular, fontSize: 12),
           filled: true,
           fillColor: whiteColor,
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+          contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: const BorderSide(color: greyLine),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: greyColor),
+            borderSide: const BorderSide(color: Color.fromRGBO(149, 155, 155, 1)),
           ),
         ),
         style: TextStyle(
@@ -106,6 +110,7 @@ Widget customTextField({
     ],
   );
 }
+
 
 class customTextFieldPassword extends StatefulWidget {
   final String? title;
@@ -159,7 +164,7 @@ class _customTextFieldPasswordState extends State<customTextFieldPassword> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: greyColor),
+              borderSide: const BorderSide( color: Color.fromRGBO(149, 155, 155, 1)),
             ),
             suffixIcon: widget.isPass
                 ? IconButton(
