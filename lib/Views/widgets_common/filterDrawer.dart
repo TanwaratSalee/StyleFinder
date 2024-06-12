@@ -38,7 +38,6 @@ class _FilterDrawerState extends State<FilterDrawer> {
     {'name': 'Black', 'color': Colors.black, 'value': 0xFF000000},
     {'name': 'Grey', 'color': greyColor, 'value': 0xFF808080},
     {'name': 'White', 'color': whiteColor, 'value': 0xFFFFFFFF},
-<<<<<<< HEAD
     {
       'name': 'Purple',
       'color': const Color.fromRGBO(98, 28, 141, 1),
@@ -74,29 +73,15 @@ class _FilterDrawerState extends State<FilterDrawer> {
       'color': Color.fromRGBO(98, 207, 47, 1),
       'value': 0xFF62CF2F
     },
-=======
-    {'name': 'Purple', 'color': const Color.fromRGBO(98, 28, 141, 1), 'value': 0xFF621C8D},
-    {'name': 'Deep Purple', 'color': const Color.fromRGBO(202, 147, 235, 1), 'value': 0xFFCA93EB},
-    {'name': 'Brown', 'color': Color.fromARGB(255, 121, 58, 31), 'value': 0xFF793A1F},
-    {'name': 'Blue', 'color': Color.fromRGBO(32, 47, 179, 1), 'value': 0xFF202FB3},
-    {'name': 'Blue', 'color': const Color.fromRGBO(48, 176, 232, 1), 'value': 0xFF30B0E8},
-    // {'name': 'Blue Grey', 'color': const Color.fromRGBO(83, 205, 191, 1), 'value': 0xFF53CDBF},
-    {'name': 'Green', 'color': const Color.fromRGBO(23, 119, 15, 1), 'value': 0xFF17770F},
-    {'name': 'Green', 'color': Color.fromRGBO(98, 207, 47, 1), 'value': 0xFF62CF2F},
->>>>>>> 1ffaf298c9a1f8fc8cf7a64becc8f646b342861a
     {'name': 'Yellow', 'color': Colors.yellow, 'value': 0xFFFFFF00},
-    {'name': 'Yellow', 'color': Color.fromARGB(255, 242, 209, 131), 'value': 0xFFFFFF00},
     {'name': 'Orange', 'color': Colors.orange, 'value': 0xFFFFA500},
+    {'name': 'Pink', 'color': Colors.pinkAccent, 'value': 0xFFFF4081},
     {'name': 'Red', 'color': Colors.red, 'value': 0xFFFF0000},
-<<<<<<< HEAD
     {
       'name': 'Brown',
       'color': Color.fromARGB(255, 121, 58, 31),
       'value': 0xFF793A1F
     },
-=======
-    {'name': 'Pink', 'color': Color.fromARGB(255, 242, 134, 170), 'value': 0xFFFF4081},
->>>>>>> 1ffaf298c9a1f8fc8cf7a64becc8f646b342861a
   ];
 
   @override
@@ -275,9 +260,9 @@ class _FilterDrawerState extends State<FilterDrawer> {
             ),
             5.heightBox,
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 22),
+              padding: const EdgeInsets.symmetric(horizontal: 28),
               child: Wrap(
-                spacing: 14,
+                spacing: 20,
                 runSpacing: 5,
                 children: List.generate(
                   allColors.length,
@@ -305,7 +290,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                           borderRadius: BorderRadius.circular(4),
                           border: Border.all(
                             color: isSelected ? primaryApp : greyThin,
-                            width: isSelected ? 2 : 1,
+                            width: isSelected ? 3 : 2,
                           ),
                         ),
                       ),

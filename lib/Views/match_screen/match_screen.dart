@@ -25,7 +25,8 @@ class _MatchScreenState extends State<MatchScreen> {
     super.initState();
     controller = Get.put(ProductController());
     _pageControllerTop = PageController(viewportFraction: 0.8, initialPage: 1);
-    _pageControllerLower = PageController(viewportFraction: 0.8, initialPage: 1);
+    _pageControllerLower =
+        PageController(viewportFraction: 0.8, initialPage: 1);
     _currentPageIndexTop = 1;
     _currentPageIndexLower = 1;
 
@@ -66,6 +67,124 @@ class _MatchScreenState extends State<MatchScreen> {
       return index - 1;
     }
   }
+
+  final List<Map<String, dynamic>> allColors = [
+    {'name': 'Black', 'color': Colors.black, 'value': 0xFF000000},
+    {'name': 'Grey', 'color': greyColor, 'value': 0xFF808080},
+    {'name': 'White', 'color': whiteColor, 'value': 0xFFFFFFFF},
+    {
+      'name': 'Purple',
+      'color': const Color.fromRGBO(98, 28, 141, 1),
+      'value': 0xFF621C8D
+    },
+    {
+      'name': 'Deep Purple',
+      'color': const Color.fromRGBO(202, 147, 235, 1),
+      'value': 0xFFCA93EB
+    },
+    {
+      'name': 'Blue',
+      'color': Color.fromRGBO(32, 47, 179, 1),
+      'value': 0xFF202FB3
+    },
+    {
+      'name': 'Blue',
+      'color': const Color.fromRGBO(48, 176, 232, 1),
+      'value': 0xFF30B0E8
+    },
+    {
+      'name': 'Blue Grey',
+      'color': const Color.fromRGBO(83, 205, 191, 1),
+      'value': 0xFF53CDBF
+    },
+    {
+      'name': 'Green',
+      'color': const Color.fromRGBO(23, 119, 15, 1),
+      'value': 0xFF17770F
+    },
+    {
+      'name': 'Green',
+      'color': Color.fromRGBO(98, 207, 47, 1),
+      'value': 0xFF62CF2F
+    },
+    {'name': 'Yellow', 'color': Colors.yellow, 'value': 0xFFFFFF00},
+    {'name': 'Orange', 'color': Colors.orange, 'value': 0xFFFFA500},
+    {'name': 'Pink', 'color': Colors.pinkAccent, 'value': 0xFFFF4081},
+    {'name': 'Red', 'color': Colors.red, 'value': 0xFFFF0000},
+    {
+      'name': 'Brown',
+      'color': Color.fromARGB(255, 121, 58, 31),
+      'value': 0xFF793A1F
+    },
+  ];
+
+  final Map<int, List<int>> colorMatchMap = {
+    0xFF000000: [0xFFFFFFFF, 0xFF000000], // Black matches with White
+    0xFFFFFFFF: [0xFF000000, 0xFFFFFFFF],
+    0xFF202FB3: [
+      0xFF000000,
+      0xFFFFFFFF,
+      0xFFFF4081,
+      0xFFFFFF00,
+      0xFF53CDBF,
+      0xFFFF0000,
+      0xFF621C8D,
+      0xFF202FB3
+    ], // Blue matches with several colors
+    0xFF808080: [
+      0xFFFF4081,
+      0xFFFFFFFF,
+      0xFFFF4081,
+      0xFFFF0000,
+      0xFF17770F,
+      0xFF202FB3,
+      0xFF000000,
+      0xFFFFFF00
+    ], // Grey matches with several colors
+    0xFFFFE4C4: [
+      0xFFFFFFFF,
+      0xFF808080,
+      0xFF793A1F,
+      0xFF000000,
+      0xFFFFFF00,
+      0xFF202FB3,
+      0xFF17770F,
+      0xFFFF4081,
+      0xFFFF0000
+    ], // Cream matches with several colors
+    0xFF793A1F: [
+      0xFFFFFFFF,
+      0xFF808080,
+      0xFF202FB3,
+      0xFF000000,
+      0xFF17770F,
+      0xFFFFFF00
+    ], // Brown matches with several colors
+    0xFFFF0000: [
+      0xFFFFFFFF,
+      0xFF621C8D,
+      0xFF793A1F,
+      0xFF000000,
+      0xFFFF4081,
+      0xFF17770F,
+      0xFFFFFF00
+    ], // Red matches with several colors
+    0xFF621C8D: [
+      0xFFFFFFFF,
+      0xFF793A1F,
+      0xFF000000,
+      0xFF17770F,
+      0xFFFFFF00
+    ], // Purple matches with several colors
+    0xFFFFFF00: [
+      0xFF793A1F,
+      0xFF621C8D,
+      0xFF000000,
+      0xFFFF4081,
+      0xFF808080,
+      0xFF17770F
+    ], // Yellow matches with several colors
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -126,63 +245,71 @@ class _MatchScreenState extends State<MatchScreen> {
     );
   }
 
-Widget buildCardSetTop(List<Map<String, dynamic>> topProducts) {
-  if (topProducts.isEmpty) {
-    return Center(child: Text('No Top available'));
+  Widget buildCardSetTop(List<Map<String, dynamic>> topProducts) {
+    if (topProducts.isEmpty) {
+      return Center(child: Text('No Top available'));
+    }
+
+    final itemCount = topProducts.length;
+    if (itemCount == 0) {
+      return Center(child: Text('No Top available'));
+    }
+
+    double containerHeight = MediaQuery.of(context).size.height < 855
+        ? MediaQuery.of(context).size.height * 0.23
+        : MediaQuery.of(context).size.height * 0.25;
+
+    return Container(
+      height: containerHeight,
+      child: PageView.builder(
+        controller: _pageControllerTop,
+        onPageChanged: (index) {
+          setState(() {
+            _currentPageIndexTop = index;
+          });
+          handlePageChangeTop(index, itemCount);
+        },
+        itemCount: itemCount + 2,
+        itemBuilder: (context, index) {
+          final actualIndex = getActualIndex(index, itemCount);
+          return buildCardItem(topProducts[actualIndex]);
+        },
+      ),
+    );
   }
 
-  final itemCount = topProducts.length;
-  double containerHeight = MediaQuery.of(context).size.height < 855
-                                            ? MediaQuery.of(context).size.height * 0.23 
-                                            : MediaQuery.of(context).size.height * 0.25;
+  Widget buildCardSetLower(List<Map<String, dynamic>> lowerProducts) {
+    if (lowerProducts.isEmpty) {
+      return Center(child: Text('No Lower available'));
+    }
 
-  return Container(
-    height: containerHeight,
-    child: PageView.builder(
-      controller: _pageControllerTop,
-      onPageChanged: (index) {
-        setState(() {
-          _currentPageIndexTop = index;
-        });
-        handlePageChangeTop(index, itemCount);
-      },
-      itemCount: itemCount + 2,
-      itemBuilder: (context, index) {
-        final actualIndex = getActualIndex(index, itemCount);
-        return buildCardItem(topProducts[actualIndex]);
-      },
-    ),
-  );
-}
+    final itemCount = lowerProducts.length;
+    if (itemCount == 0) {
+      return Center(child: Text('No Lower available'));
+    }
 
-Widget buildCardSetLower(List<Map<String, dynamic>> lowerProducts) {
-  if (lowerProducts.isEmpty) {
-    return Center(child: Text('No Lower available'));
+    double containerHeight = MediaQuery.of(context).size.height < 855
+        ? MediaQuery.of(context).size.height * 0.23
+        : MediaQuery.of(context).size.height * 0.25;
+
+    return Container(
+      height: containerHeight,
+      child: PageView.builder(
+        controller: _pageControllerLower,
+        onPageChanged: (index) {
+          setState(() {
+            _currentPageIndexLower = index;
+          });
+          handlePageChangeLower(index, itemCount);
+        },
+        itemCount: itemCount + 2,
+        itemBuilder: (context, index) {
+          final actualIndex = getActualIndex(index, itemCount);
+          return buildCardItem(lowerProducts[actualIndex]);
+        },
+      ),
+    );
   }
-
-  final itemCount = lowerProducts.length;
-  double containerHeight = MediaQuery.of(context).size.height < 855
-                                            ? MediaQuery.of(context).size.height * 0.23 
-                                            : MediaQuery.of(context).size.height * 0.25;
-
-  return Container(
-    height: containerHeight,
-    child: PageView.builder(
-      controller: _pageControllerLower,
-      onPageChanged: (index) {
-        setState(() {
-          _currentPageIndexLower = index;
-        });
-        handlePageChangeLower(index, itemCount);
-      },
-      itemCount: itemCount + 2,
-      itemBuilder: (context, index) {
-        final actualIndex = getActualIndex(index, itemCount);
-        return buildCardItem(lowerProducts[actualIndex]);
-      },
-    ),
-  );
-}
 
   Widget buildCardItem(Map<String, dynamic> product) {
     final productName = product['p_name'] ?? 'No Name';
@@ -236,15 +363,23 @@ Widget buildCardSetLower(List<Map<String, dynamic>> lowerProducts) {
           ),
         ],
       ),
-    ).box.color(primaryDark).margin(EdgeInsets.symmetric(horizontal: 10)).rounded.make();
+    )
+        .box
+        .color(primaryDark)
+        .margin(EdgeInsets.symmetric(horizontal: 10))
+        .rounded
+        .make();
   }
 
   Widget matchWithYouContainer() {
-    final topProductIndex = getActualIndex(_currentPageIndexTop, controller.topFilteredProducts.length);
-    final lowerProductIndex = getActualIndex(_currentPageIndexLower, controller.lowerFilteredProducts.length);
+    final topProductIndex = getActualIndex(
+        _currentPageIndexTop, controller.topFilteredProducts.length);
+    final lowerProductIndex = getActualIndex(
+        _currentPageIndexLower, controller.lowerFilteredProducts.length);
     final topProduct = controller.topFilteredProducts[topProductIndex];
     final lowerProduct = controller.lowerFilteredProducts[lowerProductIndex];
-    bool isGreatMatch = checkMatch(topProduct['p_colors'], lowerProduct['p_colors']);
+    bool isGreatMatch =
+        checkMatch(topProduct['p_colors'], lowerProduct['p_colors']);
 
     return Container(
       child: Column(
@@ -259,7 +394,12 @@ Widget buildCardSetLower(List<Map<String, dynamic>> lowerProducts) {
               8.widthBox,
               Text(
                 isGreatMatch ? 'Great Match!' : 'Not a Match',
-              ).text.fontFamily(semiBold).color(isGreatMatch ? Colors.green : redColor).size(20).make(),
+              )
+                  .text
+                  .fontFamily(semiBold)
+                  .color(isGreatMatch ? Colors.green : redColor)
+                  .size(20)
+                  .make(),
             ],
           )
               .box
@@ -272,14 +412,19 @@ Widget buildCardSetLower(List<Map<String, dynamic>> lowerProducts) {
             children: [
               InkWell(
                 onTap: () {
-                  final topProductIndex = getActualIndex(_currentPageIndexTop, controller.topFilteredProducts.length);
-                  final lowerProductIndex = getActualIndex(_currentPageIndexLower, controller.lowerFilteredProducts.length);
-                  final topProduct = controller.topFilteredProducts[topProductIndex];
-                  final lowerProduct = controller.lowerFilteredProducts[lowerProductIndex];
+                  final topProductIndex = getActualIndex(_currentPageIndexTop,
+                      controller.topFilteredProducts.length);
+                  final lowerProductIndex = getActualIndex(
+                      _currentPageIndexLower,
+                      controller.lowerFilteredProducts.length);
+                  final topProduct =
+                      controller.topFilteredProducts[topProductIndex];
+                  final lowerProduct =
+                      controller.lowerFilteredProducts[lowerProductIndex];
                   Get.to(() => MatchPostProduct(
-                    topProduct: topProduct,
-                    lowerProduct: lowerProduct,
-                  ));
+                        topProduct: topProduct,
+                        lowerProduct: lowerProduct,
+                      ));
                 },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -293,24 +438,27 @@ Widget buildCardSetLower(List<Map<String, dynamic>> lowerProducts) {
                         .size(14)
                         .make(),
                   ],
-                ).box
-                  .color(const Color.fromRGBO(177, 234, 199, 1))
-                  .padding(EdgeInsets.symmetric(vertical: 12, horizontal: 58))
-                  .border(color: const Color.fromRGBO(35, 101, 60, 1))
-                  .rounded
-                  .make(),
+                )
+                    .box
+                    .color(const Color.fromRGBO(177, 234, 199, 1))
+                    .padding(EdgeInsets.symmetric(vertical: 12, horizontal: 58))
+                    .border(color: const Color.fromRGBO(35, 101, 60, 1))
+                    .rounded
+                    .make(),
               ),
-                  
               InkWell(
                 onTap: () async {
                   final topProducts = controller.topFilteredProducts;
                   final lowerProducts = controller.lowerFilteredProducts;
                   if (topProducts.isNotEmpty && lowerProducts.isNotEmpty) {
-                    final topProductIndex = getActualIndex(_currentPageIndexTop, topProducts.length);
-                    final lowerProductIndex = getActualIndex(_currentPageIndexLower, lowerProducts.length);
+                    final topProductIndex = getActualIndex(
+                        _currentPageIndexTop, topProducts.length);
+                    final lowerProductIndex = getActualIndex(
+                        _currentPageIndexLower, lowerProducts.length);
                     final topProduct = topProducts[topProductIndex];
                     final lowerProduct = lowerProducts[lowerProductIndex];
-                    print('Top Product: $topProduct, Lower Product: $lowerProduct');  // Debug print
+                    print(
+                        'Top Product: ${getColorName(topProduct['p_colors'][0])}, Lower Product: ${getColorName(lowerProduct['p_colors'][0])}'); // Debug print
                     if (topProduct != null && lowerProduct != null) {
                       controller.addToWishlistUserMatch(
                         topProduct['p_name'],
@@ -320,13 +468,15 @@ Widget buildCardSetLower(List<Map<String, dynamic>> lowerProducts) {
                     } else {
                       VxToast.show(
                         context,
-                        msg: 'Unable to add to favorites, Because the information is not available',
+                        msg:
+                            'Unable to add to favorites, Because the information is not available',
                       );
                     }
                   } else {
                     VxToast.show(
                       context,
-                      msg: 'Unable to add to favorites, Because the information is not available',
+                      msg:
+                          'Unable to add to favorites, Because the information is not available',
                     );
                   }
                 },
@@ -342,11 +492,13 @@ Widget buildCardSetLower(List<Map<String, dynamic>> lowerProducts) {
                         .size(14)
                         .make(),
                   ],
-                ).box.color(const Color.fromRGBO(255, 203, 203, 1))
-                  .padding(EdgeInsets.symmetric(vertical: 12, horizontal: 18))
-                  .border(color: const Color.fromRGBO(160, 84, 84, 1))
-                  .rounded
-                  .make(),
+                )
+                    .box
+                    .color(const Color.fromRGBO(255, 203, 203, 1))
+                    .padding(EdgeInsets.symmetric(vertical: 12, horizontal: 18))
+                    .border(color: const Color.fromRGBO(160, 84, 84, 1))
+                    .rounded
+                    .make(),
               )
             ],
           ),
@@ -360,14 +512,26 @@ Widget buildCardSetLower(List<Map<String, dynamic>> lowerProducts) {
       return false;
     }
 
-    // Example matching logic: Check if any color from topColors is in lowerColors
-    for (var topColor in topColors) {
-      if (lowerColors.contains(topColor)) {
-        return true;
-      }
+    final topPrimaryColor = topColors[0];
+    final lowerPrimaryColor = lowerColors[0];
+
+    print(
+        'Top Color: ${getColorName(topPrimaryColor)}, Lower Color: ${getColorName(lowerPrimaryColor)}'); // Debug print
+
+    if (colorMatchMap[topPrimaryColor] != null &&
+        colorMatchMap[topPrimaryColor]!.contains(lowerPrimaryColor)) {
+      return true;
     }
 
     return false;
+  }
+
+  String getColorName(int colorValue) {
+    final color = allColors.firstWhere(
+      (element) => element['value'] == colorValue,
+      orElse: () => {'name': 'Unknown'},
+    );
+    return color['name'];
   }
 
   void showModalRightSheet({
