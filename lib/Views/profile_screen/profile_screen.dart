@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/match_screen/matchpost_details.dart';
 import 'package:flutter_finalproject/Views/profile_screen/menu_setting_screen.dart';
 import 'package:get/get.dart';
@@ -778,7 +777,7 @@ Widget buildMatchTab() {
                     children: [
                       TextButton(
                         onPressed: () {
-                          Navigator.of(context).pop(); // Close the dialog
+                          Navigator.of(context).pop(); 
                         },
                         child: Text(
                           "Cancel",
@@ -789,14 +788,14 @@ Widget buildMatchTab() {
                       TextButton(
                         onPressed: () async {
                           await FirebaseFirestore.instance
-                              .collection('usermixandmatchs')
+                              .collection('usermixandmatch')
                               .doc(docIdTop)
                               .delete();
                           await FirebaseFirestore.instance
-                              .collection('usermixandmatchs')
+                              .collection('usermixandmatch')
                               .doc(docIdLower)
                               .delete();
-                          Navigator.of(context).pop(); // Close the dialog
+                          Navigator.of(context).pop(); 
                         },
                         child: Text(
                           "Delete",

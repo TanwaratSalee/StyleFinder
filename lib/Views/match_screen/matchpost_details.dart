@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_finalproject/Views/profile_screen/userprofile_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
-import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
 import 'package:get/get.dart';
@@ -132,6 +131,10 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
     }
   }
 
+  void navigateToUserProfile(String userId, String postedName, String postedImg) {
+    Get.to(() => UserProfileScreen(userId: userId, postedName: postedName, postedImg: postedImg));
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isCurrentUser = widget.posted_by == FirebaseAuth.instance.currentUser?.uid;
@@ -199,7 +202,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           children: <Widget>[
             Expanded(
@@ -213,38 +216,38 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                           child: Column(
                             children: [
                               GestureDetector(
-                              onTap: () => navigateToItemDetails(widget.productName1),
-                              child: Container(
-                                child: Center(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(14),
-                                      topLeft: Radius.circular(14),
-                                    ),
-                                    child: Image.network(
-                                      widget.productImage1,
-                                      height: 150,
-                                      width: 165,
-                                      fit: BoxFit.cover,
+                                onTap: () => navigateToItemDetails(widget.productName1),
+                                child: Container(
+                                  child: Center(
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(14),
+                                        topLeft: Radius.circular(14),
+                                      ),
+                                      child: Image.network(
+                                        widget.productImage1,
+                                        height: 150,
+                                        width: 165,
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),),
+                              ),
                               5.heightBox,
-                              SizedBox(
-                                width: 135,
+                             SizedBox(
+                                width: 130,
                                 child: Text(
                                   widget.productName1,
                                   softWrap: true,
-                                  overflow: TextOverflow.clip,
-                                )
-                                    .text
-                                    .color(greyDark)
-                                    .fontFamily(bold)
-                                    .size(16)
-                                    .ellipsis
-                                    .maxLines(1)
-                                    .make(),
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: greyDark,
+                                    fontSize: 14,
+                                    fontFamily: semiBold,
+                                  ),
+                                  maxLines: 1,
+                                ),
                               ),
                               Text(
                                 "${NumberFormat('#,##0').format(double.parse(widget.price1).toInt())} Bath",
@@ -252,12 +255,12 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                                   .text
                                   .color(greyDark)
                                   .fontFamily(regular)
-                                  .size(14)
+                                  .size(12)
                                   .make(),
                             ],
                           ).box.border(color: greyLine).rounded.make(),
                         ),
-                        const SizedBox(width: 10),
+                        const SizedBox(width: 5),
                         Stack(
                           alignment: Alignment.center,
                           children: [
@@ -272,40 +275,43 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                                 .make(),
                           ],
                         ),
-                        const SizedBox(width: 10),
+                        const SizedBox(width: 5),
                         Expanded(
                           child: Column(
                             children: [
                               GestureDetector(
-                              onTap: () => navigateToItemDetails(widget.productName2),
-                              child: Container(
-                                child: Center(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(14),
-                                      topLeft: Radius.circular(14),
-                                    ),
-                                    child: Image.network(
-                                      widget.productImage2,
-                                      height: 150,
-                                      width: 165,
-                                      fit: BoxFit.cover,
+                                onTap: () => navigateToItemDetails(widget.productName2),
+                                child: Container(
+                                  child: Center(
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(14),
+                                        topLeft: Radius.circular(14),
+                                      ),
+                                      child: Image.network(
+                                        widget.productImage2,
+                                        height: 150,
+                                        width: 165,
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                              ),
                               5.heightBox,
                               SizedBox(
-                                width: 135,
-                                child: Text(widget.productName2)
-                                    .text
-                                    .color(greyDark)
-                                    .fontFamily(bold)
-                                    .size(18)
-                                    .ellipsis
-                                    .maxLines(1)
-                                    .make(),
+                                width: 130,
+                                child: Text(
+                                  widget.productName2,
+                                  softWrap: true,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: greyDark,
+                                    fontSize: 14,
+                                    fontFamily: semiBold,
+                                  ),
+                                  maxLines: 1,
+                                ),
                               ),
                               Text(
                                 "${NumberFormat('#,##0').format(double.parse(widget.price2).toInt())} Bath",
@@ -313,7 +319,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                                   .text
                                   .color(greyDark)
                                   .fontFamily(regular)
-                                  .size(14)
+                                  .size(12)
                                   .make(),
                             ],
                           ).box.border(color: greyLine).rounded.make(),
@@ -368,9 +374,10 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                           SizedBox(width: 10),
                           GestureDetector(
                             onTap: () {
-                              // Get.to(
-                              //   () => StoreScreen(vendorId: widget.vendor_id),
-                              // );
+                              navigateToUserProfile(
+                                  widget.posted_by,
+                                  widget.posted_name,
+                                  widget.posted_img);
                             },
                             child: Container(
                               margin: EdgeInsets.only(right: 12),
@@ -388,12 +395,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                             ),
                           ),
                         ],
-                      )
-                          .box
-                          .white
-                          .roundedSM
-                          .outerShadow
-                          .make(),
+                      ).box.white.roundedSM.outerShadow.make(),
                     ),
                     20.heightBox,
                     Align(

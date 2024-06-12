@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_finalproject/Views/match_screen/matchpost_details.dart';
 import 'package:flutter_finalproject/Views/news_screen/allstore_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
@@ -215,7 +214,7 @@ class NewsScreen extends StatelessWidget {
                                           gridDelegate:
                                               SliverGridDelegateWithFixedCrossAxisCount(
                                             crossAxisCount: 2,
-                                            childAspectRatio: 9.5 / 4,
+                                            childAspectRatio: 9 / 4,
                                             mainAxisSpacing: 8,
                                             crossAxisSpacing: 10,
                                           ),
@@ -970,21 +969,17 @@ class NewsScreen extends StatelessWidget {
 //         return Center(child: CircularProgressIndicator());
 //       }
 //       var data = snapshot.data!.docs;
-
 //       String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
-
 //       // Filter posts by current user ID
 //       var filteredData = data.where((doc) {
 //         var docData = doc.data() as Map<String, dynamic>;
 //         return docData['posted_by'] == currentUserUID;
 //       }).toList();
-
 //       if (filteredData.isEmpty) {
 //         return Center(
 //           child: Text("No posts available!", style: TextStyle(color: greyDark)),
 //         );
 //       }
-
 //       return GridView.builder(
 //         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
 //           crossAxisCount: 2,
@@ -1009,12 +1004,10 @@ class NewsScreen extends StatelessWidget {
 //           var description = docData['p_desc'] ?? '';
 //           var views = docData['views'] ?? 0;
 //           var gender = docData['p_sex'] ?? '';
-
 //           String totalPrice = (int.parse(docData['p_price_top']) + int.parse(docData['p_price_lower'])).toString();
 //           var posted_by = currentUserUID;
 //           var posted_name = docData['posted_name'];
 //           var posted_img = docData['posted_img'];
-
 //           return GestureDetector(
 //             onTap: () {
 //               Get.to(() => MatchPostsDetails(

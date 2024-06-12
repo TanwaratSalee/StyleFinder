@@ -33,7 +33,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
       backgroundColor: whiteColor,
       appBar: AppBar(
         title: Text('Select Payment Method')
-           .text
+            .text
             .size(26)
             .fontFamily(semiBold)
             .color(blackColor)
@@ -54,7 +54,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
                           });
                         },
                         child: Container(
-                          margin: EdgeInsets.fromLTRB(8,12,8,0),
+                          margin: EdgeInsets.fromLTRB(8, 12, 8, 0),
                           decoration: BoxDecoration(
                             color: selectedMethod == textPaymentMethods[index]
                                 ? thinPrimaryApp
@@ -135,7 +135,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
                     } else if (selectedMethod == 'Cash on Delivery') {
                       print('Processing Cash on Delivery');
                       await controller.placeMyOrder(
-                          orderPaymentMethod: selectedMethod?? '',
+                          orderPaymentMethod: selectedMethod ?? '',
                           totalAmount: controller.totalP.value.toDouble());
                       await controller.clearCart();
                       VxToast.show(context, msg: "Order placed successfully");
@@ -144,7 +144,8 @@ class _PaymentMethodsState extends State<PaymentMethods> {
                       if (selectedBank != null) {
                         Get.to(() => const MobileBankingScreenextends());
                       } else {
-                        VxToast.show(context, msg: "Please select a bank first.");
+                        VxToast.show(context,
+                            msg: "Please select a bank first.");
                       }
                     } else {
                       VxToast.show(context,
@@ -153,7 +154,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
                   },
                   color: primaryApp,
                   textColor: whiteColor,
-                  title: "Place my order")),
+                  title: "Confirm Payment")),
         ),
       ),
     );

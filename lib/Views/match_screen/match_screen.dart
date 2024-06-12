@@ -132,7 +132,9 @@ Widget buildCardSetTop(List<Map<String, dynamic>> topProducts) {
   }
 
   final itemCount = topProducts.length;
-  double containerHeight = MediaQuery.of(context).size.height * 0.25; 
+  double containerHeight = MediaQuery.of(context).size.height < 855
+                                            ? MediaQuery.of(context).size.height * 0.23 
+                                            : MediaQuery.of(context).size.height * 0.25;
 
   return Container(
     height: containerHeight,
@@ -159,7 +161,9 @@ Widget buildCardSetLower(List<Map<String, dynamic>> lowerProducts) {
   }
 
   final itemCount = lowerProducts.length;
-  double containerHeight = MediaQuery.of(context).size.height * 0.25; 
+  double containerHeight = MediaQuery.of(context).size.height < 855
+                                            ? MediaQuery.of(context).size.height * 0.23 
+                                            : MediaQuery.of(context).size.height * 0.25;
 
   return Container(
     height: containerHeight,
@@ -255,7 +259,7 @@ Widget buildCardSetLower(List<Map<String, dynamic>> lowerProducts) {
               8.widthBox,
               Text(
                 isGreatMatch ? 'Great Match!' : 'Not a Match',
-              ).text.fontFamily(semiBold).color(isGreatMatch ? Colors.green : Colors.red).size(22).make(),
+              ).text.fontFamily(semiBold).color(isGreatMatch ? Colors.green : redColor).size(20).make(),
             ],
           )
               .box

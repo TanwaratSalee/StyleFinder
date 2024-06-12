@@ -32,21 +32,22 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
 
   final selectedColorIndexes = <int>[].obs;
   final List<Map<String, dynamic>> allColors = [
-    {'name': 'Black', 'color': Colors.black, 'value': 0xFF000000},
+   {'name': 'Black', 'color': Colors.black, 'value': 0xFF000000},
     {'name': 'Grey', 'color': greyColor, 'value': 0xFF808080},
     {'name': 'White', 'color': whiteColor, 'value': 0xFFFFFFFF},
     {'name': 'Purple', 'color': const Color.fromRGBO(98, 28, 141, 1), 'value': 0xFF621C8D},
     {'name': 'Deep Purple', 'color': const Color.fromRGBO(202, 147, 235, 1), 'value': 0xFFCA93EB},
+    {'name': 'Brown', 'color': Color.fromARGB(255, 121, 58, 31), 'value': 0xFF793A1F},
     {'name': 'Blue', 'color': Color.fromRGBO(32, 47, 179, 1), 'value': 0xFF202FB3},
     {'name': 'Blue', 'color': const Color.fromRGBO(48, 176, 232, 1), 'value': 0xFF30B0E8},
-    {'name': 'Blue Grey', 'color': const Color.fromRGBO(83, 205, 191, 1), 'value': 0xFF53CDBF},
+    // {'name': 'Blue Grey', 'color': const Color.fromRGBO(83, 205, 191, 1), 'value': 0xFF53CDBF},
     {'name': 'Green', 'color': const Color.fromRGBO(23, 119, 15, 1), 'value': 0xFF17770F},
     {'name': 'Green', 'color': Color.fromRGBO(98, 207, 47, 1), 'value': 0xFF62CF2F},
     {'name': 'Yellow', 'color': Colors.yellow, 'value': 0xFFFFFF00},
+    {'name': 'Yellow', 'color': Color.fromARGB(255, 242, 209, 131), 'value': 0xFFFFFF00},
     {'name': 'Orange', 'color': Colors.orange, 'value': 0xFFFFA500},
-    {'name': 'Pink', 'color': Colors.pinkAccent, 'value': 0xFFFF4081},
     {'name': 'Red', 'color': Colors.red, 'value': 0xFFFF0000},
-    {'name': 'Brown', 'color': Color.fromARGB(255, 121, 58, 31), 'value': 0xFF793A1F},
+    {'name': 'Pink', 'color': Color.fromARGB(255, 242, 134, 170), 'value': 0xFFFF4081},
   ];
 
   @override
@@ -176,7 +177,7 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Wrap(
-                spacing: 20,
+                spacing: 14,
                 runSpacing: 5,
                 children: List.generate(
                   allColors.length,
@@ -195,8 +196,8 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
                         });
                       },
                       child: Container(
-                        width: 30,
-                        height: 30,
+                        width: 32,
+                        height: 32,
                         decoration: BoxDecoration(
                           color: color['color'],
                           borderRadius: BorderRadius.circular(4),
