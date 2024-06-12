@@ -267,7 +267,7 @@ Widget build(BuildContext context) {
                                           product['p_imgs'][0],
                                           height: MediaQuery.of(context).size.height < 855
                                             ? MediaQuery.of(context).size.height * 0.41 
-                                            : MediaQuery.of(context).size.height * 0.47,
+                                            : MediaQuery.of(context).size.height * 0.46,
                                           width: MediaQuery.of(context).size.width,
                                           fit: BoxFit.cover,
                                         ),

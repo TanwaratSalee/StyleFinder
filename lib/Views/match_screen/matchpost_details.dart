@@ -202,7 +202,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           children: <Widget>[
             Expanded(
@@ -235,20 +235,19 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                                 ),
                               ),
                               5.heightBox,
-                              SizedBox(
-                                width: 135,
+                             SizedBox(
+                                width: 130,
                                 child: Text(
                                   widget.productName1,
                                   softWrap: true,
-                                  overflow: TextOverflow.clip,
-                                )
-                                    .text
-                                    .color(greyDark)
-                                    .fontFamily(bold)
-                                    .size(16)
-                                    .ellipsis
-                                    .maxLines(1)
-                                    .make(),
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: greyDark,
+                                    fontSize: 14,
+                                    fontFamily: semiBold,
+                                  ),
+                                  maxLines: 1,
+                                ),
                               ),
                               Text(
                                 "${NumberFormat('#,##0').format(double.parse(widget.price1).toInt())} Bath",
@@ -256,12 +255,12 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                                   .text
                                   .color(greyDark)
                                   .fontFamily(regular)
-                                  .size(14)
+                                  .size(12)
                                   .make(),
                             ],
                           ).box.border(color: greyLine).rounded.make(),
                         ),
-                        const SizedBox(width: 10),
+                        const SizedBox(width: 5),
                         Stack(
                           alignment: Alignment.center,
                           children: [
@@ -276,7 +275,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                                 .make(),
                           ],
                         ),
-                        const SizedBox(width: 10),
+                        const SizedBox(width: 5),
                         Expanded(
                           child: Column(
                             children: [
@@ -301,15 +300,18 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                               ),
                               5.heightBox,
                               SizedBox(
-                                width: 135,
-                                child: Text(widget.productName2)
-                                    .text
-                                    .color(greyDark)
-                                    .fontFamily(bold)
-                                    .size(18)
-                                    .ellipsis
-                                    .maxLines(1)
-                                    .make(),
+                                width: 130,
+                                child: Text(
+                                  widget.productName2,
+                                  softWrap: true,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: greyDark,
+                                    fontSize: 14,
+                                    fontFamily: semiBold,
+                                  ),
+                                  maxLines: 1,
+                                ),
                               ),
                               Text(
                                 "${NumberFormat('#,##0').format(double.parse(widget.price2).toInt())} Bath",
@@ -317,7 +319,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                                   .text
                                   .color(greyDark)
                                   .fontFamily(regular)
-                                  .size(14)
+                                  .size(12)
                                   .make(),
                             ],
                           ).box.border(color: greyLine).rounded.make(),

@@ -168,7 +168,7 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                                     ),
                                     child: Image.network(
                                       widget.productImage1,
-                                      height: 150,
+                                      height: 140,
                                       width: 165,
                                       fit: BoxFit.cover,
                                     ),
@@ -197,12 +197,12 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                                 .text
                                 .color(greyDark)
                                 .fontFamily(regular)
-                                .size(16)
+                                .size(12)
                                 .make(),
                           ],
                         ).box.border(color: greyLine).rounded.make(),
                       ),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: 5),
                       Stack(
                         alignment: Alignment.center,
                         children: [
@@ -217,7 +217,7 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                               .make(),
                         ],
                       ),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: 5),
                       Expanded(
                         child: Column(
                           children: [
@@ -232,7 +232,7 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                                     ),
                                     child: Image.network(
                                       widget.productImage2,
-                                      height: 150,
+                                      height: 140,
                                       width: 165,
                                       fit: BoxFit.cover,
                                     ),
@@ -258,13 +258,13 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                                 .text
                                 .color(greyDark)
                                 .fontFamily(regular)
-                                .size(16)
+                                .size(12)
                                 .make(),
                           ],
                         ).box.border(color: greyLine).rounded.make(),
                       ),
                     ],
-                  ).box.margin(EdgeInsets.symmetric(horizontal: 22)).make(),
+                  ).box.margin(EdgeInsets.symmetric(horizontal: 8)).make(),
                   30.heightBox,
                   Container(
                     width: double.infinity,
