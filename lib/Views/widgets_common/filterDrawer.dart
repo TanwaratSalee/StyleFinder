@@ -31,27 +31,58 @@ class _FilterDrawerState extends State<FilterDrawer> {
   bool isSelectedEveryday = false;
   var collectionsvalue = ''.obs;
   var vendors = <Map<String, dynamic>>[];
-  var selectedVendorIds = <String>[].obs; 
+  var selectedVendorIds = <String>[].obs;
 
   final selectedColorIndexes = <int>[].obs;
   final List<Map<String, dynamic>> allColors = [
     {'name': 'Black', 'color': Colors.black, 'value': 0xFF000000},
     {'name': 'Grey', 'color': greyColor, 'value': 0xFF808080},
     {'name': 'White', 'color': whiteColor, 'value': 0xFFFFFFFF},
-    {'name': 'Purple', 'color': const Color.fromRGBO(98, 28, 141, 1), 'value': 0xFF621C8D},
-    {'name': 'Deep Purple', 'color': const Color.fromRGBO(202, 147, 235, 1), 'value': 0xFFCA93EB},
-    {'name': 'Blue', 'color': Color.fromRGBO(32, 47, 179, 1), 'value': 0xFF202FB3},
-    {'name': 'Blue', 'color': const Color.fromRGBO(48, 176, 232, 1), 'value': 0xFF30B0E8},
-    {'name': 'Blue Grey', 'color': const Color.fromRGBO(83, 205, 191, 1), 'value': 0xFF53CDBF},
-    {'name': 'Green', 'color': const Color.fromRGBO(23, 119, 15, 1), 'value': 0xFF17770F},
-    {'name': 'Green', 'color': Color.fromRGBO(98, 207, 47, 1), 'value': 0xFF62CF2F},
+    {
+      'name': 'Purple',
+      'color': const Color.fromRGBO(98, 28, 141, 1),
+      'value': 0xFF621C8D
+    },
+    {
+      'name': 'Deep Purple',
+      'color': const Color.fromRGBO(202, 147, 235, 1),
+      'value': 0xFFCA93EB
+    },
+    {
+      'name': 'Blue',
+      'color': Color.fromRGBO(32, 47, 179, 1),
+      'value': 0xFF202FB3
+    },
+    {
+      'name': 'Blue',
+      'color': const Color.fromRGBO(48, 176, 232, 1),
+      'value': 0xFF30B0E8
+    },
+    {
+      'name': 'Blue Grey',
+      'color': const Color.fromRGBO(83, 205, 191, 1),
+      'value': 0xFF53CDBF
+    },
+    {
+      'name': 'Green',
+      'color': const Color.fromRGBO(23, 119, 15, 1),
+      'value': 0xFF17770F
+    },
+    {
+      'name': 'Green',
+      'color': Color.fromRGBO(98, 207, 47, 1),
+      'value': 0xFF62CF2F
+    },
     {'name': 'Yellow', 'color': Colors.yellow, 'value': 0xFFFFFF00},
     {'name': 'Orange', 'color': Colors.orange, 'value': 0xFFFFA500},
     {'name': 'Pink', 'color': Colors.pinkAccent, 'value': 0xFFFF4081},
     {'name': 'Red', 'color': Colors.red, 'value': 0xFFFF0000},
-    {'name': 'Brown', 'color': Color.fromARGB(255, 121, 58, 31), 'value': 0xFF793A1F},
+    {
+      'name': 'Brown',
+      'color': Color.fromARGB(255, 121, 58, 31),
+      'value': 0xFF793A1F
+    },
   ];
-
 
   @override
   void initState() {
@@ -109,7 +140,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
             ),
             Center(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 3),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 18, vertical: 3),
                 child: Row(
                   children: [
                     SizedBox(width: 5),
@@ -146,9 +178,9 @@ class _FilterDrawerState extends State<FilterDrawer> {
                 ),
               ),
             ),
-            
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
               child: Text("Official Store")
                   .text
                   .fontFamily(regular)
@@ -160,7 +192,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
               child: Wrap(
                 spacing: 10,
                 children: vendors.map((vendor) {
-                  final isSelected = selectedVendorIds.contains(vendor['vendor_id']);
+                  final isSelected =
+                      selectedVendorIds.contains(vendor['vendor_id']);
                   return GestureDetector(
                     onTap: () {
                       setState(() {
@@ -197,8 +230,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
             ),
             5.heightBox,
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text("Price").text.fontFamily(regular).size(14).make(),
             ),
             SliderTheme(
@@ -222,10 +254,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
                 },
               ),
             ),
-            
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text("Color").text.fontFamily(regular).size(14).make(),
             ),
             5.heightBox,
@@ -248,7 +278,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
                           } else {
                             selectedColorIndexes.add(color['value']);
                           }
-                          controller.updateFilters(colors: selectedColorIndexes);
+                          controller.updateFilters(
+                              colors: selectedColorIndexes);
                         });
                       },
                       child: Container(
@@ -270,7 +301,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
             ),
             5.heightBox,
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
               child: Text("Type of product")
                   .text
                   .fontFamily(regular)
@@ -351,12 +383,12 @@ class _FilterDrawerState extends State<FilterDrawer> {
                 ),
               ),
             ),
-
             5.heightBox,
-            
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
-              child: Text("Collection").text.fontFamily(regular).size(14).make(),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
+              child:
+                  Text("Collection").text.fontFamily(regular).size(14).make(),
             ),
             Center(
               child: Padding(
@@ -399,7 +431,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                 ),
               ),
             ),
-             SizedBox(
+            SizedBox(
               height: 100,
               child: Center(
                 child: ElevatedButton(
@@ -451,16 +483,16 @@ class _FilterDrawerState extends State<FilterDrawer> {
     );
   }
 
-Future<List<Map<String, dynamic>>> fetchVendors() async {
-  try {
-    QuerySnapshot<Map<String, dynamic>> snapshot =
-        await FirebaseFirestore.instance.collection('vendors').get();
-    return snapshot.docs.map((doc) => doc.data()).toList();
-  } catch (e) {
-    print("Error fetching vendors: $e");
-    return [];
+  Future<List<Map<String, dynamic>>> fetchVendors() async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot =
+          await FirebaseFirestore.instance.collection('vendors').get();
+      return snapshot.docs.map((doc) => doc.data()).toList();
+    } catch (e) {
+      print("Error fetching vendors: $e");
+      return [];
+    }
   }
-}
 
   void updateFilterTypes() {
     List<String> types = [];
@@ -497,7 +529,8 @@ Future<List<Map<String, dynamic>>> fetchProducts({
   List<String>? selectedCollections,
   List<String>? vendorIds,
 }) async {
-  Query<Map<String, dynamic>> query = FirebaseFirestore.instance.collection(productsCollection);
+  Query<Map<String, dynamic>> query =
+      FirebaseFirestore.instance.collection(productsCollection);
 
   if (gender != null && gender.isNotEmpty) {
     query = query.where('p_sex', isEqualTo: gender);
@@ -510,7 +543,8 @@ Future<List<Map<String, dynamic>>> fetchProducts({
 
   try {
     QuerySnapshot<Map<String, dynamic>> snapshot = await query.get();
-    List<Map<String, dynamic>> products = snapshot.docs.map((doc) => doc.data()).toList();
+    List<Map<String, dynamic>> products =
+        snapshot.docs.map((doc) => doc.data()).toList();
 
     // Filter by colors
     if (selectedColors != null && selectedColors.isNotEmpty) {
@@ -538,7 +572,8 @@ Future<List<Map<String, dynamic>>> fetchProducts({
     if (selectedCollections != null && selectedCollections.isNotEmpty) {
       products = products.where((product) {
         List<dynamic> productCollections = product['p_collection'];
-        return selectedCollections.any((collection) => productCollections.contains(collection));
+        return selectedCollections
+            .any((collection) => productCollections.contains(collection));
       }).toList();
     }
 
@@ -548,7 +583,6 @@ Future<List<Map<String, dynamic>>> fetchProducts({
     return [];
   }
 }
-
 
 class FirestoreServices {
   static Future<List<Map<String, dynamic>>> getFeaturedProducts() async {
@@ -570,15 +604,12 @@ bool isInWishlist(Map<String, dynamic> product, String currentUid) {
 
 Widget buildFilterChip(
     String label, bool isSelected, Function(bool) onSelected) {
-  return
-     FilterChip(
-      label: Text(label),
-      selected: isSelected,
-      onSelected: onSelected,
-      showCheckmark: false,
-      side: BorderSide(color: isSelected ? primaryApp : greyLine),
-      selectedColor: thinPrimaryApp,
-  
+  return FilterChip(
+    label: Text(label),
+    selected: isSelected,
+    onSelected: onSelected,
+    showCheckmark: false,
+    side: BorderSide(color: isSelected ? primaryApp : greyLine),
+    selectedColor: thinPrimaryApp,
   );
 }
-
