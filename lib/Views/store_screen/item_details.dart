@@ -36,6 +36,9 @@ class _ItemDetailsState extends State<ItemDetails> {
       controller.calculateTotalPrice(productPrice);
       fetchReviews();
     });
+
+    // ดึงข้อมูล vendor
+    controller.fetchVendorInfo(widget.data['vendor_id']);
   }
 
   void checkIsInWishlist() async {
@@ -55,8 +58,6 @@ class _ItemDetailsState extends State<ItemDetails> {
         }
       }
     });
-
-    fetchVendorImageUrl(widget.data['vendor_id']);
   }
 
   void fetchReviews() async {
@@ -90,25 +91,6 @@ class _ItemDetailsState extends State<ItemDetails> {
         controller.updateTotalRating(0);
         this.reviewCount = 0;
       });
-    }
-  }
-
-  void fetchVendorImageUrl(String vendorId) async {
-    try {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection(vendorsCollection)
-          .where('vendor_id', isEqualTo: vendorId)
-          .limit(1)
-          .get();
-
-      if (querySnapshot.docs.isNotEmpty) {
-        Map<String, dynamic> data =
-            querySnapshot.docs.first.data() as Map<String, dynamic>;
-        String imageUrl = data['imageUrl'] ?? '';
-        controller.updateVendorImageUrl(imageUrl);
-      }
-    } catch (e) {
-      print('Error fetching vendor image: $e');
     }
   }
 
@@ -239,8 +221,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                             children: [
                               5.widthBox,
                               Obx(() {
-                                String imageUrl =
-                                    controller.vendorImageUrl.value;
+                                String imageUrl = controller.vendorImageUrl.value;
                                 return imageUrl.isNotEmpty
                                     ? ClipOval(
                                         child: Image.network(
@@ -264,13 +245,17 @@ class _ItemDetailsState extends State<ItemDetails> {
                               Expanded(
                                 child: Align(
                                   alignment: Alignment.centerLeft,
-                                  child: "${widget.data['p_seller']}"
-                                      .toUpperCase()
-                                      .text
-                                      .fontFamily(medium)
-                                      .color(blackColor)
-                                      .size(18)
-                                      .make(),
+                                  child: Obx(() {
+                                    return controller.vendorName.isNotEmpty
+                                        ? controller.vendorName.value
+                                            .toUpperCase()
+                                            .text
+                                            .fontFamily(medium)
+                                            .color(blackColor)
+                                            .size(18)
+                                            .make()
+                                        : Container();
+                                  }),
                                 ),
                               ),
                             ],
@@ -704,7 +689,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                               vendorID: widget.data['vendor_id'],
                               img: widget.data['p_imgs'][0],
                               qty: controller.quantity.value,
-                              sellername: widget.data['p_seller'],
+                              // sellername: widget.data['p_seller'],
                               title: widget.data['p_name'],
                               tprice: controller.totalPrice.value,
                               productsize: selectedSize,

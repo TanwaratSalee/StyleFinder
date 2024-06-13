@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/Views/match_screen/matchpost_details.dart';
 import 'package:flutter_finalproject/Views/news_screen/allstore_screen.dart';
@@ -324,7 +325,7 @@ class NewsScreen extends StatelessWidget {
                                 crossAxisCount: 2,
                                 mainAxisSpacing: 12,
                                 crossAxisSpacing: 8,
-                                mainAxisExtent: 280,
+                                mainAxisExtent: 270,
                               ),
                               itemBuilder: (context, index) {
                                 return Column(
@@ -339,8 +340,8 @@ class NewsScreen extends StatelessWidget {
                                           ),
                                           child: Image.network(
                                             allproductsdata[index]['p_imgs'][0],
-                                            width: 200,
-                                            height: 210,
+                                            width: 195,
+                                            height: 205,
                                             fit: BoxFit.cover,
                                           ),
                                         ),
@@ -764,198 +765,204 @@ class NewsScreen extends StatelessWidget {
     );
   }
 
-  Widget buildGeneralMatch() {
-    return StreamBuilder<QuerySnapshot>(
-      stream:
-          FirebaseFirestore.instance.collection('usermixandmatch').snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Center(child: CircularProgressIndicator());
-        }
-        var data = snapshot.data!.docs;
+Widget buildGeneralMatch() {
+  return StreamBuilder<QuerySnapshot>(
+    stream: FirebaseFirestore.instance
+        .collection('usermixandmatch')
+        .orderBy('views', descending: true)
+        .snapshots(),
+    builder: (context, snapshot) {
+      if (!snapshot.hasData) {
+        return Center(child: CircularProgressIndicator());
+      }
+      var data = snapshot.data!.docs;
 
-        if (data.isEmpty) {
-          return Center(
-            child:
-                Text("No posts available!", style: TextStyle(color: greyDark)),
-          );
-        }
-        data.shuffle();
-        var limitedData = data.take(4).toList();
+      if (data.isEmpty) {
+        return Center(
+          child: Text("No posts available!", style: TextStyle(color: greyDark)),
+        );
+      }
 
-        return GridView.builder(
-          physics: const NeverScrollableScrollPhysics(), // Disable scrolling
-          shrinkWrap: true, // Allow the grid to shrink to fit its content
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 7,
-            crossAxisSpacing: 7,
-            mainAxisExtent: 240,
-          ),
-          itemCount: limitedData.length,
-          itemBuilder: (context, index) {
-            var doc = limitedData[index];
-            var docData = doc.data() as Map<String, dynamic>;
-            var topImage = docData['p_imgs_top'] ?? '';
-            var lowerImage = docData['p_imgs_lower'] ?? '';
-            var productNameTop = docData['p_name_top'] ?? '';
-            var productNameLower = docData['p_name_lower'] ?? '';
-            var priceTop = docData['p_price_top']?.toString() ?? '0';
-            var priceLower = docData['p_price_lower']?.toString() ?? '0';
-            var vendorId = docData['vendor_id'] ?? '';
-            var collections = docData['p_collection'] != null
-                ? List<String>.from(docData['p_collection'])
-                : [];
-            var description = docData['p_desc'] ?? '';
-            var views = docData['views'] ?? 0;
-            var gender = docData['p_sex'] ?? '';
+      // Shuffle data to randomize
+      data.shuffle(Random());
 
-            String totalPrice = (int.parse(docData['p_price_top']) +
-                    int.parse(docData['p_price_lower']))
-                .toString();
-            var posted_by = docData['posted_by'] ?? '';
-            var posted_name = docData['posted_name'];
-            var posted_img = docData['posted_img'];
+      // Limit to 4 items
+      var limitedData = data.take(4).toList();
 
-            return GestureDetector(
-              onTap: () {
-                Get.to(() => MatchPostsDetails(
-                    productName1: productNameTop,
-                    productName2: productNameLower,
-                    price1: priceTop,
-                    price2: priceLower,
-                    productImage1: topImage,
-                    productImage2: lowerImage,
-                    totalPrice: (int.parse(priceTop) + int.parse(priceLower))
-                        .toString(),
-                    vendorName1: 'Vendor Name 1',
-                    vendorName2: 'Vendor Name 2',
-                    vendor_id: vendorId,
-                    collection: collections,
-                    description: description,
-                    gender: gender,
-                    posted_by: posted_by,
-                    posted_name: posted_name,
-                    posted_img: posted_img));
-              },
-              child: Container(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 75,
-                          height: 80,
-                          child: Image.network(
-                            topImage,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        SizedBox(width: 5),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                productNameTop,
-                                style: const TextStyle(
-                                  fontFamily: medium,
-                                  fontSize: 14,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                              Text(
-                                "${NumberFormat('#,##0').format(double.parse(priceTop).toInt())} Bath",
-                                style: const TextStyle(color: greyColor),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(width: 8),
-                      ],
-                    ),
-                    SizedBox(height: 10),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 75,
-                          height: 80,
-                          child: Image.network(
-                            lowerImage,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        SizedBox(width: 5),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                productNameLower,
-                                style: const TextStyle(
-                                  fontFamily: medium,
-                                  fontSize: 14,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                              Text(
-                                "${NumberFormat('#,##0').format(double.parse(priceLower).toInt())} Bath",
-                                style: const TextStyle(color: greyColor),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: Row(
+      return GridView.builder(
+        padding: EdgeInsets.all(12),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 8,
+          mainAxisSpacing: 8,
+          childAspectRatio: 9 / 11,
+        ),
+        itemCount: limitedData.length,
+        physics: const NeverScrollableScrollPhysics(), // Prevent scrolling
+        itemBuilder: (context, index) {
+          var doc = limitedData[index];
+          var docData = doc.data() as Map<String, dynamic>;
+          var productIdTop = docData['p_id_top'] ?? '';
+          var productIdLower = docData['p_id_lower'] ?? '';
+
+          return FutureBuilder<List<DocumentSnapshot>>(
+            future: Future.wait([
+              FirebaseFirestore.instance.collection('products').doc(productIdTop).get(),
+              FirebaseFirestore.instance.collection('products').doc(productIdLower).get()
+            ]),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Center(child: CircularProgressIndicator());
+              }
+
+              var snapshotTop = snapshot.data![0];
+              var snapshotLower = snapshot.data![1];
+
+              if (!snapshotTop.exists || !snapshotLower.exists) {
+                return Center(child: Text("One or more products not found"));
+              }
+
+              var productDataTop = snapshotTop.data() as Map<String, dynamic>;
+              var productDataLower = snapshotLower.data() as Map<String, dynamic>;
+
+              var topImage = (productDataTop['p_imgs'] as List<dynamic>?)?.first ?? '';
+              var lowerImage = (productDataLower['p_imgs'] as List<dynamic>?)?.first ?? '';
+              var productNameTop = productDataTop['p_name'] ?? '';
+              var productNameLower = productDataLower['p_name'] ?? '';
+              var priceTop = productDataTop['p_price']?.toString() ?? '0';
+              var priceLower = productDataLower['p_price']?.toString() ?? '0';
+              var collections = docData['p_collection'] != null
+                  ? List<String>.from(docData['p_collection'])
+                  : [];
+              var description = docData['p_desc'] ?? '';
+              var views = docData['views'] ?? 0;
+              var gender = docData['p_sex'] ?? '';
+              var postedBy = docData['posted_by'] ?? '';
+
+              return GestureDetector(
+                onTap: () {
+                  Get.to(() => MatchPostsDetails(
+                        productName1: productNameTop,
+                        productName2: productNameLower,
+                        price1: priceTop,
+                        price2: priceLower,
+                        productImage1: topImage,
+                        productImage2: lowerImage,
+                        totalPrice: (int.parse(priceTop) + int.parse(priceLower)).toString(),
+                        vendorName1: 'Vendor Name 1', // Replace with actual vendor name if available
+                        vendorName2: 'Vendor Name 2', // Replace with actual vendor name if available
+                        vendor_id: doc.id,
+                        collection: collections,
+                        description: description,
+                        gender: gender,
+                        posted_by: postedBy,
+                      ));
+                },
+                child: Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Row(
                         children: [
-                          Text(
-                            "Total: ",
-                            style: TextStyle(
-                                color: blackColor,
-                                fontFamily: regular,
-                                fontSize: 14),
+                          SizedBox(
+                            width: 75,
+                            height: 80,
+                            child: Image.network(
+                              topImage,
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                          Text(
-                            "${NumberFormat('#,##0').format(double.parse(totalPrice).toInt())} ",
-                            style: TextStyle(
-                                color: blackColor,
-                                fontFamily: medium,
-                                fontSize: 16),
+                          SizedBox(width: 5),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  productNameTop,
+                                  style: const TextStyle(
+                                    fontFamily: medium,
+                                    fontSize: 14,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                                Text(
+                                  "${NumberFormat('#,##0').format(double.parse(priceTop).toInt())} Bath",
+                                  style: const TextStyle(color: greyColor),
+                                ),
+                              ],
+                            ),
                           ),
-                          Text(
-                            "Bath",
-                            style: TextStyle(
-                                color: blackColor,
-                                fontFamily: regular,
-                                fontSize: 14),
+                          SizedBox(width: 8),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 75,
+                            height: 80,
+                            child: Image.network(
+                              lowerImage,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          SizedBox(width: 5),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  productNameLower,
+                                  style: const TextStyle(
+                                    fontFamily: medium,
+                                    fontSize: 14,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                                Text(
+                                  "${NumberFormat('#,##0').format(double.parse(priceLower).toInt())} Bath",
+                                  style: const TextStyle(color: greyColor),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
-                    )
-                  ],
-                )
-                    .box
-                    .border(color: greyLine)
-                    .p8
-                    .margin(EdgeInsets.all(2))
-                    .roundedSM
-                    .make(),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
+                      SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Total ${NumberFormat('#,##0').format(int.parse(priceTop) + int.parse(priceLower))} Bath",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: medium,
+                              color: blackColor,
+                            ),
+                          ),
+                        ],
+                      ).paddingSymmetric(horizontal: 8),
+                    ],
+                  )
+                      .box
+                      .border(color: greyLine)
+                      .rounded
+                      .padding(EdgeInsets.all(8))
+                      .make(),
+                ),
+              );
+            },
+          );
+        },
+      );
+    },
+  );
+}
+
 }
 
 //   Widget buildGeneralMatch() {

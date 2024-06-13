@@ -181,7 +181,7 @@ class AllStoreScreen extends StatelessWidget {
                         crossAxisCount: 3,
                         crossAxisSpacing: 8,
                         mainAxisSpacing: 8,
-                        childAspectRatio: 1 / 1,
+                        childAspectRatio: 1 / 1.1,
                       ),
                       itemCount: officialProducts.length,
                       itemBuilder: (context, index) {

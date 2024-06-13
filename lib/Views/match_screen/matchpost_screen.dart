@@ -1,8 +1,8 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
-import 'package:get/get.dart';
-import 'package:flutter/material.dart';
 
 class MatchPostProduct extends StatefulWidget {
   final Map<String, dynamic> topProduct;
@@ -27,8 +27,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
     bool isSelectedWinter = controller.selectedCollections.contains('winter');
     bool isSelectedAutumn = controller.selectedCollections.contains('autumn');
     bool isSelectedDinner = controller.selectedCollections.contains('dinner');
-    bool isSelectedEveryday =
-        controller.selectedCollections.contains('everydaylook');
+    bool isSelectedEveryday = controller.selectedCollections.contains('everydaylook');
 
     return WillPopScope(
       onWillPop: () async {
@@ -78,73 +77,28 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Column(
+                        buildProductImage(widget.topProduct['p_imgs'][0], 'Top'),
+                        SizedBox(width: 10),
+                        Stack(
+                          alignment: Alignment.center,
                           children: [
                             Container(
-                              width: 140,
-                              height: 150,
-                              color: whiteColor,
-                              child: Center(
-                                child: Image.network(
-                                    widget.topProduct['p_imgs'][0]),
-                              ).box.border(color: greyLine).rounded.make(),
-                            ),
-                            SizedBox(height: 5),
-                            Text(
-                              'Top',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontFamily: regular,
+                              width: 27,
+                              height: 27,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: primaryApp,
                               ),
                             ),
-                          ],
-                        ),
-                        SizedBox(width: 10),
-                        Column(
-                          children: [
-                            Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Container(
-                                  width: 27,
-                                  height: 27,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: primaryApp,
-                                  ),
-                                ),
-                                Icon(
-                                  Icons.add,
-                                  size: 24,
-                                  color: whiteColor,
-                                ),
-                              ],
+                            Icon(
+                              Icons.add,
+                              size: 24,
+                              color: whiteColor,
                             ),
-                            SizedBox(height: 10),
                           ],
                         ),
                         SizedBox(width: 15),
-                        Column(
-                          children: [
-                            Container(
-                              width: 140,
-                              height: 150,
-                              color: whiteColor,
-                              child: Center(
-                                child: Image.network(
-                                    widget.lowerProduct['p_imgs'][0]),
-                              ).box.border(color: greyLine).rounded.make(),
-                            ),
-                            SizedBox(height: 5),
-                            Text(
-                              'Lower',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontFamily: regular,
-                              ),
-                            ),
-                          ],
-                        ),
+                        buildProductImage(widget.lowerProduct['p_imgs'][0], 'Lower'),
                       ],
                     ),
                   ),
@@ -248,7 +202,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                             fontFamily: medium,
                           ),
                         ),
-                        8.heightBox,
+                        SizedBox(height: 8),
                         TextField(
                           controller: explanationController,
                           maxLines: 3,
@@ -276,6 +230,29 @@ class _MatchPostProductState extends State<MatchPostProduct> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildProductImage(String imageUrl, String label) {
+    return Column(
+      children: [
+        Container(
+          width: 140,
+          height: 150,
+          color: whiteColor,
+          child: Center(
+            child: Image.network(imageUrl),
+          ).box.border(color: greyLine).rounded.make(),
+        ),
+        SizedBox(height: 5),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 16,
+            fontFamily: regular,
+          ),
+        ),
+      ],
     );
   }
 
@@ -338,7 +315,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
             fontFamily: medium,
           ),
         ),
-        8.heightBox,
+        SizedBox(height: 8),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -373,18 +350,17 @@ class _MatchPostProductState extends State<MatchPostProduct> {
           "Collection",
           style: TextStyle(fontSize: 16, fontFamily: medium),
         ),
-        8.heightBox,
+        SizedBox(height: 8),
         Center(
           child: Wrap(
             spacing: 10,
             runSpacing: 1,
             children: [
-              buildFilterChip("Summer ", isSelectedSummer, onSummerSelected),
-              buildFilterChip("Winter ", isSelectedWinter, onWinterSelected),
-              buildFilterChip("Autumn ", isSelectedAutumn, onAutumnSelected),
-              buildFilterChip("Dinner ", isSelectedDinner, onDinnerSelected),
-              buildFilterChip(
-                  "Everydaylook ", isSelectedEveryday, onEverydaySelected),
+              buildFilterChip("Summer", isSelectedSummer, onSummerSelected),
+              buildFilterChip("Winter", isSelectedWinter, onWinterSelected),
+              buildFilterChip("Autumn", isSelectedAutumn, onAutumnSelected),
+              buildFilterChip("Dinner", isSelectedDinner, onDinnerSelected),
+              buildFilterChip("Everydaylook", isSelectedEveryday, onEverydaySelected),
             ],
           ),
         ),
@@ -392,8 +368,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
     );
   }
 
-  Widget buildFilterChip(
-      String label, bool isSelected, Function(bool) onSelected) {
+  Widget buildFilterChip(String label, bool isSelected, Function(bool) onSelected) {
     final BorderSide borderSide = BorderSide(
       color: isSelected ? primaryApp : greyLine,
       width: 2.0,

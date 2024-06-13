@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/profile_screen/userprofile_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
@@ -21,9 +22,7 @@ class MatchPostsDetails extends StatefulWidget {
   final List<dynamic> collection;
   final String description;
   final String gender;
-  final String posted_name;
   final String posted_by;
-  final String posted_img;
 
   const MatchPostsDetails({
     required this.productName1,
@@ -40,8 +39,6 @@ class MatchPostsDetails extends StatefulWidget {
     required this.description,
     required this.gender,
     required this.posted_by,
-    required this.posted_name,
-    required this.posted_img,
   });
 
   @override
@@ -50,6 +47,9 @@ class MatchPostsDetails extends StatefulWidget {
 
 class _MatchPostsDetailsState extends State<MatchPostsDetails> {
   late final ProductController controller;
+  String? productImageUrl;
+  String? postedUserName;
+  String? postedUserImageUrl;
 
   @override
   void initState() {
@@ -57,6 +57,8 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
     controller = Get.put(ProductController());
     checkIsInWishlist();
     incrementViewCount();
+    fetchProductImage();
+    fetchPostedUserDetails();
   }
 
   void checkIsInWishlist() async {
@@ -110,6 +112,48 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
     });
   }
 
+  void fetchProductImage() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('usermixandmatch')
+        .where('p_name_top', isEqualTo: widget.productName1)
+        .where('vendor_id_top', isEqualTo: widget.vendor_id)
+        .limit(1)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      var doc = querySnapshot.docs.first.data() as Map<String, dynamic>;
+      String vendorIdTop = doc['vendor_id_top'];
+      
+      QuerySnapshot productSnapshot = await FirebaseFirestore.instance
+          .collection('products')
+          .where('vendor_id', isEqualTo: vendorIdTop)
+          .limit(1)
+          .get();
+
+      if (productSnapshot.docs.isNotEmpty) {
+        var productDoc = productSnapshot.docs.first.data() as Map<String, dynamic>;
+        setState(() {
+          productImageUrl = productDoc['p_imgs'][0];
+        });
+      }
+    }
+  }
+
+  void fetchPostedUserDetails() async {
+    DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+        .collection(usersCollection)
+        .doc(widget.posted_by)
+        .get();
+
+    if (userSnapshot.exists) {
+      var userData = userSnapshot.data() as Map<String, dynamic>;
+      setState(() {
+        postedUserName = userData['name'];
+        postedUserImageUrl = userData['imageUrl'];
+      });
+    }
+  }
+
   void _updateIsFav(bool isFav) {
     setState(() {
       controller.isFav.value = isFav;
@@ -131,8 +175,12 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
     }
   }
 
-  void navigateToUserProfile(String userId, String postedName, String postedImg) {
-    Get.to(() => UserProfileScreen(userId: userId, postedName: postedName, postedImg: postedImg));
+  void navigateToUserProfile(String userId) {
+    Get.to(() => UserProfileScreen(
+      userId: userId,
+      postedName: postedUserName ?? '',
+      postedImg: postedUserImageUrl ?? '',
+    ));
   }
 
   @override
@@ -156,10 +204,10 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
               onSelected: (value) {
                 switch (value) {
                   case 'Edit':
-                    // เพิ่มโค้ดสำหรับการแก้ไข
+                    // Add code for edit
                     break;
                   case 'Delete':
-                    // เพิ่มโค้ดสำหรับการลบ
+                    // Add code for delete
                     break;
                 }
               },
@@ -202,7 +250,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(12.0),
         child: Column(
           children: <Widget>[
             Expanded(
@@ -235,7 +283,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                                 ),
                               ),
                               5.heightBox,
-                             SizedBox(
+                              SizedBox(
                                 width: 130,
                                 child: Text(
                                   widget.productName1,
@@ -336,30 +384,29 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                             child: Row(
                               children: [
                                 SizedBox(width: 12),
-                                widget.posted_img.isNotEmpty
-                                    ? Container(
+                                if (postedUserImageUrl != null)
+                                  Container(
+                                    width: 50,
+                                    height: 50,
+                                    child: ClipOval(
+                                      child: Image.network(
+                                        postedUserImageUrl!,
                                         width: 50,
                                         height: 50,
-                                        child: ClipOval(
-                                          child: Image.network(
-                                            widget.posted_img,
-                                            width: 50,
-                                            height: 50,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      )
-                                        .box
-                                        .border(color: greyLine, width: 1.5)
-                                        .roundedFull
-                                        .make()
-                                    : SizedBox.shrink(),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  )
+                                      .box
+                                      .border(color: greyLine, width: 1.5)
+                                      .roundedFull
+                                      .make(),
                                 SizedBox(width: 10),
                                 Expanded(
                                   child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      widget.posted_name.toUpperCase(),
+                                      postedUserName ?? '',
                                       style: TextStyle(
                                         fontFamily: medium,
                                         color: blackColor,
@@ -374,10 +421,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                           SizedBox(width: 10),
                           GestureDetector(
                             onTap: () {
-                              navigateToUserProfile(
-                                  widget.posted_by,
-                                  widget.posted_name,
-                                  widget.posted_img);
+                              navigateToUserProfile(widget.posted_by);
                             },
                             child: Container(
                               margin: EdgeInsets.only(right: 12),

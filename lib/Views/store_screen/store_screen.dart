@@ -439,16 +439,15 @@ class StoreScreen extends StatelessWidget {
   }
 
   Future<String> fetchSellerName(String vendorId) async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection(productsCollection)
-        .where('vendor_id', isEqualTo: vendorId)
-        .limit(1)
+    DocumentSnapshot vendorSnapshot = await FirebaseFirestore.instance
+        .collection('vendors')
+        .doc(vendorId)
         .get();
 
-    if (querySnapshot.docs.isNotEmpty) {
-      Map<String, dynamic> data =
-          querySnapshot.docs.first.data() as Map<String, dynamic>;
-      return data['p_seller'] ?? 'Unknow Seller';
+    if (vendorSnapshot.exists) {
+      Map<String, dynamic> vendorData =
+          vendorSnapshot.data() as Map<String, dynamic>;
+      return vendorData['vendor_name'] ?? 'Unknown Seller';
     } else {
       return 'Unknown Seller';
     }
@@ -456,16 +455,14 @@ class StoreScreen extends StatelessWidget {
 
   Future<String> fetchSellerImgs(String vendorId) async {
     try {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection(vendorsCollection)
-          .where('vendor_id', isEqualTo: vendorId)
-          .limit(1)
+      DocumentSnapshot vendorSnapshot = await FirebaseFirestore.instance
+          .collection('vendors')
+          .doc(vendorId)
           .get();
 
-      if (querySnapshot.docs.isNotEmpty) {
-        Map<String, dynamic> data =
-            querySnapshot.docs.first.data() as Map<String, dynamic>;
-        return data['imageUrl'] ?? 'Error product image';
+      if (vendorSnapshot.exists) {
+        var vendorData = vendorSnapshot.data() as Map<String, dynamic>;
+        return vendorData['imageUrl'] ?? 'Error product image';
       } else {
         return 'Error product image';
       }
