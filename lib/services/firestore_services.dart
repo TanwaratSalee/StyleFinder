@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
+import 'package:rxdart/rxdart.dart';
 
 class FirestoreServices {
   //get users data
@@ -80,18 +82,24 @@ class FirestoreServices {
         .snapshots();
   }
 
-  static getWishlists() {
+  static getFavorite() {
     return firestore
         .collection(productsCollection)
-        .where('favorite', arrayContains: currentUser!.uid)
+        .where('favorite_uid', arrayContains: currentUser!.uid)
         .snapshots();
   }
 
-  static getWishlistsusermixmatchs() {
-    return firestore
-        .collection(usermixandmatchCollection)
-        .where('favorite', arrayContains: currentUser!.uid)
-        .snapshots();
+  static Stream<List<QuerySnapshot>> getFavoriteusermixmatchs() {
+    return CombineLatestStream.list([
+      FirebaseFirestore.instance
+          .collection('usermixandmatch')
+          .where('favorite_userid', arrayContains: FirebaseAuth.instance.currentUser!.uid)
+          .snapshots(),
+      FirebaseFirestore.instance
+          .collection('storemixandmatchs')
+          .where('favorite_userid', arrayContains: FirebaseAuth.instance.currentUser!.uid)
+          .snapshots()
+    ]);
   }
 
   static getAllMessages() {
@@ -112,7 +120,7 @@ class FirestoreServices {
       }),
       firestore
           .collection(productsCollection)
-          .where('favorite', arrayContains: currentUser!.uid)
+          .where('favorite_uid', arrayContains: currentUser!.uid)
           .get()
           .then((value) {
         return value.docs.length;

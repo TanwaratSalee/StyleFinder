@@ -58,10 +58,10 @@ class HomeController extends GetxController {
         .then((QuerySnapshot querySnapshot) {
       if (querySnapshot.docs.isNotEmpty) {
         DocumentSnapshot doc = querySnapshot.docs.first;
-        List<dynamic> wishlist = doc['favorite'];
+        List<dynamic> wishlist = doc['favorite_uid'];
         if (!wishlist.contains(currentUser!.uid)) {
           doc.reference.update({
-            'favorite': FieldValue.arrayUnion([currentUser!.uid])
+            'favorite_uid': FieldValue.arrayUnion([currentUser!.uid])
           }).then((value) {
             // Update UI or show message
           }).catchError((error) {

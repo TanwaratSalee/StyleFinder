@@ -169,22 +169,11 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                 onPressed: () {
                   print("IconButton pressed");
                   bool isFav = !controller.isFav.value;
-                  if (isFav == true) {
-                    controller.addToWishlistMixMatch(
-                        nameTop,
-                        nameLower,
-                        widget.documentId,
-                        updateIsFav,
-                        context);
-                  } else {
-                    controller.removeToWishlistMixMatch(
-                        nameTop,
-                        nameLower,
-                        widget.documentId,
-                        updateIsFav,
-                        context);
-                  }
-                  print("isFav after toggling: $isFav");
+                  if (isFav) {
+                      addToFavorites();
+                    } else {
+                      removeFromFavorites();
+                    }
                 },
                 icon: controller.isFav.value
                     ? Image.asset(icTapFavoriteButton, width: 23)
@@ -541,5 +530,26 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
               ],
             ),
     );
+  }
+  void addToFavorites() async {
+    String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
+    await FirebaseFirestore.instance.collection('storemixandmatchs').doc(widget.documentId).update({
+      'favorite_userid': FieldValue.arrayUnion([currentUserUID])
+    }).then((_) {
+      updateIsFav(true);
+    }).catchError((error) {
+      print('Error adding to favorites: $error');
+    });
+  }
+
+  void removeFromFavorites() async {
+    String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
+    await FirebaseFirestore.instance.collection('storemixandmatchs').doc(widget.documentId).update({
+      'favorite_userid': FieldValue.arrayRemove([currentUserUID])
+    }).then((_) {
+      updateIsFav(false);
+    }).catchError((error) {
+      print('Error removing from favorites: $error');
+    });
   }
 }

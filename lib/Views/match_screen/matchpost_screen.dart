@@ -20,8 +20,8 @@ class _MatchPostProductState extends State<MatchPostProduct> {
   @override
   Widget build(BuildContext context) {
     bool isSelectedAll = controller.selectedGender.value == 'all';
-    bool isSelectedMen = controller.selectedGender.value == 'male';
-    bool isSelectedWomen = controller.selectedGender.value == 'woman';
+    bool isSelectedMen = controller.selectedGender.value == 'men';
+    bool isSelectedWomen = controller.selectedGender.value == 'women';
     bool isSelectedSummer = controller.selectedCollections.contains('summer');
     bool isSelectedWinter = controller.selectedCollections.contains('winter');
     bool isSelectedAutumn = controller.selectedCollections.contains('autumn');

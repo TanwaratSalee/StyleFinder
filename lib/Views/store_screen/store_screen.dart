@@ -218,38 +218,35 @@ class StoreScreen extends StatelessWidget {
   }
 
 Widget buildMatchTab() {
-  return StreamBuilder<List<QuerySnapshot>>(
-    stream: CombineLatestStream.list([
-      FirebaseFirestore.instance
-          .collection('storemixandmatchs')
-          .orderBy('views', descending: true)
+  return StreamBuilder<QuerySnapshot>(
+    stream: FirebaseFirestore.instance
+        .collection('storemixandmatchs')
+          .where('vendor_id', isEqualTo: vendorId)
           .snapshots(),
-      FirebaseFirestore.instance
-          .collection('usermixandmatch')
-          .orderBy('views', descending: true)
-          .snapshots(),
-    ]),
     builder: (context, snapshot) {
       if (!snapshot.hasData) {
         return Center(child: CircularProgressIndicator());
       }
+      if (snapshot.hasError) {
+        print(snapshot.error);
+        return Center(
+          child: Text(
+            "An error occurred: ${snapshot.error}",
+            style: TextStyle(color: greyDark),
+          ),
+        );
+      }
 
-      var storeData = snapshot.data![0].docs;
-      var userData = snapshot.data![1].docs;
+      var data = snapshot.data!.docs;
 
-      var combinedData = [...storeData, ...userData];
-
-      if (combinedData.isEmpty) {
+      if (data.isEmpty) {
         return Center(
           child: Text("No posts available!", style: TextStyle(color: greyDark)),
         );
       }
 
       // Shuffle data to randomize
-      combinedData.shuffle(Random());
-
-      // Limit to 4 items
-      var limitedData = combinedData.take(4).toList();
+      data.shuffle(Random());
 
       return GridView.builder(
         padding: EdgeInsets.all(12),
@@ -259,10 +256,9 @@ Widget buildMatchTab() {
           mainAxisSpacing: 8,
           childAspectRatio: 9 / 11,
         ),
-        itemCount: limitedData.length,
-        physics: const NeverScrollableScrollPhysics(),
+        itemCount: data.length,
         itemBuilder: (context, index) {
-          var doc = limitedData[index];
+          var doc = data[index];
           var docData = doc.data() as Map<String, dynamic>;
           var productIdTop = docData['product_id_top'] ?? '';
           var productIdLower = docData['product_id_lower'] ?? '';
@@ -279,6 +275,19 @@ Widget buildMatchTab() {
                   .get()
             ]),
             builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              }
+              if (snapshot.hasError) {
+                print(snapshot.error);
+                return Center(
+                  child: Text(
+                    "An error occurred: ${snapshot.error}",
+                    style: TextStyle(color: greyDark),
+                  ),
+                );
+              }
+
               if (!snapshot.hasData) {
                 return Center(child: CircularProgressIndicator());
               }
@@ -302,19 +311,12 @@ Widget buildMatchTab() {
               var productNameLower = productDataLower['name'] ?? '';
               var priceTop = productDataTop['price']?.toString() ?? '0';
               var priceLower = productDataLower['price']?.toString() ?? '0';
-              var collections = docData['collection'] != null
-                  ? List<String>.from(docData['collection'])
-                  : [];
-              var description = docData['description'] ?? '';
-              var views = docData['views'] ?? 0;
-              var gender = docData['gender'] ?? '';
-              // var postedBy = docData['user_id'] ?? '';
 
               return GestureDetector(
                 onTap: () {
-                  Get.to(() => Get.to(() => MatchStoreDetailScreen(
+                  Get.to(() => MatchStoreDetailScreen(
                         documentId: doc.id,
-                      )));
+                      ));
                 },
                 child: Container(
                   child: Column(
@@ -420,34 +422,6 @@ Widget buildMatchTab() {
     },
   );
 }
-
-  // Widget buildMatchTab(BuildContext context) {
-  //   return Column(
-  //     children: <Widget>[
-  //       Padding(
-  //         padding: const EdgeInsets.all(5),
-  //         child: DefaultTabController(
-  //           length: 1,
-  //           child: Column(
-  //             children: <Widget>[
-  //               Container(
-  //                 height: MediaQuery.of(context).size.height * 0.656,
-  //                 child: TabBarView(
-  //                   children: [
-  //                     buildProductMathGrids('All'),
-  //                   ],
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //       Expanded(
-  //         child: Container(),
-  //       ),
-  //     ],
-  //   );
-  // }
 
   Widget buildProductGridAll() {
     CollectionReference productsCollection =
@@ -648,220 +622,5 @@ Widget buildMatchTab() {
     }
   }
 
-  // Widget buildProductMathGrids(String category) {
-  //   Query query = FirebaseFirestore.instance
-  //       .collection(productsCollection)
-  //       .where('vendor_id', isEqualTo: vendorId)
-  //       .where('p_mixmatch', isNotEqualTo: null);
-  //   return StreamBuilder<QuerySnapshot>(
-  //     stream: query.snapshots(),
-  //     builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-  //       if (!snapshot.hasData) {
-  //         return Center(
-  //           child: CircularProgressIndicator(),
-  //         );
-  //       }
-  //       Map<String, List<DocumentSnapshot>> mixMatchMap = {};
-  //       for (var doc in snapshot.data!.docs) {
-  //         var data = doc.data() as Map<String, dynamic>;
-  //         if (data['vendor_id'] == vendorId && data['p_mixmatch'] != null) {
-  //           String mixMatchKey = data['p_mixmatch'];
-  //           if (!mixMatchMap.containsKey(mixMatchKey)) {
-  //             mixMatchMap[mixMatchKey] = [];
-  //           }
-  //           mixMatchMap[mixMatchKey]!.add(doc);
-  //         }
-  //       }
-  //       var validPairs = mixMatchMap.entries
-  //           .where((entry) => entry.value.length == 2)
-  //           .toList();
-  //       int itemCount = validPairs.length;
-  //       return GridView.builder(
-  //         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-  //           crossAxisCount: 2,
-  //           childAspectRatio: 1 / 1.22,
-  //         ),
-  //         itemCount: itemCount,
-  //         itemBuilder: (BuildContext context, int index) {
-  //           var pair = validPairs[index].value;
-  //           var data1 = pair[0].data() as Map<String, dynamic>;
-  //           var data2 = pair[1].data() as Map<String, dynamic>;
-  //           String vendorName1 = data1['p_seller'];
-  //           String vendorName2 = data2['p_seller'];
-  //           String vendor_id = data1['vendor_id'];
-  //           List<dynamic> collectionList = data1['p_mixmatch_collection'];
-  //           String description = data1['p_mixmatch_desc'];
-  //           String price1 = data1['p_price'].toString();
-  //           String price2 = data2['p_price'].toString();
-  //           String totalPrice =
-  //               (int.parse(price1) + int.parse(price2)).toString();
-  //           String productName1 = data1['p_name'];
-  //           String productName2 = data2['p_name'];
-  //           String productImage1 = data1['p_imgs'][0];
-  //           String productImage2 = data2['p_imgs'][0];
-  //           String gender = data1['p_mixmatch_sex'];
-  //           bool isTop1 = data1['p_part'] == 'top';
-  //           bool isTop2 = data2['p_part'] == 'top';
-  //           // Ensure top items are displayed at the top
-  //           var topProductData = isTop1 ? data1 : data2;
-  //           var lowerProductData = isTop1 ? data2 : data1;
-  //           var topProductImage = isTop1 ? productImage1 : productImage2;
-  //           var lowerProductImage = isTop1 ? productImage2 : productImage1;
-  //           var topProductName = isTop1 ? productName1 : productName2;
-  //           var lowerProductName = isTop1 ? productName2 : productName1;
-  //           var topPrice = isTop1 ? price1 : price2;
-  //           var lowerPrice = isTop1 ? price2 : price1;
-  //           return GestureDetector(
-  //             onTap: () {
-  //               Navigator.push(
-  //                 context,
-  //                 MaterialPageRoute(
-  //                   builder: (context) => MatchStoreDetailScreen(
-  //                     price1: price1,
-  //                     price2: price2,
-  //                     productName1: productName1,
-  //                     productName2: productName2,
-  //                     productImage1: productImage1,
-  //                     productImage2: productImage2,
-  //                     totalPrice: totalPrice,
-  //                     vendorName1: vendorName1,
-  //                     vendorName2: vendorName2,
-  //                     vendor_id: vendor_id,
-  //                     collection: collectionList,
-  //                     description: description,
-  //                     gender: gender,
-  //                   ),
-  //                 ),
-  //               );
-  //             },
-  //             child: Column(
-  //               crossAxisAlignment: CrossAxisAlignment.start,
-  //               mainAxisAlignment: MainAxisAlignment.start,
-  //               children: <Widget>[
-  //                 Column(
-  //                   children: [
-  //                     Row(
-  //                       children: [
-  //                         Image.network(
-  //                           topProductImage.isNotEmpty
-  //                               ? topProductImage
-  //                               : imgError,
-  //                           width: 80,
-  //                           height: 90,
-  //                           fit: BoxFit.cover,
-  //                           errorBuilder: (BuildContext context,
-  //                               Object exception, StackTrace? stackTrace) {
-  //                             return Image.asset(imgError,
-  //                                 width: 80, height: 90, fit: BoxFit.cover);
-  //                           },
-  //                         ),
-  //                         5.widthBox,
-  //                         Expanded(
-  //                           child: Column(
-  //                             crossAxisAlignment: CrossAxisAlignment.start,
-  //                             mainAxisAlignment: MainAxisAlignment.start,
-  //                             children: [
-  //                               Container(
-  //                                 width: 200,
-  //                                 child: Text(
-  //                                   topProductName,
-  //                                   style: const TextStyle(
-  //                                     fontFamily: medium,
-  //                                     fontSize: 14,
-  //                                   ),
-  //                                   overflow: TextOverflow.ellipsis,
-  //                                   maxLines: 1,
-  //                                 ),
-  //                               ),
-  //                               Text(
-  //                                 "${NumberFormat('#,##0').format(double.parse(topPrice).toInt())} Bath",
-  //                                 style: const TextStyle(color: greyDark),
-  //                               ),
-  //                             ],
-  //                           ),
-  //                         )
-  //                       ],
-  //                     ),
-  //                     5.heightBox,
-  //                     Row(
-  //                       children: [
-  //                         Image.network(
-  //                           lowerProductImage,
-  //                           width: 80,
-  //                           height: 90,
-  //                           fit: BoxFit.cover,
-  //                         ),
-  //                         5.widthBox,
-  //                         Expanded(
-  //                           child: Column(
-  //                             crossAxisAlignment: CrossAxisAlignment.start,
-  //                             mainAxisAlignment: MainAxisAlignment.start,
-  //                             children: [
-  //                               Container(
-  //                                 width: 200,
-  //                                 child: Text(
-  //                                   lowerProductName,
-  //                                   style: const TextStyle(
-  //                                     fontFamily: medium,
-  //                                     fontSize: 14,
-  //                                   ),
-  //                                   overflow: TextOverflow.ellipsis,
-  //                                   maxLines: 1,
-  //                                 ),
-  //                               ),
-  //                               Text(
-  //                                 "${NumberFormat('#,##0').format(double.parse(lowerPrice).toInt())} Bath",
-  //                                 style: const TextStyle(color: greyDark),
-  //                               ),
-  //                             ],
-  //                           ),
-  //                         )
-  //                       ],
-  //                     ),
-  //                   ],
-  //                 ),
-  //                 const SizedBox(height: 10),
-  //                 Padding(
-  //                   padding: const EdgeInsets.only(left: 16),
-  //                   child: Row(
-  //                     children: [
-  //                       Text(
-  //                         "Total  ",
-  //                         style: TextStyle(
-  //                             color: greyDark,
-  //                             fontFamily: regular,
-  //                             fontSize: 14),
-  //                       ),
-  //                       Text(
-  //                         "${NumberFormat('#,##0').format(double.parse(totalPrice).toInt())} ",
-  //                         style: TextStyle(
-  //                             color: blackColor,
-  //                             fontFamily: medium,
-  //                             fontSize: 16),
-  //                       ),
-  //                       Text(
-  //                         " Bath",
-  //                         style: TextStyle(
-  //                             color: blackColor,
-  //                             fontFamily: regular,
-  //                             fontSize: 14),
-  //                       ),
-  //                     ],
-  //                   ),
-  //                 )
-  //               ],
-  //             )
-  //                 .box
-  //                 .padding(EdgeInsets.all(6))
-  //                 .margin(EdgeInsets.symmetric(horizontal: 4, vertical: 6))
-  //                 .roundedSM
-  //                 .border(color: greyLine)
-  //                 .make(),
-  //           );
-  //         },
-  //       );
-  //     },
-  //   );
-  // }
 
 }

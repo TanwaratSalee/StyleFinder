@@ -46,7 +46,7 @@ class _ItemDetailsState extends State<ItemDetails> {
         .then((QuerySnapshot querySnapshot) {
       if (querySnapshot.docs.isNotEmpty) {
         DocumentSnapshot doc = querySnapshot.docs.first;
-        List<dynamic> wishlist = doc['favorite'];
+        List<dynamic> wishlist = doc['favorite_uid'];
         controller.setDocumentId(doc.id);
         if (wishlist.contains(currentUser!.uid)) {
           controller.isFav(true);

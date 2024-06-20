@@ -23,7 +23,7 @@ class WishlistScreen extends StatelessWidget {
             .make(),
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: FirestoreServices.getWishlists(),
+        stream: FirestoreServices.getFavorite(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
@@ -102,7 +102,7 @@ class WishlistScreen extends StatelessWidget {
                               .collection(productsCollection)
                               .doc(data[index].id)
                               .update({
-                            'favorite': FieldValue.arrayRemove(
+                            'favorite_uid': FieldValue.arrayRemove(
                                 [FirebaseAuth.instance.currentUser!.uid])
                           });
                         },

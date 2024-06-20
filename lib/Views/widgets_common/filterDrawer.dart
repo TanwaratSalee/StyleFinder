@@ -558,7 +558,7 @@ class FirestoreServices {
 }
 
 bool isInWishlist(Map<String, dynamic> product, String currentUid) {
-  List<dynamic> wishlist = product['favorite'];
+  List<dynamic> wishlist = product['favorite_uid'];
   return wishlist.contains(currentUid);
 }
 

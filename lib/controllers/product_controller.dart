@@ -367,7 +367,7 @@ class ProductController extends GetxController {
 
   addToWishlist(docId, context) async {
     await firestore.collection(productsCollection).doc(docId).set({
-      'favorite': FieldValue.arrayUnion([currentUser!.uid])
+      'favorite_uid': FieldValue.arrayUnion([currentUser!.uid])
     }, SetOptions(merge: true));
     isFav(true);
     VxToast.show(context, msg: "Added to wishlist");
@@ -382,13 +382,13 @@ class ProductController extends GetxController {
         .then((QuerySnapshot querySnapshot) {
       if (querySnapshot.docs.isNotEmpty) {
         DocumentSnapshot doc = querySnapshot.docs.first;
-        List<dynamic> wishlist = doc['favorite'];
+        List<dynamic> wishlist = doc['favorite_uid'];
         if (!wishlist.contains(currentUser!.uid)) {
           doc.reference.update({
-            'favorite': FieldValue.arrayUnion([currentUser!.uid])
+            'favorite_uid': FieldValue.arrayUnion([currentUser!.uid])
           }).then((value) {
             updateIsFav(true);
-            VxToast.show(context, msg: "Added from wishlist");
+            VxToast.show(context, msg: "Added from favorite");
           }).catchError((error) {
             print('Error adding to Favorite: $error');
           }).catchError((error) {
@@ -408,13 +408,13 @@ class ProductController extends GetxController {
         .then((QuerySnapshot querySnapshot) {
       if (querySnapshot.docs.isNotEmpty) {
         DocumentSnapshot doc = querySnapshot.docs.first;
-        List<dynamic> wishlist = doc['favorite'];
+        List<dynamic> wishlist = doc['favorite_uid'];
         if (wishlist.contains(currentUser!.uid)) {
           doc.reference.update({
-            'favorite': FieldValue.arrayRemove([currentUser!.uid])
+            'favorite_uid': FieldValue.arrayRemove([currentUser!.uid])
           }).then((value) {
             updateIsFav(false);
-            VxToast.show(context, msg: "Removed from wishlist");
+            VxToast.show(context, msg: "Removed from favorite");
           }).catchError((error) {
             print('Error removing ${product['name']} from Favorite: $error');
           });
@@ -423,103 +423,103 @@ class ProductController extends GetxController {
     });
   }
 
-  void addToWishlistMixMatch(String productName1, String productName2,
-      String vendorId, Function(bool) updateIsFav, BuildContext context) {
-    FirebaseFirestore.instance
-        .collection(productsCollection)
-        .where('name', whereIn: [productName1, productName2])
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-          if (querySnapshot.docs.isNotEmpty) {
-            // Find the documents for each product
-            DocumentSnapshot? doc1;
-            DocumentSnapshot? doc2;
+  // void addToWishlistMixMatch(String productName1, String productName2,
+  //     String vendorId, Function(bool) updateIsFav, BuildContext context) {
+  //   FirebaseFirestore.instance
+  //       .collection(productsCollection)
+  //       .where('name', whereIn: [productName1, productName2])
+  //       .get()
+  //       .then((QuerySnapshot querySnapshot) {
+  //         if (querySnapshot.docs.isNotEmpty) {
+  //           // Find the documents for each product
+  //           DocumentSnapshot? doc1;
+  //           DocumentSnapshot? doc2;
 
-            try {
-              doc1 = querySnapshot.docs
-                  .firstWhere((doc) => doc['name'] == productName1);
-            } catch (e) {
-              doc1 = null;
-            }
+  //           try {
+  //             doc1 = querySnapshot.docs
+  //                 .firstWhere((doc) => doc['name'] == productName1);
+  //           } catch (e) {
+  //             doc1 = null;
+  //           }
 
-            try {
-              doc2 = querySnapshot.docs
-                  .firstWhere((doc) => doc['name'] == productName2);
-            } catch (e) {
-              doc2 = null;
-            }
+  //           try {
+  //             doc2 = querySnapshot.docs
+  //                 .firstWhere((doc) => doc['name'] == productName2);
+  //           } catch (e) {
+  //             doc2 = null;
+  //           }
 
-            if (doc1 != null && doc2 != null) {
-              String currentUserUID =
-                  FirebaseAuth.instance.currentUser?.uid ?? '';
+  //           if (doc1 != null && doc2 != null) {
+  //             String currentUserUID =
+  //                 FirebaseAuth.instance.currentUser?.uid ?? '';
 
-              // Prepare the data to be saved in the new collection
-              Map<String, dynamic> favoriteData = {
-                'vendor_id': vendorId,
-                'user_id': currentUserUID,
-                'product1': {
-                  'p_name': doc1['p_name'],
-                  'price': doc1['price'],
-                  'p_imgs': doc1['p_imgs'][0],
-                },
-                'product2': {
-                  'p_name': doc2['p_name'],
-                  'price': doc2['price'],
-                  'p_imgs': doc2['p_imgs'][0],
-                },
-              };
+  //             // Prepare the data to be saved in the new collection
+  //             Map<String, dynamic> favoriteData = {
+  //               'vendor_id': vendorId,
+  //               'user_id': currentUserUID,
+  //               'product1': {
+  //                 'p_name': doc1['p_name'],
+  //                 'price': doc1['price'],
+  //                 'p_imgs': doc1['p_imgs'][0],
+  //               },
+  //               'product2': {
+  //                 'p_name': doc2['p_name'],
+  //                 'price': doc2['price'],
+  //                 'p_imgs': doc2['p_imgs'][0],
+  //               },
+  //             };
 
-              FirebaseFirestore.instance
-                  .collection('favoritemixmatch')
-                  .add(favoriteData)
-                  .then((value) {
-                updateIsFav(true);
-                VxToast.show(context, msg: "Added to favoritemixmatch");
-              }).catchError((error) {
-                print('Error adding to favoritemixmatch: $error');
-                VxToast.show(context, msg: "Error adding to favoritemixmatch");
-              });
-            } else {
-              VxToast.show(context, msg: "One or both products not found");
-            }
-          } else {
-            VxToast.show(context, msg: "No products found");
-          }
-        })
-        .catchError((error) {
-          print('Error retrieving products: $error');
-          VxToast.show(context, msg: "Error retrieving products");
-        });
-  }
+  //             FirebaseFirestore.instance
+  //                 .collection('favoritemixmatch')
+  //                 .add(favoriteData)
+  //                 .then((value) {
+  //               updateIsFav(true);
+  //               VxToast.show(context, msg: "Added to favoritemixmatch");
+  //             }).catchError((error) {
+  //               print('Error adding to favoritemixmatch: $error');
+  //               VxToast.show(context, msg: "Error adding to favoritemixmatch");
+  //             });
+  //           } else {
+  //             VxToast.show(context, msg: "One or both products not found");
+  //           }
+  //         } else {
+  //           VxToast.show(context, msg: "No products found");
+  //         }
+  //       })
+  //       .catchError((error) {
+  //         print('Error retrieving products: $error');
+  //         VxToast.show(context, msg: "Error retrieving products");
+  //       });
+  // }
 
-  void removeToWishlistMixMatch(String productName1, String productName2,
-      String vendorId, Function(bool) updateIsFav, BuildContext context) {
-    String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
+  // void removeToWishlistMixMatch(String productName1, String productName2,
+  //     String vendorId, Function(bool) updateIsFav, BuildContext context) {
+  //   String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
 
-    FirebaseFirestore.instance
-        .collection('favoritemixmatch')
-        .where('user_id', isEqualTo: currentUserUID)
-        .where('vendor_id', isEqualTo: vendorId)
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      if (querySnapshot.docs.isNotEmpty) {
-        DocumentSnapshot doc = querySnapshot.docs.first;
+  //   FirebaseFirestore.instance
+  //       .collection('favoritemixmatch')
+  //       .where('user_id', isEqualTo: currentUserUID)
+  //       .where('vendor_id', isEqualTo: vendorId)
+  //       .get()
+  //       .then((QuerySnapshot querySnapshot) {
+  //     if (querySnapshot.docs.isNotEmpty) {
+  //       DocumentSnapshot doc = querySnapshot.docs.first;
 
-        doc.reference.delete().then((value) {
-          updateIsFav(false);
-          VxToast.show(context, msg: "Removed from favoritemixmatch");
-        }).catchError((error) {
-          print('Error removing from favoritemixmatch: $error');
-          VxToast.show(context, msg: "Error removing from favoritemixmatch");
-        });
-      } else {
-        VxToast.show(context, msg: "No matching favoritemixmatch found");
-      }
-    }).catchError((error) {
-      print('Error retrieving favoritemixmatch: $error');
-      VxToast.show(context, msg: "Error retrieving favoritemixmatch");
-    });
-  }
+  //       doc.reference.delete().then((value) {
+  //         updateIsFav(false);
+  //         VxToast.show(context, msg: "Removed from favoritemixmatch");
+  //       }).catchError((error) {
+  //         print('Error removing from favoritemixmatch: $error');
+  //         VxToast.show(context, msg: "Error removing from favoritemixmatch");
+  //       });
+  //     } else {
+  //       VxToast.show(context, msg: "No matching favoritemixmatch found");
+  //     }
+  //   }).catchError((error) {
+  //     print('Error retrieving favoritemixmatch: $error');
+  //     VxToast.show(context, msg: "Error retrieving favoritemixmatch");
+  //   });
+  // }
 
   void addToWishlistMatch(
       String productNameTop, String productNameLower, BuildContext context) {
@@ -533,15 +533,15 @@ class ProductController extends GetxController {
         for (var doc in querySnapshot.docs) {
           // Using null safety checks to handle possible null values
           List<dynamic> wishlist = (doc.data()
-                  as Map<String, dynamic>?)?['favorite'] as List<dynamic>? ??
+                  as Map<String, dynamic>?)?['favorite_uid'] as List<dynamic>? ??
               [];
           String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
           if (!wishlist.contains(currentUserUID)) {
             doc.reference.update({
-              'favorite': FieldValue.arrayUnion([currentUserUID])
+              'favorite_uid': FieldValue.arrayUnion([currentUserUID])
             }).then((value) {
               VxToast.show(context,
-                  msg: "Added from wishlist",
+                  msg: "Added from favorite",
                   bgColor: greyColor.withOpacity(0.8));
             }).catchError((error) {
               print('Error adding to Favorite: $error');
@@ -556,7 +556,7 @@ class ProductController extends GetxController {
     });
   }
 
-void addPostByUserMatch(
+  void addPostByUserMatch(
     String productNameTop,
     String productNameLower,
     BuildContext context,
@@ -666,12 +666,12 @@ void addPostByUserMatch(
       if (querySnapshot.docs.isNotEmpty) {
         String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
         Map<String, dynamic> userData = {
-          'favorite': [currentUserUID]
+          'favorite_uid': [currentUserUID]
         };
 
         querySnapshot.docs.forEach((doc) {
           var data = doc.data() as Map<String, dynamic>?;
-          var wishlist = (data?['favorite'] as List<dynamic>?) ?? [];
+          var wishlist = (data?['favorite_uid'] as List<dynamic>?) ?? [];
 
           if (!wishlist.contains(currentUserUID)) {
             if (doc['p_name'] == productNameTop) {
@@ -716,14 +716,14 @@ void addPostByUserMatch(
 
   removeFromWishlist(docId, context) async {
     await firestore.collection(productsCollection).doc(docId).set({
-      'favorite': FieldValue.arrayRemove([currentUser!.uid])
+      'favorite_uid': FieldValue.arrayRemove([currentUser!.uid])
     }, SetOptions(merge: true));
     isFav(false);
-    VxToast.show(context, msg: "Removed from wishlist");
+    VxToast.show(context, msg: "Removed from favorite");
   }
 
   checkIfFav(data) async {
-    if (data['favorite'].contains(currentUser!.uid)) {
+    if (data['favorite_uid'].contains(currentUser!.uid)) {
       isFav(true);
     } else {
       isFav(false);

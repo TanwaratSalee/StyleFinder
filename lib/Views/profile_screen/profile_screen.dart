@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_finalproject/Views/match_screen/matchpost_details.dart';
 import 'package:flutter_finalproject/Views/profile_screen/menu_setting_screen.dart';
+import 'package:flutter_finalproject/Views/store_screen/matchstore_detail.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../consts/consts.dart';
@@ -125,8 +128,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                           fontSize: 14, fontFamily: medium, color: greyColor),
                       tabs: [
                         const Tab(text: 'Product'),
+                        const Tab(text: 'My Matchs'),
                         const Tab(text: 'Online Matchs'),
-                        const Tab(text: 'My Matches'),
                       ],
                       unselectedLabelColor: greyColor,
                       labelColor: primaryApp,
@@ -143,8 +146,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                         controller: _favoriteTabController,
                         children: [
                           buildProductsTab(),
-                          buildMatchTab(),
-                          buildUserMixMatchTab(),
+                          buildMyMatchTab(),
+                          buildOnlineMatchTab(),
                         ],
                       ),
                     ),
@@ -225,9 +228,227 @@ class _ProfileScreenState extends State<ProfileScreen>
     );
   }
 
+  Widget buildPostTab() {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('usermixandmatch')
+          .orderBy('views', descending: true)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(child: CircularProgressIndicator());
+        }
+        var data = snapshot.data!.docs;
+
+        String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
+
+        var filteredData = data.where((doc) {
+          var docData = doc.data() as Map<String, dynamic>;
+          return docData['user_id'] == currentUserUID;
+        }).toList();
+
+        if (filteredData.isEmpty) {
+          return Center(
+            child:
+                Text("No posts available!", style: TextStyle(color: greyDark)),
+          );
+        }
+
+        return GridView.builder(
+          padding: EdgeInsets.all(12),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 8,
+            mainAxisSpacing: 8,
+            childAspectRatio: 8 / 9.3,
+          ),
+          itemCount: filteredData.length,
+          itemBuilder: (context, index) {
+            var doc = filteredData[index];
+            var docData = doc.data() as Map<String, dynamic>;
+            var productIdTop = docData['product_id_top'] ?? '';
+            var productIdLower = docData['product_id_lower'] ?? '';
+
+            return FutureBuilder<List<DocumentSnapshot>>(
+              future: Future.wait([
+                FirebaseFirestore.instance
+                    .collection('products')
+                    .doc(productIdTop)
+                    .get(),
+                FirebaseFirestore.instance
+                    .collection('products')
+                    .doc(productIdLower)
+                    .get()
+              ]),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(child: CircularProgressIndicator());
+                }
+
+                var snapshotTop = snapshot.data![0];
+                var snapshotLower = snapshot.data![1];
+
+                if (!snapshotTop.exists || !snapshotLower.exists) {
+                  return Center(child: Text("One or more products not found"));
+                }
+
+                var productDataTop = snapshotTop.data() as Map<String, dynamic>;
+                var productDataLower =
+                    snapshotLower.data() as Map<String, dynamic>;
+
+                var topImage =
+                    (productDataTop['imgs'] as List<dynamic>?)?.first ?? '';
+                var lowerImage =
+                    (productDataLower['imgs'] as List<dynamic>?)?.first ?? '';
+                var productNameTop = productDataTop['name'] ?? '';
+                var productNameLower = productDataLower['name'] ?? '';
+                var priceTop = productDataTop['price']?.toString() ?? '0';
+                var priceLower = productDataLower['price']?.toString() ?? '0';
+                var collections = docData['collection'] != null
+                    ? List<String>.from(docData['collection'])
+                    : [];
+                var description = docData['description'] ?? '';
+                var views = docData['views'] ?? 0;
+                var gender = docData['gender'] ?? '';
+                var postedBy = docData['user_id'] ?? '';
+
+                return GestureDetector(
+                  onTap: () {
+                    Get.to(() => MatchPostsDetails(
+                          docId: doc.id,
+                          productName1: productNameTop,
+                          productName2: productNameLower,
+                          price1: priceTop,
+                          price2: priceLower,
+                          productImage1: topImage,
+                          productImage2: lowerImage,
+                          totalPrice:
+                              (int.parse(priceTop) + int.parse(priceLower))
+                                  .toString(),
+                          vendorName1: 'Vendor Name 1',
+                          vendorName2: 'Vendor Name 2',
+                          vendor_id: doc.id,
+                          collection: collections,
+                          description: description,
+                          gender: gender,
+                          posted_by: postedBy,
+                        ));
+                  },
+                  child: Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 75,
+                              height: 80,
+                              child: Image.network(
+                                topImage,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            SizedBox(width: 5),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    productNameTop,
+                                    style: const TextStyle(
+                                      fontFamily: medium,
+                                      fontSize: 14,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
+                                  Text(
+                                    "${NumberFormat('#,##0').format(double.parse(priceTop).toInt())} Bath",
+                                    style: const TextStyle(color: greyColor),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 75,
+                              height: 80,
+                              child: Image.network(
+                                lowerImage,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            SizedBox(width: 5),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    productNameLower,
+                                    style: const TextStyle(
+                                      fontFamily: medium,
+                                      fontSize: 14,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
+                                  Text(
+                                    "${NumberFormat('#,##0').format(double.parse(priceLower).toInt())} Bath",
+                                    style: const TextStyle(color: greyColor),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Image.asset(
+                              icEyes,
+                              width: 16,
+                              height: 10,
+                              color: greyDark,
+                            ),
+                            SizedBox(width: 4),
+                            Text(
+                              views.toString(),
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: regular,
+                                color: greyColor,
+                              ),
+                            ),
+                          ],
+                        ).paddingSymmetric(horizontal: 8),
+                      ],
+                    )
+                        .box
+                        .border(color: greyLine)
+                        .rounded
+                        .padding(EdgeInsets.all(8))
+                        .make(),
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+
   Widget buildProductsTab() {
     return StreamBuilder<QuerySnapshot>(
-      stream: FirestoreServices.getWishlists(),
+      stream: FirestoreServices.getFavorite(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const Center(
@@ -237,7 +458,8 @@ class _ProfileScreenState extends State<ProfileScreen>
         final data = snapshot.data!.docs;
         if (data.isEmpty) {
           return const Center(
-            child: Text("No products you liked!", style: TextStyle(color: greyDark)),
+            child: Text("No products you liked!",
+                style: TextStyle(color: greyDark)),
           );
         }
         return ListView.builder(
@@ -308,7 +530,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                             .collection(productsCollection)
                             .doc(data[index].id)
                             .update({
-                          'favorite': FieldValue.arrayRemove(
+                          'favorite_uid': FieldValue.arrayRemove(
                               [FirebaseAuth.instance.currentUser!.uid])
                         });
                       },
@@ -328,214 +550,206 @@ class _ProfileScreenState extends State<ProfileScreen>
     );
   }
 
-Widget buildMatchTab() {
-  return StreamBuilder<QuerySnapshot>(
-    stream:
-        FirebaseFirestore.instance.collection('favoritemixmatch').snapshots(),
-    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-      if (!snapshot.hasData) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      }
-      final data = snapshot.data!.docs;
-      print("Total documents fetched: ${data.length}"); // Debug log
+// Widget buildMyMatchTab() {
+//   return StreamBuilder<QuerySnapshot>(
+//     stream:
+//         FirebaseFirestore.instance.collection('favoritemixmatch').snapshots(),
+//     builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+//       if (!snapshot.hasData) {
+//         return const Center(
+//           child: CircularProgressIndicator(),
+//         );
+//       }
+//       final data = snapshot.data!.docs;
+//       print("Total documents fetched: ${data.length}"); // Debug log
+//       if (data.isEmpty) {
+//         return const Center(
+//           child: Text("No products you liked!",
+//               style: TextStyle(color: greyDark)),
+//         );
+//       }
+//       final currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
+//       var userDocs =
+//           data.where((doc) => doc['user_id'] == currentUserUID).toList();
+//       print("Documents for current user: ${userDocs.length}"); // Debug log
+//       if (userDocs.isEmpty) {
+//         return const Center(
+//           child: Text("No products you liked!",
+//               style: TextStyle(color: greyDark)),
+//         );
+//       }
+//       return GridView.builder(
+//         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+//           crossAxisCount: 1,
+//           childAspectRatio: 6 / 2.75,
+//         ),
+//         itemCount: userDocs.length,
+//         itemBuilder: (BuildContext context, int index) {
+//           var docData = userDocs[index].data() as Map<String, dynamic>;
+//           var product1 = docData['product1'] as Map<String, dynamic>;
+//           var product2 = docData['product2'] as Map<String, dynamic>;
+//           String productName1 = product1['name'];
+//           String productName2 = product2['name'];
+//           String price1 = product1['price'].toString();
+//           String price2 = product2['price'].toString();
+//           String productImage1 = product1['imgs'];
+//           String productImage2 = product2['imgs'];
+//           String totalPrice =
+//               (int.parse(price1) + int.parse(price2)).toString();
+//           return GestureDetector(
+//             onTap: () {},
+//             child: Column(
+//               children: [
+//                 Container(
+//                   decoration: BoxDecoration(
+//                     color: whiteColor,
+//                     borderRadius: BorderRadius.circular(8),
+//                   ),
+//                   child: Stack(
+//                     children: [
+//                       Column(
+//                         crossAxisAlignment: CrossAxisAlignment.start,
+//                         children: <Widget>[
+//                           Row(
+//                             crossAxisAlignment: CrossAxisAlignment.start,
+//                             children: [
+//                               Image.network(
+//                                 productImage1,
+//                                 width: 60,
+//                                 height: 65,
+//                                 fit: BoxFit.cover,
+//                               ),
+//                               15.widthBox,
+//                               Expanded(
+//                                 flex: 3,
+//                                 child: Column(
+//                                   crossAxisAlignment: CrossAxisAlignment.start,
+//                                   children: [
+//                                     Text(
+//                                       productName1,
+//                                       style: const TextStyle(
+//                                         fontFamily: medium,
+//                                         fontSize: 14,
+//                                         color: blackColor,
+//                                       ),
+//                                       maxLines: 1,
+//                                       overflow: TextOverflow.ellipsis,
+//                                     ),
+//                                     Text(
+//                                       "${NumberFormat('#,##0').format(double.parse(price1).toInt())} Bath",
+//                                       style: const TextStyle(color: greyDark),
+//                                     ),
+//                                   ],
+//                                 ),
+//                               ),
+//                             ],
+//                           ),
+//                           5.heightBox,
+//                           Row(
+//                             crossAxisAlignment: CrossAxisAlignment.start,
+//                             children: [
+//                               ClipRRect(
+//                                 child: Image.network(
+//                                   productImage2,
+//                                   width: 60,
+//                                   height: 65,
+//                                   fit: BoxFit.cover,
+//                                 ),
+//                               ),
+//                               15.widthBox,
+//                               Expanded(
+//                                 child: Column(
+//                                   crossAxisAlignment: CrossAxisAlignment.start,
+//                                   children: [
+//                                     Text(
+//                                       productName2,
+//                                       style: const TextStyle(
+//                                         fontFamily: medium,
+//                                         fontSize: 14,
+//                                         color: blackColor,
+//                                       ),
+//                                       maxLines: 1,
+//                                       overflow: TextOverflow.ellipsis,
+//                                     ),
+//                                     Text(
+//                                       "${NumberFormat('#,##0').format(double.parse(price2).toInt())} Bath",
+//                                       style: const TextStyle(color: greyDark),
+//                                     ),
+//                                   ],
+//                                 ),
+//                               ),
+//                             ],
+//                           ),
+//                           5.heightBox,
+//                           Row(
+//                             children: [
+//                               Text(
+//                                 "Total  ",
+//                                 style: TextStyle(
+//                                   color: greyDark,
+//                                   fontFamily: regular,
+//                                   fontSize: 14,
+//                                 ),
+//                               ),
+//                               Text(
+//                                 "${NumberFormat('#,##0').format(double.parse(totalPrice).toInt())} ",
+//                                 style: TextStyle(
+//                                   color: blackColor,
+//                                   fontFamily: medium,
+//                                   fontSize: 18,
+//                                 ),
+//                               ),
+//                               Text(
+//                                 " Bath",
+//                                 style: TextStyle(
+//                                   color: greyDark,
+//                                   fontFamily: regular,
+//                                   fontSize: 14,
+//                                 ),
+//                               ),
+//                             ],
+//                           )
+//                         ],
+//                       ),
+//                       Align(
+//                         alignment: Alignment.topRight,
+//                         child: IconButton(
+//                           icon: Icon(Icons.favorite, color: redColor),
+//                           onPressed: () async {
+//                             await FirebaseFirestore.instance
+//                                 .collection('favoritemixmatch')
+//                                 .doc(userDocs[index].id)
+//                                 .delete()
+//                                 .then((value) {
+//                               print('Removed from favoritemixmatch');
+//                             }).catchError((error) {
+//                               print(
+//                                   'Error removing from favoritemixmatch: $error');
+//                             });
+//                           },
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//               ],
+//             )
+//                 .box
+//                 .roundedSM
+//                 .border(color: greyLine)
+//                 .margin(EdgeInsets.symmetric(horizontal: 12, vertical: 4))
+//                 .padding(EdgeInsets.all(8))
+//                 .make(),
+//           );
+//         },
+//       );
+//     },
+//   );
+// }
 
-      if (data.isEmpty) {
-        return const Center(
-          child: Text("No products you liked!",
-              style: TextStyle(color: greyDark)),
-        );
-      }
-
-      final currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
-
-      var userDocs =
-          data.where((doc) => doc['user_id'] == currentUserUID).toList();
-      
-      print("Documents for current user: ${userDocs.length}"); // Debug log
-
-      if (userDocs.isEmpty) {
-        return const Center(
-          child: Text("No products you liked!",
-              style: TextStyle(color: greyDark)),
-        );
-      }
-
-      return GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 1,
-          childAspectRatio: 6 / 2.75,
-        ),
-        itemCount: userDocs.length,
-        itemBuilder: (BuildContext context, int index) {
-          var docData = userDocs[index].data() as Map<String, dynamic>;
-          var product1 = docData['product1'] as Map<String, dynamic>;
-          var product2 = docData['product2'] as Map<String, dynamic>;
-
-          String productName1 = product1['name'];
-          String productName2 = product2['name'];
-          String price1 = product1['price'].toString();
-          String price2 = product2['price'].toString();
-          String productImage1 = product1['imgs'];
-          String productImage2 = product2['imgs'];
-          String totalPrice =
-              (int.parse(price1) + int.parse(price2)).toString();
-
-          return GestureDetector(
-            onTap: () {},
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: whiteColor,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Stack(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Image.network(
-                                productImage1,
-                                width: 60,
-                                height: 65,
-                                fit: BoxFit.cover,
-                              ),
-                              15.widthBox,
-                              Expanded(
-                                flex: 3,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      productName1,
-                                      style: const TextStyle(
-                                        fontFamily: medium,
-                                        fontSize: 14,
-                                        color: blackColor,
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    Text(
-                                      "${NumberFormat('#,##0').format(double.parse(price1).toInt())} Bath",
-                                      style: const TextStyle(color: greyDark),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          5.heightBox,
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ClipRRect(
-                                child: Image.network(
-                                  productImage2,
-                                  width: 60,
-                                  height: 65,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              15.widthBox,
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      productName2,
-                                      style: const TextStyle(
-                                        fontFamily: medium,
-                                        fontSize: 14,
-                                        color: blackColor,
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    Text(
-                                      "${NumberFormat('#,##0').format(double.parse(price2).toInt())} Bath",
-                                      style: const TextStyle(color: greyDark),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          5.heightBox,
-                          Row(
-                            children: [
-                              Text(
-                                "Total  ",
-                                style: TextStyle(
-                                  color: greyDark,
-                                  fontFamily: regular,
-                                  fontSize: 14,
-                                ),
-                              ),
-                              Text(
-                                "${NumberFormat('#,##0').format(double.parse(totalPrice).toInt())} ",
-                                style: TextStyle(
-                                  color: blackColor,
-                                  fontFamily: medium,
-                                  fontSize: 18,
-                                ),
-                              ),
-                              Text(
-                                " Bath",
-                                style: TextStyle(
-                                  color: greyDark,
-                                  fontFamily: regular,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: IconButton(
-                          icon: Icon(Icons.favorite, color: redColor),
-                          onPressed: () async {
-                            await FirebaseFirestore.instance
-                                .collection('favoritemixmatch')
-                                .doc(userDocs[index].id)
-                                .delete()
-                                .then((value) {
-                              print('Removed from favoritemixmatch');
-                            }).catchError((error) {
-                              print(
-                                  'Error removing from favoritemixmatch: $error');
-                            });
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            )
-                .box
-                .roundedSM
-                .border(color: greyLine)
-                .margin(EdgeInsets.symmetric(horizontal: 12, vertical: 4))
-                .padding(EdgeInsets.all(8))
-                .make(),
-          );
-        },
-      );
-    },
-  );
-}
-
-  Widget buildUserMixMatchTab() {
+  Widget buildMyMatchTab() {
     return StreamBuilder<QuerySnapshot>(
-      stream: FirestoreServices.getWishlistsusermixmatchs(),
+      stream: FirestoreServices.getFavorite(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(child: CircularProgressIndicator());
@@ -580,7 +794,6 @@ Widget buildMatchTab() {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      
                       GestureDetector(
                         onTap: () {
                           navigateToItemDetails(context, pair['top']);
@@ -726,6 +939,234 @@ Widget buildMatchTab() {
     );
   }
 
+  Widget buildOnlineMatchTab() {
+    return StreamBuilder<List<QuerySnapshot>>(
+      stream: FirestoreServices.getFavoriteusermixmatchs(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        // Combine all documents from both collections
+        final data = snapshot.data!.expand((querySnapshot) => querySnapshot.docs).toList();
+
+        if (data.isEmpty) {
+          return const Center(
+            child: Text("No products you liked!",
+                style: TextStyle(color: greyDark)),
+          );
+        }
+
+        return ListView.builder(
+          itemCount: data.length,
+          itemBuilder: (context, index) {
+            var doc = data[index];
+            var docData = doc.data() as Map<String, dynamic>;
+            var productIdTop = docData['product_id_top'] ?? '';
+            var productIdLower = docData['product_id_lower'] ?? '';
+            bool isStoreMatch = doc.reference.parent.id == 'storemixandmatchs';
+
+            return FutureBuilder<List<DocumentSnapshot>>(
+              future: Future.wait([
+                FirebaseFirestore.instance
+                    .collection('products')
+                    .doc(productIdTop)
+                    .get(),
+                FirebaseFirestore.instance
+                    .collection('products')
+                    .doc(productIdLower)
+                    .get()
+              ]),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                var productSnapshotTop = snapshot.data![0];
+                var productSnapshotLower = snapshot.data![1];
+
+                if (!productSnapshotTop.exists ||
+                    !productSnapshotLower.exists) {
+                  return const Center(
+                    child: Text("Some products not found!"),
+                  );
+                }
+
+                var productDataTop =
+                    productSnapshotTop.data() as Map<String, dynamic>;
+                var productDataLower =
+                    productSnapshotLower.data() as Map<String, dynamic>;
+
+                var topImage =
+                    (productDataTop['imgs'] as List<dynamic>?)?.first ?? '';
+                var lowerImage =
+                    (productDataLower['imgs'] as List<dynamic>?)?.first ?? '';
+                var productNameTop = productDataTop['name'] ?? '';
+                var productNameLower = productDataLower['name'] ?? '';
+                var priceTop = productDataTop['price']?.toString() ?? '0';
+                var priceLower = productDataLower['price']?.toString() ?? '0';
+                var collections = docData['collection'] != null
+                    ? List<String>.from(docData['collection'])
+                    : [];
+                var description = docData['description'] ?? '';
+                var views = docData['views'] ?? 0;
+                var gender = docData['gender'] ?? '';
+                var postedBy = docData['user_id'] ?? '';
+
+                return GestureDetector(
+                  onTap: () {
+                    if (isStoreMatch) {
+                      Get.to(() => MatchStoreDetailScreen(
+                        documentId: doc.id,
+                      ));
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MatchPostsDetails(
+                            docId: doc.id,
+                            productName1: productNameTop,
+                            productName2: productNameLower,
+                            price1: priceTop,
+                            price2: priceLower,
+                            productImage1: topImage,
+                            productImage2: lowerImage,
+                            totalPrice:
+                            (int.parse(priceTop) + int.parse(priceLower))
+                                .toString(),
+                            vendorName1: 'Vendor Name 1',
+                            vendorName2: 'Vendor Name 2',
+                            vendor_id: doc.id,
+                            collection: collections,
+                            description: description,
+                            gender: gender,
+                            posted_by: postedBy,
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    child: Stack(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(14.0),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Image.network(
+                                    topImage,
+                                    height: 70,
+                                    width: 65,
+                                    fit: BoxFit.cover,
+                                  ),
+                                  10.widthBox,
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        productNameTop,
+                                        style: const TextStyle(
+                                          fontFamily: medium,
+                                          fontSize: 16,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                      ).box.width(180).make(),
+                                      Text(
+                                        "${NumberFormat('#,##0').format(double.parse(priceTop).toInt())} Bath",
+                                        style:
+                                        const TextStyle(color: greyColor),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                              SizedBox(height: 10),
+                              Row(
+                                children: [
+                                  Image.network(
+                                    lowerImage,
+                                    height: 70,
+                                    width: 65,
+                                    fit: BoxFit.cover,
+                                  ),
+                                  10.widthBox,
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        productNameLower,
+                                        style: const TextStyle(
+                                          fontFamily: medium,
+                                          fontSize: 16,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                      ),
+                                      Text(
+                                        "${NumberFormat('#,##0').format(double.parse(priceLower).toInt())} Bath",
+                                        style:
+                                        const TextStyle(color: greyColor),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                              15.heightBox,
+                              Padding(
+                                padding: const EdgeInsets.only(right: 220),
+                                child: Text(
+                                  "Total ${NumberFormat('#,##0').format(int.parse(priceTop) + int.parse(priceLower))} Bath",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: medium,
+                                    color: blackColor,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: IconButton(
+                            icon: Image.asset(icTapFavoriteButton, width: 20),
+                            onPressed: () async {
+                              await FirebaseFirestore.instance
+                                  .collection('usermixandmatch')
+                                  .doc(data[index].id)
+                                  .update({
+                                'favorite_userid': FieldValue.arrayRemove(
+                                    [FirebaseAuth.instance.currentUser!.uid])
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    )
+                        .box
+                        .border(color: greyLine)
+                        .roundedSM
+                        .margin(
+                        EdgeInsets.symmetric(horizontal: 12, vertical: 4))
+                        .make(),
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+
   void _showDeleteConfirmationDialog(BuildContext context, String productName,
       String docIdTop, String docIdLower) {
     showDialog(
@@ -777,7 +1218,7 @@ Widget buildMatchTab() {
                     children: [
                       TextButton(
                         onPressed: () {
-                          Navigator.of(context).pop(); 
+                          Navigator.of(context).pop();
                         },
                         child: Text(
                           "Cancel",
@@ -795,7 +1236,7 @@ Widget buildMatchTab() {
                               .collection('usermixandmatch')
                               .doc(docIdLower)
                               .delete();
-                          Navigator.of(context).pop(); 
+                          Navigator.of(context).pop();
                         },
                         child: Text(
                           "Delete",
@@ -840,211 +1281,4 @@ Widget buildMatchTab() {
       }
     });
   }
-
-  Widget buildPostTab() {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection('usermixandmatch')
-          .orderBy('views', descending: true)
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Center(child: CircularProgressIndicator());
-        }
-        var data = snapshot.data!.docs;
-
-        String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
-
-        var filteredData = data.where((doc) {
-          var docData = doc.data() as Map<String, dynamic>;
-          return docData['user_id'] == currentUserUID;
-        }).toList();
-
-        if (filteredData.isEmpty) {
-          return Center(
-            child: Text("No posts available!", style: TextStyle(color: greyDark)),
-          );
-        }
-
-        return GridView.builder(
-          padding: EdgeInsets.all(12),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 8,
-            mainAxisSpacing: 8,
-            childAspectRatio: 8 / 9.3,
-          ),
-          itemCount: filteredData.length,
-          itemBuilder: (context, index) {
-            var doc = filteredData[index];
-            var docData = doc.data() as Map<String, dynamic>;
-            var productIdTop = docData['product_id_top'] ?? '';
-            var productIdLower = docData['product_id_lower'] ?? '';
-
-            return FutureBuilder<List<DocumentSnapshot>>(
-              future: Future.wait([
-                FirebaseFirestore.instance.collection('products').doc(productIdTop).get(),
-                FirebaseFirestore.instance.collection('products').doc(productIdLower).get()
-              ]),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(child: CircularProgressIndicator());
-                }
-
-                var snapshotTop = snapshot.data![0];
-                var snapshotLower = snapshot.data![1];
-
-                if (!snapshotTop.exists || !snapshotLower.exists) {
-                  return Center(child: Text("One or more products not found"));
-                }
-
-                var productDataTop = snapshotTop.data() as Map<String, dynamic>;
-                var productDataLower = snapshotLower.data() as Map<String, dynamic>;
-
-                var topImage = (productDataTop['imgs'] as List<dynamic>?)?.first ?? '';
-                var lowerImage = (productDataLower['imgs'] as List<dynamic>?)?.first ?? '';
-                var productNameTop = productDataTop['name'] ?? '';
-                var productNameLower = productDataLower['name'] ?? '';
-                var priceTop = productDataTop['price']?.toString() ?? '0';
-                var priceLower = productDataLower['price']?.toString() ?? '0';
-                var collections = docData['collection'] != null
-                    ? List<String>.from(docData['collection'])
-                    : [];
-                var description = docData['description'] ?? '';
-                var views = docData['views'] ?? 0;
-                var gender = docData['gender'] ?? '';
-                var postedBy = docData['user_id'] ?? '';
-
-                return GestureDetector(
-                  onTap: () {
-                    Get.to(() => MatchPostsDetails(
-                           docId: doc.id,  
-                            productName1: productNameTop,
-                            productName2: productNameLower,
-                            price1: priceTop,
-                            price2: priceLower,
-                            productImage1: topImage,
-                            productImage2: lowerImage,
-                            totalPrice: (int.parse(priceTop) + int.parse(priceLower)).toString(),
-                            vendorName1: 'Vendor Name 1', 
-                            vendorName2: 'Vendor Name 2', 
-                            vendor_id: doc.id,
-                            collection: collections,
-                            description: description,
-                            gender: gender,
-                            posted_by: postedBy,
-                        ));
-                  },
-                  child: Container(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: 75,
-                              height: 80,
-                              child: Image.network(
-                                topImage,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            SizedBox(width: 5),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    productNameTop,
-                                    style: const TextStyle(
-                                      fontFamily: medium,
-                                      fontSize: 14,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                  ),
-                                  Text(
-                                    "${NumberFormat('#,##0').format(double.parse(priceTop).toInt())} Bath",
-                                    style: const TextStyle(color: greyColor),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(width: 8),
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: 75,
-                              height: 80,
-                              child: Image.network(
-                                lowerImage,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            SizedBox(width: 5),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    productNameLower,
-                                    style: const TextStyle(
-                                      fontFamily: medium,
-                                      fontSize: 14,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                  ),
-                                  Text(
-                                    "${NumberFormat('#,##0').format(double.parse(priceLower).toInt())} Bath",
-                                    style: const TextStyle(color: greyColor),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Image.asset(
-                              icEyes,
-                              width: 16,
-                              height: 10,
-                              color: greyDark,
-                            ),
-                            SizedBox(width: 4),
-                            Text(
-                              views.toString(),
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontFamily: regular,
-                                color: greyColor,
-                              ),
-                            ),
-                          ],
-                        ).paddingSymmetric(horizontal: 8),
-                      ],
-                    )
-                        .box
-                        .border(color: greyLine)
-                        .rounded
-                        .padding(EdgeInsets.all(8))
-                        .make(),
-                  ),
-                );
-              },
-            );
-          },
-        );
-      },
-    );
-  }
-
 }
