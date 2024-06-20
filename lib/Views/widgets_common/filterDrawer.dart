@@ -15,20 +15,17 @@ class _FilterDrawerState extends State<FilterDrawer> {
   bool isSelectedMen = false;
   bool isSelectedWomen = false;
   bool isSelectedDress = false;
-  bool isSelectedOuterwear = false;
   bool isSelectedTShirts = false;
-  bool isSelectedSuits = false;
-  bool isSelectedKnitwear = false;
-  bool isSelectedActivewear = false;
-  bool isSelectedBlazers = false;
   bool isSelectedPants = false;
-  bool isSelectedDenim = false;
+  bool isSelectedSuits = false;
+  bool isSelectedJackets = false;
   bool isSelectedSkirts = false;
   bool isSelectedSummer = false;
   bool isSelectedWinter = false;
   bool isSelectedAutumn = false;
   bool isSelectedDinner = false;
   bool isSelectedEveryday = false;
+
   var collectionsvalue = ''.obs;
   var vendors = <Map<String, dynamic>>[];
   var selectedVendorIds = <String>[].obs;
@@ -89,8 +86,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
     super.initState();
     _currentSliderValue = controller.maxPrice.value;
     isSelectedAll = controller.selectedGender.value == '';
-    isSelectedMen = controller.selectedGender.value == 'male';
-    isSelectedWomen = controller.selectedGender.value == 'female';
+    isSelectedMen = controller.selectedGender.value == 'man';
+    isSelectedWomen = controller.selectedGender.value == 'woman';
 
     fetchVendors().then((data) {
       setState(() {
@@ -101,24 +98,18 @@ class _FilterDrawerState extends State<FilterDrawer> {
     selectedVendorIds.addAll(controller.selectedVendorIds);
     selectedColorIndexes.addAll(controller.selectedColors);
 
-    isSelectedDress = controller.selectedTypes.contains('dresses');
-    isSelectedOuterwear =
-        controller.selectedTypes.contains('outerwear & Costs');
     isSelectedSkirts = controller.selectedTypes.contains('dresses');
     isSelectedTShirts = controller.selectedTypes.contains('t-shirts');
-    isSelectedSuits = controller.selectedTypes.contains('suits');
-    isSelectedKnitwear = controller.selectedTypes.contains('knitwear');
-    isSelectedActivewear = controller.selectedTypes.contains('activewear');
-    isSelectedBlazers = controller.selectedTypes.contains('blazers');
-    isSelectedDenim = controller.selectedTypes.contains('denim');
+    isSelectedPants = controller.selectedTypes.contains('pants');
+    isSelectedJackets = controller.selectedTypes.contains('jackets');
     isSelectedSkirts = controller.selectedTypes.contains('skirts');
+    isSelectedSuits = controller.selectedTypes.contains('suits');
 
     isSelectedSummer = controller.selectedCollections.contains('summer');
     isSelectedWinter = controller.selectedCollections.contains('winter');
     isSelectedAutumn = controller.selectedCollections.contains('autumn');
     isSelectedDinner = controller.selectedCollections.contains('dinner');
-    isSelectedEveryday =
-        controller.selectedCollections.contains('everydaylook');
+    isSelectedEveryday = controller.selectedCollections.contains('everydaylook');
   }
 
   @override
@@ -213,10 +204,10 @@ class _FilterDrawerState extends State<FilterDrawer> {
                         border: Border.all(
                           color: isSelected ? primaryApp : greyLine,
                         ),
-                        // color: isSelected ? thinPrimaryApp : Colors.transparent,
+                        color: isSelected ? thinPrimaryApp : Colors.transparent,
                       ),
                       child: Text(
-                        vendor['vendor_name'] ?? 'Unknown',
+                        vendor['name'] ?? 'Unknown',
                         style: TextStyle(
                           fontSize: 12,
                           color: isSelected ? blackColor : blackColor,
@@ -321,13 +312,6 @@ class _FilterDrawerState extends State<FilterDrawer> {
                         updateFilterTypes();
                       });
                     }),
-                    buildFilterChip("Outerwear & Coats", isSelectedOuterwear,
-                        (isSelected) {
-                      setState(() {
-                        isSelectedOuterwear = isSelected;
-                        updateFilterTypes();
-                      });
-                    }),
                     buildFilterChip("T-Shirts", isSelectedTShirts,
                         (isSelected) {
                       setState(() {
@@ -335,41 +319,23 @@ class _FilterDrawerState extends State<FilterDrawer> {
                         updateFilterTypes();
                       });
                     }),
-                    buildFilterChip("Suits", isSelectedSuits, (isSelected) {
+                    buildFilterChip("Suits", isSelectedSuits,
+                        (isSelected) {
                       setState(() {
                         isSelectedSuits = isSelected;
                         updateFilterTypes();
                       });
                     }),
-                    buildFilterChip("Knitwear", isSelectedKnitwear,
+                    buildFilterChip("Jackets", isSelectedJackets,
                         (isSelected) {
                       setState(() {
-                        isSelectedKnitwear = isSelected;
-                        updateFilterTypes();
-                      });
-                    }),
-                    buildFilterChip("Activewear", isSelectedActivewear,
-                        (isSelected) {
-                      setState(() {
-                        isSelectedActivewear = isSelected;
-                        updateFilterTypes();
-                      });
-                    }),
-                    buildFilterChip("Blazers", isSelectedBlazers, (isSelected) {
-                      setState(() {
-                        isSelectedBlazers = isSelected;
+                        isSelectedJackets = isSelected;
                         updateFilterTypes();
                       });
                     }),
                     buildFilterChip("Pants", isSelectedPants, (isSelected) {
                       setState(() {
                         isSelectedPants = isSelected;
-                        updateFilterTypes();
-                      });
-                    }),
-                    buildFilterChip("Denim", isSelectedDenim, (isSelected) {
-                      setState(() {
-                        isSelectedDenim = isSelected;
                         updateFilterTypes();
                       });
                     }),
@@ -440,20 +406,17 @@ class _FilterDrawerState extends State<FilterDrawer> {
                         gender: isSelectedMen
                             ? 'male'
                             : isSelectedWomen
-                                ? 'female'
+                                ? 'woman'
                                 : '',
                         price: _currentSliderValue,
                         colors: selectedColorIndexes,
                         types: [
                           if (isSelectedDress) 'dresses',
-                          if (isSelectedOuterwear) 'outerwear & Costs',
                           if (isSelectedSkirts) 'skirts',
                           if (isSelectedTShirts) 't-shirts',
+                          if (isSelectedPants) 'pants',
+                          if (isSelectedJackets) 'jackets',
                           if (isSelectedSuits) 'suits',
-                          if (isSelectedKnitwear) 'knitwear',
-                          if (isSelectedActivewear) 'activewear',
-                          if (isSelectedBlazers) 'blazers',
-                          if (isSelectedDenim) 'denim',
                         ],
                         collections: [
                           if (isSelectedSummer) 'summer',
@@ -496,15 +459,12 @@ class _FilterDrawerState extends State<FilterDrawer> {
 
   void updateFilterTypes() {
     List<String> types = [];
-    if (isSelectedDress) types.add('dresses');
-    if (isSelectedOuterwear) types.add('outerwear & Costs');
-    if (isSelectedSkirts) types.add('skirts');
     if (isSelectedTShirts) types.add('t-shirts');
+    if (isSelectedSkirts) types.add('skirts');
+    if (isSelectedDress) types.add('dresses');
+    if (isSelectedPants) types.add('pants');
+    if (isSelectedJackets) types.add('jackets');
     if (isSelectedSuits) types.add('suits');
-    if (isSelectedKnitwear) types.add('knitwear');
-    if (isSelectedActivewear) types.add('activewear');
-    if (isSelectedBlazers) types.add('blazers');
-    if (isSelectedDenim) types.add('denim');
 
     controller.updateFilters(types: types);
   }
@@ -533,12 +493,12 @@ Future<List<Map<String, dynamic>>> fetchProducts({
       FirebaseFirestore.instance.collection(productsCollection);
 
   if (gender != null && gender.isNotEmpty) {
-    query = query.where('p_sex', isEqualTo: gender);
+    query = query.where('sex', isEqualTo: gender);
   }
 
   if (maxPrice != null) {
     String maxPriceString = maxPrice.toStringAsFixed(0);
-    query = query.where('p_price', isLessThanOrEqualTo: maxPriceString);
+    query = query.where('price', isLessThanOrEqualTo: maxPriceString);
   }
 
   try {
@@ -549,7 +509,7 @@ Future<List<Map<String, dynamic>>> fetchProducts({
     // Filter by colors
     if (selectedColors != null && selectedColors.isNotEmpty) {
       products = products.where((product) {
-        List<dynamic> productColors = product['p_colors'];
+        List<dynamic> productColors = product['colors'];
         return selectedColors.any((color) => productColors.contains(color));
       }).toList();
     }
@@ -557,7 +517,7 @@ Future<List<Map<String, dynamic>>> fetchProducts({
     // Filter by types
     if (selectedTypes != null && selectedTypes.isNotEmpty) {
       products = products.where((product) {
-        String productType = product['p_subcollection'];
+        String productType = product['subcollection'];
         return selectedTypes.contains(productType);
       }).toList();
     }
@@ -571,7 +531,7 @@ Future<List<Map<String, dynamic>>> fetchProducts({
     // Filter by collections
     if (selectedCollections != null && selectedCollections.isNotEmpty) {
       products = products.where((product) {
-        List<dynamic> productCollections = product['p_collection'];
+        List<dynamic> productCollections = product['collection'];
         return selectedCollections
             .any((collection) => productCollections.contains(collection));
       }).toList();
@@ -598,7 +558,7 @@ class FirestoreServices {
 }
 
 bool isInWishlist(Map<String, dynamic> product, String currentUid) {
-  List<dynamic> wishlist = product['p_wishlist'];
+  List<dynamic> wishlist = product['favorite'];
   return wishlist.contains(currentUid);
 }
 

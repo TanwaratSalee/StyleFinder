@@ -124,44 +124,52 @@ class AuthController extends GetxController {
   }
 
   Future<void> saveUserDataGoogle({
-    required UserCredential currentUser,
-    required String name,
-    required DateTime birthday,
-    required String gender,
-    required String uHeight,
-    required String uWeight,
-    required Color skin,
-  }) async {
-    try {
-      String formattedDateWithDay =
-          DateFormat('EEEE, dd/MM/yyyy').format(birthday);
+  required UserCredential currentUser,
+  required String name,
+  required DateTime birthday,
+  required String gender,
+  required String uHeight,
+  required String uWeight,
+  required Color skin,
+}) async {
+  try {
+    String formattedDateWithDay = DateFormat('EEEE, dd/MM/yyyy').format(birthday);
 
-      await FirebaseFirestore.instance
-          .collection(usersCollection)
-          .doc(currentUser.user!.uid)
-          .set({
-        'email': currentUser.user!.email,
-        'name': name,
-        'imageUrl': currentUser.user!.photoURL ?? '',
-        'id': currentUser.user!.uid,
-        'birthday': formattedDateWithDay,
-        'gender': gender,
-        'height': uHeight,
-        'weight': uWeight,
-        'skinTone': skin.value,
-        'cart_count': "0",
-        'wishlist_count': "0",
-        'order_count': "0"
-      });
+    // List of fallback image URLs
+    List<String> fallbackImageUrls = [
+      'https://firebasestorage.googleapis.com/v0/b/new-tung.appspot.com/o/images%2FCs77utvw41dPiruedA7worPnUUj1%2Fimage_picker_AEE5EBF6-DE8D-4A83-A4B7-BCE38061D537-25686-000002F9E488963F.jpg?alt=media&token=b9ba2506-d9d1-4f92-8bb6-249305bce4f8',
+      'https://firebasestorage.googleapis.com/v0/b/new-tung.appspot.com/o/images%2FCs77utvw41dPiruedA7worPnUUj1%2Fimage_picker_9344ACA8-4696-435C-96DF-7CA89F0823D4-25686-000002FACFB1CB69.jpg?alt=media&token=61521f49-c618-4336-8d3c-a1e43eddbb80'
+    ];
 
-      VxToast.show(Get.context!, msg: 'User data saved successfully!');
-      Get.offAll(() => MainHome());
-    } catch (e) {
-      print("Failed to upload user data: $e");
-      VxToast.show(Get.context!, msg: 'Failed to upload user data: $e');
-    }
+    // Get a random fallback image URL if photoURL is null
+    String imageUrl = currentUser.user!.photoURL ?? 
+        (fallbackImageUrls..shuffle()).first;
+
+    await FirebaseFirestore.instance
+        .collection(usersCollection)
+        .doc(currentUser.user!.uid)
+        .set({
+      'email': currentUser.user!.email,
+      'name': name,
+      'imageUrl': imageUrl,
+      'id': currentUser.user!.uid,
+      'birthday': formattedDateWithDay,
+      'gender': gender,
+      'height': uHeight,
+      'weight': uWeight,
+      'skinTone': skin.value,
+      'cart_count': "0",
+      'wishlist_count': "0",
+      'order_count': "0"
+    });
+
+    VxToast.show(Get.context!, msg: 'User data saved successfully!');
+    Get.offAll(() => MainHome());
+  } catch (e) {
+    print("Failed to upload user data: $e");
+    VxToast.show(Get.context!, msg: 'Failed to upload user data: $e');
   }
-
+}
   Future<void> sendPasswordResetEmail(
       String email, BuildContext context) async {
     try {

@@ -117,10 +117,13 @@ class NewsScreen extends StatelessWidget {
                                         onTap: () {
                                           var vendorId = allproductsdata[index]
                                               ['vendor_id'];
+                                          var vendorName =
+                                              allproductsdata[index]['name'];
                                           print(
                                               "Navigating to StoreScreen with vendor_id: $vendorId");
-                                          Get.to(() =>
-                                              StoreScreen(vendorId: vendorId));
+                                          Get.to(() => StoreScreen(
+                                              vendorId: vendorId,
+                                              title: vendorName.value));
                                         },
                                         child: Container(
                                           child: Column(
@@ -130,7 +133,7 @@ class NewsScreen extends StatelessWidget {
                                                 MainAxisAlignment.center,
                                             children: [
                                               Text(
-                                                "${allproductsdata[index]['vendor_name']}",
+                                                "${allproductsdata[index]['name']}",
                                                 style: const TextStyle(
                                                   fontFamily: medium,
                                                   fontSize: 17,
@@ -190,15 +193,15 @@ class NewsScreen extends StatelessWidget {
                                         var allProductsData =
                                             snapshot.data!.docs;
 
-                                        // Sort the products by the length of p_wishlist in descending order
+                                        // Sort the products by the length of wishlist in descending order
                                         allProductsData.sort((a, b) {
                                           int aWishlistCount =
-                                              a['p_wishlist'] != null
-                                                  ? a['p_wishlist'].length
+                                              a['favorite'] != null
+                                                  ? a['favorite'].length
                                                   : 0;
                                           int bWishlistCount =
-                                              b['p_wishlist'] != null
-                                                  ? b['p_wishlist'].length
+                                              b['favorite'] != null
+                                                  ? b['favorite'].length
                                                   : 0;
                                           return bWishlistCount
                                               .compareTo(aWishlistCount);
@@ -226,7 +229,7 @@ class NewsScreen extends StatelessWidget {
                                             return GestureDetector(
                                               onTap: () {
                                                 Get.to(() => ItemDetails(
-                                                      title: product['p_name'],
+                                                      title: product['name'],
                                                       data: product.data()
                                                           as Map<String,
                                                               dynamic>,
@@ -238,13 +241,13 @@ class NewsScreen extends StatelessWidget {
                                                 children: [
                                                   ProductCard(
                                                     rank: index + 1,
-                                                    image: product['p_imgs'][0],
-                                                    price: product['p_price']
+                                                    image: product['imgs'][0],
+                                                    price: product['price']
                                                         .toString(),
                                                     wishlist: product[
-                                                                'p_wishlist'] !=
+                                                                'favorite'] !=
                                                             null
-                                                        ? product['p_wishlist']
+                                                        ? product['favorite']
                                                             .length
                                                             .toString()
                                                         : '0',
@@ -339,7 +342,7 @@ class NewsScreen extends StatelessWidget {
                                             topRight: Radius.circular(15.0),
                                           ),
                                           child: Image.network(
-                                            allproductsdata[index]['p_imgs'][0],
+                                            allproductsdata[index]['imgs'][0],
                                             width: 195,
                                             height: 205,
                                             fit: BoxFit.cover,
@@ -354,7 +357,7 @@ class NewsScreen extends StatelessWidget {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            "${allproductsdata[index]['p_name']}",
+                                            "${allproductsdata[index]['name']}",
                                             style: const TextStyle(
                                               fontFamily: medium,
                                               fontSize: 17,
@@ -364,7 +367,7 @@ class NewsScreen extends StatelessWidget {
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                           Text(
-                                            "${NumberFormat('#,##0').format(double.parse(allproductsdata[index]['p_price']).toInt())} Bath",
+                                            "${NumberFormat('#,##0').format(double.parse(allproductsdata[index]['price']).toInt())} Bath",
                                             style: const TextStyle(
                                               fontFamily: regular,
                                               fontSize: 14,
@@ -387,7 +390,7 @@ class NewsScreen extends StatelessWidget {
                                     .onTap(() {
                                   Get.to(() => ItemDetails(
                                         title:
-                                            "${allproductsdata[index]['p_name']}",
+                                            "${allproductsdata[index]['name']}",
                                         data: allproductsdata[index].data()
                                             as Map<String, dynamic>,
                                       ));
@@ -480,7 +483,7 @@ class NewsScreen extends StatelessWidget {
                                     child: TabBarView(
                                       controller: tabController,
                                       children: [
-                                        buildProductMatch(category),
+                                        buildStoreMatch(),
                                         buildGeneralMatch(),
                                       ],
                                     ),
@@ -531,244 +534,10 @@ class NewsScreen extends StatelessWidget {
     );
   }
 
-  Widget buildProductMatch(String category) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('products').snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (!snapshot.hasData) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-
-        Map<String, List<DocumentSnapshot>> mixMatchMap = {};
-
-        for (var doc in snapshot.data!.docs) {
-          var data = doc.data() as Map<String, dynamic>;
-          if (data['p_mixmatch'] != null) {
-            String mixMatchKey = data['p_mixmatch'];
-            if (!mixMatchMap.containsKey(mixMatchKey)) {
-              mixMatchMap[mixMatchKey] = [];
-            }
-            mixMatchMap[mixMatchKey]!.add(doc);
-          }
-        }
-
-        var validPairs = mixMatchMap.entries
-            .where((entry) => entry.value.length == 2)
-            .toList();
-
-        // Sort pairs to ensure 'top' appears before 'lower'
-        for (var entry in validPairs) {
-          entry.value.sort((a, b) {
-            var dataA = a.data() as Map<String, dynamic>;
-            var dataB = b.data() as Map<String, dynamic>;
-            if (dataA['p_part'] == 'top' && dataB['p_part'] == 'lower') {
-              return -1;
-            } else if (dataA['p_part'] == 'lower' && dataB['p_part'] == 'top') {
-              return 1;
-            }
-            return 0;
-          });
-        }
-
-        int itemCount = validPairs.length;
-        return GridView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 7,
-            crossAxisSpacing: 7,
-            mainAxisExtent: 240,
-          ),
-          itemBuilder: (BuildContext context, int index) {
-            var pair = validPairs[index].value;
-
-            var data1 = pair[0].data() as Map<String, dynamic>;
-            var data2 = pair[1].data() as Map<String, dynamic>;
-
-            String vendorName1 = data1['p_seller'];
-            String vendorName2 = data2['p_seller'];
-
-            String vendor_id = data1['vendor_id'];
-
-            List<dynamic> collectionList = data1['p_mixmatch_collection'];
-            String description = data1['p_mixmatch_desc'];
-
-            String price1 = data1['p_price'].toString();
-            String price2 = data2['p_price'].toString();
-            String totalPrice =
-                (int.parse(price1) + int.parse(price2)).toString();
-
-            String productName1 = data1['p_name'];
-            String productName2 = data2['p_name'];
-
-            String productImage1 = data1['p_imgs'][0];
-            String productImage2 = data2['p_imgs'][0];
-
-            String gender = data1['p_mixmatch_sex'];
-
-            bool isTop1 = data1['p_part'] == 'top';
-            bool isTop2 = data2['p_part'] == 'top';
-
-            // Ensure top items are displayed at the top
-            var topProductData = isTop1 ? data1 : data2;
-            var lowerProductData = isTop1 ? data2 : data1;
-
-            var topProductImage = isTop1 ? productImage1 : productImage2;
-            var lowerProductImage = isTop1 ? productImage2 : productImage1;
-
-            var topProductName = isTop1 ? productName1 : productName2;
-            var lowerProductName = isTop1 ? productName2 : productName1;
-
-            var topPrice = isTop1 ? price1 : price2;
-            var lowerPrice = isTop1 ? price2 : price1;
-
-            return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MatchStoreDetailScreen(
-                        price1: price1,
-                        price2: price2,
-                        productName1: productName1,
-                        productName2: productName2,
-                        productImage1: productImage1,
-                        productImage2: productImage2,
-                        totalPrice: totalPrice,
-                        vendorName1: vendorName1,
-                        vendorName2: vendorName2,
-                        vendor_id: vendor_id,
-                        collection: collectionList,
-                        description: description,
-                        gender: gender,
-                      ),
-                    ),
-                  );
-                },
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Image.network(
-                          productImage1,
-                          width: 75,
-                          height: 80,
-                          fit: BoxFit.cover,
-                        ),
-                        5.widthBox,
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: 200,
-                                child: Text(
-                                  productName1,
-                                  style: const TextStyle(
-                                    fontFamily: medium,
-                                    fontSize: 14,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                ),
-                              ),
-                              Text(
-                                "${NumberFormat('#,##0').format(double.parse(price1).toInt())} Bath",
-                                style: const TextStyle(color: greyColor),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                    3.heightBox,
-                    Row(
-                      children: [
-                        Image.network(
-                          productImage2,
-                          width: 75,
-                          height: 80,
-                          fit: BoxFit.cover,
-                        ),
-                        3.widthBox,
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: 200,
-                                child: Text(
-                                  productName2,
-                                  style: const TextStyle(
-                                    fontFamily: medium,
-                                    fontSize: 14,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                ),
-                              ),
-                              Text(
-                                "${NumberFormat('#,##0').format(double.parse(price2).toInt())} Bath",
-                                style: const TextStyle(color: greyColor),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Total: ",
-                            style: TextStyle(
-                                color: blackColor,
-                                fontFamily: regular,
-                                fontSize: 14),
-                          ),
-                          Text(
-                            "${NumberFormat('#,##0').format(double.parse(totalPrice).toInt())} ",
-                            style: TextStyle(
-                                color: blackColor,
-                                fontFamily: medium,
-                                fontSize: 16),
-                          ),
-                          Text(
-                            "Bath",
-                            style: TextStyle(
-                                color: blackColor,
-                                fontFamily: regular,
-                                fontSize: 14),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                )
-                    .box
-                    .border(color: greyLine)
-                    .p8
-                    .margin(EdgeInsets.all(2))
-                    .roundedSM
-                    .make());
-          },
-          itemCount: 4,
-        );
-      },
-    );
-  }
-
-Widget buildGeneralMatch() {
+Widget buildStoreMatch() {
   return StreamBuilder<QuerySnapshot>(
     stream: FirebaseFirestore.instance
-        .collection('usermixandmatch')
+        .collection('storemixandmatchs')
         .orderBy('views', descending: true)
         .snapshots(),
     builder: (context, snapshot) {
@@ -802,13 +571,19 @@ Widget buildGeneralMatch() {
         itemBuilder: (context, index) {
           var doc = limitedData[index];
           var docData = doc.data() as Map<String, dynamic>;
-          var productIdTop = docData['p_id_top'] ?? '';
-          var productIdLower = docData['p_id_lower'] ?? '';
+          var productIdTop = docData['product_id_top'] ?? '';
+          var productIdLower = docData['product_id_lower'] ?? '';
 
           return FutureBuilder<List<DocumentSnapshot>>(
             future: Future.wait([
-              FirebaseFirestore.instance.collection('products').doc(productIdTop).get(),
-              FirebaseFirestore.instance.collection('products').doc(productIdLower).get()
+              FirebaseFirestore.instance
+                  .collection('products')
+                  .doc(productIdTop)
+                  .get(),
+              FirebaseFirestore.instance
+                  .collection('products')
+                  .doc(productIdLower)
+                  .get()
             ]),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
@@ -823,39 +598,22 @@ Widget buildGeneralMatch() {
               }
 
               var productDataTop = snapshotTop.data() as Map<String, dynamic>;
-              var productDataLower = snapshotLower.data() as Map<String, dynamic>;
+              var productDataLower =
+                  snapshotLower.data() as Map<String, dynamic>;
 
-              var topImage = (productDataTop['p_imgs'] as List<dynamic>?)?.first ?? '';
-              var lowerImage = (productDataLower['p_imgs'] as List<dynamic>?)?.first ?? '';
-              var productNameTop = productDataTop['p_name'] ?? '';
-              var productNameLower = productDataLower['p_name'] ?? '';
-              var priceTop = productDataTop['p_price']?.toString() ?? '0';
-              var priceLower = productDataLower['p_price']?.toString() ?? '0';
-              var collections = docData['p_collection'] != null
-                  ? List<String>.from(docData['p_collection'])
-                  : [];
-              var description = docData['p_desc'] ?? '';
-              var views = docData['views'] ?? 0;
-              var gender = docData['p_sex'] ?? '';
-              var postedBy = docData['posted_by'] ?? '';
+              var topImage =
+                  (productDataTop['imgs'] as List<dynamic>?)?.first ?? '';
+              var lowerImage =
+                  (productDataLower['imgs'] as List<dynamic>?)?.first ?? '';
+              var productNameTop = productDataTop['name'] ?? '';
+              var productNameLower = productDataLower['name'] ?? '';
+              var priceTop = productDataTop['price']?.toString() ?? '0';
+              var priceLower = productDataLower['price']?.toString() ?? '0';
 
               return GestureDetector(
                 onTap: () {
-                  Get.to(() => MatchPostsDetails(
-                        productName1: productNameTop,
-                        productName2: productNameLower,
-                        price1: priceTop,
-                        price2: priceLower,
-                        productImage1: topImage,
-                        productImage2: lowerImage,
-                        totalPrice: (int.parse(priceTop) + int.parse(priceLower)).toString(),
-                        vendorName1: 'Vendor Name 1', // Replace with actual vendor name if available
-                        vendorName2: 'Vendor Name 2', // Replace with actual vendor name if available
-                        vendor_id: doc.id,
-                        collection: collections,
-                        description: description,
-                        gender: gender,
-                        posted_by: postedBy,
+                  Get.to(() => MatchStoreDetailScreen(
+                        documentId: doc.id,
                       ));
                 },
                 child: Container(
@@ -963,6 +721,214 @@ Widget buildGeneralMatch() {
   );
 }
 
+  Widget buildGeneralMatch() {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('usermixandmatch')
+          .orderBy('views', descending: true)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(child: CircularProgressIndicator());
+        }
+        var data = snapshot.data!.docs;
+
+        if (data.isEmpty) {
+          return Center(
+            child:
+                Text("No posts available!", style: TextStyle(color: greyDark)),
+          );
+        }
+
+        // Shuffle data to randomize
+        data.shuffle(Random());
+
+        // Limit to 4 items
+        var limitedData = data.take(4).toList();
+
+        return GridView.builder(
+          padding: EdgeInsets.all(12),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 8,
+            mainAxisSpacing: 8,
+            childAspectRatio: 9 / 11,
+          ),
+          itemCount: limitedData.length,
+          physics: const NeverScrollableScrollPhysics(), // Prevent scrolling
+          itemBuilder: (context, index) {
+            var doc = limitedData[index];
+            var docData = doc.data() as Map<String, dynamic>;
+            var productIdTop = docData['product_id_top'] ?? '';
+            var productIdLower = docData['product_id_lower'] ?? '';
+
+            return FutureBuilder<List<DocumentSnapshot>>(
+              future: Future.wait([
+                FirebaseFirestore.instance
+                    .collection('products')
+                    .doc(productIdTop)
+                    .get(),
+                FirebaseFirestore.instance
+                    .collection('products')
+                    .doc(productIdLower)
+                    .get()
+              ]),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(child: CircularProgressIndicator());
+                }
+
+                var snapshotTop = snapshot.data![0];
+                var snapshotLower = snapshot.data![1];
+
+                if (!snapshotTop.exists || !snapshotLower.exists) {
+                  return Center(child: Text("One or more products not found"));
+                }
+
+                var productDataTop = snapshotTop.data() as Map<String, dynamic>;
+                var productDataLower =
+                    snapshotLower.data() as Map<String, dynamic>;
+
+                var topImage =
+                    (productDataTop['imgs'] as List<dynamic>?)?.first ?? '';
+                var lowerImage =
+                    (productDataLower['imgs'] as List<dynamic>?)?.first ?? '';
+                var productNameTop = productDataTop['name'] ?? '';
+                var productNameLower = productDataLower['name'] ?? '';
+                var priceTop = productDataTop['price']?.toString() ?? '0';
+                var priceLower = productDataLower['price']?.toString() ?? '0';
+                var collections = docData['collection'] != null
+                    ? List<String>.from(docData['collection'])
+                    : [];
+                var description = docData['description'] ?? '';
+                var views = docData['views'] ?? 0;
+                var gender = docData['gender'] ?? '';
+                var postedBy = docData['user_id'] ?? '';
+
+                return GestureDetector(
+                  onTap: () {
+                    Get.to(() => MatchPostsDetails(
+                            docId: doc.id,  
+                            productName1: productNameTop,
+                            productName2: productNameLower,
+                            price1: priceTop,
+                            price2: priceLower,
+                            productImage1: topImage,
+                            productImage2: lowerImage,
+                            totalPrice: (int.parse(priceTop) + int.parse(priceLower)).toString(),
+                            vendorName1: 'Vendor Name 1', 
+                            vendorName2: 'Vendor Name 2', 
+                            vendor_id: doc.id,
+                            collection: collections,
+                            description: description,
+                            gender: gender,
+                            posted_by: postedBy,
+                        ));
+                  },
+                  child: Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 75,
+                              height: 80,
+                              child: Image.network(
+                                topImage,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            SizedBox(width: 5),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    productNameTop,
+                                    style: const TextStyle(
+                                      fontFamily: medium,
+                                      fontSize: 14,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
+                                  Text(
+                                    "${NumberFormat('#,##0').format(double.parse(priceTop).toInt())} Bath",
+                                    style: const TextStyle(color: greyColor),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 75,
+                              height: 80,
+                              child: Image.network(
+                                lowerImage,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            SizedBox(width: 5),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    productNameLower,
+                                    style: const TextStyle(
+                                      fontFamily: medium,
+                                      fontSize: 14,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
+                                  Text(
+                                    "${NumberFormat('#,##0').format(double.parse(priceLower).toInt())} Bath",
+                                    style: const TextStyle(color: greyColor),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Total ${NumberFormat('#,##0').format(int.parse(priceTop) + int.parse(priceLower))} Bath",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: medium,
+                                color: blackColor,
+                              ),
+                            ),
+                          ],
+                        ).paddingSymmetric(horizontal: 8),
+                      ],
+                    )
+                        .box
+                        .border(color: greyLine)
+                        .rounded
+                        .padding(EdgeInsets.all(8))
+                        .make(),
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
+    );
+  }
 }
 
 //   Widget buildGeneralMatch() {
@@ -998,20 +964,20 @@ Widget buildGeneralMatch() {
 //         itemBuilder: (context, index) {
 //           var doc = filteredData[index];
 //           var docData = doc.data() as Map<String, dynamic>;
-//           var topImage = docData['p_imgs_top'] ?? '';
-//           var lowerImage = docData['p_imgs_lower'] ?? '';
-//           var productNameTop = docData['p_name_top'] ?? '';
-//           var productNameLower = docData['p_name_lower'] ?? '';
-//           var priceTop = docData['p_price_top']?.toString() ?? '0';
-//           var priceLower = docData['p_price_lower']?.toString() ?? '0';
+//           var topImage = docData['imgs_top'] ?? '';
+//           var lowerImage = docData['imgs_lower'] ?? '';
+//           var productNameTop = docData['name_top'] ?? '';
+//           var productNameLower = docData['name_lower'] ?? '';
+//           var priceTop = docData['price_top']?.toString() ?? '0';
+//           var priceLower = docData['price_lower']?.toString() ?? '0';
 //           var vendorId = docData['vendor_id'] ?? '';
-//           var collections = docData['p_collection'] != null
-//               ? List<String>.from(docData['p_collection'])
+//           var collections = docData['collection'] != null
+//               ? List<String>.from(docData['collection'])
 //               : [];
-//           var description = docData['p_desc'] ?? '';
+//           var description = docData['desc'] ?? '';
 //           var views = docData['views'] ?? 0;
-//           var gender = docData['p_sex'] ?? '';
-//           String totalPrice = (int.parse(docData['p_price_top']) + int.parse(docData['p_price_lower'])).toString();
+//           var gender = docData['sex'] ?? '';
+//           String totalPrice = (int.parse(docData['price_top']) + int.parse(docData['price_lower'])).toString();
 //           var posted_by = currentUserUID;
 //           var posted_name = docData['posted_name'];
 //           var posted_img = docData['posted_img'];

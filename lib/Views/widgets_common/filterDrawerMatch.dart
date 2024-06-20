@@ -55,7 +55,7 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
     super.initState();
     isSelectedAll = controller.selectedGender.value == '';
     isSelectedMen = controller.selectedGender.value == 'male';
-    isSelectedWomen = controller.selectedGender.value == 'female';
+    isSelectedWomen = controller.selectedGender.value == 'woman';
     _currentSliderValue = controller.maxPrice.value;
     controller.fetchVendors();
   }
@@ -301,7 +301,7 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
               if (isSelectedMen) {
                 selectedGender = 'male';
               } else if (isSelectedWomen) {
-                selectedGender = 'female';
+                selectedGender = 'woman';
               }
 
                 controller.updateFilters(

@@ -72,50 +72,18 @@ class _MatchScreenState extends State<MatchScreen> {
     {'name': 'Black', 'color': Colors.black, 'value': 0xFF000000},
     {'name': 'Grey', 'color': greyColor, 'value': 0xFF808080},
     {'name': 'White', 'color': whiteColor, 'value': 0xFFFFFFFF},
-    {
-      'name': 'Purple',
-      'color': const Color.fromRGBO(98, 28, 141, 1),
-      'value': 0xFF621C8D
-    },
-    {
-      'name': 'Deep Purple',
-      'color': const Color.fromRGBO(202, 147, 235, 1),
-      'value': 0xFFCA93EB
-    },
-    {
-      'name': 'Blue',
-      'color': Color.fromRGBO(32, 47, 179, 1),
-      'value': 0xFF202FB3
-    },
-    {
-      'name': 'Blue',
-      'color': const Color.fromRGBO(48, 176, 232, 1),
-      'value': 0xFF30B0E8
-    },
-    {
-      'name': 'Blue Grey',
-      'color': const Color.fromRGBO(83, 205, 191, 1),
-      'value': 0xFF53CDBF
-    },
-    {
-      'name': 'Green',
-      'color': const Color.fromRGBO(23, 119, 15, 1),
-      'value': 0xFF17770F
-    },
-    {
-      'name': 'Green',
-      'color': Color.fromRGBO(98, 207, 47, 1),
-      'value': 0xFF62CF2F
-    },
+    {'name': 'Purple', 'color': const Color.fromRGBO(98, 28, 141, 1), 'value': 0xFF621C8D},
+    {'name': 'Deep Purple', 'color': const Color.fromRGBO(202, 147, 235, 1), 'value': 0xFFCA93EB},
+    {'name': 'Blue', 'color': Color.fromRGBO(32, 47, 179, 1), 'value': 0xFF202FB3},
+    {'name': 'Blue', 'color': const Color.fromRGBO(48, 176, 232, 1), 'value': 0xFF30B0E8},
+    {'name': 'Blue Grey', 'color': const Color.fromRGBO(83, 205, 191, 1), 'value': 0xFF53CDBF},
+    {'name': 'Green', 'color': const Color.fromRGBO(23, 119, 15, 1), 'value': 0xFF17770F},
+    {'name': 'Green', 'color': Color.fromRGBO(98, 207, 47, 1), 'value': 0xFF62CF2F},
     {'name': 'Yellow', 'color': Colors.yellow, 'value': 0xFFFFFF00},
     {'name': 'Orange', 'color': Colors.orange, 'value': 0xFFFFA500},
     {'name': 'Pink', 'color': Colors.pinkAccent, 'value': 0xFFFF4081},
     {'name': 'Red', 'color': Colors.red, 'value': 0xFFFF0000},
-    {
-      'name': 'Brown',
-      'color': Color.fromARGB(255, 121, 58, 31),
-      'value': 0xFF793A1F
-    },
+    {'name': 'Brown', 'color': Color.fromARGB(255, 121, 58, 31), 'value': 0xFF793A1F},
   ];
 
   final Map<int, List<int>> colorMatchMap = {
@@ -202,7 +170,7 @@ class _MatchScreenState extends State<MatchScreen> {
           SliverToBoxAdapter(
               child: Column(
             children: <Widget>[
-              Divider(
+              const Divider(
                 color: greyThin,
               ),
               Padding(
@@ -247,12 +215,12 @@ class _MatchScreenState extends State<MatchScreen> {
 
   Widget buildCardSetTop(List<Map<String, dynamic>> topProducts) {
     if (topProducts.isEmpty) {
-      return Center(child: Text('No Top available'));
+      return const Center(child: Text('No Top available'));
     }
 
     final itemCount = topProducts.length;
     if (itemCount == 0) {
-      return Center(child: Text('No Top available'));
+      return const Center(child: Text('No Top available'));
     }
 
     double containerHeight = MediaQuery.of(context).size.height < 855
@@ -280,12 +248,12 @@ class _MatchScreenState extends State<MatchScreen> {
 
   Widget buildCardSetLower(List<Map<String, dynamic>> lowerProducts) {
     if (lowerProducts.isEmpty) {
-      return Center(child: Text('No Lower available'));
+      return const Center(child: Text('No Lower available'));
     }
 
     final itemCount = lowerProducts.length;
     if (itemCount == 0) {
-      return Center(child: Text('No Lower available'));
+      return const Center(child: Text('No Lower available'));
     }
 
     double containerHeight = MediaQuery.of(context).size.height < 855
@@ -312,8 +280,8 @@ class _MatchScreenState extends State<MatchScreen> {
   }
 
   Widget buildCardItem(Map<String, dynamic> product) {
-    final productName = product['p_name'] ?? 'No Name';
-    final productImages = product['p_imgs'] ?? [''];
+    final productName = product['name'] ?? 'No Name';
+    final productImages = product['imgs'] ?? [''];
 
     return GestureDetector(
       onTap: () {
@@ -328,15 +296,15 @@ class _MatchScreenState extends State<MatchScreen> {
           Container(
             width: 250,
             child: Image.network(productImages[0], fit: BoxFit.cover),
-          ).box.color(Color.fromARGB(255, 244, 244, 245)).make(),
+          ).box.color(const Color.fromARGB(255, 244, 244, 245)).make(),
           Positioned(
             left: -10,
             child: IconButton(
-              icon: Icon(Icons.chevron_left, size: 32, color: whiteColor),
+              icon: const Icon(Icons.chevron_left, size: 32, color: whiteColor),
               onPressed: () {
                 if (_currentPageIndexTop > 0) {
                   _pageControllerTop.previousPage(
-                    duration: Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 300),
                     curve: Curves.easeIn,
                   );
                 } else {
@@ -348,11 +316,11 @@ class _MatchScreenState extends State<MatchScreen> {
           Positioned(
             right: -10,
             child: IconButton(
-              icon: Icon(Icons.chevron_right, size: 32, color: whiteColor),
+              icon: const Icon(Icons.chevron_right, size: 32, color: whiteColor),
               onPressed: () {
                 if (_currentPageIndexTop < product.length - 1) {
                   _pageControllerTop.nextPage(
-                    duration: Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 300),
                     curve: Curves.easeIn,
                   );
                 } else {
@@ -366,7 +334,7 @@ class _MatchScreenState extends State<MatchScreen> {
     )
         .box
         .color(primaryDark)
-        .margin(EdgeInsets.symmetric(horizontal: 10))
+        .margin(const EdgeInsets.symmetric(horizontal: 10))
         .rounded
         .make();
   }
@@ -379,7 +347,7 @@ class _MatchScreenState extends State<MatchScreen> {
     final topProduct = controller.topFilteredProducts[topProductIndex];
     final lowerProduct = controller.lowerFilteredProducts[lowerProductIndex];
     bool isGreatMatch =
-        checkMatch(topProduct['p_colors'], lowerProduct['p_colors']);
+        checkMatch(topProduct['colors'], lowerProduct['colors']);
 
     return Container(
       child: Column(
@@ -388,7 +356,7 @@ class _MatchScreenState extends State<MatchScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Text(
+              const Text(
                 'Feedback:',
               ).text.fontFamily(regular).color(blackColor).size(14).make(),
               8.widthBox,
@@ -404,8 +372,8 @@ class _MatchScreenState extends State<MatchScreen> {
           )
               .box
               .border(color: greyLine, width: 1)
-              .padding(EdgeInsets.symmetric(vertical: 12, horizontal: 32))
-              .margin(EdgeInsets.only(bottom: 12))
+              .padding(const EdgeInsets.symmetric(vertical: 12, horizontal: 32))
+              .margin(const EdgeInsets.only(bottom: 12))
               .make(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -421,6 +389,8 @@ class _MatchScreenState extends State<MatchScreen> {
                       controller.topFilteredProducts[topProductIndex];
                   final lowerProduct =
                       controller.lowerFilteredProducts[lowerProductIndex];
+                  print(
+                      'Top Product ID: ${topProduct['product_id']}, Lower Product ID: ${lowerProduct['product_id']}'); // Debug print
                   Get.to(() => MatchPostProduct(
                         topProduct: topProduct,
                         lowerProduct: lowerProduct,
@@ -430,18 +400,18 @@ class _MatchScreenState extends State<MatchScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     Image.asset(icPost, width: 22, height: 22),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     Text('Post')
                         .text
                         .fontFamily(semiBold)
-                        .color(Color.fromARGB(255, 28, 73, 45))
+                        .color(const Color.fromARGB(255, 28, 73, 45))
                         .size(14)
                         .make(),
                   ],
                 )
                     .box
                     .color(const Color.fromRGBO(177, 234, 199, 1))
-                    .padding(EdgeInsets.symmetric(vertical: 12, horizontal: 58))
+                    .padding(const EdgeInsets.symmetric(vertical: 12, horizontal: 58))
                     .border(color: const Color.fromRGBO(35, 101, 60, 1))
                     .rounded
                     .make(),
@@ -457,12 +427,12 @@ class _MatchScreenState extends State<MatchScreen> {
                         _currentPageIndexLower, lowerProducts.length);
                     final topProduct = topProducts[topProductIndex];
                     final lowerProduct = lowerProducts[lowerProductIndex];
-                    print(
-                        'Top Product: ${getColorName(topProduct['p_colors'][0])}, Lower Product: ${getColorName(lowerProduct['p_colors'][0])}'); // Debug print
+                    // print(
+                    //     'Top Product: ${getColorName(topProduct['colors'][0])}, Lower Product: ${getColorName(lowerProduct['colors'][0])}'); // Debug print
                     if (topProduct != null && lowerProduct != null) {
                       controller.addToWishlistUserMatch(
-                        topProduct['p_name'],
-                        lowerProduct['p_name'],
+                        topProduct['name'],
+                        lowerProduct['name'],
                         context,
                       );
                     } else {
@@ -484,7 +454,7 @@ class _MatchScreenState extends State<MatchScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     Image.asset(icLikematch, width: 22, height: 22),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     Text('Add to favorite')
                         .text
                         .fontFamily(semiBold)
@@ -495,7 +465,7 @@ class _MatchScreenState extends State<MatchScreen> {
                 )
                     .box
                     .color(const Color.fromRGBO(255, 203, 203, 1))
-                    .padding(EdgeInsets.symmetric(vertical: 12, horizontal: 18))
+                    .padding(const EdgeInsets.symmetric(vertical: 12, horizontal: 18))
                     .border(color: const Color.fromRGBO(160, 84, 84, 1))
                     .rounded
                     .make(),
@@ -511,18 +481,12 @@ class _MatchScreenState extends State<MatchScreen> {
     if (topColors.isEmpty || lowerColors.isEmpty) {
       return false;
     }
-
     final topPrimaryColor = topColors[0];
     final lowerPrimaryColor = lowerColors[0];
-
-    print(
-        'Top Color: ${getColorName(topPrimaryColor)}, Lower Color: ${getColorName(lowerPrimaryColor)}'); // Debug print
-
     if (colorMatchMap[topPrimaryColor] != null &&
         colorMatchMap[topPrimaryColor]!.contains(lowerPrimaryColor)) {
       return true;
     }
-
     return false;
   }
 
@@ -543,7 +507,7 @@ class _MatchScreenState extends State<MatchScreen> {
       barrierDismissible: true,
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
       barrierColor: Colors.black.withOpacity(0.5),
-      transitionDuration: Duration(milliseconds: 200),
+      transitionDuration: const Duration(milliseconds: 200),
       pageBuilder: (BuildContext context, Animation<double> animation,
           Animation<double> secondaryAnimation) {
         return Align(

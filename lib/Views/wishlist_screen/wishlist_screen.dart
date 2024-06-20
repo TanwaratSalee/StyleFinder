@@ -85,7 +85,7 @@ class WishlistScreen extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                "${NumberFormat('#,##0').format(double.parse(data[index]['p_price']).toInt())} Bath",
+                                "${NumberFormat('#,##0').format(double.parse(data[index]['price']).toInt())} Bath",
                                 style: const TextStyle(
                                   fontSize: 14,
                                   fontFamily: regular,
@@ -102,7 +102,7 @@ class WishlistScreen extends StatelessWidget {
                               .collection(productsCollection)
                               .doc(data[index].id)
                               .update({
-                            'p_wishlist': FieldValue.arrayRemove(
+                            'favorite': FieldValue.arrayRemove(
                                 [FirebaseAuth.instance.currentUser!.uid])
                           });
                         },

@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/reviews_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
@@ -13,8 +12,7 @@ class ItemDetails extends StatefulWidget {
   final String? title;
   final dynamic data;
 
-  const ItemDetails({Key? key, required this.title, this.data})
-      : super(key: key);
+  const ItemDetails({Key? key, required this.title, this.data}) : super(key: key);
 
   @override
   _ItemDetailsState createState() => _ItemDetailsState();
@@ -32,24 +30,23 @@ class _ItemDetailsState extends State<ItemDetails> {
     controller = Get.put(ProductController());
     checkIsInWishlist();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      int productPrice = int.parse(widget.data['p_price']);
+      int productPrice = int.parse(widget.data['price']);
       controller.calculateTotalPrice(productPrice);
       fetchReviews();
     });
 
-    // ดึงข้อมูล vendor
     controller.fetchVendorInfo(widget.data['vendor_id']);
   }
 
   void checkIsInWishlist() async {
     FirebaseFirestore.instance
         .collection(productsCollection)
-        .where('p_name', isEqualTo: widget.data['p_name'])
+        .where('name', isEqualTo: widget.data['name'])
         .get()
         .then((QuerySnapshot querySnapshot) {
       if (querySnapshot.docs.isNotEmpty) {
         DocumentSnapshot doc = querySnapshot.docs.first;
-        List<dynamic> wishlist = doc['p_wishlist'];
+        List<dynamic> wishlist = doc['favorite'];
         controller.setDocumentId(doc.id);
         if (wishlist.contains(currentUser!.uid)) {
           controller.isFav(true);
@@ -97,19 +94,35 @@ class _ItemDetailsState extends State<ItemDetails> {
   void selectItem(int index) {
     setState(() {
       selectedSizeIndex = index;
+      print("Selected size index: $selectedSizeIndex");
     });
   }
 
-  void _updateIsFav(bool isFav) {
+  void updateIsFav(bool isFav) {
     setState(() {
       controller.isFav.value = isFav;
     });
   }
 
+  Future<String> fetchVendorName(String vendorId) async {
+    DocumentSnapshot vendorSnapshot = await FirebaseFirestore.instance
+        .collection('vendors')
+        .doc(vendorId)
+        .get();
+
+    if (vendorSnapshot.exists) {
+      var vendorData = vendorSnapshot.data() as Map<String, dynamic>;
+      return vendorData['name'] ?? 'Unknown Seller';
+    } else {
+      return 'Unknown Seller';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     List<String> sizeOrder = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
-    List<String> sizes = widget.data['p_productsize'].cast<String>().toList();
+    List<String> sizes =
+        (widget.data['selectsize'] ?? []).cast<String>().toList();
     sizes.sort((a, b) => sizeOrder.indexOf(a).compareTo(sizeOrder.indexOf(b)));
 
     return WillPopScope(
@@ -124,7 +137,7 @@ class _ItemDetailsState extends State<ItemDetails> {
             IconButton(
               icon: Image.asset(icCart, width: 21),
               onPressed: () {
-                Get.to(() => const CartScreen());
+                Get.to(() => CartScreen());
               },
             ),
           ],
@@ -139,19 +152,29 @@ class _ItemDetailsState extends State<ItemDetails> {
                     VxSwiper.builder(
                       autoPlay: true,
                       height: 420,
-                      itemCount: widget.data['p_imgs'].length ?? 0,
+                      itemCount: widget.data['imgs'] != null
+                          ? widget.data['imgs'].length
+                          : 0,
                       aspectRatio: 16 / 9,
                       viewportFraction: 1.0,
                       itemBuilder: (context, index) {
-                        return Image.network(
-                          widget.data['p_imgs'][index],
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                        );
+                        return widget.data['imgs'] != null &&
+                                widget.data['imgs'].isNotEmpty
+                            ? Image.network(
+                                widget.data['imgs'][index],
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                              )
+                            : Container(
+                                width: double.infinity,
+                                height: 420,
+                                color: greyColor,
+                                child:
+                                    Center(child: Text('No image available')),
+                              );
                       },
                     ).box.white.make(),
                     10.heightBox,
-                    // Title of product
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -174,11 +197,11 @@ class _ItemDetailsState extends State<ItemDetails> {
                               () => IconButton(
                                 onPressed: () {
                                   if (controller.isFav.value) {
-                                    controller.removeToWishlistDetail(
-                                        widget.data, _updateIsFav, context);
+                                    controller.removeFavoriteDetail(
+                                        widget.data, updateIsFav, context);
                                   } else {
-                                    controller.addToWishlistDetail(
-                                        widget.data, _updateIsFav, context);
+                                    controller.addFavoriteDetail(
+                                        widget.data, updateIsFav, context);
                                   }
                                 },
                                 icon: controller.isFav.value
@@ -190,23 +213,18 @@ class _ItemDetailsState extends State<ItemDetails> {
                             )
                           ],
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            "${widget.data['p_aboutProduct']}"
-                                .text
-                                .fontFamily(regular)
-                                .color(greyDark)
-                                .size(14)
-                                .make(),
-                            "${NumberFormat('#,##0').format(double.parse(widget.data['p_price']).toInt())} Bath"
-                                .text
-                                .color(primaryApp)
-                                .fontFamily(medium)
-                                .size(20)
-                                .make(),
-                          ],
-                        )
+                        "${widget.data['aboutProduct']}"
+                            .text
+                            .fontFamily(regular)
+                            .color(greyDark)
+                            .size(14)
+                            .make(),
+                        "${NumberFormat('#,##0').format(double.parse(widget.data['price']).toInt())} Bath"
+                            .text
+                            .color(primaryApp)
+                            .fontFamily(medium)
+                            .size(20)
+                            .make()
                       ],
                     )
                         .box
@@ -221,7 +239,8 @@ class _ItemDetailsState extends State<ItemDetails> {
                             children: [
                               5.widthBox,
                               Obx(() {
-                                String imageUrl = controller.vendorImageUrl.value;
+                                String imageUrl =
+                                    controller.vendorImageUrl.value;
                                 return imageUrl.isNotEmpty
                                     ? ClipOval(
                                         child: Image.network(
@@ -263,11 +282,13 @@ class _ItemDetailsState extends State<ItemDetails> {
                         ),
                         10.widthBox,
                         GestureDetector(
-                          onTap: () {
-                            Get.to(
-                              () => StoreScreen(
-                                  vendorId: widget.data['vendor_id']),
-                            );
+                          onTap: () async {
+                            String vendorName =
+                                await fetchVendorName(widget.data['vendor_id']);
+                            Get.to(() => StoreScreen(
+                                  vendorId: widget.data['vendor_id'],
+                                  title: vendorName,
+                                ));
                           },
                           child: Container(
                             child: const Text(
@@ -310,11 +331,13 @@ class _ItemDetailsState extends State<ItemDetails> {
                           height: 40,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
-                            itemCount: widget.data['p_collection'].length,
+                            itemCount: widget.data['collection'] != null
+                                ? widget.data['collection'].length
+                                : 0,
                             itemBuilder: (context, index) {
                               return Container(
                                 child: Text(
-                                  "${widget.data['p_collection'][index].toString()[0].toUpperCase()}${widget.data['p_collection'][index].toString().substring(1)}",
+                                  "${widget.data['collection'][index].toString()[0].toUpperCase()}${widget.data['collection'][index].toString().substring(1)}",
                                 )
                                     .text
                                     .size(26)
@@ -342,7 +365,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                             .make(),
                         SizedBox(height: 5),
                         Text(
-                          widget.data['p_desc'],
+                          widget.data['description'] ?? 'No description',
                         )
                             .text
                             .color(blackColor)
@@ -358,7 +381,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                             .make(),
                         SizedBox(height: 5),
                         Text(
-                          widget.data['p_size'],
+                          widget.data['sizedes'] ?? 'No size information',
                         )
                             .text
                             .color(blackColor)
@@ -370,7 +393,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                         .box
                         .white
                         .padding(const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 8))
+                            horizontal: 22, vertical: 18))
                         .margin(const EdgeInsets.symmetric(
                             horizontal: 12, vertical: 7))
                         .outerShadow
@@ -484,7 +507,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                                           children: [
                                             CircleAvatar(
                                               backgroundImage: NetworkImage(
-                                                  review['user_img']),
+                                                  review['user_img'] ?? ''),
                                             ),
                                             SizedBox(width: 10),
                                             Expanded(
@@ -497,19 +520,26 @@ class _ItemDetailsState extends State<ItemDetails> {
                                                         MainAxisAlignment
                                                             .spaceBetween,
                                                     children: [
-                                                      Text(
-                                                        review['user_name'],
-                                                        style: TextStyle(
-                                                          fontFamily: semiBold,
-                                                          fontSize: 16,
+                                                      SizedBox(
+                                                        width:
+                                                            150, // Limit the width to 150 pixels
+                                                        child: Text(
+                                                          review['user_name'] ??
+                                                              'Anonymous',
+                                                          style: TextStyle(
+                                                              fontFamily:
+                                                                  semiBold,
+                                                              fontSize: 16),
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow
+                                                              .ellipsis, // Truncate with ellipsis if it exceeds the width
                                                         ),
                                                       ),
                                                       Text(
                                                         date,
                                                         style: TextStyle(
-                                                          color: greyColor,
-                                                          fontSize: 12,
-                                                        ),
+                                                            color: greyColor,
+                                                            fontSize: 12),
                                                       ),
                                                     ],
                                                   ),
@@ -535,17 +565,25 @@ class _ItemDetailsState extends State<ItemDetails> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    review['review_text'],
-                                                    style: TextStyle(
-                                                        fontSize: 14),
+                                                    review['review_text'] ??
+                                                        'No review text',
+                                                    style:
+                                                        TextStyle(fontSize: 14),
                                                   ),
                                                 ],
                                               ),
                                             ),
                                           ],
-                                        ).box.padding(EdgeInsets.only(left: 55)).make(),
+                                        )
+                                            .box
+                                            .padding(EdgeInsets.only(left: 55))
+                                            .make(),
                                       ],
-                                    ).box.padding(EdgeInsets.symmetric(vertical: 14, horizontal: 8)).make();
+                                    )
+                                        .box
+                                        .padding(EdgeInsets.symmetric(
+                                            vertical: 14, horizontal: 8))
+                                        .make();
                                   },
                                 );
                               },
@@ -604,12 +642,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                         );
                       },
                     ),
-                  )
-                      .box
-                      .padding(EdgeInsets.only(
-                        left: 10,
-                      ))
-                      .make(),
+                  ).box.padding(EdgeInsets.only(left: 10)).make(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -619,7 +652,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                             onPressed: () {
                               controller.decreaseQuantity();
                               controller.calculateTotalPrice(
-                                  int.parse(widget.data['p_price']));
+                                  int.parse(widget.data['price']));
                             },
                             icon: const Icon(Icons.remove, size: 20),
                           ),
@@ -632,9 +665,9 @@ class _ItemDetailsState extends State<ItemDetails> {
                           IconButton(
                             onPressed: () {
                               controller.increaseQuantity(
-                                  int.parse(widget.data['p_quantity']));
+                                  int.parse(widget.data['quantity']));
                               controller.calculateTotalPrice(
-                                  int.parse(widget.data['p_price']));
+                                  int.parse(widget.data['price']));
                             },
                             icon: const Icon(Icons.add, size: 20),
                           ),
@@ -676,36 +709,34 @@ class _ItemDetailsState extends State<ItemDetails> {
                     width: double.infinity,
                     height: 85,
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 35),
-                      child: tapButton(
-                        color: primaryApp,
-                        onPress: () {
-                          if (controller.quantity.value > 0 &&
-                              selectedSizeIndex != null) {
-                            String selectedSize =
-                                widget.data['p_productsize'][selectedSizeIndex!];
-                            controller.addToCart(
-                              context: context,
-                              vendorID: widget.data['vendor_id'],
-                              img: widget.data['p_imgs'][0],
-                              qty: controller.quantity.value,
-                              // sellername: widget.data['p_seller'],
-                              title: widget.data['p_name'],
-                              tprice: controller.totalPrice.value,
-                              productsize: selectedSize,
-                              documentId: controller.documentId.value,
-                            );
-                            VxToast.show(context, msg: "Add to your cart");
-                          } else {
-                            VxToast.show(context,
-                                msg:
-                                    "Please select the quantity and size of the products");
-                          }
-                        },
-                        textColor: whiteColor,
-                        title: "Add to your cart",
-                      ),
-                    ),
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 35),
+                        child: tapButton(
+                          color: primaryApp,
+                          onPress: () {
+                            if (controller.quantity.value > 0 &&
+                                selectedSizeIndex != null &&
+                                widget.data['selectsize'] != null &&
+                                widget.data['selectsize'].isNotEmpty) {
+                              String selectedSize =
+                                  widget.data['selectsize'][selectedSizeIndex!];
+                              controller.addToCart(
+                                context: context,
+                                vendorID: widget.data['vendor_id'],
+                                qty: controller.quantity.value,
+                                tprice: controller.totalPrice.value,
+                                productsize: selectedSize,
+                                documentId: controller.documentId.value,
+                              );
+                              VxToast.show(context, msg: "Add to your cart");
+                            } else {
+                              VxToast.show(context,
+                                  msg:
+                                      "Please select the quantity and size of the products");
+                            }
+                          },
+                          textColor: whiteColor,
+                          title: "Add to your cart",
+                        )),
                   ),
                 ],
               ).box.white.outerShadow.make(),

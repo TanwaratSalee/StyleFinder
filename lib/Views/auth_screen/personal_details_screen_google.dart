@@ -71,12 +71,13 @@ class _PersonalDetailsScreenGoogleState
     );
   }
 
-  final List<Color> skinTones = [
-    Color.fromRGBO(255, 231, 218, 1),
-    Color.fromRGBO(248, 201, 156, 1),
-    Color.fromRGBO(185, 135, 98, 1),
-    Color.fromRGBO(116, 78, 60, 1),
-  ];
+  final List<Map<String, dynamic>> skinTones = [
+  {'name': 'Pink', 'color': Color(0xFFFFE7DA), 'value': 0xFFFFE7DA}, // ผิวสีขาวอมชมพู
+  {'name': 'Yellow', 'color': Color(0xFFF8C99C), 'value': 0xFFF8C99C}, // ผิวสีเหลืองอ่อน
+  {'name': 'Brown', 'color': Color(0xFFB98762), 'value': 0xFFB98762}, // ผิวสีน้ำตาลอ่อน
+  {'name': 'Dark', 'color': Color(0xFF744E3C), 'value': 0xFF744E3C}, // ผิวสีน้ำตาลเข้ม
+];
+
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +95,7 @@ class _PersonalDetailsScreenGoogleState
                     weightController.text.isNotEmpty &&
                     selectedSkinTone != null
                 ? primaryApp
-                : greyColor,
+                : greyThin,
             title: 'Done',
             textColor: selectedDate != null &&
                     selectedGender != null &&
@@ -244,7 +245,7 @@ class _PersonalDetailsScreenGoogleState
                             side: BorderSide(
                                 color: selectedGender == gender
                                     ? primaryApp
-                                    : greyColor),
+                                    : greyLine),
                           ),
                         ),
                         elevation: MaterialStateProperty.all<double>(0),
@@ -308,43 +309,43 @@ class _PersonalDetailsScreenGoogleState
                   .make(),
             ),
             const SizedBox(height: 10),
-            Column(
+           Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: skinTones.map((tone) {
+            return Row(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: skinTones.map((tone) {
-                    return Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            if (canSelectSkin) {
-                              setState(() {
-                                selectedSkinTone = tone;
-                              });
-                            }
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: tone,
-                              border: Border.all(
-                                color: selectedSkinTone == tone
-                                    ? primaryApp
-                                    : Colors.transparent,
-                                width: 3,
-                              ),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            width: 47,
-                            height: 47,
-                          ),
-                        ),
-                        SizedBox(width: 20),
-                      ],
-                    );
-                  }).toList(),
+                GestureDetector(
+                  onTap: () {
+                    if (canSelectSkin) {
+                      setState(() {
+                        selectedSkinTone = tone['color'];
+                      });
+                    }
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: tone['color'],
+                      border: Border.all(
+                        color: selectedSkinTone == tone['color']
+                            ? primaryApp
+                            : Colors.transparent,
+                        width: 3,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    width: 47,
+                    height: 47,
+                  ),
                 ),
+                SizedBox(width: 20),
               ],
-            ),
+            );
+          }).toList(),
+        ),
+      ],
+    )
           ],
         ),
       ),

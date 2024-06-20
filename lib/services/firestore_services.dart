@@ -14,7 +14,7 @@ class FirestoreServices {
   static getProducts(collection) {
     return firestore
         .collection(productsCollection)
-        .where('p_collection', isEqualTo: collection)
+        .where('collection', isEqualTo: collection)
         .snapshots();
   }
 
@@ -29,7 +29,7 @@ class FirestoreServices {
   static getSubCollectionProducts(title) {
     return firestore
         .collection(productsCollection)
-        .where('p_subcollection', isEqualTo: title)
+        .where('subcollection', isEqualTo: title)
         .snapshots();
   }
 
@@ -83,14 +83,14 @@ class FirestoreServices {
   static getWishlists() {
     return firestore
         .collection(productsCollection)
-        .where('p_wishlist', arrayContains: currentUser!.uid)
+        .where('favorite', arrayContains: currentUser!.uid)
         .snapshots();
   }
 
   static getWishlistsusermixmatchs() {
     return firestore
         .collection(usermixandmatchCollection)
-        .where('p_wishlist', arrayContains: currentUser!.uid)
+        .where('favorite', arrayContains: currentUser!.uid)
         .snapshots();
   }
 
@@ -112,7 +112,7 @@ class FirestoreServices {
       }),
       firestore
           .collection(productsCollection)
-          .where('p_wishlist', arrayContains: currentUser!.uid)
+          .where('favorite', arrayContains: currentUser!.uid)
           .get()
           .then((value) {
         return value.docs.length;

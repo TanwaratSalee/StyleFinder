@@ -52,7 +52,7 @@ class AllStoreScreen extends StatelessWidget {
                   var allproductsdata = snapshot.data!.docs;
                   var officialProducts = allproductsdata.where((doc) {
                     var productData = doc.data() as Map<String, dynamic>;
-                    return productData['vendor_official'] == true;
+                    return productData['official'] == true;
                   }).toList();
 
                   if (officialProducts.isEmpty) {
@@ -60,13 +60,14 @@ class AllStoreScreen extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          // 150.heightBox,
-                          'Coming Soon'
+                           80.heightBox,
+                          'Coming Soon...'
                               .text
                               .fontFamily(regular)
                               .color(blackColor)
                               .size(18)
                               .make(),
+                               50.heightBox,
                         ],
                       ),
                     );
@@ -90,9 +91,10 @@ class AllStoreScreen extends StatelessWidget {
                         return GestureDetector(
                           onTap: () {
                             var vendorId = productData['vendor_id'];
+                            var vendorName = productData['name'];
                             print(
                                 "Navigating to StoreScreen with vendor_id: $vendorId");
-                            Get.to(() => StoreScreen(vendorId: vendorId));
+                            Get.to(() => StoreScreen(vendorId: vendorId, title: vendorName,));
                           },
                           child: Container(
                             child: Column(
@@ -115,7 +117,7 @@ class AllStoreScreen extends StatelessWidget {
                                 ),
                                 3.heightBox,
                                 Text(
-                                  "${productData['vendor_name']}",
+                                  "${productData['name']}",
                                   style: const TextStyle(
                                     fontFamily: medium,
                                     fontSize: 16,
@@ -152,7 +154,7 @@ class AllStoreScreen extends StatelessWidget {
                   var allproductsdata = snapshot.data!.docs;
                   var officialProducts = allproductsdata.where((doc) {
                     var productData = doc.data() as Map<String, dynamic>;
-                    return productData['vendor_official'] == false;
+                    return productData['official'] == false;
                   }).toList();
 
                   if (officialProducts.isEmpty) {
@@ -160,8 +162,8 @@ class AllStoreScreen extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          100.heightBox,
-                          'Coming Soon'
+                          80.heightBox,
+                          'Coming Soon...'
                               .text
                               .fontFamily(regular)
                               .color(blackColor)
@@ -185,14 +187,14 @@ class AllStoreScreen extends StatelessWidget {
                       ),
                       itemCount: officialProducts.length,
                       itemBuilder: (context, index) {
-                        var productData = officialProducts[index].data()
-                            as Map<String, dynamic>;
+                        var productData = officialProducts[index].data() as Map<String, dynamic>;
                         return GestureDetector(
                           onTap: () {
                             var vendorId = productData['vendor_id'];
+                            var vendorName = productData['name'];
                             print(
                                 "Navigating to StoreScreen with vendor_id: $vendorId");
-                            Get.to(() => StoreScreen(vendorId: vendorId));
+                            Get.to(() => StoreScreen(vendorId: vendorId, title: vendorName,));
                           },
                           child: Container(
                             child: Column(

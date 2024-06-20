@@ -4,7 +4,6 @@ import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 import '../../controllers/search_controller.dart';
 
-
 class SearchScreenPage extends StatelessWidget {
   final String? title;
 

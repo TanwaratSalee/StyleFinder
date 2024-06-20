@@ -33,7 +33,7 @@ Widget appbarField({required BuildContext context}) {
             width: 21,
           ),
           onPressed: () {
-            Get.to(() => const CartScreen());
+            Get.to(() => CartScreen());
           },
         ),
       ),

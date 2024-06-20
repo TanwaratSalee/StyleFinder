@@ -53,19 +53,19 @@ class HomeController extends GetxController {
   void addToWishlist(Map<String, dynamic> product) {
     FirebaseFirestore.instance
         .collection(productsCollection)
-        .where('p_name', isEqualTo: product['p_name'])
+        .where('name', isEqualTo: product['name'])
         .get()
         .then((QuerySnapshot querySnapshot) {
       if (querySnapshot.docs.isNotEmpty) {
         DocumentSnapshot doc = querySnapshot.docs.first;
-        List<dynamic> wishlist = doc['p_wishlist'];
+        List<dynamic> wishlist = doc['favorite'];
         if (!wishlist.contains(currentUser!.uid)) {
           doc.reference.update({
-            'p_wishlist': FieldValue.arrayUnion([currentUser!.uid])
+            'favorite': FieldValue.arrayUnion([currentUser!.uid])
           }).then((value) {
             // Update UI or show message
           }).catchError((error) {
-            print('Error adding ${product['p_name']} to Favorite: $error');
+            print('Error adding ${product['name']} to Favorite: $error');
           });
         }
       }

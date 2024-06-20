@@ -29,7 +29,7 @@ class SearchScreen extends StatelessWidget {
 
   List<Widget> buildGridView(List<Map<String, dynamic>> filtered) {
     return filtered.map((currentValue) {
-      if (currentValue['p_imgs'] == null) {
+      if (currentValue['imgs'] == null) {
         return SizedBox();
       }
       return Column(
@@ -41,7 +41,7 @@ class SearchScreen extends StatelessWidget {
               topLeft: Radius.circular(8),
             ),
             child: Image.network(
-              currentValue['p_imgs'][0],
+              currentValue['imgs'][0],
               height: 200,
               width: 195,
               fit: BoxFit.cover,
@@ -52,7 +52,7 @@ class SearchScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "${currentValue['p_name']}",
+                "${currentValue['name']}",
                 style: const TextStyle(
                   fontFamily: medium,
                   fontSize: 14,
@@ -60,32 +60,24 @@ class SearchScreen extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
               ),
-              // .text
-              // .fontFamily(medium)
-              // .size(18)
-              // .color(greyDark)
-              // .overflow(TextOverflow.ellipsis)
-              // .softWrap(true)
-              // .make(),
-              "${NumberFormat('#,##0').format(double.parse(currentValue['p_price']).toInt())} Bath"
+              "${NumberFormat('#,##0').format(double.parse(currentValue['price']).toInt())} Bath"
                   .text
                   .color(greyDark)
                   .fontFamily(regular)
                   .size(14)
                   .make(),
             ],
-          ).box.padding(EdgeInsets.symmetric(horizontal: 12, vertical: 5)).make(), //ชื่อ ราคา
+          ).box.padding(EdgeInsets.symmetric(horizontal: 12, vertical: 5)).make(),
         ],
       )
           .box
           .white
-          // .margin(const EdgeInsets.all(4))
           .roundedSM
           .border(color: greyLine)
           .make()
           .onTap(() {
         Get.to(() => ItemDetails(
-              title: currentValue['p_name'],
+              title: currentValue['name'],
               data: currentValue,
             ));
       });
@@ -112,21 +104,25 @@ class SearchScreen extends StatelessWidget {
           }
 
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No data available'));
+            return const Center(child: Text('No results found'));
           }
 
           List<Map<String, dynamic>> filtered = snapshot.data!
-              .where((element) => element['p_name']
+              .where((element) => element['name']
                   .toString()
                   .toLowerCase()
                   .contains(title!.toLowerCase()))
               .toList();
 
+          if (filtered.isEmpty) {
+            return const Center(child: Text('No results found'));
+          }
+
           return Padding(
             padding: const EdgeInsets.all(18),
             child: GridView(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-               crossAxisCount: 2,
+                crossAxisCount: 2,
                 mainAxisSpacing: 15,
                 crossAxisSpacing: 15,
                 mainAxisExtent: 260,

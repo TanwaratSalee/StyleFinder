@@ -109,7 +109,7 @@ class UserProfileScreen extends StatelessWidget {
 
         var filteredData = data.where((doc) {
           var docData = doc.data() as Map<String, dynamic>;
-          return docData['posted_by'] == currentUserUID;
+          return docData['user_id'] == currentUserUID;
         }).toList();
 
         if (filteredData.isEmpty) {
@@ -127,14 +127,14 @@ class UserProfileScreen extends StatelessWidget {
             crossAxisCount: 2,
             crossAxisSpacing: 8,
             mainAxisSpacing: 8,
-            childAspectRatio: 9 / 10,
+            childAspectRatio: 9 / 10.8,
           ),
           itemCount: limitedData.length,
           itemBuilder: (context, index) {
             var doc = limitedData[index];
             var docData = doc.data() as Map<String, dynamic>;
-            var productIdTop = docData['p_id_top'] ?? '';
-            var productIdLower = docData['p_id_lower'] ?? '';
+            var productIdTop = docData['product_id_top'] ?? '';
+            var productIdLower = docData['product_id_lower'] ?? '';
 
             return FutureBuilder<List<DocumentSnapshot>>(
               future: Future.wait([
@@ -156,37 +156,38 @@ class UserProfileScreen extends StatelessWidget {
                 var productDataTop = snapshotTop.data() as Map<String, dynamic>;
                 var productDataLower = snapshotLower.data() as Map<String, dynamic>;
 
-                var topImage = (productDataTop['p_imgs'] as List<dynamic>?)?.first ?? '';
-                var lowerImage = (productDataLower['p_imgs'] as List<dynamic>?)?.first ?? '';
-                var productNameTop = productDataTop['p_name'] ?? '';
-                var productNameLower = productDataLower['p_name'] ?? '';
-                var priceTop = productDataTop['p_price']?.toString() ?? '0';
-                var priceLower = productDataLower['p_price']?.toString() ?? '0';
-                var collections = docData['p_collection'] != null
-                    ? List<String>.from(docData['p_collection'])
+                var topImage = (productDataTop['imgs'] as List<dynamic>?)?.first ?? '';
+                var lowerImage = (productDataLower['imgs'] as List<dynamic>?)?.first ?? '';
+                var productNameTop = productDataTop['name'] ?? '';
+                var productNameLower = productDataLower['name'] ?? '';
+                var priceTop = productDataTop['price']?.toString() ?? '0';
+                var priceLower = productDataLower['price']?.toString() ?? '0';
+                var collections = docData['collection'] != null
+                    ? List<String>.from(docData['collection'])
                     : [];
-                var description = docData['p_desc'] ?? '';
+                var description = docData['description'] ?? '';
                 var views = docData['views'] ?? 0;
-                var gender = docData['p_sex'] ?? '';
-                var postedBy = docData['posted_by'] ?? '';
+                var gender = docData['gender'] ?? '';
+                var postedBy = docData['user_id'] ?? '';
 
                 return GestureDetector(
                   onTap: () {
                     Get.to(() => MatchPostsDetails(
-                          productName1: productNameTop,
-                          productName2: productNameLower,
-                          price1: priceTop,
-                          price2: priceLower,
-                          productImage1: topImage,
-                          productImage2: lowerImage,
-                          totalPrice: (int.parse(priceTop) + int.parse(priceLower)).toString(),
-                          vendorName1: 'Vendor Name 1', // Replace with actual vendor name if available
-                          vendorName2: 'Vendor Name 2', // Replace with actual vendor name if available
-                          vendor_id: doc.id,
-                          collection: collections,
-                          description: description,
-                          gender: gender,
-                          posted_by: postedBy,
+                           docId: doc.id,  
+                            productName1: productNameTop,
+                            productName2: productNameLower,
+                            price1: priceTop,
+                            price2: priceLower,
+                            productImage1: topImage,
+                            productImage2: lowerImage,
+                            totalPrice: (int.parse(priceTop) + int.parse(priceLower)).toString(),
+                            vendorName1: 'Vendor Name 1', 
+                            vendorName2: 'Vendor Name 2', 
+                            vendor_id: doc.id,
+                            collection: collections,
+                            description: description,
+                            gender: gender,
+                            posted_by: postedBy,
                         ));
                   },
                   child: Container(

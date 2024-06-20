@@ -222,7 +222,7 @@ class OrdersDetails extends StatelessWidget {
                             onTap: () {
                               if (data['vendors'] != null) {
                                 Get.to(() =>
-                                    StoreScreen(vendorId: data['vendors']));
+                                    StoreScreen(vendorId: data['vendors'], title: data['name'],));
                               } else {
                                 print('Vendor ID is null');
                               }

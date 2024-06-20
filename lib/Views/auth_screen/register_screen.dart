@@ -78,18 +78,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     readOnly: false,
                   ),
                   const SizedBox(height: 10),
-                  customTextField(
+                  customTextFieldPassword(
                     label: password,
-                    controller: passwordController,
                     isPass: true,
                     readOnly: false,
+                    controller: passwordController,
                   ),
                   const SizedBox(height: 10),
-                  customTextField(
-                    label: confirmPassword,
-                    controller: passwordRetypeController,
+                  customTextFieldPassword(
+                    label: password,
                     isPass: true,
                     readOnly: false,
+                    controller: passwordRetypeController,
                   ),
                 ],
               ),
@@ -98,7 +98,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(left: 15),
+                  padding: const EdgeInsets.only(left: 5),
                   child: Row(
                     children: [
                       Checkbox(
@@ -186,8 +186,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                               PersonalDetailsScreen(
                                             email: emailController.text,
                                             name: nameController.text,
-                                            password:
-                                                passwordController.text,
+                                            password: passwordController.text,
                                           ),
                                         ),
                                       );

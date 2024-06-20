@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
         context,
         MaterialPageRoute(
           builder: (context) => ItemDetails(
-            title: previousSwipedProduct!['p_name'],
+            title: previousSwipedProduct!['name'],
             data: previousSwipedProduct!,
           ),
         ),
@@ -264,7 +264,7 @@ Widget build(BuildContext context) {
                                       ClipRRect(
                                         borderRadius: BorderRadius.only(topRight: Radius.circular(14), topLeft: Radius.circular(14)),
                                         child: Image.network(
-                                          product['p_imgs'][0],
+                                          product['imgs'][0],
                                           height: MediaQuery.of(context).size.height < 855
                                             ? MediaQuery.of(context).size.height * 0.41 
                                             : MediaQuery.of(context).size.height * 0.46,
@@ -276,14 +276,14 @@ Widget build(BuildContext context) {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            product['p_name'],
+                                            product['name'],
                                             style: TextStyle(color: blackColor, fontSize: 20, fontFamily: medium),
                                             overflow: TextOverflow.ellipsis,
                                             maxLines: 1,
                                           ),
                                           SizedBox(height: 2),
                                           Text(
-                                            "${NumberFormat('#,##0').format(int.parse(product['p_price']))} Bath",
+                                            "${NumberFormat('#,##0').format(int.parse(product['price']))} Bath",
                                             style: TextStyle(color: blackColor, fontSize: 16),
                                           ),
                                         ],

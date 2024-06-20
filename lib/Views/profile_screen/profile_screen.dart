@@ -249,7 +249,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                   context,
                   MaterialPageRoute(
                     builder: (context) => ItemDetails(
-                      title: data[index]['p_name'],
+                      title: data[index]['name'],
                       data: data[index].data() as Map<String, dynamic>,
                     ),
                   ),
@@ -264,7 +264,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                       padding: const EdgeInsets.all(10.0),
                       child: ClipRRect(
                         child: Image.network(
-                          data[index]['p_imgs'][0],
+                          data[index]['imgs'][0],
                           height: 70,
                           width: 65,
                           fit: BoxFit.cover,
@@ -280,7 +280,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  data[index]['p_name'],
+                                  data[index]['name'],
                                   style: const TextStyle(
                                     fontSize: 14,
                                     fontFamily: medium,
@@ -289,7 +289,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                   overflow: TextOverflow.ellipsis,
                                 ).box.width(180).make(),
                                 Text(
-                                  "${NumberFormat('#,##0').format(double.parse(data[index]['p_price']).toInt())} Bath",
+                                  "${NumberFormat('#,##0').format(double.parse(data[index]['price']).toInt())} Bath",
                                   style: const TextStyle(
                                       fontSize: 14,
                                       fontFamily: regular,
@@ -308,7 +308,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                             .collection(productsCollection)
                             .doc(data[index].id)
                             .update({
-                          'p_wishlist': FieldValue.arrayRemove(
+                          'favorite': FieldValue.arrayRemove(
                               [FirebaseAuth.instance.currentUser!.uid])
                         });
                       },
@@ -373,12 +373,12 @@ Widget buildMatchTab() {
           var product1 = docData['product1'] as Map<String, dynamic>;
           var product2 = docData['product2'] as Map<String, dynamic>;
 
-          String productName1 = product1['p_name'];
-          String productName2 = product2['p_name'];
-          String price1 = product1['p_price'].toString();
-          String price2 = product2['p_price'].toString();
-          String productImage1 = product1['p_imgs'];
-          String productImage2 = product2['p_imgs'];
+          String productName1 = product1['name'];
+          String productName2 = product2['name'];
+          String price1 = product1['price'].toString();
+          String price2 = product2['price'].toString();
+          String productImage1 = product1['imgs'];
+          String productImage2 = product2['imgs'];
           String totalPrice =
               (int.parse(price1) + int.parse(price2)).toString();
 
@@ -550,14 +550,14 @@ Widget buildMatchTab() {
         List<Map<String, dynamic>> pairs = [];
         for (var doc in documents) {
           var data = doc.data() as Map<String, dynamic>;
-          if (data['p_name_top'] != null && data['p_name_lower'] != null) {
+          if (data['name_top'] != null && data['name_lower'] != null) {
             pairs.add({
-              'top': data['p_name_top'],
-              'lower': data['p_name_lower'],
-              'top_price': data['p_price_top'].toString(),
-              'lower_price': data['p_price_lower'].toString(),
-              'top_image': data['p_imgs_top'],
-              'lower_image': data['p_imgs_lower'],
+              'top': data['name_top'],
+              'lower': data['name_lower'],
+              'toprice': data['price_top'].toString(),
+              'lower_price': data['price_lower'].toString(),
+              'toimage': data['imgs_top'],
+              'lower_image': data['imgs_lower'],
               'docId_top': doc.id,
               'docId_lower': doc.id
             });
@@ -589,7 +589,7 @@ Widget buildMatchTab() {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Image.network(
-                              pair['top_image'],
+                              pair['toimage'],
                               width: 60,
                               height: 65,
                               fit: BoxFit.cover,
@@ -611,7 +611,7 @@ Widget buildMatchTab() {
                                       .color(blackColor)
                                       .make(),
                                   Text(
-                                    "${NumberFormat('#,##0').format(double.parse(pair['top_price']).toInt())} Bath",
+                                    "${NumberFormat('#,##0').format(double.parse(pair['toprice']).toInt())} Bath",
                                   )
                                       .text
                                       .fontFamily(regular)
@@ -681,7 +681,7 @@ Widget buildMatchTab() {
                             ),
                           ),
                           Text(
-                            "${NumberFormat('#,##0').format(double.parse(pair['top_price']).toInt() + double.parse(pair['lower_price']).toInt())} ",
+                            "${NumberFormat('#,##0').format(double.parse(pair['toprice']).toInt() + double.parse(pair['lower_price']).toInt())} ",
                             style: TextStyle(
                               color: blackColor,
                               fontFamily: medium,
@@ -816,7 +816,7 @@ Widget buildMatchTab() {
   void navigateToItemDetails(BuildContext context, String productName) {
     FirebaseFirestore.instance
         .collection(productsCollection)
-        .where('p_name', isEqualTo: productName)
+        .where('name', isEqualTo: productName)
         .limit(1)
         .get()
         .then((QuerySnapshot querySnapshot) {
@@ -827,7 +827,7 @@ Widget buildMatchTab() {
           context,
           MaterialPageRoute(
             builder: (context) => ItemDetails(
-              title: productData['p_name'],
+              title: productData['name'],
               data: productData,
             ),
           ),
@@ -857,7 +857,7 @@ Widget buildMatchTab() {
 
         var filteredData = data.where((doc) {
           var docData = doc.data() as Map<String, dynamic>;
-          return docData['posted_by'] == currentUserUID;
+          return docData['user_id'] == currentUserUID;
         }).toList();
 
         if (filteredData.isEmpty) {
@@ -872,14 +872,14 @@ Widget buildMatchTab() {
             crossAxisCount: 2,
             crossAxisSpacing: 8,
             mainAxisSpacing: 8,
-            childAspectRatio: 8 / 10,
+            childAspectRatio: 8 / 9.3,
           ),
           itemCount: filteredData.length,
           itemBuilder: (context, index) {
             var doc = filteredData[index];
             var docData = doc.data() as Map<String, dynamic>;
-            var productIdTop = docData['p_id_top'] ?? '';
-            var productIdLower = docData['p_id_lower'] ?? '';
+            var productIdTop = docData['product_id_top'] ?? '';
+            var productIdLower = docData['product_id_lower'] ?? '';
 
             return FutureBuilder<List<DocumentSnapshot>>(
               future: Future.wait([
@@ -901,37 +901,38 @@ Widget buildMatchTab() {
                 var productDataTop = snapshotTop.data() as Map<String, dynamic>;
                 var productDataLower = snapshotLower.data() as Map<String, dynamic>;
 
-                var topImage = (productDataTop['p_imgs'] as List<dynamic>?)?.first ?? '';
-                var lowerImage = (productDataLower['p_imgs'] as List<dynamic>?)?.first ?? '';
-                var productNameTop = productDataTop['p_name'] ?? '';
-                var productNameLower = productDataLower['p_name'] ?? '';
-                var priceTop = productDataTop['p_price']?.toString() ?? '0';
-                var priceLower = productDataLower['p_price']?.toString() ?? '0';
-                var collections = docData['p_collection'] != null
-                    ? List<String>.from(docData['p_collection'])
+                var topImage = (productDataTop['imgs'] as List<dynamic>?)?.first ?? '';
+                var lowerImage = (productDataLower['imgs'] as List<dynamic>?)?.first ?? '';
+                var productNameTop = productDataTop['name'] ?? '';
+                var productNameLower = productDataLower['name'] ?? '';
+                var priceTop = productDataTop['price']?.toString() ?? '0';
+                var priceLower = productDataLower['price']?.toString() ?? '0';
+                var collections = docData['collection'] != null
+                    ? List<String>.from(docData['collection'])
                     : [];
-                var description = docData['p_desc'] ?? '';
+                var description = docData['description'] ?? '';
                 var views = docData['views'] ?? 0;
-                var gender = docData['p_sex'] ?? '';
-                var postedBy = docData['posted_by'] ?? '';
+                var gender = docData['gender'] ?? '';
+                var postedBy = docData['user_id'] ?? '';
 
                 return GestureDetector(
                   onTap: () {
                     Get.to(() => MatchPostsDetails(
-                          productName1: productNameTop,
-                          productName2: productNameLower,
-                          price1: priceTop,
-                          price2: priceLower,
-                          productImage1: topImage,
-                          productImage2: lowerImage,
-                          totalPrice: (int.parse(priceTop) + int.parse(priceLower)).toString(),
-                          vendorName1: 'Vendor Name 1', // Replace with actual vendor name if available
-                          vendorName2: 'Vendor Name 2', // Replace with actual vendor name if available
-                          vendor_id: doc.id,
-                          collection: collections,
-                          description: description,
-                          gender: gender,
-                          posted_by: postedBy,
+                           docId: doc.id,  
+                            productName1: productNameTop,
+                            productName2: productNameLower,
+                            price1: priceTop,
+                            price2: priceLower,
+                            productImage1: topImage,
+                            productImage2: lowerImage,
+                            totalPrice: (int.parse(priceTop) + int.parse(priceLower)).toString(),
+                            vendorName1: 'Vendor Name 1', 
+                            vendorName2: 'Vendor Name 2', 
+                            vendor_id: doc.id,
+                            collection: collections,
+                            description: description,
+                            gender: gender,
+                            posted_by: postedBy,
                         ));
                   },
                   child: Container(

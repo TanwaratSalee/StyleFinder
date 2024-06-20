@@ -130,7 +130,7 @@ class _CollectionDetailsState extends State<CollectionDetails> {
                                 .fontFamily(regular)
                                 .color(blackColor)
                                 .make(),
-                            "${NumberFormat('#,##0').format(double.parse(data[index]['p_price']).toInt())} Bath"
+                            "${NumberFormat('#,##0').format(double.parse(data[index]['price']).toInt())} Bath"
                                 .text
                                 .color(primaryApp)
                                 .fontFamily(bold)

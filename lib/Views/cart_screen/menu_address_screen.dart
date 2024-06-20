@@ -93,8 +93,10 @@ class _AddressScreenState extends State<AddressScreen> {
                       itemCount: addressesList.length,
                       itemBuilder: (context, index) {
                         var address = addressesList[index];
-                        String formattedAddress =
-                            '${address['firstname'] ?? ''} ${address['surname'] ?? ''},\n${address['address'] ?? ''}, ${address['city'] ?? ''}, ${address['state'] ?? ''}, ${address['postalCode'] ?? ''} \n${formatPhoneNumber(address['phone'] ?? '')}';
+                        String fullnameAddress =
+                            '${address['firstname'] ?? ''} ${address['surname'] ?? ''}';
+                            String formattedAddress =
+                            '${address['address'] ?? ''}, ${address['city'] ?? ''}, ${address['state'] ?? ''}, ${address['postalCode'] ?? ''} \n${formatPhoneNumber(address['phone'] ?? '')}';
                         return GestureDetector(
                           onTap: () {},
                           child: Column(
@@ -105,11 +107,22 @@ class _AddressScreenState extends State<AddressScreen> {
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                                 child: ListTile(
-                                  title: Text(formattedAddress)
+                                  title: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                    Text(fullnameAddress)
                                       .text
                                       .fontFamily(regular)
+                                      .size(15)
                                       .color(greyDark)
                                       .make(),
+                                    Text(formattedAddress)
+                                      .text
+                                      .fontFamily(regular)
+                                      .size(14)
+                                      .color(greyDark)
+                                      .make(),
+                                  ],),
                                   trailing: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
