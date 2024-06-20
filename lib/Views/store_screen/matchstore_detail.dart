@@ -170,10 +170,10 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                   print("IconButton pressed");
                   bool isFav = !controller.isFav.value;
                   if (isFav) {
-                      addToFavorites();
-                    } else {
-                      removeFromFavorites();
-                    }
+                    addToFavorites();
+                  } else {
+                    removeFromFavorites();
+                  }
                 },
                 icon: controller.isFav.value
                     ? Image.asset(icTapFavoriteButton, width: 23)
@@ -531,6 +531,7 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
             ),
     );
   }
+
   void addToFavorites() async {
     String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
     await FirebaseFirestore.instance.collection('storemixandmatchs').doc(widget.documentId).update({

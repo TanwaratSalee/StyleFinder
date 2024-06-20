@@ -69,12 +69,11 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
 
     FirebaseFirestore.instance
         .collection('usermixandmatch')
-        .where('name', isEqualTo: widget.productName1)
-        .where('vendor_id', isEqualTo: widget.vendor_id)
+        .doc(widget.docId)
         .get()
-        .then((QuerySnapshot querySnapshot) {
-      if (querySnapshot.docs.isNotEmpty) {
-        var doc = querySnapshot.docs.first;
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        var doc = documentSnapshot.data() as Map<String, dynamic>;
         List<dynamic> wishlist = doc['favorite_userid'];
         if (wishlist.contains(currentUserUID)) {
           controller.isFav(true);
@@ -82,9 +81,11 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
           controller.isFav(false);
         }
       } else {
+        controller.isFav(false);
         print('Document not found for checking wishlist status');
       }
     }).catchError((error) {
+      controller.isFav(false);
       print('Error fetching document for checking wishlist status: $error');
     });
   }
@@ -244,7 +245,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
             )
           else
             Obx(() => IconButton(
-                 onPressed: () {
+                  onPressed: () {
                     print("IconButton pressed");
                     bool isFav = !controller.isFav.value;
                     if (isFav) {
@@ -593,7 +594,10 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
 
   void addToFavorites() async {
     String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
-    await FirebaseFirestore.instance.collection('usermixandmatch').doc(widget.docId).update({
+    await FirebaseFirestore.instance
+        .collection('usermixandmatch')
+        .doc(widget.docId)
+        .update({
       'favorite_userid': FieldValue.arrayUnion([currentUserUID])
     }).then((_) {
       updateIsFav(true);
@@ -604,7 +608,10 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
 
   void removeFromFavorites() async {
     String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
-    await FirebaseFirestore.instance.collection('usermixandmatch').doc(widget.docId).update({
+    await FirebaseFirestore.instance
+        .collection('usermixandmatch')
+        .doc(widget.docId)
+        .update({
       'favorite_userid': FieldValue.arrayRemove([currentUserUID])
     }).then((_) {
       updateIsFav(false);
