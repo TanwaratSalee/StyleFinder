@@ -80,7 +80,8 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                 : '';
             priceLower = productLowerDoc.data()?['price']?.toString() ?? '0';
 
-            totalPrice = (double.parse(priceTop) + double.parse(priceLower)).toString();
+            totalPrice =
+                (double.parse(priceTop) + double.parse(priceLower)).toString();
 
             vendorIdTop = productTopDoc.data()?['vendor_id'] ?? '';
             vendorIdLower = productLowerDoc.data()?['vendor_id'] ?? '';
@@ -94,8 +95,7 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
             collection = data['collection'] ?? [];
           });
 
-          // Check if the products are in the wishlist after setting product details
-          checkIsInWishlist();
+          listenToFavoriteStatus();
         }
       }
     } catch (e) {
@@ -103,13 +103,31 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
     }
   }
 
-  void checkIsInWishlist() async {
+  void listenToFavoriteStatus() {
+    FirebaseFirestore.instance
+        .collection('storemixandmatchs')
+        .doc(widget.documentId)
+        .snapshots()
+        .listen((snapshot) {
+      if (snapshot.exists) {
+        var docData = snapshot.data() as Map<String, dynamic>;
+        var favoriteUserIds =
+            List<String>.from(docData['favorite_userid'] ?? []);
+        String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
+        bool isFav = favoriteUserIds.contains(currentUserUID);
+
+        controller.isFav.value = isFav;
+      }
+    });
+  }
+
+/*   void checkIsInWishlist() async {
     String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
 
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('favoritemixmatch')
-          .where('user_id', isEqualTo: currentUserUID)
+          .collection('storemixandmatchs')
+          .where('favorite_userid', isEqualTo: currentUserUID)
           .where('vendor_id', isEqualTo: widget.documentId)
           .get();
 
@@ -120,22 +138,16 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
               data['product2']['name'] == nameLower;
         });
 
-        controller.isFav(hasBothProducts);
+        controller.isFav.value = hasBothProducts;
       } else {
-        controller.isFav(false);
+        controller.isFav.value = false;
       }
     } catch (error) {
-      controller.isFav(false);
+      controller.isFav.value = false;
       print('Error fetching document for checking wishlist status: $error');
     }
   }
-
-  void updateIsFav(bool isFav) {
-    setState(() {
-      controller.isFav.value = isFav;
-    });
-  }
-
+ */
   void navigateToItemDetails(String productName) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('products')
@@ -167,7 +179,6 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
         actions: <Widget>[
           Obx(() => IconButton(
                 onPressed: () {
-                  print("IconButton pressed");
                   bool isFav = !controller.isFav.value;
                   if (isFav) {
                     addToFavorites();
@@ -215,7 +226,8 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                                                   height: 140,
                                                   width: 165,
                                                   color: greyLine,
-                                                  child: Icon(Icons.image, color: greyColor),
+                                                  child: Icon(Icons.image,
+                                                      color: greyColor),
                                                 ),
                                         ),
                                       ),
@@ -245,7 +257,12 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                                       .size(12)
                                       .make(),
                                 ],
-                              ).box.border(color: greyLine).margin(EdgeInsets.symmetric(horizontal: 8)).rounded.make(),
+                              )
+                                  .box
+                                  .border(color: greyLine)
+                                  .margin(EdgeInsets.symmetric(horizontal: 8))
+                                  .rounded
+                                  .make(),
                             ),
                             const SizedBox(width: 5),
                             Stack(
@@ -267,7 +284,8 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                               child: Column(
                                 children: [
                                   GestureDetector(
-                                    onTap: () => navigateToItemDetails(nameLower),
+                                    onTap: () =>
+                                        navigateToItemDetails(nameLower),
                                     child: Container(
                                       child: Center(
                                         child: ClipRRect(
@@ -286,7 +304,8 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                                                   height: 140,
                                                   width: 165,
                                                   color: greyLine,
-                                                  child: Icon(Icons.image, color: greyColor),
+                                                  child: Icon(Icons.image,
+                                                      color: greyColor),
                                                 ),
                                         ),
                                       ),
@@ -295,7 +314,7 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                                   5.heightBox,
                                   SizedBox(
                                     width: 135,
-                                    child:  Text(
+                                    child: Text(
                                       nameLower,
                                       softWrap: true,
                                       overflow: TextOverflow.ellipsis,
@@ -316,10 +335,18 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                                       .size(12)
                                       .make(),
                                 ],
-                              ).box.border(color: greyLine).margin(EdgeInsets.symmetric(horizontal: 8)).rounded.make(),
+                              )
+                                  .box
+                                  .border(color: greyLine)
+                                  .margin(EdgeInsets.symmetric(horizontal: 8))
+                                  .rounded
+                                  .make(),
                             ),
                           ],
-                        ).box.margin(EdgeInsets.symmetric(horizontal: 8)).make(),
+                        )
+                            .box
+                            .margin(EdgeInsets.symmetric(horizontal: 8))
+                            .make(),
                         30.heightBox,
                         Container(
                           width: double.infinity,
@@ -331,7 +358,8 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                                   children: [
                                     SizedBox(width: 12),
                                     Obx(() {
-                                      String imageUrl = controller.vendorImageUrl.value;
+                                      String imageUrl =
+                                          controller.vendorImageUrl.value;
                                       return imageUrl.isNotEmpty
                                           ? Container(
                                               width: 50,
@@ -346,21 +374,23 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                                               ),
                                             )
                                               .box
-                                              .border(color: greyLine, width: 1.5)
+                                              .border(
+                                                  color: greyLine, width: 1.5)
                                               .roundedFull
                                               .make()
                                           : Icon(
-                                                  Icons.person,
-                                                  color: whiteColor,
-                                                  size: 27,
-                                                );
+                                              Icons.person,
+                                              color: whiteColor,
+                                              size: 27,
+                                            );
                                     }),
                                     SizedBox(width: 10),
                                     Expanded(
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Obx(() {
-                                          return controller.vendorName.isNotEmpty
+                                          return controller
+                                                  .vendorName.isNotEmpty
                                               ? controller.vendorName.value
                                                   .toUpperCase()
                                                   .text
@@ -379,7 +409,9 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                               GestureDetector(
                                 onTap: () {
                                   Get.to(
-                                    () => StoreScreen(vendorId: vendorIdTop, title: controller.vendorName.value),
+                                    () => StoreScreen(
+                                        vendorId: vendorIdTop,
+                                        title: controller.vendorName.value),
                                   );
                                 },
                                 child: Container(
@@ -444,8 +476,8 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                                         )
                                             .box
                                             .color(thinPrimaryApp)
-                                            .margin(
-                                                EdgeInsets.symmetric(horizontal: 6))
+                                            .margin(EdgeInsets.symmetric(
+                                                horizontal: 6))
                                             .roundedLg
                                             .padding(EdgeInsets.symmetric(
                                                 horizontal: 24, vertical: 12))
@@ -483,8 +515,8 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                                         )
                                             .box
                                             .color(thinPrimaryApp)
-                                            .margin(
-                                                EdgeInsets.symmetric(horizontal: 6))
+                                            .margin(EdgeInsets.symmetric(
+                                                horizontal: 6))
                                             .roundedLg
                                             .padding(EdgeInsets.symmetric(
                                                 horizontal: 24, vertical: 12))
@@ -515,9 +547,9 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                                     child: Text(
                                       description,
                                       style: TextStyle(
-                                            color: blackColor,
-                                            fontSize: 14,
-                                          ),
+                                        color: blackColor,
+                                        fontSize: 14,
+                                      ),
                                     ),
                                   ))
                             ],
@@ -534,10 +566,15 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
 
   void addToFavorites() async {
     String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
-    await FirebaseFirestore.instance.collection('storemixandmatchs').doc(widget.documentId).update({
+    print('Current User ID: $currentUserUID');
+    await FirebaseFirestore.instance
+        .collection('storemixandmatchs')
+        .doc(widget.documentId)
+        .update({
       'favorite_userid': FieldValue.arrayUnion([currentUserUID])
     }).then((_) {
-      updateIsFav(true);
+      VxToast.show(context, msg: "Match updated successfully.");
+      print('Match updated successfully.');
     }).catchError((error) {
       print('Error adding to favorites: $error');
     });
@@ -545,10 +582,15 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
 
   void removeFromFavorites() async {
     String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
-    await FirebaseFirestore.instance.collection('storemixandmatchs').doc(widget.documentId).update({
+    print('Current User ID: $currentUserUID');
+    await FirebaseFirestore.instance
+        .collection('storemixandmatchs')
+        .doc(widget.documentId)
+        .update({
       'favorite_userid': FieldValue.arrayRemove([currentUserUID])
     }).then((_) {
-      updateIsFav(false);
+      VxToast.show(context, msg: "Removed from favorites successfully.");
+      print('Removed from favorites successfully.');
     }).catchError((error) {
       print('Error removing from favorites: $error');
     });
