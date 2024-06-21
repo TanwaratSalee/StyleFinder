@@ -109,7 +109,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
     isSelectedWinter = controller.selectedCollections.contains('winter');
     isSelectedAutumn = controller.selectedCollections.contains('autumn');
     isSelectedDinner = controller.selectedCollections.contains('dinner');
-    isSelectedEveryday = controller.selectedCollections.contains('everydaylook');
+    isSelectedEveryday =
+        controller.selectedCollections.contains('everydaylook');
   }
 
   @override
@@ -319,15 +320,13 @@ class _FilterDrawerState extends State<FilterDrawer> {
                         updateFilterTypes();
                       });
                     }),
-                    buildFilterChip("Suits", isSelectedSuits,
-                        (isSelected) {
+                    buildFilterChip("Suits", isSelectedSuits, (isSelected) {
                       setState(() {
                         isSelectedSuits = isSelected;
                         updateFilterTypes();
                       });
                     }),
-                    buildFilterChip("Jackets", isSelectedJackets,
-                        (isSelected) {
+                    buildFilterChip("Jackets", isSelectedJackets, (isSelected) {
                       setState(() {
                         isSelectedJackets = isSelected;
                         updateFilterTypes();
@@ -404,9 +403,9 @@ class _FilterDrawerState extends State<FilterDrawer> {
                     onPressed: () {
                       Get.find<HomeController>().updateFilters(
                         gender: isSelectedMen
-                            ? 'male'
+                            ? 'men'
                             : isSelectedWomen
-                                ? 'woman'
+                                ? 'women'
                                 : '',
                         price: _currentSliderValue,
                         colors: selectedColorIndexes,
@@ -493,7 +492,7 @@ Future<List<Map<String, dynamic>>> fetchProducts({
       FirebaseFirestore.instance.collection(productsCollection);
 
   if (gender != null && gender.isNotEmpty) {
-    query = query.where('sex', isEqualTo: gender);
+    query = query.where('gender', isEqualTo: gender);
   }
 
   if (maxPrice != null) {
