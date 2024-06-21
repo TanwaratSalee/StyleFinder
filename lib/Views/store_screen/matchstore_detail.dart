@@ -42,7 +42,6 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
     super.initState();
     controller = Get.put(ProductController());
     fetchDocumentData();
-    checkIsInWishlist();
   }
 
   void fetchDocumentData() async {
@@ -94,6 +93,9 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
             gender = data['gender'] ?? '';
             collection = data['collection'] ?? [];
           });
+
+          // Check if the products are in the wishlist after setting product details
+          checkIsInWishlist();
         }
       }
     } catch (e) {
@@ -104,12 +106,13 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
   void checkIsInWishlist() async {
     String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
 
-    FirebaseFirestore.instance
-        .collection('favoritemixmatch')
-        .where('user_id', isEqualTo: currentUserUID)
-        .where('vendor_id', isEqualTo: widget.documentId)
-        .get()
-        .then((QuerySnapshot querySnapshot) {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('favoritemixmatch')
+          .where('user_id', isEqualTo: currentUserUID)
+          .where('vendor_id', isEqualTo: widget.documentId)
+          .get();
+
       if (querySnapshot.docs.isNotEmpty) {
         bool hasBothProducts = querySnapshot.docs.any((doc) {
           Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
@@ -117,17 +120,14 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
               data['product2']['name'] == nameLower;
         });
 
-        if (hasBothProducts) {
-          controller.isFav(true);
-        } else {
-          controller.isFav(false);
-        }
+        controller.isFav(hasBothProducts);
       } else {
         controller.isFav(false);
       }
-    }).catchError((error) {
-      print('Error checking wishlist status: $error');
-    });
+    } catch (error) {
+      controller.isFav(false);
+      print('Error fetching document for checking wishlist status: $error');
+    }
   }
 
   void updateIsFav(bool isFav) {

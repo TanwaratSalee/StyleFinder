@@ -6,6 +6,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class MatchProductController extends GetxController {
   var isFav = false.obs;
 
+  void updateIsFav(bool value) {
+    isFav.value = value;
+  }
     void addFavoriteUserPost(Map<String, dynamic> product, Function(bool) updateIsFav, context) {
     FirebaseFirestore.instance
         .collection('usermixandmatch')

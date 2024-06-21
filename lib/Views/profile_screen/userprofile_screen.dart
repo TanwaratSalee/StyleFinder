@@ -93,7 +93,7 @@ class UserProfileScreen extends StatelessWidget {
     );
   }
 
-    Widget buildPostTab() {
+  Widget buildPostTab() {
   return StreamBuilder<QuerySnapshot>(
     stream: FirebaseFirestore.instance
         .collection('usermixandmatch')

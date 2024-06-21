@@ -89,6 +89,13 @@ class FirestoreServices {
         .snapshots();
   }
 
+  static getUserMatchFavorite() {
+    return firestore
+        .collection('usermatchfavorite')
+        .where('favorite_uid', arrayContains: currentUser!.uid)
+        .snapshots();
+  }
+
   static Stream<List<QuerySnapshot>> getFavoriteusermixmatchs() {
     return CombineLatestStream.list([
       FirebaseFirestore.instance

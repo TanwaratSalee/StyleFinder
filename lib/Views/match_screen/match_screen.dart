@@ -427,8 +427,7 @@ class _MatchScreenState extends State<MatchScreen> {
                         _currentPageIndexLower, lowerProducts.length);
                     final topProduct = topProducts[topProductIndex];
                     final lowerProduct = lowerProducts[lowerProductIndex];
-                    // print(
-                    //     'Top Product: ${getColorName(topProduct['colors'][0])}, Lower Product: ${getColorName(lowerProduct['colors'][0])}'); // Debug print
+                    print('Top Product: ${getColorName(topProduct['colors'][0])}, Lower Product: ${getColorName(lowerProduct['colors'][0])}'); 
                     if (topProduct != null && lowerProduct != null) {
                       controller.addToWishlistUserMatch(
                         topProduct['name'],
