@@ -22,7 +22,7 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
   bool isSelectedSuits = false;
   bool isSelectedJackets = false;
   bool isSelectedSkirts = false;
-  
+
   bool isSelectedSummer = false;
   bool isSelectedWinter = false;
   bool isSelectedAutumn = false;
@@ -31,22 +31,58 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
 
   final selectedColorIndexes = <int>[].obs;
   final List<Map<String, dynamic>> allColors = [
-   {'name': 'Black', 'color': Colors.black, 'value': 0xFF000000},
+    {'name': 'Black', 'color': Colors.black, 'value': 0xFF000000},
     {'name': 'Grey', 'color': greyColor, 'value': 0xFF808080},
     {'name': 'White', 'color': whiteColor, 'value': 0xFFFFFFFF},
-    {'name': 'Purple', 'color': const Color.fromRGBO(98, 28, 141, 1), 'value': 0xFF621C8D},
-    {'name': 'Deep Purple', 'color': const Color.fromRGBO(202, 147, 235, 1), 'value': 0xFFCA93EB},
-    {'name': 'Brown', 'color': Color.fromARGB(255, 121, 58, 31), 'value': 0xFF793A1F},
-    {'name': 'Blue', 'color': Color.fromRGBO(32, 47, 179, 1), 'value': 0xFF202FB3},
-    {'name': 'Blue', 'color': const Color.fromRGBO(48, 176, 232, 1), 'value': 0xFF30B0E8},
+    {
+      'name': 'Purple',
+      'color': const Color.fromRGBO(98, 28, 141, 1),
+      'value': 0xFF621C8D
+    },
+    {
+      'name': 'Deep Purple',
+      'color': const Color.fromRGBO(202, 147, 235, 1),
+      'value': 0xFFCA93EB
+    },
+    {
+      'name': 'Brown',
+      'color': Color.fromARGB(255, 121, 58, 31),
+      'value': 0xFF793A1F
+    },
+    {
+      'name': 'Blue',
+      'color': Color.fromRGBO(32, 47, 179, 1),
+      'value': 0xFF202FB3
+    },
+    {
+      'name': 'Blue',
+      'color': const Color.fromRGBO(48, 176, 232, 1),
+      'value': 0xFF30B0E8
+    },
     // {'name': 'Blue Grey', 'color': const Color.fromRGBO(83, 205, 191, 1), 'value': 0xFF53CDBF},
-    {'name': 'Green', 'color': const Color.fromRGBO(23, 119, 15, 1), 'value': 0xFF17770F},
-    {'name': 'Green', 'color': Color.fromRGBO(98, 207, 47, 1), 'value': 0xFF62CF2F},
+    {
+      'name': 'Green',
+      'color': const Color.fromRGBO(23, 119, 15, 1),
+      'value': 0xFF17770F
+    },
+    {
+      'name': 'Green',
+      'color': Color.fromRGBO(98, 207, 47, 1),
+      'value': 0xFF62CF2F
+    },
     {'name': 'Yellow', 'color': Colors.yellow, 'value': 0xFFFFFF00},
-    {'name': 'Yellow', 'color': Color.fromARGB(255, 242, 209, 131), 'value': 0xFFFFFF00},
+    {
+      'name': 'Yellow',
+      'color': Color.fromARGB(255, 242, 209, 131),
+      'value': 0xFFFFFF00
+    },
     {'name': 'Orange', 'color': Colors.orange, 'value': 0xFFFFA500},
     {'name': 'Red', 'color': Colors.red, 'value': 0xFFFF0000},
-    {'name': 'Pink', 'color': Color.fromARGB(255, 242, 134, 170), 'value': 0xFFFF4081},
+    {
+      'name': 'Pink',
+      'color': Color.fromARGB(255, 242, 134, 170),
+      'value': 0xFFFF4081
+    },
   ];
 
   @override
@@ -77,7 +113,8 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
               child: Text("Gender").text.fontFamily(regular).size(14).make(),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
               child: Row(
                 children: [
                   SizedBox(width: 5),
@@ -108,7 +145,8 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 5.0),
               child: Text("Official Store")
                   .text
                   .fontFamily(regular)
@@ -124,11 +162,14 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
                 return Wrap(
                   spacing: 10,
                   children: controller.vendors.map((vendor) {
-                    final isSelected = controller.selectedVendorId.value == vendor['vendor_id'];
-                    return buildFilterChip(vendor['name'] ?? 'Unknown', isSelected, (isSelected) {
+                    final isSelected = controller.selectedVendorId.value ==
+                        vendor['vendor_id'];
+                    return buildFilterChip(
+                        vendor['name'] ?? 'Unknown', isSelected, (isSelected) {
                       setState(() {
                         if (isSelected) {
-                          controller.updateFilters(vendorId: vendor['vendor_id']);
+                          controller.updateFilters(
+                              vendorId: vendor['vendor_id']);
                         } else {
                           controller.updateFilters(vendorId: '');
                         }
@@ -140,12 +181,14 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
             ),
             5.heightBox,
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, ),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
               child: Row(
-                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text("Price").text.fontFamily(regular).size(14).make(),
-                   Text(
+                  Text(
                     "${NumberFormat('#,###').format(_currentSliderValue.round())} Bath",
                     style: TextStyle(
                       fontFamily: regular,
@@ -170,7 +213,8 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
                   min: 0,
                   max: 999999,
                   divisions: 100,
-                  label: "${NumberFormat('#,###').format(_currentSliderValue.round())} Bath",
+                  label:
+                      "${NumberFormat('#,###').format(_currentSliderValue.round())} Bath",
                   onChanged: (value) {
                     setState(() {
                       _currentSliderValue = value;
@@ -249,7 +293,7 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
                     buildFilterChip("Suits", isSelectedSuits, (isSelected) {
                       setState(() => isSelectedSuits = isSelected);
                     }),
-                     buildFilterChip("Skirts", isSelectedSkirts, (isSelected) {
+                    buildFilterChip("Skirts", isSelectedSkirts, (isSelected) {
                       setState(() => isSelectedSkirts = isSelected);
                     }),
                     buildFilterChip("Pants", isSelectedPants, (isSelected) {
@@ -262,7 +306,6 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
                 ),
               ).paddingOnly(left: 13),
             ),
-            
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
@@ -285,82 +328,82 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
                   buildFilterChip("Dinner", isSelectedDinner, (isSelected) {
                     setState(() => isSelectedDinner = isSelected);
                   }),
-                  buildFilterChip("Everyday", isSelectedEveryday,
-                      (isSelected) {
+                  buildFilterChip("Everyday", isSelectedEveryday, (isSelected) {
                     setState(() => isSelectedEveryday = isSelected);
                   }),
                 ],
               ),
             ).paddingOnly(left: 6),
+            ElevatedButton(
+                onPressed: () {
+                  String selectedGender = '';
+                  if (isSelectedMen) {
+                    selectedGender = 'men';
+                  } else if (isSelectedWomen) {
+                    selectedGender = 'women';
+                  }
 
+                  controller.updateFilters(
+                    gender: selectedGender,
+                    price: _currentSliderValue,
+                    colors: selectedColorIndexes,
+                    types: [
+                      if (isSelectedDress) 'dresses',
+                      if (isSelectedSkirts) 'skirts',
+                      if (isSelectedTShirts) 't-shirts',
+                      if (isSelectedPants) 'pants',
+                      if (isSelectedJackets) 'jackets',
+                      if (isSelectedSuits) 'suits',
+                    ],
+                    collections: [
+                      if (isSelectedSummer) 'summer',
+                      if (isSelectedWinter) 'winter',
+                      if (isSelectedAutumn) 'autumn',
+                      if (isSelectedDinner) 'dinner',
+                      if (isSelectedEveryday) 'everydaylook',
+                    ],
+                  );
 
-          ElevatedButton(
-            onPressed: () {
-              String selectedGender = '';
-              if (isSelectedMen) {
-                selectedGender = 'male';
-              } else if (isSelectedWomen) {
-                selectedGender = 'woman';
-              }
+                  // Print the selected vendor name before fetching filtered products
+                  final selectedVendor = controller.vendors.firstWhere(
+                      (vendor) =>
+                          vendor['vendor_id'] ==
+                          controller.selectedVendorId.value,
+                      orElse: () => {'vendor_name': 'Unknown'});
+                  print(
+                      "Selected vendor name: ${selectedVendor['vendor_name']}");
+                  print(
+                      "Selected Vendor ID: ${controller.selectedVendorId.value}");
 
-                controller.updateFilters(
-                  gender: selectedGender,
-                  price: _currentSliderValue,
-                  colors: selectedColorIndexes,
-                  types: [
-                    if (isSelectedDress) 'dresses',
-                    if (isSelectedSkirts) 'skirts',
-                    if (isSelectedTShirts) 't-shirts',
-                    if (isSelectedPants) 'pants',
-                    if (isSelectedJackets) 'jackets',
-                    if (isSelectedSuits) 'suits',
-                  ],
-                  collections: [
-                    if (isSelectedSummer) 'summer',
-                    if (isSelectedWinter) 'winter',
-                    if (isSelectedAutumn) 'autumn',
-                    if (isSelectedDinner) 'dinner',
-                    if (isSelectedEveryday) 'everydaylook',
-                  ],
-                );
-                
-              // Print the selected vendor name before fetching filtered products
-              final selectedVendor = controller.vendors.firstWhere(
-                (vendor) => vendor['vendor_id'] == controller.selectedVendorId.value,
-                orElse: () => {'vendor_name': 'Unknown'}
-              );
-              print("Selected vendor name: ${selectedVendor['vendor_name']}");
-              print("Selected Vendor ID: ${controller.selectedVendorId.value}");
+                  controller.fetchFilteredTopProducts();
+                  controller.fetchFilteredLowerProducts();
 
-              controller.fetchFilteredTopProducts();
-              controller.fetchFilteredLowerProducts();
-
-              Navigator.pop(context);
-            },
-            
-            child: Text('Save',).text.white.make(),
-            style: ElevatedButton.styleFrom(
-                        backgroundColor: primaryApp,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ))
-          ).box.makeCentered()
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  'Save',
+                ).text.white.make(),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: primaryApp,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ))).box.makeCentered()
           ],
         ).box.white.padding(EdgeInsets.symmetric(vertical: 12)).make(),
       ),
     );
   }
 
-
-   Widget buildFilterChip(String label, bool isSelected, Function(bool) onSelected) {
-  return FilterChip(
-    label: Text(label),
-    selected: isSelected,
-    onSelected: onSelected,
-    showCheckmark: false,
-    side: BorderSide(color: isSelected ? primaryApp : greyLine),
-    selectedColor: thinPrimaryApp,
-    padding: EdgeInsets.symmetric(horizontal: 3), 
-  );
-
-}}
+  Widget buildFilterChip(
+      String label, bool isSelected, Function(bool) onSelected) {
+    return FilterChip(
+      label: Text(label),
+      selected: isSelected,
+      onSelected: onSelected,
+      showCheckmark: false,
+      side: BorderSide(color: isSelected ? primaryApp : greyLine),
+      selectedColor: thinPrimaryApp,
+      padding: EdgeInsets.symmetric(horizontal: 3),
+    );
+  }
+}

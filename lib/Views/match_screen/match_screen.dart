@@ -373,110 +373,101 @@ class _MatchScreenState extends State<MatchScreen> {
   }
 
   Widget matchWithYouContainer() {
-    if (controller.topFilteredProducts.isEmpty ||
-        controller.lowerFilteredProducts.isEmpty) {
-      return const Center(child: Text('No matching products available'));
-    }
+    return Obx(() {
+      if (controller.isFetchingTopProducts.value ||
+          controller.isFetchingLowerProducts.value) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      }
 
-    final topProductIndex = getActualIndex(
-        _currentPageIndexTop, controller.topFilteredProducts.length);
-    final lowerProductIndex = getActualIndex(
-        _currentPageIndexLower, controller.lowerFilteredProducts.length);
+      if (controller.topFilteredProducts.isEmpty ||
+          controller.lowerFilteredProducts.isEmpty) {
+        return const Center(child: Text('No matching products available'));
+      }
 
-    if (topProductIndex < 0 ||
-        lowerProductIndex < 0 ||
-        topProductIndex >= controller.topFilteredProducts.length ||
-        lowerProductIndex >= controller.lowerFilteredProducts.length) {
-      return const Center(child: Text('No matching products available'));
-    }
+      final topProductIndex = getActualIndex(
+          _currentPageIndexTop, controller.topFilteredProducts.length);
+      final lowerProductIndex = getActualIndex(
+          _currentPageIndexLower, controller.lowerFilteredProducts.length);
 
-    final topProduct = controller.topFilteredProducts[topProductIndex];
-    final lowerProduct = controller.lowerFilteredProducts[lowerProductIndex];
-    bool isGreatMatch =
-        checkMatch(topProduct['colors'], lowerProduct['colors']);
+      if (topProductIndex < 0 ||
+          lowerProductIndex < 0 ||
+          topProductIndex >= controller.topFilteredProducts.length ||
+          lowerProductIndex >= controller.lowerFilteredProducts.length) {
+        return const Center(child: Text('No matching products available'));
+      }
 
-    return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              const Text(
-                'Feedback:',
-              ).text.fontFamily(regular).color(blackColor).size(14).make(),
-              8.widthBox,
-              Text(
-                isGreatMatch ? 'Great Match!' : 'Not a Match',
-              )
-                  .text
-                  .fontFamily(semiBold)
-                  .color(isGreatMatch ? Colors.green : redColor)
-                  .size(20)
-                  .make(),
-            ],
-          )
-              .box
-              .border(color: greyLine, width: 1)
-              .padding(const EdgeInsets.symmetric(vertical: 12, horizontal: 32))
-              .margin(const EdgeInsets.only(bottom: 12))
-              .make(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              InkWell(
-                onTap: () {
-                  final topProductIndex = getActualIndex(_currentPageIndexTop,
-                      controller.topFilteredProducts.length);
-                  final lowerProductIndex = getActualIndex(
-                      _currentPageIndexLower,
-                      controller.lowerFilteredProducts.length);
-                  final topProduct =
-                      controller.topFilteredProducts[topProductIndex];
-                  final lowerProduct =
-                      controller.lowerFilteredProducts[lowerProductIndex];
-                  print(
-                      'Top Product ID: ${topProduct['product_id']}, Lower Product ID: ${lowerProduct['product_id']}'); // Debug print
-                  Get.to(() => MatchPostProduct(
-                        topProduct: topProduct,
-                        lowerProduct: lowerProduct,
-                      ));
-                },
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Image.asset(icPost, width: 22, height: 22),
-                    const SizedBox(width: 8),
-                    Text('Post')
-                        .text
-                        .fontFamily(semiBold)
-                        .color(const Color.fromARGB(255, 28, 73, 45))
-                        .size(14)
-                        .make(),
-                  ],
+      final topProduct = controller.topFilteredProducts[topProductIndex];
+      final lowerProduct = controller.lowerFilteredProducts[lowerProductIndex];
+      bool isGreatMatch =
+          checkMatch(topProduct['colors'], lowerProduct['colors']);
+
+      return Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                const Text(
+                  'Feedback:',
+                ).text.fontFamily(regular).color(blackColor).size(14).make(),
+                8.widthBox,
+                Text(
+                  isGreatMatch ? 'Great Match!' : 'Not a Match',
                 )
-                    .box
-                    .color(const Color.fromRGBO(177, 234, 199, 1))
-                    .padding(const EdgeInsets.symmetric(
-                        vertical: 12, horizontal: 58))
-                    .border(color: const Color.fromRGBO(35, 101, 60, 1))
-                    .rounded
+                    .text
+                    .fontFamily(semiBold)
+                    .color(isGreatMatch ? Colors.green : redColor)
+                    .size(20)
                     .make(),
-              ),
-              InkWell(
-                onTap: () async {
-                  final topProducts = controller.topFilteredProducts;
-                  final lowerProducts = controller.lowerFilteredProducts;
-                  if (topProducts.isNotEmpty && lowerProducts.isNotEmpty) {
-                    final topProductIndex = getActualIndex(
-                        _currentPageIndexTop, topProducts.length);
-                    final lowerProductIndex = getActualIndex(
-                        _currentPageIndexLower, lowerProducts.length);
-                    final topProduct = topProducts[topProductIndex];
-                    final lowerProduct = lowerProducts[lowerProductIndex];
+              ],
+            )
+                .box
+                .border(color: greyLine, width: 1)
+                .padding(
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 32))
+                .margin(const EdgeInsets.only(bottom: 12))
+                .make(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                InkWell(
+                  onTap: () {
                     print(
-                        'Top Product: ${getColorName(topProduct['colors'][0])}, Lower Product: ${getColorName(lowerProduct['colors'][0])}');
+                        'Top Product ID: ${topProduct['product_id']}, Lower Product ID: ${lowerProduct['product_id']}'); // Debug print
+                    Get.to(() => MatchPostProduct(
+                          topProduct: topProduct,
+                          lowerProduct: lowerProduct,
+                        ));
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Image.asset(icPost, width: 22, height: 22),
+                      const SizedBox(width: 8),
+                      Text('Post')
+                          .text
+                          .fontFamily(semiBold)
+                          .color(const Color.fromARGB(255, 28, 73, 45))
+                          .size(14)
+                          .make(),
+                    ],
+                  )
+                      .box
+                      .color(const Color.fromRGBO(177, 234, 199, 1))
+                      .padding(const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 58))
+                      .border(color: const Color.fromRGBO(35, 101, 60, 1))
+                      .rounded
+                      .make(),
+                ),
+                InkWell(
+                  onTap: () async {
                     if (topProduct != null && lowerProduct != null) {
+                      print(
+                          'Top Product: ${getColorName(topProduct['colors'][0])}, Lower Product: ${getColorName(lowerProduct['colors'][0])}');
                       controller.addToWishlistUserMatch(
                         topProduct['name'],
                         lowerProduct['name'],
@@ -489,40 +480,34 @@ class _MatchScreenState extends State<MatchScreen> {
                             'Unable to add to favorites, Because the information is not available',
                       );
                     }
-                  } else {
-                    VxToast.show(
-                      context,
-                      msg:
-                          'Unable to add to favorites, Because the information is not available',
-                    );
-                  }
-                },
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Image.asset(icLikematch, width: 22, height: 22),
-                    const SizedBox(width: 8),
-                    Text('Add to favorite')
-                        .text
-                        .fontFamily(semiBold)
-                        .color(const Color.fromRGBO(87, 12, 12, 1))
-                        .size(14)
-                        .make(),
-                  ],
-                )
-                    .box
-                    .color(const Color.fromRGBO(255, 203, 203, 1))
-                    .padding(const EdgeInsets.symmetric(
-                        vertical: 12, horizontal: 18))
-                    .border(color: const Color.fromRGBO(160, 84, 84, 1))
-                    .rounded
-                    .make(),
-              )
-            ],
-          ),
-        ],
-      ),
-    );
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Image.asset(icLikematch, width: 22, height: 22),
+                      const SizedBox(width: 8),
+                      Text('Add to favorite')
+                          .text
+                          .fontFamily(semiBold)
+                          .color(const Color.fromRGBO(87, 12, 12, 1))
+                          .size(14)
+                          .make(),
+                    ],
+                  )
+                      .box
+                      .color(const Color.fromRGBO(255, 203, 203, 1))
+                      .padding(const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 18))
+                      .border(color: const Color.fromRGBO(160, 84, 84, 1))
+                      .rounded
+                      .make(),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    });
   }
 
   bool checkMatch(List<dynamic> topColors, List<dynamic> lowerColors) {

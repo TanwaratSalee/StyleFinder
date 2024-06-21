@@ -108,7 +108,11 @@ class ProductController extends GetxController {
     }
   }
 
+  var isFetchingTopProducts = false.obs;
+  var isFetchingLowerProducts = false.obs;
+
   void fetchFilteredTopProducts() async {
+    isFetchingTopProducts.value = true;
     try {
       Query<Map<String, dynamic>> query = FirebaseFirestore.instance
           .collection('products')
@@ -165,6 +169,7 @@ class ProductController extends GetxController {
   }
 
   void fetchFilteredLowerProducts() async {
+    isFetchingTopProducts.value = false;
     try {
       Query<Map<String, dynamic>> query = FirebaseFirestore.instance
           .collection('products')
