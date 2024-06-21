@@ -230,8 +230,7 @@ class ProductController extends GetxController {
       QuerySnapshot<Map<String, dynamic>> snapshot =
           await FirebaseFirestore.instance.collection('vendors').get();
       List<Map<String, dynamic>> vendorList = snapshot.docs
-          .map(
-              (doc) => {'vendor_id': doc.id, 'vendor_name': doc['vendor_name']})
+          .map((doc) => {'vendor_id': doc.id, 'name': doc['name']})
           .toList();
       vendors.assignAll(vendorList);
       print("Vendors fetched: $vendorList");
@@ -532,9 +531,10 @@ class ProductController extends GetxController {
       if (querySnapshot.docs.isNotEmpty) {
         for (var doc in querySnapshot.docs) {
           // Using null safety checks to handle possible null values
-          List<dynamic> wishlist = (doc.data()
-                  as Map<String, dynamic>?)?['favorite_uid'] as List<dynamic>? ??
-              [];
+          List<dynamic> wishlist =
+              (doc.data() as Map<String, dynamic>?)?['favorite_uid']
+                      as List<dynamic>? ??
+                  [];
           String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
           if (!wishlist.contains(currentUserUID)) {
             doc.reference.update({
@@ -557,161 +557,163 @@ class ProductController extends GetxController {
   }
 
   void addPostByUserMatch(
-    String productNameTop,
-    String productNameLower,
-    BuildContext context,
-    String selectedGender,
-    List<String> selectedCollections,
-    String explanation,
-    String productIdTop,
-    String productIdLower) {
-  List<String> productNames = [productNameTop, productNameLower];
-  String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
+      String productNameTop,
+      String productNameLower,
+      BuildContext context,
+      String selectedGender,
+      List<String> selectedCollections,
+      String explanation,
+      String productIdTop,
+      String productIdLower) {
+    List<String> productNames = [productNameTop, productNameLower];
+    String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
 
-  // Retrieve user details
-  FirebaseFirestore.instance
-      .collection('users')
-      .doc(currentUserUID)
-      .get()
-      .then((DocumentSnapshot userDoc) {
-    if (userDoc.exists) {
-      String userName = userDoc['name'];
-      String userImg = userDoc['imageUrl'];
+    // Retrieve user details
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(currentUserUID)
+        .get()
+        .then((DocumentSnapshot userDoc) {
+      if (userDoc.exists) {
+        String userName = userDoc['name'];
+        String userImg = userDoc['imageUrl'];
 
-      // Retrieve product details
-      FirebaseFirestore.instance
-          .collection(productsCollection)
-          .where('name', whereIn: productNames)
-          .get()
-          .then((QuerySnapshot querySnapshot) {
-        if (querySnapshot.docs.isNotEmpty) {
-          Map<String, dynamic> userData = {
-            'user_id': currentUserUID,
-            'collection': selectedCollections,
-            'gender': selectedGender,
-            'description': explanation,
-            'favorite_userid': FieldValue.arrayUnion([]),
-            'created_at': Timestamp.now(),
-            'product_id_top': productIdTop,
-            'product_id_lower': productIdLower,
-          };
+        // Retrieve product details
+        FirebaseFirestore.instance
+            .collection(productsCollection)
+            .where('name', whereIn: productNames)
+            .get()
+            .then((QuerySnapshot querySnapshot) {
+          if (querySnapshot.docs.isNotEmpty) {
+            Map<String, dynamic> userData = {
+              'user_id': currentUserUID,
+              'collection': selectedCollections,
+              'gender': selectedGender,
+              'description': explanation,
+              'favorite_userid': FieldValue.arrayUnion([]),
+              'created_at': Timestamp.now(),
+              'product_id_top': productIdTop,
+              'product_id_lower': productIdLower,
+            };
 
-          querySnapshot.docs.forEach((doc) {
-            var data = doc.data() as Map<String, dynamic>?;
-            var wishlist = (data?['favorite_count'] as List<dynamic>?) ?? [];
+            querySnapshot.docs.forEach((doc) {
+              var data = doc.data() as Map<String, dynamic>?;
+              var wishlist = (data?['favorite_count'] as List<dynamic>?) ?? [];
 
-            if (!wishlist.contains(currentUserUID)) {
-              userData['views'] = 0;
-              userData['favorite_count'] = 0;
-              if (doc['name'] == productNameTop) {
-                userData['vendor_id_top'] = doc['vendor_id'];
-              } else if (doc['name'] == productNameLower) {
-                userData['vendor_id_lower'] = doc['vendor_id'];
+              if (!wishlist.contains(currentUserUID)) {
+                userData['views'] = 0;
+                userData['favorite_count'] = 0;
+                if (doc['name'] == productNameTop) {
+                  userData['vendor_id_top'] = doc['vendor_id'];
+                } else if (doc['name'] == productNameLower) {
+                  userData['vendor_id_lower'] = doc['vendor_id'];
+                }
               }
-            }
-          });
+            });
 
-          if (userData.keys.length > 1) {
-            // Check if any product info was added
-            FirebaseFirestore.instance
-                .collection('usermixandmatch')
-                .add(userData)
-                .then((documentReference) {
-              // Save the document ID
-              String documentID = documentReference.id;
+            if (userData.keys.length > 1) {
+              // Check if any product info was added
               FirebaseFirestore.instance
                   .collection('usermixandmatch')
-                  .doc(documentID)
-                  .update({'id': documentID}).then((_) {
-                VxToast.show(context, msg: "Added post successful.");
-                print('Data added in usermixandmatch collection with document ID: $documentID');
-                Navigator.pop(context);
+                  .add(userData)
+                  .then((documentReference) {
+                // Save the document ID
+                String documentID = documentReference.id;
+                FirebaseFirestore.instance
+                    .collection('usermixandmatch')
+                    .doc(documentID)
+                    .update({'id': documentID}).then((_) {
+                  VxToast.show(context, msg: "Added post successful.");
+                  print(
+                      'Data added in usermixandmatch collection with document ID: $documentID');
+                  Navigator.pop(context);
+                }).catchError((error) {
+                  print('Error updating document ID: $error');
+                  VxToast.show(context, msg: "Error updating document ID.");
+                });
               }).catchError((error) {
-                print('Error updating document ID: $error');
-                VxToast.show(context, msg: "Error updating document ID.");
+                print(
+                    'Error adding data in usermixandmatch collection: $error');
+                VxToast.show(context, msg: "Error post.");
               });
-            }).catchError((error) {
-              print('Error adding data in usermixandmatch collection: $error');
-              VxToast.show(context, msg: "Error post.");
-            });
+            } else {
+              VxToast.show(context, msg: "Products already in wishlist.");
+            }
           } else {
-            VxToast.show(context, msg: "Products already in wishlist.");
+            print('No products found matching the names.');
+            VxToast.show(context, msg: "No products found.");
           }
-        } else {
-          print('No products found matching the names.');
-          VxToast.show(context, msg: "No products found.");
-        }
-      }).catchError((error) {
-        print('Error retrieving products: $error');
-        VxToast.show(context, msg: "Error retrieving products.");
-      });
-    } else {
-      print('User not found.');
-      VxToast.show(context, msg: "User not found.");
-    }
-  }).catchError((error) {
-    print('Error retrieving user: $error');
-    VxToast.show(context, msg: "Error retrieving user.");
-  });
-}
-
-void addToWishlistUserMatch(
-    String productNameTop, String productNameLower, BuildContext context) {
-  List<String> productNames = [productNameTop, productNameLower];
-  FirebaseFirestore.instance
-      .collection(productsCollection)
-      .where('name', whereIn: productNames)
-      .get()
-      .then((QuerySnapshot querySnapshot) {
-    if (querySnapshot.docs.isNotEmpty) {
-      String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
-      Map<String, dynamic> userData = {
-        'favorite_uid': [currentUserUID]
-      };
-
-      String? topProductId;
-      String? lowerProductId;
-
-      querySnapshot.docs.forEach((doc) {
-        var data = doc.data() as Map<String, dynamic>?;
-        var wishlist = (data?['favorite_uid'] as List<dynamic>?) ?? [];
-
-        if (!wishlist.contains(currentUserUID)) {
-          if (doc['name'] == productNameTop) {
-            topProductId = doc.id;
-          } else if (doc['name'] == productNameLower) {
-            lowerProductId = doc.id;
-          }
-        }
-      });
-
-      if (topProductId != null && lowerProductId != null) {
-        userData['product_id_top'] = topProductId;
-        userData['product_id_lower'] = lowerProductId;
-
-        FirebaseFirestore.instance
-            .collection('usermatchfavorite')
-            .add(userData)
-            .then((documentReference) {
-          VxToast.show(context, msg: "Added to wishlist and user mix-match.");
-          print(
-              'Data added in usermixandmatch collection with document ID: ${documentReference.id}');
         }).catchError((error) {
-          print('Error adding data in usermixandmatch collection: $error');
-          VxToast.show(context, msg: "Error adding to wishlist.");
+          print('Error retrieving products: $error');
+          VxToast.show(context, msg: "Error retrieving products.");
         });
       } else {
-        VxToast.show(context, msg: "Products already in wishlist.");
+        print('User not found.');
+        VxToast.show(context, msg: "User not found.");
       }
-    } else {
-      print('No products found matching the names.');
-      VxToast.show(context, msg: "No products found.");
-    }
-  }).catchError((error) {
-    print('Error retrieving products: $error');
-    VxToast.show(context, msg: "Error retrieving products.");
-  });
-}
+    }).catchError((error) {
+      print('Error retrieving user: $error');
+      VxToast.show(context, msg: "Error retrieving user.");
+    });
+  }
+
+  void addToWishlistUserMatch(
+      String productNameTop, String productNameLower, BuildContext context) {
+    List<String> productNames = [productNameTop, productNameLower];
+    FirebaseFirestore.instance
+        .collection(productsCollection)
+        .where('name', whereIn: productNames)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      if (querySnapshot.docs.isNotEmpty) {
+        String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
+        Map<String, dynamic> userData = {
+          'favorite_uid': [currentUserUID]
+        };
+
+        String? topProductId;
+        String? lowerProductId;
+
+        querySnapshot.docs.forEach((doc) {
+          var data = doc.data() as Map<String, dynamic>?;
+          var wishlist = (data?['favorite_uid'] as List<dynamic>?) ?? [];
+
+          if (!wishlist.contains(currentUserUID)) {
+            if (doc['name'] == productNameTop) {
+              topProductId = doc.id;
+            } else if (doc['name'] == productNameLower) {
+              lowerProductId = doc.id;
+            }
+          }
+        });
+
+        if (topProductId != null && lowerProductId != null) {
+          userData['product_id_top'] = topProductId;
+          userData['product_id_lower'] = lowerProductId;
+
+          FirebaseFirestore.instance
+              .collection('usermatchfavorite')
+              .add(userData)
+              .then((documentReference) {
+            VxToast.show(context, msg: "Added to wishlist and user mix-match.");
+            print(
+                'Data added in usermixandmatch collection with document ID: ${documentReference.id}');
+          }).catchError((error) {
+            print('Error adding data in usermixandmatch collection: $error');
+            VxToast.show(context, msg: "Error adding to wishlist.");
+          });
+        } else {
+          VxToast.show(context, msg: "Products already in wishlist.");
+        }
+      } else {
+        print('No products found matching the names.');
+        VxToast.show(context, msg: "No products found.");
+      }
+    }).catchError((error) {
+      print('Error retrieving products: $error');
+      VxToast.show(context, msg: "Error retrieving products.");
+    });
+  }
 
   removeFromWishlist(docId, context) async {
     await firestore.collection(productsCollection).doc(docId).set({

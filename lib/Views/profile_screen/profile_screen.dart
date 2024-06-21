@@ -259,7 +259,7 @@ class _ProfileScreenState extends State<ProfileScreen>
           padding: EdgeInsets.all(12),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            crossAxisSpacing: 8,
+            crossAxisSpacing: 7,
             mainAxisSpacing: 8,
             childAspectRatio: 8 / 9.3,
           ),
@@ -309,12 +309,20 @@ class _ProfileScreenState extends State<ProfileScreen>
                     ? List<String>.from(docData['collection'])
                     : [];
                 var description = docData['description'] ?? '';
-                var views = docData['views'] ?? 0;
+                var views = (docData['views'] ?? 0)
+                    as int; // Ensure views is treated as an int
                 var gender = docData['gender'] ?? '';
                 var postedBy = docData['user_id'] ?? '';
 
                 return GestureDetector(
                   onTap: () {
+                    // Increase view count
+                    FirebaseFirestore.instance
+                        .collection('usermixandmatch')
+                        .doc(doc.id)
+                        .update({'views': FieldValue.increment(1)});
+
+                    // Navigate to details screen
                     Get.to(() => MatchPostsDetails(
                           docId: doc.id,
                           productName1: productNameTop,
@@ -605,7 +613,7 @@ class _ProfileScreenState extends State<ProfileScreen>
 
                 var nameTop = productTopData?['name']?.toString() ?? '0';
                 var nameLower = productLowerData?['name']?.toString() ?? '0';
-                 var topImage =
+                var topImage =
                     (productTopData?['imgs'] as List<dynamic>?)?.first ?? '';
                 var lowerImage =
                     (productLowerData?['imgs'] as List<dynamic>?)?.first ?? '';
