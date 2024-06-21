@@ -19,14 +19,10 @@ const String icHome = "assets/icons/iconsNavbarinapp/Home.png";
 const String icNews = "assets/icons/iconsNavbarinapp/News.png";
 const String icMatch = "assets/icons/iconsNavbarinapp/match.png";
 const String icPerson = "assets/icons/iconsNavbarinapp/me.png";
-const String icHomeSelected =
-    "assets/icons/iconsNavbarinapp/icHomeSelected.png";
-const String icNewsSelected =
-    "assets/icons/iconsNavbarinapp/icNewsSelected.png";
-const String icMatchSelected =
-    "assets/icons/iconsNavbarinapp/icMatchSelected.png";
-const String icPersonSelected =
-    "assets/icons/iconsNavbarinapp/icPersonSelected.png";
+const String icHomeSelected = "assets/icons/iconsNavbarinapp/icHomeSelected.png";
+const String icNewsSelected = "assets/icons/iconsNavbarinapp/icNewsSelected.png";
+const String icMatchSelected = "assets/icons/iconsNavbarinapp/icMatchSelected.png";
+const String icPersonSelected = "assets/icons/iconsNavbarinapp/icPersonSelected.png";
 
 //other
 const String icLogoApp = "assets/images/LogoOnApp.png";
