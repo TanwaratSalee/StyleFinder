@@ -252,7 +252,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
                 min: 10,
                 max: 99999,
                 divisions: 150,
-                label: "${NumberFormat('#,###').format(_currentSliderValue.round())} Bath",
+                label:
+                    "${NumberFormat('#,###').format(_currentSliderValue.round())} Bath",
                 onChanged: (value) {
                   setState(() {
                     _currentSliderValue = value.clamp(10, 99999);
@@ -509,15 +510,18 @@ Future<List<Map<String, dynamic>>> fetchProducts({
     query = query.where('gender', isEqualTo: gender);
   }
 
-  if (maxPrice != null) {
-    String maxPriceString = maxPrice.toStringAsFixed(0);
-    query = query.where('price', isLessThanOrEqualTo: maxPriceString);
-  }
-
   try {
     QuerySnapshot<Map<String, dynamic>> snapshot = await query.get();
     List<Map<String, dynamic>> products =
         snapshot.docs.map((doc) => doc.data()).toList();
+
+    // Convert price to numeric and filter
+    if (maxPrice != null) {
+      products = products.where((product) {
+        double productPrice = double.tryParse(product['price'] ?? '0') ?? 0;
+        return productPrice <= maxPrice;
+      }).toList();
+    }
 
     // Filter by colors
     if (selectedColors != null && selectedColors.isNotEmpty) {
