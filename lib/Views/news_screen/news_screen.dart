@@ -563,12 +563,12 @@ class NewsScreen extends StatelessWidget {
         var limitedData = data.take(4).toList();
 
         return GridView.builder(
-          padding: EdgeInsets.all(12),
+          
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             crossAxisSpacing: 8,
             mainAxisSpacing: 8,
-            childAspectRatio: 9 / 11,
+            childAspectRatio: 8.8 / 11,
           ),
           itemCount: limitedData.length,
           physics: const NeverScrollableScrollPhysics(), // Prevent scrolling
@@ -707,7 +707,7 @@ class NewsScreen extends StatelessWidget {
                               ),
                             ),
                           ],
-                        ).paddingSymmetric(horizontal: 8),
+                        )
                       ],
                     )
                         .box
@@ -751,12 +751,12 @@ class NewsScreen extends StatelessWidget {
         var limitedData = data.take(4).toList();
 
         return GridView.builder(
-          padding: EdgeInsets.all(12),
+          
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             crossAxisSpacing: 8,
             mainAxisSpacing: 8,
-            childAspectRatio: 9 / 11,
+            childAspectRatio: 8.8 / 11,
           ),
           itemCount: limitedData.length,
           physics: const NeverScrollableScrollPhysics(), // Prevent scrolling
@@ -918,7 +918,7 @@ class NewsScreen extends StatelessWidget {
                               ),
                             ),
                           ],
-                        ).paddingSymmetric(horizontal: 8),
+                        )
                       ],
                     )
                         .box

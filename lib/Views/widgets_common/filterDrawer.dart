@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/home_controller.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
 
 class FilterDrawer extends StatefulWidget {
   @override
@@ -84,7 +86,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
   @override
   void initState() {
     super.initState();
-    _currentSliderValue = controller.maxPrice.value;
+    _currentSliderValue = controller.maxPrice.value.clamp(10, 99999).toDouble();
     isSelectedAll = controller.selectedGender.value == '';
     isSelectedMen = controller.selectedGender.value == 'man';
     isSelectedWomen = controller.selectedGender.value == 'woman';
@@ -223,7 +225,19 @@ class _FilterDrawerState extends State<FilterDrawer> {
             5.heightBox,
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text("Price").text.fontFamily(regular).size(14).make(),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Price").text.fontFamily(regular).size(14).make(),
+                  Text(
+                    "${NumberFormat('#,###').format(_currentSliderValue.round())} Bath",
+                    style: TextStyle(
+                      fontFamily: regular,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
             ),
             SliderTheme(
               data: SliderTheme.of(context).copyWith(
@@ -235,13 +249,13 @@ class _FilterDrawerState extends State<FilterDrawer> {
               ),
               child: Slider(
                 value: _currentSliderValue,
-                min: 0,
-                max: 999999,
+                min: 10,
+                max: 99999,
                 divisions: 150,
-                label: "${_currentSliderValue.round()} Bath",
+                label: "${NumberFormat('#,###').format(_currentSliderValue.round())} Bath",
                 onChanged: (value) {
                   setState(() {
-                    _currentSliderValue = value;
+                    _currentSliderValue = value.clamp(10, 99999);
                   });
                 },
               ),
@@ -254,7 +268,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 28),
               child: Wrap(
-                spacing: 20,
+                spacing: 12,
                 runSpacing: 5,
                 children: List.generate(
                   allColors.length,
@@ -302,10 +316,10 @@ class _FilterDrawerState extends State<FilterDrawer> {
                   .make(),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18),
+              padding: const EdgeInsets.symmetric(horizontal: 6),
               child: Center(
                 child: Wrap(
-                  spacing: 5,
+                  spacing: 8,
                   children: [
                     buildFilterChip("Dress", isSelectedDress, (isSelected) {
                       setState(() {
@@ -357,9 +371,9 @@ class _FilterDrawerState extends State<FilterDrawer> {
             ),
             Center(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: Wrap(
-                  spacing: 5,
+                  spacing: 6,
                   children: [
                     buildFilterChip("Summer", isSelectedSummer, (isSelected) {
                       setState(() {
