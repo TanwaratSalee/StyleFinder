@@ -65,7 +65,7 @@ class ProductController extends GetxController {
   //======Filter
   var filteredProducts = <Map<String, dynamic>>[].obs;
   var selectedGender = ''.obs;
-  var maxPrice = 0.0.obs;
+  var maxPrice = ''.obs;
   var selectedColors = <int>[].obs;
   var selectedTypes = <String>[].obs;
   var selectedCollections = <String>[].obs;
@@ -81,7 +81,7 @@ class ProductController extends GetxController {
     String? vendorId,
   }) {
     selectedGender.value = gender ?? '';
-    maxPrice.value = price ?? 0.0;
+    maxPrice.value = price?.toStringAsFixed(0) ?? '0';
     selectedColors.assignAll(colors ?? []);
     selectedTypes.assignAll(types ?? []);
     selectedCollections.assignAll(collections ?? []);
@@ -92,6 +92,8 @@ class ProductController extends GetxController {
 
   var topFilteredProducts = <Map<String, dynamic>>[].obs;
   var lowerFilteredProducts = <Map<String, dynamic>>[].obs;
+  var isFetchingTopProducts = false.obs;
+  var isFetchingLowerProducts = false.obs;
 
   void fetchInitialTopProducts() async {
     try {
@@ -108,9 +110,6 @@ class ProductController extends GetxController {
     }
   }
 
-  var isFetchingTopProducts = false.obs;
-  var isFetchingLowerProducts = false.obs;
-
   void fetchFilteredTopProducts() async {
     isFetchingTopProducts.value = true;
     try {
@@ -124,11 +123,6 @@ class ProductController extends GetxController {
 
       if (selectedVendorId.value.isNotEmpty) {
         query = query.where('vendor_id', isEqualTo: selectedVendorId.value);
-      }
-
-      if (maxPrice.value > 0) {
-        query = query.where('price',
-            isLessThanOrEqualTo: maxPrice.value.toString());
       }
 
       if (selectedColors.isNotEmpty) {
@@ -147,9 +141,21 @@ class ProductController extends GetxController {
       QuerySnapshot<Map<String, dynamic>> snapshot = await query.get();
       List<Map<String, dynamic>> products =
           snapshot.docs.map((doc) => doc.data()).toList();
+
+      // Filter products by price
+      if (maxPrice.value.isNotEmpty) {
+        double maxPriceValue = double.tryParse(maxPrice.value) ?? 0;
+        products = products.where((product) {
+          double productPrice = double.tryParse(product['price'] ?? '0') ?? 0;
+          return productPrice <= maxPriceValue;
+        }).toList();
+      }
+
       topFilteredProducts.assignAll(products);
     } catch (e) {
       print("Error fetching filtered top products: $e");
+    } finally {
+      isFetchingTopProducts.value = false;
     }
   }
 
@@ -183,9 +189,8 @@ class ProductController extends GetxController {
         query = query.where('vendor_id', isEqualTo: selectedVendorId.value);
       }
 
-      if (maxPrice.value > 0) {
-        query = query.where('price',
-            isLessThanOrEqualTo: maxPrice.value.toString());
+      if (maxPrice.value.isNotEmpty) {
+        query = query.where('price', isLessThanOrEqualTo: maxPrice.value);
       }
 
       if (selectedColors.isNotEmpty) {
@@ -204,9 +209,20 @@ class ProductController extends GetxController {
       QuerySnapshot<Map<String, dynamic>> snapshot = await query.get();
       List<Map<String, dynamic>> products =
           snapshot.docs.map((doc) => doc.data()).toList();
+
+      // Filter products by price
+      if (maxPrice.value.isNotEmpty) {
+        double maxPriceValue = double.tryParse(maxPrice.value) ?? 0;
+        products = products.where((product) {
+          double productPrice = double.tryParse(product['price'] ?? '0') ?? 0;
+          return productPrice <= maxPriceValue;
+        }).toList();
+      }
       lowerFilteredProducts.assignAll(products);
     } catch (e) {
       print("Error fetching filtered lower products: $e");
+    } finally {
+      isFetchingLowerProducts.value = false;
     }
   }
 

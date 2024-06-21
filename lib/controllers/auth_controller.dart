@@ -36,8 +36,8 @@ class AuthController extends GetxController {
       VxToast.show(context, msg: "Login successful");
     } on FirebaseAuthException catch (e) {
       // VxToast.show(context, msg: "Login failed: $e");
-      VxToast.show(context, msg: "Invalid email or password. Please try again.");
-
+      VxToast.show(context,
+          msg: "Invalid email or password. Please try again.");
     }
 
     return userCredential;
@@ -124,52 +124,54 @@ class AuthController extends GetxController {
   }
 
   Future<void> saveUserDataGoogle({
-  required UserCredential currentUser,
-  required String name,
-  required DateTime birthday,
-  required String gender,
-  required String uHeight,
-  required String uWeight,
-  required Color skin,
-}) async {
-  try {
-    String formattedDateWithDay = DateFormat('EEEE, dd/MM/yyyy').format(birthday);
+    required UserCredential currentUser,
+    required String name,
+    required DateTime birthday,
+    required String gender,
+    required String uHeight,
+    required String uWeight,
+    required Color skin,
+  }) async {
+    try {
+      String formattedDateWithDay =
+          DateFormat('EEEE, dd/MM/yyyy').format(birthday);
 
-    // List of fallback image URLs
-    List<String> fallbackImageUrls = [
-      'https://firebasestorage.googleapis.com/v0/b/new-tung.appspot.com/o/images%2FCs77utvw41dPiruedA7worPnUUj1%2Fimage_picker_AEE5EBF6-DE8D-4A83-A4B7-BCE38061D537-25686-000002F9E488963F.jpg?alt=media&token=b9ba2506-d9d1-4f92-8bb6-249305bce4f8',
-      'https://firebasestorage.googleapis.com/v0/b/new-tung.appspot.com/o/images%2FCs77utvw41dPiruedA7worPnUUj1%2Fimage_picker_9344ACA8-4696-435C-96DF-7CA89F0823D4-25686-000002FACFB1CB69.jpg?alt=media&token=61521f49-c618-4336-8d3c-a1e43eddbb80'
-    ];
+      // List of fallback image URLs
+      List<String> fallbackImageUrls = [
+        'gs://new-tung.appspot.com/images/Cs77utvw41dPiruedA7worPnUUj1/image_picker_D0DB4636-C828-40E6-A766-8B649EE83E3E-97366-000004745F652AD3.jpg',
+        'https://firebasestorage.googleapis.com/v0/b/new-tung.appspot.com/o/images%2FCs77utvw41dPiruedA7worPnUUj1%2Fimage_picker_9344ACA8-4696-435C-96DF-7CA89F0823D4-25686-000002FACFB1CB69.jpg?alt=media&token=61521f49-c618-4336-8d3c-a1e43eddbb80'
+      ];
 
-    // Get a random fallback image URL if photoURL is null
-    String imageUrl = currentUser.user!.photoURL ?? 
-        (fallbackImageUrls..shuffle()).first;
+      // Get a random fallback image URL if photoURL is null
+      String imageUrl =
+          currentUser.user!.photoURL ?? (fallbackImageUrls..shuffle()).first;
 
-    await FirebaseFirestore.instance
-        .collection(usersCollection)
-        .doc(currentUser.user!.uid)
-        .set({
-      'email': currentUser.user!.email,
-      'name': name,
-      'imageUrl': imageUrl,
-      'id': currentUser.user!.uid,
-      'birthday': formattedDateWithDay,
-      'gender': gender,
-      'height': uHeight,
-      'weight': uWeight,
-      'skinTone': skin.value,
-      'cart_count': "0",
-      'wishlist_count': "0",
-      'order_count': "0"
-    });
+      await FirebaseFirestore.instance
+          .collection(usersCollection)
+          .doc(currentUser.user!.uid)
+          .set({
+        'email': currentUser.user!.email,
+        'name': name,
+        'imageUrl': imageUrl,
+        'id': currentUser.user!.uid,
+        'birthday': formattedDateWithDay,
+        'gender': gender,
+        'height': uHeight,
+        'weight': uWeight,
+        'skinTone': skin.value,
+        'cart_count': "0",
+        'wishlist_count': "0",
+        'order_count': "0"
+      });
 
-    VxToast.show(Get.context!, msg: 'User data saved successfully!');
-    Get.offAll(() => MainHome());
-  } catch (e) {
-    print("Failed to upload user data: $e");
-    VxToast.show(Get.context!, msg: 'Failed to upload user data: $e');
+      VxToast.show(Get.context!, msg: 'User data saved successfully!');
+      Get.offAll(() => MainHome());
+    } catch (e) {
+      print("Failed to upload user data: $e");
+      VxToast.show(Get.context!, msg: 'Failed to upload user data: $e');
+    }
   }
-}
+
   Future<void> sendPasswordResetEmail(
       String email, BuildContext context) async {
     try {
@@ -197,29 +199,45 @@ class AuthController extends GetxController {
     }
   }
 
-Future<void> signInWithGoogle(BuildContext context) async {
-  isLoading(true);
-  try {
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
-    final OAuthCredential credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
-    final UserCredential userCredential =
-        await FirebaseAuth.instance.signInWithCredential(credential);
+  Future<void> signInWithGoogle(BuildContext context) async {
+    isLoading(true);
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
+      final OAuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+      final UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
 
-    final String email = userCredential.user?.email ?? "No Email";
-    final String name = userCredential.user?.displayName ?? "No Name";
-    final String uid = userCredential.user?.uid ?? "";
+      final String email = userCredential.user?.email ?? "No Email";
+      final String name = userCredential.user?.displayName ?? "No Name";
+      final String uid = userCredential.user?.uid ?? "";
 
-    final DocumentSnapshot userDoc =
-        await FirebaseFirestore.instance.collection('users').doc(uid).get();
+      final DocumentSnapshot userDoc =
+          await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
-    if (userDoc.exists) {
-      final String gender = userDoc['gender'] ?? '';
-      if (gender.isEmpty) {
+      if (userDoc.exists) {
+        final String gender = userDoc['gender'] ?? '';
+        if (gender.isEmpty) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PersonalDetailsScreenGoogle(
+                email: email,
+                name: name,
+                password: "Not Available",
+                userCredential: userCredential,
+              ),
+            ),
+          );
+        } else {
+          Get.offAll(() => MainHome());
+          VxToast.show(context, msg: 'Login with Google successful');
+        }
+      } else {
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -231,32 +249,14 @@ Future<void> signInWithGoogle(BuildContext context) async {
             ),
           ),
         );
-      } else {
-        Get.offAll(() => MainHome());
-        VxToast.show(context, msg: 'Login with Google successful');
       }
-    } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => PersonalDetailsScreenGoogle(
-            email: email,
-            name: name,
-            password: "Not Available",
-            userCredential: userCredential,
-          ),
-        ),
-      );
+    } catch (e) {
+      print("Error signing in with Google: $e");
+      VxToast.show(context, msg: 'Error signing in with Google: $e');
+    } finally {
+      isLoading(false);
     }
-  } catch (e) {
-    print("Error signing in with Google: $e");
-    VxToast.show(context,
-        msg: 'Error signing in with Google: $e');
-  } finally {
-    isLoading(false);
   }
-}
-
 
   // Login with Facebook
   Future<void> signInWithFacebook() async {
@@ -272,13 +272,11 @@ Future<void> signInWithGoogle(BuildContext context) async {
         VxToast.show(Get.context!, msg: 'Login with Facebook successful');
       } else {
         print('Error: Access token is null');
-        VxToast.show(Get.context!,
-            msg: 'Error: Access token is null');
+        VxToast.show(Get.context!, msg: 'Error: Access token is null');
       }
     } catch (e) {
       print("Error signing in with Facebook: $e");
-      VxToast.show(Get.context!,
-          msg: 'Error signing in with Facebook: $e');
+      VxToast.show(Get.context!, msg: 'Error signing in with Facebook: $e');
     } finally {
       isLoading(false);
     }

@@ -91,7 +91,7 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
     isSelectedAll = controller.selectedGender.value == '';
     isSelectedMen = controller.selectedGender.value == 'male';
     isSelectedWomen = controller.selectedGender.value == 'woman';
-    _currentSliderValue = controller.maxPrice.value;
+    _currentSliderValue = double.tryParse(controller.maxPrice.value) ?? 0.0;
     controller.fetchVendors();
   }
 
@@ -219,6 +219,8 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
                     setState(() {
                       _currentSliderValue = value;
                     });
+                    print(
+                        "Selected price: ${NumberFormat('#,###').format(_currentSliderValue.round())} Bath");
                   },
                 ),
               ),
@@ -335,59 +337,57 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
               ),
             ).paddingOnly(left: 6),
             ElevatedButton(
-                onPressed: () {
-                  String selectedGender = '';
-                  if (isSelectedMen) {
-                    selectedGender = 'men';
-                  } else if (isSelectedWomen) {
-                    selectedGender = 'women';
-                  }
+              onPressed: () {
+                String selectedGender = '';
+                if (isSelectedMen) {
+                  selectedGender = 'men';
+                } else if (isSelectedWomen) {
+                  selectedGender = 'women';
+                }
 
-                  controller.updateFilters(
-                    gender: selectedGender,
-                    price: _currentSliderValue,
-                    colors: selectedColorIndexes,
-                    types: [
-                      if (isSelectedDress) 'dresses',
-                      if (isSelectedSkirts) 'skirts',
-                      if (isSelectedTShirts) 't-shirts',
-                      if (isSelectedPants) 'pants',
-                      if (isSelectedJackets) 'jackets',
-                      if (isSelectedSuits) 'suits',
-                    ],
-                    collections: [
-                      if (isSelectedSummer) 'summer',
-                      if (isSelectedWinter) 'winter',
-                      if (isSelectedAutumn) 'autumn',
-                      if (isSelectedDinner) 'dinner',
-                      if (isSelectedEveryday) 'everydaylook',
-                    ],
-                  );
+                controller.updateFilters(
+                  gender: selectedGender,
+                  price: _currentSliderValue,
+                  colors: selectedColorIndexes,
+                  types: [
+                    if (isSelectedDress) 'dresses',
+                    if (isSelectedSkirts) 'skirts',
+                    if (isSelectedTShirts) 't-shirts',
+                    if (isSelectedPants) 'pants',
+                    if (isSelectedJackets) 'jackets',
+                    if (isSelectedSuits) 'suits',
+                  ],
+                  collections: [
+                    if (isSelectedSummer) 'summer',
+                    if (isSelectedWinter) 'winter',
+                    if (isSelectedAutumn) 'autumn',
+                    if (isSelectedDinner) 'dinner',
+                    if (isSelectedEveryday) 'everydaylook',
+                  ],
+                );
 
-                  // Print the selected vendor name before fetching filtered products
-                  final selectedVendor = controller.vendors.firstWhere(
-                      (vendor) =>
-                          vendor['vendor_id'] ==
-                          controller.selectedVendorId.value,
-                      orElse: () => {'vendor_name': 'Unknown'});
-                  print(
-                      "Selected vendor name: ${selectedVendor['vendor_name']}");
-                  print(
-                      "Selected Vendor ID: ${controller.selectedVendorId.value}");
+                final selectedVendor = controller.vendors.firstWhere(
+                    (vendor) =>
+                        vendor['vendor_id'] ==
+                        controller.selectedVendorId.value,
+                    orElse: () => {'vendor_name': 'Unknown'});
+                print("Selected vendor name: ${selectedVendor['vendor_name']}");
+                print(
+                    "Selected Vendor ID: ${controller.selectedVendorId.value}");
 
-                  controller.fetchFilteredTopProducts();
-                  controller.fetchFilteredLowerProducts();
+                controller.fetchFilteredTopProducts();
+                controller.fetchFilteredLowerProducts();
 
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  'Save',
-                ).text.white.make(),
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: primaryApp,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ))).box.makeCentered()
+                Navigator.pop(context);
+              },
+              child: Text('Save').text.white.make(),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: primaryApp,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ).box.makeCentered()
           ],
         ).box.white.padding(EdgeInsets.symmetric(vertical: 12)).make(),
       ),
