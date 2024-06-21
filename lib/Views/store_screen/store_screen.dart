@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/match_screen/matchpost_details.dart';
@@ -16,7 +17,8 @@ class StoreScreen extends StatelessWidget {
   final String vendorId;
   final String title;
 
-  const StoreScreen({Key? key, required this.vendorId, required this.title}) : super(key: key);
+  const StoreScreen({Key? key, required this.vendorId, required this.title})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +67,8 @@ class StoreScreen extends StatelessWidget {
                 Center(
                   child: FutureBuilder<String>(
                     future: fetchSellerImgs(vendorId),
-                    builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                    builder:
+                        (BuildContext context, AsyncSnapshot<String> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return CircularProgressIndicator();
                       } else if (snapshot.hasError) {
@@ -217,211 +220,212 @@ class StoreScreen extends StatelessWidget {
     );
   }
 
-Widget buildMatchTab() {
-  return StreamBuilder<QuerySnapshot>(
-    stream: FirebaseFirestore.instance
-        .collection('storemixandmatchs')
+  Widget buildMatchTab() {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('storemixandmatchs')
           .where('vendor_id', isEqualTo: vendorId)
           .snapshots(),
-    builder: (context, snapshot) {
-      if (!snapshot.hasData) {
-        return Center(child: CircularProgressIndicator());
-      }
-      if (snapshot.hasError) {
-        print(snapshot.error);
-        return Center(
-          child: Text(
-            "An error occurred: ${snapshot.error}",
-            style: TextStyle(color: greyDark),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(child: CircularProgressIndicator());
+        }
+        if (snapshot.hasError) {
+          print(snapshot.error);
+          return Center(
+            child: Text(
+              "An error occurred: ${snapshot.error}",
+              style: TextStyle(color: greyDark),
+            ),
+          );
+        }
+
+        var data = snapshot.data!.docs;
+
+        if (data.isEmpty) {
+          return Center(
+            child:
+                Text("No posts available!", style: TextStyle(color: greyDark)),
+          );
+        }
+
+        // Shuffle data to randomize
+        data.shuffle(Random());
+
+        return GridView.builder(
+          padding: EdgeInsets.all(12),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 8,
+            mainAxisSpacing: 8,
+            childAspectRatio: 6.4 / 8,
           ),
-        );
-      }
+          itemCount: data.length,
+          itemBuilder: (context, index) {
+            var doc = data[index];
+            var docData = doc.data() as Map<String, dynamic>;
+            var productIdTop = docData['product_id_top'] ?? '';
+            var productIdLower = docData['product_id_lower'] ?? '';
 
-      var data = snapshot.data!.docs;
+            return FutureBuilder<List<DocumentSnapshot>>(
+              future: Future.wait([
+                FirebaseFirestore.instance
+                    .collection('products')
+                    .doc(productIdTop)
+                    .get(),
+                FirebaseFirestore.instance
+                    .collection('products')
+                    .doc(productIdLower)
+                    .get()
+              ]),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                if (snapshot.hasError) {
+                  print(snapshot.error);
+                  return Center(
+                    child: Text(
+                      "An error occurred: ${snapshot.error}",
+                      style: TextStyle(color: greyDark),
+                    ),
+                  );
+                }
 
-      if (data.isEmpty) {
-        return Center(
-          child: Text("No posts available!", style: TextStyle(color: greyDark)),
-        );
-      }
+                if (!snapshot.hasData) {
+                  return Center(child: CircularProgressIndicator());
+                }
 
-      // Shuffle data to randomize
-      data.shuffle(Random());
+                var snapshotTop = snapshot.data![0];
+                var snapshotLower = snapshot.data![1];
 
-      return GridView.builder(
-        padding: EdgeInsets.all(12),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 8,
-          childAspectRatio: 9 / 11,
-        ),
-        itemCount: data.length,
-        itemBuilder: (context, index) {
-          var doc = data[index];
-          var docData = doc.data() as Map<String, dynamic>;
-          var productIdTop = docData['product_id_top'] ?? '';
-          var productIdLower = docData['product_id_lower'] ?? '';
+                if (!snapshotTop.exists || !snapshotLower.exists) {
+                  return Center(child: Text("One or more products not found"));
+                }
 
-          return FutureBuilder<List<DocumentSnapshot>>(
-            future: Future.wait([
-              FirebaseFirestore.instance
-                  .collection('products')
-                  .doc(productIdTop)
-                  .get(),
-              FirebaseFirestore.instance
-                  .collection('products')
-                  .doc(productIdLower)
-                  .get()
-            ]),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              }
-              if (snapshot.hasError) {
-                print(snapshot.error);
-                return Center(
-                  child: Text(
-                    "An error occurred: ${snapshot.error}",
-                    style: TextStyle(color: greyDark),
+                var productDataTop = snapshotTop.data() as Map<String, dynamic>;
+                var productDataLower =
+                    snapshotLower.data() as Map<String, dynamic>;
+
+                var topImage =
+                    (productDataTop['imgs'] as List<dynamic>?)?.first ?? '';
+                var lowerImage =
+                    (productDataLower['imgs'] as List<dynamic>?)?.first ?? '';
+                var productNameTop = productDataTop['name'] ?? '';
+                var productNameLower = productDataLower['name'] ?? '';
+                var priceTop = productDataTop['price']?.toString() ?? '0';
+                var priceLower = productDataLower['price']?.toString() ?? '0';
+
+                return GestureDetector(
+                  onTap: () {
+                    Get.to(() => MatchStoreDetailScreen(
+                          documentId: doc.id,
+                        ));
+                  },
+                  child: Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 75,
+                              height: 80,
+                              child: Image.network(
+                                topImage,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            SizedBox(width: 5),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    productNameTop,
+                                    style: const TextStyle(
+                                      fontFamily: medium,
+                                      fontSize: 14,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
+                                  Text(
+                                    "${NumberFormat('#,##0').format(double.parse(priceTop).toInt())} Bath",
+                                    style: const TextStyle(color: greyColor),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 75,
+                              height: 80,
+                              child: Image.network(
+                                lowerImage,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            SizedBox(width: 5),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    productNameLower,
+                                    style: const TextStyle(
+                                      fontFamily: medium,
+                                      fontSize: 14,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
+                                  Text(
+                                    "${NumberFormat('#,##0').format(double.parse(priceLower).toInt())} Bath",
+                                    style: const TextStyle(color: greyColor),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Total ${NumberFormat('#,##0').format(int.parse(priceTop) + int.parse(priceLower))} Bath",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: medium,
+                                color: blackColor,
+                              ),
+                            ),
+                          ],
+                        ).paddingSymmetric(horizontal: 8),
+                      ],
+                    )
+                        .box
+                        .border(color: greyLine)
+                        .rounded
+                        .padding(EdgeInsets.all(8))
+                        .make(),
                   ),
                 );
-              }
-
-              if (!snapshot.hasData) {
-                return Center(child: CircularProgressIndicator());
-              }
-
-              var snapshotTop = snapshot.data![0];
-              var snapshotLower = snapshot.data![1];
-
-              if (!snapshotTop.exists || !snapshotLower.exists) {
-                return Center(child: Text("One or more products not found"));
-              }
-
-              var productDataTop = snapshotTop.data() as Map<String, dynamic>;
-              var productDataLower =
-                  snapshotLower.data() as Map<String, dynamic>;
-
-              var topImage =
-                  (productDataTop['imgs'] as List<dynamic>?)?.first ?? '';
-              var lowerImage =
-                  (productDataLower['imgs'] as List<dynamic>?)?.first ?? '';
-              var productNameTop = productDataTop['name'] ?? '';
-              var productNameLower = productDataLower['name'] ?? '';
-              var priceTop = productDataTop['price']?.toString() ?? '0';
-              var priceLower = productDataLower['price']?.toString() ?? '0';
-
-              return GestureDetector(
-                onTap: () {
-                  Get.to(() => MatchStoreDetailScreen(
-                        documentId: doc.id,
-                      ));
-                },
-                child: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 75,
-                            height: 80,
-                            child: Image.network(
-                              topImage,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          SizedBox(width: 5),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  productNameTop,
-                                  style: const TextStyle(
-                                    fontFamily: medium,
-                                    fontSize: 14,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                ),
-                                Text(
-                                  "${NumberFormat('#,##0').format(double.parse(priceTop).toInt())} Bath",
-                                  style: const TextStyle(color: greyColor),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(width: 8),
-                        ],
-                      ),
-                      SizedBox(height: 10),
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 75,
-                            height: 80,
-                            child: Image.network(
-                              lowerImage,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          SizedBox(width: 5),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  productNameLower,
-                                  style: const TextStyle(
-                                    fontFamily: medium,
-                                    fontSize: 14,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                ),
-                                Text(
-                                  "${NumberFormat('#,##0').format(double.parse(priceLower).toInt())} Bath",
-                                  style: const TextStyle(color: greyColor),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Total ${NumberFormat('#,##0').format(int.parse(priceTop) + int.parse(priceLower))} Bath",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontFamily: medium,
-                              color: blackColor,
-                            ),
-                          ),
-                        ],
-                      ).paddingSymmetric(horizontal: 8),
-                    ],
-                  )
-                      .box
-                      .border(color: greyLine)
-                      .rounded
-                      .padding(EdgeInsets.all(8))
-                      .make(),
-                ),
-              );
-            },
-          );
-        },
-      );
-    },
-  );
-}
+              },
+            );
+          },
+        );
+      },
+    );
+  }
 
   Widget buildProductGridAll() {
     CollectionReference productsCollection =
@@ -447,7 +451,11 @@ Widget buildMatchTab() {
         return GridView.builder(
           padding: const EdgeInsets.all(8),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, childAspectRatio: 1 / 1.35),
+              crossAxisCount: 2,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
+            childAspectRatio: 5.8 / 8,
+            ),
           itemCount: products.length,
           itemBuilder: (BuildContext context, int index) {
             var product = products[index].data() as Map<String, dynamic>;
@@ -468,15 +476,21 @@ Widget buildMatchTab() {
                 );
               },
               child: Container(
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                ),
+                // clipBehavior: Clip.antiAlias,
+                // decoration: BoxDecoration(
+                //   borderRadius: BorderRadius.circular(4),
+                // ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Image.network(productImage,
-                        fit: BoxFit.cover, width: double.infinity, height: 190),
+                    ClipRRect(
+                       borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(14),
+                                  topLeft: Radius.circular(14),
+                                ),
+                      child: Image.network(productImage,
+                          fit: BoxFit.cover, width: double.infinity, height: 180),
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(8),
                       child: Column(
@@ -500,7 +514,6 @@ Widget buildMatchTab() {
                   .box
                   .color(whiteColor)
                   .border(color: greyLine)
-                  .margin(EdgeInsets.all(6))
                   .rounded
                   .make(),
             );
@@ -537,7 +550,11 @@ Widget buildMatchTab() {
         return GridView.builder(
           padding: const EdgeInsets.all(8),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, childAspectRatio: 1 / 1.35),
+            crossAxisCount: 2,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
+            childAspectRatio: 5.8 / 8,
+          ),
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (BuildContext context, int index) {
             var product = snapshot.data!.docs[index];
@@ -557,16 +574,22 @@ Widget buildMatchTab() {
                   ),
                 );
               },
-              child: Card(
-                clipBehavior: Clip.antiAlias,
-                child: Column(
+              child: Column(
+                children: [
+                   Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Image.network(
-                      productImage,
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: 190,
+                    ClipRRect(
+                      borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(14),
+                                  topLeft: Radius.circular(14),
+                                ),
+                      child: Image.network(
+                        productImage,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: 180,
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8),
@@ -594,7 +617,9 @@ Widget buildMatchTab() {
                       ),
                     ),
                   ],
-                ).box.color(whiteColor).make(),
+                ).box.border(color: greyLine).rounded.color(whiteColor).make(),
+              
+                ],
               ),
             );
           },
@@ -621,6 +646,4 @@ Widget buildMatchTab() {
       return 'Error product image';
     }
   }
-
-
 }
