@@ -251,9 +251,6 @@ class _MatchScreenState extends State<MatchScreen> {
     }
 
     final itemCount = topProducts.length;
-    if (itemCount == 0) {
-      return const Center(child: Text('No Top available'));
-    }
 
     double containerHeight = MediaQuery.of(context).size.height < 855
         ? MediaQuery.of(context).size.height * 0.23
@@ -271,6 +268,9 @@ class _MatchScreenState extends State<MatchScreen> {
         },
         itemCount: itemCount + 2,
         itemBuilder: (context, index) {
+          if (itemCount == 0) {
+            return const Center(child: Text('No Top available'));
+          }
           final actualIndex = getActualIndex(index, itemCount);
           return buildCardItem(topProducts[actualIndex]);
         },
@@ -284,9 +284,6 @@ class _MatchScreenState extends State<MatchScreen> {
     }
 
     final itemCount = lowerProducts.length;
-    if (itemCount == 0) {
-      return const Center(child: Text('No Lower available'));
-    }
 
     double containerHeight = MediaQuery.of(context).size.height < 855
         ? MediaQuery.of(context).size.height * 0.23
@@ -304,6 +301,9 @@ class _MatchScreenState extends State<MatchScreen> {
         },
         itemCount: itemCount + 2,
         itemBuilder: (context, index) {
+          if (itemCount == 0) {
+            return const Center(child: Text('No Lower available'));
+          }
           final actualIndex = getActualIndex(index, itemCount);
           return buildCardItem(lowerProducts[actualIndex]);
         },
@@ -373,10 +373,23 @@ class _MatchScreenState extends State<MatchScreen> {
   }
 
   Widget matchWithYouContainer() {
+    if (controller.topFilteredProducts.isEmpty ||
+        controller.lowerFilteredProducts.isEmpty) {
+      return const Center(child: Text('No matching products available'));
+    }
+
     final topProductIndex = getActualIndex(
         _currentPageIndexTop, controller.topFilteredProducts.length);
     final lowerProductIndex = getActualIndex(
         _currentPageIndexLower, controller.lowerFilteredProducts.length);
+
+    if (topProductIndex < 0 ||
+        lowerProductIndex < 0 ||
+        topProductIndex >= controller.topFilteredProducts.length ||
+        lowerProductIndex >= controller.lowerFilteredProducts.length) {
+      return const Center(child: Text('No matching products available'));
+    }
+
     final topProduct = controller.topFilteredProducts[topProductIndex];
     final lowerProduct = controller.lowerFilteredProducts[lowerProductIndex];
     bool isGreatMatch =
