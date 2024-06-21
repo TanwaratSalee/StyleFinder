@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/match_screen/matchpost_details.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
@@ -52,12 +53,7 @@ class UserProfileScreen extends StatelessWidget {
                                 height: 110,
                                 fit: BoxFit.cover,
                               )
-                            : Image.asset(
-                                imgProfile,
-                                height: 110,
-                                width: 110,
-                                fit: BoxFit.cover,
-                              ),
+                            : loadingIndicator()
                       ),
                       const SizedBox(height: 10),
                       Column(
@@ -120,7 +116,7 @@ class UserProfileScreen extends StatelessWidget {
           crossAxisCount: 2,
           crossAxisSpacing: 8,
           mainAxisSpacing: 8,
-          childAspectRatio: 9 / 10.8,
+          childAspectRatio: 8 / 10,
         ),
         itemCount: limitedData.length,
         itemBuilder: (context, index) {

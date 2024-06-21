@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/match_screen/edit_matchpost.dart';
 import 'package:flutter_finalproject/Views/profile_screen/userprofile_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
@@ -411,14 +412,25 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                                   Container(
                                     width: 50,
                                     height: 50,
-                                    child: ClipOval(
-                                      child: Image.network(
-                                        postedUserImageUrl!,
-                                        width: 50,
-                                        height: 50,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
+                                    child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                        child: postedUserImageUrl!.isNotEmpty
+                                            ? Image.network(
+                                                postedUserImageUrl!,
+                                                width: 110,
+                                                height: 110,
+                                                fit: BoxFit.cover,
+                                              )
+                                            : loadingIndicator()),
+                                    // ClipOval(
+                                    //   child: Image.network(
+                                    //     postedUserImageUrl!,
+                                    //     width: 50,
+                                    //     height: 50,
+                                    //     fit: BoxFit.cover,
+                                    //   ),
+                                    // ),
                                   )
                                       .box
                                       .border(color: greyLine, width: 1.5)
