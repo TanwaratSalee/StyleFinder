@@ -261,7 +261,7 @@ class _ProfileScreenState extends State<ProfileScreen>
             crossAxisCount: 2,
             crossAxisSpacing: 7,
             mainAxisSpacing: 8,
-            childAspectRatio: 8 / 9.3,
+            childAspectRatio: 8.8 / 11,
           ),
           itemCount: filteredData.length,
           itemBuilder: (context, index) {
@@ -601,9 +601,12 @@ class _ProfileScreenState extends State<ProfileScreen>
                 var productTopSnapshot = futureSnapshot.data![0];
                 var productLowerSnapshot = futureSnapshot.data![1];
 
-                if (!productTopSnapshot.exists ||
-                    !productLowerSnapshot.exists) {
-                  return Center(child: Text("Product not found"));
+                if (!productTopSnapshot.exists && !productLowerSnapshot.exists) {
+                  return Center(child: Text("Both products not found"));
+                } else if (!productTopSnapshot.exists) {
+                  return Center(child: Text("Top product not found"));
+                } else if (!productLowerSnapshot.exists) {
+                  return Center(child: Text("Lower product not found"));
                 }
 
                 var productTopData =
@@ -621,119 +624,110 @@ class _ProfileScreenState extends State<ProfileScreen>
                 var priceLower = productLowerData?['price']?.toString() ?? '0';
 
                 return Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                      ),
                       Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                          child: Row(
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => ItemDetails(
-                                            title: data[index]['name'],
-                                            data: data[index].data()
-                                                as Map<String, dynamic>,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    child: Row(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(10.0),
-                                          child: Image.network(
-                                            topImage,
-                                            height: 70,
-                                            width: 65,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                        Column(
-                                          children: [
-                                            Text(
-                                              nameTop,
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                                fontFamily: medium,
-                                              ),
-                                              softWrap: false,
-                                              overflow: TextOverflow.ellipsis,
-                                            ).box.width(180).make(),
-                                            Text(
-                                              "${NumberFormat('#,##0').format(double.parse(priceTop).toInt())} Bath",
-                                              style: const TextStyle(
-                                                  fontSize: 14,
-                                                  fontFamily: regular,
-                                                  color: greyDark),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ItemDetails(
+                                      title: nameTop,
+                                      data: productTopData!,
                                     ),
                                   ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => ItemDetails(
-                                            title: data[index]['name'],
-                                            data: data[index].data()
-                                                as Map<String, dynamic>,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    child: Row(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(10.0),
-                                          child: Image.network(
-                                            lowerImage,
-                                            height: 70,
-                                            width: 65,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                        Column(
-                                          children: [
-                                            Text(
-                                              nameLower,
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                                fontFamily: medium,
-                                              ),
-                                              softWrap: false,
-                                              overflow: TextOverflow.ellipsis,
-                                            ).box.width(180).make(),
-                                            Text(
-                                              "${NumberFormat('#,##0').format(double.parse(priceLower).toInt())} Bath",
-                                              style: const TextStyle(
-                                                  fontSize: 14,
-                                                  fontFamily: regular,
-                                                  color: greyDark),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                                );
+                              },
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Image.network(
+                                      topImage,
+                                      height: 60,
+                                      width: 55,
+                                      fit: BoxFit.cover,
                                     ),
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        nameTop,
+                                        style: const TextStyle(
+                                          fontFamily: medium,
+                                          fontSize: 16,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                      ).box.width(180).make(),
+                                      Text(
+                                        "${NumberFormat('#,##0').format(double.parse(priceTop).toInt())} Bath",
+                                        style: const TextStyle(
+                                            fontSize: 14,
+                                            fontFamily: regular,
+                                            color: greyDark),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                            ],
-                          ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ItemDetails(
+                                      title: nameLower,
+                                      data: productLowerData!,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Image.network(
+                                      lowerImage,
+                                      height: 60,
+                                      width: 55,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        nameLower,
+                                        style: const TextStyle(
+                                          fontFamily: medium,
+                                          fontSize: 16,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                      ).box.width(180).make(),
+                                      Text(
+                                        "${NumberFormat('#,##0').format(double.parse(priceLower).toInt())} Bath",
+                                        style: const TextStyle(
+                                            fontSize: 14,
+                                            fontFamily: regular,
+                                            color: greyDark),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       IconButton(
@@ -877,7 +871,6 @@ class _ProfileScreenState extends State<ProfileScreen>
                     }
                   },
                   child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 4),
                     child: Stack(
                       children: <Widget>[
                         Padding(
@@ -885,17 +878,19 @@ class _ProfileScreenState extends State<ProfileScreen>
                           child: Column(
                             children: [
                               Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Image.network(
                                     topImage,
-                                    height: 70,
-                                    width: 65,
+                                    height: 60,
+                                    width: 55,
                                     fit: BoxFit.cover,
                                   ),
                                   10.widthBox,
                                   Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Text(
                                         productNameTop,
@@ -915,13 +910,13 @@ class _ProfileScreenState extends State<ProfileScreen>
                                   )
                                 ],
                               ),
-                              SizedBox(height: 10),
+                              5.heightBox,
                               Row(
                                 children: [
                                   Image.network(
                                     lowerImage,
-                                    height: 70,
-                                    width: 65,
+                                    height: 60,
+                                    width: 55,
                                     fit: BoxFit.cover,
                                   ),
                                   10.widthBox,
@@ -949,7 +944,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                               ),
                               15.heightBox,
                               Padding(
-                                padding: const EdgeInsets.only(right: 220),
+                                padding: const EdgeInsets.only(right: 200),
                                 child: Text(
                                   "Total ${NumberFormat('#,##0').format(int.parse(priceTop) + int.parse(priceLower))} Bath",
                                   style: TextStyle(
