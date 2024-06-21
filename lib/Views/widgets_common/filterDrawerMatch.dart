@@ -1,6 +1,7 @@
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class FilterDrawerMatch extends StatefulWidget {
   @override
@@ -14,16 +15,14 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
   bool isSelectedAll = false;
   bool isSelectedMen = false;
   bool isSelectedWomen = false;
+
   bool isSelectedDress = false;
-  bool isSelectedOuterwear = false;
   bool isSelectedTShirts = false;
-  bool isSelectedSuits = false;
-  bool isSelectedKnitwear = false;
-  bool isSelectedActivewear = false;
-  bool isSelectedBlazers = false;
   bool isSelectedPants = false;
-  bool isSelectedDenim = false;
+  bool isSelectedSuits = false;
+  bool isSelectedJackets = false;
   bool isSelectedSkirts = false;
+  
   bool isSelectedSummer = false;
   bool isSelectedWinter = false;
   bool isSelectedAutumn = false;
@@ -126,7 +125,7 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
                   spacing: 10,
                   children: controller.vendors.map((vendor) {
                     final isSelected = controller.selectedVendorId.value == vendor['vendor_id'];
-                    return buildFilterChip(vendor['vendor_name'] ?? 'Unknown', isSelected, (isSelected) {
+                    return buildFilterChip(vendor['name'] ?? 'Unknown', isSelected, (isSelected) {
                       setState(() {
                         if (isSelected) {
                           controller.updateFilters(vendorId: vendor['vendor_id']);
@@ -141,8 +140,20 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
             ),
             5.heightBox,
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
-              child: Text("Price").text.fontFamily(regular).size(14).make(),
+              padding: const EdgeInsets.symmetric(horizontal: 16, ),
+              child: Row(
+                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Price").text.fontFamily(regular).size(14).make(),
+                   Text(
+                    "${NumberFormat('#,###').format(_currentSliderValue.round())} Bath",
+                    style: TextStyle(
+                      fontFamily: regular,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -159,7 +170,7 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
                   min: 0,
                   max: 999999,
                   divisions: 100,
-                  label: "${_currentSliderValue.round()} Bath",
+                  label: "${NumberFormat('#,###').format(_currentSliderValue.round())} Bath",
                   onChanged: (value) {
                     setState(() {
                       _currentSliderValue = value;
@@ -177,7 +188,7 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Wrap(
-                spacing: 14,
+                spacing: 16,
                 runSpacing: 5,
                 children: List.generate(
                   allColors.length,
@@ -222,47 +233,35 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
                   .size(14)
                   .make(),
             ),
-            Center(
-              child: Wrap(
-                spacing: 5,
-                children: [
-                  buildFilterChip("Dress", isSelectedDress, (isSelected) {
-                    setState(() => isSelectedDress = isSelected);
-                  }),
-                  buildFilterChip("Outerwear & Coats", isSelectedOuterwear,
-                      (isSelected) {
-                    setState(() => isSelectedOuterwear = isSelected);
-                  }),
-                  buildFilterChip("T-Shirts", isSelectedTShirts,
-                      (isSelected) {
-                    setState(() => isSelectedTShirts = isSelected);
-                  }),
-                  buildFilterChip("Suits", isSelectedSuits, (isSelected) {
-                    setState(() => isSelectedSuits = isSelected);
-                  }),
-                  buildFilterChip("Knitwear", isSelectedKnitwear,
-                      (isSelected) {
-                    setState(() => isSelectedKnitwear = isSelected);
-                  }),
-                  buildFilterChip("Activewear", isSelectedActivewear,
-                      (isSelected) {
-                    setState(() => isSelectedActivewear = isSelected);
-                  }),
-                  buildFilterChip("Blazers", isSelectedBlazers, (isSelected) {
-                    setState(() => isSelectedBlazers = isSelected);
-                  }),
-                  buildFilterChip("Pants", isSelectedPants, (isSelected) {
-                    setState(() => isSelectedPants = isSelected);
-                  }),
-                  buildFilterChip("Denim", isSelectedDenim, (isSelected) {
-                    setState(() => isSelectedDenim = isSelected);
-                  }),
-                  buildFilterChip("Skirts", isSelectedSkirts, (isSelected) {
-                    setState(() => isSelectedSkirts = isSelected);
-                  }),
-                ],
-              ),
-            ).paddingOnly(left: 13),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 3),
+              child: Center(
+                child: Wrap(
+                  spacing: 8,
+                  children: [
+                    buildFilterChip("Dress", isSelectedDress, (isSelected) {
+                      setState(() => isSelectedDress = isSelected);
+                    }),
+                    buildFilterChip("T-Shirts", isSelectedTShirts,
+                        (isSelected) {
+                      setState(() => isSelectedTShirts = isSelected);
+                    }),
+                    buildFilterChip("Suits", isSelectedSuits, (isSelected) {
+                      setState(() => isSelectedSuits = isSelected);
+                    }),
+                     buildFilterChip("Skirts", isSelectedSkirts, (isSelected) {
+                      setState(() => isSelectedSkirts = isSelected);
+                    }),
+                    buildFilterChip("Pants", isSelectedPants, (isSelected) {
+                      setState(() => isSelectedPants = isSelected);
+                    }),
+                    buildFilterChip("Jackets", isSelectedJackets, (isSelected) {
+                      setState(() => isSelectedJackets = isSelected);
+                    }),
+                  ],
+                ),
+              ).paddingOnly(left: 13),
+            ),
             
             Padding(
               padding:
@@ -310,14 +309,11 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
                   colors: selectedColorIndexes,
                   types: [
                     if (isSelectedDress) 'dresses',
-                    if (isSelectedOuterwear) 'outerwear & Costs',
                     if (isSelectedSkirts) 'skirts',
                     if (isSelectedTShirts) 't-shirts',
+                    if (isSelectedPants) 'pants',
+                    if (isSelectedJackets) 'jackets',
                     if (isSelectedSuits) 'suits',
-                    if (isSelectedKnitwear) 'knitwear',
-                    if (isSelectedActivewear) 'activewear',
-                    if (isSelectedBlazers) 'blazers',
-                    if (isSelectedDenim) 'denim',
                   ],
                   collections: [
                     if (isSelectedSummer) 'summer',
