@@ -107,7 +107,7 @@ class NewsScreen extends StatelessWidget {
                                 allproductsdata.shuffle(math.Random());
 
                                 int itemCount =
-                                    math.min(allproductsdata.length, 4);
+                                    math.min(allproductsdata.length, 10);
 
                                 return SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
@@ -115,15 +115,17 @@ class NewsScreen extends StatelessWidget {
                                     children: List.generate(itemCount, (index) {
                                       return GestureDetector(
                                         onTap: () {
-                                          var vendorId = allproductsdata[index]['vendor_id'];
-                                          var vendorName = allproductsdata[index]['name']; 
-                                          var vendorImg = allproductsdata[index]['imageUrl']; 
+                                          var vendorId = allproductsdata[index]
+                                              ['vendor_id'];
+                                          var vendorName =
+                                              allproductsdata[index]['name'];
+                                          var vendorImg = allproductsdata[index]
+                                              ['imageUrl'];
                                           print(
                                               "Navigating to StoreScreen with vendor_id: $vendorId");
                                           Get.to(() => StoreScreen(
                                                 vendorId: vendorId,
-                                                title:
-                                                    vendorName, 
+                                                title: vendorName,
                                               ));
                                         },
                                         child: Container(
@@ -133,6 +135,23 @@ class NewsScreen extends StatelessWidget {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
+                                              ClipRRect(
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(24),
+                                                ),
+                                                child: Image.network(
+                                                  allproductsdata[index]
+                                                      ['imageUrl'],
+                                                  width: 120,
+                                                  height: 90,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              )
+                                                  .box
+                                                  .roundedSM
+                                                  .border(color: greyLine)
+                                                  .make(),
+                                              SizedBox(height: 10),
                                               Text(
                                                 "${allproductsdata[index]['name']}",
                                                 style: const TextStyle(
@@ -148,12 +167,8 @@ class NewsScreen extends StatelessWidget {
                                         )
                                             .box
                                             .white
-                                            .roundedSM
-                                            .border(color: greyLine)
-                                            .margin(const EdgeInsets.symmetric(
-                                                horizontal: 5))
                                             .padding(const EdgeInsets.symmetric(
-                                                horizontal: 22, vertical: 8))
+                                                horizontal: 12, vertical: 8))
                                             .make(),
                                       );
                                     }),
@@ -165,7 +180,6 @@ class NewsScreen extends StatelessWidget {
                         ],
                       ),
                       30.heightBox,
-                      
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -194,7 +208,6 @@ class NewsScreen extends StatelessWidget {
                                         var allProductsData =
                                             snapshot.data!.docs;
 
-                                        
                                         allProductsData.sort((a, b) {
                                           int aWishlistCount =
                                               a['favorite_uid'] != null
@@ -208,7 +221,6 @@ class NewsScreen extends StatelessWidget {
                                               .compareTo(aWishlistCount);
                                         });
 
-                                        
                                         var topProductsData =
                                             allProductsData.take(10).toList();
 
@@ -248,7 +260,8 @@ class NewsScreen extends StatelessWidget {
                                                     wishlist: product[
                                                                 'favorite_uid'] !=
                                                             null
-                                                        ? product['favorite_uid']
+                                                        ? product[
+                                                                'favorite_uid']
                                                             .length
                                                             .toString()
                                                         : '0',
@@ -267,8 +280,6 @@ class NewsScreen extends StatelessWidget {
                           )
                         ],
                       ),
-
-                      
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -467,9 +478,8 @@ class NewsScreen extends StatelessWidget {
                                         width: 3.0,
                                         color: primaryApp,
                                       ),
-                                      insets: EdgeInsets.symmetric(
-                                          horizontal:
-                                              0), 
+                                      insets:
+                                          EdgeInsets.symmetric(horizontal: 0),
                                     ),
                                     tabs: [
                                       Tab(text: 'STORE'),
@@ -504,7 +514,7 @@ class NewsScreen extends StatelessWidget {
                                           backgroundColor:
                                               tabController.index == 0
                                                   ? primaryApp
-                                                  : Colors.grey,
+                                                  : greyColor,
                                         ),
                                         SizedBox(width: 10),
                                         CircleAvatar(
@@ -512,7 +522,7 @@ class NewsScreen extends StatelessWidget {
                                           backgroundColor:
                                               tabController.index == 1
                                                   ? primaryApp
-                                                  : Colors.grey,
+                                                  : greyColor,
                                         ),
                                       ],
                                     );
@@ -553,14 +563,11 @@ class NewsScreen extends StatelessWidget {
           );
         }
 
-        
         data.shuffle(Random());
 
-        
         var limitedData = data.take(4).toList();
 
         return GridView.builder(
-          
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             crossAxisSpacing: 8,
@@ -568,7 +575,7 @@ class NewsScreen extends StatelessWidget {
             childAspectRatio: 8.8 / 11,
           ),
           itemCount: limitedData.length,
-          physics: const NeverScrollableScrollPhysics(), 
+          physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
             var doc = limitedData[index];
             var docData = doc.data() as Map<String, dynamic>;
@@ -647,7 +654,7 @@ class NewsScreen extends StatelessWidget {
                                     maxLines: 1,
                                   ),
                                   Text(
-                                    "${NumberFormat('#,##0').format(double.parse(priceTop).toInt())} Bath",
+                                    "${NumberFormat('#,##0').format(double.tryParse(priceTop)?.toInt() ?? 0)} Bath",
                                     style: const TextStyle(color: greyColor),
                                   ),
                                 ],
@@ -683,7 +690,7 @@ class NewsScreen extends StatelessWidget {
                                     maxLines: 1,
                                   ),
                                   Text(
-                                    "${NumberFormat('#,##0').format(double.parse(priceLower).toInt())} Bath",
+                                    "${NumberFormat('#,##0').format(double.tryParse(priceLower)?.toInt() ?? 0)} Bath",
                                     style: const TextStyle(color: greyColor),
                                   ),
                                 ],
@@ -696,7 +703,7 @@ class NewsScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
-                              "Total ${NumberFormat('#,##0').format(int.parse(priceTop) + int.parse(priceLower))} Bath",
+                              "Total ${NumberFormat('#,##0').format((double.tryParse(priceTop) ?? 0) + (double.tryParse(priceLower) ?? 0))} Bath",
                               style: TextStyle(
                                 fontSize: 16,
                                 fontFamily: medium,
@@ -741,14 +748,11 @@ class NewsScreen extends StatelessWidget {
           );
         }
 
-        
         data.shuffle(Random());
 
-        
         var limitedData = data.take(4).toList();
 
         return GridView.builder(
-          
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             crossAxisSpacing: 8,
@@ -756,7 +760,7 @@ class NewsScreen extends StatelessWidget {
             childAspectRatio: 8.8 / 11,
           ),
           itemCount: limitedData.length,
-          physics: const NeverScrollableScrollPhysics(), 
+          physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
             var doc = limitedData[index];
             var docData = doc.data() as Map<String, dynamic>;
@@ -858,7 +862,7 @@ class NewsScreen extends StatelessWidget {
                                     maxLines: 1,
                                   ),
                                   Text(
-                                    "${NumberFormat('#,##0').format(double.parse(priceTop).toInt())} Bath",
+                                    "${NumberFormat('#,##0').format(double.tryParse(priceTop)?.toInt() ?? 0)} Bath",
                                     style: const TextStyle(color: greyColor),
                                   ),
                                 ],
@@ -894,7 +898,7 @@ class NewsScreen extends StatelessWidget {
                                     maxLines: 1,
                                   ),
                                   Text(
-                                    "${NumberFormat('#,##0').format(double.parse(priceLower).toInt())} Bath",
+                                    "${NumberFormat('#,##0').format(double.tryParse(priceLower)?.toInt() ?? 0)} Bath",
                                     style: const TextStyle(color: greyColor),
                                   ),
                                 ],
@@ -907,7 +911,7 @@ class NewsScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
-                              "Total ${NumberFormat('#,##0').format(int.parse(priceTop) + int.parse(priceLower))} Bath",
+                              "Total ${NumberFormat('#,##0').format((double.tryParse(priceTop) ?? 0) + (double.tryParse(priceLower) ?? 0))} Bath",
                               style: TextStyle(
                                 fontSize: 16,
                                 fontFamily: medium,
