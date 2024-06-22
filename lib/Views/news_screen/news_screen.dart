@@ -115,17 +115,15 @@ class NewsScreen extends StatelessWidget {
                                     children: List.generate(itemCount, (index) {
                                       return GestureDetector(
                                         onTap: () {
-                                          var vendorId = allproductsdata[index]
-                                              ['vendor_id'];
-                                          var vendorName = allproductsdata[
-                                                  index][
-                                              'name']; // vendorName is a string
+                                          var vendorId = allproductsdata[index]['vendor_id'];
+                                          var vendorName = allproductsdata[index]['name']; 
+                                          var vendorImg = allproductsdata[index]['imageUrl']; 
                                           print(
                                               "Navigating to StoreScreen with vendor_id: $vendorId");
                                           Get.to(() => StoreScreen(
                                                 vendorId: vendorId,
                                                 title:
-                                                    vendorName, // Pass vendorName directly
+                                                    vendorName, 
                                               ));
                                         },
                                         child: Container(
@@ -167,7 +165,7 @@ class NewsScreen extends StatelessWidget {
                         ],
                       ),
                       30.heightBox,
-                      //popular product
+                      
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -196,7 +194,7 @@ class NewsScreen extends StatelessWidget {
                                         var allProductsData =
                                             snapshot.data!.docs;
 
-                                        // Sort the products by the length of wishlist in descending order
+                                        
                                         allProductsData.sort((a, b) {
                                           int aWishlistCount =
                                               a['favorite_uid'] != null
@@ -210,7 +208,7 @@ class NewsScreen extends StatelessWidget {
                                               .compareTo(aWishlistCount);
                                         });
 
-                                        // Limit to top 10 products
+                                        
                                         var topProductsData =
                                             allProductsData.take(10).toList();
 
@@ -270,7 +268,7 @@ class NewsScreen extends StatelessWidget {
                         ],
                       ),
 
-                      //Product
+                      
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -471,7 +469,7 @@ class NewsScreen extends StatelessWidget {
                                       ),
                                       insets: EdgeInsets.symmetric(
                                           horizontal:
-                                              0), // ทำให้ indicator ชิดขอบ
+                                              0), 
                                     ),
                                     tabs: [
                                       Tab(text: 'STORE'),
@@ -555,10 +553,10 @@ class NewsScreen extends StatelessWidget {
           );
         }
 
-        // Shuffle data to randomize
+        
         data.shuffle(Random());
 
-        // Limit to 4 items
+        
         var limitedData = data.take(4).toList();
 
         return GridView.builder(
@@ -570,7 +568,7 @@ class NewsScreen extends StatelessWidget {
             childAspectRatio: 8.8 / 11,
           ),
           itemCount: limitedData.length,
-          physics: const NeverScrollableScrollPhysics(), // Prevent scrolling
+          physics: const NeverScrollableScrollPhysics(), 
           itemBuilder: (context, index) {
             var doc = limitedData[index];
             var docData = doc.data() as Map<String, dynamic>;
@@ -743,10 +741,10 @@ class NewsScreen extends StatelessWidget {
           );
         }
 
-        // Shuffle data to randomize
+        
         data.shuffle(Random());
 
-        // Limit to 4 items
+        
         var limitedData = data.take(4).toList();
 
         return GridView.builder(
@@ -758,7 +756,7 @@ class NewsScreen extends StatelessWidget {
             childAspectRatio: 8.8 / 11,
           ),
           itemCount: limitedData.length,
-          physics: const NeverScrollableScrollPhysics(), // Prevent scrolling
+          physics: const NeverScrollableScrollPhysics(), 
           itemBuilder: (context, index) {
             var doc = limitedData[index];
             var docData = doc.data() as Map<String, dynamic>;
@@ -935,196 +933,6 @@ class NewsScreen extends StatelessWidget {
     );
   }
 }
-
-//   Widget buildGeneralMatch() {
-//   return StreamBuilder<QuerySnapshot>(
-//     stream: FirebaseFirestore.instance
-//         .collection('usermixandmatch')
-//         .orderBy('views', descending: true)
-//         .snapshots(),
-//     builder: (context, snapshot) {
-//       if (!snapshot.hasData) {
-//         return Center(child: CircularProgressIndicator());
-//       }
-//       var data = snapshot.data!.docs;
-//       String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
-//       // Filter posts by current user ID
-//       var filteredData = data.where((doc) {
-//         var docData = doc.data() as Map<String, dynamic>;
-//         return docData['posted_by'] == currentUserUID;
-//       }).toList();
-//       if (filteredData.isEmpty) {
-//         return Center(
-//           child: Text("No posts available!", style: TextStyle(color: greyDark)),
-//         );
-//       }
-//       return GridView.builder(
-//         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-//           crossAxisCount: 2,
-//             mainAxisSpacing: 7,
-//             crossAxisSpacing: 7,
-//             mainAxisExtent: 240,
-//         ),
-//         itemCount: filteredData.length,
-//         itemBuilder: (context, index) {
-//           var doc = filteredData[index];
-//           var docData = doc.data() as Map<String, dynamic>;
-//           var topImage = docData['imgs_top'] ?? '';
-//           var lowerImage = docData['imgs_lower'] ?? '';
-//           var productNameTop = docData['name_top'] ?? '';
-//           var productNameLower = docData['name_lower'] ?? '';
-//           var priceTop = docData['price_top']?.toString() ?? '0';
-//           var priceLower = docData['price_lower']?.toString() ?? '0';
-//           var vendorId = docData['vendor_id'] ?? '';
-//           var collections = docData['collection'] != null
-//               ? List<String>.from(docData['collection'])
-//               : [];
-//           var description = docData['desc'] ?? '';
-//           var views = docData['views'] ?? 0;
-//           var gender = docData['sex'] ?? '';
-//           String totalPrice = (int.parse(docData['price_top']) + int.parse(docData['price_lower'])).toString();
-//           var posted_by = currentUserUID;
-//           var posted_name = docData['posted_name'];
-//           var posted_img = docData['posted_img'];
-//           return GestureDetector(
-//             onTap: () {
-//               Get.to(() => MatchPostsDetails(
-//                     productName1: productNameTop,
-//                     productName2: productNameLower,
-//                     price1: priceTop,
-//                     price2: priceLower,
-//                     productImage1: topImage,
-//                     productImage2: lowerImage,
-//                     totalPrice: (int.parse(priceTop) + int.parse(priceLower)).toString(),
-//                     vendorName1: 'Vendor Name 1',
-//                     vendorName2: 'Vendor Name 2',
-//                     vendor_id: vendorId,
-//                     collection: collections,
-//                     description: description,
-//                     gender: gender,
-//                     posted_by: posted_by,
-//                     posted_name: posted_name,
-//                     posted_img: posted_img
-//                   ));
-//             },
-//             child: Container(
-//               child: Column(
-//                 mainAxisAlignment: MainAxisAlignment.start,
-//                 children: [
-//                   Row(
-//                     children: [
-//                       SizedBox(
-//                         width: 75,
-//                         height: 80,
-//                         child: Image.network(
-//                           topImage,
-//                           fit: BoxFit.cover,
-//                         ),
-//                       ),
-//                       SizedBox(width: 5),
-//                       Expanded(
-//                         child: Column(
-//                           crossAxisAlignment: CrossAxisAlignment.start,
-//                           mainAxisAlignment: MainAxisAlignment.start,
-//                           children: [
-//                             Text(
-//                               productNameTop,
-//                               style: const TextStyle(
-//                                 fontFamily: medium,
-//                                 fontSize: 14,
-//                               ),
-//                               overflow: TextOverflow.ellipsis,
-//                               maxLines: 1,
-//                             ),
-//                             Text(
-//                               "${NumberFormat('#,##0').format(double.parse(priceTop).toInt())} Bath",
-//                               style: const TextStyle(color: greyColor),
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//                       SizedBox(width: 8),
-//                     ],
-//                   ),
-//                   SizedBox(height: 10),
-//                   Row(
-//                     children: [
-//                       SizedBox(
-//                         width: 75,
-//                         height: 80,
-//                         child: Image.network(
-//                           lowerImage,
-//                           fit: BoxFit.cover,
-//                         ),
-//                       ),
-//                       SizedBox(width: 5),
-//                       Expanded(
-//                         child: Column(
-//                           crossAxisAlignment: CrossAxisAlignment.start,
-//                           mainAxisAlignment: MainAxisAlignment.start,
-//                           children: [
-//                             Text(
-//                               productNameLower,
-//                               style: const TextStyle(
-//                                 fontFamily: medium,
-//                                 fontSize: 14,
-//                               ),
-//                               overflow: TextOverflow.ellipsis,
-//                               maxLines: 1,
-//                             ),
-//                             Text(
-//                               "${NumberFormat('#,##0').format(double.parse(priceLower).toInt())} Bath",
-//                               style: const TextStyle(color: greyColor),
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                   SizedBox(height: 10),
-//                   Padding(
-//                       padding: const EdgeInsets.symmetric(horizontal: 4),
-//                       child: Row(
-//                         children: [
-//                           Text(
-//                             "Total: ",
-//                             style: TextStyle(
-//                                 color: blackColor,
-//                                 fontFamily: regular,
-//                                 fontSize: 14),
-//                           ),
-//                           Text(
-//                             "${NumberFormat('#,##0').format(double.parse(totalPrice).toInt())} ",
-//                             style: TextStyle(
-//                                 color: blackColor,
-//                                 fontFamily: medium,
-//                                 fontSize: 16),
-//                           ),
-//                           Text(
-//                             "Bath",
-//                             style: TextStyle(
-//                                 color: blackColor,
-//                                 fontFamily: regular,
-//                                 fontSize: 14),
-//                           ),
-//                         ],
-//                       ),
-//                     )
-//                 ],
-//               )
-//                   .box
-//                     .border(color: greyLine)
-//                     .p8
-//                     .margin(EdgeInsets.all(2))
-//                     .roundedSM
-//                     .make(),
-//             ),
-//           );
-//         },
-//       );
-//     },
-//   );
-// }
 
 class GridCardExample extends StatelessWidget {
   @override

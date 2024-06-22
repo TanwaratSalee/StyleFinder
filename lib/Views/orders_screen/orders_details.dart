@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_finalproject/Views/chat_screen/chat_screen.dart';
 import 'package:flutter_finalproject/Views/orders_screen/component/orders_status.dart';
 import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
@@ -89,6 +90,12 @@ class OrdersDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double totalOrderPrice = 0;
+
+    data['orders'].forEach((orderItem) {
+      totalOrderPrice += (orderItem['total_price'] ?? 0).toDouble();
+    });
+
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
@@ -346,69 +353,58 @@ class OrdersDetails extends StatelessWidget {
                     itemCount: data['orders'].length,
                     itemBuilder: (context, index) {
                       var orderItem = data['orders'][index];
-                      return FutureBuilder<Map<String, String>>(
-                        future:
-                            getProductDetails(orderItem['product_id'] ?? ''),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return CircularProgressIndicator();
-                          }
-                          if (snapshot.hasError) {
-                            return Text('Error: ${snapshot.error}');
-                          }
-                          if (!snapshot.hasData ||
-                              snapshot.data!['name']!.isEmpty) {
-                            return Text('Unknown Product');
-                          }
-
-                          return Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text('x${orderItem['qty'] ?? 0}')
-                                  .text
-                                  .size(12)
-                                  .fontFamily(regular)
-                                  .color(greyDark)
-                                  .make(),
-                              const SizedBox(width: 5),
-                              snapshot.data!['imageUrl']!.isNotEmpty
-                                  ? Image.network(snapshot.data!['imageUrl']!,
-                                      width: 70, height: 80, fit: BoxFit.cover)
-                                  : Container(
-                                      width: 70,
-                                      height: 80,
-                                      color:
-                                          greyColor), // Placeholder for empty image URL
-                              const SizedBox(width: 15),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(snapshot.data!['name'] ?? '',
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis)
-                                        .text
-                                        .size(14)
-                                        .fontFamily(semiBold)
-                                        .color(greyDark)
-                                        .make(),
-                                    Text(
-                                      '${NumberFormat('#,##0').format(orderItem['total_price'] ?? 0)} Bath',
-                                      style: const TextStyle(color: greyDark),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                      return Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            'x${orderItem['qty'] ?? 0}',
                           )
-                              .box
-                              .padding(EdgeInsets.symmetric(vertical: 5))
-                              .make();
-                        },
-                      );
+                              .text
+                              .size(12)
+                              .fontFamily(regular)
+                              .color(greyDark)
+                              .make(),
+                          const SizedBox(width: 5),
+                          Image.network(orderItem['img'] ?? '',
+                              width: 70, height: 80, fit: BoxFit.cover),
+                          const SizedBox(width: 15),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  orderItem['name'] ?? '',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                )
+                                    .text
+                                    .size(14)
+                                    .fontFamily(semiBold)
+                                    .color(greyDark)
+                                    .make(),
+                                Text(
+                                  '${NumberFormat('#,##0').format(orderItem['total_price'] ?? 0)} Bath',
+                                  style: const TextStyle(color: greyDark),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ).box.padding(EdgeInsets.symmetric(vertical: 5)).make();
                     },
-                  )
+                  ),
+                  Divider(color: greyLine),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      'Total: ${NumberFormat('#,##0').format(totalOrderPrice)} Bath',
+                      style: TextStyle(
+                        color: blackColor,
+                        fontFamily: regular,
+                        fontSize: 16,
+                      ),
+                    ).paddingSymmetric(vertical: 8),
+                  ),
                 ],
               )
                   .box

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_finalproject/Views/cart_screen/detailforshipping.dart';
+import 'package:flutter_finalproject/Views/cart_screen/detailforshipping_screen.dart';
 import 'package:flutter_finalproject/Views/profile_screen/menu_addaddress_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/cart_controller.dart';

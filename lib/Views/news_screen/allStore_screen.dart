@@ -30,7 +30,7 @@ class AllStoreScreen extends StatelessWidget {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: ListView(
           children: [
             'OFFICIAL STORE'
@@ -77,12 +77,12 @@ class AllStoreScreen extends StatelessWidget {
                     return GridView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
-                      padding: const EdgeInsets.all(12),
+                      
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
                         crossAxisSpacing: 8,
                         mainAxisSpacing: 8,
-                        childAspectRatio: 1 / 1.1,
+                        childAspectRatio: 2.6 / 2.65,
                       ),
                       itemCount: officialProducts.length,
                       itemBuilder: (context, index) {
@@ -178,12 +178,12 @@ class AllStoreScreen extends StatelessWidget {
                     return GridView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
-                      padding: const EdgeInsets.all(12),
+                      
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
                         crossAxisSpacing: 8,
                         mainAxisSpacing: 8,
-                        childAspectRatio: 1 / 1.1,
+                        childAspectRatio: 2.6 / 2.65,
                       ),
                       itemCount: officialProducts.length,
                       itemBuilder: (context, index) {

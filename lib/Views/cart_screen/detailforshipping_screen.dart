@@ -289,10 +289,10 @@ class DetailForShipping extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        "Total   $formattedPrice  Bath",
-                      ).text.size(14).color(greyDark).fontFamily(medium).make(),
+                        "Tota $formattedPrice Bath",
+                      ).text.size(16).color(greyDark).fontFamily(medium).make(),
                     ],
-                  ).box.padding(EdgeInsets.only(left: 15)).make(),
+                  ).paddingOnly(left: 10)
                 ],
               )
                   .box
