@@ -140,7 +140,7 @@ class CartController extends GetxController {
       List<Map<String, dynamic>> vendorProducts = entry.value;
 
       var vendorSnapshot =
-          await firestore.collection(vendorsCollection).doc(vendorId).get();
+          await firestore.collection('vendors').doc(vendorId).get();
       String vendorName = 'Unknown Vendor';
       if (vendorSnapshot.exists) {
         vendorName = vendorSnapshot['name'] ??

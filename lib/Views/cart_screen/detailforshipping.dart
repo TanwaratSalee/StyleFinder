@@ -1,10 +1,14 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/Views/cart_screen/payment_method.dart';
+import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
+import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+
+import '../../controllers/cart_controller.dart';
 
 class DetailForShipping extends StatelessWidget {
   final Map<String, dynamic>? address;
@@ -48,9 +52,33 @@ class DetailForShipping extends StatelessWidget {
     return phone;
   }
 
+  Future<String?> getVendorName(String vendorId) async {
+    final doc = await FirebaseFirestore.instance
+        .collection('vendors')
+        .doc(vendorId)
+        .get();
+    if (doc.exists) {
+      final data = doc.data();
+      return data?['name'];
+    }
+    return null;
+  }
+
+  Future<Map<String, dynamic>?> getProductDetails(String productId) async {
+    final doc = await FirebaseFirestore.instance
+        .collection('products')
+        .doc(productId)
+        .get();
+    if (doc.exists) {
+      return doc.data();
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
-    String formattedPrice = NumberFormat('#,##0', 'en_US').format(totalPrice);
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    final CartController cartController = Get.put(CartController());
 
     print(
         "Received address: $address, cart items: $cartItems, and total price: $totalPrice");
@@ -145,7 +173,7 @@ class DetailForShipping extends StatelessWidget {
                   .padding(EdgeInsets.fromLTRB(22, 0, 22, 10))
                   .rounded
                   .make(),
-              SizedBox(height: 15),
+              20.heightBox,
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -294,13 +322,7 @@ class DetailForShipping extends StatelessWidget {
                     ],
                   ).box.padding(EdgeInsets.only(left: 15)).make(),
                 ],
-              )
-                  .box
-                  .white
-                  .border(color: greyThin)
-                  .padding(EdgeInsets.symmetric(horizontal: 22, vertical: 15))
-                  .rounded
-                  .make()
+              ).box.border(color: greyLine).rounded.p12.make()
             ],
           ),
         ),

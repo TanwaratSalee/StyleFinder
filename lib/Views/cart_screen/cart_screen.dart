@@ -10,6 +10,8 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../controllers/cart_controller.dart';
+
 class CartScreen extends StatelessWidget {
   const CartScreen({Key? key}) : super(key: key);
 
@@ -90,52 +92,56 @@ class CartScreen extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               }
 
-              if (!vendorSnapshot.hasData || vendorSnapshot.data!.isEmpty) {
-                return const Center(child: Text('No vendors found'));
-              }
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: groupedProducts.keys.map((vendorId) {
+                List<DocumentSnapshot> vendorProducts = groupedProducts[vendorId]!;
 
-              var groupedProducts = vendorSnapshot.data!;
-              return SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: groupedProducts.keys.map((vendorName) {
-                    List<DocumentSnapshot> vendorProducts =
-                        groupedProducts[vendorName]!;
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      StreamBuilder<DocumentSnapshot>(
+                        stream: _firestore.collection('vendors').doc(vendorId).snapshots(),
+                        builder: (context, vendorSnapshot) {
+                          if (vendorSnapshot.connectionState == ConnectionState.waiting) {
+                            return const Center(child: CircularProgressIndicator());
+                          }
 
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 5),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
+                          if (!vendorSnapshot.hasData || !vendorSnapshot.data!.exists) {
+                            return const Center(child: Text('Vendor not found'));
+                          }
+
+                          var vendorData = vendorSnapshot.data!.data() as Map<String, dynamic>;
+                          String vendorName = vendorData['name'] ?? 'Unknown Vendor';
+
+                          return Row(
                             children: [
                               Image.asset(iconsStore, width: 18),
                               5.widthBox,
                               Text(
                                 vendorName,
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontFamily: medium,
-                                ),
+                                style: TextStyle(fontSize: 18, fontFamily: medium),
                               ),
                             ],
-                          ),
-                          Column(
-                            children: vendorProducts.map((productDoc) {
-                              var data =
-                                  productDoc.data() as Map<String, dynamic>?;
+                          );
+                        },
+                      ),
+                      Column(
+                        children: vendorProducts.map((productDoc) {
+                          var data = productDoc.data() as Map<String, dynamic>?;
 
-                              String productId = data?['product_id'] ?? '';
-                              int qty = data?['qty'] ?? 0;
-                              String selectSize = data?['select_size'] ?? '';
-                              double totalPrice = (data?['total_price']
-                                      is String)
-                                  ? double.tryParse(data?['total_price']) ?? 0.0
-                                  : data?['total_price'] is int
-                                      ? (data?['total_price'] as int).toDouble()
-                                      : data?['total_price'] ?? 0.0;
-                              String userId = data?['user_id'] ?? '';
+                          String productId = data?['product_id'] ?? '';
+                          int qty = data?['qty'] ?? 0;
+                          String selectSize = data?['select_size'] ?? '';
+                          double totalPrice = (data?['total_price'] is String)
+                              ? double.tryParse(data?['total_price']) ?? 0.0
+                              : data?['total_price'] is int
+                                  ? (data?['total_price'] as int).toDouble()
+                                  : data?['total_price'] ?? 0.0;
+                          String userId = data?['user_id'] ?? '';
 
                               return FutureBuilder<DocumentSnapshot>(
                                 future: _firestore
@@ -236,14 +242,16 @@ class CartScreen extends StatelessWidget {
                           Divider(color: greyLine),
                         ],
                       ),
-                    );
-                  }).toList(),
-                ),
-              );
-            },
+                      Divider(color: greyLine),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
           );
         },
       ),
     );
   }
 }
+
