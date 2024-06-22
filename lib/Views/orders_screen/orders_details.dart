@@ -6,6 +6,7 @@ import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class OrdersDetails extends StatelessWidget {
   final dynamic data;
@@ -26,6 +27,60 @@ class OrdersDetails extends StatelessWidget {
       });
     }
     return phone;
+  }
+
+  Future<Map<String, String>> getProductDetails(String productId) async {
+    if (productId.isEmpty) {
+      debugPrint('Error: productId is empty.');
+      return {'name': 'Unknown Product', 'id': productId};
+    }
+
+    try {
+      var productSnapshot = await FirebaseFirestore.instance
+          .collection('products')
+          .doc(productId)
+          .get();
+      if (productSnapshot.exists) {
+        debugPrint('Document ID: ${productSnapshot.id}'); // Use debugPrint
+        var productData = productSnapshot.data() as Map<String, dynamic>?;
+        return {
+          'name': productData?['name'] ?? 'Unknown Product',
+          'id': productId
+        };
+      } else {
+        return {'name': 'Unknown Product', 'id': productId};
+      }
+    } catch (e) {
+      debugPrint('Error getting product name: $e');
+      return {'name': 'Unknown Product', 'id': productId};
+    }
+  }
+
+  Future<Map<String, String>> getVendorDetails(String vendorId) async {
+    if (vendorId.isEmpty) {
+      debugPrint('Error: vendorId is empty.');
+      return {'name': 'Unknown Vendor', 'id': vendorId};
+    }
+
+    try {
+      var vendorSnapshot = await FirebaseFirestore.instance
+          .collection('vendors')
+          .doc(vendorId)
+          .get();
+      if (vendorSnapshot.exists) {
+        debugPrint('Document ID: ${vendorSnapshot.id}'); // Use debugPrint
+        var vendorData = vendorSnapshot.data() as Map<String, dynamic>?;
+        return {
+          'name': vendorData?['name'] ?? 'Unknown Vendor',
+          'id': vendorId
+        };
+      } else {
+        return {'name': 'Unknown Vendor', 'id': vendorId};
+      }
+    } catch (e) {
+      debugPrint('Error getting vendor name: $e');
+      return {'name': 'Unknown Vendor', 'id': vendorId};
+    }
   }
 
   @override
@@ -111,7 +166,12 @@ class OrdersDetails extends StatelessWidget {
                       Icon(Icons.location_on_outlined),
                       20.widthBox,
                       Text(
-                          "${data['order_by_firstname'] ?? ''} ${data['order_by_surname'] ?? ''},\n${data['order_by_address'] ?? ''},\n${data['order_by_city'] ?? ''}, ${data['order_by_state'] ?? ''},${data['order_by_postalcode'] ?? ''}\n${formatPhoneNumber(data['order_by_phone'] ?? '')}"),
+                          "${data['order']['order_by_firstname'] ?? ''} ${data['order']['order_by_surname'] ?? ''},\n"
+                          "${data['order']['order_by_address'] ?? ''},\n"
+                          "${data['order']['order_by_city'] ?? ''}, "
+                          "${data['order']['order_by_state'] ?? ''}, "
+                          "${data['order']['order_by_postalcode'] ?? ''}\n"
+                          "${formatPhoneNumber(data['order']['order_by_phone'] ?? '')}"),
                     ],
                   ),
                 ],
@@ -138,7 +198,7 @@ class OrdersDetails extends StatelessWidget {
                                 .black
                                 .fontFamily(semiBold)
                                 .make(),
-                            Text(data['order_code'] ?? '')
+                            Text(data['order_id'] ?? '')
                           ],
                         ),
                         5.heightBox,
@@ -150,10 +210,10 @@ class OrdersDetails extends StatelessWidget {
                                 .black
                                 .fontFamily(semiBold)
                                 .make(),
-                            Text(data['order_date'] != null
+                            Text(data['created_at'] != null
                                 ? intl.DateFormat()
                                     .add_yMd()
-                                    .format((data['order_date'].toDate()))
+                                    .format((data['created_at'].toDate()))
                                 : '')
                           ],
                         ),
@@ -166,7 +226,7 @@ class OrdersDetails extends StatelessWidget {
                                 .black
                                 .fontFamily(semiBold)
                                 .make(),
-                            Text(data['shipping_method'] ?? '')
+                            Text(data['payment_method'] ?? '')
                           ],
                         ),
                       ],
@@ -188,23 +248,41 @@ class OrdersDetails extends StatelessWidget {
                         children: [
                           Image.asset(iconsStore, width: 20),
                           10.widthBox,
-                          Text(data['vendor_name'] ?? '')
-                              .text
-                              .size(16)
-                              .fontFamily(semiBold)
-                              .color(blackColor)
-                              .make(),
+                          FutureBuilder<Map<String, String>>(
+                            future: getVendorDetails(
+                                data['orders'][0]['vendor_id'] ?? ''),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return CircularProgressIndicator();
+                              }
+                              if (snapshot.hasError) {
+                                return Text('Error: ${snapshot.error}');
+                              }
+                              if (!snapshot.hasData ||
+                                  snapshot.data!['name']!.isEmpty) {
+                                return Text('Unknown Vendor');
+                              }
+
+                              return Text(snapshot.data!['name']!)
+                                  .text
+                                  .size(16)
+                                  .fontFamily(semiBold)
+                                  .color(blackColor)
+                                  .make();
+                            },
+                          ),
                         ],
                       ),
                       Row(
                         children: [
                           GestureDetector(
-                            onTap: () {
-                              print('p_seller: ${data['vendor_name'] ?? ''}');
-                              print('vendor_id: ${data['vendor_id'] ?? ''}');
+                            onTap: () async {
+                              var vendorDetails = await getVendorDetails(
+                                  data['orders'][0]['vendor_id'] ?? '');
                               Get.to(() => const ChatScreen(), arguments: [
-                                data['vendor_name'] ?? '',
-                                data['vendor_id'] ?? ''
+                                vendorDetails['name'] ?? '',
+                                vendorDetails['id'] ?? ''
                               ]);
                             },
                             child: Container(
@@ -224,11 +302,13 @@ class OrdersDetails extends StatelessWidget {
                           ),
                           5.widthBox,
                           GestureDetector(
-                            onTap: () {
-                              if (data['vendor_id'] != null) {
+                            onTap: () async {
+                              var vendorDetails = await getVendorDetails(
+                                  data['orders'][0]['vendor_id'] ?? '');
+                              if (vendorDetails['id'] != null) {
                                 Get.to(() => StoreScreen(
-                                      vendorId: data['vendor_id'],
-                                      title: data['vendor_name'] ??
+                                      vendorId: vendorDetails['id'] ?? '',
+                                      title: vendorDetails['name'] ??
                                           'Unknown Vendor',
                                     ));
                               } else {
@@ -239,21 +319,19 @@ class OrdersDetails extends StatelessWidget {
                               child: const Text(
                                 'See Store',
                                 style: TextStyle(
-                                  color: whiteColor,
-                                  fontFamily: medium,
-                                ),
-                              )
-                                  .box
-                                  .white
-                                  .padding(EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 5))
-                                  .roundedSM
-                                  .color(primaryApp)
-                                  .make(),
-                            ),
+                                    color: whiteColor, fontFamily: medium),
+                              ),
+                            )
+                                .box
+                                .white
+                                .padding(EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 5))
+                                .roundedSM
+                                .color(primaryApp)
+                                .make(),
                           )
                         ],
-                      )
+                      ),
                     ],
                   ),
                   Divider(color: greyLine),
@@ -264,44 +342,68 @@ class OrdersDetails extends StatelessWidget {
                     itemCount: data['orders'].length,
                     itemBuilder: (context, index) {
                       var orderItem = data['orders'][index];
-                      return Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            'x${orderItem['qty'] ?? 0}',
-                          )
-                              .text
-                              .size(12)
-                              .fontFamily(regular)
-                              .color(greyDark)
-                              .make(),
-                          const SizedBox(width: 5),
-                          Image.network(orderItem['img'] ?? '',
-                              width: 70, height: 80, fit: BoxFit.cover),
-                          const SizedBox(width: 15),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  orderItem['name'] ?? '',
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                )
-                                    .text
-                                    .size(14)
-                                    .fontFamily(semiBold)
-                                    .color(greyDark)
-                                    .make(),
-                                Text(
-                                  '${NumberFormat('#,##0').format(orderItem['total_price'] ?? 0)} Bath',
-                                  style: const TextStyle(color: greyDark),
+                      var imageUrl = orderItem['img'] ?? '';
+                      return FutureBuilder<Map<String, String>>(
+                        future:
+                            getProductDetails(orderItem['product_id'] ?? ''),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return CircularProgressIndicator();
+                          }
+                          if (snapshot.hasError) {
+                            return Text('Error: ${snapshot.error}');
+                          }
+                          if (!snapshot.hasData ||
+                              snapshot.data!['name']!.isEmpty) {
+                            return Text('Unknown Product');
+                          }
+
+                          return Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text('x${orderItem['qty'] ?? 0}')
+                                  .text
+                                  .size(12)
+                                  .fontFamily(regular)
+                                  .color(greyDark)
+                                  .make(),
+                              const SizedBox(width: 5),
+                              imageUrl.isNotEmpty
+                                  ? Image.network(imageUrl,
+                                      width: 70, height: 80, fit: BoxFit.cover)
+                                  : Container(
+                                      width: 70,
+                                      height: 80,
+                                      color:
+                                          greyColor), // Placeholder for empty image URL
+                              const SizedBox(width: 15),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(snapshot.data!['name'] ?? '',
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis)
+                                        .text
+                                        .size(14)
+                                        .fontFamily(semiBold)
+                                        .color(greyDark)
+                                        .make(),
+                                    Text(
+                                      '${NumberFormat('#,##0').format(orderItem['price'] ?? 0)} Bath',
+                                      style: const TextStyle(color: greyDark),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ).box.padding(EdgeInsets.symmetric(vertical: 5)).make();
+                              ),
+                            ],
+                          )
+                              .box
+                              .padding(EdgeInsets.symmetric(vertical: 5))
+                              .make();
+                        },
+                      );
                     },
                   )
                 ],

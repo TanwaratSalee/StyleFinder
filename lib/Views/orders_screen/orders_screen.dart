@@ -81,12 +81,12 @@ class _OrdersScreenState extends State<OrdersScreen>
         } else {
           var data = snapshot.data!.docs;
 
-          // Sort data by order_date in descending order
+          // Sort data by created_at in descending order
           data.sort((a, b) {
             var dateA =
-                (a.data() as Map<String, dynamic>)['order_date'].toDate();
+                (a.data() as Map<String, dynamic>)['created_at'].toDate();
             var dateB =
-                (b.data() as Map<String, dynamic>)['order_date'].toDate();
+                (b.data() as Map<String, dynamic>)['created_at'].toDate();
             return dateB.compareTo(dateA);
           });
 
@@ -107,7 +107,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Order code ${orderData['order_code']}",
+                          "Order code ${orderData['order_id']}",
                         )
                             .text
                             .fontFamily(medium)
@@ -116,7 +116,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                             .make(),
                         Text(intl.DateFormat()
                             .add_yMd()
-                            .format((orderData['order_date'].toDate()))),
+                            .format((orderData['created_at'].toDate()))),
                         Text(
                           orderData['order_confirmed'] ? "Confirm" : "Pending",
                           style: TextStyle(
@@ -676,7 +676,7 @@ class _OrdersScreenState extends State<OrdersScreen>
         .collection(ordersCollection)
         .where('order_on_delivery', isEqualTo: false)
         .where('order_delivered', isEqualTo: false)
-        .where('order_by', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .where('user_id', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
         .snapshots();
   }
 
@@ -685,7 +685,7 @@ class _OrdersScreenState extends State<OrdersScreen>
         .collection(ordersCollection)
         .where('order_on_delivery', isEqualTo: true)
         .where('order_delivered', isEqualTo: false)
-        .where('order_by', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .where('user_id', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
         .snapshots();
   }
 
@@ -693,7 +693,7 @@ class _OrdersScreenState extends State<OrdersScreen>
     return FirebaseFirestore.instance
         .collection(ordersCollection)
         .where('order_delivered', isEqualTo: true)
-        .where('order_by', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .where('user_id', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
         .snapshots();
   }
 
@@ -702,7 +702,7 @@ class _OrdersScreenState extends State<OrdersScreen>
         .collection(ordersCollection)
         .where('order_delivered', isEqualTo: true)
         .where('reviews', isEqualTo: false)
-        .where('order_by', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .where('user_id', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
         .snapshots();
   }
 }

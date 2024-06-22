@@ -156,19 +156,18 @@ class CartController extends GetxController {
       totalOrderAmount += vendorTotalAmount;
 
       var orderRef = await firestore.collection(ordersCollection).add({
-        'order_code': generateRandomOrderCode(8),
-        'order_date': FieldValue.serverTimestamp(),
-        'order_by': currentUser!.uid,
-        'order_by_name': Get.find<NewsController>().username,
-        'order_by_email': currentUser!.email,
-        'order_by_firstname': firstname,
-        'order_by_surname': surname,
-        'order_by_address': address,
-        'order_by_state': state,
-        'order_by_city': city,
-        'order_by_phone': phone,
-        'order_by_postalcode': postalcode,
-        'shipping_method': "Home Delivery",
+        'created_at': FieldValue.serverTimestamp(),
+        'user_id': currentUser!.uid,
+        'order': {
+          'order_by_email': currentUser!.email,
+          'order_by_firstname': firstname,
+          'order_by_surname': surname,
+          'order_by_address': address,
+          'order_by_state': state,
+          'order_by_city': city,
+          'order_by_phone': phone,
+          'order_by_postalcode': postalcode,
+        },
         'payment_method': orderPaymentMethod,
         'order_placed': true,
         'order_confirmed': false,
@@ -176,11 +175,9 @@ class CartController extends GetxController {
         'order_on_delivery': false,
         'total_amount': vendorTotalAmount,
         'orders': vendorProducts,
-        'vendor_id': vendorId,
-        'vendor_name': vendorName,
       });
 
-      await orderRef.update({'id': orderRef.id});
+      await orderRef.update({'order_id': orderRef.id});
     }
 
     print('Total order amount: $totalOrderAmount');
@@ -226,19 +223,8 @@ class CartController extends GetxController {
         // Ensure productData is not null and has the necessary fields
         products.add({
           'product_id': productId,
-          'img': productData != null &&
-                  productData.containsKey('imgs') &&
-                  productData['imgs'] != null &&
-                  productData['imgs'].isNotEmpty
-              ? productData['imgs'][0]
-              : '',
           'vendor_id': vendorId ?? '',
-          'total_price': cartProductData['total_price'] ?? 0,
           'qty': cartProductData['qty'] ?? 0,
-          'name': productData != null && productData.containsKey('name')
-              ? productData['name']
-              : '',
-          'sellername': vendorName, // Use fetched vendor name
           'reviews': false,
         });
         vendors.add(vendorId ?? '');
@@ -246,12 +232,8 @@ class CartController extends GetxController {
         // Handle the case where the product document does not exist or data is null
         products.add({
           'product_id': productId,
-          'img': '',
           'vendor_id': cartProductData['vendor_id'] ?? '',
-          'total_price': cartProductData['total_price'] ?? 0,
           'qty': cartProductData['qty'] ?? 0,
-          'name': '',
-          'sellername': 'Unknown Vendor', // Use 'Unknown Vendor' as default
           'reviews': false,
         });
         vendors.add(cartProductData['vendor_id'] ?? '');
