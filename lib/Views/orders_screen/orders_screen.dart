@@ -332,7 +332,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    productName,
+                                    product['name'] ?? 'Unknown Product',
                                     style: const TextStyle(
                                       fontFamily: medium,
                                       fontSize: 14,
@@ -340,7 +340,9 @@ class _OrdersScreenState extends State<OrdersScreen>
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  Text('${productPrice} Bath')
+                                  Text(
+                                    '${NumberFormat('#,##0').format(product['total_price'] ?? 0)} Bath',
+                                  )
                                       .text
                                       .fontFamily(regular)
                                       .color(greyColor)
