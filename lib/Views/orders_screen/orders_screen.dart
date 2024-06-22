@@ -212,7 +212,7 @@ class _OrdersScreenState extends State<OrdersScreen>
             itemCount: data.length,
             itemBuilder: (context, index) {
               var orderData = data[index].data() as Map<String, dynamic>;
-              var products = orderData['orders'] as List<dynamic>;
+              var products = orderData['orders'] as List<dynamic>? ?? [];
 
               return InkWell(
                 onTap: () {
@@ -225,7 +225,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Order code ${orderData['order_code']}",
+                          "Order code ${orderData['order_code'] ?? 'N/A'}",
                         )
                             .text
                             .fontFamily(medium)
@@ -233,9 +233,11 @@ class _OrdersScreenState extends State<OrdersScreen>
                             .size(18)
                             .make(),
                         Text(
-                          orderData['order_confirmed'] ? "Confirm" : "Pending",
+                          orderData['order_confirmed'] == true
+                              ? "Confirm"
+                              : "Pending",
                           style: TextStyle(
-                              color: orderData['order_confirmed']
+                              color: orderData['order_confirmed'] == true
                                   ? Colors.green
                                   : Colors.orange,
                               fontFamily: regular,
@@ -252,7 +254,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'x${product['qty']}',
+                              'x${product['qty'] ?? 0}',
                             )
                                 .text
                                 .fontFamily(regular)
@@ -260,15 +262,18 @@ class _OrdersScreenState extends State<OrdersScreen>
                                 .size(12)
                                 .make(),
                             const SizedBox(width: 5),
-                            Image.network(product['img'],
-                                width: 70, height: 60, fit: BoxFit.cover),
+                            Image.network(product['img'] ?? '',
+                                width: 70, height: 60, fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                              return Icon(Icons.image, size: 70);
+                            }),
                             const SizedBox(width: 5),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    product['title'],
+                                    product['name'] ?? 'Unknown Product',
                                     style: const TextStyle(
                                       fontFamily: medium,
                                       fontSize: 14,
@@ -277,7 +282,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   Text(
-                                    '${NumberFormat('#,##0').format(product['price'])} Bath',
+                                    '${NumberFormat('#,##0').format(product['total_price'] ?? 0)} Bath',
                                   )
                                       .text
                                       .fontFamily(regular)
@@ -393,14 +398,14 @@ class _OrdersScreenState extends State<OrdersScreen>
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              product['title'],
+                                              product['name'],
                                               style: TextStyle(
                                                 fontFamily: medium,
                                                 fontSize: 16,
                                               ),
                                             ),
                                             Text(
-                                              '${NumberFormat('#,##0').format(product['price'])} Bath',
+                                              '${NumberFormat('#,##0').format(product['total_price'])} Bath',
                                             )
                                                 .text
                                                 .fontFamily(regular)
@@ -469,7 +474,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                                                 'product_id':
                                                     product['product_id'],
                                                 'product_title':
-                                                    product['title'],
+                                                    product['name'],
                                                 'product_img': product['img'],
                                                 'rating': rating,
                                                 'review_text':
@@ -553,7 +558,7 @@ class _OrdersScreenState extends State<OrdersScreen>
 
   Widget buildHistory(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: getHistoryOrders(),
+      stream: getOrderHistory(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(child: loadingIndicator());
@@ -620,7 +625,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    product['title'],
+                                    product['name'],
                                     style: const TextStyle(
                                       fontFamily: medium,
                                       fontSize: 14,
@@ -634,7 +639,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                                       .size(14)
                                       .make(),
                                   Text(
-                                    '${NumberFormat('#,##0').format(product['price'])} Bath',
+                                    '${NumberFormat('#,##0').format(product['total_price'])} Bath',
                                   )
                                       .text
                                       .fontFamily(regular)
@@ -667,20 +672,20 @@ class _OrdersScreenState extends State<OrdersScreen>
   }
 
   static Stream<QuerySnapshot> getOrders() {
-    return firestore
+    return FirebaseFirestore.instance
         .collection(ordersCollection)
         .where('order_on_delivery', isEqualTo: false)
         .where('order_delivered', isEqualTo: false)
-        .where('order_by', isEqualTo: currentUser!.uid)
+        .where('order_by', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
         .snapshots();
   }
 
   static Stream<QuerySnapshot> getDeliveryOrders() {
-    return firestore
+    return FirebaseFirestore.instance
         .collection(ordersCollection)
         .where('order_on_delivery', isEqualTo: true)
         .where('order_delivered', isEqualTo: false)
-        .where('order_by', isEqualTo: currentUser!.uid)
+        .where('order_by', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
         .snapshots();
   }
 
@@ -692,20 +697,12 @@ class _OrdersScreenState extends State<OrdersScreen>
         .snapshots();
   }
 
-  static Stream<QuerySnapshot> getHistoryOrders() {
-    return firestore
-        .collection(ordersCollection)
-        .where('order_delivered', isEqualTo: true)
-        .where('order_by', isEqualTo: currentUser!.uid)
-        .snapshots();
-  }
-
   static Stream<QuerySnapshot> getReviewOrders() {
-    return firestore
+    return FirebaseFirestore.instance
         .collection(ordersCollection)
         .where('order_delivered', isEqualTo: true)
         .where('reviews', isEqualTo: false)
-        .where('order_by', isEqualTo: currentUser!.uid)
+        .where('order_by', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
         .snapshots();
   }
 }
