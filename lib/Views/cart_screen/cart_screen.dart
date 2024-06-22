@@ -110,6 +110,7 @@ class CartScreen extends StatelessWidget {
                         children: [
                           Row(
                             children: [
+                              15.widthBox,
                               Image.asset(iconsStore, width: 18),
                               5.widthBox,
                               Text(
@@ -190,28 +191,30 @@ class CartScreen extends StatelessWidget {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.center,
                                             children: [
-                                              Text('x$qty'),
-                                              5.widthBox,
                                               productImages.isNotEmpty
                                                   ? Image.network(
                                                       productImages[0],
                                                       height: 70,
                                                       width: 70)
                                                   : loadingIndicator(),
-                                              15.widthBox,
+                                              10.widthBox,
                                               Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  Text('$productName')
-                                                      .text
-                                                      .color(blackColor)
-                                                      .fontFamily(medium)
-                                                      .size(16)
-                                                      .make(),
+                                                  Text(
+                                                    productName,
+                                                    style: const TextStyle(
+                                                      fontFamily: medium,
+                                                      fontSize: 16,
+                                                    ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    maxLines: 1,
+                                                  ).box.width(170).make(),
                                                   Text('Size: $selectSize')
                                                       .text
-                                                      .color(greyColor)
+                                                      .color(greyDark)
                                                       .size(14)
                                                       .make(),
                                                   "Total ${NumberFormat('#,##0').format(double.parse('$totalPrice').toInt())} Bath"
@@ -221,6 +224,23 @@ class CartScreen extends StatelessWidget {
                                                       .size(14)
                                                       .make(),
                                                 ],
+                                              ),
+                                              Spacer(),
+                                              IconButton(
+                                                icon: Icon(Icons.remove),
+                                                onPressed: () {
+                                                  cartController
+                                                      .decrementCount(
+                                                          productDoc.id);
+                                                },
+                                              ),
+                                              Text('$qty'),
+                                              IconButton(
+                                                icon: Icon(Icons.add),
+                                                onPressed: () {
+                                                  cartController.incrementCount(
+                                                      productDoc.id);
+                                                },
                                               ),
                                               SizedBox(height: 10),
                                             ],
