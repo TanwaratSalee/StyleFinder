@@ -138,28 +138,40 @@ class _OrdersScreenState extends State<OrdersScreen>
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Order ${orderData['order_id']?.length > 9 ? orderData['order_id']?.substring(0, 9) + '...' : orderData['order_id']}",
+                          "Order : ${orderData['order_id']?.length > 9 ? orderData['order_id']?.substring(0, 9) + '...' : orderData['order_id']}",
                         )
                             .text
                             .fontFamily(medium)
                             .color(blackColor)
                             .size(18)
                             .make(),
-                        Text(intl.DateFormat()
-                            .add_yMd()
-                            .format((orderData['created_at'].toDate()))),
-                        Text(
-                          orderData['order_confirmed'] ? "Confirm" : "Pending",
-                          style: TextStyle(
-                              color: orderData['order_confirmed']
-                                  ? Colors.green
-                                  : Colors.orange,
-                              fontFamily: regular,
-                              fontSize: 16),
+                        // Text(intl.DateFormat()
+                        //     .add_yMd()
+                        //     .format((orderData['created_at'].toDate()))),
+
+                        Container(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 12, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: orderData['order_confirmed']
+                                ? Colors.green
+                                : Colors.orange,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            orderData['order_confirmed']
+                                ? "Confirm"
+                                : "Pending",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: medium,
+                              fontSize: 12,
+                            ),
+                          ),
                         ),
                       ],
                     ).box.padding(EdgeInsets.symmetric(horizontal: 12)).make(),
-                    5.heightBox,
+                    10.heightBox,
                     ...products.map((product) {
                       return FutureBuilder<Map<String, String>>(
                         future: getProductDetails(product['product_id'] ?? ''),
@@ -284,23 +296,32 @@ class _OrdersScreenState extends State<OrdersScreen>
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Order ${orderData['order_id']?.length > 9 ? orderData['order_id']?.substring(0, 9) + '...' : orderData['order_id']}",
+                          "Order : ${orderData['order_id']?.length > 9 ? orderData['order_id']?.substring(0, 9) + '...' : orderData['order_id']}",
                         )
                             .text
                             .fontFamily(medium)
                             .color(blackColor)
                             .size(18)
                             .make(),
-                        Text(
-                          orderData['order_confirmed'] == true
-                              ? "Confirm"
-                              : "Pending",
-                          style: TextStyle(
-                              color: orderData['order_confirmed'] == true
-                                  ? Colors.green
-                                  : Colors.orange,
-                              fontFamily: regular,
-                              fontSize: 16),
+                        Container(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 12, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: orderData['order_confirmed']
+                                ? Colors.green
+                                : Colors.orange,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            orderData['order_confirmed']
+                                ? "Confirm"
+                                : "Pending",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: medium,
+                              fontSize: 12,
+                            ),
+                          ),
                         ),
                       ],
                     ).box.padding(EdgeInsets.symmetric(horizontal: 12)).make(),
