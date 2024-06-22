@@ -62,26 +62,29 @@ class OrdersDetails extends StatelessWidget {
                         orderStatus(
                           icon: icPlaced,
                           title: "Placed",
-                          showDone: data['order_placed'],
+                          showDone: data['order_placed'] ?? false,
                         ),
                         3.widthBox,
-                        horizontalLine(isActive: data['order_confirmed']),
+                        horizontalLine(
+                            isActive: data['order_confirmed'] ?? false),
                         orderStatus(
                           icon: icOnDelivery,
                           title: "Confirmed",
-                          showDone: data['order_confirmed'],
+                          showDone: data['order_confirmed'] ?? false,
                         ),
-                        horizontalLine(isActive: data['order_on_delivery']),
+                        horizontalLine(
+                            isActive: data['order_on_delivery'] ?? false),
                         orderStatus(
                           icon: icDelivered,
                           title: "On Delivery",
-                          showDone: data['order_on_delivery'],
+                          showDone: data['order_on_delivery'] ?? false,
                         ),
-                        horizontalLine(isActive: data['order_delivered']),
+                        horizontalLine(
+                            isActive: data['order_delivered'] ?? false),
                         orderStatus(
                           icon: icHome,
                           title: "Delivered",
-                          showDone: data['order_delivered'],
+                          showDone: data['order_delivered'] ?? false,
                         ),
                       ],
                     ),
@@ -108,7 +111,7 @@ class OrdersDetails extends StatelessWidget {
                       Icon(Icons.location_on_outlined),
                       20.widthBox,
                       Text(
-                          "${data['order_by_firstname']} ${data['order_by_surname']},\n${data['order_by_address']},\n${data['order_by_city']}, ${data['order_by_state']},${data['order_by_postalcode']}\n${formatPhoneNumber(data['order_by_phone'])}"),
+                          "${data['order_by_firstname'] ?? ''} ${data['order_by_surname'] ?? ''},\n${data['order_by_address'] ?? ''},\n${data['order_by_city'] ?? ''}, ${data['order_by_state'] ?? ''},${data['order_by_postalcode'] ?? ''}\n${formatPhoneNumber(data['order_by_phone'] ?? '')}"),
                     ],
                   ),
                 ],
@@ -135,7 +138,7 @@ class OrdersDetails extends StatelessWidget {
                                 .black
                                 .fontFamily(semiBold)
                                 .make(),
-                            Text(data['order_code'])
+                            Text(data['order_code'] ?? '')
                           ],
                         ),
                         5.heightBox,
@@ -147,9 +150,11 @@ class OrdersDetails extends StatelessWidget {
                                 .black
                                 .fontFamily(semiBold)
                                 .make(),
-                            Text(intl.DateFormat()
-                                .add_yMd()
-                                .format((data['order_date'].toDate())))
+                            Text(data['order_date'] != null
+                                ? intl.DateFormat()
+                                    .add_yMd()
+                                    .format((data['order_date'].toDate()))
+                                : '')
                           ],
                         ),
                         5.heightBox,
@@ -161,7 +166,7 @@ class OrdersDetails extends StatelessWidget {
                                 .black
                                 .fontFamily(semiBold)
                                 .make(),
-                            Text(data['shipping_method'])
+                            Text(data['shipping_method'] ?? '')
                           ],
                         ),
                       ],
@@ -183,7 +188,7 @@ class OrdersDetails extends StatelessWidget {
                         children: [
                           Image.asset(iconsStore, width: 20),
                           10.widthBox,
-                          Text(data['vendor_name'])
+                          Text(data['vendor_name'] ?? '')
                               .text
                               .size(16)
                               .fontFamily(semiBold)
@@ -195,12 +200,12 @@ class OrdersDetails extends StatelessWidget {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              print('p_seller: ${data['vendor_name']}');
-                          print('vendor_id: ${data['vendor_id']}');
+                              print('p_seller: ${data['vendor_name'] ?? ''}');
+                              print('vendor_id: ${data['vendor_id'] ?? ''}');
                               Get.to(() => const ChatScreen(), arguments: [
-                            data['vendor_name'],
-                            data['vendor_id']
-                          ]);
+                                data['vendor_name'] ?? '',
+                                data['vendor_id'] ?? ''
+                              ]);
                             },
                             child: Container(
                               child: const Text(
@@ -220,9 +225,12 @@ class OrdersDetails extends StatelessWidget {
                           5.widthBox,
                           GestureDetector(
                             onTap: () {
-                              if (data['vendors'] != null) {
-                                Get.to(() =>
-                                    StoreScreen(vendorId: data['vendors'], title: data['name'],));
+                              if (data['vendor_id'] != null) {
+                                Get.to(() => StoreScreen(
+                                      vendorId: data['vendor_id'],
+                                      title: data['vendor_name'] ??
+                                          'Unknown Vendor',
+                                    ));
                               } else {
                                 print('Vendor ID is null');
                               }
@@ -231,16 +239,18 @@ class OrdersDetails extends StatelessWidget {
                               child: const Text(
                                 'See Store',
                                 style: TextStyle(
-                                    color: whiteColor, fontFamily: medium),
-                              ),
-                            )
-                                .box
-                                .white
-                                .padding(EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 5))
-                                .roundedSM
-                                .color(primaryApp)
-                                .make(),
+                                  color: whiteColor,
+                                  fontFamily: medium,
+                                ),
+                              )
+                                  .box
+                                  .white
+                                  .padding(EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 5))
+                                  .roundedSM
+                                  .color(primaryApp)
+                                  .make(),
+                            ),
                           )
                         ],
                       )
@@ -253,11 +263,12 @@ class OrdersDetails extends StatelessWidget {
                     shrinkWrap: true,
                     itemCount: data['orders'].length,
                     itemBuilder: (context, index) {
+                      var orderItem = data['orders'][index];
                       return Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            'x${data['orders'][index]['qty']}',
+                            'x${orderItem['qty'] ?? 0}',
                           )
                               .text
                               .size(12)
@@ -265,7 +276,7 @@ class OrdersDetails extends StatelessWidget {
                               .color(greyDark)
                               .make(),
                           const SizedBox(width: 5),
-                          Image.network(data['orders'][index]['img'],
+                          Image.network(orderItem['img'] ?? '',
                               width: 70, height: 80, fit: BoxFit.cover),
                           const SizedBox(width: 15),
                           Expanded(
@@ -273,7 +284,7 @@ class OrdersDetails extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  data['orders'][index]['title'],
+                                  orderItem['name'] ?? '',
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 )
@@ -283,7 +294,7 @@ class OrdersDetails extends StatelessWidget {
                                     .color(greyDark)
                                     .make(),
                                 Text(
-                                  '${NumberFormat('#,##0').format(data['orders'][index]['price'])} Bath',
+                                  '${NumberFormat('#,##0').format(orderItem['total_price'] ?? 0)} Bath',
                                   style: const TextStyle(color: greyDark),
                                 ),
                               ],

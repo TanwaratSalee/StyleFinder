@@ -5,8 +5,10 @@ import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.d
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
+import 'package:flutter_finalproject/controllers/cart_controller.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -35,6 +37,10 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    final User? currentUser = FirebaseAuth.instance.currentUser;
+
+    // Initialize the CartController
+    final CartController cartController = Get.put(CartController());
 
     return Scaffold(
       backgroundColor: whiteColor,
@@ -45,7 +51,12 @@ class CartScreen extends StatelessWidget {
           child: tapButton(
             color: primaryApp,
             onPress: () {
-              Get.to(() => ShippingInfoDetails());
+              print(
+                  "Proceeding to shipping with cart items: ${cartController.productSnapshot} and total price: ${cartController.totalP.value}");
+              Get.to(() => ShippingInfoDetails(
+                    cartItems: cartController.productSnapshot.toList(),
+                    totalPrice: cartController.totalP.value,
+                  ));
             },
             textColor: whiteColor,
             title: "Proceed to shipping",
@@ -56,7 +67,10 @@ class CartScreen extends StatelessWidget {
         title: const Text('Cart'),
       ),
       body: StreamBuilder(
-        stream: _firestore.collection('cart').snapshots(),
+        stream: _firestore
+            .collection('cart')
+            .where('user_id', isEqualTo: currentUser?.uid)
+            .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -65,6 +79,9 @@ class CartScreen extends StatelessWidget {
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
             return const Center(child: Text('No items in the cart'));
           }
+
+          // Update CartController with the data from Firestore
+          cartController.updateCart(snapshot.data!.docs);
 
           return FutureBuilder<Map<String, List<DocumentSnapshot>>>(
             future: groupProductsByVendor(snapshot.data!.docs),
@@ -205,7 +222,6 @@ class CartScreen extends StatelessWidget {
                                                       .make(),
                                                 ],
                                               ),
-                                              // Text('User ID: $userId'),
                                               SizedBox(height: 10),
                                             ],
                                           ),
@@ -217,9 +233,7 @@ class CartScreen extends StatelessWidget {
                               );
                             }).toList(),
                           ),
-                          Divider(
-                            color: greyLine,
-                          )
+                          Divider(color: greyLine),
                         ],
                       ),
                     );

@@ -34,7 +34,8 @@ class _AddressFormState extends State<AddressForm> {
     String address = _addressController.text;
     String city = _cityController.text;
     String state = _stateController.text;
-    String postalCode = _postalCodeController.text.replaceAll(RegExp(r'\D'), '');
+    String postalCode =
+        _postalCodeController.text.replaceAll(RegExp(r'\D'), '');
     String phone = _phoneController.text.replaceAll(RegExp(r'\D'), '');
 
     if (firstname.isNotEmpty &&
@@ -55,13 +56,16 @@ class _AddressFormState extends State<AddressForm> {
         }
       } else {
         if (address.length <= 10) {
-          VxToast.show(context, msg: "Address should be at least 10 characters long");
+          VxToast.show(context,
+              msg: "Address should be at least 10 characters long");
         }
         if (phone.length < 10) {
-          VxToast.show(context, msg: "Phone number should be at least 10 digits long");
+          VxToast.show(context,
+              msg: "Phone number should be at least 10 digits long");
         }
         if (postalCode.length < 5) {
-          VxToast.show(context, msg: "Postal code should be at least 5 digits long");
+          VxToast.show(context,
+              msg: "Postal code should be at least 5 digits long");
         }
       }
     } else {
@@ -74,7 +78,12 @@ class _AddressFormState extends State<AddressForm> {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: "Add Address".text.size(26).fontFamily(semiBold).color(blackColor).make(),
+        title: "Add Address"
+            .text
+            .size(26)
+            .fontFamily(semiBold)
+            .color(blackColor)
+            .make(),
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 35),
@@ -133,7 +142,7 @@ class _AddressFormState extends State<AddressForm> {
                   isPass: false,
                   readOnly: false,
                   controller: _phoneController,
-                   inputFormatters: [PhoneNumberInputFormatter()]),
+                  inputFormatters: [PhoneNumberInputFormatter()]),
               20.heightBox,
             ],
           ),
@@ -144,7 +153,12 @@ class _AddressFormState extends State<AddressForm> {
 }
 
 class ShippingInfoDetails extends StatefulWidget {
-  const ShippingInfoDetails({Key? key}) : super(key: key);
+  final List<DocumentSnapshot> cartItems;
+  final int totalPrice;
+
+  const ShippingInfoDetails(
+      {Key? key, required this.cartItems, required this.totalPrice})
+      : super(key: key);
 
   @override
   _ShippingInfoDetailsState createState() => _ShippingInfoDetailsState();
@@ -185,9 +199,11 @@ class _ShippingInfoDetailsState extends State<ShippingInfoDetails> {
   Future<void> loadCurrentUserAddress() async {
     String userId = FirebaseAuth.instance.currentUser!.uid;
     try {
-      DocumentSnapshot documentSnapshot = await FirebaseService().getCurrentUserAddress(userId);
+      DocumentSnapshot documentSnapshot =
+          await FirebaseService().getCurrentUserAddress(userId);
       if (documentSnapshot.exists) {
-        Map<String, dynamic>? userData = documentSnapshot.data() as Map<String, dynamic>?;
+        Map<String, dynamic>? userData =
+            documentSnapshot.data() as Map<String, dynamic>?;
         if (userData != null && userData.containsKey('address')) {
           List<dynamic> addressesList = userData['address'];
           setState(() {
@@ -218,6 +234,8 @@ class _ShippingInfoDetailsState extends State<ShippingInfoDetails> {
 
   @override
   Widget build(BuildContext context) {
+    print(
+        "Received cart items: ${widget.cartItems} and total price: ${widget.totalPrice}");
     var controller = Get.find<CartController>();
     String userId = FirebaseAuth.instance.currentUser!.uid;
 
@@ -238,12 +256,13 @@ class _ShippingInfoDetailsState extends State<ShippingInfoDetails> {
           height: 50,
           child: tapButton(
             onPress: () {
-              if (_selectedAddress != null ||
-                  controller.addressController.text.isNotEmpty) {
+              if (_selectedAddress != null) {
+                print(
+                    "Proceeding to detail for shipping with address: $_selectedAddress, cart items: ${widget.cartItems}, and total price: ${widget.totalPrice}");
                 Get.to(() => DetailForShipping(
                       address: _selectedAddress,
-                      cartItems: controller.productSnapshot,
-                      totalPrice: controller.totalP.value,
+                      cartItems: widget.cartItems, // Use widget.cartItems
+                      totalPrice: widget.totalPrice,
                     ));
               } else {
                 VxToast.show(context, msg: "Choose an address");
@@ -283,19 +302,25 @@ class _ShippingInfoDetailsState extends State<ShippingInfoDetails> {
                     return const Center(child: Text("No addresses found."));
                   }
 
-                  Map<String, dynamic>? userData = snapshot.data!.data() as Map<String, dynamic>?;
+                  Map<String, dynamic>? userData =
+                      snapshot.data!.data() as Map<String, dynamic>?;
                   List<dynamic> addressesList = userData?['address'] ?? [];
                   return ListView.separated(
                     itemCount: addressesList.length,
                     itemBuilder: (context, index) {
-                      var address = Map<String, dynamic>.from(addressesList[index]);
+                      var address =
+                          Map<String, dynamic>.from(addressesList[index]);
                       bool isSelected = _selectedAddress != null &&
                           _selectedAddress!.containsValue(address['address']);
 
                       return Container(
                         decoration: BoxDecoration(
-                          color: isSelected ? thinPrimaryApp.withOpacity(0.2) : whiteColor,
-                          border: isSelected ? Border.all(color: primaryApp, width: 2) : null,
+                          color: isSelected
+                              ? thinPrimaryApp.withOpacity(0.2)
+                              : whiteColor,
+                          border: isSelected
+                              ? Border.all(color: primaryApp, width: 2)
+                              : null,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: ListTile(
@@ -304,21 +329,27 @@ class _ShippingInfoDetailsState extends State<ShippingInfoDetails> {
                               style: TextStyle(fontSize: 14, color: blackColor),
                               children: [
                                 TextSpan(
-                                  text: '${capitalize(address['firstname'])} ${capitalize(address['surname'])},\n',
-                                  style: TextStyle(fontFamily: medium, height: 2),
+                                  text:
+                                      '${capitalize(address['firstname'])} ${capitalize(address['surname'])},\n',
+                                  style:
+                                      TextStyle(fontFamily: medium, height: 2),
                                 ),
                                 TextSpan(
-                                  text: '${formatPhoneNumber(address['phone'])},\n',
+                                  text:
+                                      '${formatPhoneNumber(address['phone'])},\n',
                                   style: TextStyle(fontFamily: light),
                                 ),
                                 TextSpan(
-                                  text: '${capitalize(address['address'])}, ${capitalize(address['city'])},\n ${capitalize(address['state'])}, ${address['postalCode']}\n',
+                                  text:
+                                      '${capitalize(address['address'])}, ${capitalize(address['city'])},\n ${capitalize(address['state'])}, ${address['postalCode']}\n',
                                   style: TextStyle(fontFamily: light),
                                 ),
                               ],
                             ),
                           ),
-                          trailing: isSelected ? Icon(Icons.check_circle, color: primaryApp) : null,
+                          trailing: isSelected
+                              ? Icon(Icons.check_circle, color: primaryApp)
+                              : null,
                           onTap: () {
                             setState(() {
                               controller.setSelectedAddress(address);
@@ -328,7 +359,8 @@ class _ShippingInfoDetailsState extends State<ShippingInfoDetails> {
                         ),
                       );
                     },
-                    separatorBuilder: (context, index) => Divider(color: greyLine),
+                    separatorBuilder: (context, index) =>
+                        Divider(color: greyLine),
                   );
                 },
               ),
@@ -339,8 +371,10 @@ class _ShippingInfoDetailsState extends State<ShippingInfoDetails> {
     );
   }
 }
+
 class FirebaseService {
-  final CollectionReference usersCollection = FirebaseFirestore.instance.collection('users');
+  final CollectionReference usersCollection =
+      FirebaseFirestore.instance.collection('users');
 
   // Real-time stream
   Stream<DocumentSnapshot> streamCurrentUserAddress(String userId) {
@@ -349,7 +383,8 @@ class FirebaseService {
 
   Future<DocumentSnapshot> getCurrentUserAddress(String userId) async {
     try {
-      DocumentSnapshot documentSnapshot = await usersCollection.doc(userId).get();
+      DocumentSnapshot documentSnapshot =
+          await usersCollection.doc(userId).get();
       return documentSnapshot;
     } catch (error) {
       throw error;
@@ -373,9 +408,11 @@ class FirebaseService {
           state.isNotEmpty &&
           postalCode.isNotEmpty &&
           phone.isNotEmpty) {
-        DocumentSnapshot documentSnapshot = await usersCollection.doc(userId).get();
+        DocumentSnapshot documentSnapshot =
+            await usersCollection.doc(userId).get();
         if (documentSnapshot.exists) {
-          Map<String, dynamic>? userData = documentSnapshot.data() as Map<String, dynamic>?;
+          Map<String, dynamic>? userData =
+              documentSnapshot.data() as Map<String, dynamic>?;
           if (userData != null) {
             if (userData.containsKey('address')) {
               List<dynamic>? addressList = List.from(userData['address']);
@@ -422,4 +459,3 @@ class FirebaseService {
     }
   }
 }
-

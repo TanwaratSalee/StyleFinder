@@ -130,40 +130,43 @@ class _OrdersScreenState extends State<OrdersScreen>
                     ).box.padding(EdgeInsets.symmetric(horizontal: 12)).make(),
                     5.heightBox,
                     ...products.map((product) {
+                      var productName = product['name'] ?? 'Unknown';
+                      var productImage = product['img'] ?? '';
+                      var productPrice = product['total_price'] != null
+                          ? NumberFormat('#,##0').format(product['total_price'])
+                          : '0';
+
                       return Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 4),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              'x${product['qty']}',
-                            )
+                            Text('x${product['qty']}')
                                 .text
                                 .fontFamily(regular)
                                 .color(greyColor)
                                 .size(12)
                                 .make(),
                             const SizedBox(width: 5),
-                            Image.network(product['img'],
+                            Image.network(productImage,
                                 width: 70, height: 60, fit: BoxFit.cover),
                             const SizedBox(width: 5),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    product['title'],
-                                    style: const TextStyle(
-                                      fontFamily: medium,
-                                      fontSize: 14,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  Text(
-                                    '${NumberFormat('#,##0').format(product['price'])} Bath',
-                                  )
+                                  Text(productName,
+                                          style: const TextStyle(
+                                              fontFamily: medium, fontSize: 14),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis)
+                                      .text
+                                      .fontFamily(medium)
+                                      .color(blackColor)
+                                      .size(14)
+                                      .make(),
+                                  Text('${productPrice} Bath')
                                       .text
                                       .fontFamily(regular)
                                       .color(greyColor)
@@ -469,7 +472,8 @@ class _OrdersScreenState extends State<OrdersScreen>
                                                     product['title'],
                                                 'product_img': product['img'],
                                                 'rating': rating,
-                                                'review_text': reviewController.text,
+                                                'review_text':
+                                                    reviewController.text,
                                                 'review_date': DateTime.now(),
                                                 'user_id': currentUser.uid,
                                                 'user_name':
@@ -584,11 +588,13 @@ class _OrdersScreenState extends State<OrdersScreen>
                             .size(18)
                             .make(),
                         Text(intl.DateFormat()
-                                .add_yMd()
-                                .format((orderData['order_date'].toDate())))
+                            .add_yMd()
+                            .format((orderData['order_date'].toDate())))
                       ],
                     ).box.padding(EdgeInsets.symmetric(horizontal: 12)).make(),
-                    Divider(color: greyLine,),
+                    Divider(
+                      color: greyLine,
+                    ),
                     5.heightBox,
                     ...products.map((product) {
                       return Padding(

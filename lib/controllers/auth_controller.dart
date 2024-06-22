@@ -137,10 +137,7 @@ class AuthController extends GetxController {
           DateFormat('EEEE, dd/MM/yyyy').format(birthday);
 
       // List of fallback image URLs
-      List<String> fallbackImageUrls = [
-        'gs://new-tung.appspot.com/images/Cs77utvw41dPiruedA7worPnUUj1/image_picker_D0DB4636-C828-40E6-A766-8B649EE83E3E-97366-000004745F652AD3.jpg',
-        'https://firebasestorage.googleapis.com/v0/b/new-tung.appspot.com/o/images%2FCs77utvw41dPiruedA7worPnUUj1%2Fimage_picker_9344ACA8-4696-435C-96DF-7CA89F0823D4-25686-000002FACFB1CB69.jpg?alt=media&token=61521f49-c618-4336-8d3c-a1e43eddbb80'
-      ];
+      List<String> fallbackImageUrls = [''];
 
       // Get a random fallback image URL if photoURL is null
       String imageUrl =

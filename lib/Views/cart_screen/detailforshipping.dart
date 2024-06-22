@@ -18,6 +18,19 @@ class DetailForShipping extends StatelessWidget {
     required this.totalPrice,
   }) : super(key: key);
 
+  Future<String> getVendorName(String vendorId) async {
+    DocumentSnapshot vendorSnapshot = await FirebaseFirestore.instance
+        .collection('vendors')
+        .doc(vendorId)
+        .get();
+
+    if (vendorSnapshot.exists) {
+      return vendorSnapshot['name'] ?? 'Unknown Vendor';
+    } else {
+      return 'Unknown Vendor';
+    }
+  }
+
   String formatPhoneNumber(String phone) {
     String cleaned = phone.replaceAll(RegExp(r'\D'), '');
 
@@ -39,14 +52,17 @@ class DetailForShipping extends StatelessWidget {
   Widget build(BuildContext context) {
     String formattedPrice = NumberFormat('#,##0', 'en_US').format(totalPrice);
 
-    // Group the cart items by seller name
+    print(
+        "Received address: $address, cart items: $cartItems, and total price: $totalPrice");
+
+    // Group the cart items by vendor id
     Map<String, List<DocumentSnapshot>> groupedProducts = {};
     for (var doc in cartItems) {
-      String sellerName = doc['sellername'] ?? 'Unknown Seller';
-      if (!groupedProducts.containsKey(sellerName)) {
-        groupedProducts[sellerName] = [];
+      String vendorId = doc['vendor_id'] ?? 'Unknown Vendor';
+      if (!groupedProducts.containsKey(vendorId)) {
+        groupedProducts[vendorId] = [];
       }
-      groupedProducts[sellerName]!.add(doc);
+      groupedProducts[vendorId]!.add(doc);
     }
 
     return Scaffold(
@@ -139,89 +155,133 @@ class DetailForShipping extends StatelessWidget {
                       .fontFamily(semiBold)
                       .make(),
                   Divider(color: greyThin),
-                  // Display the grouped products by seller name
+                  // Display the grouped products by vendor id
                   ...groupedProducts.entries.map((entry) {
-                    String sellerName = entry.key;
+                    String vendorId = entry.key;
                     List<DocumentSnapshot> products = entry.value;
 
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          child: Row(
-                            children: [
-                              Image.asset(
-                                iconsStore,
-                                width: 18,
+                    return FutureBuilder<String>(
+                      future: getVendorName(vendorId),
+                      builder: (context, vendorSnapshot) {
+                        if (vendorSnapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(child: CircularProgressIndicator());
+                        }
+                        if (!vendorSnapshot.hasData ||
+                            vendorSnapshot.data == null) {
+                          return Center(child: Text('Unknown Vendor'));
+                        }
+                        String sellerName = vendorSnapshot.data!;
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    iconsStore,
+                                    width: 18,
+                                  ),
+                                  10.widthBox,
+                                  Text(sellerName)
+                                      .text
+                                      .size(16)
+                                      .fontFamily(semiBold)
+                                      .color(blackColor)
+                                      .make(),
+                                ],
                               ),
-                              10.widthBox,
-                              Text(sellerName)
-                                  .text
-                                  .size(16)
-                                  .fontFamily(semiBold)
-                                  .color(blackColor)
-                                  .make(),
-                            ],
-                          ),
-                        ),
-                        ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: products.length,
-                          itemBuilder: (context, index) {
-                            var item = products[index];
-                            String itemPrice = NumberFormat('#,##0', 'en_US')
-                                .format(item['tprice']);
-                            return Column(
-                              children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text('x${item['qty']}')
-                                        .text
-                                        .size(12)
-                                        .fontFamily(regular)
-                                        .color(greyDark)
-                                        .make(),
-                                    const SizedBox(width: 5),
-                                    Image.network(item['img'],
-                                        width: 50,
-                                        height: 60,
-                                        fit: BoxFit.cover),
-                                    const SizedBox(width: 15),
-                                    Expanded(
-                                        child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                            ),
+                            ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: products.length,
+                              itemBuilder: (context, index) {
+                                var item = products[index];
+                                String itemPrice =
+                                    NumberFormat('#,##0', 'en_US')
+                                        .format(item['total_price']);
+
+                                // Fetch product data using product_id
+                                return FutureBuilder<DocumentSnapshot>(
+                                  future: FirebaseFirestore.instance
+                                      .collection('products')
+                                      .doc(item['product_id'])
+                                      .get(),
+                                  builder: (context, productSnapshot) {
+                                    if (productSnapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return Center(
+                                          child: CircularProgressIndicator());
+                                    }
+                                    if (!productSnapshot.hasData ||
+                                        !productSnapshot.data!.exists) {
+                                      return Center(
+                                          child: Text('Product not found'));
+                                    }
+
+                                    var productData = productSnapshot.data!
+                                        .data() as Map<String, dynamic>;
+                                    String title = productData['name'] ?? '';
+                                    String imgUrl =
+                                        productData['imgs'][0] ?? '';
+
+                                    return Column(
                                       children: [
-                                        Text(
-                                          item['title'],
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text('x${item['qty']}')
+                                                .text
+                                                .size(12)
+                                                .fontFamily(regular)
+                                                .color(greyDark)
+                                                .make(),
+                                            const SizedBox(width: 5),
+                                            Image.network(imgUrl,
+                                                width: 50,
+                                                height: 60,
+                                                fit: BoxFit.cover),
+                                            const SizedBox(width: 15),
+                                            Expanded(
+                                                child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  title,
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                )
+                                                    .text
+                                                    .size(14)
+                                                    .fontFamily(medium)
+                                                    .color(blackColor)
+                                                    .make(),
+                                                Text(
+                                                  '$itemPrice Bath',
+                                                  style: const TextStyle(
+                                                      color: greyDark),
+                                                ),
+                                              ],
+                                            )),
+                                          ],
                                         )
-                                            .text
-                                            .size(14)
-                                            .fontFamily(medium)
-                                            .color(blackColor)
+                                            .box
+                                            .padding(EdgeInsets.only(bottom: 5))
                                             .make(),
-                                        Text(
-                                          '$itemPrice Bath',
-                                          style:
-                                              const TextStyle(color: greyDark),
-                                        ),
                                       ],
-                                    )),
-                                  ],
-                                )
-                                    .box
-                                    .padding(EdgeInsets.only(bottom: 5))
-                                    .make(),
-                              ],
-                            );
-                          },
-                        ),
-                      ],
+                                    );
+                                  },
+                                );
+                              },
+                            )
+                          ],
+                        );
+                      },
                     );
                   }).toList(),
                   Divider(color: greyThin),
