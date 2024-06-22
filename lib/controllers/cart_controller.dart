@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/news_controller.dart';
-import 'package:flutter_finalproject/services/firestore_services.dart';
 import 'package:get/get.dart';
 import 'dart:math';
 
@@ -26,8 +25,8 @@ class CartController extends GetxController {
   var totalP = 0.obs;
 
   void updateCart(List<DocumentSnapshot> products) {
-    productSnapshot.assignAll(products);
-    calculate(products);
+    productSnapshot.value = products;
+    recalculateTotalPrice();
   }
 
   void calculate(List<DocumentSnapshot> data) {
@@ -39,36 +38,62 @@ class CartController extends GetxController {
     isMobileBankingExpanded.value = !isMobileBankingExpanded.value;
   }
 
-  void incrementCount(String docId) {
-    var currentItem =
-        productSnapshot.firstWhere((element) => element.id == docId);
+  void incrementCount(String docId) async {
+    var currentItem = productSnapshot.firstWhere((element) => element.id == docId);
     int currentQty = currentItem['qty'];
-    int price = currentItem['total_price'];
+    double unitPrice = (currentItem['total_price'] as int) / currentQty;
     int newQty = currentQty + 1;
-    int newTprice = price * newQty;
-    FirestoreServices.updateDocumentCart(
-        docId, {'qty': newQty, 'total_price': newTprice});
-    currentItem.reference.update({'qty': newQty, 'total_price': newTprice});
+    double newTprice = unitPrice * newQty;
+
+    // Update Firestore
+    await currentItem.reference.update({
+      'qty': newQty,
+      'total_price': newTprice.toInt(),
+    });
+
+    // Update local snapshot
+    currentItem = await currentItem.reference.get();
+    productSnapshot[productSnapshot.indexWhere((element) => element.id == docId)] = currentItem;
     recalculateTotalPrice();
   }
 
-  void decrementCount(String docId) {
-    var currentItem =
-        productSnapshot.firstWhere((element) => element.id == docId);
+  void decrementCount(String docId) async {
+    var currentItem = productSnapshot.firstWhere((element) => element.id == docId);
     int currentQty = currentItem['qty'];
     if (currentQty > 1) {
-      int currentTprice = currentItem['total_price'];
-      int unitPrice = currentTprice ~/ currentQty;
+      double unitPrice = (currentItem['total_price'] as int) / currentQty;
       int newQty = currentQty - 1;
-      int newTprice = unitPrice * newQty;
-      FirestoreServices.updateDocumentCart(
-          docId, {'qty': newQty, 'total_price': newTprice});
-      currentItem.reference.update({'qty': newQty, 'total_price': newTprice});
+      double newTprice = unitPrice * newQty;
+
+      // Update Firestore
+      await currentItem.reference.update({
+        'qty': newQty,
+        'total_price': newTprice.toInt(),
+      });
+
+      // Update local snapshot
+      currentItem = await currentItem.reference.get();
+      productSnapshot[productSnapshot.indexWhere((element) => element.id == docId)] = currentItem;
+    } else {
+      // Remove item from Firestore if qty < 1
+      await currentItem.reference.delete();
+      productSnapshot.removeWhere((element) => element.id == docId);
+    }
+    recalculateTotalPrice();
+  }
+
+    void removeItem(String docId) async {
+    try {
+      var currentItem = productSnapshot.firstWhere((element) => element.id == docId);
+      await currentItem.reference.delete();
+      productSnapshot.removeWhere((element) => element.id == docId);
       recalculateTotalPrice();
+    } catch (e) {
+      print("Error removing item: $e");
     }
   }
 
-  void recalculateTotalPrice() {
+   void recalculateTotalPrice() {
     totalP.value = productSnapshot.fold<int>(
         0, (sum, item) => sum + (item['total_price'] as int));
   }
