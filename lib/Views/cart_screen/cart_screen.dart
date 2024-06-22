@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_finalproject/Views/cart_screen/shipping_screen.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
@@ -10,8 +11,18 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
+
+  @override
+  _CartScreenState createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  final CartController cartController = Get.put(CartController());
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final User? currentUser = FirebaseAuth.instance.currentUser;
+  Map<String, bool> showDeleteIcon = {};
 
   Future<Map<String, List<DocumentSnapshot>>> groupProductsByVendor(
       List<DocumentSnapshot> data) async {
@@ -36,12 +47,6 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-    final User? currentUser = FirebaseAuth.instance.currentUser;
-
-    // Initialize the CartController
-    final CartController cartController = Get.put(CartController());
-
     return Scaffold(
       backgroundColor: whiteColor,
       bottomNavigationBar: SizedBox(
@@ -72,10 +77,6 @@ class CartScreen extends StatelessWidget {
             .where('user_id', isEqualTo: currentUser?.uid)
             .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
             return const Center(child: Text('No items in the cart'));
           }
@@ -88,10 +89,6 @@ class CartScreen extends StatelessWidget {
             builder: (context, vendorSnapshot) {
               if (vendorSnapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
-              }
-
-              if (!vendorSnapshot.hasData || vendorSnapshot.data!.isEmpty) {
-                return const Center(child: Text('No vendors found'));
               }
 
               var groupedProducts = vendorSnapshot.data!;
@@ -112,7 +109,7 @@ class CartScreen extends StatelessWidget {
                             children: [
                               15.widthBox,
                               Image.asset(iconsStore, width: 18),
-                              5.widthBox,
+                              10.widthBox,
                               Text(
                                 vendorName,
                                 style: TextStyle(
@@ -171,82 +168,99 @@ class CartScreen extends StatelessWidget {
                                               .toDouble()
                                           : productData['price'] ?? 0.0;
 
-                                  return GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => ItemDetails(
-                                            title: productName,
-                                            data: productData,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    child: Column(
+                                  return Slidable(
+                                    key: Key(productDoc.id),
+                                    endActionPane: ActionPane(
+                                      motion: ScrollMotion(),
+                                      extentRatio: 0.25,
                                       children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(10),
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              productImages.isNotEmpty
-                                                  ? Image.network(
-                                                      productImages[0],
-                                                      height: 70,
-                                                      width: 70)
-                                                  : loadingIndicator(),
-                                              10.widthBox,
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    productName,
-                                                    style: const TextStyle(
-                                                      fontFamily: medium,
-                                                      fontSize: 16,
-                                                    ),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    maxLines: 1,
-                                                  ).box.width(170).make(),
-                                                  Text('Size: $selectSize')
-                                                      .text
-                                                      .color(greyDark)
-                                                      .size(14)
-                                                      .make(),
-                                                  "Total ${NumberFormat('#,##0').format(double.parse('$totalPrice').toInt())} Bath"
-                                                      .text
-                                                      .color(greyDark)
-                                                      .fontFamily(regular)
-                                                      .size(14)
-                                                      .make(),
-                                                ],
-                                              ),
-                                              Spacer(),
-                                              IconButton(
-                                                icon: Icon(Icons.remove),
-                                                onPressed: () {
-                                                  cartController
-                                                      .decrementCount(
-                                                          productDoc.id);
-                                                },
-                                              ),
-                                              Text('$qty'),
-                                              IconButton(
-                                                icon: Icon(Icons.add),
-                                                onPressed: () {
-                                                  cartController.incrementCount(
-                                                      productDoc.id);
-                                                },
-                                              ),
-                                              SizedBox(height: 10),
-                                            ],
-                                          ),
+                                        SlidableAction(
+                                          onPressed: (context) {
+                                            cartController.removeItem(productDoc.id);
+                                          },
+                                          backgroundColor: redColor,
+                                          foregroundColor: whiteColor,
+                                          icon: Icons.delete,
+                                          label: 'Delete',
                                         ),
                                       ],
+                                    ),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => ItemDetails(
+                                              title: productName,
+                                              data: productData,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Column(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(10),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                productImages.isNotEmpty
+                                                    ? Image.network(
+                                                        productImages[0],
+                                                        height: 70,
+                                                        width: 70)
+                                                    : loadingIndicator(),
+                                                15.widthBox,
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      productName,
+                                                      style: const TextStyle(
+                                                        fontFamily: medium,
+                                                        fontSize: 16,
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      maxLines: 1,
+                                                    ).box.width(170).make(),
+                                                    Text('Size: $selectSize')
+                                                        .text
+                                                        .color(greyDark)
+                                                        .size(14)
+                                                        .make(),
+                                                    "Total ${NumberFormat('#,##0').format(double.parse('$totalPrice').toInt())} Bath"
+                                                        .text
+                                                        .color(greyDark)
+                                                        .fontFamily(regular)
+                                                        .size(14)
+                                                        .make(),
+                                                  ],
+                                                ),
+                                                Spacer(),
+                                                IconButton(
+                                                  icon: Icon(Icons.remove),
+                                                  onPressed: () {
+                                                    cartController.decrementCount(
+                                                        productDoc.id);
+                                                  },
+                                                ),
+                                                Text('$qty'),
+                                                IconButton(
+                                                  icon: Icon(Icons.add),
+                                                  onPressed: () {
+                                                    cartController.incrementCount(
+                                                        productDoc.id);
+                                                  },
+                                                ),
+                                                SizedBox(height: 10),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   );
                                 },
