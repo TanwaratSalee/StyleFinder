@@ -443,7 +443,6 @@ class NewsScreen extends StatelessWidget {
                             .roundedLg
                             .make(),
                       ),
-                      20.heightBox,
                       Container(
                         width: double.infinity,
                         height: 570,

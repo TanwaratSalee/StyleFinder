@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/news_controller.dart';
-import 'package:flutter_finalproject/services/firestore_services.dart';
 import 'package:get/get.dart';
 import 'dart:math';
 
@@ -38,33 +37,36 @@ class CartController extends GetxController {
         data.fold<int>(0, (sum, item) => sum + (item['tprice'] as int));
   }
 
-  void incrementCount(String docId) {
-    var currentItem =
-        productSnapshot.firstWhere((element) => element.id == docId);
-    int currentQty = currentItem['qty'];
-    int price = currentItem['tprice'];
-    int newQty = currentQty + 1;
-    int newTprice = price * newQty;
-    FirestoreServices.updateDocumentCart(
-        docId, {'qty': newQty, 'tprice': newTprice});
-    currentItem.reference.update({'qty': newQty, 'tprice': newTprice});
-    recalculateTotalPrice();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  void incrementQuantity(DocumentSnapshot cartItem) {
+    _firestore.runTransaction((transaction) async {
+      DocumentSnapshot freshSnap = await transaction.get(cartItem.reference);
+      int newQuantity = (freshSnap['qty'] ?? 0) + 1;
+      double price = freshSnap['total_price'] / freshSnap['qty'];
+      double newTotalPrice = newQuantity * price;
+      transaction.update(freshSnap.reference, {
+        'qty': newQuantity,
+        'total_price': newTotalPrice,
+      });
+    });
+    update();
   }
 
-  void decrementCount(String docId) {
-    var currentItem =
-        productSnapshot.firstWhere((element) => element.id == docId);
-    int currentQty = currentItem['qty'];
-    if (currentQty > 1) {
-      int currentTprice = currentItem['tprice'];
-      int unitPrice = currentTprice ~/ currentQty;
-      int newQty = currentQty - 1;
-      int newTprice = unitPrice * newQty;
-      FirestoreServices.updateDocumentCart(
-          docId, {'qty': newQty, 'tprice': newTprice});
-      currentItem.reference.update({'qty': newQty, 'tprice': newTprice});
-      recalculateTotalPrice();
-    }
+  void decrementQuantity(DocumentSnapshot cartItem) {
+    _firestore.runTransaction((transaction) async {
+      DocumentSnapshot freshSnap = await transaction.get(cartItem.reference);
+      int newQuantity = (freshSnap['qty'] ?? 0) - 1;
+      if (newQuantity > 0) {
+        double price = freshSnap['total_price'] / freshSnap['qty'];
+        double newTotalPrice = newQuantity * price;
+        transaction.update(freshSnap.reference, {
+          'qty': newQuantity,
+          'total_price': newTotalPrice,
+        });
+      }
+    });
+    update();
   }
 
   void recalculateTotalPrice() {
@@ -112,55 +114,9 @@ class CartController extends GetxController {
     return 0.0;
   }
 
-/*   calculate(data) {
-    totalP.value = 0;
-    for (var i = 0; i < data.length; i++) {
-      totalP.value = totalP.value + int.parse(data[i]['tprice'].toString());
-    }
-  } */
-
   changePaymentIndex(index) {
     paymentIndex.value = index;
   }
-
-/*   placeMyOrder({required orderPaymentMethod, required totalAmount}) async {
-    placingOrder(true);
-    await getProductDetails();
-    String orderCode = generateRandomOrderCode(8);
-
-    String firstname = _selectedAddress?['firstname'] ?? '';
-    String surname = _selectedAddress?['surname'] ?? '';
-    String address = _selectedAddress?['address'] ?? '';
-    String state = _selectedAddress?['state'] ?? '';
-    String city = _selectedAddress?['city'] ?? '';
-    String phone = _selectedAddress?['phone'] ?? '';
-    String postalcode = _selectedAddress?['postalCode'] ?? '';
-
-    await firestore.collection(ordersCollection).doc().set({
-      'order_code': orderCode,
-      'order_date': FieldValue.serverTimestamp(),
-      'order_by': currentUser!.uid,
-      'order_by_name': Get.find<NewsController>().username,
-      'order_by_email': currentUser!.email,
-      'order_by_firstname': firstname,
-      'order_by_surname': surname,
-      'order_by_address': address,
-      'order_by_state': state,
-      'order_by_city': city,
-      'order_by_phone': phone,
-      'order_by_postalcode': postalcode,
-      'shipping_method': "Home Delivery",
-      'payment_method': orderPaymentMethod,
-      'order_placed': true,
-      'order_confirmed': false,
-      'order_delivered': false,
-      'order_on_delivery': false,
-      'total_amount': totalAmount,
-      'orders': FieldValue.arrayUnion(products),
-      'vendors': FieldValue.arrayUnion(vendors)
-    });
-    placingOrder(false);
-  } */
 
   placeMyOrder({required orderPaymentMethod, required totalAmount}) async {
     placingOrder(true);
@@ -193,7 +149,7 @@ class CartController extends GetxController {
 
       // Fetch vendor details
       var vendorSnapshot =
-          await firestore.collection(vendorsCollection).doc(vendorId).get();
+          await _firestore.collection('vendors').doc(vendorId).get();
       String vendorName = 'Unknown Vendor';
       if (vendorSnapshot.exists) {
         vendorName = vendorSnapshot['vendor_name'] ?? 'Unknown Vendor';
@@ -210,7 +166,7 @@ class CartController extends GetxController {
       totalOrderAmount += vendorTotalAmount;
 
       // Create a new document and get its ID
-      var orderRef = await firestore.collection(ordersCollection).add({
+      var orderRef = await _firestore.collection('orders').add({
         'order_code': generateRandomOrderCode(8),
         'order_date': FieldValue.serverTimestamp(),
         'order_by': currentUser!.uid,
@@ -263,7 +219,7 @@ class CartController extends GetxController {
 
   clearCart() {
     for (var i = 0; i < productSnapshot.length; i++) {
-      firestore.collection(cartCollection).doc(productSnapshot[i].id).delete();
+      _firestore.collection(cartCollection).doc(productSnapshot[i].id).delete();
     }
   }
 

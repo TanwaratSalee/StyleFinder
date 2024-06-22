@@ -1,10 +1,14 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/Views/cart_screen/payment_method.dart';
+import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
+import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+
+import '../../controllers/cart_controller.dart';
 
 class DetailForShipping extends StatelessWidget {
   final Map<String, dynamic>? address;
@@ -35,19 +39,35 @@ class DetailForShipping extends StatelessWidget {
     return phone;
   }
 
+  Future<String?> getVendorName(String vendorId) async {
+    final doc = await FirebaseFirestore.instance
+        .collection('vendors')
+        .doc(vendorId)
+        .get();
+    if (doc.exists) {
+      final data = doc.data();
+      return data?['name'];
+    }
+    return null;
+  }
+
+  Future<Map<String, dynamic>?> getProductDetails(String productId) async {
+    final doc = await FirebaseFirestore.instance
+        .collection('products')
+        .doc(productId)
+        .get();
+    if (doc.exists) {
+      return doc.data();
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
-    String formattedPrice = NumberFormat('#,##0', 'en_US').format(totalPrice);
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    final CartController cartController = Get.put(CartController());
 
-    // Group the cart items by seller name
-    Map<String, List<DocumentSnapshot>> groupedProducts = {};
-    for (var doc in cartItems) {
-      String sellerName = doc['sellername'] ?? 'Unknown Seller';
-      if (!groupedProducts.containsKey(sellerName)) {
-        groupedProducts[sellerName] = [];
-      }
-      groupedProducts[sellerName]!.add(doc);
-    }
+    String formattedPrice = NumberFormat('#,##0', 'en_US').format(totalPrice);
 
     return Scaffold(
       appBar: AppBar(
@@ -129,119 +149,142 @@ class DetailForShipping extends StatelessWidget {
                   .padding(EdgeInsets.fromLTRB(22, 0, 22, 10))
                   .rounded
                   .make(),
-              SizedBox(height: 15),
+              20.heightBox,
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text("Order List")
-                      .text
-                      .size(20)
-                      .fontFamily(semiBold)
-                      .make(),
-                  Divider(color: greyThin),
-                  // Display the grouped products by seller name
-                  ...groupedProducts.entries.map((entry) {
-                    String sellerName = entry.key;
-                    List<DocumentSnapshot> products = entry.value;
+                  Text("Order List").text.size(20).fontFamily(semiBold).make(),
+              Divider(color: greyLine,),
+              FutureBuilder<QuerySnapshot>(
+                future: _firestore.collection('cart').get(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  }
 
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          child: Row(
+                  if (snapshot.hasError) {
+                    return Center(child: Text('Error loading cart items'));
+                  }
+
+                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                    return Center(child: Text('No items in cart'));
+                  }
+
+                  final cartDocs = snapshot.data!.docs;
+
+                  // Group cart items by vendor_id
+                  final groupedItems = <String, List<DocumentSnapshot>>{};
+                  for (var doc in cartDocs) {
+                    final vendorId = doc['vendor_id'] as String;
+                    if (!groupedItems.containsKey(vendorId)) {
+                      groupedItems[vendorId] = [];
+                    }
+                    groupedItems[vendorId]!.add(doc);
+                  }
+
+                  return Column(
+                    children: groupedItems.entries.map((entry) {
+                      final vendorId = entry.key;
+                      final items = entry.value;
+                      return FutureBuilder<String?>(
+                        future: getVendorName(vendorId),
+                        builder: (context, vendorSnapshot) {
+                          if (vendorSnapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(child: CircularProgressIndicator());
+                          }
+
+                          if (vendorSnapshot.hasError ||
+                              !vendorSnapshot.hasData) {
+                            return Center(
+                                child: Text('Error loading vendor name'));
+                          }
+
+                          final vendorName =
+                              vendorSnapshot.data ?? 'Unknown Vendor';
+
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Image.asset(
-                                iconsStore,
-                                width: 18,
+                              Row(
+                                children: [
+                                  Image.asset(iconsStore, width: 18),
+                                  5.widthBox,
+                                  Text(
+                                    vendorName,
+                                    style: TextStyle(
+                                        fontSize: 18, fontFamily: medium),
+                                  ),
+                                ],
                               ),
-                              10.widthBox,
-                              Text(sellerName)
-                                  .text
-                                  .size(16)
-                                  .fontFamily(semiBold)
-                                  .color(blackColor)
-                                  .make(),
-                            ],
-                          ),
-                        ),
-                        ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: products.length,
-                          itemBuilder: (context, index) {
-                            var item = products[index];
-                            String itemPrice = NumberFormat('#,##0', 'en_US')
-                                .format(item['tprice']);
-                            return Column(
-                              children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text('x${item['qty']}')
-                                        .text
-                                        .size(12)
-                                        .fontFamily(regular)
-                                        .color(greyDark)
-                                        .make(),
-                                    const SizedBox(width: 5),
-                                    Image.network(item['img'],
-                                        width: 50,
-                                        height: 60,
-                                        fit: BoxFit.cover),
-                                    const SizedBox(width: 15),
-                                    Expanded(
-                                        child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                              ...items.map((item) {
+                                return FutureBuilder<Map<String, dynamic>?>(
+                                  future: getProductDetails(item['product_id']),
+                                  builder: (context, productSnapshot) {
+                                    if (productSnapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return Center(
+                                          child: CircularProgressIndicator());
+                                    }
+
+                                    if (productSnapshot.hasError ||
+                                        !productSnapshot.hasData) {
+                                      return Center(
+                                          child: Text(
+                                              'Error loading product details'));
+                                    }
+
+                                    final productDetails = productSnapshot.data;
+                                    final productName =
+                                        productDetails?['name'] ??
+                                            'Unknown Product';
+                                    final productImage =
+                                        productDetails?['imgs'] != null
+                                            ? productDetails!['imgs'][0]
+                                            : null;
+
+                                    return Row(
                                       children: [
-                                        Text(
-                                          item['title'],
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        )
-                                            .text
-                                            .size(14)
-                                            .fontFamily(medium)
-                                            .color(blackColor)
-                                            .make(),
-                                        Text(
-                                          '$itemPrice Bath',
-                                          style:
-                                              const TextStyle(color: greyDark),
-                                        ),
+                                        Text('x${item['qty']}'),
+                                        5.widthBox,
+                                         productImage != null
+                                                  ? Image.network(productImage,
+                                                      width: 65, height: 70)
+                                                  : Icon(Icons.image),
+                                                  15.widthBox,
+                                                  Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                  '$productName',
+                                                  style: TextStyle(color: blackColor, fontFamily: medium, fontSize: 16),
+                                                  softWrap: false,
+                                                  overflow: TextOverflow.ellipsis,
+                                                ).box.width(200).make(),
+                                                  Text('Size: ${item['select_size']}').text.size(14).color(greyDark).fontFamily(regular).make(),
+                                                   Text('Total ${NumberFormat('#,##0').format(double.parse('${item['total_price']}').toInt())} Bath',
+                                                    style: TextStyle(color: greyDark, fontFamily: regular, fontSize: 14)),
+                                                ],
+                                              ),
                                       ],
-                                    )),
-                                  ],
-                                )
-                                    .box
-                                    .padding(EdgeInsets.only(bottom: 5))
-                                    .make(),
-                              ],
-                            );
-                          },
-                        ),
-                      ],
-                    );
-                  }).toList(),
-                  Divider(color: greyThin),
-                  5.heightBox,
-                  Row(
-                    children: [
-                      Text(
-                        "Total   $formattedPrice  Bath",
-                      ).text.size(14).color(greyDark).fontFamily(medium).make(),
-                    ],
-                  ).box.padding(EdgeInsets.only(left: 15)).make(),
+                                    ).paddingSymmetric(vertical: 5);
+                                  },
+                                );
+                              }).toList(),
+                              10.heightBox,
+                            ],
+                          );
+                        },
+                      );
+                    }).toList(),
+                  );
+                },
+              ),
+            
                 ],
-              )
-                  .box
-                  .white
-                  .border(color: greyThin)
-                  .padding(EdgeInsets.symmetric(horizontal: 22, vertical: 15))
-                  .rounded
-                  .make()
-            ],
+              ).box.border(color: greyLine).rounded.p12.make()
+              ],
           ),
         ),
       ),
