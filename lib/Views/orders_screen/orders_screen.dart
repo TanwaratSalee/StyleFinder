@@ -69,6 +69,37 @@ class _OrdersScreenState extends State<OrdersScreen>
     );
   }
 
+  Future<Map<String, String>> getProductDetails(String productId) async {
+    if (productId.isEmpty) {
+      debugPrint('Error: productId is empty.');
+      return {'name': 'Unknown Product', 'id': productId, 'imageUrl': ''};
+    }
+
+    try {
+      var productSnapshot = await FirebaseFirestore.instance
+          .collection('products')
+          .doc(productId)
+          .get();
+      if (productSnapshot.exists) {
+        debugPrint('Document ID: ${productSnapshot.id}'); // Use debugPrint
+        var productData = productSnapshot.data() as Map<String, dynamic>?;
+        return {
+          'name': productData?['name'] ?? 'Unknown Product',
+          'id': productId,
+          'imageUrl':
+              (productData?['imgs'] != null && productData!['imgs'].isNotEmpty)
+                  ? productData['imgs'][0]
+                  : ''
+        };
+      } else {
+        return {'name': 'Unknown Product', 'id': productId, 'imageUrl': ''};
+      }
+    } catch (e) {
+      debugPrint('Error getting product name: $e');
+      return {'name': 'Unknown Product', 'id': productId, 'imageUrl': ''};
+    }
+  }
+
   Widget buildOrders(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: getOrders(),
@@ -107,7 +138,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Order code ${orderData['order_id']}",
+                          "Order ${orderData['order_id']?.length > 9 ? orderData['order_id']?.substring(0, 9) + '...' : orderData['order_id']}",
                         )
                             .text
                             .fontFamily(medium)
@@ -130,53 +161,81 @@ class _OrdersScreenState extends State<OrdersScreen>
                     ).box.padding(EdgeInsets.symmetric(horizontal: 12)).make(),
                     5.heightBox,
                     ...products.map((product) {
-                      var productName = product['name'] ?? 'Unknown';
-                      var productImage = product['img'] ?? '';
-                      var productPrice = product['total_price'] != null
-                          ? NumberFormat('#,##0').format(product['total_price'])
-                          : '0';
+                      return FutureBuilder<Map<String, String>>(
+                        future: getProductDetails(product['product_id'] ?? ''),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return CircularProgressIndicator();
+                          }
+                          if (snapshot.hasError) {
+                            return Text('Error: ${snapshot.error}');
+                          }
+                          if (!snapshot.hasData ||
+                              snapshot.data!['name']!.isEmpty) {
+                            return Text('Unknown Product');
+                          }
 
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('x${product['qty']}')
-                                .text
-                                .fontFamily(regular)
-                                .color(greyColor)
-                                .size(12)
-                                .make(),
-                            const SizedBox(width: 5),
-                            Image.network(productImage,
-                                width: 70, height: 60, fit: BoxFit.cover),
-                            const SizedBox(width: 5),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(productName,
-                                          style: const TextStyle(
-                                              fontFamily: medium, fontSize: 14),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis)
-                                      .text
-                                      .fontFamily(medium)
-                                      .color(blackColor)
-                                      .size(14)
-                                      .make(),
-                                  Text('${productPrice} Bath')
-                                      .text
-                                      .fontFamily(regular)
-                                      .color(greyColor)
-                                      .size(14)
-                                      .make(),
-                                ],
-                              ),
+                          var productName = snapshot.data!['name'] ?? 'Unknown';
+                          var productImage = snapshot.data!['imageUrl'] ?? '';
+                          var productPrice = product['total_price'] != null
+                              ? NumberFormat('#,##0')
+                                  .format(product['total_price'])
+                              : '0';
+
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 4),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('x${product['qty']}')
+                                    .text
+                                    .fontFamily(regular)
+                                    .color(greyColor)
+                                    .size(12)
+                                    .make(),
+                                const SizedBox(width: 5),
+                                productImage.isNotEmpty
+                                    ? Image.network(productImage,
+                                        width: 70,
+                                        height: 60,
+                                        fit: BoxFit.cover)
+                                    : Container(
+                                        width: 70,
+                                        height: 60,
+                                        color:
+                                            greyColor), // Placeholder for empty image URL
+                                const SizedBox(width: 5),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(productName,
+                                              style: const TextStyle(
+                                                  fontFamily: medium,
+                                                  fontSize: 14),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis)
+                                          .text
+                                          .fontFamily(medium)
+                                          .color(blackColor)
+                                          .size(14)
+                                          .make(),
+                                      Text('${productPrice} Bath')
+                                          .text
+                                          .fontFamily(regular)
+                                          .color(greyColor)
+                                          .size(14)
+                                          .make(),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          );
+                        },
                       );
                     }).toList(),
                   ],
@@ -225,7 +284,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Order code ${orderData['order_code'] ?? 'N/A'}",
+                          "Order ${orderData['order_id']?.length > 9 ? orderData['order_id']?.substring(0, 9) + '...' : orderData['order_id']}",
                         )
                             .text
                             .fontFamily(medium)
@@ -273,7 +332,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    product['name'] ?? 'Unknown Product',
+                                    productName,
                                     style: const TextStyle(
                                       fontFamily: medium,
                                       fontSize: 14,
@@ -281,9 +340,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  Text(
-                                    '${NumberFormat('#,##0').format(product['total_price'] ?? 0)} Bath',
-                                  )
+                                  Text('${productPrice} Bath')
                                       .text
                                       .fontFamily(regular)
                                       .color(greyColor)

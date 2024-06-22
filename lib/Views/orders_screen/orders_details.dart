@@ -32,7 +32,7 @@ class OrdersDetails extends StatelessWidget {
   Future<Map<String, String>> getProductDetails(String productId) async {
     if (productId.isEmpty) {
       debugPrint('Error: productId is empty.');
-      return {'name': 'Unknown Product', 'id': productId};
+      return {'name': 'Unknown Product', 'id': productId, 'imageUrl': ''};
     }
 
     try {
@@ -45,14 +45,18 @@ class OrdersDetails extends StatelessWidget {
         var productData = productSnapshot.data() as Map<String, dynamic>?;
         return {
           'name': productData?['name'] ?? 'Unknown Product',
-          'id': productId
+          'id': productId,
+          'imageUrl':
+              (productData?['imgs'] != null && productData!['imgs'].isNotEmpty)
+                  ? productData['imgs'][0]
+                  : ''
         };
       } else {
-        return {'name': 'Unknown Product', 'id': productId};
+        return {'name': 'Unknown Product', 'id': productId, 'imageUrl': ''};
       }
     } catch (e) {
       debugPrint('Error getting product name: $e');
-      return {'name': 'Unknown Product', 'id': productId};
+      return {'name': 'Unknown Product', 'id': productId, 'imageUrl': ''};
     }
   }
 
@@ -342,7 +346,6 @@ class OrdersDetails extends StatelessWidget {
                     itemCount: data['orders'].length,
                     itemBuilder: (context, index) {
                       var orderItem = data['orders'][index];
-                      var imageUrl = orderItem['img'] ?? '';
                       return FutureBuilder<Map<String, String>>(
                         future:
                             getProductDetails(orderItem['product_id'] ?? ''),
@@ -369,8 +372,8 @@ class OrdersDetails extends StatelessWidget {
                                   .color(greyDark)
                                   .make(),
                               const SizedBox(width: 5),
-                              imageUrl.isNotEmpty
-                                  ? Image.network(imageUrl,
+                              snapshot.data!['imageUrl']!.isNotEmpty
+                                  ? Image.network(snapshot.data!['imageUrl']!,
                                       width: 70, height: 80, fit: BoxFit.cover)
                                   : Container(
                                       width: 70,
@@ -391,7 +394,7 @@ class OrdersDetails extends StatelessWidget {
                                         .color(greyDark)
                                         .make(),
                                     Text(
-                                      '${NumberFormat('#,##0').format(orderItem['price'] ?? 0)} Bath',
+                                      '${NumberFormat('#,##0').format(orderItem['total_price'] ?? 0)} Bath',
                                       style: const TextStyle(color: greyDark),
                                     ),
                                   ],

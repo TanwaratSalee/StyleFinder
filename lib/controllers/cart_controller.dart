@@ -39,7 +39,8 @@ class CartController extends GetxController {
   }
 
   void incrementCount(String docId) async {
-    var currentItem = productSnapshot.firstWhere((element) => element.id == docId);
+    var currentItem =
+        productSnapshot.firstWhere((element) => element.id == docId);
     int currentQty = currentItem['qty'];
     double unitPrice = (currentItem['total_price'] as int) / currentQty;
     int newQty = currentQty + 1;
@@ -53,12 +54,14 @@ class CartController extends GetxController {
 
     // Update local snapshot
     currentItem = await currentItem.reference.get();
-    productSnapshot[productSnapshot.indexWhere((element) => element.id == docId)] = currentItem;
+    productSnapshot[productSnapshot
+        .indexWhere((element) => element.id == docId)] = currentItem;
     recalculateTotalPrice();
   }
 
   void decrementCount(String docId) async {
-    var currentItem = productSnapshot.firstWhere((element) => element.id == docId);
+    var currentItem =
+        productSnapshot.firstWhere((element) => element.id == docId);
     int currentQty = currentItem['qty'];
     if (currentQty > 1) {
       double unitPrice = (currentItem['total_price'] as int) / currentQty;
@@ -73,7 +76,8 @@ class CartController extends GetxController {
 
       // Update local snapshot
       currentItem = await currentItem.reference.get();
-      productSnapshot[productSnapshot.indexWhere((element) => element.id == docId)] = currentItem;
+      productSnapshot[productSnapshot
+          .indexWhere((element) => element.id == docId)] = currentItem;
     } else {
       // Remove item from Firestore if qty < 1
       await currentItem.reference.delete();
@@ -82,9 +86,10 @@ class CartController extends GetxController {
     recalculateTotalPrice();
   }
 
-    void removeItem(String docId) async {
+  void removeItem(String docId) async {
     try {
-      var currentItem = productSnapshot.firstWhere((element) => element.id == docId);
+      var currentItem =
+          productSnapshot.firstWhere((element) => element.id == docId);
       await currentItem.reference.delete();
       productSnapshot.removeWhere((element) => element.id == docId);
       recalculateTotalPrice();
@@ -93,7 +98,7 @@ class CartController extends GetxController {
     }
   }
 
-   void recalculateTotalPrice() {
+  void recalculateTotalPrice() {
     totalP.value = productSnapshot.fold<int>(
         0, (sum, item) => sum + (item['total_price'] as int));
   }
@@ -130,7 +135,14 @@ class CartController extends GetxController {
   }
 
   double calculateTotalPrice() {
-    return 0.0;
+    return selectedItems.entries.fold(0.0, (sum, entry) {
+      if (entry.value) {
+        var item =
+            productSnapshot.firstWhere((element) => element.id == entry.key);
+        return sum + (item['total_price'] as int).toDouble();
+      }
+      return sum;
+    });
   }
 
   changePaymentIndex(index) {
@@ -168,8 +180,7 @@ class CartController extends GetxController {
           await firestore.collection('vendors').doc(vendorId).get();
       String vendorName = 'Unknown Vendor';
       if (vendorSnapshot.exists) {
-        vendorName = vendorSnapshot['name'] ??
-            'Unknown Vendor'; // Fetch vendor name correctly
+        vendorName = vendorSnapshot['name'] ?? 'Unknown Vendor';
       }
 
       double vendorTotalAmount = vendorProducts.fold(0.0, (sum, item) {
@@ -250,6 +261,7 @@ class CartController extends GetxController {
           'product_id': productId,
           'vendor_id': vendorId ?? '',
           'qty': cartProductData['qty'] ?? 0,
+          'total_price': cartProductData['total_price'] ?? 0,
           'reviews': false,
         });
         vendors.add(vendorId ?? '');
@@ -259,6 +271,7 @@ class CartController extends GetxController {
           'product_id': productId,
           'vendor_id': cartProductData['vendor_id'] ?? '',
           'qty': cartProductData['qty'] ?? 0,
+          'total_price': cartProductData['total_price'] ?? 0,
           'reviews': false,
         });
         vendors.add(cartProductData['vendor_id'] ?? '');

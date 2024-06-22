@@ -29,7 +29,12 @@ class _CartScreenState extends State<CartScreen> {
     Map<String, List<DocumentSnapshot>> groupedProducts = {};
 
     for (var doc in data) {
-      String vendorId = doc['vendor_id'];
+      String vendorId = doc['vendor_id'] ?? '';
+      if (vendorId.isEmpty) {
+        debugPrint('Error: vendorId is empty.');
+        continue;
+      }
+
       DocumentSnapshot vendorSnapshot = await FirebaseFirestore.instance
           .collection('vendors')
           .doc(vendorId)
@@ -176,7 +181,8 @@ class _CartScreenState extends State<CartScreen> {
                                       children: [
                                         SlidableAction(
                                           onPressed: (context) {
-                                            cartController.removeItem(productDoc.id);
+                                            cartController
+                                                .removeItem(productDoc.id);
                                           },
                                           backgroundColor: redColor,
                                           foregroundColor: whiteColor,
@@ -243,16 +249,18 @@ class _CartScreenState extends State<CartScreen> {
                                                 IconButton(
                                                   icon: Icon(Icons.remove),
                                                   onPressed: () {
-                                                    cartController.decrementCount(
-                                                        productDoc.id);
+                                                    cartController
+                                                        .decrementCount(
+                                                            productDoc.id);
                                                   },
                                                 ),
                                                 Text('$qty'),
                                                 IconButton(
                                                   icon: Icon(Icons.add),
                                                   onPressed: () {
-                                                    cartController.incrementCount(
-                                                        productDoc.id);
+                                                    cartController
+                                                        .incrementCount(
+                                                            productDoc.id);
                                                   },
                                                 ),
                                                 SizedBox(height: 10),
