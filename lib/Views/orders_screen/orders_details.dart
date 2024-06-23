@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_finalproject/Views/chat_screen/chat_screen.dart';
-import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/orders_screen/component/orders_status.dart';
-import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart' as intl;
@@ -358,10 +356,10 @@ class OrdersDetails extends StatelessWidget {
                         future:
                             getProductDetails(orderItem['product_id'] ?? ''),
                         builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return CircularProgressIndicator();
-                          }
+                          // if (snapshot.connectionState ==
+                          //     ConnectionState.waiting) {
+                          //   return CircularProgressIndicator();
+                          // }
                           if (snapshot.hasError) {
                             return Text('Error: ${snapshot.error}');
                           }
