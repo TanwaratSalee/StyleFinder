@@ -247,7 +247,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                                     children: [
                                       Text(productName,
                                           style: const TextStyle(
-                                              fontFamily: medium, fontSize: 16),
+                                              fontFamily: medium, fontSize: 16, color: greyDark),
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis),
                                       Text('${productPrice} Bath')
@@ -688,6 +688,7 @@ Widget buildReview(BuildContext context) {
 
                                                         var reviewData = {
                                                           'product_id': product['product_id'] ?? 'N/A',
+                                                          'order_id': product['order_id'] ?? 'N/A',
                                                           'rating': rating,
                                                           'review_text': reviewController.text,
                                                           'created_at': DateTime.now(),
@@ -859,14 +860,14 @@ Widget buildReview(BuildContext context) {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 4),
                             child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
                                   'x${product['qty']}',
                                 )
                                     .text
                                     .fontFamily(medium)
-                                    .color(blackColor)
+                                    .color(greyDark)
                                     .size(16)
                                     .make(),
                                 const SizedBox(width: 5),
@@ -883,6 +884,7 @@ Widget buildReview(BuildContext context) {
                                         style: const TextStyle(
                                           fontFamily: medium,
                                           fontSize: 16,
+                                          color: greyDark
                                         ),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
