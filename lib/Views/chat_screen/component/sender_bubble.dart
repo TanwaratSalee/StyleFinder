@@ -14,7 +14,7 @@ Widget senderBubble(DocumentSnapshot data) {
     textDirection: isCurrentUser ? TextDirection.ltr : TextDirection.ltr,
     child: Column(
       crossAxisAlignment:
-          isCurrentUser ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+          isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
       children: [
         Container(
           padding: const EdgeInsets.fromLTRB(12, 8, 14, 8),
@@ -25,12 +25,12 @@ Widget senderBubble(DocumentSnapshot data) {
                 ? const BorderRadius.only(
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20),
-                    bottomRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(20),
                   )
                 : const BorderRadius.only(
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20),
-                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
                   ),
           ),
           constraints: const BoxConstraints(maxWidth: 200),
@@ -42,13 +42,15 @@ Widget senderBubble(DocumentSnapshot data) {
               .color(isCurrentUser ? whiteColor : blackColor)
               .make(),
         ),
-        Container(
+        Align(
+          alignment: isCurrentUser ? Alignment.centerRight : Alignment.centerLeft,
           child: time.text
               .size(12)
               .fontFamily(regular)
               .color(blackColor.withOpacity(0.8))
               .make(),
         ),
+        5.heightBox,
       ],
     ),
   );
