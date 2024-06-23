@@ -382,8 +382,8 @@ class OrdersDetails extends StatelessWidget {
                               const SizedBox(width: 5),
                               Image.network(
                                 productDetails['imageUrl']!,
-                                width: 70,
-                                height: 80,
+                                width: 65,
+                                height: 70,
                                 fit: BoxFit.cover,
                               ),
                               const SizedBox(width: 15),
@@ -397,7 +397,7 @@ class OrdersDetails extends StatelessWidget {
                                       overflow: TextOverflow.ellipsis,
                                     )
                                         .text
-                                        .size(14)
+                                        .size(16)
                                         .fontFamily(semiBold)
                                         .color(greyDark)
                                         .make(),

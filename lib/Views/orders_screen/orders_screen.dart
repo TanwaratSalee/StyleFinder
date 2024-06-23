@@ -132,13 +132,12 @@ class _OrdersScreenState extends State<OrdersScreen>
                   Get.to(() => OrdersDetails(data: orderData));
                 },
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Order : ${orderData['order_id']?.length > 9 ? orderData['order_id']?.substring(0, 9) + '...' : orderData['order_id']}",
+                          "Order : ${orderData['order_id']?.length > 16 ? orderData['order_id']?.substring(0, 16) + '...' : orderData['order_id']}",
                         )
                             .text
                             .fontFamily(medium)
@@ -199,23 +198,23 @@ class _OrdersScreenState extends State<OrdersScreen>
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 4),
                             child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text('x${product['qty']}')
                                     .text
                                     .fontFamily(regular)
-                                    .color(greyColor)
-                                    .size(12)
+                                    .color(blackColor)
+                                    .size(16)
                                     .make(),
-                                const SizedBox(width: 5),
+                                const SizedBox(width: 10),
                                 productImage.isNotEmpty
                                     ? Image.network(productImage,
-                                        width: 70,
-                                        height: 60,
+                                        width: 60,
+                                        height: 70,
                                         fit: BoxFit.cover)
                                     : Container(
-                                        width: 70,
-                                        height: 60,
+                                        width: 60,
+                                        height: 70,
                                         color:
                                             greyColor), 
                                 const SizedBox(width: 5),
@@ -285,13 +284,12 @@ class _OrdersScreenState extends State<OrdersScreen>
                   Get.to(() => OrdersDetails(data: orderData));
                 },
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Order : ${orderData['order_id']?.length > 9 ? orderData['order_id']?.substring(0, 9) + '...' : orderData['order_id']}",
+                          "Order : ${orderData['order_id']?.length > 16 ? orderData['order_id']?.substring(0, 16) + '...' : orderData['order_id']}",
                         )
                             .text
                             .fontFamily(medium)
@@ -341,19 +339,19 @@ class _OrdersScreenState extends State<OrdersScreen>
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 4),
                             child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
                                   'x${product['qty'] ?? 0}',
                                 )
                                     .text
                                     .fontFamily(regular)
-                                    .color(greyColor)
-                                    .size(12)
+                                    .color(blackColor)
+                                    .size(16)
                                     .make(),
-                                const SizedBox(width: 5),
+                                const SizedBox(width:10),
                                 Image.network(productDetails['imageUrl']!,
-                                    width: 70, height: 60, fit: BoxFit.cover,
+                                    width: 60, height: 70, fit: BoxFit.cover,
                                     errorBuilder: (context, error, stackTrace) {
                                   return Icon(Icons.image, size: 70);
                                 }),
@@ -368,7 +366,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                                             'Unknown Product',
                                         style: const TextStyle(
                                           fontFamily: medium,
-                                          fontSize: 14,
+                                          fontSize: 16,
                                         ),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
@@ -456,7 +454,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Order : ${orderData['order_id']?.length > 9 ? orderData['order_id']?.substring(0, 9) + '...' : orderData['order_id']}",
+                            "Order : ${orderData['order_id']?.length > 16 ? orderData['order_id']?.substring(0, 16) + '...' : orderData['order_id']}",
                             style: TextStyle(
                               fontFamily: 'Medium',
                               color: Colors.black,
@@ -754,7 +752,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Order : ${orderData['order_id']?.length > 9 ? orderData['order_id']?.substring(0, 9) + '...' : orderData['order_id']}",
+                          "Order : ${orderData['order_id']?.length > 16 ? orderData['order_id']?.substring(0, 16) + '...' : orderData['order_id']}",
                         )
                             .text
                             .fontFamily(medium)
@@ -802,13 +800,13 @@ class _OrdersScreenState extends State<OrdersScreen>
                                   'x${product['qty']}',
                                 )
                                     .text
-                                    .fontFamily(regular)
-                                    .color(greyColor)
-                                    .size(12)
+                                    .fontFamily(medium)
+                                    .color(blackColor)
+                                    .size(16)
                                     .make(),
                                 const SizedBox(width: 5),
                                 Image.network(productDetails['imageUrl']!,
-                                    width: 70, height: 60, fit: BoxFit.cover),
+                                    width: 60, height: 70, fit: BoxFit.cover),
                                 const SizedBox(width: 5),
                                 Expanded(
                                   child: Column(
