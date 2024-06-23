@@ -217,7 +217,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                                         width: 70,
                                         height: 60,
                                         color:
-                                            greyColor), // Placeholder for empty image URL
+                                            greyColor), 
                                 const SizedBox(width: 5),
                                 Expanded(
                                   child: Column(
@@ -227,14 +227,9 @@ class _OrdersScreenState extends State<OrdersScreen>
                                       Text(productName,
                                               style: const TextStyle(
                                                   fontFamily: medium,
-                                                  fontSize: 14),
+                                                  fontSize: 16),
                                               maxLines: 1,
-                                              overflow: TextOverflow.ellipsis)
-                                          .text
-                                          .fontFamily(medium)
-                                          .color(blackColor)
-                                          .size(14)
-                                          .make(),
+                                              overflow: TextOverflow.ellipsis),
                                       Text('${productPrice} Bath')
                                           .text
                                           .fontFamily(regular)
@@ -824,16 +819,11 @@ class _OrdersScreenState extends State<OrdersScreen>
                                         productName,
                                         style: const TextStyle(
                                           fontFamily: medium,
-                                          fontSize: 14,
+                                          fontSize: 16,
                                         ),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
-                                      )
-                                          .text
-                                          .fontFamily(medium)
-                                          .color(blackColor)
-                                          .size(14)
-                                          .make(),
+                                      ),
                                       Text(
                                         '${NumberFormat('#,##0').format(product['total_price'])} Bath',
                                       )
