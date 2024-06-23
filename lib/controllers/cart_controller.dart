@@ -211,6 +211,7 @@ class CartController extends GetxController {
         'order_on_delivery': false,
         'total_amount': vendorTotalAmount,
         'orders': vendorProducts,
+        'vendor_id': vendorId ,
       });
 
       await orderRef.update({'order_id': orderRef.id});
