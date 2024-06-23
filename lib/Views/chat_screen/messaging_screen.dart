@@ -10,6 +10,32 @@ import 'package:intl/intl.dart';
 class MessagesScreen extends StatelessWidget {
   const MessagesScreen({super.key});
 
+  Future<Map<String, String>> getVendorDetails(String vendorId) async {
+    if (vendorId.isEmpty) {
+      debugPrint('Error: vendorId is empty.');
+      return {'name': 'Unknown Vendor', 'imageUrl': ''};
+    }
+
+    try {
+      var vendorSnapshot = await FirebaseFirestore.instance
+          .collection('vendors')
+          .doc(vendorId)
+          .get();
+      if (vendorSnapshot.exists) {
+        var vendorData = vendorSnapshot.data() as Map<String, dynamic>?;
+        return {
+          'name': vendorData?['name'] ?? 'Unknown Vendor',
+          'imageUrl': vendorData?['imageUrl'] ?? ''
+        };
+      } else {
+        return {'name': 'Unknown Vendor', 'imageUrl': ''};
+      }
+    } catch (e) {
+      debugPrint('Error getting vendor details: $e');
+      return {'name': 'Unknown Vendor', 'imageUrl': ''};
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,89 +104,107 @@ class MessagesScreen extends StatelessWidget {
                                 DateFormat('dd/MM/yyyy').format(date);
                           }
 
-                          var docData =
-                              data[index].data() as Map<String, dynamic>;
+                          var vendorId = data[index]['vendor_id'] ?? '';
+                          debugPrint('vendorId: $vendorId');
 
-                          var friendImageUrl =
-                              docData['friend_image_url'] ?? '';
-                          var friendName = docData['friend_name'] ?? 'Unknown';
-                          var lastMsg = docData['last_msg'] ?? '';
-                          var toId = docData['toId'] ?? '';
+                          return FutureBuilder<Map<String, String>>(
+                            future: getVendorDetails(vendorId),
+                            builder: (context, vendorSnapshot) {
+                              if (vendorSnapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return CircularProgressIndicator();
+                              } else if (vendorSnapshot.hasError) {
+                                return Text('Error: ${vendorSnapshot.error}');
+                              } else if (!vendorSnapshot.hasData ||
+                                  vendorSnapshot.data!['name']!.isEmpty) {
+                                return Text('Unknown Vendor');
+                              }
 
-                          return GestureDetector(
-                            onTap: () {
-                              print('p_seller: $friendName');
-                              print('vendor_id: $toId');
-                              Get.to(() => const ChatScreen(),
-                                  arguments: [friendName, toId]);
-                            },
-                            child: Container(
-                              margin: const EdgeInsets.symmetric(
-                                  vertical: 5, horizontal: 8),
-                              padding: const EdgeInsets.all(15),
-                              decoration: BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(
-                                    color: greyThin,
-                                    width: 1,
-                                  ),
-                                ),
-                              ),
-                              child: Row(
-                                children: [
-                                  CircleAvatar(
-                                    radius: 27,
-                                    backgroundColor: primaryApp,
-                                    backgroundImage: friendImageUrl.isNotEmpty
-                                        ? NetworkImage(friendImageUrl)
-                                        : null,
-                                    child: friendImageUrl.isEmpty
-                                        ? Icon(
-                                            Icons.person,
-                                            color: whiteColor,
-                                            size: 27,
-                                          )
-                                        : null,
-                                  ),
-                                  SizedBox(width: 15),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          friendName,
-                                          style: TextStyle(
-                                            fontFamily: medium,
-                                            fontSize: 16,
-                                            color: blackColor,
-                                          ),
-                                        ),
-                                        SizedBox(height: 5),
-                                        SizedBox(
-                                          width: 200,
-                                          height: 20,
-                                          child: Text(
-                                            lastMsg,
-                                            style: TextStyle(
-                                              color: greyDark,
-                                              fontFamily: regular,
-                                              fontSize: 14,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            maxLines: 1,
-                                          ),
-                                        ),
-                                      ],
+                              var vendorName = vendorSnapshot.data!['name'] ??
+                                  'Unknown Vendor';
+                              var vendorImageUrl =
+                                  vendorSnapshot.data!['imageUrl'] ?? '';
+
+                              return GestureDetector(
+                                onTap: () {
+                                  Get.to(() => const ChatScreen(), arguments: [
+                                    vendorId,
+                                    data[index]['vendor_id']
+                                  ]);
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 8),
+                                  padding: const EdgeInsets.all(15),
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      bottom: BorderSide(
+                                        color: greyThin,
+                                        width: 1,
+                                      ),
                                     ),
                                   ),
-                                  Text(
-                                    formattedDate,
-                                    style: TextStyle(color: greyDark),
-                                  ),
-                                ],
-                              ),
-                            ),
+                                  child: Row(
+                                    children: [
+                                      CircleAvatar(
+                                        radius: 27,
+                                        backgroundColor: primaryApp,
+                                        backgroundImage:
+                                            vendorImageUrl.isNotEmpty
+                                                ? NetworkImage(vendorImageUrl)
+                                                : null,
+                                        child: vendorImageUrl.isEmpty
+                                            ? Icon(
+                                                Icons.person,
+                                                color: whiteColor,
+                                                size: 27,
+                                              )
+                                            : null,
+                                      )
+                                          .box
+                                          .border(color: greyLine)
+                                          .roundedFull
+                                          .make(),
+                                      15.widthBox,
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            vendorName.text
+                                                .fontFamily(medium)
+                                                .size(16)
+                                                .color(blackColor)
+                                                .make(),
+                                            5.heightBox,
+                                            SizedBox(
+                                              width: 250,
+                                              height: 20,
+                                              child: Text(
+                                                "${data[index]['last_msg']}",
+                                                style:
+                                                    TextStyle(color: greyDark),
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
+                                              )
+                                                  .text
+                                                  .fontFamily(regular)
+                                                  .size(14)
+                                                  .color(greyColor)
+                                                  .make(),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Text(
+                                        formattedDate,
+                                        style: TextStyle(color: greyDark),
+                                      ),
+                                    ],
+                                  ).box.make(),
+                                ),
+                              );
+                            },
                           );
                         },
                       ),
