@@ -12,7 +12,8 @@ class ItemDetails extends StatefulWidget {
   final String? title;
   final dynamic data;
 
-  const ItemDetails({Key? key, required this.title, this.data}) : super(key: key);
+  const ItemDetails({Key? key, required this.title, this.data})
+      : super(key: key);
 
   @override
   _ItemDetailsState createState() => _ItemDetailsState();
@@ -28,11 +29,10 @@ class _ItemDetailsState extends State<ItemDetails> {
   void initState() {
     super.initState();
     controller = Get.put(ProductController());
-    checkIsInWishlist();
+    checkIsInWishlist(); // This will call fetchReviews internally
     WidgetsBinding.instance.addPostFrameCallback((_) {
       int productPrice = int.parse(widget.data['price']);
       controller.calculateTotalPrice(productPrice);
-      fetchReviews();
     });
 
     controller.fetchVendorInfo(widget.data['vendor_id']);
@@ -47,48 +47,51 @@ class _ItemDetailsState extends State<ItemDetails> {
       if (querySnapshot.docs.isNotEmpty) {
         DocumentSnapshot doc = querySnapshot.docs.first;
         List<dynamic> wishlist = doc['favorite_uid'];
-        controller.setDocumentId(doc.id);
+        controller.setDocumentId(doc.id); // Set the documentId here
         if (wishlist.contains(currentUser!.uid)) {
           controller.isFav(true);
         } else {
           controller.isFav(false);
         }
+        fetchReviews(); // Fetch reviews after setting the documentId
       }
     });
   }
 
-  void fetchReviews() async {
-    try {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('reviewCollection')
-          .where('product_id', isEqualTo: controller.documentId.value)
-          .get();
-
-      setState(() {
-        reviews = querySnapshot.docs.map((doc) => doc.data()).toList();
+  void fetchReviews() {
+    FirebaseFirestore.instance
+        .collection('reviews')
+        .where('product_id', isEqualTo: controller.documentId.value)
+        .snapshots()
+        .listen((QuerySnapshot querySnapshot) {
+      if (querySnapshot.docs.isNotEmpty) {
+        List<dynamic> reviewsData =
+            querySnapshot.docs.map((doc) => doc.data()).toList();
         double totalRating = 0;
-        int reviewCount = reviews.length;
+        int reviewCount = reviewsData.length;
 
-        for (var review in reviews) {
+        for (var review in reviewsData) {
           totalRating += review['rating'];
         }
 
         double averageRating = reviewCount > 0 ? totalRating / reviewCount : 0;
-        controller.updateAverageRating(averageRating);
-        controller.updateReviewCount(reviewCount);
-        controller.updateTotalRating(totalRating.toInt());
-        this.reviewCount = reviewCount;
-      });
-    } catch (e) {
-      print("Error fetching reviews: $e");
-      setState(() {
-        reviews = [];
-        controller.updateAverageRating(0);
-        controller.updateReviewCount(0);
-        controller.updateTotalRating(0);
-        this.reviewCount = 0;
-      });
-    }
+        setState(() {
+          reviews = reviewsData;
+          controller.updateAverageRating(averageRating);
+          controller.updateReviewCount(reviewCount);
+          controller.updateTotalRating(totalRating.toInt());
+          this.reviewCount = reviewCount;
+        });
+      } else {
+        setState(() {
+          reviews = [];
+          controller.updateAverageRating(0);
+          controller.updateReviewCount(0);
+          controller.updateTotalRating(0);
+          this.reviewCount = 0;
+        });
+      }
+    });
   }
 
   void selectItem(int index) {
