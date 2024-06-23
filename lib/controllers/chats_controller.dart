@@ -7,13 +7,14 @@ import 'package:flutter_finalproject/controllers/news_controller.dart';
 class ChatsController extends GetxController {
   @override
   void onInit() {
-    getChatId();
     super.onInit();
+    getChatId();
+    listenToFriendDetails();
   }
 
   var chats = firestore.collection(chatsCollection);
 
-  var friendName = Get.arguments[0];
+  var friendName = ''.obs;
   var friendId = Get.arguments[1];
   var friendImageUrl = ''.obs;
 
@@ -27,20 +28,10 @@ class ChatsController extends GetxController {
 
   var isLoading = false.obs;
 
-  getChatId() async {
+  void getChatId() async {
     isLoading(true);
 
-    // Fetch imageUrl for the friend from vendors collection
-    await firestore
-        .collection(vendorsCollection)
-        .doc(friendId)
-        .get()
-        .then((doc) {
-      if (doc.exists) {
-        friendImageUrl.value = doc['imageUrl'] ?? '';
-      }
-    });
-
+    // Fetch current user's imageUrl from vendors collection
     await firestore
         .collection(vendorsCollection)
         .doc(currentId)
@@ -71,10 +62,24 @@ class ChatsController extends GetxController {
             });
           }
         });
+
     isLoading(false);
   }
 
-  sendMsg(String msg) async {
+  void listenToFriendDetails() {
+    firestore
+        .collection(vendorsCollection)
+        .doc(friendId)
+        .snapshots()
+        .listen((doc) {
+      if (doc.exists) {
+        friendName.value = doc['name'] ?? '';
+        friendImageUrl.value = doc['imageUrl'] ?? '';
+      }
+    });
+  }
+
+  void sendMsg(String msg) async {
     if (msg.trim().isNotEmpty) {
       chats.doc(chatDocId).update({
         'created_on': FieldValue.serverTimestamp(),

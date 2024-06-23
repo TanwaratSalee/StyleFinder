@@ -63,14 +63,14 @@ class ChatScreen extends StatelessWidget {
                         : null,
                   )),
               SizedBox(width: 15),
-              Text(
-                "${controller.friendName}",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontFamily: medium,
-                  color: blackColor,
-                ),
-              ),
+              Obx(() => Text(
+                    "${controller.friendName}",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontFamily: medium,
+                      color: blackColor,
+                    ),
+                  )),
             ],
           ),
         ),
