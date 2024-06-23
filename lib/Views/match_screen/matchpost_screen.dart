@@ -220,7 +220,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                           style: TextStyle(
                             fontSize: 14.0,
                             fontFamily: regular,
-                            color: Colors.black,
+                            color: blackColor,
                           ),
                         ),
                       ],

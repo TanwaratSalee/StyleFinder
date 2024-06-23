@@ -472,7 +472,7 @@ class NewsScreen extends StatelessWidget {
                                   child: TabBar(
                                     controller: tabController,
                                     labelColor: primaryApp,
-                                    unselectedLabelColor: Colors.black,
+                                    unselectedLabelColor: blackColor,
                                     indicator: UnderlineTabIndicator(
                                       borderSide: BorderSide(
                                         width: 3.0,

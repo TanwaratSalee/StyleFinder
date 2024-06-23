@@ -307,7 +307,7 @@ class _EditMatchProductState extends State<EditMatchProduct> {
                           style: TextStyle(
                             fontSize: 14.0,
                             fontFamily: regular,
-                            color: Colors.black,
+                            color: blackColor,
                           ),
                         ),
                       ],

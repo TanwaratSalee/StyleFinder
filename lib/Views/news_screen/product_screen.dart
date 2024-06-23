@@ -506,7 +506,7 @@ class _ProductScreenState extends State<ProductScreen> {
       context: context,
       barrierDismissible: true,
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-      barrierColor: Colors.black54,
+      barrierColor: greyDark,
       transitionDuration: Duration(milliseconds: 200),
       pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
         return Align(

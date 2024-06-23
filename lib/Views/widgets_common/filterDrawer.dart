@@ -34,7 +34,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
 
   final selectedColorIndexes = <int>[].obs;
   final List<Map<String, dynamic>> allColors = [
-    {'name': 'Black', 'color': Colors.black, 'value': 0xFF000000},
+    {'name': 'Black', 'color': blackColor, 'value': 0xFF000000},
     {'name': 'Grey', 'color': greyColor, 'value': 0xFF808080},
     {'name': 'White', 'color': whiteColor, 'value': 0xFFFFFFFF},
     {

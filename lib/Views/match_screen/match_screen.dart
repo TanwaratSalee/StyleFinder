@@ -69,7 +69,7 @@ class _MatchScreenState extends State<MatchScreen> {
   }
 
   final List<Map<String, dynamic>> allColors = [
-    {'name': 'Black', 'color': Colors.black, 'value': 0xFF000000},
+    {'name': 'Black', 'color': blackColor, 'value': 0xFF000000},
     {'name': 'Grey', 'color': greyColor, 'value': 0xFF808080},
     {'name': 'White', 'color': whiteColor, 'value': 0xFFFFFFFF},
     {
@@ -539,7 +539,7 @@ class _MatchScreenState extends State<MatchScreen> {
       context: context,
       barrierDismissible: true,
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-      barrierColor: Colors.black.withOpacity(0.5),
+      barrierColor: blackColor.withOpacity(0.5),
       transitionDuration: const Duration(milliseconds: 200),
       pageBuilder: (BuildContext context, Animation<double> animation,
           Animation<double> secondaryAnimation) {
