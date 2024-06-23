@@ -108,7 +108,7 @@ class _OrdersScreenState extends State<OrdersScreen>
 
     try {
       var vendorSnapshot = await FirebaseFirestore.instance
-          .collection('vendors')
+          .collection('vendor')
           .doc(vendorId)
           .get();
       if (vendorSnapshot.exists) {
@@ -247,7 +247,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                                     children: [
                                       Text(productName,
                                           style: const TextStyle(
-                                              fontFamily: medium, fontSize: 16, color: greyDark),
+                                              fontFamily: medium, fontSize: 16),
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis),
                                       Text('${productPrice} Bath')
@@ -427,307 +427,335 @@ class _OrdersScreenState extends State<OrdersScreen>
     );
   }
 
-Widget buildReview(BuildContext context) {
-  return StreamBuilder<QuerySnapshot>(
-    stream: getReviewOrders(),
-    builder: (context, snapshot) {
-      if (!snapshot.hasData) {
-        return Center(child: CircularProgressIndicator());
-      } else if (snapshot.data!.docs.isEmpty) {
-        return const Center(
-            child: Text("No orders yet!", style: TextStyle(color: greyColor)));
-      } else {
-        var data = snapshot.data!.docs;
-
-        var ordersWithProductsToReview = data.where((orderDoc) {
-          var orderData = orderDoc.data() as Map<String, dynamic>;
-          var products = orderData['orders'] as List<dynamic>;
-          return products.any((product) => product['reviews'] == false);
-        }).toList();
-
-        if (ordersWithProductsToReview.isEmpty) {
+  Widget buildReview(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: getReviewOrders(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.data!.docs.isEmpty) {
           return const Center(
-              child: Text("No orders yet!", style: TextStyle(color: greyColor)));
-        }
+              child:
+                  Text("No orders yet!", style: TextStyle(color: greyColor)));
+        } else {
+          var data = snapshot.data!.docs;
 
-        return ListView.builder(
-          itemCount: ordersWithProductsToReview.length,
-          itemBuilder: (context, index) {
-            var orderDoc = ordersWithProductsToReview[index];
+          // Filter orders that have at least one product with 'reviews' set to false
+          var ordersWithProductsToReview = data.where((orderDoc) {
             var orderData = orderDoc.data() as Map<String, dynamic>;
             var products = orderData['orders'] as List<dynamic>;
+            return products.any((product) => product['reviews'] == false);
+          }).toList();
 
-            // Filter products that have 'reviews' set to false
-            var productsToReview = products
-                .where((product) => product['reviews'] == false)
-                .toList();
+          if (ordersWithProductsToReview.isEmpty) {
+            return const Center(
+                child:
+                    Text("No orders yet!", style: TextStyle(color: greyColor)));
+          }
 
-            return FutureBuilder<Map<String, String>>(
-              future: getVendorDetails(orderData['vendor_id']),
-              builder: (context, vendorSnapshot) {
-                if (vendorSnapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                } else if (vendorSnapshot.hasError || !vendorSnapshot.hasData) {
-                  return Center(child: Text('Error loading vendor details.'));
-                } else {
-                  var vendorDetails = vendorSnapshot.data!;
+          return ListView.builder(
+            itemCount: ordersWithProductsToReview.length,
+            itemBuilder: (context, index) {
+              var orderDoc = ordersWithProductsToReview[index];
+              var orderData = orderDoc.data() as Map<String, dynamic>;
+              var products = orderData['orders'] as List<dynamic>;
 
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (productsToReview.isNotEmpty)
-                        Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 12),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Image.asset(iconsStore, width: 20),
-                                        15.widthBox,
-                                        Text(
-                                          vendorDetails['name'] ??
-                                              'Unknown Vendor',
-                                          style: TextStyle(
-                                            fontFamily: medium,
-                                            color: blackColor,
-                                            fontSize: 18,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Text(intl.DateFormat().add_yMd().format(
-                                        (orderData['created_at'].toDate()))),
-                                  ],
-                                ).paddingOnly(top: 10),
-                                5.heightBox,
-                                Divider(
-                                  color: greyLine,
-                                ),
-                                Text(
-                                  "Order : ${orderData['order_id']}",
-                                  style: TextStyle(
-                                    fontFamily: medium,
-                                    color: greyDark,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ],
-                            )),
-                      ...productsToReview.asMap().entries.map((entry) {
-                        int productIndex = entry.key;
-                        var product = entry.value;
-                        var reviewController = TextEditingController();
-                        var rating = 0.0;
+              // Filter products that have 'reviews' set to false
+              var productsToReview = products
+                  .where((product) => product['reviews'] == false)
+                  .toList();
 
-                        return FutureBuilder<Map<String, String>>(
-                          future: getProductDetails(product['product_id']),
-                          builder: (context, productSnapshot) {
-                            if (productSnapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return Center(
-                                  child: CircularProgressIndicator());
-                            } else if (productSnapshot.hasError ||
-                                !productSnapshot.hasData) {
-                              return Center(
-                                  child: Text('Error loading product details.'));
-                            } else {
-                              var productDetails = productSnapshot.data!;
-                              return StatefulBuilder(
-                                builder: (context, setState) {
-                                  return Column(
+              return FutureBuilder<Map<String, String>>(
+                future: getVendorDetails(orderData['vendor_id']),
+                builder: (context, vendorSnapshot) {
+                  if (vendorSnapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (vendorSnapshot.hasError ||
+                      !vendorSnapshot.hasData) {
+                    return Center(child: Text('Error loading vendor details.'));
+                  } else {
+                    var vendorDetails = vendorSnapshot.data!;
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (productsToReview.isNotEmpty)
+                          Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 12),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(10),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Image.network(
-                                                  productDetails['imageUrl'] ??
-                                                      'default_image_url',
-                                                  width: 95,
-                                                  height: 90,
-                                                ),
-                                                const SizedBox(width: 10),
-                                                Expanded(
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        productDetails['name'] ??
-                                                            'Unknown',
-                                                        style: TextStyle(
-                                                          fontFamily: medium,
-                                                          fontSize: 18,
+                                      Row(
+                                        children: [
+                                          Image.asset(iconsStore, width: 20),
+                                          15.widthBox,
+                                          Text(
+                                            vendorDetails['name'] ??
+                                                'Unknown Vendor',
+                                            style: TextStyle(
+                                              fontFamily: medium,
+                                              color: blackColor,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Text(intl.DateFormat().add_yMd().format(
+                                          (orderData['created_at'].toDate()))),
+                                    ],
+                                  ).paddingOnly(top: 10),
+                                  5.heightBox,
+                                  Divider(
+                                    color: greyLine,
+                                  ),
+                                  Text(
+                                    "Order : ${orderData['order_id']?.length > 16 ? orderData['order_id']?.substring(0, 16) + '...' : orderData['order_id']}",
+                                    style: TextStyle(
+                                      fontFamily: medium,
+                                      color: greyDark,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
+                              )),
+                        ...productsToReview.asMap().entries.map((entry) {
+                          int productIndex = entry.key;
+                          var product = entry.value;
+                          var reviewController = TextEditingController();
+                          var rating = 0.0;
+
+                          return FutureBuilder<Map<String, String>>(
+                            future: getProductDetails(product['product_id']),
+                            builder: (context, productSnapshot) {
+                              if (productSnapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Center(
+                                    child: CircularProgressIndicator());
+                              } else if (productSnapshot.hasError ||
+                                  !productSnapshot.hasData) {
+                                return Center(
+                                    child:
+                                        Text('Error loading product details.'));
+                              } else {
+                                var productDetails = productSnapshot.data!;
+                                return StatefulBuilder(
+                                  builder: (context, setState) {
+                                    return Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(10),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Image.network(
+                                                    productDetails[
+                                                            'imageUrl'] ??
+                                                        'default_image_url',
+                                                    width: 85,
+                                                    height: 85,
+                                                  ),
+                                                  const SizedBox(width: 10),
+                                                  Expanded(
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          productDetails[
+                                                                  'name'] ??
+                                                              'Unknown',
+                                                          style: TextStyle(
+                                                            fontFamily: medium,
+                                                            fontSize: 16,
+                                                          ),
                                                         ),
-                                                      ),
-                                                      Text(
-                                                        '${NumberFormat('#,##0').format(product['total_price'] ?? 0)} Bath',
-                                                        style: TextStyle(
-                                                          fontFamily: regular,
-                                                          color: greyColor,
-                                                          fontSize: 14,
+                                                        Text(
+                                                          '${NumberFormat('#,##0').format(product['total_price'] ?? 0)} Bath',
+                                                          style: TextStyle(
+                                                            fontFamily:
+                                                                'Regular',
+                                                            color: greyColor,
+                                                            fontSize: 14,
+                                                          ),
                                                         ),
-                                                      ),
-                                                      RatingBar.builder(
-                                                        initialRating: 0,
-                                                        minRating: 1,
-                                                        direction:
-                                                            Axis.horizontal,
-                                                        allowHalfRating: true,
-                                                        itemCount: 5,
-                                                        itemSize: 25, // Smaller stars
-                                                        itemBuilder:
-                                                            (context, _) =>
-                                                                Icon(
-                                                          Icons.star,
-                                                          color: Colors.amber,
-                                                        ),
-                                                        onRatingUpdate:
-                                                            (ratingValue) {
-                                                          if (mounted) {
+                                                        RatingBar.builder(
+                                                          initialRating: 0,
+                                                          minRating: 1,
+                                                          direction:
+                                                              Axis.horizontal,
+                                                          allowHalfRating: true,
+                                                          itemCount: 5,
+                                                          itemSize:
+                                                              20.0, // Smaller stars
+                                                          itemBuilder:
+                                                              (context, _) =>
+                                                                  Icon(
+                                                            Icons.star,
+                                                            color: Colors.amber,
+                                                          ),
+                                                          onRatingUpdate:
+                                                              (ratingValue) {
                                                             setState(() {
                                                               rating =
                                                                   ratingValue;
                                                             });
-                                                          }
-                                                        },
-                                                      ),
-                                                    ],
+                                                          },
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                            const SizedBox(height: 10),
-                                            TextField(
-                                              controller: reviewController,
-                                              maxLines: 2,
-                                              decoration: InputDecoration(
-                                                hintText:
-                                                    'Write your review here',
-                                                border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          8.0),
-                                                  borderSide: BorderSide(
-                                                      color: greyColor),
-                                                ),
-                                                focusedBorder:
-                                                    OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          8.0),
-                                                  borderSide: BorderSide(
-                                                    color: greyColor,
-                                                    width: 1.5,
+                                                ],
+                                              ),
+                                              const SizedBox(height: 10),
+                                              TextField(
+                                                controller: reviewController,
+                                                maxLines: 2,
+                                                decoration: InputDecoration(
+                                                  hintText:
+                                                      'Write your review here',
+                                                  border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8.0),
+                                                    borderSide: BorderSide(
+                                                        color: greyColor),
                                                   ),
-                                                ),
-                                                enabledBorder:
-                                                    OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          8.0),
-                                                  borderSide: BorderSide(
-                                                    color: greyColor,
-                                                    width: 1.0,
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8.0),
+                                                    borderSide: BorderSide(
+                                                      color: greyColor,
+                                                      width: 1.5,
+                                                    ),
+                                                  ),
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8.0),
+                                                    borderSide: BorderSide(
+                                                      color: greyColor,
+                                                      width: 1.0,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                            const SizedBox(height: 10),
-                                            tapButton(
-                                              color: primaryApp,
-                                              title: 'Submit',
-                                              textColor: whiteColor,
-                                              onPress: rating > 0
-                                                  ? () async {
-                                                      var currentUser =
-                                                          FirebaseAuth
-                                                              .instance
-                                                              .currentUser;
-                                                      if (currentUser != null) {
-                                                        var userName = currentUser
-                                                                .displayName ??
-                                                            'Anonymous';
-                                                        var userImg = currentUser
-                                                                .photoURL ??
-                                                            'default_user_image_url';
-
-                                                        // Fetch user details from Firestore if necessary
-                                                        var userDoc =
-                                                            await FirebaseFirestore
+                                              const SizedBox(height: 10),
+                                              tapButton(
+                                                color: primaryApp,
+                                                title: 'Submit',
+                                                textColor: whiteColor,
+                                                onPress: rating > 0
+                                                    ? () async {
+                                                        var currentUser =
+                                                            FirebaseAuth
                                                                 .instance
-                                                                .collection(
-                                                                    'users')
-                                                                .doc(currentUser
-                                                                    .uid)
-                                                                .get();
-                                                        if (userDoc.exists) {
-                                                          var userData =
-                                                              userDoc.data()
-                                                                  as Map<
-                                                                      String,
-                                                                      dynamic>?;
-                                                          userName = userData?[
-                                                                  'name'] ??
-                                                              userName;
-                                                          userImg = userData?[
-                                                                  'imageUrl'] ??
-                                                              userImg;
-                                                        }
+                                                                .currentUser;
+                                                        if (currentUser !=
+                                                            null) {
+                                                          var userName = currentUser
+                                                                  .displayName ??
+                                                              'Anonymous';
+                                                          var userImg = currentUser
+                                                                  .photoURL ??
+                                                              'default_user_image_url';
 
-                                                        var reviewData = {
-                                                          'product_id': product['product_id'] ?? 'N/A',
-                                                          'order_id': orderData['order_id'] ?? 'N/A',
-                                                          'rating': rating,
-                                                          'review_text': reviewController.text,
-                                                          'created_at': DateTime.now(),
-                                                          'user_id': currentUser.uid,
-                                                        };
-
-                                                        await FirebaseFirestore
-                                                            .instance
-                                                            .collection(
-                                                                'reviews')
-                                                            .add(reviewData);
-
-                                                        // Update the product's review status in Firestore
-                                                        var updatedProducts =
-                                                            products.map((p) {
-                                                          if (p['product_id'] ==
-                                                              product[
-                                                                  'product_id']) {
-                                                            p['reviews'] = true;
+                                                          // Fetch user details from Firestore if necessary
+                                                          var userDoc =
+                                                              await FirebaseFirestore
+                                                                  .instance
+                                                                  .collection(
+                                                                      'users')
+                                                                  .doc(
+                                                                      currentUser
+                                                                          .uid)
+                                                                  .get();
+                                                          if (userDoc.exists) {
+                                                            var userData =
+                                                                userDoc.data()
+                                                                    as Map<
+                                                                        String,
+                                                                        dynamic>?;
+                                                            userName = userData?[
+                                                                    'name'] ??
+                                                                userName;
+                                                            userImg = userData?[
+                                                                    'imageUrl'] ??
+                                                                userImg;
                                                           }
-                                                          return p;
-                                                        }).toList();
 
-                                                        await orderDoc
-                                                            .reference
-                                                            .update({
-                                                          'orders':
-                                                              updatedProducts
-                                                        });
+                                                          var reviewData = {
+                                                            'product_id': product[
+                                                                    'product_id'] ??
+                                                                'N/A',
+                                                            'product_title':
+                                                                productDetails[
+                                                                        'name'] ??
+                                                                    'Unknown',
+                                                            'product_img':
+                                                                productDetails[
+                                                                        'imageUrl'] ??
+                                                                    'default_image_url',
+                                                            'rating': rating,
+                                                            'review_text':
+                                                                reviewController
+                                                                    .text,
+                                                            'review_date':
+                                                                DateTime.now(),
+                                                            'user_id':
+                                                                currentUser.uid,
+                                                            'user_name':
+                                                                userName,
+                                                            'user_img': userImg,
+                                                          };
 
-                                                        if (mounted) {
+                                                          await FirebaseFirestore
+                                                              .instance
+                                                              .collection(
+                                                                  'reviews')
+                                                              .add(reviewData);
+
+                                                          // Update the product's review status in Firestore
+                                                          var updatedProducts =
+                                                              products.map((p) {
+                                                            if (p['product_id'] ==
+                                                                product[
+                                                                    'product_id']) {
+                                                              p['reviews'] =
+                                                                  true;
+                                                            }
+                                                            return p;
+                                                          }).toList();
+
+                                                          await orderDoc
+                                                              .reference
+                                                              .update({
+                                                            'orders':
+                                                                updatedProducts
+                                                          });
+
                                                           ScaffoldMessenger.of(
                                                                   context)
                                                               .showSnackBar(
                                                             SnackBar(
                                                               content: Text(
                                                                   'Review Submitted: Thank you for your feedback!'),
-                                                              duration: Duration(
-                                                                  seconds: 2),
+                                                              duration:
+                                                                  Duration(
+                                                                      seconds:
+                                                                          2),
                                                             ),
                                                           );
 
@@ -742,52 +770,51 @@ Widget buildReview(BuildContext context) {
                                                                       index);
                                                             }
                                                           });
-                                                        }
-                                                      } else {
-                                                        if (mounted) {
+                                                        } else {
                                                           ScaffoldMessenger.of(
                                                                   context)
                                                               .showSnackBar(
                                                             SnackBar(
                                                               content: Text(
                                                                   'Error: You need to be logged in to submit a review'),
-                                                              duration: Duration(
-                                                                  seconds: 2),
+                                                              duration:
+                                                                  Duration(
+                                                                      seconds:
+                                                                          2),
                                                             ),
                                                           );
                                                         }
                                                       }
-                                                    }
-                                                  : null,
-                                            ),
-                                          ],
+                                                    : null,
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            }
-                          },
-                        );
-                      }).toList(),
-                    ],
-                  )
-                      .box
-                      .border(color: greyLine)
-                      .rounded
-                      .margin(
-                          EdgeInsets.symmetric(horizontal: 12, vertical: 8))
-                      .make();
-                }
-              },
-            );
-          },
-        );
-      }
-    },
-  );
-}
+                                      ],
+                                    );
+                                  },
+                                );
+                              }
+                            },
+                          );
+                        }).toList(),
+                      ],
+                    )
+                        .box
+                        .border(color: greyLine)
+                        .rounded
+                        .margin(
+                            EdgeInsets.symmetric(horizontal: 12, vertical: 8))
+                        .make();
+                  }
+                },
+              );
+            },
+          );
+        }
+      },
+    );
+  }
 
   Widget buildHistory(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -860,14 +887,14 @@ Widget buildReview(BuildContext context) {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 4),
                             child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   'x${product['qty']}',
                                 )
                                     .text
                                     .fontFamily(medium)
-                                    .color(greyDark)
+                                    .color(blackColor)
                                     .size(16)
                                     .make(),
                                 const SizedBox(width: 5),
@@ -884,7 +911,6 @@ Widget buildReview(BuildContext context) {
                                         style: const TextStyle(
                                           fontFamily: medium,
                                           fontSize: 16,
-                                          color: greyDark
                                         ),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,

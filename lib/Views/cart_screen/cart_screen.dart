@@ -24,7 +24,8 @@ class _CartScreenState extends State<CartScreen> {
   final User? currentUser = FirebaseAuth.instance.currentUser;
   Map<String, bool> showDeleteIcon = {};
 
-  Future<Map<String, dynamic>> groupProductsByVendor(List<DocumentSnapshot> data) async {
+  Future<Map<String, dynamic>> groupProductsByVendor(
+      List<DocumentSnapshot> data) async {
     Map<String, List<DocumentSnapshot>> groupedProducts = {};
     double totalCartPrice = 0.0;
 
@@ -75,25 +76,28 @@ class _CartScreenState extends State<CartScreen> {
             );
           }
 
-          double totalCartPrice = vendorSnapshot.data!['totalCartPrice'] as double;
+          double totalCartPrice =
+              vendorSnapshot.data!['totalCartPrice'] as double;
 
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-
-                    Text(
-                      'Total Price ${NumberFormat('#,##0').format(totalCartPrice)} Bath',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontFamily: medium,
-                        color: blackColor,
-                      ),
-                    ),
+                    Obx(() {
+                      return Text(
+                        'Total Price ${NumberFormat('#,##0').format(cartController.totalP.value)} Bath',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: medium,
+                          color: blackColor,
+                        ),
+                      );
+                    }),
                   ],
                 ),
               ),
@@ -108,7 +112,7 @@ class _CartScreenState extends State<CartScreen> {
                           "Proceeding to shipping with cart items: ${cartController.productSnapshot} and total price: ${totalCartPrice}");
                       Get.to(() => ShippingInfoDetails(
                             cartItems: cartController.productSnapshot.toList(),
-                    totalPrice: cartController.totalP.value,
+                            totalPrice: cartController.totalP.value,
                           ));
                     },
                     textColor: whiteColor,
@@ -134,7 +138,9 @@ class _CartScreenState extends State<CartScreen> {
           }
 
           // Update CartController with the data from Firestore
-          cartController.updateCart(snapshot.data!.docs);
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            cartController.updateCart(snapshot.data!.docs);
+          });
 
           return FutureBuilder<Map<String, dynamic>>(
             future: groupProductsByVendor(snapshot.data!.docs),
@@ -143,17 +149,20 @@ class _CartScreenState extends State<CartScreen> {
                 return const Center(child: CircularProgressIndicator());
               }
 
-              var groupedProducts = vendorSnapshot.data!['groupedProducts'] as Map<String, List<DocumentSnapshot>>;
+              var groupedProducts = vendorSnapshot.data!['groupedProducts']
+                  as Map<String, List<DocumentSnapshot>>;
 
               return SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ...groupedProducts.keys.map((vendorName) {
-                      List<DocumentSnapshot> vendorProducts = groupedProducts[vendorName]!;
+                      List<DocumentSnapshot> vendorProducts =
+                          groupedProducts[vendorName]!;
 
                       return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 5),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -173,37 +182,55 @@ class _CartScreenState extends State<CartScreen> {
                             ),
                             Column(
                               children: vendorProducts.map((productDoc) {
-                                var data = productDoc.data() as Map<String, dynamic>?;
+                                var data =
+                                    productDoc.data() as Map<String, dynamic>?;
 
                                 String productId = data?['product_id'] ?? '';
                                 int qty = data?['qty'] ?? 0;
                                 String selectSize = data?['select_size'] ?? '';
-                                double totalPrice = (data?['total_price'] is String)
-                                    ? double.tryParse(data?['total_price']) ?? 0.0
+                                double totalPrice = (data?['total_price']
+                                        is String)
+                                    ? double.tryParse(data?['total_price']) ??
+                                        0.0
                                     : data?['total_price'] is int
-                                        ? (data?['total_price'] as int).toDouble()
+                                        ? (data?['total_price'] as int)
+                                            .toDouble()
                                         : data?['total_price'] ?? 0.0;
                                 String userId = data?['user_id'] ?? '';
 
                                 return FutureBuilder<DocumentSnapshot>(
-                                  future: _firestore.collection('products').doc(productId).get(),
+                                  future: _firestore
+                                      .collection('products')
+                                      .doc(productId)
+                                      .get(),
                                   builder: (context, productSnapshot) {
-                                    if (productSnapshot.connectionState == ConnectionState.waiting) {
-                                      return const Center(child: CircularProgressIndicator());
+                                    if (productSnapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const Center(
+                                          child: CircularProgressIndicator());
                                     }
 
-                                    if (!productSnapshot.hasData || !productSnapshot.data!.exists) {
-                                      return const Center(child: Text('Product not found'));
+                                    if (!productSnapshot.hasData ||
+                                        !productSnapshot.data!.exists) {
+                                      return const Center(
+                                          child: Text('Product not found'));
                                     }
 
-                                    var productData = productSnapshot.data!.data() as Map<String, dynamic>;
-                                    String productName = productData['name'] ?? '';
-                                    List<dynamic> productImages = productData['imgs'] ?? [];
-                                    double productPrice = (productData['price'] is String)
-                                        ? double.tryParse(productData['price']) ?? 0.0
-                                        : productData['price'] is int
-                                            ? (productData['price'] as int).toDouble()
-                                            : productData['price'] ?? 0.0;
+                                    var productData = productSnapshot.data!
+                                        .data() as Map<String, dynamic>;
+                                    String productName =
+                                        productData['name'] ?? '';
+                                    List<dynamic> productImages =
+                                        productData['imgs'] ?? [];
+                                    double productPrice =
+                                        (productData['price'] is String)
+                                            ? double.tryParse(
+                                                    productData['price']) ??
+                                                0.0
+                                            : productData['price'] is int
+                                                ? (productData['price'] as int)
+                                                    .toDouble()
+                                                : productData['price'] ?? 0.0;
 
                                     return Slidable(
                                       key: Key(productDoc.id),
@@ -213,7 +240,8 @@ class _CartScreenState extends State<CartScreen> {
                                         children: [
                                           SlidableAction(
                                             onPressed: (context) {
-                                              cartController.removeItem(productDoc.id);
+                                              cartController
+                                                  .removeItem(productDoc.id);
                                             },
                                             backgroundColor: redColor,
                                             foregroundColor: whiteColor,
@@ -239,7 +267,8 @@ class _CartScreenState extends State<CartScreen> {
                                             Padding(
                                               padding: const EdgeInsets.all(10),
                                               child: Row(
-                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
                                                 children: [
                                                   productImages.isNotEmpty
                                                       ? Image.network(
@@ -250,7 +279,9 @@ class _CartScreenState extends State<CartScreen> {
                                                       : loadingIndicator(),
                                                   15.widthBox,
                                                   Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
                                                       Text(
                                                         productName,
@@ -258,7 +289,8 @@ class _CartScreenState extends State<CartScreen> {
                                                           fontFamily: medium,
                                                           fontSize: 16,
                                                         ),
-                                                        overflow: TextOverflow.ellipsis,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
                                                         maxLines: 1,
                                                       ).box.width(170).make(),
                                                       Text('Size: $selectSize')
@@ -278,14 +310,18 @@ class _CartScreenState extends State<CartScreen> {
                                                   IconButton(
                                                     icon: Icon(Icons.remove),
                                                     onPressed: () {
-                                                      cartController.decrementCount(productDoc.id);
+                                                      cartController
+                                                          .decrementCount(
+                                                              productDoc.id);
                                                     },
                                                   ),
                                                   Text('$qty'),
                                                   IconButton(
                                                     icon: Icon(Icons.add),
                                                     onPressed: () {
-                                                      cartController.incrementCount(productDoc.id);
+                                                      cartController
+                                                          .incrementCount(
+                                                              productDoc.id);
                                                     },
                                                   ),
                                                   SizedBox(height: 10),

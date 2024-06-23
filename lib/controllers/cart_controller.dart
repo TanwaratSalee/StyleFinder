@@ -24,8 +24,8 @@ class CartController extends GetxController {
   var productSnapshot = <DocumentSnapshot>[].obs;
   var totalP = 0.obs;
 
-  void updateCart(List<DocumentSnapshot> products) {
-    productSnapshot.value = products;
+  void updateCart(List<QueryDocumentSnapshot> products) {
+    productSnapshot.value = products.cast<DocumentSnapshot>();
     recalculateTotalPrice();
   }
 
@@ -42,48 +42,68 @@ class CartController extends GetxController {
     var currentItem =
         productSnapshot.firstWhere((element) => element.id == docId);
     int currentQty = currentItem['qty'];
-    double unitPrice = (currentItem['total_price'] as int) / currentQty;
+    double unitPrice =
+        (currentItem['total_price'] as num).toDouble() / currentQty;
     int newQty = currentQty + 1;
     double newTprice = unitPrice * newQty;
 
-    // Update Firestore
     await currentItem.reference.update({
       'qty': newQty,
-      'total_price': newTprice.toInt(),
+      'total_price': newTprice,
     });
 
-    // Update local snapshot
-    currentItem = await currentItem.reference.get();
-    productSnapshot[productSnapshot
-        .indexWhere((element) => element.id == docId)] = currentItem;
+    DocumentSnapshot updatedItem = await currentItem.reference.get();
+    int index = productSnapshot.indexWhere((element) => element.id == docId);
+    if (index != -1 && updatedItem.exists) {
+      productSnapshot[index] = updatedItem;
+    }
     recalculateTotalPrice();
   }
 
   void decrementCount(String docId) async {
-    var currentItem =
-        productSnapshot.firstWhere((element) => element.id == docId);
-    int currentQty = currentItem['qty'];
-    if (currentQty > 1) {
-      double unitPrice = (currentItem['total_price'] as int) / currentQty;
-      int newQty = currentQty - 1;
-      double newTprice = unitPrice * newQty;
+    try {
+      var currentItem =
+          productSnapshot.firstWhere((element) => element.id == docId);
+      Map<String, dynamic>? currentData =
+          currentItem.data() as Map<String, dynamic>?;
 
-      // Update Firestore
-      await currentItem.reference.update({
-        'qty': newQty,
-        'total_price': newTprice.toInt(),
-      });
+      if (currentData != null) {
+        int currentQty = currentData['qty'] ?? 0;
+        if (currentQty > 1) {
+          double unitPrice =
+              (currentData['total_price'] as num).toDouble() / currentQty;
+          int newQty = currentQty - 1;
+          double newTprice = unitPrice * newQty;
 
-      // Update local snapshot
-      currentItem = await currentItem.reference.get();
-      productSnapshot[productSnapshot
-          .indexWhere((element) => element.id == docId)] = currentItem;
-    } else {
-      // Remove item from Firestore if qty < 1
-      await currentItem.reference.delete();
-      productSnapshot.removeWhere((element) => element.id == docId);
+          await currentItem.reference.update({
+            'qty': newQty,
+            'total_price': newTprice,
+          });
+
+          var updatedItem = await currentItem.reference.get();
+          int index =
+              productSnapshot.indexWhere((element) => element.id == docId);
+          if (index != -1 && updatedItem.exists) {
+            productSnapshot[index] = updatedItem;
+          }
+        } else {
+          await currentItem.reference.delete();
+          productSnapshot.removeWhere((element) => element.id == docId);
+        }
+        recalculateTotalPrice();
+      } else {
+        print("Current item data is null");
+      }
+    } catch (e) {
+      print("Error decrementing count: $e");
     }
-    recalculateTotalPrice();
+  }
+
+  void recalculateTotalPrice() {
+    totalP.value = productSnapshot.fold<double>(0.0, (sum, item) {
+      var price = (item.data() as Map<String, dynamic>)['total_price'];
+      return sum + (price is int ? price.toDouble() : price as double);
+    }).toInt();
   }
 
   void removeItem(String docId) async {
@@ -96,11 +116,6 @@ class CartController extends GetxController {
     } catch (e) {
       print("Error removing item: $e");
     }
-  }
-
-  void recalculateTotalPrice() {
-    totalP.value = productSnapshot.fold<int>(
-        0, (sum, item) => sum + (item['total_price'] as int));
   }
 
   Map<String, dynamic>? _selectedAddress;
@@ -211,7 +226,7 @@ class CartController extends GetxController {
         'order_on_delivery': false,
         'total_amount': vendorTotalAmount,
         'orders': vendorProducts,
-        'vendor_id': vendorId ,
+        'vendor_id': vendorId,
       });
 
       await orderRef.update({'order_id': orderRef.id});
