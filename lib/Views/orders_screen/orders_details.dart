@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_finalproject/Views/chat_screen/chat_screen.dart';
+import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/orders_screen/component/orders_status.dart';
 import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
@@ -203,7 +204,7 @@ class OrdersDetails extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            Text('Order Code :    ')
+                            Text('Order Code : ')
                                 .text
                                 .size(14)
                                 .black
@@ -215,7 +216,7 @@ class OrdersDetails extends StatelessWidget {
                         5.heightBox,
                         Row(
                           children: [
-                            Text('Order Date :    ')
+                            Text('Order Date : ')
                                 .text
                                 .size(14)
                                 .black
@@ -231,7 +232,7 @@ class OrdersDetails extends StatelessWidget {
                         5.heightBox,
                         Row(
                           children: [
-                            Text('Payment Method :    ')
+                            Text('Payment Method : ')
                                 .text
                                 .size(14)
                                 .black
@@ -248,6 +249,60 @@ class OrdersDetails extends StatelessWidget {
                   .roundedSM
                   .border(color: greyLine)
                   .padding(const EdgeInsets.all(6))
+                  .make(),
+              15.heightBox,
+              GestureDetector(
+                onTap: () async {
+                  var vendorDetails = await getVendorDetails(
+                      data['orders'][0]['vendor_id'] ?? '');
+                  Get.to(() => const ChatScreen(), arguments: [
+                    vendorDetails['name'] ?? '',
+                    vendorDetails['id'] ?? ''
+                  ]);
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Row(
+                      children: [
+                        Image.asset(
+                          icMessage,
+                          width: 25,
+                        ),
+                        SizedBox(width: 15),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Chat with seller',
+                              style: TextStyle(
+                                  color: blackColor,
+                                  fontFamily: medium,
+                                  fontSize: 16),
+                            ),
+                            Text(
+                              'Product, pre-shipping issues, and other questions',
+                              style: TextStyle(
+                                  color: greyDark,
+                                  fontFamily: regular,
+                                  fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Image.asset(
+                      icSeeAll,
+                      width: 12,
+                    ),
+                  ],
+                ),
+              )
+                  .box
+                  .color(whiteColor)
+                  .padding(EdgeInsets.fromLTRB(6, 10, 6, 10))
+                  .roundedSM
+                  .border(color: greyLine)
                   .make(),
               15.heightBox,
               Column(
@@ -285,66 +340,12 @@ class OrdersDetails extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () async {
-                              var vendorDetails = await getVendorDetails(
-                                  data['orders'][0]['vendor_id'] ?? '');
-                              Get.to(() => const ChatScreen(), arguments: [
-                                vendorDetails['name'] ?? '',
-                                vendorDetails['id'] ?? ''
-                              ]);
-                            },
-                            child: Container(
-                              child: const Text(
-                                'Chat with seller',
-                                style: TextStyle(
-                                    color: whiteColor, fontFamily: medium),
-                              ),
-                            )
-                                .box
-                                .white
-                                .padding(EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 5))
-                                .roundedSM
-                                .color(primaryApp)
-                                .make(),
-                          ),
-                          5.widthBox,
-                          GestureDetector(
-                            onTap: () async {
-                              var vendorDetails = await getVendorDetails(
-                                  data['orders'][0]['vendor_id'] ?? '');
-                              if (vendorDetails['id'] != null) {
-                                Get.to(() => StoreScreen(
-                                      vendorId: vendorDetails['id'] ?? '',
-                                      title: vendorDetails['name'] ??
-                                          'Unknown Vendor',
-                                    ));
-                              } else {
-                                print('Vendor ID is null');
-                              }
-                            },
-                            child: Container(
-                              child: const Text(
-                                'See Store',
-                                style: TextStyle(
-                                    color: whiteColor, fontFamily: medium),
-                              ),
-                            )
-                                .box
-                                .white
-                                .padding(EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 5))
-                                .roundedSM
-                                .color(primaryApp)
-                                .make(),
-                          )
-                        ],
-                      ),
+                       Image.asset(
+                      icSeeAll,
+                      width: 12,
+                    ),
                     ],
-                  ),
+                  ).paddingSymmetric(horizontal: 6),
                   Divider(color: greyLine),
                   5.heightBox,
                   ListView.builder(
@@ -353,44 +354,67 @@ class OrdersDetails extends StatelessWidget {
                     itemCount: data['orders'].length,
                     itemBuilder: (context, index) {
                       var orderItem = data['orders'][index];
-                      return Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            'x${orderItem['qty'] ?? 0}',
-                          )
-                              .text
-                              .size(12)
-                              .fontFamily(regular)
-                              .color(greyDark)
-                              .make(),
-                          const SizedBox(width: 5),
-                          Image.network(orderItem['img'] ?? '',
-                              width: 70, height: 80, fit: BoxFit.cover),
-                          const SizedBox(width: 15),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  orderItem['name'] ?? '',
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                )
-                                    .text
-                                    .size(14)
-                                    .fontFamily(semiBold)
-                                    .color(greyDark)
-                                    .make(),
-                                Text(
-                                  '${NumberFormat('#,##0').format(orderItem['total_price'] ?? 0)} Bath',
-                                  style: const TextStyle(color: greyDark),
+                      String productId = orderItem['product_id'] ?? '';
+
+                      return FutureBuilder<Map<String, String>>(
+                        future: getProductDetails(productId),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                          if (snapshot.hasError) {
+                            return Center(
+                                child: Text('Error: ${snapshot.error}'));
+                          }
+                          if (!snapshot.hasData) {
+                            return Center(child: Text('Product not found'));
+                          }
+
+                          var productDetails = snapshot.data!;
+
+                          return Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                'x${orderItem['qty'] ?? 0}',
+                              )
+                                  .text
+                                  .size(16)
+                                  .fontFamily(regular)
+                                  .color(greyDark)
+                                  .make(),
+                              const SizedBox(width: 5),
+                              productDetails['imageUrl']!.isNotEmpty
+                                  ? Image.network(productDetails['imageUrl']!,
+                                      width: 70, height: 80, fit: BoxFit.cover)
+                                  : loadingIndicator(),
+                              const SizedBox(width: 15),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      productDetails['name'] ?? '',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    )
+                                        .text
+                                        .size(16)
+                                        .fontFamily(semiBold)
+                                        .color(greyDark)
+                                        .make(),
+                                    Text(
+                                      '${NumberFormat('#,##0').format(orderItem['total_price'] ?? 0)} Bath',
+                                      style: const TextStyle(color: greyDark),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ).box.padding(EdgeInsets.symmetric(vertical: 5)).make();
+                              ),
+                            ],
+                          ).paddingSymmetric(vertical: 3);
+                        },
+                      );
                     },
                   ),
                   Divider(color: greyLine),
