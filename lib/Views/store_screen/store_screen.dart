@@ -1,17 +1,12 @@
 import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
-import 'package:flutter_finalproject/Views/match_screen/matchpost_details.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/store_screen/matchstore_detail.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:rxdart/rxdart.dart';
 
 class StoreScreen extends StatelessWidget {
   final String vendorId;
@@ -256,9 +251,9 @@ class StoreScreen extends StatelessWidget {
           padding: EdgeInsets.all(12),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            crossAxisSpacing: 8,
-            mainAxisSpacing: 8,
-            childAspectRatio: 6.4 / 8,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
+            childAspectRatio: 5.3 / 6,
           ),
           itemCount: data.length,
           itemBuilder: (context, index) {
@@ -451,10 +446,10 @@ class StoreScreen extends StatelessWidget {
         return GridView.builder(
           padding: const EdgeInsets.all(8),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
+            crossAxisCount: 2,
             crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
-            childAspectRatio: 5.8 / 8,
+            mainAxisSpacing: 8.5,
+            childAspectRatio: 5.7 / 7,
             ),
           itemCount: products.length,
           itemBuilder: (BuildContext context, int index) {
@@ -552,8 +547,8 @@ class StoreScreen extends StatelessWidget {
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
-            childAspectRatio: 5.8 / 8,
+            mainAxisSpacing: 0,
+            childAspectRatio: 5.5 / 7,
           ),
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (BuildContext context, int index) {
