@@ -601,7 +601,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                 var productTopSnapshot = futureSnapshot.data![0];
                 var productLowerSnapshot = futureSnapshot.data![1];
 
-                if (!productTopSnapshot.exists && !productLowerSnapshot.exists) {
+                if (!productTopSnapshot.exists &&
+                    !productLowerSnapshot.exists) {
                   return Center(child: Text("Both products not found"));
                 } else if (!productTopSnapshot.exists) {
                   return Center(child: Text("Top product not found"));
@@ -733,13 +734,29 @@ class _ProfileScreenState extends State<ProfileScreen>
                       IconButton(
                         icon: Image.asset(icTapFavoriteButton, width: 20),
                         onPressed: () async {
-                          await FirebaseFirestore.instance
-                              .collection(productsCollection)
-                              .doc(data[index].id)
-                              .update({
-                            'favorite_uid': FieldValue.arrayRemove(
-                                [FirebaseAuth.instance.currentUser!.uid])
-                          });
+                          String documentId = data[index].id;
+                          DocumentSnapshot docSnapshot = await FirebaseFirestore
+                              .instance
+                              .collection(userfavmatchCollection)
+                              .doc(documentId)
+                              .get();
+
+                          if (docSnapshot.exists) {
+                            await FirebaseFirestore.instance
+                                .collection(userfavmatchCollection)
+                                .doc(documentId)
+                                .update({
+                              'favorite_uid': FieldValue.arrayRemove(
+                                  [FirebaseAuth.instance.currentUser!.uid])
+                            });
+                            VxToast.show(context,
+                                msg: "Removed favorited match successfully");
+                            print(
+                                "Document updated successfully for ID: $documentId");
+                          } else {
+                            print("Document not found for ID: $documentId");
+                            VxToast.show(context, msg: "Product not found");
+                          }
                         },
                       ),
                     ],
@@ -879,7 +896,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                             children: [
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Image.network(
                                     topImage,
@@ -889,7 +906,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                                   ),
                                   10.widthBox,
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Text(

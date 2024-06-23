@@ -9,6 +9,7 @@ User? currentUser = auth.currentUser;
 const usersCollection = "users";
 const productsCollection = "products";
 const usermatchCollection = "usermixandmatch";
+const userfavmatchCollection = "usermatchfavorite";
 const cartCollection = "cart";
 const chatsCollection = 'chats';
 const messagesCollection = 'messages';

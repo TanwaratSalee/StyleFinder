@@ -709,19 +709,55 @@ class ProductController extends GetxController {
         });
 
         if (topProductId != null && lowerProductId != null) {
-          userData['product_id_top'] = topProductId;
-          userData['product_id_lower'] = lowerProductId;
-
           FirebaseFirestore.instance
               .collection('usermatchfavorite')
-              .add(userData)
-              .then((documentReference) {
-            VxToast.show(context, msg: "Added to wishlist and user mix-match.");
-            print(
-                'Data added in usermixandmatch collection with document ID: ${documentReference.id}');
+              .where('product_id_top', isEqualTo: topProductId)
+              .where('product_id_lower', isEqualTo: lowerProductId)
+              .get()
+              .then((QuerySnapshot existingFavorites) {
+            if (existingFavorites.docs.isNotEmpty) {
+              var existingDoc = existingFavorites.docs.first;
+              var existingData = existingDoc.data() as Map<String, dynamic>?;
+              var existingFavoritesList =
+                  (existingData?['favorite_uid'] as List<dynamic>?) ?? [];
+              if (!existingFavoritesList.contains(currentUserUID)) {
+                existingFavoritesList.add(currentUserUID);
+                existingDoc.reference.update({
+                  'favorite_uid': existingFavoritesList,
+                }).then((_) {
+                  VxToast.show(context,
+                      msg: "Added to existing wishlist and user mix-match.");
+                  print(
+                      'Updated existing document in usermatchfavorite collection with document ID: ${existingDoc.id}');
+                }).catchError((error) {
+                  print(
+                      'Error updating document in usermatchfavorite collection: $error');
+                  VxToast.show(context, msg: "Error updating wishlist.");
+                });
+              } else {
+                VxToast.show(context, msg: "Products already in wishlist.");
+              }
+            } else {
+              userData['product_id_top'] = topProductId;
+              userData['product_id_lower'] = lowerProductId;
+
+              FirebaseFirestore.instance
+                  .collection('usermatchfavorite')
+                  .add(userData)
+                  .then((documentReference) {
+                VxToast.show(context,
+                    msg: "Added to wishlist and user mix-match.");
+                print(
+                    'Data added in usermixandmatch collection with document ID: ${documentReference.id}');
+              }).catchError((error) {
+                print(
+                    'Error adding data in usermixandmatch collection: $error');
+                VxToast.show(context, msg: "Error adding to wishlist.");
+              });
+            }
           }).catchError((error) {
-            print('Error adding data in usermixandmatch collection: $error');
-            VxToast.show(context, msg: "Error adding to wishlist.");
+            print('Error retrieving usermatchfavorite documents: $error');
+            VxToast.show(context, msg: "Error retrieving usermatchfavorite.");
           });
         } else {
           VxToast.show(context, msg: "Products already in wishlist.");

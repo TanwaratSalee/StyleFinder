@@ -45,11 +45,6 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
       'value': 0xFFCA93EB
     },
     {
-      'name': 'Brown',
-      'color': Color.fromARGB(255, 121, 58, 31),
-      'value': 0xFF793A1F
-    },
-    {
       'name': 'Blue',
       'color': Color.fromRGBO(32, 47, 179, 1),
       'value': 0xFF202FB3
@@ -59,7 +54,11 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
       'color': const Color.fromRGBO(48, 176, 232, 1),
       'value': 0xFF30B0E8
     },
-    // {'name': 'Blue Grey', 'color': const Color.fromRGBO(83, 205, 191, 1), 'value': 0xFF53CDBF},
+    {
+      'name': 'Blue Grey',
+      'color': const Color.fromRGBO(83, 205, 191, 1),
+      'value': 0xFF53CDBF
+    },
     {
       'name': 'Green',
       'color': const Color.fromRGBO(23, 119, 15, 1),
@@ -71,17 +70,13 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
       'value': 0xFF62CF2F
     },
     {'name': 'Yellow', 'color': Colors.yellow, 'value': 0xFFFFFF00},
-    {
-      'name': 'Yellow',
-      'color': Color.fromARGB(255, 242, 209, 131),
-      'value': 0xFFFFFF00
-    },
     {'name': 'Orange', 'color': Colors.orange, 'value': 0xFFFFA500},
+    {'name': 'Pink', 'color': Colors.pinkAccent, 'value': 0xFFFF4081},
     {'name': 'Red', 'color': Colors.red, 'value': 0xFFFF0000},
     {
-      'name': 'Pink',
-      'color': Color.fromARGB(255, 242, 134, 170),
-      'value': 0xFFFF4081
+      'name': 'Brown',
+      'color': Color.fromARGB(255, 121, 58, 31),
+      'value': 0xFF793A1F
     },
   ];
 
