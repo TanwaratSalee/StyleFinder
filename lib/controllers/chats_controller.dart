@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/news_controller.dart';
-import 'package:get/get.dart';
 
 class ChatsController extends GetxController {
   @override
@@ -15,11 +15,11 @@ class ChatsController extends GetxController {
 
   var friendName = Get.arguments[0];
   var friendId = Get.arguments[1];
-  var friendImageUrl = ''.obs; 
+  var friendImageUrl = ''.obs;
 
   var senderName = Get.find<NewsController>().username;
   var currentId = currentUser!.uid;
-  var currentUserImageUrl = ''.obs; 
+  var currentUserImageUrl = ''.obs;
 
   var msgController = TextEditingController();
 
@@ -30,50 +30,47 @@ class ChatsController extends GetxController {
   getChatId() async {
     isLoading(true);
 
-    // imageUrl for both users
-    await firestore.collection('users').doc(friendId).get().then((doc) {
+    // Fetch imageUrl for the friend from vendors collection
+    await firestore
+        .collection(vendorsCollection)
+        .doc(friendId)
+        .get()
+        .then((doc) {
       if (doc.exists) {
         friendImageUrl.value = doc['imageUrl'] ?? '';
       }
     });
 
-    await firestore.collection('users').doc(currentId).get().then((doc) {
+    await firestore
+        .collection(vendorsCollection)
+        .doc(currentId)
+        .get()
+        .then((doc) {
       if (doc.exists) {
         currentUserImageUrl.value = doc['imageUrl'] ?? '';
       }
     });
 
-    // Check friend_name matches vendor_name 
-    await firestore.collection(vendorsCollection).where('vendor_name', isEqualTo: friendName).limit(1).get().then((QuerySnapshot snapshot) {
-      if (snapshot.docs.isNotEmpty) {
-        var vendorDoc = snapshot.docs.single;
-        friendImageUrl.value = vendorDoc['imageUrl'] ?? '';
-      }
-    });
-
+    // Check if a chat already exists between the two users
     await chats
         .where('users', isEqualTo: {friendId: null, currentId: null})
         .limit(1)
         .get()
         .then((QuerySnapshot snapshot) {
-      if (snapshot.docs.isNotEmpty) {
-        chatDocId = snapshot.docs.single.id;
-      } else {
-        chats.add({
-          'created_on': null,
-          'last_msg': '',
-          'users': {friendId: null, currentId: null},
-          'toId': '',
-          'fromId': '',
-          'friend_name': friendName,
-          'sender_name': senderName,
-          'friend_image_url': friendImageUrl.value,
-          'current_user_image_url': currentUserImageUrl.value
-        }).then((value) {
-          chatDocId = value.id;
+          if (snapshot.docs.isNotEmpty) {
+            chatDocId = snapshot.docs.single.id;
+          } else {
+            chats.add({
+              'created_on': FieldValue.serverTimestamp(),
+              'user_id': currentId,
+              'last_msg': '',
+              'vendor_id': friendId,
+              'users': {friendId: null, currentId: null},
+            }).then((value) {
+              chatDocId = value.id;
+            });
+          }
         });
-      }
-    });
     isLoading(false);
   }
 
@@ -82,14 +79,12 @@ class ChatsController extends GetxController {
       chats.doc(chatDocId).update({
         'created_on': FieldValue.serverTimestamp(),
         'last_msg': msg,
-        'toId': friendId,
-        'fromId': currentId,
       });
 
       chats.doc(chatDocId).collection(messagesCollection).doc().set({
         'created_on': FieldValue.serverTimestamp(),
         'msg': msg,
-        'uid': friendId,
+        'uid': currentId,
       });
     }
   }

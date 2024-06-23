@@ -5,9 +5,8 @@ import 'package:intl/intl.dart' as intl;
 import 'package:velocity_x/velocity_x.dart';
 
 Widget senderBubble(DocumentSnapshot data) {
-  var t = data['created_on'] == null
-      ? DateTime.now()
-      : data['created_on'].toDate();
+  var t =
+      data['created_on'] == null ? DateTime.now() : data['created_on'].toDate();
   var time = intl.DateFormat("h:mma").format(t);
   bool isCurrentUser = data['uid'] == currentUser!.uid;
 
@@ -21,7 +20,7 @@ Widget senderBubble(DocumentSnapshot data) {
           padding: const EdgeInsets.fromLTRB(12, 8, 14, 8),
           margin: const EdgeInsets.only(bottom: 8),
           decoration: BoxDecoration(
-            color: isCurrentUser ? greyMessage : primaryMessage,
+            color: isCurrentUser ? primaryMessage : greyMessage,
             borderRadius: isCurrentUser
                 ? const BorderRadius.only(
                     topLeft: Radius.circular(20),
@@ -40,7 +39,7 @@ Widget senderBubble(DocumentSnapshot data) {
               .text
               .fontFamily(regular)
               .size(14)
-              .color(isCurrentUser ? blackColor : whiteColor)
+              .color(isCurrentUser ? whiteColor : blackColor)
               .make(),
         ),
         Container(

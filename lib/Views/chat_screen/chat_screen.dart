@@ -52,16 +52,16 @@ class ChatScreen extends StatelessWidget {
           elevation: 4,
           title: Row(
             children: [
-              CircleAvatar(
-                radius: 22,
-                backgroundColor: primaryApp,
-                backgroundImage: controller.friendImageUrl.value.isNotEmpty
-                    ? NetworkImage(controller.friendImageUrl.value)
-                    : null,
-                child: controller.friendImageUrl.value.isEmpty
-                    ? loadingIndicator()
-                    : null,
-              ),
+              Obx(() => CircleAvatar(
+                    radius: 22,
+                    backgroundColor: primaryApp,
+                    backgroundImage: controller.friendImageUrl.value.isNotEmpty
+                        ? NetworkImage(controller.friendImageUrl.value)
+                        : null,
+                    child: controller.friendImageUrl.value.isEmpty
+                        ? loadingIndicator()
+                        : null,
+                  )),
               SizedBox(width: 15),
               Text(
                 "${controller.friendName}",
@@ -81,14 +81,19 @@ class ChatScreen extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(12),
-                child: Obx(
-                  () => controller.isLoading.value
+                child: Obx(() {
+                  print("Loading state: ${controller.isLoading.value}");
+
+                  return controller.isLoading.value
                       ? Center(child: loadingIndicator())
                       : StreamBuilder(
                           stream: FirestoreServices.getChatMessages(
                               controller.chatDocId.toString()),
                           builder: (BuildContext context,
                               AsyncSnapshot<QuerySnapshot> snapshot) {
+                            print("Stream has data: ${snapshot.hasData}");
+                            print("Chat Doc ID: ${controller.chatDocId}");
+
                             if (!snapshot.hasData) {
                               return Center(child: loadingIndicator());
                             } else if (snapshot.data!.docs.isEmpty) {
@@ -101,6 +106,11 @@ class ChatScreen extends StatelessWidget {
                             } else {
                               List<QueryDocumentSnapshot> messages =
                                   snapshot.data!.docs;
+
+                              // เพิ่ม log เพื่อดูข้อมูลที่ดึงมาจาก Firestore
+                              print(
+                                  "Messages from Firestore: ${messages.map((e) => e.data()).toList()}");
+
                               Map<String, List<QueryDocumentSnapshot>>
                                   groupedMessages = {};
 
@@ -123,6 +133,9 @@ class ChatScreen extends StatelessWidget {
                                 }
                                 groupedMessages[date]!.add(message);
                               }
+
+                              // ตรวจสอบว่าข้อมูลได้ถูกจัดกลุ่มอย่างถูกต้องหรือไม่
+                              print("Grouped Messages: $groupedMessages");
 
                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                 if (scrollController.hasClients) {
@@ -160,8 +173,8 @@ class ChatScreen extends StatelessWidget {
                                         return Align(
                                           alignment:
                                               data['uid'] == currentUser!.uid
-                                                  ? Alignment.centerLeft
-                                                  : Alignment.centerRight,
+                                                  ? Alignment.centerRight
+                                                  : Alignment.centerLeft,
                                           child: senderBubble(data),
                                         );
                                       }).toList(),
@@ -171,8 +184,8 @@ class ChatScreen extends StatelessWidget {
                               );
                             }
                           },
-                        ),
-                ),
+                        );
+                }),
               ),
             ),
             SizedBox(height: 10),
