@@ -194,7 +194,7 @@ class CartController extends GetxController {
       var orderRef = await firestore.collection(ordersCollection).add({
         'created_at': FieldValue.serverTimestamp(),
         'user_id': currentUser!.uid,
-        'order': {
+        'address': {
           'order_by_email': currentUser!.email,
           'order_by_firstname': firstname,
           'order_by_surname': surname,

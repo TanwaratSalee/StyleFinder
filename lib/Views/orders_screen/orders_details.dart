@@ -176,12 +176,12 @@ class OrdersDetails extends StatelessWidget {
                       Icon(Icons.location_on_outlined),
                       20.widthBox,
                       Text(
-                          "${data['order']['order_by_firstname'] ?? ''} ${data['order']['order_by_surname'] ?? ''},\n"
-                          "${data['order']['order_by_address'] ?? ''},\n"
-                          "${data['order']['order_by_city'] ?? ''}, "
-                          "${data['order']['order_by_state'] ?? ''}, "
-                          "${data['order']['order_by_postalcode'] ?? ''}\n"
-                          "${formatPhoneNumber(data['order']['order_by_phone'] ?? '')}"),
+                          "${data['address']['order_by_firstname'] ?? ''} ${data['address']['order_by_surname'] ?? ''},\n"
+                          "${data['address']['order_by_address'] ?? ''},\n"
+                          "${data['address']['order_by_city'] ?? ''}, "
+                          "${data['address']['order_by_state'] ?? ''}, "
+                          "${data['address']['order_by_postalcode'] ?? ''}\n"
+                          "${formatPhoneNumber(data['address']['order_by_phone'] ?? '')}"),
                     ],
                   ),
                 ],
