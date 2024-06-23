@@ -16,9 +16,11 @@ class ChatScreen extends StatelessWidget {
     DateTime now = DateTime.now();
     DateTime yesterday = now.subtract(Duration(days: 1));
 
-    if (DateFormat('yyyyMMdd').format(date) == DateFormat('yyyyMMdd').format(now)) {
+    if (DateFormat('yyyyMMdd').format(date) ==
+        DateFormat('yyyyMMdd').format(now)) {
       return 'Today';
-    } else if (DateFormat('yyyyMMdd').format(date) == DateFormat('yyyyMMdd').format(yesterday)) {
+    } else if (DateFormat('yyyyMMdd').format(date) ==
+        DateFormat('yyyyMMdd').format(yesterday)) {
       return 'Yesterday';
     } else {
       return DateFormat('MMMM d, yyyy').format(date);
@@ -83,8 +85,10 @@ class ChatScreen extends StatelessWidget {
                   () => controller.isLoading.value
                       ? Center(child: loadingIndicator())
                       : StreamBuilder(
-                          stream: FirestoreServices.getChatMessages(controller.chatDocId.toString()),
-                          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                          stream: FirestoreServices.getChatMessages(
+                              controller.chatDocId.toString()),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<QuerySnapshot> snapshot) {
                             if (!snapshot.hasData) {
                               return Center(child: loadingIndicator());
                             } else if (snapshot.data!.docs.isEmpty) {
@@ -95,20 +99,24 @@ class ChatScreen extends StatelessWidget {
                                 ),
                               );
                             } else {
-                              List<QueryDocumentSnapshot> messages = snapshot.data!.docs;
-                              Map<String, List<QueryDocumentSnapshot>> groupedMessages = {};
+                              List<QueryDocumentSnapshot> messages =
+                                  snapshot.data!.docs;
+                              Map<String, List<QueryDocumentSnapshot>>
+                                  groupedMessages = {};
 
                               for (var message in messages) {
                                 String date;
                                 try {
-                                  var data = message.data() as Map<String, dynamic>;
+                                  var data =
+                                      message.data() as Map<String, dynamic>;
                                   if (data['created_on'] != null) {
-                                    date = formatDate(data['created_on'] as Timestamp);
+                                    date = formatDate(
+                                        data['created_on'] as Timestamp);
                                   } else {
                                     date = 'Unknown Date';
                                   }
                                 } catch (e) {
-                                  date = 'Unknown Date'; 
+                                  date = 'Unknown Date';
                                 }
                                 if (!groupedMessages.containsKey(date)) {
                                   groupedMessages[date] = [];
@@ -118,7 +126,8 @@ class ChatScreen extends StatelessWidget {
 
                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                 if (scrollController.hasClients) {
-                                  scrollController.jumpTo(scrollController.position.maxScrollExtent);
+                                  scrollController.jumpTo(scrollController
+                                      .position.maxScrollExtent);
                                 }
                               });
 
@@ -126,26 +135,33 @@ class ChatScreen extends StatelessWidget {
                                 controller: scrollController,
                                 itemCount: groupedMessages.length,
                                 itemBuilder: (context, index) {
-                                  String date = groupedMessages.keys.elementAt(index);
-                                  List<QueryDocumentSnapshot> dayMessages = groupedMessages[date]!;
+                                  String date =
+                                      groupedMessages.keys.elementAt(index);
+                                  List<QueryDocumentSnapshot> dayMessages =
+                                      groupedMessages[date]!;
 
                                   return Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 20),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 20),
                                         child: Center(
                                           child: Text(
                                             date,
-                                            style: TextStyle(color: greyDark, fontFamily: medium),
+                                            style: TextStyle(
+                                                color: greyDark,
+                                                fontFamily: medium),
                                           ),
                                         ),
                                       ),
                                       ...dayMessages.map((data) {
                                         return Align(
-                                          alignment: data['uid'] == currentUser!.uid
-                                              ? Alignment.centerLeft
-                                              : Alignment.centerRight,
+                                          alignment:
+                                              data['uid'] == currentUser!.uid
+                                                  ? Alignment.centerLeft
+                                                  : Alignment.centerRight,
                                           child: senderBubble(data),
                                         );
                                       }).toList(),
@@ -186,14 +202,20 @@ class ChatScreen extends StatelessWidget {
                     controller.msgController.clear();
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       if (scrollController.hasClients) {
-                        scrollController.jumpTo(scrollController.position.maxScrollExtent);
+                        scrollController
+                            .jumpTo(scrollController.position.maxScrollExtent);
                       }
                     });
                   },
                   icon: const Icon(Icons.send, color: primaryApp),
                 ),
               ],
-            ).box.border(color: greyLine).padding(const EdgeInsets.all(12)).height(80).make(),
+            )
+                .box
+                .border(color: greyLine)
+                .padding(const EdgeInsets.all(12))
+                .height(80)
+                .make(),
           ],
         ),
       ),

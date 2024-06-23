@@ -327,53 +327,72 @@ class _OrdersScreenState extends State<OrdersScreen>
                     ).box.padding(EdgeInsets.symmetric(horizontal: 12)).make(),
                     5.heightBox,
                     ...products.map((product) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'x${product['qty'] ?? 0}',
-                            )
-                                .text
-                                .fontFamily(regular)
-                                .color(greyColor)
-                                .size(12)
-                                .make(),
-                            const SizedBox(width: 5),
-                            Image.network(product['img'] ?? '',
-                                width: 70, height: 60, fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                              return Icon(Icons.image, size: 70);
-                            }),
-                            const SizedBox(width: 5),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    product['name'] ?? 'Unknown Product',
-                                    style: const TextStyle(
-                                      fontFamily: medium,
-                                      fontSize: 14,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
+                      return FutureBuilder<Map<String, String>>(
+                        future: getProductDetails(product['product_id'] ?? ''),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return CircularProgressIndicator();
+                          }
+                          if (snapshot.hasError) {
+                            return Text('Error: ${snapshot.error}');
+                          }
+                          if (!snapshot.hasData ||
+                              snapshot.data!['name']!.isEmpty) {
+                            return Text('Unknown Product');
+                          }
+                          var productDetails = snapshot.data!;
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 4),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'x${product['qty'] ?? 0}',
+                                )
+                                    .text
+                                    .fontFamily(regular)
+                                    .color(greyColor)
+                                    .size(12)
+                                    .make(),
+                                const SizedBox(width: 5),
+                                Image.network(productDetails['imageUrl']!,
+                                    width: 70, height: 60, fit: BoxFit.cover,
+                                    errorBuilder: (context, error, stackTrace) {
+                                  return Icon(Icons.image, size: 70);
+                                }),
+                                const SizedBox(width: 5),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        productDetails['name'] ??
+                                            'Unknown Product',
+                                        style: const TextStyle(
+                                          fontFamily: medium,
+                                          fontSize: 14,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      Text(
+                                        '${NumberFormat('#,##0').format(product['total_price'] ?? 0)} Bath',
+                                      )
+                                          .text
+                                          .fontFamily(regular)
+                                          .color(greyColor)
+                                          .size(14)
+                                          .make(),
+                                    ],
                                   ),
-                                  Text(
-                                    '${NumberFormat('#,##0').format(product['total_price'] ?? 0)} Bath',
-                                  )
-                                      .text
-                                      .fontFamily(regular)
-                                      .color(greyColor)
-                                      .size(14)
-                                      .make(),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          );
+                        },
                       );
                     }).toList(),
                   ],
@@ -396,13 +415,14 @@ class _OrdersScreenState extends State<OrdersScreen>
 
   Widget buildReview(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: getOrderHistory(),
+      stream: getReviewOrders(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Center(child: loadingIndicator());
+          return Center(child: CircularProgressIndicator());
         } else if (snapshot.data!.docs.isEmpty) {
           return const Center(
-              child: Text("No orders yet!", style: TextStyle(color: greyDark)));
+              child:
+                  Text("No orders yet!", style: TextStyle(color: Colors.grey)));
         } else {
           var data = snapshot.data!.docs;
 
@@ -415,8 +435,8 @@ class _OrdersScreenState extends State<OrdersScreen>
 
           if (ordersWithProductsToReview.isEmpty) {
             return const Center(
-                child:
-                    Text("No orders yet!", style: TextStyle(color: greyDark)));
+                child: Text("No orders yet!",
+                    style: TextStyle(color: Colors.grey)));
           }
 
           return ListView.builder(
@@ -435,195 +455,269 @@ class _OrdersScreenState extends State<OrdersScreen>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (productsToReview.isNotEmpty)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Order code ${orderData['order_code']}",
-                        )
-                            .text
-                            .fontFamily(medium)
-                            .color(blackColor)
-                            .size(18)
-                            .make(),
-                      ],
-                    ).box.padding(EdgeInsets.symmetric(horizontal: 12)).make(),
-                  5.heightBox,
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Order : ${orderData['order_id']?.length > 9 ? orderData['order_id']?.substring(0, 9) + '...' : orderData['order_id']}",
+                            style: TextStyle(
+                              fontFamily: 'Medium',
+                              color: Colors.black,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  SizedBox(height: 5),
                   ...productsToReview.asMap().entries.map((entry) {
                     int productIndex = entry.key;
                     var product = entry.value;
                     var reviewController = TextEditingController();
                     var rating = 0.0;
 
-                    return StatefulBuilder(
-                      builder: (context, setState) {
-                        return Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Image.network(
-                                        product['img'],
-                                        width: 85,
-                                        height: 85,
-                                      ),
-                                      const SizedBox(width: 10),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              product['name'],
-                                              style: TextStyle(
-                                                fontFamily: medium,
-                                                fontSize: 16,
+                    return FutureBuilder<Map<String, String>>(
+                      future: getProductDetails(product['product_id']),
+                      builder: (context, productSnapshot) {
+                        if (productSnapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(child: CircularProgressIndicator());
+                        } else if (productSnapshot.hasError ||
+                            !productSnapshot.hasData) {
+                          return Center(
+                              child: Text('Error loading product details.'));
+                        } else {
+                          var productDetails = productSnapshot.data!;
+                          return StatefulBuilder(
+                            builder: (context, setState) {
+                              return Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 8, horizontal: 12),
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(10),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Image.network(
+                                                productDetails['imageUrl'] ??
+                                                    'default_image_url',
+                                                width: 85,
+                                                height: 85,
+                                              ),
+                                              const SizedBox(width: 10),
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      productDetails['name'] ??
+                                                          'Unknown',
+                                                      style: TextStyle(
+                                                        fontFamily: 'Medium',
+                                                        fontSize: 16,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      '${NumberFormat('#,##0').format(product['total_price'] ?? 0)} Bath',
+                                                      style: TextStyle(
+                                                        fontFamily: 'Regular',
+                                                        color: Colors.grey,
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                                    RatingBar.builder(
+                                                      initialRating: 0,
+                                                      minRating: 1,
+                                                      direction:
+                                                          Axis.horizontal,
+                                                      allowHalfRating: true,
+                                                      itemCount: 5,
+                                                      itemSize:
+                                                          20.0, // Smaller stars
+                                                      itemBuilder:
+                                                          (context, _) => Icon(
+                                                        Icons.star,
+                                                        color: Colors.amber,
+                                                      ),
+                                                      onRatingUpdate:
+                                                          (ratingValue) {
+                                                        setState(() {
+                                                          rating = ratingValue;
+                                                        });
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 10),
+                                          TextField(
+                                            controller: reviewController,
+                                            maxLines: 2,
+                                            decoration: InputDecoration(
+                                              hintText:
+                                                  'Write your review here',
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0),
+                                                borderSide: BorderSide(
+                                                    color: Colors.grey),
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0),
+                                                borderSide: BorderSide(
+                                                  color: Colors.grey,
+                                                  width: 2.0,
+                                                ),
+                                              ),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0),
+                                                borderSide: BorderSide(
+                                                  color: Colors.grey,
+                                                  width: 1.0,
+                                                ),
                                               ),
                                             ),
-                                            Text(
-                                              '${NumberFormat('#,##0').format(product['total_price'])} Bath',
-                                            )
-                                                .text
-                                                .fontFamily(regular)
-                                                .color(greyColor)
-                                                .size(14)
-                                                .make(),
-                                            RatingBar.builder(
-                                              initialRating: 0,
-                                              minRating: 1,
-                                              direction: Axis.horizontal,
-                                              allowHalfRating: true,
-                                              itemCount: 5,
-                                              itemSize: 20.0, // Smaller stars
-                                              itemBuilder: (context, _) => Icon(
-                                                Icons.star,
-                                                color: Colors.amber,
-                                              ),
-                                              onRatingUpdate: (ratingValue) {
-                                                setState(() {
-                                                  rating = ratingValue;
-                                                });
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 10),
-                                  TextField(
-                                    controller: reviewController,
-                                    maxLines: 2,
-                                    decoration: InputDecoration(
-                                      hintText: 'Write your review here',
-                                      border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                        borderSide: BorderSide(color: greyLine),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                        borderSide: BorderSide(
-                                          color: greyLine,
-                                          width: 2.0,
-                                        ),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                        borderSide: BorderSide(
-                                          color: greyThin,
-                                          width: 1.0,
-                                        ),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          ElevatedButton(
+                                            onPressed: rating > 0
+                                                ? () async {
+                                                    var currentUser =
+                                                        FirebaseAuth.instance
+                                                            .currentUser;
+                                                    if (currentUser != null) {
+                                                      var userName = currentUser
+                                                              .displayName ??
+                                                          'Anonymous';
+                                                      var userImg = currentUser
+                                                              .photoURL ??
+                                                          'default_user_image_url';
+
+                                                      // Fetch user details from Firestore if necessary
+                                                      var userDoc =
+                                                          await FirebaseFirestore
+                                                              .instance
+                                                              .collection(
+                                                                  'users')
+                                                              .doc(currentUser
+                                                                  .uid)
+                                                              .get();
+                                                      if (userDoc.exists) {
+                                                        var userData =
+                                                            userDoc.data()
+                                                                as Map<String,
+                                                                    dynamic>?;
+                                                        userName =
+                                                            userData?['name'] ??
+                                                                userName;
+                                                        userImg = userData?[
+                                                                'imageUrl'] ??
+                                                            userImg;
+                                                      }
+
+                                                      var reviewData = {
+                                                        'product_id': product[
+                                                                'product_id'] ??
+                                                            'N/A',
+                                                        'product_title':
+                                                            productDetails[
+                                                                    'name'] ??
+                                                                'Unknown',
+                                                        'product_img': productDetails[
+                                                                'imageUrl'] ??
+                                                            'default_image_url',
+                                                        'rating': rating,
+                                                        'review_text':
+                                                            reviewController
+                                                                .text,
+                                                        'review_date':
+                                                            DateTime.now(),
+                                                        'user_id':
+                                                            currentUser.uid,
+                                                        'user_name': userName,
+                                                        'user_img': userImg,
+                                                      };
+
+                                                      await FirebaseFirestore
+                                                          .instance
+                                                          .collection('reviews')
+                                                          .add(reviewData);
+
+                                                      // Update the product's review status in Firestore
+                                                      var updatedProducts =
+                                                          products.map((p) {
+                                                        if (p['product_id'] ==
+                                                            product[
+                                                                'product_id']) {
+                                                          p['reviews'] = true;
+                                                        }
+                                                        return p;
+                                                      }).toList();
+
+                                                      await orderDoc.reference
+                                                          .update({
+                                                        'orders':
+                                                            updatedProducts
+                                                      });
+
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                        SnackBar(
+                                                          content: Text(
+                                                              'Review Submitted: Thank you for your feedback!'),
+                                                          duration: Duration(
+                                                              seconds: 2),
+                                                        ),
+                                                      );
+
+                                                      setState(() {
+                                                        productsToReview
+                                                            .removeAt(
+                                                                productIndex);
+                                                        if (productsToReview
+                                                            .isEmpty) {
+                                                          ordersWithProductsToReview
+                                                              .removeAt(index);
+                                                        }
+                                                      });
+                                                    } else {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                        SnackBar(
+                                                          content: Text(
+                                                              'Error: You need to be logged in to submit a review'),
+                                                          duration: Duration(
+                                                              seconds: 2),
+                                                        ),
+                                                      );
+                                                    }
+                                                  }
+                                                : null,
+                                            child: Text("Submit"),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  tapButton(
-                                    onPress: rating > 0
-                                        ? () async {
-                                            var currentUser = FirebaseAuth
-                                                .instance.currentUser;
-                                            if (currentUser != null) {
-                                              var reviewData = {
-                                                'product_id':
-                                                    product['product_id'],
-                                                'product_title':
-                                                    product['name'],
-                                                'product_img': product['img'],
-                                                'rating': rating,
-                                                'review_text':
-                                                    reviewController.text,
-                                                'review_date': DateTime.now(),
-                                                'user_id': currentUser.uid,
-                                                'user_name':
-                                                    currentUser.displayName ??
-                                                        'Anonymous',
-                                                'user_img': currentUser
-                                                        .photoURL ??
-                                                    'default_user_image_url',
-                                              };
-
-                                              await FirebaseFirestore.instance
-                                                  .collection('reviews')
-                                                  .add(reviewData);
-
-                                              // Update the product's review status in Firestore
-                                              var updatedProducts =
-                                                  products.map((p) {
-                                                if (p['product_id'] ==
-                                                    product['product_id']) {
-                                                  p['reviews'] = true;
-                                                }
-                                                return p;
-                                              }).toList();
-
-                                              await orderDoc.reference.update(
-                                                  {'orders': updatedProducts});
-
-                                              VxToast.show(context,
-                                                  msg:
-                                                      'Review Submitted: Thank you for your feedback!',
-                                                  position:
-                                                      VxToastPosition.bottom);
-
-                                              setState(() {
-                                                productsToReview
-                                                    .removeAt(productIndex);
-                                                if (productsToReview.isEmpty) {
-                                                  ordersWithProductsToReview
-                                                      .removeAt(index);
-                                                }
-                                              });
-                                            } else {
-                                              VxToast.show(context,
-                                                  msg:
-                                                      'Error: You need to be logged in to submit a review',
-                                                  position:
-                                                      VxToastPosition.bottom);
-                                            }
-                                          }
-                                        : null,
-                                    color: primaryApp,
-                                    textColor: whiteColor,
-                                    title: "Submit",
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        )
-                            .box
-                            .border(color: greyLine)
-                            .roundedSM
-                            .margin(const EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 12))
-                            .make();
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        }
                       },
                     );
                   }).toList(),
@@ -665,16 +759,20 @@ class _OrdersScreenState extends State<OrdersScreen>
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Order code ${orderData['order_code']}",
+                          "Order : ${orderData['order_id']?.length > 9 ? orderData['order_id']?.substring(0, 9) + '...' : orderData['order_id']}",
                         )
                             .text
                             .fontFamily(medium)
                             .color(blackColor)
                             .size(18)
                             .make(),
-                        Text(intl.DateFormat()
-                            .add_yMd()
-                            .format((orderData['order_date'].toDate())))
+                        Text(
+                          orderData['created_at'] != null
+                              ? intl.DateFormat()
+                                  .add_yMd()
+                                  .format((orderData['created_at'].toDate()))
+                              : 'Unknown Date',
+                        ),
                       ],
                     ).box.padding(EdgeInsets.symmetric(horizontal: 12)).make(),
                     Divider(
@@ -682,55 +780,75 @@ class _OrdersScreenState extends State<OrdersScreen>
                     ),
                     5.heightBox,
                     ...products.map((product) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'x${product['qty']}',
-                            )
-                                .text
-                                .fontFamily(regular)
-                                .color(greyColor)
-                                .size(12)
-                                .make(),
-                            const SizedBox(width: 5),
-                            Image.network(product['img'],
-                                width: 70, height: 60, fit: BoxFit.cover),
-                            const SizedBox(width: 5),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    product['name'],
-                                    style: const TextStyle(
-                                      fontFamily: medium,
-                                      fontSize: 14,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  )
-                                      .text
-                                      .fontFamily(medium)
-                                      .color(blackColor)
-                                      .size(14)
-                                      .make(),
-                                  Text(
-                                    '${NumberFormat('#,##0').format(product['total_price'])} Bath',
-                                  )
-                                      .text
-                                      .fontFamily(regular)
-                                      .color(greyColor)
-                                      .size(14)
-                                      .make(),
-                                ],
-                              ),
+                      return FutureBuilder<Map<String, String>>(
+                        future: getProductDetails(product['product_id'] ?? ''),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return CircularProgressIndicator();
+                          }
+                          if (snapshot.hasError) {
+                            return Text('Error: ${snapshot.error}');
+                          }
+                          if (!snapshot.hasData ||
+                              snapshot.data!['name']!.isEmpty) {
+                            return Text('Unknown Product');
+                          }
+                          var productDetails = snapshot.data!;
+                          var productName =
+                              productDetails['name'] ?? 'Unknown Product';
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 4),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'x${product['qty']}',
+                                )
+                                    .text
+                                    .fontFamily(regular)
+                                    .color(greyColor)
+                                    .size(12)
+                                    .make(),
+                                const SizedBox(width: 5),
+                                Image.network(productDetails['imageUrl']!,
+                                    width: 70, height: 60, fit: BoxFit.cover),
+                                const SizedBox(width: 5),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        productName,
+                                        style: const TextStyle(
+                                          fontFamily: medium,
+                                          fontSize: 14,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      )
+                                          .text
+                                          .fontFamily(medium)
+                                          .color(blackColor)
+                                          .size(14)
+                                          .make(),
+                                      Text(
+                                        '${NumberFormat('#,##0').format(product['total_price'])} Bath',
+                                      )
+                                          .text
+                                          .fontFamily(regular)
+                                          .color(greyColor)
+                                          .size(14)
+                                          .make(),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          );
+                        },
                       );
                     }).toList(),
                   ],
@@ -779,9 +897,8 @@ class _OrdersScreenState extends State<OrdersScreen>
 
   static Stream<QuerySnapshot> getReviewOrders() {
     return FirebaseFirestore.instance
-        .collection(ordersCollection)
+        .collection('orders')
         .where('order_delivered', isEqualTo: true)
-        .where('reviews', isEqualTo: false)
         .where('user_id', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
         .snapshots();
   }

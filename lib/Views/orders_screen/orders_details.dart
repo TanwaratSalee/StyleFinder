@@ -353,44 +353,69 @@ class OrdersDetails extends StatelessWidget {
                     itemCount: data['orders'].length,
                     itemBuilder: (context, index) {
                       var orderItem = data['orders'][index];
-                      return Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            'x${orderItem['qty'] ?? 0}',
-                          )
-                              .text
-                              .size(12)
-                              .fontFamily(regular)
-                              .color(greyDark)
-                              .make(),
-                          const SizedBox(width: 5),
-                          Image.network(orderItem['img'] ?? '',
-                              width: 70, height: 80, fit: BoxFit.cover),
-                          const SizedBox(width: 15),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  orderItem['name'] ?? '',
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                )
-                                    .text
-                                    .size(14)
-                                    .fontFamily(semiBold)
-                                    .color(greyDark)
-                                    .make(),
-                                Text(
-                                  '${NumberFormat('#,##0').format(orderItem['total_price'] ?? 0)} Bath',
-                                  style: const TextStyle(color: greyDark),
+                      return FutureBuilder<Map<String, String>>(
+                        future:
+                            getProductDetails(orderItem['product_id'] ?? ''),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return CircularProgressIndicator();
+                          }
+                          if (snapshot.hasError) {
+                            return Text('Error: ${snapshot.error}');
+                          }
+                          if (!snapshot.hasData ||
+                              snapshot.data!['name']!.isEmpty) {
+                            return Text('Unknown Product');
+                          }
+                          var productDetails = snapshot.data!;
+                          return Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                'x${orderItem['qty'] ?? 0}',
+                              )
+                                  .text
+                                  .size(12)
+                                  .fontFamily(regular)
+                                  .color(greyDark)
+                                  .make(),
+                              const SizedBox(width: 5),
+                              Image.network(
+                                productDetails['imageUrl']!,
+                                width: 70,
+                                height: 80,
+                                fit: BoxFit.cover,
+                              ),
+                              const SizedBox(width: 15),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      productDetails['name'] ?? '',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    )
+                                        .text
+                                        .size(14)
+                                        .fontFamily(semiBold)
+                                        .color(greyDark)
+                                        .make(),
+                                    Text(
+                                      '${NumberFormat('#,##0').format(orderItem['total_price'] ?? 0)} Bath',
+                                      style: const TextStyle(color: greyDark),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ).box.padding(EdgeInsets.symmetric(vertical: 5)).make();
+                              ),
+                            ],
+                          )
+                              .box
+                              .padding(EdgeInsets.symmetric(vertical: 5))
+                              .make();
+                        },
+                      );
                     },
                   ),
                   Divider(color: greyLine),
