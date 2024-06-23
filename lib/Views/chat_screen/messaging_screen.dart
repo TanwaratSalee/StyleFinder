@@ -70,7 +70,6 @@ class MessagesScreen extends StatelessWidget {
             } else {
               var data = snapshot.data!.docs;
 
-              // Sort data based on 'created_on' timestamp in descending order
               data.sort((a, b) {
                 var aTimestamp = a['created_on'] as Timestamp?;
                 var bTimestamp = b['created_on'] as Timestamp?;
@@ -112,7 +111,7 @@ class MessagesScreen extends StatelessWidget {
                             builder: (context, vendorSnapshot) {
                               if (vendorSnapshot.connectionState ==
                                   ConnectionState.waiting) {
-                                return CircularProgressIndicator();
+                                return loadingIndicator();
                               } else if (vendorSnapshot.hasError) {
                                 return Text('Error: ${vendorSnapshot.error}');
                               } else if (!vendorSnapshot.hasData ||

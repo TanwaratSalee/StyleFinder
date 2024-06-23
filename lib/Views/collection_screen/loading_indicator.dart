@@ -1,6 +1,6 @@
 import 'package:flutter_finalproject/consts/consts.dart';
 
-Widget loadingIndicator() {
+Widget loadingIndicator({double size = 50.0}) {
   return const CircularProgressIndicator(
     valueColor: AlwaysStoppedAnimation(primaryApp),
   );

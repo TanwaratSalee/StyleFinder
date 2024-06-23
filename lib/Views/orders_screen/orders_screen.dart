@@ -688,7 +688,7 @@ Widget buildReview(BuildContext context) {
 
                                                         var reviewData = {
                                                           'product_id': product['product_id'] ?? 'N/A',
-                                                          'order_id': product['order_id'] ?? 'N/A',
+                                                          'order_id': orderData['order_id'] ?? 'N/A',
                                                           'rating': rating,
                                                           'review_text': reviewController.text,
                                                           'created_at': DateTime.now(),
