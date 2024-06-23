@@ -107,7 +107,6 @@ class ChatScreen extends StatelessWidget {
                               List<QueryDocumentSnapshot> messages =
                                   snapshot.data!.docs;
 
-                              // เพิ่ม log เพื่อดูข้อมูลที่ดึงมาจาก Firestore
                               print(
                                   "Messages from Firestore: ${messages.map((e) => e.data()).toList()}");
 
@@ -134,7 +133,6 @@ class ChatScreen extends StatelessWidget {
                                 groupedMessages[date]!.add(message);
                               }
 
-                              // ตรวจสอบว่าข้อมูลได้ถูกจัดกลุ่มอย่างถูกต้องหรือไม่
                               print("Grouped Messages: $groupedMessages");
 
                               WidgetsBinding.instance.addPostFrameCallback((_) {
