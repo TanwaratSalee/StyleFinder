@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/chat_screen/chat_screen.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
@@ -14,12 +15,14 @@ class MessagesScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: "Message"
-            .text
-            .size(26)
-            .fontFamily(semiBold)
-            .color(blackColor)
-            .make(),
+        title: Text(
+          "Message",
+          style: TextStyle(
+            fontSize: 26,
+            fontFamily: semiBold,
+            color: blackColor,
+          ),
+        ),
       ),
       body: StreamBuilder(
           stream: FirestoreServices.getAllMessages(),
@@ -30,7 +33,14 @@ class MessagesScreen extends StatelessWidget {
                 child: loadingIndicator(),
               );
             } else if (snapshot.data!.docs.isEmpty) {
-              return "No messages yet!".text.color(greyDark).makeCentered();
+              return Center(
+                child: Text(
+                  "No messages yet!",
+                  style: TextStyle(
+                    color: greyDark,
+                  ),
+                ),
+              );
             } else {
               var data = snapshot.data!.docs;
 
@@ -53,7 +63,8 @@ class MessagesScreen extends StatelessWidget {
                       child: ListView.builder(
                         itemCount: data.length,
                         itemBuilder: (BuildContext context, int index) {
-                          var timestamp = data[index]['created_on'] as Timestamp?;
+                          var timestamp =
+                              data[index]['created_on'] as Timestamp?;
                           var date = timestamp != null
                               ? timestamp.toDate()
                               : DateTime.now();
@@ -67,17 +78,21 @@ class MessagesScreen extends StatelessWidget {
                                 DateFormat('dd/MM/yyyy').format(date);
                           }
 
+                          var docData =
+                              data[index].data() as Map<String, dynamic>;
+
                           var friendImageUrl =
-                              data[index]['friend_image_url'] ?? '';
+                              docData['friend_image_url'] ?? '';
+                          var friendName = docData['friend_name'] ?? 'Unknown';
+                          var lastMsg = docData['last_msg'] ?? '';
+                          var toId = docData['toId'] ?? '';
 
                           return GestureDetector(
                             onTap: () {
-                              print('p_seller: ${data[index]['friend_name']}');
-                              print('vendor_id: ${data[index]['toId']}');
-                              Get.to(() => const ChatScreen(), arguments: [
-                                data[index]['friend_name'],
-                                data[index]['toId']
-                              ]);
+                              print('p_seller: $friendName');
+                              print('vendor_id: $toId');
+                              Get.to(() => const ChatScreen(),
+                                  arguments: [friendName, toId]);
                             },
                             child: Container(
                               margin: const EdgeInsets.symmetric(
@@ -107,33 +122,34 @@ class MessagesScreen extends StatelessWidget {
                                           )
                                         : null,
                                   ),
-                                  15.widthBox,
+                                  SizedBox(width: 15),
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        "${data[index]['friend_name']}"
-                                            .text
-                                            .fontFamily(medium)
-                                            .size(16)
-                                            .color(blackColor)
-                                            .make(),
-                                        5.heightBox,
+                                        Text(
+                                          friendName,
+                                          style: TextStyle(
+                                            fontFamily: medium,
+                                            fontSize: 16,
+                                            color: blackColor,
+                                          ),
+                                        ),
+                                        SizedBox(height: 5),
                                         SizedBox(
                                           width: 200,
                                           height: 20,
                                           child: Text(
-                                            "${data[index]['last_msg']}",
-                                            style: TextStyle(color: greyDark),
-                                            overflow: TextOverflow.ellipsis,
+                                            lastMsg,
+                                            style: TextStyle(
+                                              color: greyDark,
+                                              fontFamily: regular,
+                                              fontSize: 14,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
                                             maxLines: 1,
-                                          )
-                                              .text
-                                              .fontFamily(regular)
-                                              .size(14)
-                                              .color(greyColor)
-                                              .make(),
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -143,7 +159,7 @@ class MessagesScreen extends StatelessWidget {
                                     style: TextStyle(color: greyDark),
                                   ),
                                 ],
-                              ).box.make(),
+                              ),
                             ),
                           );
                         },

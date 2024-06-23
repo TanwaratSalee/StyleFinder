@@ -71,7 +71,7 @@ class FirestoreServices {
         .collection(chatsCollection)
         .doc(docId)
         .collection(messagesCollection)
-        .orderBy('created_on', descending: false) 
+        .orderBy('created_on', descending: false)
         .snapshots();
   }
 
@@ -100,11 +100,13 @@ class FirestoreServices {
     return CombineLatestStream.list([
       FirebaseFirestore.instance
           .collection('usermixandmatch')
-          .where('favorite_userid', arrayContains: FirebaseAuth.instance.currentUser!.uid)
+          .where('favorite_userid',
+              arrayContains: FirebaseAuth.instance.currentUser!.uid)
           .snapshots(),
       FirebaseFirestore.instance
           .collection('storemixandmatchs')
-          .where('favorite_userid', arrayContains: FirebaseAuth.instance.currentUser!.uid)
+          .where('favorite_userid',
+              arrayContains: FirebaseAuth.instance.currentUser!.uid)
           .snapshots()
     ]);
   }
@@ -112,7 +114,7 @@ class FirestoreServices {
   static getAllMessages() {
     return firestore
         .collection(chatsCollection)
-        .where('fromId', isEqualTo: currentUser!.uid)
+        .where('user_id', isEqualTo: currentUser!.uid)
         .snapshots();
   }
 
@@ -171,14 +173,9 @@ class FirestoreServices {
   }
 
   static getReviews(String productId) {
-  return FirebaseFirestore.instance
-      .collection(reviewsCollection)
-      .where('productId', isEqualTo: productId)
-      .snapshots();
-}
-
-
-
-
- 
+    return FirebaseFirestore.instance
+        .collection(reviewsCollection)
+        .where('productId', isEqualTo: productId)
+        .snapshots();
+  }
 }
