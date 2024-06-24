@@ -44,6 +44,35 @@ class _ReviewScreenState extends State<ReviewScreen> {
     }
   }
 
+  Future<Map<String, String>> getUserDetails(String userId) async {
+    if (userId.isEmpty) {
+      debugPrint('Error: userId is empty.');
+      return {'name': 'Unknown User', 'id': userId, 'imageUrl': ''};
+    }
+
+    try {
+      var userSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
+      if (userSnapshot.exists) {
+        var userData = userSnapshot.data() as Map<String, dynamic>?;
+        debugPrint('User data: $userData'); // Debug log
+        return {
+          'name': userData?['name'] ?? 'Unknown User',
+          'id': userId,
+          'imageUrl': userData?['imageUrl'] ?? ''
+        };
+      } else {
+        debugPrint('User not found for ID: $userId'); // Debug log
+        return {'name': 'Unknown User', 'id': userId, 'imageUrl': ''};
+      }
+    } catch (e) {
+      debugPrint('Error getting user details: $e');
+      return {'name': 'Unknown User', 'id': userId, 'imageUrl': ''};
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,21 +97,21 @@ class _ReviewScreenState extends State<ReviewScreen> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Obx(() {
-                      double rating = controller.averageRating.value;
-                      return Row(
-                        children: [
-                          buildCustomRating(rating, 22),
-                          5.widthBox,
-                          Text('${rating.toStringAsFixed(1)}/5.0')
-                        ],
-                      );
-                    }),
-                    Text('($reviewCount reviews)') // Display the count of reviews
-                        .text
-                        .fontFamily(medium)
-                        .size(14)
-                        .color(blackColor)
-                        .make(),
+                          double rating = controller.averageRating.value;
+                          return Row(
+                            children: [
+                              buildCustomRating(rating, 22),
+                              5.widthBox,
+                              Text('${rating.toStringAsFixed(1)}/5.0')
+                            ],
+                          );
+                        }),
+                        Text('($reviewCount reviews)') // Display the count of reviews
+                            .text
+                            .fontFamily(medium)
+                            .size(14)
+                            .color(blackColor)
+                            .make(),
                       ],
                     )
                   ],
@@ -115,80 +144,108 @@ class _ReviewScreenState extends State<ReviewScreen> {
                   itemCount: reviews.length,
                   itemBuilder: (context, index) {
                     var review = reviews[index];
-                    var timestamp = review['review_date'] as Timestamp;
-                    var date = DateFormat('yyyy-MM-dd').format(timestamp.toDate());
-                    var rating = review['rating'] is double
-                        ? (review['rating'] as double).toInt()
-                        : review['rating'] as int;
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
+                    var reviewData = review.data() as Map<String, dynamic>;
+                    var timestamp = reviewData['created_at'] as Timestamp;
+                    var date =
+                        DateFormat('yyyy-MM-dd').format(timestamp.toDate());
+                    var rating = reviewData['rating'] is double
+                        ? (reviewData['rating'] as double).toInt()
+                        : reviewData['rating'] as int;
+
+                    return FutureBuilder<Map<String, String>>(
+                      future: getUserDetails(reviewData['user_id']),
+                      builder: (context, userSnapshot) {
+                        if (!userSnapshot.hasData) {
+                          return Center(child: CircularProgressIndicator());
+                        }
+                        var userDetails = userSnapshot.data!;
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CircleAvatar(
-                              backgroundImage: NetworkImage(review['user_img']),
-                            ),
-                            SizedBox(width: 10),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            Row(
+                              children: [
+                                CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                    userDetails['imageUrl'] ??
+                                        'https://via.placeholder.com/150', // Placeholder image
+                                  ),
+                                ),
+                                SizedBox(width: 10),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        review['user_name'],
-                                        style: TextStyle(
-                                          fontFamily: semiBold,
-                                          fontSize: 16,
-                                        ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            userDetails['name'] ?? 'Not Found',
+                                            style: TextStyle(
+                                              fontFamily: semiBold,
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                          Text(
+                                            date,
+                                            style: TextStyle(
+                                              color: greyColor,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      Text(
-                                        date,
-                                        style: TextStyle(
-                                          color: greyColor,
-                                          fontSize: 12,
-                                        ),
+                                      Row(
+                                        children: [
+                                          buildStars(rating),
+                                          5.widthBox,
+                                          Text('${rating.toString()}/5.0')
+                                        ],
                                       ),
                                     ],
                                   ),
-                                  Row(
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 10),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      buildStars(rating),
-                                      5.widthBox,
-                                      Text('${rating.toStringAsFixed(1)}/5.0')
+                                      Text(
+                                        reviewData['review_text'],
+                                        style: TextStyle(fontSize: 14),
+                                      ),
                                     ],
                                   ),
-                                ],
-                              ),
-                            ),
+                                ),
+                              ],
+                            ).box.padding(EdgeInsets.only(left: 55)).make(),
                           ],
-                        ),
-                        SizedBox(height: 10),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    review['review_text'],
-                                    style: TextStyle(fontSize: 14),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ).box.padding(EdgeInsets.only(left: 55)).make(),
-                      ],
-                    ).box.padding(EdgeInsets.symmetric(vertical: 14, horizontal: 8)).make();
+                        )
+                            .box
+                            .padding(EdgeInsets.symmetric(
+                                vertical: 14, horizontal: 8))
+                            .make();
+                      },
+                    );
                   },
                 );
               },
             ),
           ),
         ],
-      ).box.padding(EdgeInsets.all(12)).margin(const EdgeInsets.symmetric(horizontal: 12, vertical: 7)).white.roundedSM.make(),
+      )
+          .box
+          .padding(EdgeInsets.all(12))
+          .margin(const EdgeInsets.symmetric(horizontal: 12, vertical: 7))
+          .white
+          .roundedSM
+          .make(),
     );
   }
 
