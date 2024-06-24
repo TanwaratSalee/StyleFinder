@@ -272,7 +272,6 @@ class CartController extends GetxController {
           vendorName = vendorData['name'] ?? 'Unknown Vendor';
         }
 
-        // Ensure productData is not null and has the necessary fields
         products.add({
           'product_id': productId,
           'vendor_id': vendorId ?? '',
@@ -282,10 +281,8 @@ class CartController extends GetxController {
         });
         vendors.add(vendorId ?? '');
       } else {
-        // Handle the case where the product document does not exist or data is null
         products.add({
           'product_id': productId,
-          'vendor_id': cartProductData['vendor_id'] ?? '',
           'qty': cartProductData['qty'] ?? 0,
           'total_price': cartProductData['total_price'] ?? 0,
           'reviews': false,

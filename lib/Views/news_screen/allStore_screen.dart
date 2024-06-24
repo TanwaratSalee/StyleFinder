@@ -217,7 +217,7 @@ class AllStoreScreen extends StatelessWidget {
                                 ),
                                 3.heightBox,
                                 Text(
-                                  "${productData['vendor_name']}",
+                                  "${productData['name']}",
                                   style: const TextStyle(
                                     fontFamily: medium,
                                     fontSize: 16,

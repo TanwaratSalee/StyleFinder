@@ -108,7 +108,7 @@ class _OrdersScreenState extends State<OrdersScreen>
 
     try {
       var vendorSnapshot = await FirebaseFirestore.instance
-          .collection('vendor')
+          .collection('vendors')
           .doc(vendorId)
           .get();
       if (vendorSnapshot.exists) {
@@ -583,7 +583,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                                                           '${NumberFormat('#,##0').format(product['total_price'] ?? 0)} Bath',
                                                           style: TextStyle(
                                                             fontFamily:
-                                                                'Regular',
+                                                                regular,
                                                             color: greyColor,
                                                             fontSize: 14,
                                                           ),
@@ -601,7 +601,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                                                               (context, _) =>
                                                                   Icon(
                                                             Icons.star,
-                                                            color: Colors.amber,
+                                                            color: golden,
                                                           ),
                                                           onRatingUpdate:
                                                               (ratingValue) {
@@ -624,27 +624,18 @@ class _OrdersScreenState extends State<OrdersScreen>
                                                   hintText:
                                                       'Write your review here',
                                                   border: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.0),
-                                                    borderSide: BorderSide(
-                                                        color: greyColor),
+                                                    borderRadius: BorderRadius.circular(8.0),
+                                                    borderSide: BorderSide(color: greyColor),
                                                   ),
-                                                  focusedBorder:
-                                                      OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.0),
+                                                  focusedBorder: OutlineInputBorder(
+                                                    borderRadius: BorderRadius.circular( 8.0),
                                                     borderSide: BorderSide(
                                                       color: greyColor,
                                                       width: 1.5,
                                                     ),
                                                   ),
-                                                  enabledBorder:
-                                                      OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.0),
+                                                  enabledBorder: OutlineInputBorder(
+                                                    borderRadius: BorderRadius.circular( 8.0),
                                                     borderSide: BorderSide(
                                                       color: greyColor,
                                                       width: 1.0,
@@ -657,137 +648,67 @@ class _OrdersScreenState extends State<OrdersScreen>
                                                 color: primaryApp,
                                                 title: 'Submit',
                                                 textColor: whiteColor,
-                                                onPress: rating > 0
-                                                    ? () async {
-                                                        var currentUser =
-                                                            FirebaseAuth
-                                                                .instance
-                                                                .currentUser;
-                                                        if (currentUser !=
-                                                            null) {
-                                                          var userName = currentUser
-                                                                  .displayName ??
-                                                              'Anonymous';
-                                                          var userImg = currentUser
-                                                                  .photoURL ??
-                                                              'default_user_image_url';
+                                                onPress: rating > 0 ? () async {
+                                                  var currentUser = FirebaseAuth.instance.currentUser;
+                                                  if (currentUser != null) {
+                                                    var userName = currentUser.displayName ?? 'Anonymous';
+                                                    var userImg = currentUser.photoURL ?? 'default_user_image_url';
+                                                    var userDoc = await FirebaseFirestore.instance.collection('users').doc(currentUser.uid).get();
+                                                    if (userDoc.exists) {
+                                                      var userData = userDoc.data() as Map<String, dynamic>?;
+                                                      userName = userData?['name'] ?? userName;
+                                                      userImg = userData?['imageUrl'] ?? userImg;
+                                                    }
 
-                                                          // Fetch user details from Firestore if necessary
-                                                          var userDoc =
-                                                              await FirebaseFirestore
-                                                                  .instance
-                                                                  .collection(
-                                                                      'users')
-                                                                  .doc(
-                                                                      currentUser
-                                                                          .uid)
-                                                                  .get();
-                                                          if (userDoc.exists) {
-                                                            var userData =
-                                                                userDoc.data()
-                                                                    as Map<
-                                                                        String,
-                                                                        dynamic>?;
-                                                            userName = userData?[
-                                                                    'name'] ??
-                                                                userName;
-                                                            userImg = userData?[
-                                                                    'imageUrl'] ??
-                                                                userImg;
-                                                          }
+                                                    var vendorId = orderData['vendor_id'] ?? 'Unknown Vendor'; 
 
-                                                          var reviewData = {
-                                                            'product_id': product[
-                                                                    'product_id'] ??
-                                                                'N/A',
-                                                            'product_title':
-                                                                productDetails[
-                                                                        'name'] ??
-                                                                    'Unknown',
-                                                            'product_img':
-                                                                productDetails[
-                                                                        'imageUrl'] ??
-                                                                    'default_image_url',
-                                                            'rating': rating,
-                                                            'review_text':
-                                                                reviewController
-                                                                    .text,
-                                                            'review_date':
-                                                                DateTime.now(),
-                                                            'user_id':
-                                                                currentUser.uid,
-                                                            'user_name':
-                                                                userName,
-                                                            'user_img': userImg,
-                                                          };
+                                                    var reviewData = {
+                                                      'vendor_id': vendorId,
+                                                      'product_id': product['product_id'] ?? 'N/A',
+                                                      'rating': rating,
+                                                      'review_text': reviewController.text,
+                                                      'created_at': DateTime.now(),
+                                                      'user_id': currentUser.uid,
+                                                      'user_img': userImg,
+                                                    };
 
-                                                          await FirebaseFirestore
-                                                              .instance
-                                                              .collection(
-                                                                  'reviews')
-                                                              .add(reviewData);
+                                                    await FirebaseFirestore.instance.collection('reviews').add(reviewData);
 
-                                                          // Update the product's review status in Firestore
-                                                          var updatedProducts =
-                                                              products.map((p) {
-                                                            if (p['product_id'] ==
-                                                                product[
-                                                                    'product_id']) {
-                                                              p['reviews'] =
-                                                                  true;
-                                                            }
-                                                            return p;
-                                                          }).toList();
-
-                                                          await orderDoc
-                                                              .reference
-                                                              .update({
-                                                            'orders':
-                                                                updatedProducts
-                                                          });
-
-                                                          ScaffoldMessenger.of(
-                                                                  context)
-                                                              .showSnackBar(
-                                                            SnackBar(
-                                                              content: Text(
-                                                                  'Review Submitted: Thank you for your feedback!'),
-                                                              duration:
-                                                                  Duration(
-                                                                      seconds:
-                                                                          2),
-                                                            ),
-                                                          );
-
-                                                          setState(() {
-                                                            productsToReview
-                                                                .removeAt(
-                                                                    productIndex);
-                                                            if (productsToReview
-                                                                .isEmpty) {
-                                                              ordersWithProductsToReview
-                                                                  .removeAt(
-                                                                      index);
-                                                            }
-                                                          });
-                                                        } else {
-                                                          ScaffoldMessenger.of(
-                                                                  context)
-                                                              .showSnackBar(
-                                                            SnackBar(
-                                                              content: Text(
-                                                                  'Error: You need to be logged in to submit a review'),
-                                                              duration:
-                                                                  Duration(
-                                                                      seconds:
-                                                                          2),
-                                                            ),
-                                                          );
-                                                        }
+                                                    var updatedProducts = products.map((p) {
+                                                      if (p['product_id'] == product['product_id']) {
+                                                        p['reviews'] = true;
                                                       }
-                                                    : null,
+                                                      return p;
+                                                    }).toList();
+
+                                                    await orderDoc.reference.update({
+                                                      'orders': updatedProducts
+                                                    });
+
+                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                      SnackBar(
+                                                        content: Text('Review Submitted: Thank you for your feedback!'),
+                                                        duration: Duration(seconds: 2),
+                                                      ),
+                                                    );
+
+                                                    setState(() {
+                                                      productsToReview.removeAt(productIndex);
+                                                      if (productsToReview.isEmpty) {
+                                                        ordersWithProductsToReview.removeAt(index);
+                                                      }
+                                                    });
+                                                  } else {
+                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                      SnackBar(
+                                                        content: Text('Error: You need to be logged in to submit a review'),
+                                                        duration: Duration(seconds: 2),
+                                                      ),
+                                                    );
+                                                  }
+                                                } : null,
                                               ),
-                                            ],
+                                              ],
                                           ),
                                         ),
                                       ],

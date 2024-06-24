@@ -77,7 +77,7 @@ class _WriteReviewScreenState extends State<WriteReviewScreen> {
           itemCount: 5,
           itemBuilder: (context, _) => Icon(
             Icons.star,
-            color: Colors.amber,
+            color: golden,
           ),
           onRatingUpdate: (rating) {
             setState(() {

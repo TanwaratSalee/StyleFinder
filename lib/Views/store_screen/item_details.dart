@@ -74,7 +74,7 @@ class _ItemDetailsState extends State<ItemDetails> {
           var userDetails = await getUserDetails(review['user_id']);
           review['user_name'] = userDetails['name'] ?? 'Unknown User';
           review['user_img'] =
-              userDetails['imageUrl'] ?? ''; // Add 'user_img' safely
+              userDetails['imageUrl'] ?? ''; 
           reviewsData.add(review);
           totalRating += review['rating'];
         }
@@ -139,14 +139,14 @@ class _ItemDetailsState extends State<ItemDetails> {
           .get();
       if (userSnapshot.exists) {
         var userData = userSnapshot.data() as Map<String, dynamic>?;
-        debugPrint('User data: $userData'); // Debug log
+        debugPrint('User data: $userData'); 
         return {
           'name': userData?['name'] ?? 'Unknown User',
           'id': userId,
           'imageUrl': userData?['imageUrl'] ?? ''
         };
       } else {
-        debugPrint('User not found for ID: $userId'); // Debug log
+        debugPrint('User not found for ID: $userId'); 
         return {'name': 'Unknown User', 'id': userId, 'imageUrl': ''};
       }
     } catch (e) {
