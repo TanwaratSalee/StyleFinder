@@ -619,7 +619,7 @@ class ProductController extends GetxController {
 
             querySnapshot.docs.forEach((doc) {
               var data = doc.data() as Map<String, dynamic>?;
-              var wishlist = (data?['favorite_count'] as List<dynamic>?) ?? [];
+              var wishlist = (data?['favorite_userid'] as List<dynamic>?) ?? [];
 
               if (!wishlist.contains(currentUserUID)) {
                 userData['views'] = 0;

@@ -79,7 +79,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        buildProductImage(widget.topProduct['imgs'][0], 'Top'),
+                        buildProductImage(widget.topProduct['imgs'], 'Top'),
                         SizedBox(width: 10),
                         Stack(
                           alignment: Alignment.center,
@@ -100,8 +100,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                           ],
                         ),
                         SizedBox(width: 15),
-                        buildProductImage(
-                            widget.lowerProduct['imgs'][0], 'Lower'),
+                        buildProductImage(widget.lowerProduct['imgs'], 'Lower'),
                       ],
                     ),
                   ),
@@ -236,30 +235,57 @@ class _MatchPostProductState extends State<MatchPostProduct> {
     );
   }
 
-  Widget buildProductImage(String imageUrl, String label) {
-    return Column(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(15)),
-          child: Container(
-            width: 140,
-            height: 150,
-            color: whiteColor,
-            child: Center(
-              child: Image.network(imageUrl),
-            ).box.border(color: greyLine).rounded.make(),
+  Widget buildProductImage(dynamic imageUrl, String label) {
+    if (imageUrl is List && imageUrl.isNotEmpty) {
+      return Column(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(15)),
+            child: Container(
+              width: 140,
+              height: 150,
+              color: whiteColor,
+              child: Center(
+                child: Image.network(imageUrl[0]), // เข้าถึง index ของ list
+              ).box.border(color: greyLine).rounded.make(),
+            ),
           ),
-        ),
-        SizedBox(height: 5),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 16,
-            fontFamily: regular,
+          SizedBox(height: 5),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 16,
+              fontFamily: regular,
+            ),
           ),
-        ),
-      ],
-    );
+        ],
+      );
+    } else {
+      // Handle case when imageUrl is not a list or is empty
+      return Column(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(15)),
+            child: Container(
+              width: 140,
+              height: 150,
+              color: whiteColor,
+              child: Center(
+                child: Text('No image'),
+              ).box.border(color: greyLine).rounded.make(),
+            ),
+          ),
+          SizedBox(height: 5),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 16,
+              fontFamily: regular,
+            ),
+          ),
+        ],
+      );
+    }
   }
 
   void resetSelections() {
