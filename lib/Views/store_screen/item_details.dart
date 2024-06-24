@@ -542,8 +542,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                                         Row(
                                           children: [
                                             CircleAvatar(
-                                              backgroundImage: NetworkImage(
-                                                  review['user_img'] ?? ''),
+                                              backgroundImage: NetworkImage(review['user_img'] ?? ''),
                                             ),
                                             SizedBox(width: 10),
                                             Expanded(
