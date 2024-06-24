@@ -496,7 +496,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                                   itemBuilder: (context, index) {
                                     var review = reviews[index];
                                     var timestamp =
-                                        review['review_date'] as Timestamp;
+                                        review['created_at'] as Timestamp;
                                     var date = DateFormat('yyyy-MM-dd')
                                         .format(timestamp.toDate());
                                     var rating = review['rating'] is double
@@ -509,8 +509,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                                         Row(
                                           children: [
                                             CircleAvatar(
-                                              backgroundImage: NetworkImage(
-                                                  review['user_img'] ?? ''),
+                                              backgroundImage: NetworkImage(review['user_img'] ?? ''),
                                             ),
                                             SizedBox(width: 10),
                                             Expanded(
