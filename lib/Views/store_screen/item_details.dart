@@ -63,14 +63,19 @@ class _ItemDetailsState extends State<ItemDetails> {
         .collection('reviews')
         .where('product_id', isEqualTo: controller.documentId.value)
         .snapshots()
-        .listen((QuerySnapshot querySnapshot) {
+        .listen((QuerySnapshot querySnapshot) async {
       if (querySnapshot.docs.isNotEmpty) {
-        List<dynamic> reviewsData =
-            querySnapshot.docs.map((doc) => doc.data()).toList();
+        List<dynamic> reviewsData = [];
         double totalRating = 0;
-        int reviewCount = reviewsData.length;
+        int reviewCount = querySnapshot.docs.length;
 
-        for (var review in reviewsData) {
+        for (var doc in querySnapshot.docs) {
+          var review = doc.data() as Map<String, dynamic>;
+          var userDetails =
+              await getUserDetails(review['user_id']); // ดึงข้อมูลผู้ใช้
+          review['user_img'] =
+              userDetails['imageUrl']; // เพิ่ม `user_img` ในข้อมูลรีวิว
+          reviewsData.add(review);
           totalRating += review['rating'];
         }
 
@@ -118,6 +123,34 @@ class _ItemDetailsState extends State<ItemDetails> {
       return vendorData['name'] ?? 'Unknown Seller';
     } else {
       return 'Unknown Seller';
+    }
+  }
+
+  Future<Map<String, String>> getUserDetails(String userId) async {
+    if (userId.isEmpty) {
+      debugPrint('Error: userId is empty.');
+      return {'name': 'Unknown User', 'id': userId, 'imageUrl': ''};
+    }
+
+    try {
+      var userSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
+      if (userSnapshot.exists) {
+        debugPrint('Document ID: ${userSnapshot.id}'); // Use debugPrint
+        var userData = userSnapshot.data() as Map<String, dynamic>?;
+        return {
+          'name': userData?['name'] ?? 'Unknown User',
+          'id': userId,
+          'imageUrl': userData?['imageUrl'] ?? ''
+        };
+      } else {
+        return {'name': 'Unknown User', 'id': userId, 'imageUrl': ''};
+      }
+    } catch (e) {
+      debugPrint('Error getting user details: $e');
+      return {'name': 'Unknown User', 'id': userId, 'imageUrl': ''};
     }
   }
 
@@ -496,7 +529,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                                   itemBuilder: (context, index) {
                                     var review = reviews[index];
                                     var timestamp =
-                                        review['review_date'] as Timestamp;
+                                        review['created_at'] as Timestamp;
                                     var date = DateFormat('yyyy-MM-dd')
                                         .format(timestamp.toDate());
                                     var rating = review['rating'] is double
@@ -551,7 +584,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                                                       buildStars(rating),
                                                       5.widthBox,
                                                       Text(
-                                                          '${rating.toStringAsFixed(1)}/5.0')
+                                                          '${rating.toStringAsFixed(1)}/5.0'),
                                                     ],
                                                   ),
                                                 ],
