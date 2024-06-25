@@ -6,6 +6,7 @@ import 'package:flutter_finalproject/Views/chat_screen/messaging_screen.dart';
 import 'package:flutter_finalproject/Views/orders_screen/orders_screen.dart';
 import 'package:flutter_finalproject/Views/profile_screen/menu_edit_profile_screen.dart';
 import 'package:flutter_finalproject/Views/profile_screen/resetPassword_screen.dart';
+import 'package:flutter_finalproject/Views/splash_screen/splash_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/consts/lists.dart';
 import 'package:flutter_finalproject/controllers/auth_controller.dart';
@@ -173,7 +174,7 @@ class MenuSettingScreen extends StatelessWidget {
                           await Get.put(AuthController())
                               .signoutMethod(context);
                           Navigator.of(dialogContext).pop();
-                          Get.offAll(() => const WelcomeScreen());
+                          Get.offAll(() => const SplashScreen());
                         },
                       ),
                     ),

@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
             selectionHandleColor: primaryApp,
             cursorColor: primaryApp,
           )),
-      home: const WelcomeScreen(),
+      home: const SplashScreen(),
     );
   }
 }
