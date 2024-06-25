@@ -442,7 +442,7 @@ class ProductController extends GetxController {
       }
     });
   }
-  
+
   void addToWishlistMatch(
       String productNameTop, String productNameLower, BuildContext context) {
     List<String> productNames = [productNameTop, productNameLower];

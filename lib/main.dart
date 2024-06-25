@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_finalproject/Views/auth_screen/login_screen.dart';
+import 'package:flutter_finalproject/Views/auth_screen/welcome_screen.dart';
 import 'package:flutter_finalproject/Views/splash_screen/splash_screen.dart';
 import 'package:flutter_finalproject/consts/colors.dart';
 import 'package:flutter_finalproject/consts/styles.dart';
@@ -12,20 +14,6 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
-
-// void main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-//   await Firebase.initializeApp(
-//     options: DefaultFirebaseOptions.currentPlatform,
-//   );
-//   runApp(
-//     DevicePreview(
-//       enabled: true,
-//       builder: (context) => MyApp(),
-//     ),
-//   );
-// }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -61,7 +49,7 @@ class MyApp extends StatelessWidget {
             selectionHandleColor: primaryApp,
             cursorColor: primaryApp,
           )),
-      home: const SplashScreen(),
+      home: const WelcomeScreen(),
     );
   }
 }

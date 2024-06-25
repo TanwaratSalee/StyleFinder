@@ -6,6 +6,7 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_finalproject/Views/auth_screen/login_screen.dart';
 import 'package:flutter_finalproject/Views/auth_screen/personal_details_screen_google.dart';
 import 'package:flutter_finalproject/Views/auth_screen/verifyemail_screen.dart';
+import 'package:flutter_finalproject/Views/auth_screen/welcome_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -104,7 +105,8 @@ class AuthController extends GetxController {
 
       // สุ่มเลือกรูปโปรไฟล์จาก List
       final random = Random();
-      String randomProfileImage = profileImages[random.nextInt(profileImages.length)];
+      String randomProfileImage =
+          profileImages[random.nextInt(profileImages.length)];
 
       await FirebaseFirestore.instance
           .collection(usersCollection)
@@ -138,7 +140,7 @@ class AuthController extends GetxController {
       isloading(false);
     }
   }
-  
+
   Future<void> saveUserDataGoogle({
     required UserCredential currentUser,
     required String name,
@@ -201,7 +203,7 @@ class AuthController extends GetxController {
     try {
       await FirebaseAuth.instance.signOut();
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
+        MaterialPageRoute(builder: (context) => const WelcomeScreen()),
         (route) => false,
       );
       VxToast.show(context, msg: 'Logout successful');

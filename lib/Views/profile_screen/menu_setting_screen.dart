@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/Views/auth_screen/login_screen.dart';
+import 'package:flutter_finalproject/Views/auth_screen/welcome_screen.dart';
 import 'package:flutter_finalproject/Views/cart_screen/menu_address_screen.dart';
 import 'package:flutter_finalproject/Views/chat_screen/messaging_screen.dart';
 import 'package:flutter_finalproject/Views/orders_screen/orders_screen.dart';
@@ -26,12 +27,7 @@ class MenuSettingScreen extends StatelessWidget {
           title: const Text(
             'Setting',
             textAlign: TextAlign.center,
-            
-          ).text
-            .size(26)
-            .fontFamily(semiBold)
-            .color(blackColor)
-            .make(),
+          ).text.size(26).fontFamily(semiBold).color(blackColor).make(),
         ),
         backgroundColor: whiteColor,
         body: SafeArea(
@@ -136,7 +132,7 @@ class MenuSettingScreen extends StatelessWidget {
                   .fontFamily(semiBold)
                   .color(greyDark)
                   .make(),
-                  10.heightBox,
+              10.heightBox,
               const Text('Are you sure you want to log out?')
                   .text
                   .size(14)
@@ -154,19 +150,30 @@ class MenuSettingScreen extends StatelessWidget {
                   children: [
                     Expanded(
                       child: TextButton(
-                        child: const Text('Cancel',style: TextStyle(color: redColor, fontFamily: medium, fontSize: 14)),
+                        child: const Text('Cancel',
+                            style: TextStyle(
+                                color: redColor,
+                                fontFamily: medium,
+                                fontSize: 14)),
                         onPressed: () => Navigator.of(context).pop(),
                       ),
                     ),
-                    const VerticalDivider(width: 1, thickness: 1, color: greyLine),
+                    const VerticalDivider(
+                        width: 1, thickness: 1, color: greyLine),
                     Expanded(
                       child: TextButton(
-                        child: const Text('Logout',style: TextStyle(color: greyDark, fontFamily: medium, fontSize: 14),),
+                        child: const Text(
+                          'Logout',
+                          style: TextStyle(
+                              color: greyDark,
+                              fontFamily: medium,
+                              fontSize: 14),
+                        ),
                         onPressed: () async {
                           await Get.put(AuthController())
                               .signoutMethod(context);
                           Navigator.of(dialogContext).pop();
-                          Get.offAll(() => const LoginScreen());
+                          Get.offAll(() => const WelcomeScreen());
                         },
                       ),
                     ),
