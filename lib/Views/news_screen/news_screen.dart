@@ -9,6 +9,7 @@ import 'package:flutter_finalproject/Views/news_screen/product_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/consts/lists.dart';
+import 'package:flutter_finalproject/controllers/home_controller.dart';
 import 'package:flutter_finalproject/controllers/news_controller.dart';
 import 'package:flutter_finalproject/services/firestore_services.dart';
 import 'package:get/get.dart';
