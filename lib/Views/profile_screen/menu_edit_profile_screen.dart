@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/scheduler.dart';
@@ -217,12 +218,13 @@ class EditProfileScreen extends StatelessWidget {
                       Container(
                         child: data['imageUrl'] == '' &&
                                 controller.profileImgPath.isEmpty
-                            ? Image.asset(
+                            ? loadingIndicator()
+                            /* Image.asset(
                                 imgProfile,
                                 width: 130,
                                 height: 130,
                                 fit: BoxFit.cover,
-                              ).box.roundedFull.clip(Clip.antiAlias).make()
+                              ).box.roundedFull.clip(Clip.antiAlias).make() */
                             : data['imageUrl'] != '' &&
                                     controller.profileImgPath.isEmpty
                                 ? Image.network(

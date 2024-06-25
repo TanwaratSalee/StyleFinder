@@ -75,12 +75,12 @@ class StoreScreen extends StatelessWidget {
                             border: Border.all(color: greyLine, width: 3),
                           ),
                           child: ClipOval(
-                            child: Image.asset(
+                            child: loadingIndicator()/* Image.asset(
                               imgProfile,
                               width: 120,
                               height: 120,
                               fit: BoxFit.cover,
-                            ),
+                            ), */
                           ),
                         );
                       } else if (snapshot.hasData) {
@@ -109,12 +109,12 @@ class StoreScreen extends StatelessWidget {
                             border: Border.all(color: greyLine, width: 3),
                           ),
                           child: ClipOval(
-                            child: Image.asset(
+                            child: loadingIndicator()/* Image.asset(
                               imgProfile,
                               width: 120,
                               height: 120,
                               fit: BoxFit.cover,
-                            ),
+                            ), */
                           ),
                         );
                       }

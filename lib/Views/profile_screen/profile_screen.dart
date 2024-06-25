@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/match_screen/matchpost_details.dart';
 import 'package:flutter_finalproject/Views/profile_screen/menu_setting_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/matchstore_detail.dart';
@@ -190,12 +191,12 @@ class _ProfileScreenState extends State<ProfileScreen>
                           data['imageUrl'] == ''
                               ? ClipRRect(
                                   borderRadius: BorderRadius.circular(100),
-                                  child: Image.asset(
+                                  child: loadingIndicator()/*  Image.asset(
                                     imgProfile,
                                     width: 110,
                                     height: 110,
                                     fit: BoxFit.cover,
-                                  ),
+                                  ), */
                                 )
                               : ClipRRect(
                                   borderRadius: BorderRadius.circular(100),

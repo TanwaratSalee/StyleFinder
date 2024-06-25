@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
@@ -90,13 +92,27 @@ class AuthController extends GetxController {
       String formattedDateWithDay =
           DateFormat('EEEE, dd/MM/yyyy').format(birthday);
 
+      // List ของลิงก์รูปโปรไฟล์
+      List<String> profileImages = [
+        'https://firebasestorage.googleapis.com/v0/b/new-tung.appspot.com/o/images%2Fprofile%20random%2FCute%20Avatar.png?alt=media&token=07db3157-596b-4896-aeb4-48ad44179639',
+        'https://firebasestorage.googleapis.com/v0/b/new-tung.appspot.com/o/images%2Fprofile%20random%2FMask%20Group.png?alt=media&token=dd02f251-1ceb-4019-9d4b-1b16c22f64c2',
+        'https://firebasestorage.googleapis.com/v0/b/new-tung.appspot.com/o/images%2Fprofile%20random%2FPreview.png?alt=media&token=4ae4491f-d360-4a5d-bfe4-1f9c88cadae4',
+        'https://firebasestorage.googleapis.com/v0/b/new-tung.appspot.com/o/images%2Fprofile%20random%2FPreviewboy.png?alt=media&token=867c5f81-78b6-4404-9656-cf5dca5efaa3',
+        'https://firebasestorage.googleapis.com/v0/b/new-tung.appspot.com/o/images%2Fprofile%20random%2FSample.png?alt=media&token=8dbf0038-1fe6-484a-abd1-4189a48cfc0e',
+        'https://firebasestorage.googleapis.com/v0/b/new-tung.appspot.com/o/images%2Fprofile%20random%2FSamplegirl.png?alt=media&token=6c716d35-86f8-4984-be92-f4d50884f035',
+      ];
+
+      // สุ่มเลือกรูปโปรไฟล์จาก List
+      final random = Random();
+      String randomProfileImage = profileImages[random.nextInt(profileImages.length)];
+
       await FirebaseFirestore.instance
           .collection(usersCollection)
           .doc(currentUser.user!.uid)
           .set({
         'email': email,
         'name': name,
-        'imageUrl': '',
+        'imageUrl': randomProfileImage,
         'id': currentUser.user!.uid,
         'birthday': formattedDateWithDay,
         'gender': gender,
@@ -122,7 +138,7 @@ class AuthController extends GetxController {
       isloading(false);
     }
   }
-
+  
   Future<void> saveUserDataGoogle({
     required UserCredential currentUser,
     required String name,
