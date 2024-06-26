@@ -73,8 +73,7 @@ class _ItemDetailsState extends State<ItemDetails> {
           var review = doc.data() as Map<String, dynamic>;
           var userDetails = await getUserDetails(review['user_id']);
           review['user_name'] = userDetails['name'] ?? 'Unknown User';
-          review['user_img'] =
-              userDetails['imageUrl'] ?? ''; 
+          review['user_img'] = userDetails['imageUrl'] ?? '';
           reviewsData.add(review);
           totalRating += review['rating'];
         }
@@ -139,14 +138,14 @@ class _ItemDetailsState extends State<ItemDetails> {
           .get();
       if (userSnapshot.exists) {
         var userData = userSnapshot.data() as Map<String, dynamic>?;
-        debugPrint('User data: $userData'); 
+        debugPrint('User data: $userData');
         return {
           'name': userData?['name'] ?? 'Unknown User',
           'id': userId,
           'imageUrl': userData?['imageUrl'] ?? ''
         };
       } else {
-        debugPrint('User not found for ID: $userId'); 
+        debugPrint('User not found for ID: $userId');
         return {'name': 'Unknown User', 'id': userId, 'imageUrl': ''};
       }
     } catch (e) {

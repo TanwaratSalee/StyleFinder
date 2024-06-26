@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/match_screen/matchpost_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
@@ -185,6 +186,106 @@ class _MatchScreenState extends State<MatchScreen> {
       0xFF17770F
     ], // Yellow matches with several colors
   };
+
+  int findClosestColor(int colorValue) {
+    int closestColorValue = allColors[0]['value'];
+    double minDistance = double.infinity;
+
+    for (var color in allColors) {
+      double distance = calculateColorDistance(colorValue, color['value']);
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestColorValue = color['value'];
+      }
+    }
+
+    return closestColorValue;
+  }
+
+  double calculateColorDistance(int color1, int color2) {
+    int r1 = (color1 >> 16) & 0xFF;
+    int g1 = (color1 >> 8) & 0xFF;
+    int b1 = color1 & 0xFF;
+
+    int r2 = (color2 >> 16) & 0xFF;
+    int g2 = (color2 >> 8) & 0xFF;
+    int b2 = color2 & 0xFF;
+
+    return sqrt((r1 - r2) * (r1 - r2) +
+            (g1 - g2) * (g1 - g2) +
+            (b1 - b2) * (b1 - b2))
+        .toDouble();
+  }
+
+  Map<String, dynamic> checkMatch(
+      List<dynamic> topColors, List<dynamic> lowerColors) {
+    if (topColors.isEmpty || lowerColors.isEmpty) {
+      return {
+        'isGreatMatch': false,
+        'topClosestColor': null,
+        'lowerClosestColor': null
+      };
+    }
+    final topPrimaryColor = findClosestColor(topColors[0]);
+    final lowerPrimaryColor = findClosestColor(lowerColors[0]);
+    print('Top Color: $topPrimaryColor'); // เพิ่มดีบักตรงนี้
+    print('Lower Color: $lowerPrimaryColor'); // เพิ่มดีบักตรงนี้
+    bool isGreatMatch = colorMatchMap[topPrimaryColor] != null &&
+        colorMatchMap[topPrimaryColor]!.contains(lowerPrimaryColor);
+    return {
+      'isGreatMatch': isGreatMatch,
+      'topClosestColor': topPrimaryColor,
+      'lowerClosestColor': lowerPrimaryColor
+    };
+  }
+
+  String getColorName(int colorValue) {
+    final color = allColors.firstWhere(
+      (element) => element['value'] == colorValue,
+      orElse: () => {'name': 'Unknown'},
+    );
+    return color['name'];
+  }
+
+  void showMatchReasonModal(
+      BuildContext context, Map<String, dynamic> matchResult) {
+    final bool isGreatMatch = matchResult['isGreatMatch'];
+    final int? topPrimaryColor = matchResult['topClosestColor'];
+    final int? lowerPrimaryColor = matchResult['lowerClosestColor'];
+
+    print('Top Colors: ${matchResult['topClosestColor']}'); // เพิ่มดีบักตรงนี้
+    print(
+        'Lower Colors: ${matchResult['lowerClosestColor']}'); // เพิ่มดีบักตรงนี้
+
+    String reason;
+    if (topPrimaryColor == null || lowerPrimaryColor == null) {
+      reason = 'Unknown colors selected';
+    } else if (isGreatMatch) {
+      reason =
+          '${getColorName(topPrimaryColor)} matches with ${getColorName(lowerPrimaryColor)}';
+    } else {
+      reason =
+          '${getColorName(topPrimaryColor)} does not match with ${getColorName(lowerPrimaryColor)}';
+    }
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(isGreatMatch ? 'Great Match!' : 'Not a Match'),
+          content: Text(reason),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -400,7 +501,7 @@ class _MatchScreenState extends State<MatchScreen> {
 
       final topProduct = controller.topFilteredProducts[topProductIndex];
       final lowerProduct = controller.lowerFilteredProducts[lowerProductIndex];
-      bool isGreatMatch =
+      final matchResult =
           checkMatch(topProduct['colors'], lowerProduct['colors']);
 
       return Container(
@@ -414,14 +515,22 @@ class _MatchScreenState extends State<MatchScreen> {
                   'Feedback:',
                 ).text.fontFamily(regular).color(blackColor).size(14).make(),
                 8.widthBox,
-                Text(
-                  isGreatMatch ? 'Great Match!' : 'Not a Match',
-                )
-                    .text
-                    .fontFamily(semiBold)
-                    .color(isGreatMatch ? Colors.green : redColor)
-                    .size(20)
-                    .make(),
+                InkWell(
+                  onTap: () {
+                    showMatchReasonModal(context, matchResult);
+                  },
+                  child: Text(
+                    matchResult['isGreatMatch']
+                        ? 'Great Match!'
+                        : 'Not a Match',
+                  )
+                      .text
+                      .fontFamily(semiBold)
+                      .color(
+                          matchResult['isGreatMatch'] ? Colors.green : redColor)
+                      .size(20)
+                      .make(),
+                ),
               ],
             )
                 .box
@@ -509,60 +618,39 @@ class _MatchScreenState extends State<MatchScreen> {
       );
     });
   }
+}
 
-  bool checkMatch(List<dynamic> topColors, List<dynamic> lowerColors) {
-    if (topColors.isEmpty || lowerColors.isEmpty) {
-      return false;
-    }
-    final topPrimaryColor = topColors[0];
-    final lowerPrimaryColor = lowerColors[0];
-    if (colorMatchMap[topPrimaryColor] != null &&
-        colorMatchMap[topPrimaryColor]!.contains(lowerPrimaryColor)) {
-      return true;
-    }
-    return false;
-  }
-
-  String getColorName(int colorValue) {
-    final color = allColors.firstWhere(
-      (element) => element['value'] == colorValue,
-      orElse: () => {'name': 'Unknown'},
-    );
-    return color['name'];
-  }
-
-  void showModalRightSheet({
-    required BuildContext context,
-    required WidgetBuilder builder,
-  }) {
-    showGeneralDialog(
-      context: context,
-      barrierDismissible: true,
-      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-      barrierColor: blackColor.withOpacity(0.5),
-      transitionDuration: const Duration(milliseconds: 200),
-      pageBuilder: (BuildContext context, Animation<double> animation,
-          Animation<double> secondaryAnimation) {
-        return Align(
-          alignment: Alignment.centerRight,
-          child: Material(
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.7,
-              child: builder(context),
-            ),
+void showModalRightSheet({
+  required BuildContext context,
+  required WidgetBuilder builder,
+}) {
+  showGeneralDialog(
+    context: context,
+    barrierDismissible: true,
+    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+    barrierColor: blackColor.withOpacity(0.5),
+    transitionDuration: const Duration(milliseconds: 200),
+    pageBuilder: (BuildContext context, Animation<double> animation,
+        Animation<double> secondaryAnimation) {
+      return Align(
+        alignment: Alignment.centerRight,
+        child: Material(
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.7,
+            child: builder(context),
           ),
-        );
-      },
-      transitionBuilder: (BuildContext context, Animation<double> animation,
-          Animation<double> secondaryAnimation, Widget child) {
-        return SlideTransition(
-          position: Tween<Offset>(
-            begin: const Offset(1.0, 0.0),
-            end: Offset.zero,
-          ).animate(animation),
-          child: child,
-        );
-      },
-    );
-  }
+        ),
+      );
+    },
+    transitionBuilder: (BuildContext context, Animation<double> animation,
+        Animation<double> secondaryAnimation, Widget child) {
+      return SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(1.0, 0.0),
+          end: Offset.zero,
+        ).animate(animation),
+        child: child,
+      );
+    },
+  );
 }
