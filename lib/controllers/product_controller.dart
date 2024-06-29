@@ -113,36 +113,48 @@ class ProductController extends GetxController {
   void fetchFilteredTopProducts() async {
     isFetchingTopProducts.value = true;
     try {
-      Query<Map<String, dynamic>> query = FirebaseFirestore.instance
+      QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+          .instance
           .collection('products')
-          .where('part', isEqualTo: 'top');
-
-      if (selectedGender.value.isNotEmpty) {
-        query = query.where('gender', isEqualTo: selectedGender.value);
-      }
-
-      if (selectedVendorId.value.isNotEmpty) {
-        query = query.where('vendor_id', isEqualTo: selectedVendorId.value);
-      }
-
-      if (selectedColors.isNotEmpty) {
-        query = query.where('colors', arrayContainsAny: selectedColors);
-      }
-
-      if (selectedTypes.isNotEmpty) {
-        query = query.where('subcollection', whereIn: selectedTypes);
-      }
-
-      if (selectedCollections.isNotEmpty) {
-        query =
-            query.where('collection', arrayContainsAny: selectedCollections);
-      }
-
-      QuerySnapshot<Map<String, dynamic>> snapshot = await query.get();
+          .where('part', isEqualTo: 'top')
+          .get();
       List<Map<String, dynamic>> products =
           snapshot.docs.map((doc) => doc.data()).toList();
 
-      // Filter products by price
+      // Apply filters locally
+      if (selectedGender.value.isNotEmpty) {
+        products = products
+            .where((product) => product['gender'] == selectedGender.value)
+            .toList();
+      }
+
+      if (selectedVendorId.value.isNotEmpty) {
+        products = products
+            .where((product) => product['vendor_id'] == selectedVendorId.value)
+            .toList();
+      }
+
+      if (selectedColors.isNotEmpty) {
+        products = products
+            .where((product) => selectedColors
+                .any((color) => product['colors'].contains(color)))
+            .toList();
+      }
+
+      if (selectedTypes.isNotEmpty) {
+        products = products
+            .where(
+                (product) => selectedTypes.contains(product['subcollection']))
+            .toList();
+      }
+
+      if (selectedCollections.isNotEmpty) {
+        products = products
+            .where((product) => selectedCollections.any(
+                (collection) => product['collection'].contains(collection)))
+            .toList();
+      }
+
       if (maxPrice.value.isNotEmpty) {
         double maxPriceValue = double.tryParse(maxPrice.value) ?? 0;
         products = products.where((product) {
@@ -175,42 +187,50 @@ class ProductController extends GetxController {
   }
 
   void fetchFilteredLowerProducts() async {
-    isFetchingTopProducts.value = false;
+    isFetchingLowerProducts.value = true;
     try {
-      Query<Map<String, dynamic>> query = FirebaseFirestore.instance
+      QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+          .instance
           .collection('products')
-          .where('part', isEqualTo: 'lower');
-
-      if (selectedGender.value.isNotEmpty) {
-        query = query.where('gender', isEqualTo: selectedGender.value);
-      }
-
-      if (selectedVendorId.value.isNotEmpty) {
-        query = query.where('vendor_id', isEqualTo: selectedVendorId.value);
-      }
-
-      if (maxPrice.value.isNotEmpty) {
-        query = query.where('price', isLessThanOrEqualTo: maxPrice.value);
-      }
-
-      if (selectedColors.isNotEmpty) {
-        query = query.where('colors', arrayContainsAny: selectedColors);
-      }
-
-      if (selectedTypes.isNotEmpty) {
-        query = query.where('subcollection', whereIn: selectedTypes);
-      }
-
-      if (selectedCollections.isNotEmpty) {
-        query =
-            query.where('collection', arrayContainsAny: selectedCollections);
-      }
-
-      QuerySnapshot<Map<String, dynamic>> snapshot = await query.get();
+          .where('part', isEqualTo: 'lower')
+          .get();
       List<Map<String, dynamic>> products =
           snapshot.docs.map((doc) => doc.data()).toList();
 
-      // Filter products by price
+      // Apply filters locally
+      if (selectedGender.value.isNotEmpty) {
+        products = products
+            .where((product) => product['gender'] == selectedGender.value)
+            .toList();
+      }
+
+      if (selectedVendorId.value.isNotEmpty) {
+        products = products
+            .where((product) => product['vendor_id'] == selectedVendorId.value)
+            .toList();
+      }
+
+      if (selectedColors.isNotEmpty) {
+        products = products
+            .where((product) => selectedColors
+                .any((color) => product['colors'].contains(color)))
+            .toList();
+      }
+
+      if (selectedTypes.isNotEmpty) {
+        products = products
+            .where(
+                (product) => selectedTypes.contains(product['subcollection']))
+            .toList();
+      }
+
+      if (selectedCollections.isNotEmpty) {
+        products = products
+            .where((product) => selectedCollections.any(
+                (collection) => product['collection'].contains(collection)))
+            .toList();
+      }
+
       if (maxPrice.value.isNotEmpty) {
         double maxPriceValue = double.tryParse(maxPrice.value) ?? 0;
         products = products.where((product) {
@@ -218,6 +238,7 @@ class ProductController extends GetxController {
           return productPrice <= maxPriceValue;
         }).toList();
       }
+
       lowerFilteredProducts.assignAll(products);
     } catch (e) {
       print("Error fetching filtered lower products: $e");

@@ -30,6 +30,7 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
   bool isSelectedEveryday = false;
 
   final selectedColorIndexes = <int>[].obs;
+
   final List<Map<String, dynamic>> allColors = [
     {'name': 'Black', 'color': blackColor, 'value': 0xFF000000},
     {'name': 'Grey', 'color': greyColor, 'value': 0xFF808080},
