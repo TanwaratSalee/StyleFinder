@@ -7,7 +7,10 @@ class MatchPostProduct extends StatefulWidget {
   final Map<String, dynamic> topProduct;
   final Map<String, dynamic> lowerProduct;
 
-  MatchPostProduct({required this.topProduct, required this.lowerProduct});
+  MatchPostProduct({
+    required this.topProduct,
+    required this.lowerProduct,
+  });
 
   @override
   _MatchPostProductState createState() => _MatchPostProductState();
@@ -26,7 +29,8 @@ class _MatchPostProductState extends State<MatchPostProduct> {
     bool isSelectedWinter = controller.selectedCollections.contains('winter');
     bool isSelectedAutumn = controller.selectedCollections.contains('autumn');
     bool isSelectedDinner = controller.selectedCollections.contains('dinner');
-    bool isSelectedEveryday = controller.selectedCollections.contains('everydaylook');
+    bool isSelectedEveryday =
+        controller.selectedCollections.contains('everydaylook');
 
     return WillPopScope(
       onWillPop: () async {
@@ -234,7 +238,49 @@ class _MatchPostProductState extends State<MatchPostProduct> {
     );
   }
 
-  Widget buildProductImage(String imageUrl, String label) {
+  Widget buildProductImage(dynamic imageUrl, String label) {
+    if (imageUrl is List && imageUrl.isNotEmpty && imageUrl[0] is String) {
+      return Column(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(15)),
+            child: Container(
+              width: 140,
+              height: 150,
+              color: whiteColor,
+              child: Center(
+                child:
+                    Image.network(imageUrl[0]), // ใช้เฉพาะ URL ตัวแรกจาก List
+              ).box.border(color: greyLine).rounded.make(),
+            ),
+          ),
+          SizedBox(height: 5),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 16,
+              fontFamily: regular,
+            ),
+          ),
+        ],
+      );
+    } else {
+      print('Error: Expected a String but got ${imageUrl.runtimeType}');
+      return Column(
+        children: [
+          Text('Invalid image URL'),
+          SizedBox(height: 5),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 16,
+              fontFamily: regular,
+            ),
+          ),
+        ],
+      );
+    }
+
     return Column(
       children: [
         ClipRRect(

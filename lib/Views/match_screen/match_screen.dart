@@ -223,19 +223,24 @@ class _MatchScreenState extends State<MatchScreen> {
       return {
         'isGreatMatch': false,
         'topClosestColor': null,
-        'lowerClosestColor': null
+        'lowerClosestColor': null,
       };
     }
-    final topPrimaryColor = findClosestColor(topColors[0]);
-    final lowerPrimaryColor = findClosestColor(lowerColors[0]);
-    print('Top Color: $topPrimaryColor'); // เพิ่มดีบักตรงนี้
-    print('Lower Color: $lowerPrimaryColor'); // เพิ่มดีบักตรงนี้
-    bool isGreatMatch = colorMatchMap[topPrimaryColor] != null &&
-        colorMatchMap[topPrimaryColor]!.contains(lowerPrimaryColor);
+
+    // Ensure that topColors and lowerColors are lists of integers
+    final List<int> topColorsList = List<int>.from(topColors);
+    final List<int> lowerColorsList = List<int>.from(lowerColors);
+
+    final topPrimaryColor = findClosestColor(topColorsList[0]);
+    final lowerPrimaryColor = findClosestColor(lowerColorsList[0]);
+
+    bool isGreatMatch =
+        colorMatchMap[topPrimaryColor]?.contains(lowerPrimaryColor) ?? false;
+
     return {
       'isGreatMatch': isGreatMatch,
       'topClosestColor': topPrimaryColor,
-      'lowerClosestColor': lowerPrimaryColor
+      'lowerClosestColor': lowerPrimaryColor,
     };
   }
 
@@ -253,9 +258,8 @@ class _MatchScreenState extends State<MatchScreen> {
     final int? topPrimaryColor = matchResult['topClosestColor'];
     final int? lowerPrimaryColor = matchResult['lowerClosestColor'];
 
-    print('Top Colors: ${matchResult['topClosestColor']}'); // เพิ่มดีบักตรงนี้
-    print(
-        'Lower Colors: ${matchResult['lowerClosestColor']}'); // เพิ่มดีบักตรงนี้
+    print('Top Colors: ${matchResult['topClosestColor']}'); // Debug
+    print('Lower Colors: ${matchResult['lowerClosestColor']}'); // Debug
 
     String reason;
     if (topPrimaryColor == null || lowerPrimaryColor == null) {
@@ -415,6 +419,7 @@ class _MatchScreenState extends State<MatchScreen> {
   Widget buildCardItem(Map<String, dynamic> product) {
     final productName = product['name'] ?? 'No Name';
     final productImages = product['imgs'] ?? [''];
+    final productColors = product['colors'] ?? []; // Ensure colors is a list
 
     return GestureDetector(
       onTap: () {
@@ -544,8 +549,7 @@ class _MatchScreenState extends State<MatchScreen> {
               children: [
                 InkWell(
                   onTap: () {
-                    print(
-                        'Top Product ID: ${topProduct['product_id']}, Lower Product ID: ${lowerProduct['product_id']}'); // Debug print
+                    debugPrints(topProduct, lowerProduct);
                     Get.to(() => MatchPostProduct(
                           topProduct: topProduct,
                           lowerProduct: lowerProduct,
@@ -618,6 +622,17 @@ class _MatchScreenState extends State<MatchScreen> {
       );
     });
   }
+}
+
+void debugPrints(
+    Map<String, dynamic> topProduct, Map<String, dynamic> lowerProduct) {
+  List<int> topColors = List<int>.from(topProduct['colors']);
+  List<int> lowerColors = List<int>.from(lowerProduct['colors']);
+
+  print('Top Product ID: ${topProduct['product_id']}'); // Debug print
+  print('Lower Product ID: ${lowerProduct['product_id']}'); // Debug print
+  print('Top Colors: $topColors'); // Debug print
+  print('Lower Colors: $lowerColors'); // Debug print
 }
 
 void showModalRightSheet({
