@@ -1,4 +1,6 @@
 import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/match_screen/matchpost_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
@@ -24,6 +26,7 @@ class _MatchScreenState extends State<MatchScreen> {
   @override
   void initState() {
     super.initState();
+    fetchAndPrintUserSkinTone();
     controller = Get.put(ProductController());
     _pageControllerTop = PageController(viewportFraction: 0.8, initialPage: 1);
     _pageControllerLower =
@@ -89,7 +92,7 @@ class _MatchScreenState extends State<MatchScreen> {
       'value': 0xFF202FB3
     },
     {
-      'name': 'Blue',
+      'name': 'Light blue',
       'color': const Color.fromRGBO(48, 176, 232, 1),
       'value': 0xFF30B0E8
     },
@@ -104,7 +107,7 @@ class _MatchScreenState extends State<MatchScreen> {
       'value': 0xFF17770F
     },
     {
-      'name': 'Green',
+      'name': 'Lime Green',
       'color': Color.fromRGBO(98, 207, 47, 1),
       'value': 0xFF62CF2F
     },
@@ -289,6 +292,54 @@ class _MatchScreenState extends State<MatchScreen> {
         );
       },
     );
+  }
+
+  Future<void> fetchAndPrintUserSkinTone() async {
+    // Get the current user
+    final currentUser = FirebaseAuth.instance.currentUser;
+
+    if (currentUser != null) {
+      // Get the user's document from Firestore
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser.uid)
+          .get();
+
+      if (userDoc.exists) {
+        // Get the skin tone field
+        final skinTone = userDoc.data()?['skinTone'];
+
+        // Print the skin tone
+        if (skinTone != null) {
+          String skinDescription;
+
+          switch (skinTone) {
+            case 4294961114:
+              skinDescription = 'Fair Skin';
+              break;
+            case 4289672092:
+              skinDescription = 'Medium Skin';
+              break;
+            case 4280391411:
+              skinDescription = 'Tan Skin';
+              break;
+            case 4278215680:
+              skinDescription = 'Dark Skin';
+              break;
+            default:
+              skinDescription = 'Unknown Skin Tone';
+          }
+
+          print('User has $skinDescription');
+        } else {
+          print('Skin tone not found for the current user.');
+        }
+      } else {
+        print('User document does not exist.');
+      }
+    } else {
+      print('No user is currently signed in.');
+    }
   }
 
   @override

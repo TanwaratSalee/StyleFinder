@@ -81,7 +81,7 @@ class AuthController extends GetxController {
     required String gender,
     required String uHeight,
     required String uWeight,
-    required Color skin,
+    required int skin,
   }) async {
     isloading(true);
     try {
@@ -121,7 +121,7 @@ class AuthController extends GetxController {
         'gender': gender,
         'height': uHeight,
         'weight': uWeight,
-        'skinTone': skin.value,
+        'skinTone': skin,
         'cart_count': "0",
         'wishlist_count': "0",
         'order_count': "0"
@@ -149,7 +149,7 @@ class AuthController extends GetxController {
     required String gender,
     required String uHeight,
     required String uWeight,
-    required Color skin,
+    required int skin,
   }) async {
     try {
       String formattedDateWithDay =
@@ -174,7 +174,7 @@ class AuthController extends GetxController {
         'gender': gender,
         'height': uHeight,
         'weight': uWeight,
-        'skinTone': skin.value,
+        'skinTone': skin,
         'cart_count': "0",
         'wishlist_count': "0",
         'order_count': "0"

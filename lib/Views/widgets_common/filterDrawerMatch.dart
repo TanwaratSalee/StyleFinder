@@ -51,7 +51,7 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
       'value': 0xFF202FB3
     },
     {
-      'name': 'Blue',
+      'name': 'Light blue',
       'color': const Color.fromRGBO(48, 176, 232, 1),
       'value': 0xFF30B0E8
     },
@@ -66,7 +66,7 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
       'value': 0xFF17770F
     },
     {
-      'name': 'Green',
+      'name': 'Lime Green',
       'color': Color.fromRGBO(98, 207, 47, 1),
       'value': 0xFF62CF2F
     },

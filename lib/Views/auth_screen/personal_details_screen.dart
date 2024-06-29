@@ -71,10 +71,26 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
   }
 
   final List<Map<String, dynamic>> skinTones = [
-    {'name': 'Pink', 'color': Color(0xFFFFE7DA), 'value': 0xFFFFE7DA}, // ผิวสีขาวอมชมพู
-    {'name': 'Yellow', 'color': Color(0xFFF8C99C), 'value': 0xFFF8C99C}, // ผิวสีเหลืองอ่อน
-    {'name': 'Brown', 'color': Color(0xFFB98762), 'value': 0xFFB98762}, // ผิวสีน้ำตาลอ่อน
-    {'name': 'Dark', 'color': Color(0xFF744E3C), 'value': 0xFF744E3C}, // ผิวสีน้ำตาลเข้ม
+    {
+      'name': 'Pink',
+      'color': Color(0xFFFFE7DA),
+      'value': 0xFFFFE7DA // จะถูกบันทึกเป็น 4294961114
+    }, // ผิวสีขาวอมชมพู
+    {
+      'name': 'Yellow',
+      'color': Color(0xFFF8C99C),
+      'value': 0xFFF8C99C // จะถูกบันทึกเป็น 4289672092
+    }, // ผิวสีเหลืองอ่อน
+    {
+      'name': 'Brown',
+      'color': Color(0xFFB98762),
+      'value': 0xFFB98762 // จะถูกบันทึกเป็น 4286943330
+    }, // ผิวสีน้ำตาลอ่อน
+    {
+      'name': 'Dark',
+      'color': Color(0xFF744E3C),
+      'value': 0xFF744E3C // จะถูกบันทึกเป็น 4284008252
+    }, // ผิวสีน้ำตาลเข้ม
   ];
 
   @override
@@ -121,7 +137,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   gender: selectedGender!,
                   uHeight: heightController.text,
                   uWeight: weightController.text,
-                  skin: selectedSkinTone!,
+                  skin: selectedSkinTone!.value,
                 );
               }
             },
@@ -246,8 +262,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                         ),
                         elevation: MaterialStateProperty.all<double>(0),
                         padding: MaterialStateProperty.all<EdgeInsets>(
-                          const EdgeInsets.symmetric(
-                              vertical: 10),
+                          const EdgeInsets.symmetric(vertical: 10),
                         ),
                       ),
                     ),
@@ -308,7 +323,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
             Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start, 
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: skinTones.map((tone) {
                     return Row(
                       children: [

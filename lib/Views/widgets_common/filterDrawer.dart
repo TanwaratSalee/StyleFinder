@@ -53,7 +53,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
       'value': 0xFF202FB3
     },
     {
-      'name': 'Blue',
+      'name': 'Light blue',
       'color': const Color.fromRGBO(48, 176, 232, 1),
       'value': 0xFF30B0E8
     },
@@ -68,7 +68,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
       'value': 0xFF17770F
     },
     {
-      'name': 'Green',
+      'name': 'Lime Green',
       'color': Color.fromRGBO(98, 207, 47, 1),
       'value': 0xFF62CF2F
     },
@@ -249,15 +249,22 @@ class _FilterDrawerState extends State<FilterDrawer> {
               ),
               child: Slider(
                 value: _currentSliderValue,
-                min: 10,
-                max: 99999,
-                divisions: 150,
+                min: 0,
+                max: 999999,
+                divisions: 100,
                 label:
                     "${NumberFormat('#,###').format(_currentSliderValue.round())} Bath",
                 onChanged: (value) {
                   setState(() {
-                    _currentSliderValue = value.clamp(10, 99999);
+                    if (value == 0) {
+                      _currentSliderValue =
+                          0; // กำหนดค่า _currentSliderValue เป็น 0 เมื่อ value เป็น 0
+                    } else {
+                      _currentSliderValue = value;
+                    }
                   });
+                  print(
+                      "Selected price: ${NumberFormat('#,###').format(_currentSliderValue.round())} Bath");
                 },
               ),
             ),

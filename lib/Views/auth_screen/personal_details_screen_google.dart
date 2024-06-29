@@ -72,12 +72,27 @@ class _PersonalDetailsScreenGoogleState
   }
 
   final List<Map<String, dynamic>> skinTones = [
-  {'name': 'Pink', 'color': Color(0xFFFFE7DA), 'value': 0xFFFFE7DA}, // ผิวสีขาวอมชมพู
-  {'name': 'Yellow', 'color': Color(0xFFF8C99C), 'value': 0xFFF8C99C}, // ผิวสีเหลืองอ่อน
-  {'name': 'Brown', 'color': Color(0xFFB98762), 'value': 0xFFB98762}, // ผิวสีน้ำตาลอ่อน
-  {'name': 'Dark', 'color': Color(0xFF744E3C), 'value': 0xFF744E3C}, // ผิวสีน้ำตาลเข้ม
-];
-
+    {
+      'name': 'Pink',
+      'color': Color(0xFFFFE7DA),
+      'value': 0xFFFFE7DA
+    }, // ผิวสีขาวอมชมพู
+    {
+      'name': 'Yellow',
+      'color': Color(0xFFF8C99C),
+      'value': 0xFFF8C99C
+    }, // ผิวสีเหลืองอ่อน
+    {
+      'name': 'Brown',
+      'color': Color(0xFFB98762),
+      'value': 0xFFB98762
+    }, // ผิวสีน้ำตาลอ่อน
+    {
+      'name': 'Dark',
+      'color': Color(0xFF744E3C),
+      'value': 0xFF744E3C
+    }, // ผิวสีน้ำตาลเข้ม
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +137,7 @@ class _PersonalDetailsScreenGoogleState
                   gender: selectedGender!,
                   uHeight: heightController.text,
                   uWeight: weightController.text,
-                  skin: selectedSkinTone!,
+                  skin: selectedSkinTone!.value,
                 );
               }
             },
@@ -250,8 +265,7 @@ class _PersonalDetailsScreenGoogleState
                         ),
                         elevation: MaterialStateProperty.all<double>(0),
                         padding: MaterialStateProperty.all<EdgeInsets>(
-                          const EdgeInsets.symmetric(
-                              vertical: 10),
+                          const EdgeInsets.symmetric(vertical: 10),
                         ),
                       ),
                     ),
@@ -309,43 +323,43 @@ class _PersonalDetailsScreenGoogleState
                   .make(),
             ),
             const SizedBox(height: 10),
-           Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: skinTones.map((tone) {
-            return Row(
+            Column(
               children: [
-                GestureDetector(
-                  onTap: () {
-                    if (canSelectSkin) {
-                      setState(() {
-                        selectedSkinTone = tone['color'];
-                      });
-                    }
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: tone['color'],
-                      border: Border.all(
-                        color: selectedSkinTone == tone['color']
-                            ? primaryApp
-                            : Colors.transparent,
-                        width: 3,
-                      ),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    width: 47,
-                    height: 47,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: skinTones.map((tone) {
+                    return Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            if (canSelectSkin) {
+                              setState(() {
+                                selectedSkinTone = tone['color'];
+                              });
+                            }
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: tone['color'],
+                              border: Border.all(
+                                color: selectedSkinTone == tone['color']
+                                    ? primaryApp
+                                    : Colors.transparent,
+                                width: 3,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            width: 47,
+                            height: 47,
+                          ),
+                        ),
+                        SizedBox(width: 20),
+                      ],
+                    );
+                  }).toList(),
                 ),
-                SizedBox(width: 20),
               ],
-            );
-          }).toList(),
-        ),
-      ],
-    )
+            )
           ],
         ),
       ),

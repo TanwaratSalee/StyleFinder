@@ -191,13 +191,14 @@ class _ProfileScreenState extends State<ProfileScreen>
                           data['imageUrl'] == ''
                               ? ClipRRect(
                                   borderRadius: BorderRadius.circular(100),
-                                  child: loadingIndicator()/*  Image.asset(
+                                  child:
+                                      loadingIndicator() /*  Image.asset(
                                     imgProfile,
                                     width: 110,
                                     height: 110,
                                     fit: BoxFit.cover,
                                   ), */
-                                )
+                                  )
                               : ClipRRect(
                                   borderRadius: BorderRadius.circular(100),
                                   child: Image.network(
@@ -777,8 +778,11 @@ class _ProfileScreenState extends State<ProfileScreen>
   }
 
   Widget buildOnlineMatchTab() {
+    Stream<List<QuerySnapshot>> favoriteUserMixMatchsStream =
+        FirestoreServices.getFavoriteusermixmatchs();
+
     return StreamBuilder<List<QuerySnapshot>>(
-      stream: FirestoreServices.getFavoriteusermixmatchs(),
+      stream: favoriteUserMixMatchsStream,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const Center(
@@ -905,7 +909,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                     width: 55,
                                     fit: BoxFit.cover,
                                   ),
-                                  10.widthBox,
+                                  SizedBox(width: 10),
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -929,7 +933,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                   )
                                 ],
                               ),
-                              5.heightBox,
+                              SizedBox(height: 5),
                               Row(
                                 children: [
                                   Image.network(
@@ -938,7 +942,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                     width: 55,
                                     fit: BoxFit.cover,
                                   ),
-                                  10.widthBox,
+                                  SizedBox(width: 10),
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -961,7 +965,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                   )
                                 ],
                               ),
-                              15.heightBox,
+                              SizedBox(height: 15),
                               Padding(
                                 padding: const EdgeInsets.only(right: 200),
                                 child: Text(
