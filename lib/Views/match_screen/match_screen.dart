@@ -9,6 +9,7 @@ import 'package:flutter_finalproject/Views/widgets_common/filterDrawerMatch.dart
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class MatchScreen extends StatefulWidget {
   const MatchScreen({Key? key}) : super(key: key);
@@ -22,11 +23,12 @@ class _MatchScreenState extends State<MatchScreen> {
   late final PageController _pageControllerTop, _pageControllerLower;
   late int _currentPageIndexTop, _currentPageIndexLower;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  late String dayOfWeek = '';
 
   @override
   void initState() {
     super.initState();
-    fetchAndPrintUserSkinTone();
+    fetchUserBirthday();
     controller = Get.put(ProductController());
     _pageControllerTop = PageController(viewportFraction: 0.8, initialPage: 1);
     _pageControllerLower =
@@ -69,276 +71,6 @@ class _MatchScreenState extends State<MatchScreen> {
       return 0;
     } else {
       return index - 1;
-    }
-  }
-
-  final List<Map<String, dynamic>> allColors = [
-    {'name': 'Black', 'color': blackColor, 'value': 0xFF000000},
-    {'name': 'Grey', 'color': greyColor, 'value': 0xFF808080},
-    {'name': 'White', 'color': whiteColor, 'value': 0xFFFFFFFF},
-    {
-      'name': 'Purple',
-      'color': const Color.fromRGBO(98, 28, 141, 1),
-      'value': 0xFF621C8D
-    },
-    {
-      'name': 'Deep Purple',
-      'color': const Color.fromRGBO(202, 147, 235, 1),
-      'value': 0xFFCA93EB
-    },
-    {
-      'name': 'Blue',
-      'color': Color.fromRGBO(32, 47, 179, 1),
-      'value': 0xFF202FB3
-    },
-    {
-      'name': 'Light blue',
-      'color': const Color.fromRGBO(48, 176, 232, 1),
-      'value': 0xFF30B0E8
-    },
-    {
-      'name': 'Blue Grey',
-      'color': const Color.fromRGBO(83, 205, 191, 1),
-      'value': 0xFF53CDBF
-    },
-    {
-      'name': 'Green',
-      'color': const Color.fromRGBO(23, 119, 15, 1),
-      'value': 0xFF17770F
-    },
-    {
-      'name': 'Lime Green',
-      'color': Color.fromRGBO(98, 207, 47, 1),
-      'value': 0xFF62CF2F
-    },
-    {'name': 'Yellow', 'color': Colors.yellow, 'value': 0xFFFFFF00},
-    {'name': 'Orange', 'color': Colors.orange, 'value': 0xFFFFA500},
-    {'name': 'Pink', 'color': Colors.pinkAccent, 'value': 0xFFFF4081},
-    {'name': 'Red', 'color': Colors.red, 'value': 0xFFFF0000},
-    {
-      'name': 'Brown',
-      'color': Color.fromARGB(255, 121, 58, 31),
-      'value': 0xFF793A1F
-    },
-  ];
-
-  final Map<int, List<int>> colorMatchMap = {
-    0xFF000000: [0xFFFFFFFF, 0xFF000000], // Black matches with White
-    0xFFFFFFFF: [0xFF000000, 0xFFFFFFFF],
-    0xFF202FB3: [
-      0xFF000000,
-      0xFFFFFFFF,
-      0xFFFF4081,
-      0xFFFFFF00,
-      0xFF53CDBF,
-      0xFFFF0000,
-      0xFF621C8D,
-      0xFF202FB3
-    ], // Blue matches with several colors
-    0xFF808080: [
-      0xFFFF4081,
-      0xFFFFFFFF,
-      0xFFFF4081,
-      0xFFFF0000,
-      0xFF17770F,
-      0xFF202FB3,
-      0xFF000000,
-      0xFFFFFF00
-    ], // Grey matches with several colors
-    0xFFFFE4C4: [
-      0xFFFFFFFF,
-      0xFF808080,
-      0xFF793A1F,
-      0xFF000000,
-      0xFFFFFF00,
-      0xFF202FB3,
-      0xFF17770F,
-      0xFFFF4081,
-      0xFFFF0000
-    ], // Cream matches with several colors
-    0xFF793A1F: [
-      0xFFFFFFFF,
-      0xFF808080,
-      0xFF202FB3,
-      0xFF000000,
-      0xFF17770F,
-      0xFFFFFF00
-    ], // Brown matches with several colors
-    0xFFFF0000: [
-      0xFFFFFFFF,
-      0xFF621C8D,
-      0xFF793A1F,
-      0xFF000000,
-      0xFFFF4081,
-      0xFF17770F,
-      0xFFFFFF00
-    ], // Red matches with several colors
-    0xFF621C8D: [
-      0xFFFFFFFF,
-      0xFF793A1F,
-      0xFF000000,
-      0xFF17770F,
-      0xFFFFFF00
-    ], // Purple matches with several colors
-    0xFFFFFF00: [
-      0xFF793A1F,
-      0xFF621C8D,
-      0xFF000000,
-      0xFFFF4081,
-      0xFF808080,
-      0xFF17770F
-    ], // Yellow matches with several colors
-  };
-
-  int findClosestColor(int colorValue) {
-    int closestColorValue = allColors[0]['value'];
-    double minDistance = double.infinity;
-
-    for (var color in allColors) {
-      double distance = calculateColorDistance(colorValue, color['value']);
-      if (distance < minDistance) {
-        minDistance = distance;
-        closestColorValue = color['value'];
-      }
-    }
-
-    return closestColorValue;
-  }
-
-  double calculateColorDistance(int color1, int color2) {
-    int r1 = (color1 >> 16) & 0xFF;
-    int g1 = (color1 >> 8) & 0xFF;
-    int b1 = color1 & 0xFF;
-
-    int r2 = (color2 >> 16) & 0xFF;
-    int g2 = (color2 >> 8) & 0xFF;
-    int b2 = color2 & 0xFF;
-
-    return sqrt((r1 - r2) * (r1 - r2) +
-            (g1 - g2) * (g1 - g2) +
-            (b1 - b2) * (b1 - b2))
-        .toDouble();
-  }
-
-  Map<String, dynamic> checkMatch(
-      List<dynamic> topColors, List<dynamic> lowerColors) {
-    if (topColors.isEmpty || lowerColors.isEmpty) {
-      return {
-        'isGreatMatch': false,
-        'topClosestColor': null,
-        'lowerClosestColor': null,
-      };
-    }
-
-    // Ensure that topColors and lowerColors are lists of integers
-    final List<int> topColorsList = List<int>.from(topColors);
-    final List<int> lowerColorsList = List<int>.from(lowerColors);
-
-    final topPrimaryColor = findClosestColor(topColorsList[0]);
-    final lowerPrimaryColor = findClosestColor(lowerColorsList[0]);
-
-    bool isGreatMatch =
-        colorMatchMap[topPrimaryColor]?.contains(lowerPrimaryColor) ?? false;
-
-    return {
-      'isGreatMatch': isGreatMatch,
-      'topClosestColor': topPrimaryColor,
-      'lowerClosestColor': lowerPrimaryColor,
-    };
-  }
-
-  String getColorName(int colorValue) {
-    final color = allColors.firstWhere(
-      (element) => element['value'] == colorValue,
-      orElse: () => {'name': 'Unknown'},
-    );
-    return color['name'];
-  }
-
-  void showMatchReasonModal(
-      BuildContext context, Map<String, dynamic> matchResult) {
-    final bool isGreatMatch = matchResult['isGreatMatch'];
-    final int? topPrimaryColor = matchResult['topClosestColor'];
-    final int? lowerPrimaryColor = matchResult['lowerClosestColor'];
-
-    print('Top Colors: ${matchResult['topClosestColor']}'); // Debug
-    print('Lower Colors: ${matchResult['lowerClosestColor']}'); // Debug
-
-    String reason;
-    if (topPrimaryColor == null || lowerPrimaryColor == null) {
-      reason = 'Unknown colors selected';
-    } else if (isGreatMatch) {
-      reason =
-          '${getColorName(topPrimaryColor)} matches with ${getColorName(lowerPrimaryColor)}';
-    } else {
-      reason =
-          '${getColorName(topPrimaryColor)} does not match with ${getColorName(lowerPrimaryColor)}';
-    }
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(isGreatMatch ? 'Great Match!' : 'Not a Match'),
-          content: Text(reason),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> fetchAndPrintUserSkinTone() async {
-    // Get the current user
-    final currentUser = FirebaseAuth.instance.currentUser;
-
-    if (currentUser != null) {
-      // Get the user's document from Firestore
-      final userDoc = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(currentUser.uid)
-          .get();
-
-      if (userDoc.exists) {
-        // Get the skin tone field
-        final skinTone = userDoc.data()?['skinTone'];
-
-        // Print the skin tone
-        if (skinTone != null) {
-          String skinDescription;
-
-          switch (skinTone) {
-            case 4294961114:
-              skinDescription = 'Fair Skin';
-              break;
-            case 4289672092:
-              skinDescription = 'Medium Skin';
-              break;
-            case 4280391411:
-              skinDescription = 'Tan Skin';
-              break;
-            case 4278215680:
-              skinDescription = 'Dark Skin';
-              break;
-            default:
-              skinDescription = 'Unknown Skin Tone';
-          }
-
-          print('User has $skinDescription');
-        } else {
-          print('Skin tone not found for the current user.');
-        }
-      } else {
-        print('User document does not exist.');
-      }
-    } else {
-      print('No user is currently signed in.');
     }
   }
 
@@ -472,6 +204,12 @@ class _MatchScreenState extends State<MatchScreen> {
     final productImages = product['imgs'] ?? [''];
     final productColors = product['colors'] ?? []; // Ensure colors is a list
 
+    // Find the closest color
+    final colorValue = productColors.isNotEmpty
+        ? findClosestColor(productColors[0])
+        : 0xFF000000;
+    final colorName = getColorName(colorValue);
+
     return GestureDetector(
       onTap: () {
         Get.to(() => ItemDetails(
@@ -519,6 +257,16 @@ class _MatchScreenState extends State<MatchScreen> {
               },
             ),
           ),
+          Positioned(
+            bottom: 10,
+            child: Text(colorName,
+                    style: TextStyle(color: whiteColor, fontSize: 16))
+                .box
+                .color(blackColor.withOpacity(0.7))
+                .padding(EdgeInsets.symmetric(horizontal: 8, vertical: 4))
+                .rounded
+                .make(),
+          ),
         ],
       ),
     )
@@ -557,122 +305,237 @@ class _MatchScreenState extends State<MatchScreen> {
 
       final topProduct = controller.topFilteredProducts[topProductIndex];
       final lowerProduct = controller.lowerFilteredProducts[lowerProductIndex];
-      final matchResult =
-          checkMatch(topProduct['colors'], lowerProduct['colors']);
+      final topColors = topProduct['colors'] ?? [];
+      final lowerColors = lowerProduct['colors'] ?? [];
 
-      return Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+      return FutureBuilder<int?>(
+        future: fetchUserSkinTone(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+          final skinTone = snapshot.data;
+          final matchResult =
+              checkMatchWithSkinTone(topColors, lowerColors, skinTone);
+
+          return Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                const Text(
-                  'Feedback:',
-                ).text.fontFamily(regular).color(blackColor).size(14).make(),
-                8.widthBox,
-                InkWell(
-                  onTap: () {
-                    showMatchReasonModal(context, matchResult);
-                  },
-                  child: Text(
-                    matchResult['isGreatMatch']
-                        ? 'Great Match!'
-                        : 'Not a Match',
-                  )
-                      .text
-                      .fontFamily(semiBold)
-                      .color(
-                          matchResult['isGreatMatch'] ? Colors.green : redColor)
-                      .size(20)
-                      .make(),
-                ),
-              ],
-            )
-                .box
-                .border(color: greyLine, width: 1)
-                .padding(
-                    const EdgeInsets.symmetric(vertical: 12, horizontal: 32))
-                .margin(const EdgeInsets.only(bottom: 12))
-                .make(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                InkWell(
-                  onTap: () {
-                    debugPrints(topProduct, lowerProduct);
-                    Get.to(() => MatchPostProduct(
-                          topProduct: topProduct,
-                          lowerProduct: lowerProduct,
-                        ));
-                  },
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Image.asset(icPost, width: 22, height: 22),
-                      const SizedBox(width: 8),
-                      Text('Post')
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    const Text(
+                      'Feedback:',
+                    )
+                        .text
+                        .fontFamily(regular)
+                        .color(blackColor)
+                        .size(14)
+                        .make(),
+                    8.widthBox,
+                    InkWell(
+                      onTap: () {
+                        showMatchReasonModal(context, matchResult, skinTone);
+                      },
+                      child: Text(
+                        matchResult['isGreatMatch']
+                            ? 'Great Match!'
+                            : 'Not a Match',
+                      )
                           .text
                           .fontFamily(semiBold)
-                          .color(const Color.fromARGB(255, 28, 73, 45))
-                          .size(14)
+                          .color(matchResult['isGreatMatch']
+                              ? Colors.green
+                              : redColor)
+                          .size(20)
                           .make(),
-                    ],
-                  )
-                      .box
-                      .color(const Color.fromRGBO(177, 234, 199, 1))
-                      .padding(const EdgeInsets.symmetric(
-                          vertical: 12, horizontal: 58))
-                      .border(color: const Color.fromRGBO(35, 101, 60, 1))
-                      .rounded
-                      .make(),
-                ),
-                InkWell(
-                  onTap: () async {
-                    if (topProduct != null && lowerProduct != null) {
-                      print(
-                          'Top Product: ${getColorName(topProduct['colors'][0])}, Lower Product: ${getColorName(lowerProduct['colors'][0])}');
-                      controller.addToWishlistUserMatch(
-                        topProduct['name'],
-                        lowerProduct['name'],
-                        context,
-                      );
-                    } else {
-                      VxToast.show(
-                        context,
-                        msg:
-                            'Unable to add to favorites, Because the information is not available',
-                      );
-                    }
-                  },
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Image.asset(icLikematch, width: 22, height: 22),
-                      const SizedBox(width: 8),
-                      Text('Add to favorite')
-                          .text
-                          .fontFamily(semiBold)
-                          .color(const Color.fromRGBO(87, 12, 12, 1))
-                          .size(14)
+                    ),
+                  ],
+                )
+                    .box
+                    .border(color: greyLine, width: 1)
+                    .padding(const EdgeInsets.symmetric(
+                        vertical: 12, horizontal: 32))
+                    .margin(const EdgeInsets.only(bottom: 12))
+                    .make(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        debugPrints(topProduct, lowerProduct);
+                        Get.to(() => MatchPostProduct(
+                              topProduct: topProduct,
+                              lowerProduct: lowerProduct,
+                            ));
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Image.asset(icPost, width: 22, height: 22),
+                          const SizedBox(width: 8),
+                          Text('Post')
+                              .text
+                              .fontFamily(semiBold)
+                              .color(const Color.fromARGB(255, 28, 73, 45))
+                              .size(14)
+                              .make(),
+                        ],
+                      )
+                          .box
+                          .color(const Color.fromRGBO(177, 234, 199, 1))
+                          .padding(const EdgeInsets.symmetric(
+                              vertical: 12, horizontal: 58))
+                          .border(color: const Color.fromRGBO(35, 101, 60, 1))
+                          .rounded
                           .make(),
-                    ],
-                  )
-                      .box
-                      .color(const Color.fromRGBO(255, 203, 203, 1))
-                      .padding(const EdgeInsets.symmetric(
-                          vertical: 12, horizontal: 18))
-                      .border(color: const Color.fromRGBO(160, 84, 84, 1))
-                      .rounded
-                      .make(),
+                    ),
+                    InkWell(
+                      onTap: () async {
+                        if (topProduct != null && lowerProduct != null) {
+                          print(
+                              'Top Product: ${getColorName(topProduct['colors'][0])}, Lower Product: ${getColorName(lowerProduct['colors'][0])}');
+                          controller.addToWishlistUserMatch(
+                            topProduct['name'],
+                            lowerProduct['name'],
+                            context,
+                          );
+                        } else {
+                          VxToast.show(
+                            context,
+                            msg:
+                                'Unable to add to favorites, Because the information is not available',
+                          );
+                        }
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Image.asset(icLikematch, width: 22, height: 22),
+                          const SizedBox(width: 8),
+                          Text('Add to favorite')
+                              .text
+                              .fontFamily(semiBold)
+                              .color(const Color.fromRGBO(87, 12, 12, 1))
+                              .size(14)
+                              .make(),
+                        ],
+                      )
+                          .box
+                          .color(const Color.fromRGBO(255, 203, 203, 1))
+                          .padding(const EdgeInsets.symmetric(
+                              vertical: 12, horizontal: 18))
+                          .border(color: const Color.fromRGBO(160, 84, 84, 1))
+                          .rounded
+                          .make(),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
-        ),
+          );
+        },
       );
     });
   }
+}
+
+void showMatchReasonModal(
+    BuildContext context, Map<String, dynamic> matchResult, int? skinTone) {
+  final bool isGreatMatch = matchResult['isGreatMatch'];
+  final int? topPrimaryColor = matchResult['topClosestColor'];
+  final int? lowerPrimaryColor = matchResult['lowerClosestColor'];
+
+  print('Top Colors: ${matchResult['topClosestColor']}'); // Debug
+  print('Lower Colors: ${matchResult['lowerClosestColor']}'); // Debug
+
+  String reason;
+  String additionalReason = '';
+  List<Widget> colorReasonsWidgets = [];
+
+  if (topPrimaryColor == null || lowerPrimaryColor == null) {
+    reason = 'Unknown colors selected';
+  } else {
+    reason =
+        '${getColorName(topPrimaryColor)} matches with ${getColorName(lowerPrimaryColor)} and suits your skin tone.';
+    if (!isGreatMatch) {
+      reason =
+          '${getColorName(topPrimaryColor)} does not match with ${getColorName(lowerPrimaryColor)} or does not suit your skin tone.';
+    }
+    additionalReason = getAdditionalReason(topPrimaryColor, lowerPrimaryColor);
+
+    Map<int, String> recommendedColors = getRecommendedColors(dayOfWeek.value);
+    if (topPrimaryColor == lowerPrimaryColor &&
+        recommendedColors.containsKey(topPrimaryColor)) {
+      colorReasonsWidgets.add(
+        Text(
+          'สำหรับคนเกิดวัน ${dayOfWeek.value}: ${recommendedColors[topPrimaryColor]!}',
+          style: TextStyle(fontSize: 14),
+        ),
+      );
+    } else {
+      if (recommendedColors.containsKey(topPrimaryColor)) {
+        colorReasonsWidgets.add(
+          Text(
+            'People born on ${dayOfWeek.value}: ${recommendedColors[topPrimaryColor]!}',
+            style: TextStyle(fontSize: 14),
+          ),
+        );
+      }
+      if (recommendedColors.containsKey(lowerPrimaryColor)) {
+        colorReasonsWidgets.add(
+          Text(
+            'People born on ${dayOfWeek.value}: ${recommendedColors[lowerPrimaryColor]!}',
+            style: TextStyle(fontSize: 14),
+          ),
+        );
+      }
+    }
+  }
+
+  showModalBottomSheet(
+    context: context,
+    builder: (BuildContext context) {
+      return Container(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              isGreatMatch ? 'Great Match!' : 'Not a Match',
+              style: TextStyle(
+                color: isGreatMatch ? Colors.green : Colors.red,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 10),
+            Text(
+              skinTone == null
+                  ? 'Skin Tone'
+                  : 'Skin Tone ${getSkinToneDescription(skinTone)}',
+              style: TextStyle(fontSize: 14),
+            ),
+            SizedBox(height: 10),
+            Text(reason, style: TextStyle(fontSize: 14)),
+            if (colorReasonsWidgets.isNotEmpty) ...[
+              SizedBox(height: 10),
+              ...colorReasonsWidgets.map((widget) => Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: widget,
+                  )),
+            ],
+            if (additionalReason.isNotEmpty) ...[
+              SizedBox(height: 10),
+              Text(additionalReason, style: TextStyle(fontSize: 14)),
+            ],
+          ],
+        ),
+      );
+    },
+  );
 }
 
 void debugPrints(
