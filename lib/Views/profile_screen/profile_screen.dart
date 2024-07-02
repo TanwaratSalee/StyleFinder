@@ -1,6 +1,3 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/match_screen/matchpost_details.dart';
 import 'package:flutter_finalproject/Views/profile_screen/menu_setting_screen.dart';
@@ -235,7 +232,7 @@ class _ProfileScreenState extends State<ProfileScreen>
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection('usermixandmatch')
-          .orderBy('views', descending: true)
+          .orderBy('favorite_count', descending: true)
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
@@ -252,8 +249,7 @@ class _ProfileScreenState extends State<ProfileScreen>
 
         if (filteredData.isEmpty) {
           return Center(
-            child:
-                Text("No posts available!", style: TextStyle(color: greyDark)),
+            child: Text("No posts available!", style: TextStyle(color: greyDark)),
           );
         }
 
@@ -263,7 +259,7 @@ class _ProfileScreenState extends State<ProfileScreen>
             crossAxisCount: 2,
             crossAxisSpacing: 7,
             mainAxisSpacing: 8,
-            childAspectRatio: 8.8 / 11,
+            childAspectRatio: 9.5 / 11,
           ),
           itemCount: filteredData.length,
           itemBuilder: (context, index) {
@@ -311,20 +307,20 @@ class _ProfileScreenState extends State<ProfileScreen>
                     ? List<String>.from(docData['collection'])
                     : [];
                 var description = docData['description'] ?? '';
-                var views = (docData['views'] ?? 0)
-                    as int; // Ensure views is treated as an int
+                var favoriteCount = (docData['favorite_count'] ?? 0) as int;
                 var gender = docData['gender'] ?? '';
                 var postedBy = docData['user_id'] ?? '';
 
                 return GestureDetector(
                   onTap: () {
-                    // Increase view count
                     FirebaseFirestore.instance
                         .collection('usermixandmatch')
                         .doc(doc.id)
-                        .update({'views': FieldValue.increment(1)});
+                        .update({
+                      'favorite_userid': FieldValue.arrayUnion([currentUserUID]),
+                      'favorite_count': FieldValue.increment(1)
+                    });
 
-                    // Navigate to details screen
                     Get.to(() => MatchPostsDetails(
                           docId: doc.id,
                           productName1: productNameTop,
@@ -424,14 +420,14 @@ class _ProfileScreenState extends State<ProfileScreen>
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Image.asset(
-                              icEyes,
-                              width: 16,
-                              height: 10,
+                              icFavoriteButton,
+                              // width: 16,
+                              height: 15,
                               color: greyDark,
                             ),
-                            SizedBox(width: 4),
+                            SizedBox(width: 10),
                             Text(
-                              views.toString(),
+                              favoriteCount.toString(),
                               style: TextStyle(
                                 fontSize: 16,
                                 fontFamily: regular,

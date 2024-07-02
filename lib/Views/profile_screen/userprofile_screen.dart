@@ -1,6 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/match_screen/matchpost_details.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
@@ -93,7 +91,7 @@ class UserProfileScreen extends StatelessWidget {
   return StreamBuilder<QuerySnapshot>(
     stream: FirebaseFirestore.instance
         .collection('usermixandmatch')
-        .where('user_id', isEqualTo: userId) // Filter by the userId of the profile being viewed
+        .where('user_id', isEqualTo: userId) 
         .snapshots(),
     builder: (context, snapshot) {
       if (!snapshot.hasData) {
@@ -107,7 +105,6 @@ class UserProfileScreen extends StatelessWidget {
         );
       }
 
-      // Limit to 4 items if needed
       var limitedData = data.take(4).toList();
 
       return GridView.builder(
@@ -179,8 +176,8 @@ class UserProfileScreen extends StatelessWidget {
                         productImage1: topImage,
                         productImage2: lowerImage,
                         totalPrice: (int.parse(priceTop) + int.parse(priceLower)).toString(),
-                        vendorName1: 'Vendor Name 1', // Placeholder, update as needed
-                        vendorName2: 'Vendor Name 2', // Placeholder, update as needed
+                        vendorName1: 'Vendor Name 1', 
+                        vendorName2: 'Vendor Name 2', 
                         vendor_id: doc.id,
                         collection: collections,
                         description: description,
