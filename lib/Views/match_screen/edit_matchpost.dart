@@ -1,10 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_finalproject/Views/match_screen/matchpost_details.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class EditMatchProduct extends StatefulWidget {
+  final MatchPostsDetails document;
+
+  const EditMatchProduct({Key? key, required this.document}) : super(key: key);
+
   @override
   _EditMatchProductState createState() => _EditMatchProductState();
 }
@@ -12,6 +17,7 @@ class EditMatchProduct extends StatefulWidget {
 class _EditMatchProductState extends State<EditMatchProduct> {
   final TextEditingController explanationController = TextEditingController();
   List<String> selectedCollections = [];
+  List<String> selectedSiturations = [];
   String selectedGender = '';
   late DocumentSnapshot document;
   Map<String, dynamic> ItemsDetails = {};
@@ -27,15 +33,12 @@ class _EditMatchProductState extends State<EditMatchProduct> {
   @override
   void initState() {
     super.initState();
-    document = Get.arguments['document'];
-    Map<String, dynamic> docData = document.data() as Map<String, dynamic>;
-    selectedGender = docData['gender'];
-    selectedCollections = docData.containsKey('collection')
-        ? List<String>.from(docData['collection'])
-        : [];
-    explanationController.text = docData['description'];
-    pIdTop = docData['product_id_top'];
-    pIdLower = docData['product_id_lower'];
+    selectedGender = widget.document.gender;
+    selectedCollections = List<String>.from(widget.document.collection);
+    selectedSiturations = List<String>.from(widget.document.situration);
+    explanationController.text = widget.document.description;
+    pIdTop = widget.document.docId; // Adjust this if needed
+    pIdLower = widget.document.docId; // Adjust this if needed
     fetchItemsDetails();
   }
 
@@ -89,7 +92,7 @@ class _EditMatchProductState extends State<EditMatchProduct> {
           ),
         ],
       ),
-       body: SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: Column(
@@ -194,7 +197,7 @@ class _EditMatchProductState extends State<EditMatchProduct> {
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children: ['all','man', 'woman'].map((gender) {
+                    children: ['all', 'man', 'woman'].map((gender) {
                       bool isSelected = selectedGender == gender;
                       return Container(
                         width: 105,
@@ -228,6 +231,57 @@ class _EditMatchProductState extends State<EditMatchProduct> {
                     }).toList(),
                   ).box.makeCentered(),
                   const SizedBox(height: 15),
+                  const Text("Siturations")
+                      .text
+                      .size(16)
+                      .color(blackColor)
+                      .fontFamily(medium)
+                      .make(),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 6,
+                    runSpacing: 1,
+                    children: [
+                      'formal',
+                      'casual',
+                      'seasonal',
+                      'semi-formal',
+                      'special-activity'
+                          'work-from-home'
+                    ].map((situration) {
+                      bool isSelected =
+                          selectedSiturations.contains(situration);
+                      return ChoiceChip(
+                        showCheckmark: false,
+                        label: Container(
+                          width: 75,
+                          alignment: Alignment.center,
+                          child: Text(
+                            capitalize(situration),
+                            style: TextStyle(
+                              color: isSelected ? primaryApp : greyColor,
+                              fontFamily: isSelected ? semiBold : regular,
+                            ),
+                          ).text.size(14).make(),
+                        ),
+                        selected: isSelected,
+                        onSelected: (selected) {
+                          setState(() {
+                            if (isSelected) {
+                              selectedSiturations.remove(situration);
+                            } else {
+                              selectedSiturations.add(situration);
+                            }
+                          });
+                        },
+                        selectedColor: thinPrimaryApp,
+                        backgroundColor: whiteColor,
+                        side: isSelected
+                            ? const BorderSide(color: primaryApp, width: 2)
+                            : const BorderSide(color: greyLine, width: 1.3),
+                      );
+                    }).toList(),
+                  ).box.makeCentered(),
                   const Text("Collection")
                       .text
                       .size(16)
@@ -320,7 +374,6 @@ class _EditMatchProductState extends State<EditMatchProduct> {
           ),
         ),
       ),
-    
     );
   }
 
@@ -336,6 +389,7 @@ class _EditMatchProductState extends State<EditMatchProduct> {
       'product_id_top': pIdTop,
       'product_id_lower': pIdLower,
       'collection': selectedCollections,
+      'siturations': selectedSiturations,
       'gender': selectedGender,
       'description': explanationController.text,
     };

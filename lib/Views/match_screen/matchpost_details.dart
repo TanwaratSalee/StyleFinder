@@ -23,6 +23,7 @@ class MatchPostsDetails extends StatefulWidget {
   final String vendorName2;
   final String vendor_id;
   final List<dynamic> collection;
+  final List<dynamic> situration;
   final String description;
   final String gender;
   final String posted_by;
@@ -40,6 +41,7 @@ class MatchPostsDetails extends StatefulWidget {
     required this.vendorName2,
     required this.vendor_id,
     required this.collection,
+    required this.situration,
     required this.description,
     required this.gender,
     required this.posted_by,
@@ -185,9 +187,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
   }
 
   void editPost() {
-    Get.to(() => EditMatchProduct(), arguments: {
-      'document': widget,
-    });
+    Get.to(() => EditMatchProduct(document: widget));
   }
 
   void removeMatch(String docId) async {

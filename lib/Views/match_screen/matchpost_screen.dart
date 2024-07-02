@@ -30,7 +30,18 @@ class _MatchPostProductState extends State<MatchPostProduct> {
     bool isSelectedAutumn = controller.selectedCollections.contains('autumn');
     bool isSelectedDinner = controller.selectedCollections.contains('dinner');
     bool isSelectedEveryday =
-        controller.selectedCollections.contains('everydaylook');
+        controller.selectedSiturations.contains('everydaylook');
+
+    bool isSelectedFormal = controller.selectedSiturations.contains('formal');
+    bool isSelectedCasual = controller.selectedSiturations.contains('casual');
+    bool isSelectedSeasonal =
+        controller.selectedSiturations.contains('seasonal');
+    bool isSelectedSemiFormal =
+        controller.selectedSiturations.contains('semi-formal');
+    bool isSelectedSpecialActivity =
+        controller.selectedSiturations.contains('special-activity');
+    bool isSelectedWorkfromHome =
+        controller.selectedSiturations.contains('work-from-home');
 
     return WillPopScope(
       onWillPop: () async {
@@ -57,6 +68,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                     context,
                     controller.selectedGender.value,
                     List.from(controller.selectedCollections),
+                    List.from(controller.selectedSiturations),
                     explanationController.text,
                     widget.topProduct['product_id'],
                     widget.lowerProduct['product_id'],
@@ -148,6 +160,54 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                           } else if (!isSelectedAll && !isSelectedMen) {
                             controller.selectedGender.value = '';
                           }
+                        });
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 15),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: buildSiturationSelector(
+                      isSelectedFormal: isSelectedFormal,
+                      isSelectedCasual: isSelectedCasual,
+                      isSelectedSeasonal: isSelectedSeasonal,
+                      isSelectedSemiFormal: isSelectedSemiFormal,
+                      isSelectedSpecialActivity: isSelectedSpecialActivity,
+                      isSelectedWorkfromHome: isSelectedWorkfromHome,
+                      onFormalSelected: (isSelected) {
+                        setState(() {
+                          isSelectedFormal = isSelected;
+                          updateSiturations('formal', isSelected);
+                        });
+                      },
+                      onCasualSelected: (isSelected) {
+                        setState(() {
+                          isSelectedCasual = isSelected;
+                          updateSiturations('casual', isSelected);
+                        });
+                      },
+                      onSeasonalSelected: (isSelected) {
+                        setState(() {
+                          isSelectedSeasonal = isSelected;
+                          updateSiturations('seasonal', isSelected);
+                        });
+                      },
+                      onSemiFormalSelected: (isSelected) {
+                        setState(() {
+                          isSelectedSemiFormal = isSelected;
+                          updateSiturations('semi-formal', isSelected);
+                        });
+                      },
+                      onSpecialActivitySelected: (isSelected) {
+                        setState(() {
+                          isSelectedSpecialActivity = isSelected;
+                          updateSiturations('special-activity', isSelected);
+                        });
+                      },
+                      onWorkfromHomeSelected: (isSelected) {
+                        setState(() {
+                          isSelectedWorkfromHome = isSelected;
+                          updateSiturations('work-from-home', isSelected);
                         });
                       },
                     ),
@@ -310,6 +370,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
     setState(() {
       controller.selectedGender.value = '';
       controller.selectedCollections.clear();
+      controller.selectedSiturations.clear();
       explanationController.clear();
     });
   }
@@ -320,6 +381,16 @@ class _MatchPostProductState extends State<MatchPostProduct> {
         controller.selectedCollections.add(collection);
       } else {
         controller.selectedCollections.remove(collection);
+      }
+    });
+  }
+
+  void updateSiturations(String collection, bool isSelected) {
+    setState(() {
+      if (isSelected) {
+        controller.selectedSiturations.add(collection);
+      } else {
+        controller.selectedSiturations.remove(collection);
       }
     });
   }
@@ -380,6 +451,53 @@ class _MatchPostProductState extends State<MatchPostProduct> {
     );
   }
 
+  Widget buildSiturationSelector({
+    required bool isSelectedFormal,
+    required bool isSelectedCasual,
+    required bool isSelectedSeasonal,
+    required bool isSelectedSemiFormal,
+    required bool isSelectedSpecialActivity,
+    required bool isSelectedWorkfromHome,
+    required Function(bool) onFormalSelected,
+    required Function(bool) onCasualSelected,
+    required Function(bool) onSeasonalSelected,
+    required Function(bool) onSemiFormalSelected,
+    required Function(bool) onSpecialActivitySelected,
+    required Function(bool) onWorkfromHomeSelected,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: 10),
+        Text(
+          "Suitable for work and siturations",
+          style: TextStyle(fontSize: 16, fontFamily: medium),
+        ),
+        SizedBox(height: 8),
+        Center(
+          child: Wrap(
+            spacing: 10,
+            runSpacing: 1,
+            children: [
+              buildFilterChip(
+                  "Formal Attire", isSelectedFormal, onFormalSelected),
+              buildFilterChip(
+                  "Casual Attire", isSelectedCasual, onCasualSelected),
+              buildFilterChip(
+                  "Seasonal Attire", isSelectedSeasonal, onSeasonalSelected),
+              buildFilterChip("Semi-Formal Attire", isSelectedSemiFormal,
+                  onSemiFormalSelected),
+              buildFilterChip("Special Activity Attire",
+                  isSelectedSpecialActivity, onSpecialActivitySelected),
+              buildFilterChip("Work from Home", isSelectedWorkfromHome,
+                  onWorkfromHomeSelected),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget buildCollectionSelector({
     required bool isSelectedSummer,
     required bool isSelectedWinter,
@@ -397,7 +515,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
       children: [
         SizedBox(height: 10),
         Text(
-          "Collection",
+          "Suitable for seasons",
           style: TextStyle(fontSize: 16, fontFamily: medium),
         ),
         SizedBox(height: 8),

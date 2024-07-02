@@ -249,7 +249,8 @@ class _ProfileScreenState extends State<ProfileScreen>
 
         if (filteredData.isEmpty) {
           return Center(
-            child: Text("No posts available!", style: TextStyle(color: greyDark)),
+            child:
+                Text("No posts available!", style: TextStyle(color: greyDark)),
           );
         }
 
@@ -317,7 +318,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                         .collection('usermixandmatch')
                         .doc(doc.id)
                         .update({
-                      'favorite_userid': FieldValue.arrayUnion([currentUserUID]),
+                      'favorite_userid':
+                          FieldValue.arrayUnion([currentUserUID]),
                       'favorite_count': FieldValue.increment(1)
                     });
 

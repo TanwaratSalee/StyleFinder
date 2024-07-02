@@ -202,7 +202,7 @@ class _MatchScreenState extends State<MatchScreen> {
   Widget buildCardItem(Map<String, dynamic> product) {
     final productName = product['name'] ?? 'No Name';
     final productImages = product['imgs'] ?? [''];
-    final productColors = product['colors'] ?? []; // Ensure colors is a list
+    final productColors = product['colors'] ?? [];
 
     // Find the closest color
     final colorValue = productColors.isNotEmpty
