@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
@@ -25,23 +26,18 @@ class _MatchPostProductState extends State<MatchPostProduct> {
     bool isSelectedAll = controller.selectedGender.value == 'all';
     bool isSelectedMen = controller.selectedGender.value == 'men';
     bool isSelectedWomen = controller.selectedGender.value == 'women';
+
     bool isSelectedSummer = controller.selectedCollections.contains('summer');
     bool isSelectedWinter = controller.selectedCollections.contains('winter');
     bool isSelectedAutumn = controller.selectedCollections.contains('autumn');
-    bool isSelectedDinner = controller.selectedCollections.contains('dinner');
-    bool isSelectedEveryday =
-        controller.selectedSiturations.contains('everydaylook');
+    bool isSelectedSpring = controller.selectedCollections.contains('spring');
 
     bool isSelectedFormal = controller.selectedSiturations.contains('formal');
     bool isSelectedCasual = controller.selectedSiturations.contains('casual');
-    bool isSelectedSeasonal =
-        controller.selectedSiturations.contains('seasonal');
-    bool isSelectedSemiFormal =
-        controller.selectedSiturations.contains('semi-formal');
-    bool isSelectedSpecialActivity =
-        controller.selectedSiturations.contains('special-activity');
-    bool isSelectedWorkfromHome =
-        controller.selectedSiturations.contains('work-from-home');
+    bool isSelectedSeasonal = controller.selectedSiturations.contains('seasonal');
+    bool isSelectedSemiFormal = controller.selectedSiturations.contains('semi-formal');
+    bool isSelectedSpecialActivity = controller.selectedSiturations.contains('special-activity');
+    bool isSelectedWorkfromHome = controller.selectedSiturations.contains('work-from-home');
 
     return WillPopScope(
       onWillPop: () async {
@@ -122,135 +118,168 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                   SizedBox(height: 15),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: buildGenderSelector(
-                      isSelectedAll: isSelectedAll,
-                      isSelectedMen: isSelectedMen,
-                      isSelectedWomen: isSelectedWomen,
-                      onAllSelected: (isSelected) {
-                        setState(() {
-                          isSelectedAll = isSelected;
-                          if (isSelected) {
-                            isSelectedMen = false;
-                            isSelectedWomen = false;
-                            controller.selectedGender.value = 'all';
-                          } else if (!isSelectedMen && !isSelectedWomen) {
-                            controller.selectedGender.value = '';
-                          }
-                        });
-                      },
-                      onMenSelected: (isSelected) {
-                        setState(() {
-                          isSelectedMen = isSelected;
-                          if (isSelected) {
-                            isSelectedAll = false;
-                            isSelectedWomen = false;
-                            controller.selectedGender.value = 'men';
-                          } else if (!isSelectedAll && !isSelectedWomen) {
-                            controller.selectedGender.value = '';
-                          }
-                        });
-                      },
-                      onWomenSelected: (isSelected) {
-                        setState(() {
-                          isSelectedWomen = isSelected;
-                          if (isSelected) {
-                            isSelectedAll = false;
-                            isSelectedMen = false;
-                            controller.selectedGender.value = 'women';
-                          } else if (!isSelectedAll && !isSelectedMen) {
-                            controller.selectedGender.value = '';
-                          }
-                        });
-                      },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 10),
+                        Text(
+                          "Suitable for gender",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontFamily: medium,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            buildFilterChipGender("All", isSelectedAll, (isSelected) {
+                              setState(() {
+                                isSelectedAll = isSelected;
+                                if (isSelected) {
+                                  isSelectedMen = false;
+                                  isSelectedWomen = false;
+                                  controller.selectedGender.value = 'all';
+                                } else if (!isSelectedMen && !isSelectedWomen) {
+                                  controller.selectedGender.value = '';
+                                }
+                              });
+                            }),
+                            SizedBox(width: 5),
+                            buildFilterChipGender("Men", isSelectedMen, (isSelected) {
+                              setState(() {
+                                isSelectedMen = isSelected;
+                                if (isSelected) {
+                                  isSelectedAll = false;
+                                  isSelectedWomen = false;
+                                  controller.selectedGender.value = 'men';
+                                } else if (!isSelectedAll && !isSelectedWomen) {
+                                  controller.selectedGender.value = '';
+                                }
+                              });
+                            }),
+                            SizedBox(width: 5),
+                            buildFilterChipGender("Women", isSelectedWomen, (isSelected) {
+                              setState(() {
+                                isSelectedWomen = isSelected;
+                                if (isSelected) {
+                                  isSelectedAll = false;
+                                  isSelectedMen = false;
+                                  controller.selectedGender.value = 'women';
+                                } else if (!isSelectedAll && !isSelectedMen) {
+                                  controller.selectedGender.value = '';
+                                }
+                              });
+                            }),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                   SizedBox(height: 15),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: buildSiturationSelector(
-                      isSelectedFormal: isSelectedFormal,
-                      isSelectedCasual: isSelectedCasual,
-                      isSelectedSeasonal: isSelectedSeasonal,
-                      isSelectedSemiFormal: isSelectedSemiFormal,
-                      isSelectedSpecialActivity: isSelectedSpecialActivity,
-                      isSelectedWorkfromHome: isSelectedWorkfromHome,
-                      onFormalSelected: (isSelected) {
-                        setState(() {
-                          isSelectedFormal = isSelected;
-                          updateSiturations('formal', isSelected);
-                        });
-                      },
-                      onCasualSelected: (isSelected) {
-                        setState(() {
-                          isSelectedCasual = isSelected;
-                          updateSiturations('casual', isSelected);
-                        });
-                      },
-                      onSeasonalSelected: (isSelected) {
-                        setState(() {
-                          isSelectedSeasonal = isSelected;
-                          updateSiturations('seasonal', isSelected);
-                        });
-                      },
-                      onSemiFormalSelected: (isSelected) {
-                        setState(() {
-                          isSelectedSemiFormal = isSelected;
-                          updateSiturations('semi-formal', isSelected);
-                        });
-                      },
-                      onSpecialActivitySelected: (isSelected) {
-                        setState(() {
-                          isSelectedSpecialActivity = isSelected;
-                          updateSiturations('special-activity', isSelected);
-                        });
-                      },
-                      onWorkfromHomeSelected: (isSelected) {
-                        setState(() {
-                          isSelectedWorkfromHome = isSelected;
-                          updateSiturations('work-from-home', isSelected);
-                        });
-                      },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 10),
+                        Text(
+                          "Suitable for work and situations",
+                          style: TextStyle(fontSize: 16, fontFamily: medium),
+                        ),
+                        SizedBox(height: 8),
+                        Center(
+                          child: Wrap(
+                            spacing: 10,
+                            runSpacing: 1,
+                            children: [
+                              buildFilterChip("Formal Attire", isSelectedFormal, (isSelected) {
+                                setState(() {
+                                  isSelectedFormal = isSelected;
+                                  updateSiturations('formal', isSelected);
+                                });
+                              }),
+                              buildFilterChip("Casual Attire", isSelectedCasual, (isSelected) {
+                                setState(() {
+                                  isSelectedCasual = isSelected;
+                                  updateSiturations('casual', isSelected);
+                                });
+                              }),
+                              buildFilterChip("Seasonal Attire", isSelectedSeasonal, (isSelected) {
+                                setState(() {
+                                  isSelectedSeasonal = isSelected;
+                                  updateSiturations('seasonal', isSelected);
+                                });
+                              }),
+                              buildFilterChip("Semi-Formal Attire", isSelectedSemiFormal, (isSelected) {
+                                setState(() {
+                                  isSelectedSemiFormal = isSelected;
+                                  updateSiturations('semi-formal', isSelected);
+                                });
+                              }),
+                              buildFilterChip("Special Activity Attire", isSelectedSpecialActivity, (isSelected) {
+                                setState(() {
+                                  isSelectedSpecialActivity = isSelected;
+                                  updateSiturations('special-activity', isSelected);
+                                });
+                              }),
+                              buildFilterChip("Work from Home", isSelectedWorkfromHome, (isSelected) {
+                                setState(() {
+                                  isSelectedWorkfromHome = isSelected;
+                                  updateSiturations('work-from-home', isSelected);
+                                });
+                              }),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   SizedBox(height: 15),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: buildCollectionSelector(
-                      isSelectedSummer: isSelectedSummer,
-                      isSelectedWinter: isSelectedWinter,
-                      isSelectedAutumn: isSelectedAutumn,
-                      isSelectedDinner: isSelectedDinner,
-                      isSelectedEveryday: isSelectedEveryday,
-                      onSummerSelected: (isSelected) {
-                        setState(() {
-                          isSelectedSummer = isSelected;
-                          updateCollection('summer', isSelected);
-                        });
-                      },
-                      onWinterSelected: (isSelected) {
-                        setState(() {
-                          isSelectedWinter = isSelected;
-                          updateCollection('winter', isSelected);
-                        });
-                      },
-                      onAutumnSelected: (isSelected) {
-                        setState(() {
-                          isSelectedAutumn = isSelected;
-                          updateCollection('autumn', isSelected);
-                        });
-                      },
-                      onDinnerSelected: (isSelected) {
-                        setState(() {
-                          isSelectedDinner = isSelected;
-                          updateCollection('dinner', isSelected);
-                        });
-                      },
-                      onEverydaySelected: (isSelected) {
-                        setState(() {
-                          isSelectedEveryday = isSelected;
-                          updateCollection('everydaylook', isSelected);
-                        });
-                      },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 10),
+                        Text(
+                          "Suitable for seasons",
+                          style: TextStyle(fontSize: 16, fontFamily: medium),
+                        ),
+                        SizedBox(height: 8),
+                        Center(
+                          child: Wrap(
+                            spacing: 10,
+                            runSpacing: 1,
+                            children: [
+                              buildFilterChip("Summer", isSelectedSummer, (isSelected) {
+                                setState(() {
+                                  isSelectedSummer = isSelected;
+                                  updateCollection('summer', isSelected);
+                                });
+                              }),
+                              buildFilterChip("Winter", isSelectedWinter, (isSelected) {
+                                setState(() {
+                                  isSelectedWinter = isSelected;
+                                  updateCollection('winter', isSelected);
+                                });
+                              }),
+                              buildFilterChip("Autumn", isSelectedAutumn, (isSelected) {
+                                setState(() {
+                                  isSelectedAutumn = isSelected;
+                                  updateCollection('autumn', isSelected);
+                                });
+                              }),
+                              buildFilterChip("Spring", isSelectedSpring, (isSelected) {
+                                setState(() {
+                                  isSelectedSpring = isSelected;
+                                  updateCollection('spring', isSelected);
+                                });
+                              }),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   SizedBox(height: 15),
@@ -309,9 +338,8 @@ class _MatchPostProductState extends State<MatchPostProduct> {
               height: 150,
               color: whiteColor,
               child: Center(
-                child:
-                    Image.network(imageUrl[0]), // ใช้เฉพาะ URL ตัวแรกจาก List
-              ).box.border(color: greyLine).rounded.make(),
+                child: Image.network(imageUrl[0]),
+              ),
             ),
           ),
           SizedBox(height: 5),
@@ -340,30 +368,6 @@ class _MatchPostProductState extends State<MatchPostProduct> {
         ],
       );
     }
-
-    return Column(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(15)),
-          child: Container(
-            width: 140,
-            height: 150,
-            color: whiteColor,
-            child: Center(
-              child: Image.network(imageUrl),
-            ).box.border(color: greyLine).rounded.make(),
-          ),
-        ),
-        SizedBox(height: 5),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 16,
-            fontFamily: regular,
-          ),
-        ),
-      ],
-    );
   }
 
   void resetSelections() {
@@ -385,12 +389,12 @@ class _MatchPostProductState extends State<MatchPostProduct> {
     });
   }
 
-  void updateSiturations(String collection, bool isSelected) {
+  void updateSiturations(String situration, bool isSelected) {
     setState(() {
       if (isSelected) {
-        controller.selectedSiturations.add(collection);
+        controller.selectedSiturations.add(situration);
       } else {
-        controller.selectedSiturations.remove(collection);
+        controller.selectedSiturations.remove(situration);
       }
     });
   }
@@ -417,128 +421,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
     );
   }
 
-  Widget buildGenderSelector({
-    required bool isSelectedAll,
-    required bool isSelectedMen,
-    required bool isSelectedWomen,
-    required Function(bool) onAllSelected,
-    required Function(bool) onMenSelected,
-    required Function(bool) onWomenSelected,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(height: 10),
-        Text(
-          "Suitable for gender",
-          style: TextStyle(
-            fontSize: 16,
-            fontFamily: medium,
-          ),
-        ),
-        SizedBox(height: 8),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            buildFilterChip("All", isSelectedAll, onAllSelected),
-            SizedBox(width: 5),
-            buildFilterChip("Men", isSelectedMen, onMenSelected),
-            SizedBox(width: 5),
-            buildFilterChip("Women", isSelectedWomen, onWomenSelected),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget buildSiturationSelector({
-    required bool isSelectedFormal,
-    required bool isSelectedCasual,
-    required bool isSelectedSeasonal,
-    required bool isSelectedSemiFormal,
-    required bool isSelectedSpecialActivity,
-    required bool isSelectedWorkfromHome,
-    required Function(bool) onFormalSelected,
-    required Function(bool) onCasualSelected,
-    required Function(bool) onSeasonalSelected,
-    required Function(bool) onSemiFormalSelected,
-    required Function(bool) onSpecialActivitySelected,
-    required Function(bool) onWorkfromHomeSelected,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(height: 10),
-        Text(
-          "Suitable for work and siturations",
-          style: TextStyle(fontSize: 16, fontFamily: medium),
-        ),
-        SizedBox(height: 8),
-        Center(
-          child: Wrap(
-            spacing: 10,
-            runSpacing: 1,
-            children: [
-              buildFilterChip(
-                  "Formal Attire", isSelectedFormal, onFormalSelected),
-              buildFilterChip(
-                  "Casual Attire", isSelectedCasual, onCasualSelected),
-              buildFilterChip(
-                  "Seasonal Attire", isSelectedSeasonal, onSeasonalSelected),
-              buildFilterChip("Semi-Formal Attire", isSelectedSemiFormal,
-                  onSemiFormalSelected),
-              buildFilterChip("Special Activity Attire",
-                  isSelectedSpecialActivity, onSpecialActivitySelected),
-              buildFilterChip("Work from Home", isSelectedWorkfromHome,
-                  onWorkfromHomeSelected),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget buildCollectionSelector({
-    required bool isSelectedSummer,
-    required bool isSelectedWinter,
-    required bool isSelectedAutumn,
-    required bool isSelectedDinner,
-    required bool isSelectedEveryday,
-    required Function(bool) onSummerSelected,
-    required Function(bool) onWinterSelected,
-    required Function(bool) onAutumnSelected,
-    required Function(bool) onDinnerSelected,
-    required Function(bool) onEverydaySelected,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(height: 10),
-        Text(
-          "Suitable for seasons",
-          style: TextStyle(fontSize: 16, fontFamily: medium),
-        ),
-        SizedBox(height: 8),
-        Center(
-          child: Wrap(
-            spacing: 10,
-            runSpacing: 1,
-            children: [
-              buildFilterChip("Summer", isSelectedSummer, onSummerSelected),
-              buildFilterChip("Winter", isSelectedWinter, onWinterSelected),
-              buildFilterChip("Autumn", isSelectedAutumn, onAutumnSelected),
-              buildFilterChip("Dinner", isSelectedDinner, onDinnerSelected),
-              buildFilterChip(
-                  "Everydaylook", isSelectedEveryday, onEverydaySelected),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget buildFilterChip(
-      String label, bool isSelected, Function(bool) onSelected) {
+  Widget buildFilterChipGender(String label, bool isSelected, Function(bool) onSelected) {
     final BorderSide borderSide = BorderSide(
       color: isSelected ? primaryApp : greyLine,
       width: 2.0,
@@ -565,4 +448,35 @@ class _MatchPostProductState extends State<MatchPostProduct> {
       ),
     );
   }
+
+  Widget buildFilterChip(String label, bool isSelected, Function(bool) onSelected) {
+  final BorderSide borderSide = BorderSide(
+    color: isSelected ? primaryApp : greyLine,
+    width: 2.0,
+  );
+
+  return SizedBox(
+    width: 165,
+    child: TextButton(
+      onPressed: () => onSelected(!isSelected),
+      style: TextButton.styleFrom(
+        backgroundColor: isSelected ? thinPrimaryApp : whiteColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+          side: borderSide,
+        ),
+        // padding: EdgeInsets.symmetric(horizontal: 6, vertical: 5),
+        splashFactory: NoSplash.splashFactory,
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontFamily: isSelected ? medium : regular,
+          color: greyColor,
+        ),
+      ),
+    ),
+  );
+}
+
 }
