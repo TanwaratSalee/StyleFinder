@@ -55,8 +55,6 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
   String? productImageUrl;
   String? postedUserName;
   String? postedUserImageUrl;
-  String? productIdTop;
-  String? productIdLower;
 
   @override
   void initState() {
@@ -66,7 +64,6 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
     incrementViewCount();
     fetchProductImage();
     fetchPostedUserDetails();
-    fetchProductIds();
   }
 
   void checkIsInWishlist() async {
@@ -166,24 +163,6 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
     }
   }
 
-  void fetchProductIds() async {
-    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-        .collection('usermixandmatch')
-        .doc(widget.docId)
-        .get();
-
-    if (documentSnapshot.exists) {
-      var docData = documentSnapshot.data() as Map<String, dynamic>;
-      // print('Document data: $docData'); // Debug print statement
-      setState(() {
-        productIdTop = docData['product_id_top'];
-        productIdLower = docData['product_id_lower'];
-      });
-    } else {
-      print('Document not found for fetching product IDs');
-    }
-  }
-
   void navigateToItemDetails(String productName) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('products')
@@ -204,6 +183,10 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
           postedName: postedUserName ?? '',
           postedImg: postedUserImageUrl ?? '',
         ));
+  }
+
+  void editPost() {
+    Get.to(() => EditMatchProduct(document: widget));
   }
 
   void removeMatch(String docId) async {
@@ -243,10 +226,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
               onSelected: (value) {
                 switch (value) {
                   case 'Edit':
-                    print('docId: ${widget.docId}'); // Add this print statement
-                    print('product_id_top: $productIdTop'); // Print product_id_top
-                    print('product_id_lower: $productIdLower'); // Print product_id_lower
-                    Get.to(() => EditMatchProduct(document: widget));
+                    editPost();
                     break;
                   case 'Delete':
                     removeMatch(widget.docId);
@@ -442,6 +422,14 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                                                 fit: BoxFit.cover,
                                               )
                                             : loadingIndicator()),
+                                    // ClipOval(
+                                    //   child: Image.network(
+                                    //     postedUserImageUrl!,
+                                    //     width: 50,
+                                    //     height: 50,
+                                    //     fit: BoxFit.cover,
+                                    //   ),
+                                    // ),
                                   )
                                       .box
                                       .border(color: greyLine, width: 1.5)
@@ -487,18 +475,18 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                         ],
                       ).box.white.roundedSM.outerShadow.make(),
                     ),
-                    15.heightBox,
+                    20.heightBox,
                     Column(
                       children: [
                         Align(
                           alignment: Alignment.centerLeft,
                           child: const Text(
                             'Suitable for gender',
-                          ).text.fontFamily(medium).size(16).make(),
+                          ).text.fontFamily(regular).size(16).make(),
                         ),
                         Column(
                           children: [
-                            3.heightBox,
+                            const SizedBox(height: 10),
                             Container(
                               height: 40,
                               child: ListView.builder(
@@ -522,49 +510,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                                           horizontal: 6))
                                       .roundedLg
                                       .padding(const EdgeInsets.symmetric(
-                                          horizontal: 24, vertical: 8))
-                                      .make();
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                        10.heightBox,
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: const Text(
-                            'Suitable for work and situations',
-                          ).text.fontFamily(medium).size(16).make(),
-                        ),
-                        Column(
-                          children: [
-                            3.heightBox,
-                            Container(
-                              height: 40,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: widget.situration.length,
-                                itemBuilder: (context, index) {
-                                  String item =
-                                      widget.situration[index].toString();
-                                  return Container(
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "${item[0].toUpperCase()}${item.substring(1)}",
-                                    )
-                                        .text
-                                        .size(14)
-                                        .color(greyDark)
-                                        .fontFamily(medium)
-                                        .make(),
-                                  )
-                                      .box
-                                      .color(thinPrimaryApp)
-                                      .margin(const EdgeInsets.symmetric(
-                                          horizontal: 6))
-                                      .roundedLg
-                                      .padding(const EdgeInsets.symmetric(
-                                          horizontal: 24, vertical: 8))
+                                          horizontal: 24, vertical: 12))
                                       .make();
                                 },
                               ),
@@ -618,12 +564,12 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: const Text(
-                            'Suitable for seasons',
-                          ).text.fontFamily(medium).size(16).make(),
+                            'Opportunity suitable for',
+                          ).text.fontFamily(regular).size(16).make(),
                         ),
                         Column(
                           children: [
-                            3.heightBox,
+                            const SizedBox(height: 10),
                             Container(
                               height: 40,
                               child: ListView.builder(
@@ -649,7 +595,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                                           horizontal: 6))
                                       .roundedLg
                                       .padding(const EdgeInsets.symmetric(
-                                          horizontal: 24, vertical: 8))
+                                          horizontal: 24, vertical: 12))
                                       .make();
                                 },
                               ),

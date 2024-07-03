@@ -19,6 +19,8 @@ class _EditMatchProductState extends State<EditMatchProduct> {
   List<String> selectedCollections = [];
   List<String> selectedSiturations = [];
   String selectedGender = '';
+  late DocumentSnapshot document;
+  Map<String, dynamic> ItemsDetails = {};
   String pIdTop = '';
   String pIdLower = '';
   String topProductImg = '';
@@ -37,35 +39,51 @@ class _EditMatchProductState extends State<EditMatchProduct> {
     explanationController.text = widget.document.description;
     pIdTop = widget.document.docId; // Adjust this if needed
     pIdLower = widget.document.docId; // Adjust this if needed
-    fetchItemsDetails();
+    fetchItemsDetails(widget.document.docId);
   }
 
-  Future<void> fetchItemsDetails() async {
-    final topSnapshot = await FirebaseFirestore.instance
-        .collection('products')
-        .doc(pIdTop)
-        .get();
-    final lowerSnapshot = await FirebaseFirestore.instance
-        .collection('products')
-        .doc(pIdLower)
-        .get();
+  Future<void> fetchItemsDetails(String docId) async {
+    try {
+      var docSnapshot = await FirebaseFirestore.instance
+          .collection('usermixandmatch')
+          .doc(docId)
+          .get();
 
-    if (topSnapshot.exists) {
-      setState(() {
-        topProductImg = topSnapshot.data()!['imgs'][0];
-        topProductName = topSnapshot.data()!['name'];
-        topProductPrice =
-            double.tryParse(topSnapshot.data()!['price'].toString()) ?? 0.0;
-      });
-    }
+      if (docSnapshot.exists) {
+        var docData = docSnapshot.data() as Map<String, dynamic>;
+        var productIdTop = docData['product_id_top'];
+        var productIdLower = docData['product_id_lower'];
 
-    if (lowerSnapshot.exists) {
-      setState(() {
-        lowerProductImg = lowerSnapshot.data()!['imgs'][0];
-        lowerProductName = lowerSnapshot.data()!['name'];
-        lowerProductPrice =
-            double.tryParse(lowerSnapshot.data()!['price'].toString()) ?? 0.0;
-      });
+        var topSnapshot = await FirebaseFirestore.instance
+            .collection('products')
+            .doc(productIdTop)
+            .get();
+        var lowerSnapshot = await FirebaseFirestore.instance
+            .collection('products')
+            .doc(productIdLower)
+            .get();
+
+        if (topSnapshot.exists) {
+          setState(() {
+            topProductImg = topSnapshot.data()!['imgs'][0];
+            topProductName = topSnapshot.data()!['name'];
+            topProductPrice =
+                double.tryParse(topSnapshot.data()!['price'].toString()) ?? 0.0;
+          });
+        }
+
+        if (lowerSnapshot.exists) {
+          setState(() {
+            lowerProductImg = lowerSnapshot.data()!['imgs'][0];
+            lowerProductName = lowerSnapshot.data()!['name'];
+            lowerProductPrice =
+                double.tryParse(lowerSnapshot.data()!['price'].toString()) ??
+                    0.0;
+          });
+        }
+      }
+    } catch (e) {
+      print('Error fetching items details: $e');
     }
   }
 
@@ -102,7 +120,7 @@ class _EditMatchProductState extends State<EditMatchProduct> {
                     children: [
                       if (topProductImg.isNotEmpty)
                         ClipRRect(
-                          borderRadius: const BorderRadius.only(
+                          borderRadius: BorderRadius.only(
                             topRight: Radius.circular(15),
                             topLeft: Radius.circular(15),
                           ),
@@ -117,7 +135,7 @@ class _EditMatchProductState extends State<EditMatchProduct> {
                         width: 130,
                         child: Text(
                           topProductName,
-                          style: const TextStyle(fontSize: 14, color: blackColor),
+                          style: TextStyle(fontSize: 14, color: blackColor),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -141,7 +159,7 @@ class _EditMatchProductState extends State<EditMatchProduct> {
                           .box
                           .color(primaryApp)
                           .roundedFull
-                          .padding(const EdgeInsets.all(4))
+                          .padding(EdgeInsets.all(4))
                           .make(),
                     ],
                   ),
@@ -150,7 +168,7 @@ class _EditMatchProductState extends State<EditMatchProduct> {
                     children: [
                       if (lowerProductImg.isNotEmpty)
                         ClipRRect(
-                          borderRadius: const BorderRadius.only(
+                          borderRadius: BorderRadius.only(
                             topRight: Radius.circular(15),
                             topLeft: Radius.circular(15),
                           ),
@@ -166,7 +184,7 @@ class _EditMatchProductState extends State<EditMatchProduct> {
                         width: 130,
                         child: Text(
                           lowerProductName,
-                          style: const TextStyle(fontSize: 14, color: blackColor),
+                          style: TextStyle(fontSize: 14, color: blackColor),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -198,7 +216,7 @@ class _EditMatchProductState extends State<EditMatchProduct> {
                     children: ['all', 'man', 'woman'].map((gender) {
                       bool isSelected = selectedGender == gender;
                       return Container(
-                        width: 110,
+                        width: 105,
                         child: ChoiceChip(
                           showCheckmark: false,
                           label: Container(
@@ -237,22 +255,22 @@ class _EditMatchProductState extends State<EditMatchProduct> {
                       .make(),
                   const SizedBox(height: 8),
                   Wrap(
-                    spacing: 8,
+                    spacing: 6,
                     runSpacing: 1,
                     children: [
                       'formal',
                       'casual',
                       'seasonal',
                       'semi-formal',
-                      'special-activity',
-                      'work-from-home'
+                      'special-activity'
+                          'work-from-home'
                     ].map((situration) {
                       bool isSelected =
                           selectedSiturations.contains(situration);
                       return ChoiceChip(
                         showCheckmark: false,
                         label: Container(
-                          width: 140,
+                          width: 75,
                           alignment: Alignment.center,
                           child: Text(
                             capitalize(situration),
@@ -280,7 +298,7 @@ class _EditMatchProductState extends State<EditMatchProduct> {
                       );
                     }).toList(),
                   ).box.makeCentered(),
-                  const Text("Suitable for seasons")
+                  const Text("Collection")
                       .text
                       .size(16)
                       .color(blackColor)
@@ -288,20 +306,21 @@ class _EditMatchProductState extends State<EditMatchProduct> {
                       .make(),
                   const SizedBox(height: 8),
                   Wrap(
-                    spacing: 8,
-                    runSpacing: 2,
+                    spacing: 6,
+                    runSpacing: 1,
                     children: [
                       'summer',
                       'winter',
                       'autumn',
-                      'spring'
+                      'dinner',
+                      'everydaylook'
                     ].map((collection) {
                       bool isSelected =
                           selectedCollections.contains(collection);
                       return ChoiceChip(
                         showCheckmark: false,
                         label: Container(
-                          width: 140,
+                          width: 75,
                           alignment: Alignment.center,
                           child: Text(
                             capitalize(collection),
@@ -335,19 +354,19 @@ class _EditMatchProductState extends State<EditMatchProduct> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height: 10),
-                        const Text(
+                        SizedBox(height: 10),
+                        Text(
                           "Explain clothing matching",
                           style: TextStyle(
                             fontSize: 16,
                             fontFamily: medium,
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8),
                         TextField(
                           controller: explanationController,
                           maxLines: 3,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             hintText: 'Enter your explanation here',
                             border: OutlineInputBorder(
                               borderSide: BorderSide.none,
@@ -355,7 +374,7 @@ class _EditMatchProductState extends State<EditMatchProduct> {
                             filled: true,
                             fillColor: Color.fromRGBO(240, 240, 240, 1),
                           ),
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 14.0,
                             fontFamily: regular,
                             color: blackColor,
@@ -391,7 +410,7 @@ class _EditMatchProductState extends State<EditMatchProduct> {
 
     await FirebaseFirestore.instance
         .collection('usermixandmatch')
-        .doc(document.id)
+        .doc(widget.document.docId) // เปลี่ยนเป็น widget.document
         .update(userData)
         .then((_) {
       VxToast.show(context, msg: "Match updated successfully.");

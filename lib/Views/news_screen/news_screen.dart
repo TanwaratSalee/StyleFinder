@@ -811,7 +811,6 @@ class NewsScreen extends StatelessWidget {
                 var description = docData['description'] ?? '';
                 var views = docData['views'] ?? 0;
                 var gender = docData['gender'] ?? '';
-                var siturations = docData['siturations'] ?? '';
                 var postedBy = docData['user_id'] ?? '';
 
                 return GestureDetector(
@@ -833,7 +832,8 @@ class NewsScreen extends StatelessWidget {
                           collection: collections,
                           description: description,
                           gender: gender,
-                          posted_by: postedBy, situration: [],
+                          posted_by: postedBy,
+                          siturations: siturations,
                         ));
                   },
                   child: Container(

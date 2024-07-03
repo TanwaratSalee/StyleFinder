@@ -299,52 +299,59 @@ class _ProfileScreenState extends State<ProfileScreen>
                 var productDataLower =
                     snapshotLower.data() as Map<String, dynamic>;
 
-              var topImage = (productDataTop['imgs'] as List<dynamic>?)?.first ?? '';
-              var lowerImage = (productDataLower['imgs'] as List<dynamic>?)?.first ?? '';
-              var productNameTop = productDataTop['name'] ?? '';
-              var productNameLower = productDataLower['name'] ?? '';
-              var priceTop = productDataTop['price']?.toString() ?? '0';
-              var priceLower = productDataLower['price']?.toString() ?? '0';
-              var collections = docData['collection'] != null
-                  ? List<String>.from(docData['collection'])
-                  : [];
-              var description = docData['description'] ?? '';
-              var favoriteCount = (docData['favorite_count'] ?? 0) as int;
-              var gender = docData['gender'] ?? '';
-              var postedBy = docData['user_id'] ?? '';
+                var topImage =
+                    (productDataTop['imgs'] as List<dynamic>?)?.first ?? '';
+                var lowerImage =
+                    (productDataLower['imgs'] as List<dynamic>?)?.first ?? '';
+                var productNameTop = productDataTop['name'] ?? '';
+                var productNameLower = productDataLower['name'] ?? '';
+                var priceTop = productDataTop['price']?.toString() ?? '0';
+                var priceLower = productDataLower['price']?.toString() ?? '0';
+                var collections = docData['collection'] != null
+                    ? List<String>.from(docData['collection'])
+                    : [];
+                var situations = docData['siturations'] != null
+                    ? List<String>.from(docData['siturations'])
+                    : [];
+                var description = docData['description'] ?? '';
+                var favoriteCount = (docData['favorite_count'] ?? 0) as int;
+                var gender = docData['gender'] ?? '';
+                var postedBy = docData['user_id'] ?? '';
 
-              return GestureDetector(
-                onTap: () {
-                  Get.to(() => MatchPostsDetails(
-                        docId: doc.id,
-                        productName1: productNameTop,
-                        productName2: productNameLower,
-                        price1: priceTop,
-                        price2: priceLower,
-                        productImage1: topImage,
-                        productImage2: lowerImage,
-                        totalPrice: (int.parse(priceTop) + int.parse(priceLower)).toString(),
-                        vendorName1: 'Vendor Name 1',
-                        vendorName2: 'Vendor Name 2',
-                        vendor_id: doc.id,
-                        collection: collections,
-                        description: description,
-                        gender: gender,
-                        posted_by: postedBy,
-                        situration: [],
-                      ));
-                },
-                child: StatefulBuilder(
-                  builder: (context, setState) {
-                    return FutureBuilder<DocumentSnapshot>(
-                      future: FirebaseFirestore.instance
-                          .collection('usermixandmatch')
-                          .doc(doc.id)
-                          .get(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return Center(child: CircularProgressIndicator());
-                        }
+                return GestureDetector(
+                  onTap: () {
+                    Get.to(() => MatchPostsDetails(
+                          docId: doc.id,
+                          productName1: productNameTop,
+                          productName2: productNameLower,
+                          price1: priceTop,
+                          price2: priceLower,
+                          productImage1: topImage,
+                          productImage2: lowerImage,
+                          totalPrice:
+                              (int.parse(priceTop) + int.parse(priceLower))
+                                  .toString(),
+                          vendorName1: 'Vendor Name 1',
+                          vendorName2: 'Vendor Name 2',
+                          vendor_id: doc.id,
+                          collection: collections,
+                          description: description,
+                          gender: gender,
+                          posted_by: postedBy,
+                          siturations: situations, // ตรวจสอบ siturations
+                        ));
+                  },
+                  child: StatefulBuilder(
+                    builder: (context, setState) {
+                      return FutureBuilder<DocumentSnapshot>(
+                        future: FirebaseFirestore.instance
+                            .collection('usermixandmatch')
+                            .doc(doc.id)
+                            .get(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return Center(child: CircularProgressIndicator());
+                          }
 
                           var docData =
                               snapshot.data!.data() as Map<String, dynamic>;
