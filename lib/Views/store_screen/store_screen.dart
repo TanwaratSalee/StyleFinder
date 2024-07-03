@@ -76,12 +76,7 @@ class StoreScreen extends StatelessWidget {
                           ),
                           child: ClipOval(
                               child:
-                                  loadingIndicator() /* Image.asset(
-                              imgProfile,
-                              width: 120,
-                              height: 120,
-                              fit: BoxFit.cover,
-                            ), */
+                                  loadingIndicator() 
                               ),
                         );
                       } else if (snapshot.hasData) {

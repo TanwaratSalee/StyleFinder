@@ -313,7 +313,6 @@ class _EditMatchProductState extends State<EditMatchProduct> {
                       'winter',
                       'autumn',
                       'dinner',
-                      'everydaylook'
                     ].map((collection) {
                       bool isSelected =
                           selectedCollections.contains(collection);

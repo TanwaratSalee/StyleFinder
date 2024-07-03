@@ -33,10 +33,10 @@ class _MatchPostProductState extends State<MatchPostProduct> {
     bool isSelectedSpring = controller.selectedCollections.contains('spring');
 
     bool isSelectedFormal = controller.selectedSiturations.contains('formal');
-    bool isSelectedCasual = controller.selectedSiturations.contains('casual');
-    bool isSelectedSeasonal = controller.selectedSiturations.contains('seasonal');
     bool isSelectedSemiFormal = controller.selectedSiturations.contains('semi-formal');
+    bool isSelectedCasual = controller.selectedSiturations.contains('casual');
     bool isSelectedSpecialActivity = controller.selectedSiturations.contains('special-activity');
+    bool isSelectedSeasonal = controller.selectedSiturations.contains('seasonal');
     bool isSelectedWorkfromHome = controller.selectedSiturations.contains('work-from-home');
 
     return WillPopScope(
