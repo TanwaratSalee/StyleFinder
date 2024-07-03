@@ -6,7 +6,6 @@ import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter/services.dart';
 
-
 class AddressForm extends StatefulWidget {
   @override
   _AddressFormState createState() => _AddressFormState();
@@ -33,7 +32,8 @@ class _AddressFormState extends State<AddressForm> {
     String address = _addressController.text;
     String city = _cityController.text;
     String state = _stateController.text;
-    String postalCode = _postalCodeController.text.replaceAll(RegExp(r'\D'), '');
+    String postalCode =
+        _postalCodeController.text.replaceAll(RegExp(r'\D'), '');
     String phone = _phoneController.text.replaceAll(RegExp(r'\D'), '');
 
     if (firstname.isNotEmpty &&
@@ -151,16 +151,16 @@ class _AddressFormState extends State<AddressForm> {
   }
 }
 
-
 class PhoneNumberInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
     final newText = newValue.text;
 
     // สตริงที่ได้จากการลบตัวอักษรทั้งหมดที่ไม่ใช่ตัวเลขออก
     final digitsOnly = newText.replaceAll(RegExp(r'\D'), '');
 
-    // 3 หรือ 6 (i == 3 หรือ i == 6), จะเพิ่มขีดกลาง (-) 
+    // 3 หรือ 6 (i == 3 หรือ i == 6), จะเพิ่มขีดกลาง (-)
     String formatted = '';
     for (int i = 0; i < digitsOnly.length; i++) {
       if (i == 3 || i == 6) {

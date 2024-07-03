@@ -310,7 +310,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                 var collections = docData['collection'] != null
                     ? List<String>.from(docData['collection'])
                     : [];
-                var situations = docData['siturations'] != null
+                var siturations = docData['siturations'] != null
                     ? List<String>.from(docData['siturations'])
                     : [];
                 var description = docData['description'] ?? '';
@@ -338,7 +338,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                           description: description,
                           gender: gender,
                           posted_by: postedBy,
-                          siturations: situations, // ตรวจสอบ siturations
+                          siturations: siturations, // ตรวจสอบ siturations
                         ));
                   },
                   child: StatefulBuilder(
