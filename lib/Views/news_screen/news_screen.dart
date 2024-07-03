@@ -805,8 +805,8 @@ class NewsScreen extends StatelessWidget {
                 var collections = docData['collection'] != null
                     ? List<String>.from(docData['collection'])
                     : [];
-                var siturations = docData['siturations'] != null
-                    ? List<String>.from(docData['siturations'])
+                var situations = docData['situations'] != null
+                    ? List<String>.from(docData['situations'])
                     : [];
                 var description = docData['description'] ?? '';
                 var views = docData['views'] ?? 0;
@@ -833,7 +833,7 @@ class NewsScreen extends StatelessWidget {
                           description: description,
                           gender: gender,
                           posted_by: postedBy,
-                          siturations: siturations,
+                          situations: situations,
                         ));
                   },
                   child: Container(

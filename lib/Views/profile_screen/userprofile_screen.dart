@@ -174,8 +174,8 @@ class UserProfileScreen extends StatelessWidget {
                 var collections = docData['collection'] != null
                     ? List<String>.from(docData['collection'])
                     : [];
-                var siturations = docData['siturations'] != null
-                    ? List<String>.from(docData['siturations'])
+                var situations = docData['situations'] != null
+                    ? List<String>.from(docData['situations'])
                     : [];
                 var description = docData['description'] ?? '';
                 var views = docData['views'] ?? 0;
@@ -199,7 +199,7 @@ class UserProfileScreen extends StatelessWidget {
                           vendorName2: 'Vendor Name 2',
                           vendor_id: doc.id,
                           collection: collections,
-                          siturations: siturations,
+                          situations: situations,
                           description: description,
                           gender: gender,
                           posted_by: postedBy,
