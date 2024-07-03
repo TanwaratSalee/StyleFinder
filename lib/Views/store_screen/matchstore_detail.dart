@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
@@ -36,6 +35,7 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
   List<dynamic> collection = [];
   List<dynamic> siturations = [];
   String description = '';
+  String situation = '';
   String gender = '';
 
   @override
@@ -94,6 +94,8 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
             description = data['description'] ?? '';
             gender = data['gender'] ?? '';
             collection = data['collection'] ?? [];
+            situation = data['siturtion'] ?? [];
+           
           });
 
           listenToFavoriteStatus();
@@ -452,9 +454,7 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                                   ).text.fontFamily(medium).size(16).make(),
                                 ],
                               ),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              
                               Column(
                                 children: [
                                   Container(
@@ -489,55 +489,12 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                                 ],
                               ),
                               10.heightBox,
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: const Text(
-                                  'Suitable for work and situations',
-                                ).text.fontFamily(regular).size(16).make(),
-                              ),
-                              Column(
-                                children: [
-                                  const SizedBox(height: 10),
-                                  Container(
-                                    height: 40,
-                                    child: ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount:
-                                          siturations.length, // แก้ไขตรงนี้
-                                      itemBuilder: (context, index) {
-                                        String item = siturations[index]
-                                            .toString(); // แก้ไขตรงนี้
-                                        return Container(
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            "${item[0].toUpperCase()}${item.substring(1)}",
-                                          )
-                                              .text
-                                              .size(14)
-                                              .color(greyDark)
-                                              .fontFamily(medium)
-                                              .make(),
-                                        )
-                                            .box
-                                            .color(thinPrimaryApp)
-                                            .margin(const EdgeInsets.symmetric(
-                                                horizontal: 6))
-                                            .roundedLg
-                                            .padding(const EdgeInsets.symmetric(
-                                                horizontal: 24, vertical: 12))
-                                            .make();
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              10.heightBox,
                               Text(
-                                'Opportunity suitable for',
+                                'Suitable for seasons',
                               ).text.fontFamily(regular).size(16).make(),
                               Column(
                                 children: [
-                                  SizedBox(height: 10),
+                                  
                                   Container(
                                     height: 40,
                                     child: ListView.builder(
@@ -581,7 +538,7 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                               8.heightBox,
                               Container(
                                   width: double.infinity,
-                                  height: 100,
+                                  // height: 100,
                                   decoration: BoxDecoration(
                                     color: greyThin,
                                     borderRadius: BorderRadius.circular(10),

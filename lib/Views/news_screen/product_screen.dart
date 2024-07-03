@@ -369,6 +369,7 @@ class _ProductScreenState extends State<ProductScreen> {
                 var views = docData['views'] ?? 0;
                 var gender = docData['gender'] ?? '';
                 var postedBy = docData['vendor_id'] ?? docData['user_id'] ?? '';
+                var siturations = docData['siturations'] ?? '';
 
                 return GestureDetector(
                   onTap: () {
@@ -394,8 +395,7 @@ class _ProductScreenState extends State<ProductScreen> {
                             collection: collections,
                             description: description,
                             gender: gender,
-                            posted_by: postedBy,
-                            siturations: siturations,
+                            posted_by: postedBy, situration: [],
                           ));
                     }
                   },

@@ -107,20 +107,20 @@ class UserProfileScreen extends StatelessWidget {
 
         var limitedData = data.take(4).toList();
 
-        return GridView.builder(
-          padding: EdgeInsets.all(12),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 8,
-            mainAxisSpacing: 8,
-            childAspectRatio: 8 / 10,
-          ),
-          itemCount: limitedData.length,
-          itemBuilder: (context, index) {
-            var doc = limitedData[index];
-            var docData = doc.data() as Map<String, dynamic>;
-            var productIdTop = docData['product_id_top'] ?? '';
-            var productIdLower = docData['product_id_lower'] ?? '';
+      return GridView.builder(
+        padding: EdgeInsets.all(12),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 8,
+          mainAxisSpacing: 8,
+          childAspectRatio: 8 / 10,
+        ),
+        itemCount: limitedData.length,
+        itemBuilder: (context, index) {
+          var doc = limitedData[index];
+          var docData = doc.data() as Map<String, dynamic>;
+          var productIdTop = docData['product_id_top'] ?? '';
+          var productIdLower = docData['product_id_lower'] ?? '';
 
             return FutureBuilder<List<DocumentSnapshot>>(
               future: Future.wait([
