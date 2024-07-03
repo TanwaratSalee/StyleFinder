@@ -22,7 +22,7 @@ class MatchPostsDetails extends StatefulWidget {
   final String vendorName2;
   final String vendor_id;
   final List<dynamic> collection;
-  final List<dynamic> siturations;
+  final List<dynamic> situations;
   final String description;
   final String gender;
   final String posted_by;
@@ -40,7 +40,7 @@ class MatchPostsDetails extends StatefulWidget {
     required this.vendorName2,
     required this.vendor_id,
     required this.collection,
-    required this.siturations,
+    required this.situations,
     required this.description,
     required this.gender,
     required this.posted_by,
@@ -532,9 +532,9 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
                                 itemCount:
-                                    widget.siturations.length, // แก้ไขตรงนี้
+                                    widget.situations.length, // แก้ไขตรงนี้
                                 itemBuilder: (context, index) {
-                                  String item = widget.siturations[index]
+                                  String item = widget.situations[index]
                                       .toString(); // แก้ไขตรงนี้
                                   return Container(
                                     alignment: Alignment.center,

@@ -310,8 +310,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                 var collections = docData['collection'] != null
                     ? List<String>.from(docData['collection'])
                     : [];
-                var situations = docData['siturations'] != null
-                    ? List<String>.from(docData['siturations'])
+                var situations = docData['situations'] != null
+                    ? List<String>.from(docData['situations'])
                     : [];
                 var description = docData['description'] ?? '';
                 var favoriteCount = (docData['favorite_count'] ?? 0) as int;
@@ -338,7 +338,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                           description: description,
                           gender: gender,
                           posted_by: postedBy,
-                          siturations: situations, // ตรวจสอบ siturations
+                          situations: situations, // ตรวจสอบ situations
                         ));
                   },
                   child: StatefulBuilder(
@@ -907,7 +907,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                             vendorName2: 'Vendor Name 2',
                             vendor_id: doc.id,
                             collection: collections,
-                            siturations: situations,
+                            situations: situations,
                             description: description,
                             gender: gender,
                             posted_by: postedBy,

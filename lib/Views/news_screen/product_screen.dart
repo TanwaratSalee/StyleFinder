@@ -362,8 +362,8 @@ class _ProductScreenState extends State<ProductScreen> {
                 var collections = docData['collection'] != null
                     ? List<String>.from(docData['collection'])
                     : [];
-                var siturations = docData['siturations'] != null
-                    ? List<String>.from(docData['siturations'])
+                var situations = docData['situations'] != null
+                    ? List<String>.from(docData['situations'])
                     : [];
                 var description = docData['description'] ?? '';
                 var views = docData['views'] ?? 0;
@@ -395,7 +395,7 @@ class _ProductScreenState extends State<ProductScreen> {
                             description: description,
                             gender: gender,
                             posted_by: postedBy,
-                            siturations: siturations,
+                            situations: situations,
                           ));
                     }
                   },

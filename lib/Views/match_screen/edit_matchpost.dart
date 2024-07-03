@@ -17,7 +17,7 @@ class EditMatchProduct extends StatefulWidget {
 class _EditMatchProductState extends State<EditMatchProduct> {
   final TextEditingController explanationController = TextEditingController();
   List<String> selectedCollections = [];
-  List<String> selectedSiturations = [];
+  List<String> selectedSituations = [];
   String selectedGender = '';
   late DocumentSnapshot document;
   Map<String, dynamic> ItemsDetails = {};
@@ -35,7 +35,7 @@ class _EditMatchProductState extends State<EditMatchProduct> {
     super.initState();
     selectedGender = widget.document.gender;
     selectedCollections = List<String>.from(widget.document.collection);
-    selectedSiturations = List<String>.from(widget.document.siturations);
+    selectedSituations = List<String>.from(widget.document.situations);
     explanationController.text = widget.document.description;
     pIdTop = widget.document.docId; // Adjust this if needed
     pIdLower = widget.document.docId; // Adjust this if needed
@@ -247,7 +247,7 @@ class _EditMatchProductState extends State<EditMatchProduct> {
                     }).toList(),
                   ).box.makeCentered(),
                   const SizedBox(height: 15),
-                  const Text("Siturations")
+                  const Text("Situations")
                       .text
                       .size(16)
                       .color(blackColor)
@@ -266,7 +266,7 @@ class _EditMatchProductState extends State<EditMatchProduct> {
                           'work-from-home'
                     ].map((situration) {
                       bool isSelected =
-                          selectedSiturations.contains(situration);
+                          selectedSituations.contains(situration);
                       return ChoiceChip(
                         showCheckmark: false,
                         label: Container(
@@ -284,9 +284,9 @@ class _EditMatchProductState extends State<EditMatchProduct> {
                         onSelected: (selected) {
                           setState(() {
                             if (isSelected) {
-                              selectedSiturations.remove(situration);
+                              selectedSituations.remove(situration);
                             } else {
-                              selectedSiturations.add(situration);
+                              selectedSituations.add(situration);
                             }
                           });
                         },
@@ -402,7 +402,7 @@ class _EditMatchProductState extends State<EditMatchProduct> {
 
     Map<String, dynamic> userData = {
       'collection': selectedCollections,
-      'siturations': selectedSiturations,
+      'situations': selectedSituations,
       'gender': selectedGender,
       'description': explanationController.text,
     };
