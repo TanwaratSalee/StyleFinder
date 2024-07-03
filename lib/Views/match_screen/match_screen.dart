@@ -562,10 +562,15 @@ void showModalRightSheet({
     pageBuilder: (BuildContext context, Animation<double> animation,
         Animation<double> secondaryAnimation) {
       return Align(
-        alignment: Alignment.centerRight,
+        alignment: Alignment.bottomCenter,
         child: Material(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
           child: Container(
-            width: MediaQuery.of(context).size.width * 0.7,
+            height: MediaQuery.of(context).size.height * 0.75,
+            width: MediaQuery.of(context).size.width,
             child: builder(context),
           ),
         ),
@@ -575,7 +580,7 @@ void showModalRightSheet({
         Animation<double> secondaryAnimation, Widget child) {
       return SlideTransition(
         position: Tween<Offset>(
-          begin: const Offset(1.0, 0.0),
+          begin: const Offset(0.0, 1.0),
           end: Offset.zero,
         ).animate(animation),
         child: child,

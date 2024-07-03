@@ -71,7 +71,7 @@ class ProductController extends GetxController {
   var selectedColors = <int>[].obs;
   var selectedTypes = <String>[].obs;
   var selectedCollections = <String>[].obs;
-  var selectedSiturations = <String>[].obs;
+  var selectedSituations = <String>[].obs;
   var selectedVendorId = ''.obs;
   var vendors = <Map<String, dynamic>>[].obs;
 
@@ -81,6 +81,7 @@ class ProductController extends GetxController {
     List<int>? colors,
     List<String>? types,
     List<String>? collections,
+    List<String>? situations,
     String? vendorId,
   }) {
     selectedGender.value = gender ?? '';
@@ -88,6 +89,7 @@ class ProductController extends GetxController {
     selectedColors.assignAll(colors ?? []);
     selectedTypes.assignAll(types ?? []);
     selectedCollections.assignAll(collections ?? []);
+    selectedSituations.assignAll(situations ?? []);
     if (vendorId != null) {
       selectedVendorId.value = vendorId;
     }
@@ -155,6 +157,13 @@ class ProductController extends GetxController {
         products = products
             .where((product) => selectedCollections.any(
                 (collection) => product['collection'].contains(collection)))
+            .toList();
+      }
+
+      if (selectedSituations.isNotEmpty) {
+        products = products
+            .where((product) => selectedSituations
+                .any((situation) => product['situations'].contains(situation)))
             .toList();
       }
 
@@ -536,7 +545,7 @@ class ProductController extends GetxController {
             Map<String, dynamic> userData = {
               'user_id': currentUserUID,
               'collection': selectedCollections,
-              'siturations': selectedSiturations,
+              'situations': selectedSiturations,
               'gender': selectedGender,
               'description': explanation,
               'favorite_userid': FieldValue.arrayUnion([]),

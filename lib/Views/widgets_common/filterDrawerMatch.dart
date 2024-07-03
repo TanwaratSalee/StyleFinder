@@ -26,8 +26,14 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
   bool isSelectedSummer = false;
   bool isSelectedWinter = false;
   bool isSelectedAutumn = false;
-  bool isSelectedDinner = false;
-  bool isSelectedEveryday = false;
+  bool isSelectedSpring = false;
+
+  bool isSelectedFormal = false;
+  bool isSelectedCasual = false;
+  bool isSelectedSeasonal = false;
+  bool isSelectedSemiFormal = false;
+  bool isSelectedSpecialActivity = false;
+  bool isSelectedWorkFromHome = false;
 
   final selectedColorIndexes = <int>[].obs;
 
@@ -100,80 +106,16 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
           children: [
             35.heightBox,
             ListTile(
-              title: Text(
-                "Filter products",
-              ).text.size(24).makeCentered(),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text("Gender").text.fontFamily(regular).size(14).make(),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
-              child: Row(
-                children: [
-                  SizedBox(width: 5),
-                  buildFilterChip("All", isSelectedAll, (isSelected) {
-                    setState(() {
-                      isSelectedAll = isSelected;
-                      isSelectedMen = false;
-                      isSelectedWomen = false;
-                    });
-                  }),
-                  SizedBox(width: 5),
-                  buildFilterChip("Men", isSelectedMen, (isSelected) {
-                    setState(() {
-                      isSelectedAll = false;
-                      isSelectedMen = isSelected;
-                      isSelectedWomen = false;
-                    });
-                  }),
-                  SizedBox(width: 5),
-                  buildFilterChip("Women", isSelectedWomen, (isSelected) {
-                    setState(() {
-                      isSelectedAll = false;
-                      isSelectedMen = false;
-                      isSelectedWomen = isSelected;
-                    });
-                  }),
-                ],
+              title: Center(
+                child: Text(
+                  "Choose clothes that are appropriate for your situation.",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 5.0),
-              child: Text("Official Store")
-                  .text
-                  .fontFamily(regular)
-                  .size(14)
-                  .make(),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Obx(() {
-                if (controller.vendors.isEmpty) {
-                  return Center(child: Text('No vendors available'));
-                }
-                return Wrap(
-                  spacing: 10,
-                  children: controller.vendors.map((vendor) {
-                    final isSelected = controller.selectedVendorId.value ==
-                        vendor['vendor_id'];
-                    return buildFilterChip(
-                        vendor['name'] ?? 'Unknown', isSelected, (isSelected) {
-                      setState(() {
-                        if (isSelected) {
-                          controller.updateFilters(
-                              vendorId: vendor['vendor_id']);
-                        } else {
-                          controller.updateFilters(vendorId: '');
-                        }
-                      });
-                    });
-                  }).toList(),
-                );
-              }),
             ),
             5.heightBox,
             Padding(
@@ -269,46 +211,52 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
-              child: Text("Type of product")
+              child: Text("Suitable for work and situations")
                   .text
                   .fontFamily(regular)
                   .size(14)
                   .make(),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 3),
-              child: Center(
-                child: Wrap(
-                  spacing: 8,
-                  children: [
-                    buildFilterChip("Dress", isSelectedDress, (isSelected) {
-                      setState(() => isSelectedDress = isSelected);
-                    }),
-                    buildFilterChip("T-Shirts", isSelectedTShirts,
-                        (isSelected) {
-                      setState(() => isSelectedTShirts = isSelected);
-                    }),
-                    buildFilterChip("Suits", isSelectedSuits, (isSelected) {
-                      setState(() => isSelectedSuits = isSelected);
-                    }),
-                    buildFilterChip("Skirts", isSelectedSkirts, (isSelected) {
-                      setState(() => isSelectedSkirts = isSelected);
-                    }),
-                    buildFilterChip("Pants", isSelectedPants, (isSelected) {
-                      setState(() => isSelectedPants = isSelected);
-                    }),
-                    buildFilterChip("Jackets", isSelectedJackets, (isSelected) {
-                      setState(() => isSelectedJackets = isSelected);
-                    }),
-                  ],
-                ),
-              ).paddingOnly(left: 13),
-            ),
+            Center(
+              child: Wrap(
+                spacing: 5,
+                children: [
+                  buildFilterChip("Formal Attire", isSelectedFormal,
+                      (isSelected) {
+                    setState(() => isSelectedFormal = isSelected);
+                  }),
+                  buildFilterChip("Casual Attire", isSelectedCasual,
+                      (isSelected) {
+                    setState(() => isSelectedCasual = isSelected);
+                  }),
+                  buildFilterChip("Seasonal Attire", isSelectedSeasonal,
+                      (isSelected) {
+                    setState(() => isSelectedSeasonal = isSelected);
+                  }),
+                  buildFilterChip("Semi-Formal Attire ", isSelectedSemiFormal,
+                      (isSelected) {
+                    setState(() => isSelectedSemiFormal = isSelected);
+                  }),
+                  buildFilterChip(
+                      "Special Activity Attire ", isSelectedSpecialActivity,
+                      (isSelected) {
+                    setState(() => isSelectedSpecialActivity = isSelected);
+                  }),
+                  buildFilterChip("Work from Home ", isSelectedWorkFromHome,
+                      (isSelected) {
+                    setState(() => isSelectedWorkFromHome = isSelected);
+                  }),
+                ],
+              ),
+            ).paddingOnly(left: 6),
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
-              child:
-                  Text("Collection").text.fontFamily(regular).size(14).make(),
+              child: Text(" Suitable for seasons")
+                  .text
+                  .fontFamily(regular)
+                  .size(14)
+                  .make(),
             ),
             Center(
               child: Wrap(
@@ -323,11 +271,8 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
                   buildFilterChip("Autumn", isSelectedAutumn, (isSelected) {
                     setState(() => isSelectedAutumn = isSelected);
                   }),
-                  buildFilterChip("Dinner", isSelectedDinner, (isSelected) {
-                    setState(() => isSelectedDinner = isSelected);
-                  }),
-                  buildFilterChip("Everyday", isSelectedEveryday, (isSelected) {
-                    setState(() => isSelectedEveryday = isSelected);
+                  buildFilterChip("Spring ", isSelectedSpring, (isSelected) {
+                    setState(() => isSelectedSpring = isSelected);
                   }),
                 ],
               ),
@@ -357,8 +302,15 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
                     if (isSelectedSummer) 'summer',
                     if (isSelectedWinter) 'winter',
                     if (isSelectedAutumn) 'autumn',
-                    if (isSelectedDinner) 'dinner',
-                    if (isSelectedEveryday) 'everydaylook',
+                    if (isSelectedSpring) 'spring',
+                  ],
+                  situations: [
+                    if (isSelectedFormal) 'formal',
+                    if (isSelectedCasual) 'casual',
+                    if (isSelectedSeasonal) 'seasonal',
+                    if (isSelectedSemiFormal) 'semi-formal',
+                    if (isSelectedSpecialActivity) 'specialactivity',
+                    if (isSelectedWorkFromHome) 'workfromhome',
                   ],
                 );
 
