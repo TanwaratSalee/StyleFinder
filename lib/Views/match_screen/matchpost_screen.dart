@@ -32,12 +32,12 @@ class _MatchPostProductState extends State<MatchPostProduct> {
     bool isSelectedAutumn = controller.selectedCollections.contains('autumn');
     bool isSelectedSpring = controller.selectedCollections.contains('spring');
 
-    bool isSelectedFormal = controller.selectedSiturations.contains('formal');
-    bool isSelectedSemiFormal = controller.selectedSiturations.contains('semi-formal');
-    bool isSelectedCasual = controller.selectedSiturations.contains('casual');
-    bool isSelectedSpecialActivity = controller.selectedSiturations.contains('special-activity');
-    bool isSelectedSeasonal = controller.selectedSiturations.contains('seasonal');
-    bool isSelectedWorkfromHome = controller.selectedSiturations.contains('work-from-home');
+    bool isSelectedFormal = controller.selectedSituations.contains('formal');
+    bool isSelectedSemiFormal = controller.selectedSituations.contains('semi-formal');
+    bool isSelectedCasual = controller.selectedSituations.contains('casual');
+    bool isSelectedSpecialActivity = controller.selectedSituations.contains('special-activity');
+    bool isSelectedSeasonal = controller.selectedSituations.contains('seasonal');
+    bool isSelectedWorkfromHome = controller.selectedSituations.contains('work-from-home');
 
     return WillPopScope(
       onWillPop: () async {
@@ -64,7 +64,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                     context,
                     controller.selectedGender.value,
                     List.from(controller.selectedCollections),
-                    List.from(controller.selectedSiturations),
+                    List.from(controller.selectedSituations),
                     explanationController.text,
                     widget.topProduct['product_id'],
                     widget.lowerProduct['product_id'],
@@ -196,37 +196,37 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                               buildFilterChip("Formal Attire", isSelectedFormal, (isSelected) {
                                 setState(() {
                                   isSelectedFormal = isSelected;
-                                  updateSiturations('formal', isSelected);
+                                  updateSituations('formal', isSelected);
                                 });
                               }),
                               buildFilterChip("Casual Attire", isSelectedCasual, (isSelected) {
                                 setState(() {
                                   isSelectedCasual = isSelected;
-                                  updateSiturations('casual', isSelected);
+                                  updateSituations('casual', isSelected);
                                 });
                               }),
                               buildFilterChip("Seasonal Attire", isSelectedSeasonal, (isSelected) {
                                 setState(() {
                                   isSelectedSeasonal = isSelected;
-                                  updateSiturations('seasonal', isSelected);
+                                  updateSituations('seasonal', isSelected);
                                 });
                               }),
                               buildFilterChip("Semi-Formal Attire", isSelectedSemiFormal, (isSelected) {
                                 setState(() {
                                   isSelectedSemiFormal = isSelected;
-                                  updateSiturations('semi-formal', isSelected);
+                                  updateSituations('semi-formal', isSelected);
                                 });
                               }),
                               buildFilterChip("Special Activity Attire", isSelectedSpecialActivity, (isSelected) {
                                 setState(() {
                                   isSelectedSpecialActivity = isSelected;
-                                  updateSiturations('special-activity', isSelected);
+                                  updateSituations('special-activity', isSelected);
                                 });
                               }),
                               buildFilterChip("Work from Home", isSelectedWorkfromHome, (isSelected) {
                                 setState(() {
                                   isSelectedWorkfromHome = isSelected;
-                                  updateSiturations('work-from-home', isSelected);
+                                  updateSituations('work-from-home', isSelected);
                                 });
                               }),
                             ],
@@ -299,7 +299,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                         SizedBox(height: 8),
                         TextField(
                           controller: explanationController,
-                          maxLines: 3,
+                          maxLines: null,
                           decoration: InputDecoration(
                             hintText: 'Enter your explanation here',
                             border: OutlineInputBorder(
@@ -374,7 +374,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
     setState(() {
       controller.selectedGender.value = '';
       controller.selectedCollections.clear();
-      controller.selectedSiturations.clear();
+      controller.selectedSituations.clear();
       explanationController.clear();
     });
   }
@@ -389,12 +389,12 @@ class _MatchPostProductState extends State<MatchPostProduct> {
     });
   }
 
-  void updateSiturations(String situration, bool isSelected) {
+  void updateSituations(String situration, bool isSelected) {
     setState(() {
       if (isSelected) {
-        controller.selectedSiturations.add(situration);
+        controller.selectedSituations.add(situration);
       } else {
-        controller.selectedSiturations.remove(situration);
+        controller.selectedSituations.remove(situration);
       }
     });
   }

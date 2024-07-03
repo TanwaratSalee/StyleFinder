@@ -34,7 +34,7 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
   String vendorIdTop = '';
   String vendorIdLower = '';
   List<dynamic> collection = [];
-  List<dynamic> siturations = [];
+  List<dynamic> situations = [];
   String description = '';
   String gender = '';
 
@@ -503,9 +503,9 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                                     child: ListView.builder(
                                       scrollDirection: Axis.horizontal,
                                       itemCount:
-                                          siturations.length, // แก้ไขตรงนี้
+                                          situations.length, // แก้ไขตรงนี้
                                       itemBuilder: (context, index) {
-                                        String item = siturations[index]
+                                        String item = situations[index]
                                             .toString(); // แก้ไขตรงนี้
                                         return Container(
                                           alignment: Alignment.center,
