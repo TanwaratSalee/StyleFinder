@@ -64,33 +64,32 @@ class _ProductScreenState extends State<ProductScreen> {
       child: Column(
         children: <Widget>[
           GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SearchScreenPage()),
-                        );
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Search')
-                              .text
-                              .fontFamily(medium)
-                              .color(greyDark)
-                              .size(16)
-                              .make(),
-                          // 200.widthBox,
-                          Icon(Icons.search, color: greyDark),
-                        ],
-                      )
-                          .box
-                          .padding(EdgeInsets.symmetric(horizontal: 16, vertical: 10))
-                          .margin(EdgeInsets.symmetric(horizontal: 28,vertical: 8))
-                          .border(color: greyLine)
-                          .roundedLg
-                          .make(),
-                    ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SearchScreenPage()),
+              );
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Search')
+                    .text
+                    .fontFamily(medium)
+                    .color(greyDark)
+                    .size(16)
+                    .make(),
+                // 200.widthBox,
+                Icon(Icons.search, color: greyDark),
+              ],
+            )
+                .box
+                .padding(EdgeInsets.symmetric(horizontal: 16, vertical: 10))
+                .margin(EdgeInsets.symmetric(horizontal: 28, vertical: 8))
+                .border(color: greyLine)
+                .roundedLg
+                .make(),
+          ),
           TabBar(
             labelStyle: const TextStyle(
                 fontSize: 15, fontFamily: regular, color: greyDark),
@@ -194,7 +193,7 @@ class _ProductScreenState extends State<ProductScreen> {
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               mainAxisSpacing: 15,
-                crossAxisSpacing: 15,
+              crossAxisSpacing: 15,
               mainAxisExtent: 260),
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (BuildContext context, int index) {
@@ -279,7 +278,7 @@ class _ProductScreenState extends State<ProductScreen> {
   }
 
   Widget buildMatchTab() {
-  return StreamBuilder<List<QuerySnapshot>>(
+    return StreamBuilder<List<QuerySnapshot>>(
       stream: CombineLatestStream.list([
         FirebaseFirestore.instance
             .collection('storemixandmatchs')
@@ -302,7 +301,8 @@ class _ProductScreenState extends State<ProductScreen> {
 
         if (combinedData.isEmpty) {
           return Center(
-            child: Text("No posts available!", style: TextStyle(color: greyDark)),
+            child:
+                Text("No posts available!", style: TextStyle(color: greyDark)),
           );
         }
 
@@ -362,6 +362,9 @@ class _ProductScreenState extends State<ProductScreen> {
                 var collections = docData['collection'] != null
                     ? List<String>.from(docData['collection'])
                     : [];
+                var siturations = docData['siturations'] != null
+                    ? List<String>.from(docData['siturations'])
+                    : [];
                 var description = docData['description'] ?? '';
                 var views = docData['views'] ?? 0;
                 var gender = docData['gender'] ?? '';
@@ -371,25 +374,28 @@ class _ProductScreenState extends State<ProductScreen> {
                   onTap: () {
                     if (storeData.contains(doc)) {
                       Get.to(() => MatchStoreDetailScreen(
-                        documentId: doc.id,
-                      ));
+                            documentId: doc.id,
+                          ));
                     } else {
                       Get.to(() => MatchPostsDetails(
-                            docId: doc.id,  
+                            docId: doc.id,
                             productName1: productNameTop,
                             productName2: productNameLower,
                             price1: priceTop,
                             price2: priceLower,
                             productImage1: topImage,
                             productImage2: lowerImage,
-                            totalPrice: (int.parse(priceTop) + int.parse(priceLower)).toString(),
-                            vendorName1: 'Vendor Name 1', 
-                            vendorName2: 'Vendor Name 2', 
+                            totalPrice:
+                                (int.parse(priceTop) + int.parse(priceLower))
+                                    .toString(),
+                            vendorName1: 'Vendor Name 1',
+                            vendorName2: 'Vendor Name 2',
                             vendor_id: doc.id,
                             collection: collections,
                             description: description,
                             gender: gender,
-                            posted_by: postedBy, situration: [],
+                            posted_by: postedBy,
+                            siturations: siturations,
                           ));
                     }
                   },
@@ -508,7 +514,8 @@ class _ProductScreenState extends State<ProductScreen> {
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
       barrierColor: greyDark,
       transitionDuration: Duration(milliseconds: 200),
-      pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+      pageBuilder: (BuildContext context, Animation<double> animation,
+          Animation<double> secondaryAnimation) {
         return Align(
           alignment: Alignment.centerRight,
           child: Material(
@@ -519,7 +526,8 @@ class _ProductScreenState extends State<ProductScreen> {
           ),
         );
       },
-      transitionBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
+      transitionBuilder: (BuildContext context, Animation<double> animation,
+          Animation<double> secondaryAnimation, Widget child) {
         return SlideTransition(
           position: Tween<Offset>(
             begin: const Offset(1.0, 0.0),

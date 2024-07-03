@@ -34,6 +34,7 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
   String vendorIdTop = '';
   String vendorIdLower = '';
   List<dynamic> collection = [];
+  List<dynamic> siturations = [];
   String description = '';
   String gender = '';
 
@@ -480,6 +481,49 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                                                 horizontal: 6))
                                             .roundedLg
                                             .padding(EdgeInsets.symmetric(
+                                                horizontal: 24, vertical: 12))
+                                            .make();
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              10.heightBox,
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: const Text(
+                                  'Suitable for work and situations',
+                                ).text.fontFamily(regular).size(16).make(),
+                              ),
+                              Column(
+                                children: [
+                                  const SizedBox(height: 10),
+                                  Container(
+                                    height: 40,
+                                    child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount:
+                                          siturations.length, // แก้ไขตรงนี้
+                                      itemBuilder: (context, index) {
+                                        String item = siturations[index]
+                                            .toString(); // แก้ไขตรงนี้
+                                        return Container(
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            "${item[0].toUpperCase()}${item.substring(1)}",
+                                          )
+                                              .text
+                                              .size(14)
+                                              .color(greyDark)
+                                              .fontFamily(medium)
+                                              .make(),
+                                        )
+                                            .box
+                                            .color(thinPrimaryApp)
+                                            .margin(const EdgeInsets.symmetric(
+                                                horizontal: 6))
+                                            .roundedLg
+                                            .padding(const EdgeInsets.symmetric(
                                                 horizontal: 24, vertical: 12))
                                             .make();
                                       },

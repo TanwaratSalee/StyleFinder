@@ -35,39 +35,55 @@ class _EditMatchProductState extends State<EditMatchProduct> {
     super.initState();
     selectedGender = widget.document.gender;
     selectedCollections = List<String>.from(widget.document.collection);
-    selectedSiturations = List<String>.from(widget.document.situration);
+    selectedSiturations = List<String>.from(widget.document.siturations);
     explanationController.text = widget.document.description;
     pIdTop = widget.document.docId; // Adjust this if needed
     pIdLower = widget.document.docId; // Adjust this if needed
-    fetchItemsDetails();
+    fetchItemsDetails(widget.document.docId);
   }
 
-  Future<void> fetchItemsDetails() async {
-    final topSnapshot = await FirebaseFirestore.instance
-        .collection('products')
-        .doc(pIdTop)
-        .get();
-    final lowerSnapshot = await FirebaseFirestore.instance
-        .collection('products')
-        .doc(pIdLower)
-        .get();
+  Future<void> fetchItemsDetails(String docId) async {
+    try {
+      var docSnapshot = await FirebaseFirestore.instance
+          .collection('usermixandmatch')
+          .doc(docId)
+          .get();
 
-    if (topSnapshot.exists) {
-      setState(() {
-        topProductImg = topSnapshot.data()!['imgs'][0];
-        topProductName = topSnapshot.data()!['name'];
-        topProductPrice =
-            double.tryParse(topSnapshot.data()!['price'].toString()) ?? 0.0;
-      });
-    }
+      if (docSnapshot.exists) {
+        var docData = docSnapshot.data() as Map<String, dynamic>;
+        var productIdTop = docData['product_id_top'];
+        var productIdLower = docData['product_id_lower'];
 
-    if (lowerSnapshot.exists) {
-      setState(() {
-        lowerProductImg = lowerSnapshot.data()!['imgs'][0];
-        lowerProductName = lowerSnapshot.data()!['name'];
-        lowerProductPrice =
-            double.tryParse(lowerSnapshot.data()!['price'].toString()) ?? 0.0;
-      });
+        var topSnapshot = await FirebaseFirestore.instance
+            .collection('products')
+            .doc(productIdTop)
+            .get();
+        var lowerSnapshot = await FirebaseFirestore.instance
+            .collection('products')
+            .doc(productIdLower)
+            .get();
+
+        if (topSnapshot.exists) {
+          setState(() {
+            topProductImg = topSnapshot.data()!['imgs'][0];
+            topProductName = topSnapshot.data()!['name'];
+            topProductPrice =
+                double.tryParse(topSnapshot.data()!['price'].toString()) ?? 0.0;
+          });
+        }
+
+        if (lowerSnapshot.exists) {
+          setState(() {
+            lowerProductImg = lowerSnapshot.data()!['imgs'][0];
+            lowerProductName = lowerSnapshot.data()!['name'];
+            lowerProductPrice =
+                double.tryParse(lowerSnapshot.data()!['price'].toString()) ??
+                    0.0;
+          });
+        }
+      }
+    } catch (e) {
+      print('Error fetching items details: $e');
     }
   }
 
@@ -386,8 +402,6 @@ class _EditMatchProductState extends State<EditMatchProduct> {
     }
 
     Map<String, dynamic> userData = {
-      'product_id_top': pIdTop,
-      'product_id_lower': pIdLower,
       'collection': selectedCollections,
       'siturations': selectedSiturations,
       'gender': selectedGender,
@@ -396,7 +410,7 @@ class _EditMatchProductState extends State<EditMatchProduct> {
 
     await FirebaseFirestore.instance
         .collection('usermixandmatch')
-        .doc(document.id)
+        .doc(widget.document.docId) // เปลี่ยนเป็น widget.document
         .update(userData)
         .then((_) {
       VxToast.show(context, msg: "Match updated successfully.");

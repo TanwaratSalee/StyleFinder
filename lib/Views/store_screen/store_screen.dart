@@ -75,13 +75,14 @@ class StoreScreen extends StatelessWidget {
                             border: Border.all(color: greyLine, width: 3),
                           ),
                           child: ClipOval(
-                            child: loadingIndicator()/* Image.asset(
+                              child:
+                                  loadingIndicator() /* Image.asset(
                               imgProfile,
                               width: 120,
                               height: 120,
                               fit: BoxFit.cover,
                             ), */
-                          ),
+                              ),
                         );
                       } else if (snapshot.hasData) {
                         return Container(
@@ -109,13 +110,14 @@ class StoreScreen extends StatelessWidget {
                             border: Border.all(color: greyLine, width: 3),
                           ),
                           child: ClipOval(
-                            child: loadingIndicator()/* Image.asset(
+                              child:
+                                  loadingIndicator() /* Image.asset(
                               imgProfile,
                               width: 120,
                               height: 120,
                               fit: BoxFit.cover,
                             ), */
-                          ),
+                              ),
                         );
                       }
                     },
@@ -450,7 +452,7 @@ class StoreScreen extends StatelessWidget {
             crossAxisSpacing: 12,
             mainAxisSpacing: 8.5,
             childAspectRatio: 5.7 / 7,
-            ),
+          ),
           itemCount: products.length,
           itemBuilder: (BuildContext context, int index) {
             var product = products[index].data() as Map<String, dynamic>;
@@ -479,12 +481,14 @@ class StoreScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     ClipRRect(
-                       borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(14),
-                                  topLeft: Radius.circular(14),
-                                ),
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(14),
+                        topLeft: Radius.circular(14),
+                      ),
                       child: Image.network(productImage,
-                          fit: BoxFit.cover, width: double.infinity, height: 180),
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: 180),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8),
@@ -505,12 +509,7 @@ class StoreScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-              )
-                  .box
-                  .color(whiteColor)
-                  .border(color: greyLine)
-                  .rounded
-                  .make(),
+              ).box.color(whiteColor).border(color: greyLine).rounded.make(),
             );
           },
         );
@@ -571,49 +570,53 @@ class StoreScreen extends StatelessWidget {
               },
               child: Column(
                 children: [
-                   Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    ClipRRect(
-                      borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(14),
-                                  topLeft: Radius.circular(14),
-                                ),
-                      child: Image.network(
-                        productImage,
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        height: 180,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      ClipRRect(
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(14),
+                          topLeft: Radius.circular(14),
+                        ),
+                        child: Image.network(
+                          productImage,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: 180,
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          3.heightBox,
-                          Text(
-                            productName,
-                            style: const TextStyle(
-                              fontFamily: medium,
-                              fontSize: 16,
+                      Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            3.heightBox,
+                            Text(
+                              productName,
+                              style: const TextStyle(
+                                fontFamily: medium,
+                                fontSize: 16,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Text(
-                            "${NumberFormat('#,##0').format(double.parse(
-                              '$price',
-                            ).toInt())} Bath",
-                            style: const TextStyle(
-                                color: greyDark, fontFamily: regular),
-                          ),
-                        ],
+                            Text(
+                              "${NumberFormat('#,##0').format(double.parse(
+                                '$price',
+                              ).toInt())} Bath",
+                              style: const TextStyle(
+                                  color: greyDark, fontFamily: regular),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ).box.border(color: greyLine).rounded.color(whiteColor).make(),
-              
+                    ],
+                  )
+                      .box
+                      .border(color: greyLine)
+                      .rounded
+                      .color(whiteColor)
+                      .make(),
                 ],
               ),
             );
