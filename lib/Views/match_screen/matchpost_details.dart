@@ -603,6 +603,35 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
     );
   }
 
+  void updateFavoriteCount() async {
+    await FirebaseFirestore.instance
+        .collection('usermixandmatch')
+        .doc(widget.docId)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        var doc = documentSnapshot.data() as Map<String, dynamic>;
+        List<dynamic> favoriteUsers = doc['favorite_userid'];
+        int favoriteCount = favoriteUsers.length;
+
+        FirebaseFirestore.instance
+            .collection('usermixandmatch')
+            .doc(widget.docId)
+            .update({
+          'favorite_count': favoriteCount,
+        }).then((_) {
+          print('Favorite count updated successfully.');
+        }).catchError((error) {
+          print('Error updating favorite count: $error');
+        });
+      } else {
+        print('Document not found for updating favorite count');
+      }
+    }).catchError((error) {
+      print('Error fetching document for updating favorite count: $error');
+    });
+  }
+
   void addToFavorites() async {
     String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
     await FirebaseFirestore.instance
@@ -612,6 +641,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
       'favorite_userid': FieldValue.arrayUnion([currentUserUID])
     }).then((_) {
       updateIsFav(true);
+      updateFavoriteCount(); // เรียกฟังก์ชันนี้หลังจากเพิ่มผู้ใช้ใน favorite
     }).catchError((error) {
       print('Error adding to favorites: $error');
     });
@@ -626,6 +656,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
       'favorite_userid': FieldValue.arrayRemove([currentUserUID])
     }).then((_) {
       updateIsFav(false);
+      updateFavoriteCount(); // เรียกฟังก์ชันนี้หลังจากเอาผู้ใช้ออกจาก favorite
     }).catchError((error) {
       print('Error removing from favorites: $error');
     });
