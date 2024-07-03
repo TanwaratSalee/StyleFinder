@@ -1,7 +1,4 @@
-import 'dart:math';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+
 import 'package:flutter_finalproject/Views/match_screen/matchpost_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/widgets_common/appbar_ontop.dart';
@@ -204,7 +201,6 @@ class _MatchScreenState extends State<MatchScreen> {
     final productImages = product['imgs'] ?? [''];
     final productColors = product['colors'] ?? [];
 
-    // Find the closest color
     final colorValue = productColors.isNotEmpty
         ? findClosestColor(productColors[0])
         : 0xFF000000;

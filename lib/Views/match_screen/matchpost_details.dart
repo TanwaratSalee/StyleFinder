@@ -422,14 +422,6 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                                                 fit: BoxFit.cover,
                                               )
                                             : loadingIndicator()),
-                                    // ClipOval(
-                                    //   child: Image.network(
-                                    //     postedUserImageUrl!,
-                                    //     width: 50,
-                                    //     height: 50,
-                                    //     fit: BoxFit.cover,
-                                    //   ),
-                                    // ),
                                   )
                                       .box
                                       .border(color: greyLine, width: 1.5)

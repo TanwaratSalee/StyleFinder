@@ -321,7 +321,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                         SizedBox(height: 8),
                         TextField(
                           controller: explanationController,
-                          maxLines: 3,
+                          maxLines: null,
                           decoration: InputDecoration(
                             hintText: 'Enter your explanation here',
                             border: OutlineInputBorder(

@@ -259,11 +259,11 @@ class _EditMatchProductState extends State<EditMatchProduct> {
                     runSpacing: 1,
                     children: [
                       'formal',
-                      'casual',
-                      'seasonal',
                       'semi-formal',
+                      'casual',
                       'special-activity'
-                          'work-from-home'
+                      'seasonal',
+                      'work-from-home'
                     ].map((situration) {
                       bool isSelected =
                           selectedSituations.contains(situration);

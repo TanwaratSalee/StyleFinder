@@ -518,7 +518,7 @@ class ProductController extends GetxController {
       BuildContext context,
       String selectedGender,
       List<String> selectedCollections,
-      List<String> selectedSiturations,
+      List<String> selectedSituations,
       String explanation,
       String productIdTop,
       String productIdLower) {
@@ -545,7 +545,7 @@ class ProductController extends GetxController {
             Map<String, dynamic> userData = {
               'user_id': currentUserUID,
               'collection': selectedCollections,
-              'situations': selectedSiturations,
+              'situations': selectedSituations,
               'gender': selectedGender,
               'description': explanation,
               'favorite_userid': FieldValue.arrayUnion([]),
