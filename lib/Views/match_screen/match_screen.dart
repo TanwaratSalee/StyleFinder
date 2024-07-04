@@ -588,7 +588,7 @@ void showModalRightSheet({
               topRight: Radius.circular(20),
             ),
             child: Container(
-              height: MediaQuery.of(context).size.height * 0.80,
+              height: MediaQuery.of(context).size.height * 0.85,
               width: MediaQuery.of(context).size.width,
               color: Colors.white, 
               child: builder(context),

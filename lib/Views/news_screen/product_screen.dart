@@ -26,10 +26,21 @@ class _ProductScreenState extends State<ProductScreen> {
   final TextEditingController searchController = TextEditingController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final HomeController controller = Get.put(HomeController());
+  late final Stream<List<QuerySnapshot>> combinedStream;
 
   @override
   void initState() {
     super.initState();
+    combinedStream = CombineLatestStream.list([
+      FirebaseFirestore.instance
+          .collection('storemixandmatchs')
+          .orderBy('views', descending: true)
+          .snapshots(),
+      FirebaseFirestore.instance
+          .collection('usermixandmatch')
+          .orderBy('views', descending: true)
+          .snapshots(),
+    ]);
   }
 
   @override
@@ -79,7 +90,6 @@ class _ProductScreenState extends State<ProductScreen> {
                     .color(greyDark)
                     .size(16)
                     .make(),
-                // 200.widthBox,
                 Icon(Icons.search, color: greyDark),
               ],
             )
@@ -279,16 +289,7 @@ class _ProductScreenState extends State<ProductScreen> {
 
   Widget buildMatchTab() {
     return StreamBuilder<List<QuerySnapshot>>(
-      stream: CombineLatestStream.list([
-        FirebaseFirestore.instance
-            .collection('storemixandmatchs')
-            .orderBy('views', descending: true)
-            .snapshots(),
-        FirebaseFirestore.instance
-            .collection('usermixandmatch')
-            .orderBy('views', descending: true)
-            .snapshots(),
-      ]),
+      stream: combinedStream,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(child: CircularProgressIndicator());
@@ -306,7 +307,6 @@ class _ProductScreenState extends State<ProductScreen> {
           );
         }
 
-        // Shuffle data to randomize
         combinedData.shuffle(Random());
 
         return GridView.builder(
