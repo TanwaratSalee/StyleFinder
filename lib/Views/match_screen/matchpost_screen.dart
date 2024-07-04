@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_finalproject/Views/widgets_common/situationEx.dart';
 import 'package:get/get.dart';
 import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
@@ -33,11 +34,15 @@ class _MatchPostProductState extends State<MatchPostProduct> {
     bool isSelectedSpring = controller.selectedCollections.contains('spring');
 
     bool isSelectedFormal = controller.selectedSituations.contains('formal');
-    bool isSelectedSemiFormal = controller.selectedSituations.contains('semi-formal');
+    bool isSelectedSemiFormal =
+        controller.selectedSituations.contains('semi-formal');
     bool isSelectedCasual = controller.selectedSituations.contains('casual');
-    bool isSelectedSpecialActivity = controller.selectedSituations.contains('special-activity');
-    bool isSelectedSeasonal = controller.selectedSituations.contains('seasonal');
-    bool isSelectedWorkfromHome = controller.selectedSituations.contains('work-from-home');
+    bool isSelectedSpecialActivity =
+        controller.selectedSituations.contains('special-activity');
+    bool isSelectedSeasonal =
+        controller.selectedSituations.contains('seasonal');
+    bool isSelectedWorkfromHome =
+        controller.selectedSituations.contains('work-from-home');
 
     return WillPopScope(
       onWillPop: () async {
@@ -186,9 +191,29 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(height: 10),
-                        Text(
-                          "Suitable for work and situations",
-                          style: TextStyle(fontSize: 16, fontFamily: medium),
+                        Row(
+                          children: [
+                            Text(
+                              "Suitable for work and situations",
+                              style:
+                                  TextStyle(fontSize: 16, fontFamily: medium),
+                            ),
+                            10.widthBox,
+                            GestureDetector(
+                              onTap: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (context) {
+                                    return SituationsList();
+                                  },
+                                );
+                              },
+                              child: Image.asset(
+                                icInfo,
+                                width: 15,
+                              ),
+                            ),
+                          ],
                         ),
                         SizedBox(height: 8),
                         Center(
@@ -203,7 +228,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                                   updateSituations('formal', isSelected);
                                 });
                               }),
-                               buildFilterChip(
+                              buildFilterChip(
                                   "Semi-Formal Attire", isSelectedSemiFormal,
                                   (isSelected) {
                                 setState(() {

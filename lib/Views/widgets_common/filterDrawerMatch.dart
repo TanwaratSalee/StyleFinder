@@ -1,3 +1,4 @@
+import 'package:flutter_finalproject/Views/widgets_common/situationEx.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
 import 'package:get/get.dart';
@@ -117,7 +118,7 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
                 ),
               ),
             ),
-            5.heightBox,
+            15.heightBox,
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 16,
@@ -163,7 +164,7 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
                 ),
               ),
             ),
-            5.heightBox,
+            15.heightBox,
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
@@ -207,15 +208,33 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
                 ),
               ),
             ),
-            5.heightBox,
+            15.heightBox,
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
-              child: Text("Suitable for work and situations")
-                  .text
-                  .fontFamily(regular)
-                  .size(14)
-                  .make(),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
+              child: Row(
+                            children: [
+                              Text(
+                                "Suitable for work and situations",
+                                style:
+                                    TextStyle(fontSize: 14, fontFamily: regular),
+                              ),
+                              10.widthBox,
+                              GestureDetector(
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    builder: (context) {
+                                      return SituationsList();
+                                    },
+                                  );
+                                },
+                                child: Image.asset(
+                                  icInfo,
+                                  width: 15,
+                                ),
+                              ),
+                            ],
+                          ),
             ),
             Center(
               child: Wrap(

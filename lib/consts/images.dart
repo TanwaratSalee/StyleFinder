@@ -153,3 +153,4 @@ const String icPost = 'assets/icons/iconpost.png';
 const String icTrash = "assets/icons/icTrash.png";
 const String imgPaymentSuccful = 'assets/images/imgPaymentsuccful.png';
 const String imgVerify = 'assets/images/imgVerify.png';
+const String icInfo = 'assets/images/icInfo.png';
