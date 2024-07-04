@@ -1,4 +1,3 @@
-
 import 'package:flutter_finalproject/Views/match_screen/matchpost_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/widgets_common/appbar_ontop.dart';
@@ -443,8 +442,8 @@ void showMatchReasonModal(
   final int? topPrimaryColor = matchResult['topClosestColor'];
   final int? lowerPrimaryColor = matchResult['lowerClosestColor'];
 
-  print('Top Colors: ${matchResult['topClosestColor']}'); 
-  print('Lower Colors: ${matchResult['lowerClosestColor']}'); 
+  print('Top Colors: ${matchResult['topClosestColor']}');
+  print('Lower Colors: ${matchResult['lowerClosestColor']}');
 
   String reason;
   String additionalReason = '';
@@ -464,28 +463,44 @@ void showMatchReasonModal(
     Map<int, String> recommendedColors = getRecommendedColors(dayOfWeek.value);
     if (topPrimaryColor == lowerPrimaryColor &&
         recommendedColors.containsKey(topPrimaryColor)) {
-      colorReasonsWidgets.add(
+      colorReasonsWidgets.addAll([
         Text(
-          'You born on ${dayOfWeek.value}: ${recommendedColors[topPrimaryColor]!}',
-          style: TextStyle(fontSize: 14),
+          'You were born on ${dayOfWeek.value} and the top and lower color is:',
+          style: TextStyle(fontSize: 14, fontFamily: medium),
         ),
-      );
+        Text(
+          recommendedColors[topPrimaryColor]!,
+          style: TextStyle(fontSize: 12),
+        ),
+      ]);
     } else {
-      if (recommendedColors.containsKey(topPrimaryColor)) {
-        colorReasonsWidgets.add(
+      if (recommendedColors.containsKey(lowerPrimaryColor)) {
+        colorReasonsWidgets.addAll([
           Text(
-            'You born on ${dayOfWeek.value}: ${recommendedColors[topPrimaryColor]!}',
-            style: TextStyle(fontSize: 14),
+            'You were born on ${dayOfWeek.value} ',
+            style: TextStyle(fontSize: 16, fontFamily: medium),
           ),
-        );
+          Text(
+            'The top color is: ${recommendedColors[topPrimaryColor]}!',
+            style: TextStyle(fontSize: 14, fontFamily: regular),
+          ),
+          // Text(
+          //   recommendedColors[lowerPrimaryColor]!,
+          //   style: TextStyle(fontSize: 12),
+          // ),
+        ]);
       }
       if (recommendedColors.containsKey(lowerPrimaryColor)) {
-        colorReasonsWidgets.add(
+        colorReasonsWidgets.addAll([
           Text(
-            'You born on ${dayOfWeek.value}: ${recommendedColors[lowerPrimaryColor]!}',
-            style: TextStyle(fontSize: 14),
+            'The lower color is: ${recommendedColors[lowerPrimaryColor]}!',
+            style: TextStyle(fontSize: 14, fontFamily: regular),
           ),
-        );
+          // Text(
+          //   recommendedColors[lowerPrimaryColor]!,
+          //   style: TextStyle(fontSize: 12),
+          // ),
+        ]);
       }
     }
   }
@@ -510,7 +525,9 @@ void showMatchReasonModal(
                 ),
               ),
             ),
-            Divider(color: greyLine,),
+            Divider(
+              color: greyLine,
+            ),
             SizedBox(height: 10),
             Text(
               skinTone == null

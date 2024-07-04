@@ -203,33 +203,6 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                                   updateSituations('formal', isSelected);
                                 });
                               }),
-                              
-                              buildFilterChip(
-                                  "Seasonal Attire", isSelectedSeasonal,
-                                  (isSelected) {
-                                setState(() {
-                                  isSelectedSeasonal = isSelected;
-                                  updateSituations('seasonal', isSelected);
-                                });
-                              }),
-
-                              buildFilterChip("Casual Attire", isSelectedCasual,
-                                  (isSelected) {
-                                setState(() {
-                                  isSelectedCasual = isSelected;
-                                  updateSituations('casual', isSelected);
-                                });
-                              }),
-                             
-                              buildFilterChip("Special Activity Attire",
-                                  isSelectedSpecialActivity, (isSelected) {
-                                setState(() {
-                                  isSelectedSpecialActivity = isSelected;
-                                  updateSituations(
-                                      'special-activity', isSelected);
-                                });
-                              }),
-                              
                                buildFilterChip(
                                   "Semi-Formal Attire", isSelectedSemiFormal,
                                   (isSelected) {
@@ -238,7 +211,29 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                                   updateSituations('semi-formal', isSelected);
                                 });
                               }),
-
+                              buildFilterChip("Casual Attire", isSelectedCasual,
+                                  (isSelected) {
+                                setState(() {
+                                  isSelectedCasual = isSelected;
+                                  updateSituations('casual', isSelected);
+                                });
+                              }),
+                              buildFilterChip("Special Activity Attire",
+                                  isSelectedSpecialActivity, (isSelected) {
+                                setState(() {
+                                  isSelectedSpecialActivity = isSelected;
+                                  updateSituations(
+                                      'special-activity', isSelected);
+                                });
+                              }),
+                              buildFilterChip(
+                                  "Seasonal Attire", isSelectedSeasonal,
+                                  (isSelected) {
+                                setState(() {
+                                  isSelectedSeasonal = isSelected;
+                                  updateSituations('seasonal', isSelected);
+                                });
+                              }),
                               buildFilterChip(
                                   "Work from Home", isSelectedWorkfromHome,
                                   (isSelected) {

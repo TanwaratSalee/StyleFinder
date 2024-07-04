@@ -306,7 +306,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                                     fontSize: 14,
                                     fontFamily: semiBold,
                                   ),
-                                  maxLines: 1,
+                                  maxLines: null,
                                 ),
                               ),
                               Text(
@@ -376,7 +376,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                                     fontSize: 14,
                                     fontFamily: semiBold,
                                   ),
-                                  maxLines: 1,
+                                  maxLines: null,
                                 ),
                               ),
                               Text(
@@ -523,30 +523,15 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                               height: 40,
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
-                                itemCount:
-                                    widget.situations.length, // แก้ไขตรงนี้
+                                itemCount: widget.situations.length, 
                                 itemBuilder: (context, index) {
-                                  String item = widget.situations[index]
-                                      .toString(); // แก้ไขตรงนี้
+                                  String item = widget.situations[index].toString(); 
                                   return Container(
                                     alignment: Alignment.center,
                                     child: Text(
                                       "${item[0].toUpperCase()}${item.substring(1)}",
-                                    )
-                                        .text
-                                        .size(14)
-                                        .color(greyDark)
-                                        .fontFamily(medium)
-                                        .make(),
-                                  )
-                                      .box
-                                      .color(thinPrimaryApp)
-                                      .margin(const EdgeInsets.symmetric(
-                                          horizontal: 6))
-                                      .roundedLg
-                                      .padding(const EdgeInsets.symmetric(
-                                          horizontal: 24, vertical: 12))
-                                      .make();
+                                    ).text.size(14).color(greyDark).fontFamily(medium).make(),
+                                  ).box.color(thinPrimaryApp).margin(const EdgeInsets.symmetric(horizontal: 6)).roundedLg.padding(const EdgeInsets.symmetric(horizontal: 24, vertical: 12)).make();
                                 },
                               ),
                             ),
@@ -607,7 +592,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                         ),
                         Container(
                           width: double.infinity,
-                          height: 100,
+                          // height: 100,
                           decoration: BoxDecoration(
                             color: greyThin,
                             borderRadius: BorderRadius.circular(10),
