@@ -324,7 +324,7 @@ class NewsScreen extends StatelessWidget {
                               crossAxisCount: 3,
                               mainAxisSpacing: 12,
                               crossAxisSpacing: 12,
-                              childAspectRatio: 1.3, // อัตราส่วนของแต่ละการ์ด
+                              childAspectRatio: 1.3,
                             ),
                             itemCount: 6,
                             itemBuilder: (context, index) {
