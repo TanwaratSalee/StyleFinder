@@ -329,66 +329,64 @@ class NewsScreen extends StatelessWidget {
                             itemCount: 6,
                             itemBuilder: (context, index) {
                               List<Map<String, dynamic>> cardData = [
-                                {'image': '', 'name': 'Formal Attire'},
-                                {'image': '', 'name': 'Semi-Formal Attire'},
-                                {'image': '', 'name': 'Casual Attire'},
-                                {'image': '', 'name': 'Seasonal Attire'},
                                 {
-                                  'image': '',
-                                  'name': 'Special Activity Attire'
+                                  'image': imgPopupEmail,
+                                  'title': 'Formal Attire'
                                 },
-                                {'image': '', 'name': 'Work from Home'}
+                                {
+                                  'image': imgPopupEmail,
+                                  'title': 'Semi-Formal Attire'
+                                },
+                                {
+                                  'image': imgPopupEmail,
+                                  'title': 'Casual Attire'
+                                },
+                                {
+                                  'image': imgPopupEmail,
+                                  'title': 'Seasonal Attire'
+                                },
+                                {
+                                  'image': imgPopupEmail,
+                                  'title': 'Special Activity Attire'
+                                },
+                                {
+                                  'image': imgPopupEmail,
+                                  'title': 'Work from Home'
+                                }
                               ];
 
                               return GestureDetector(
                                 onTap: () {
-                                  switch (index) {
-                                    case 0:
-                                      Get.to(() => AllStoreScreen());
-                                      break;
-                                    case 1:
-                                      Get.to(() => AllStoreScreen());
-                                      break;
-                                    case 2:
-                                      Get.to(() => AllStoreScreen());
-                                      break;
-                                    case 3:
-                                      Get.to(() => AllStoreScreen());
-                                      break;
-                                    case 4:
-                                      Get.to(() => AllStoreScreen());
-                                      break;
-                                    case 5:
-                                      Get.to(() => AllStoreScreen());
-                                      break;
-                                  }
+                                  Get.to(() => AllStoreScreen());
                                 },
                                 child: Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                                      const EdgeInsets.fromLTRB(10, 10, 10, 0),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       ClipRRect(
                                         borderRadius: BorderRadius.circular(0),
                                         child: SizedBox(
-                                          width: 30,
-                                          height: 30,
+                                          width: 40,
+                                          height: 40,
                                           child: Image.asset(
                                             cardData[index]['image']!,
                                             fit: BoxFit.contain,
                                           ),
                                         ),
                                       ),
-                                      SizedBox(height: 5),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
                                       Container(
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 0, horizontal: 5),
                                         child: Text(
-                                          cardData[index]['name']!,
+                                          cardData[index]['title']!,
                                           style: const TextStyle(
                                             fontFamily: medium,
-                                            fontSize: 15,
+                                            fontSize: 13,
                                             color: Colors.black,
                                             height: 1.0,
                                           ),
