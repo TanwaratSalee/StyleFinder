@@ -328,43 +328,46 @@ class NewsScreen extends StatelessWidget {
                             ),
                             itemCount: 6,
                             itemBuilder: (context, index) {
-                              List<Map<String, String>> cardData = [
+                              List<Map<String, dynamic>> cardData = [
+                                {'image': '', 'name': 'Formal Attire'},
+                                {'image': '', 'name': 'Semi-Formal Attire'},
+                                {'image': '', 'name': 'Casual Attire'},
+                                {'image': '', 'name': 'Seasonal Attire'},
                                 {
-                                  'image': 'assets/icons/Icon/Formal.png',
-                                  'name': 'Formal Attire'
-                                },
-                                {
-                                  'image': 'assets/icons/Icon/Semi-Formal.png',
-                                  'name': 'Semi-Formal Attire'
-                                },
-                                {
-                                  'image': 'assets/icons/Icon/Casual.png',
-                                  'name': 'Casual Attire'
-                                },
-                                {
-                                  'image': 'assets/icons/Icon/Vector.png',
-                                  'name': 'Seasonal Attire'
-                                },
-                                {
-                                  'image': 'assets/icons/Icon/Special.png',
+                                  'image': '',
                                   'name': 'Special Activity Attire'
                                 },
-                                {
-                                  'image': 'assets/icons/Icon/Special.png',
-                                  'name': 'Work from Home'
-                                }
+                                {'image': '', 'name': 'Work from Home'}
                               ];
 
                               return GestureDetector(
                                 onTap: () {
-                                  print("Tapped on item $index");
+                                  switch (index) {
+                                    case 0:
+                                      Get.to(() => AllStoreScreen());
+                                      break;
+                                    case 1:
+                                      Get.to(() => AllStoreScreen());
+                                      break;
+                                    case 2:
+                                      Get.to(() => AllStoreScreen());
+                                      break;
+                                    case 3:
+                                      Get.to(() => AllStoreScreen());
+                                      break;
+                                    case 4:
+                                      Get.to(() => AllStoreScreen());
+                                      break;
+                                    case 5:
+                                      Get.to(() => AllStoreScreen());
+                                      break;
+                                  }
                                 },
                                 child: Container(
-                                  padding: const EdgeInsets.fromLTRB(10, 20, 10,
-                                      10), // เพิ่ม padding รอบรูปภาพ
+                                  padding:
+                                      const EdgeInsets.fromLTRB(10, 20, 10, 10),
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment
-                                        .start, // จัดให้อยู่ด้านบน
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       ClipRRect(
                                         borderRadius: BorderRadius.circular(0),
@@ -373,7 +376,7 @@ class NewsScreen extends StatelessWidget {
                                           height: 30,
                                           child: Image.asset(
                                             cardData[index]['image']!,
-                                            fit: BoxFit.cover,
+                                            fit: BoxFit.contain,
                                           ),
                                         ),
                                       ),
@@ -387,8 +390,7 @@ class NewsScreen extends StatelessWidget {
                                             fontFamily: medium,
                                             fontSize: 15,
                                             color: Colors.black,
-                                            height:
-                                                1.0, // ปรับระยะห่างระหว่างบรรทัดให้น้อยลง
+                                            height: 1.0,
                                           ),
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
