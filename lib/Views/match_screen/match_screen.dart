@@ -443,8 +443,8 @@ void showMatchReasonModal(
   final int? topPrimaryColor = matchResult['topClosestColor'];
   final int? lowerPrimaryColor = matchResult['lowerClosestColor'];
 
-  print('Top Colors: ${matchResult['topClosestColor']}'); // Debug
-  print('Lower Colors: ${matchResult['lowerClosestColor']}'); // Debug
+  print('Top Colors: ${matchResult['topClosestColor']}'); 
+  print('Lower Colors: ${matchResult['lowerClosestColor']}'); 
 
   String reason;
   String additionalReason = '';
@@ -466,7 +466,7 @@ void showMatchReasonModal(
         recommendedColors.containsKey(topPrimaryColor)) {
       colorReasonsWidgets.add(
         Text(
-          'สำหรับคนเกิดวัน ${dayOfWeek.value}: ${recommendedColors[topPrimaryColor]!}',
+          'You born on ${dayOfWeek.value}: ${recommendedColors[topPrimaryColor]!}',
           style: TextStyle(fontSize: 14),
         ),
       );
@@ -474,7 +474,7 @@ void showMatchReasonModal(
       if (recommendedColors.containsKey(topPrimaryColor)) {
         colorReasonsWidgets.add(
           Text(
-            'People born on ${dayOfWeek.value}: ${recommendedColors[topPrimaryColor]!}',
+            'You born on ${dayOfWeek.value}: ${recommendedColors[topPrimaryColor]!}',
             style: TextStyle(fontSize: 14),
           ),
         );
@@ -482,7 +482,7 @@ void showMatchReasonModal(
       if (recommendedColors.containsKey(lowerPrimaryColor)) {
         colorReasonsWidgets.add(
           Text(
-            'People born on ${dayOfWeek.value}: ${recommendedColors[lowerPrimaryColor]!}',
+            'You born on ${dayOfWeek.value}: ${recommendedColors[lowerPrimaryColor]!}',
             style: TextStyle(fontSize: 14),
           ),
         );
@@ -490,23 +490,27 @@ void showMatchReasonModal(
     }
   }
 
-  showModalBottomSheet(
+  showDialog(
     context: context,
     builder: (BuildContext context) {
-      return Container(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
+      return AlertDialog(
+        backgroundColor: whiteColor,
+        contentPadding: EdgeInsets.all(16.0),
+        content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              isGreatMatch ? 'Great Match!' : 'Not a Match',
-              style: TextStyle(
-                color: isGreatMatch ? Colors.green : Colors.red,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+            Center(
+              child: Text(
+                isGreatMatch ? 'Great Match!' : 'Not a Match',
+                style: TextStyle(
+                  color: isGreatMatch ? Colors.green : Colors.red,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
+            Divider(color: greyLine,),
             SizedBox(height: 10),
             Text(
               skinTone == null
@@ -561,7 +565,7 @@ void showModalRightSheet({
         alignment: Alignment.bottomCenter,
         child: Material(
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
+            topLeft: Radius.circular(120),
             topRight: Radius.circular(20),
           ),
           child: Container(
