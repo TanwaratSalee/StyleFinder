@@ -798,11 +798,8 @@ class _ProfileScreenState extends State<ProfileScreen>
   }
 
   Widget buildOnlineMatchTab() {
-    Stream<List<QuerySnapshot>> favoriteUserMixMatchsStream =
-        FirestoreServices.getFavoriteusermixmatchs();
-
-    return StreamBuilder<List<QuerySnapshot>>(
-      stream: favoriteUserMixMatchsStream,
+    return FutureBuilder<List<QuerySnapshot>>(
+      future: FirestoreServices.getFavoriteusermixmatchs().first,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const Center(
@@ -810,7 +807,6 @@ class _ProfileScreenState extends State<ProfileScreen>
           );
         }
 
-        // Combine all documents from both collections
         final data = snapshot.data!
             .expand((querySnapshot) => querySnapshot.docs)
             .toList();
