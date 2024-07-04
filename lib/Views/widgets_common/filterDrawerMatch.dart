@@ -105,7 +105,7 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            35.heightBox,
+            15.heightBox,
             ListTile(
               title: Center(
                 child: Text(
@@ -210,31 +210,31 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
             ),
             15.heightBox,
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
               child: Row(
-                            children: [
-                              Text(
-                                "Suitable for work and situations",
-                                style:
-                                    TextStyle(fontSize: 14, fontFamily: regular),
-                              ),
-                              10.widthBox,
-                              GestureDetector(
-                                onTap: () {
-                                  showModalBottomSheet(
-                                    context: context,
-                                    builder: (context) {
-                                      return SituationsList();
-                                    },
-                                  );
-                                },
-                                child: Image.asset(
-                                  icInfo,
-                                  width: 15,
-                                ),
-                              ),
-                            ],
-                          ),
+                children: [
+                  Text(
+                    "Suitable for work and situations",
+                    style: TextStyle(fontSize: 14, fontFamily: regular),
+                  ),
+                  10.widthBox,
+                  GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return SituationsList();
+                        },
+                      );
+                    },
+                    child: Image.asset(
+                      icInfo,
+                      width: 15,
+                    ),
+                  ),
+                ],
+              ),
             ),
             Center(
               child: Wrap(

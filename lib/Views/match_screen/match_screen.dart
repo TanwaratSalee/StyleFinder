@@ -574,21 +574,25 @@ void showModalRightSheet({
     context: context,
     barrierDismissible: true,
     barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-    barrierColor: blackColor.withOpacity(0.5),
+    barrierColor: Colors.black.withOpacity(0.5),
     transitionDuration: const Duration(milliseconds: 200),
     pageBuilder: (BuildContext context, Animation<double> animation,
         Animation<double> secondaryAnimation) {
       return Align(
         alignment: Alignment.bottomCenter,
         child: Material(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(120),
-            topRight: Radius.circular(20),
-          ),
-          child: Container(
-            height: MediaQuery.of(context).size.height * 0.75,
-            width: MediaQuery.of(context).size.width,
-            child: builder(context),
+          color: Colors.transparent, 
+          child: ClipRRect(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.80,
+              width: MediaQuery.of(context).size.width,
+              color: Colors.white, 
+              child: builder(context),
+            ),
           ),
         ),
       );

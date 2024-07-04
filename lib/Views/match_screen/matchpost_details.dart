@@ -4,6 +4,7 @@ import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.d
 import 'package:flutter_finalproject/Views/match_screen/edit_matchpost.dart';
 import 'package:flutter_finalproject/Views/profile_screen/userprofile_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
+import 'package:flutter_finalproject/Views/widgets_common/situationEx.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/matchproduct_controller.dart';
 import 'package:get/get.dart';
@@ -526,9 +527,30 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                         15.heightBox,
                         Align(
                           alignment: Alignment.centerLeft,
-                          child: const Text(
-                            'Suitable for work and situations',
-                          ).text.fontFamily(medium).size(14).make(),
+                          child:Row(
+                          children: [
+                            Text(
+                              "Suitable for work and situations",
+                              
+                            ).text.fontFamily(medium).size(14).make(),
+                            10.widthBox,
+                            GestureDetector(
+                              onTap: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (context) {
+                                    return SituationsList();
+                                  },
+                                );
+                              },
+                              child: Image.asset(
+                                icInfo,
+                                width: 15,
+                              ),
+                            ),
+                          ],
+                        ),
+                        
                         ),
                         Column(
                           children: [

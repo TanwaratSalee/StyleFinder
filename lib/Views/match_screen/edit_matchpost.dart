@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_finalproject/Views/match_screen/matchpost_details.dart';
+import 'package:flutter_finalproject/Views/widgets_common/situationEx.dart';
 import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
@@ -268,12 +269,31 @@ class _EditMatchProductState extends State<EditMatchProduct> {
                     }).toList(),
                   ).box.makeCentered(),
                   15.heightBox,
-                  const Text("Suitable for work and situations")
-                      .text
-                      .size(16)
-                      .color(blackColor)
-                      .fontFamily(medium)
-                      .make(),
+                 Row(
+                          children: [
+                            Text(
+                              "Suitable for work and situations",
+                              style:
+                                  TextStyle(fontSize: 16, fontFamily: medium),
+                            ),
+                            10.widthBox,
+                            GestureDetector(
+                              onTap: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (context) {
+                                    return SituationsList();
+                                  },
+                                );
+                              },
+                              child: Image.asset(
+                                icInfo,
+                                width: 15,
+                              ),
+                            ),
+                          ],
+                        ),
+                        
                   Wrap(
                     spacing: 8,
                     runSpacing: 1,
@@ -331,7 +351,7 @@ class _EditMatchProductState extends State<EditMatchProduct> {
                       'summer',
                       'winter',
                       'autumn',
-                      'dinner',
+                      'spring ',
                     ].map((collection) {
                       bool isSelected =
                           selectedCollections.contains(collection);

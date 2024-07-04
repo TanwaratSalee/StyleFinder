@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
+import 'package:flutter_finalproject/Views/widgets_common/situationEx.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
 import 'package:get/get.dart';
@@ -449,7 +450,7 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                                 children: [
                                   Text(
                                     'Suitable for gender',
-                                  ).text.fontFamily(medium).size(16).make(),
+                                  ).text.fontFamily(medium).size(14).make(),
                                 ],
                               ),
                               SizedBox(
@@ -491,9 +492,29 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                               10.heightBox,
                               Align(
                                 alignment: Alignment.centerLeft,
-                                child: const Text(
-                                  'Suitable for work and situations',
-                                ).text.fontFamily(regular).size(16).make(),
+                                child: Row(
+                          children: [
+                            Text(
+                              "Suitable for work and situations",
+                              
+                            ).text.fontFamily(medium).size(14).make(),
+                            10.widthBox,
+                            GestureDetector(
+                              onTap: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (context) {
+                                    return SituationsList();
+                                  },
+                                );
+                              },
+                              child: Image.asset(
+                                icInfo,
+                                width: 15,
+                              ),
+                            ),
+                          ],
+                        ),
                               ),
                               Column(
                                 children: [

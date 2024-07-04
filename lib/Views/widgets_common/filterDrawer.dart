@@ -25,8 +25,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
   bool isSelectedSummer = false;
   bool isSelectedWinter = false;
   bool isSelectedAutumn = false;
-  bool isSelectedDinner = false;
-  bool isSelectedEveryday = false;
+  bool isSelectedSpring  = false;
+  // bool isSelectedEveryday = false;
 
   var collectionsvalue = ''.obs;
   var vendors = <Map<String, dynamic>>[];
@@ -110,9 +110,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
     isSelectedSummer = controller.selectedCollections.contains('summer');
     isSelectedWinter = controller.selectedCollections.contains('winter');
     isSelectedAutumn = controller.selectedCollections.contains('autumn');
-    isSelectedDinner = controller.selectedCollections.contains('dinner');
-    isSelectedEveryday =
-        controller.selectedCollections.contains('everydaylook');
+    isSelectedSpring  = controller.selectedCollections.contains('spring ');
+    // isSelectedEveryday = controller.selectedCollections.contains('everydaylook');
   }
 
   @override
@@ -401,19 +400,19 @@ class _FilterDrawerState extends State<FilterDrawer> {
                         updateFilterCollections();
                       });
                     }),
-                    buildFilterChip("Dinner", isSelectedDinner, (isSelected) {
+                    buildFilterChip("Spring ", isSelectedSpring , (isSelected) {
                       setState(() {
-                        isSelectedDinner = isSelected;
+                        isSelectedSpring  = isSelected;
                         updateFilterCollections();
                       });
                     }),
-                    buildFilterChip("Everyday", isSelectedEveryday,
-                        (isSelected) {
-                      setState(() {
-                        isSelectedEveryday = isSelected;
-                        updateFilterCollections();
-                      });
-                    }),
+                    // buildFilterChip("Everyday", isSelectedEveryday,
+                    //     (isSelected) {
+                    //   setState(() {
+                    //     isSelectedEveryday = isSelected;
+                    //     updateFilterCollections();
+                    //   });
+                    // }),
                   ],
                 ),
               ),
@@ -443,8 +442,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
                           if (isSelectedSummer) 'summer',
                           if (isSelectedWinter) 'winter',
                           if (isSelectedAutumn) 'autumn',
-                          if (isSelectedDinner) 'dinner',
-                          if (isSelectedEveryday) 'everydaylook',
+                          if (isSelectedSpring ) 'spring ',
+                          // if (isSelectedEveryday) 'everydaylook',
                         ],
                         vendorIds: selectedVendorIds,
                       );
@@ -495,8 +494,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
     if (isSelectedSummer) collections.add('summer');
     if (isSelectedWinter) collections.add('winter');
     if (isSelectedAutumn) collections.add('autumn');
-    if (isSelectedDinner) collections.add('dinner');
-    if (isSelectedEveryday) collections.add('everydaylook');
+    if (isSelectedSpring ) collections.add('spring ');
+    // if (isSelectedEveryday) collections.add('everydaylook');
 
     controller.updateFilters(collections: collections);
   }

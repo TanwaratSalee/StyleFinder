@@ -18,7 +18,7 @@ class SituationsList extends StatelessWidget {
       '   - Weddings',
       '   - Business Meetings',
       '   - Job Interviews',
-      '   - Formal Dinners',
+      '   - Formal Springs',
       '   - Graduations',
     ],
     'semi-formal': [

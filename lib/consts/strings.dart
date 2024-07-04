@@ -53,7 +53,7 @@ const search = "Search",
 const summer = "Summer Collections",
     winter = "Winter Collections",
     autumn = "Autumn Collections",
-    gala = "Gala Dinner Collections",
+    gala = "Gala Spring  Collections",
     bridesmaid = "Bridesmaid Collections";
 
 //item detail string
