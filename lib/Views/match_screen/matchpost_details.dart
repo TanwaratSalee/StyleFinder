@@ -527,30 +527,28 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                         15.heightBox,
                         Align(
                           alignment: Alignment.centerLeft,
-                          child:Row(
-                          children: [
-                            Text(
-                              "Suitable for work and situations",
-                              
-                            ).text.fontFamily(medium).size(14).make(),
-                            10.widthBox,
-                            GestureDetector(
-                              onTap: () {
-                                showModalBottomSheet(
-                                  context: context,
-                                  builder: (context) {
-                                    return SituationsList();
-                                  },
-                                );
-                              },
-                              child: Image.asset(
-                                icInfo,
-                                width: 15,
+                          child: Row(
+                            children: [
+                              Text(
+                                "Suitable for work and situations",
+                              ).text.fontFamily(medium).size(14).make(),
+                              10.widthBox,
+                              GestureDetector(
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    builder: (context) {
+                                      return SituationsList();
+                                    },
+                                  );
+                                },
+                                child: Image.asset(
+                                  icInfo,
+                                  width: 15,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                        
+                            ],
+                          ),
                         ),
                         Column(
                           children: [
@@ -560,13 +558,29 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                                 scrollDirection: Axis.horizontal,
                                 itemCount: widget.situations.length,
                                 itemBuilder: (context, index) {
-                                  String item =widget.situations[index].toString();
-                                  String fullName =situationNames[item] ?? item;
+                                  String item =
+                                      widget.situations[index].toString();
+                                  String fullName =
+                                      situationNames[item] ?? item;
                                   return Container(
                                     alignment: Alignment.center,
-                                    child: Text(fullName,
-                                    ).text.size(14).color(greyDark).fontFamily(medium).make(),
-                                  ).box.color(thinPrimaryApp).margin(const EdgeInsets.symmetric(horizontal: 6)).roundedLg.padding(const EdgeInsets.symmetric(horizontal: 24, vertical: 12)).make();
+                                    child: Text(
+                                      fullName,
+                                    )
+                                        .text
+                                        .size(14)
+                                        .color(greyDark)
+                                        .fontFamily(medium)
+                                        .make(),
+                                  )
+                                      .box
+                                      .color(thinPrimaryApp)
+                                      .margin(const EdgeInsets.symmetric(
+                                          horizontal: 6))
+                                      .roundedLg
+                                      .padding(const EdgeInsets.symmetric(
+                                          horizontal: 24, vertical: 12))
+                                      .make();
                                 },
                               ),
                             ),

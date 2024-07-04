@@ -120,7 +120,7 @@ class AllStoreScreen extends StatelessWidget {
                                   "${productData['name']}",
                                   style: const TextStyle(
                                     fontFamily: medium,
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     color: blackColor,
                                   ),
                                 ),
@@ -220,7 +220,7 @@ class AllStoreScreen extends StatelessWidget {
                                   "${productData['name']}",
                                   style: const TextStyle(
                                     fontFamily: medium,
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     color: blackColor,
                                   ),
                                 ),
