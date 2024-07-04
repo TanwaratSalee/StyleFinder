@@ -850,84 +850,84 @@ Map<int, String> getRecommendedColors(String dayOfWeek) {
     case 'Sunday':
       return {
         0xFFFF0000:
-            'สีแดง: สื่อถึงพลังและความมั่นใจ เนื่องจากวันอาทิตย์เป็นวันที่เกี่ยวข้องกับพระอาทิตย์ ซึ่งมีสีแดงเป็นสัญลักษณ์',
+            'Red: Represents power and confidence. As Sunday is associated with the sun, red is a symbol',
         0xFFFFFFFF:
-            'สีขาว: สื่อถึงความบริสุทธิ์และความสงบ ช่วยเสริมความคิดสร้างสรรค์',
+            'White: Represents purity and tranquility, enhancing creativity',
         0xFFFFC0CB:
-            'สีชมพู: สื่อถึงความรักและความเมตตา ช่วยสร้างความสัมพันธ์ที่ดี',
-        0xFF17770F: 'สีเขียว: สื่อถึงความสมดุลและความสงบ',
-        0xFF000000: 'สีดำ: สื่อถึงความมั่นคงและความเข้มแข็ง',
-        0xFF621C8D: 'สีม่วง: สื่อถึงความหรูหราและสติปัญญา',
-        0xFFFFA500: 'สีส้ม: สื่อถึงความสุขและความอบอุ่น',
-        0xFF808080: 'สีเทา: สื่อถึงความสงบและความสุขุม'
+            'Pink: Represents love and kindness, fostering good relationships',
+        0xFF17770F: 'Green: Represents balance and calmness',
+        0xFF000000: 'Black: Represents stability and strength',
+        0xFF621C8D: 'Purple: Represents luxury and intelligence',
+        0xFFFFA500: 'Orange: Represents happiness and warmth',
+        0xFF808080: 'Gray: Represents calmness and composure'
       };
     case 'Monday':
       return {
-        0xFFFFFF00: 'สีเหลือง: สื่อถึงความอบอุ่นและความสดใส',
-        0xFFFFFFFF: 'สีขาว: สื่อถึงความบริสุทธิ์และความสงบ',
-        0xFF17770F: 'สีเขียว: สื่อถึงความสมดุลและความสงบ',
-        0xFF621C8D: 'สีม่วง: สื่อถึงความหรูหราและสติปัญญา',
-        0xFFFFA500: 'สีส้ม: สื่อถึงความสุขและความอบอุ่น',
-        0xFF30B0E8: 'สีฟ้าอ่อน: สื่อถึงความสงบและความเยือกเย็น',
-        0xFF202FB3: 'สีน้ำเงิน: สื่อถึงความมั่นคงและความไว้วางใจ'
+        0xFFFFFF00: 'Yellow: Represents warmth and brightness',
+        0xFFFFFFFF: 'White: Represents purity and tranquility',
+        0xFF17770F: 'Green: Represents balance and calmness',
+        0xFF621C8D: 'Purple: Represents luxury and intelligence',
+        0xFFFFA500: 'Orange: Represents happiness and warmth',
+        0xFF30B0E8: 'Light Blue: Represents calmness and coolness',
+        0xFF202FB3: 'Blue: Represents stability and trust'
       };
     case 'Tuesday':
       return {
-        0xFFFFC0CB: 'สีชมพู: สื่อถึงความรักและความเมตตา',
-        0xFF17770F: 'สีเขียว: สื่อถึงความสมดุลและความสงบ',
-        0xFF621C8D: 'สีม่วง: สื่อถึงความหรูหราและสติปัญญา',
-        0xFFFFA500: 'สีส้ม: สื่อถึงความสุขและความอบอุ่น',
-        0xFF808080: 'สีเทา: สื่อถึงความสงบและความสุขุม',
-        0xFF30B0E8: 'สีฟ้าอ่อน: สื่อถึงความสงบและความเยือกเย็น',
-        0xFF202FB3: 'สีน้ำเงิน: สื่อถึงความมั่นคงและความไว้วางใจ',
-        0xFFFF0000: 'สีแดง: สื่อถึงพลังและความมั่นใจ'
+        0xFFFFC0CB: 'Pink: Represents love and kindness',
+        0xFF17770F: 'Green: Represents balance and calmness',
+        0xFF621C8D: 'Purple: Represents luxury and intelligence',
+        0xFFFFA500: 'Orange: Represents happiness and warmth',
+        0xFF808080: 'Gray: Represents calmness and composure',
+        0xFF30B0E8: 'Light Blue: Represents calmness and coolness',
+        0xFF202FB3: 'Blue: Represents stability and trust',
+        0xFFFF0000: 'Red: Represents power and confidence'
       };
     case 'Wednesday':
       return {
-        0xFF17770F: 'สีเขียว: สื่อถึงความสมดุลและความสงบ',
-        0xFF621C8D: 'สีม่วง: สื่อถึงความหรูหราและสติปัญญา',
-        0xFFFFD700: 'สีทอง: สื่อถึงความรุ่งเรืองและความมั่งคั่ง',
-        0xFF808080: 'สีเทา: สื่อถึงความสงบและความสุขุม',
-        0xFF202FB3: 'สีน้ำเงิน: สื่อถึงความมั่นคงและความไว้วางใจ',
-        0xFF30B0E8: 'สีฟ้าอ่อน: สื่อถึงความสงบและความเยือกเย็น',
-        0xFFFF0000: 'สีแดง: สื่อถึงพลังและความมั่นใจ',
-        0xFFFFFF00: 'สีเหลือง: สื่อถึงความอบอุ่นและความสดใส',
-        0xFFFFFFFF: 'สีขาว: สื่อถึงความบริสุทธิ์และความสงบ',
-        0xFFFFC0CB: 'สีชมพู: สื่อถึงความรักและความเมตตา'
+        0xFF17770F: 'Green: Represents balance and calmness',
+        0xFF621C8D: 'Purple: Represents luxury and intelligence',
+        0xFFFFD700: 'Gold: Represents prosperity and wealth',
+        0xFF808080: 'Gray: Represents calmness and composure',
+        0xFF202FB3: 'Blue: Represents stability and trust',
+        0xFF30B0E8: 'Light Blue: Represents calmness and coolness',
+        0xFFFF0000: 'Red: Represents power and confidence',
+        0xFFFFFF00: 'Yellow: Represents warmth and brightness',
+        0xFFFFFFFF: 'White: Represents purity and tranquility',
+        0xFFFFC0CB: 'Pink: Represents love and kindness'
       };
     case 'Thursday':
       return {
-        0xFFFFA500: 'สีส้ม: สื่อถึงความสุขและความอบอุ่น',
-        0xFF808080: 'สีเทา: สื่อถึงความสงบและความสุขุม',
-        0xFF202FB3: 'สีน้ำเงิน: สื่อถึงความมั่นคงและความไว้วางใจ',
-        0xFFFF0000: 'สีแดง: สื่อถึงพลังและความมั่นใจ',
-        0xFFFFFF00: 'สีเหลือง: สื่อถึงความอบอุ่นและความสดใส',
-        0xFFFFFFFF: 'สีขาว: สื่อถึงความบริสุทธิ์และความสงบ',
-        0xFFFFC0CB: 'สีชมพู: สื่อถึงความรักและความเมตตา',
-        0xFF17770F: 'สีเขียว: สื่อถึงความสมดุลและความสงบ'
+        0xFFFFA500: 'Orange: Represents happiness and warmth',
+        0xFF808080: 'Gray: Represents calmness and composure',
+        0xFF202FB3: 'Blue: Represents stability and trust',
+        0xFFFF0000: 'Red: Represents power and confidence',
+        0xFFFFFF00: 'Yellow: Represents warmth and brightness',
+        0xFFFFFFFF: 'White: Represents purity and tranquility',
+        0xFFFFC0CB: 'Pink: Represents love and kindness',
+        0xFF17770F: 'Green: Represents balance and calmness'
       };
     case 'Friday':
       return {
-        0xFF202FB3: 'สีน้ำเงิน: สื่อถึงความมั่นคงและความไว้วางใจ',
-        0xFFFF0000: 'สีแดง: สื่อถึงพลังและความมั่นใจ',
-        0xFFFFFF00: 'สีเหลือง: สื่อถึงความอบอุ่นและความสดใส',
-        0xFFFFFFFF: 'สีขาว: สื่อถึงความบริสุทธิ์และความสงบ',
-        0xFFFFC0CB: 'สีชมพู: สื่อถึงความรักและความเมตตา',
-        0xFF17770F: 'สีเขียว: สื่อถึงความสมดุลและความสงบ',
-        0xFF621C8D: 'สีม่วง: สื่อถึงความหรูหราและสติปัญญา',
-        0xFFFFA500: 'สีส้ม: สื่อถึงความสุขและความอบอุ่น',
-        0xFF808080: 'สีเทา: สื่อถึงความสงบและความสุขุม'
+        0xFF202FB3: 'Blue: Represents stability and trust',
+        0xFFFF0000: 'Red: Represents power and confidence',
+        0xFFFFFF00: 'Yellow: Represents warmth and brightness',
+        0xFFFFFFFF: 'White: Represents purity and tranquility',
+        0xFFFFC0CB: 'Pink: Represents love and kindness',
+        0xFF17770F: 'Green: Represents balance and calmness',
+        0xFF621C8D: 'Purple: Represents luxury and intelligence',
+        0xFFFFA500: 'Orange: Represents happiness and warmth',
+        0xFF808080: 'Gray: Represents calmness and composure'
       };
     case 'Saturday':
       return {
-        0xFF000000: 'สีดำ: สื่อถึงความมั่นคงและความเข้มแข็ง',
-        0xFF621C8D: 'สีม่วง: สื่อถึงความหรูหราและสติปัญญา',
-        0xFF808080: 'สีเทา: สื่อถึงความสงบและความสุขุม',
-        0xFF202FB3: 'สีน้ำเงิน: สื่อถึงความมั่นคงและความไว้วางใจ',
-        0xFFFF0000: 'สีแดง: สื่อถึงพลังและความมั่นใจ',
-        0xFFFFFF00: 'สีเหลือง: สื่อถึงความอบอุ่นและความสดใส',
-        0xFFFFFFFF: 'สีขาว: สื่อถึงความบริสุทธิ์และความสงบ',
-        0xFFFFC0CB: 'สีชมพู: สื่อถึงความรักและความเมตตา'
+        0xFF000000: 'Black: Represents stability and strength',
+        0xFF621C8D: 'Purple: Represents luxury and intelligence',
+        0xFF808080: 'Gray: Represents calmness and composure',
+        0xFF202FB3: 'Blue: Represents stability and trust',
+        0xFFFF0000: 'Red: Represents power and confidence',
+        0xFFFFFF00: 'Yellow: Represents warmth and brightness',
+        0xFFFFFFFF: 'White: Represents purity and tranquility',
+        0xFFFFC0CB: 'Pink: Represents love and kindness'
       };
     default:
       return {};
@@ -1288,179 +1288,265 @@ String getAdditionalReason(int color1, int color2) {
     return 'The high contrast between black and white creates a striking and formal appearance. Additionally, black enhances the cleanliness and brightness of white.';
   } else if (color1 == 0xFF000000 && color2 == 0xFF000000) {
     return 'Pairing black with black creates a somber and powerful look, making it appear modern and intriguing.';
-  } else if ((color1 == 0xFF000000 && color2 == 0xFF808080) || (color1 == 0xFF808080 && color2 == 0xFF000000)) {
+  } else if ((color1 == 0xFF000000 && color2 == 0xFF808080) ||
+      (color1 == 0xFF808080 && color2 == 0xFF000000)) {
     return 'Pairing neutral tones creates a simple and modern feel. Additionally, gray adds a softness to an all-black outfit.';
-  } else if ((color1 == 0xFF000000 && color2 == 0xFFFF0000) || (color1 == 0xFFFF0000 && color2 == 0xFF000000)) {
+  } else if ((color1 == 0xFF000000 && color2 == 0xFFFF0000) ||
+      (color1 == 0xFFFF0000 && color2 == 0xFF000000)) {
     return 'Red adds vibrancy to an otherwise plain black outfit, creating a striking and lively appearance.';
-  } else if ((color1 == 0xFF000000 && color2 == 0xFFFFFF00) || (color1 == 0xFFFFFF00 && color2 == 0xFF000000)) {
+  } else if ((color1 == 0xFF000000 && color2 == 0xFFFFFF00) ||
+      (color1 == 0xFFFFFF00 && color2 == 0xFF000000)) {
     return 'The brightness of yellow creates an interesting contrast, making the outfit look energetic and fun.';
-  } else if ((color1 == 0xFF000000 && color2 == 0xFFFF4081) || (color1 == 0xFFFF4081 && color2 == 0xFF000000)) {
+  } else if ((color1 == 0xFF000000 && color2 == 0xFFFF4081) ||
+      (color1 == 0xFFFF4081 && color2 == 0xFF000000)) {
     return 'Pink adds a touch of softness and friendliness, preventing an all-black outfit from appearing too somber.';
-  } else if ((color1 == 0xFF000000 && color2 == 0xFF621C8D) || (color1 == 0xFF621C8D && color2 == 0xFF000000)) {
+  } else if ((color1 == 0xFF000000 && color2 == 0xFF621C8D) ||
+      (color1 == 0xFF621C8D && color2 == 0xFF000000)) {
     return 'Purple adds a touch of luxury and intrigue, giving a black outfit a sense of depth.';
-  } else if ((color1 == 0xFF000000 && color2 == 0xFF202FB3) || (color1 == 0xFF202FB3 && color2 == 0xFF000000)) {
+  } else if ((color1 == 0xFF000000 && color2 == 0xFF202FB3) ||
+      (color1 == 0xFF202FB3 && color2 == 0xFF000000)) {
     return 'Blue infuses a black outfit with energy and brightness.';
-  } else if ((color1 == 0xFF000000 && color2 == 0xFF30B0E8) || (color1 == 0xFF30B0E8 && color2 == 0xFF000000)) {
+  } else if ((color1 == 0xFF000000 && color2 == 0xFF30B0E8) ||
+      (color1 == 0xFF30B0E8 && color2 == 0xFF000000)) {
     return 'Light blue adds a touch of softness and modernity, preventing a black outfit from appearing too intense.';
-  } else if ((color1 == 0xFF000000 && color2 == 0xFF53CDBF) || (color1 == 0xFF53CDBF && color2 == 0xFF000000)) {
+  } else if ((color1 == 0xFF000000 && color2 == 0xFF53CDBF) ||
+      (color1 == 0xFF53CDBF && color2 == 0xFF000000)) {
     return 'Sky blue adds brightness and vitality to a black outfit.';
-  } else if ((color1 == 0xFF000000 && color2 == 0xFF17770F) || (color1 == 0xFF17770F && color2 == 0xFF000000)) {
+  } else if ((color1 == 0xFF000000 && color2 == 0xFF17770F) ||
+      (color1 == 0xFF17770F && color2 == 0xFF000000)) {
     return 'Green adds brightness and energy to a black outfit.';
-  } else if ((color1 == 0xFF000000 && color2 == 0xFF62CF2F) || (color1 == 0xFF62CF2F && color2 == 0xFF000000)) {
+  } else if ((color1 == 0xFF000000 && color2 == 0xFF62CF2F) ||
+      (color1 == 0xFF62CF2F && color2 == 0xFF000000)) {
     return 'Lime green adds brightness and vibrancy to a black outfit.';
-  } else if ((color1 == 0xFF000000 && color2 == 0xFFFFA500) || (color1 == 0xFFFFA500 && color2 == 0xFF000000)) {
+  } else if ((color1 == 0xFF000000 && color2 == 0xFFFFA500) ||
+      (color1 == 0xFFFFA500 && color2 == 0xFF000000)) {
     return 'Orange adds fun and energy to a black outfit';
-  } else if ((color1 == 0xFF808080 && color2 == 0xFF000000) || (color1 == 0xFF000000 && color2 == 0xFF808080)) {
+  } else if ((color1 == 0xFF808080 && color2 == 0xFF000000) ||
+      (color1 == 0xFF000000 && color2 == 0xFF808080)) {
     return 'A classic and polite combination, simple and modern. Black makes gray appear clear and prominent';
-  } else if ((color1 == 0xFF808080 && color2 == 0xFF0000FF) || (color1 == 0xFF0000FF && color2 == 0xFF808080)) {
+  } else if ((color1 == 0xFF808080 && color2 == 0xFF0000FF) ||
+      (color1 == 0xFF0000FF && color2 == 0xFF808080)) {
     return 'A professional and not over-the-top combination. Blue brightens up gray';
-  } else if ((color1 == 0xFF808080 && color2 == 0xFF32CD32) || (color1 == 0xFF32CD32 && color2 == 0xFF808080)) {
+  } else if ((color1 == 0xFF808080 && color2 == 0xFF32CD32) ||
+      (color1 == 0xFF32CD32 && color2 == 0xFF808080)) {
     return 'Lime green adds brightness and vibrancy to the outfit. Green also gives gray a sense of energy';
-  } else if ((color1 == 0xFF808080 && color2 == 0xFFFF4081) || (color1 == 0xFFFF4081 && color2 == 0xFF808080)) {
+  } else if ((color1 == 0xFF808080 && color2 == 0xFFFF4081) ||
+      (color1 == 0xFFFF4081 && color2 == 0xFF808080)) {
     return 'Pink provides a warm and soft feel, making gray look more interesting';
-  } else if ((color1 == 0xFF808080 && color2 == 0xFF4B0082) || (color1 == 0xFF4B0082 && color2 == 0xFF808080)) {
+  } else if ((color1 == 0xFF808080 && color2 == 0xFF4B0082) ||
+      (color1 == 0xFF4B0082 && color2 == 0xFF808080)) {
     return 'The depth of purple adds luxury and formality to the outfit';
-  } else if ((color1 == 0xFF808080 && color2 == 0xFF17770F) || (color1 == 0xFF17770F && color2 == 0xFF808080)) {
+  } else if ((color1 == 0xFF808080 && color2 == 0xFF17770F) ||
+      (color1 == 0xFF17770F && color2 == 0xFF808080)) {
     return 'Green makes gray look fresh and lively';
-  } else if ((color1 == 0xFF808080 && color2 == 0xFF30B0E8) || (color1 == 0xFF30B0E8 && color2 == 0xFF808080)) {
+  } else if ((color1 == 0xFF808080 && color2 == 0xFF30B0E8) ||
+      (color1 == 0xFF30B0E8 && color2 == 0xFF808080)) {
     return 'Light blue makes gray look more interesting and easy on the eyes';
-  } else if ((color1 == 0xFF808080 && color2 == 0xFF53CDBF) || (color1 == 0xFF53CDBF && color2 == 0xFF808080)) {
+  } else if ((color1 == 0xFF808080 && color2 == 0xFF53CDBF) ||
+      (color1 == 0xFF53CDBF && color2 == 0xFF808080)) {
     return 'Sky blue gives gray a balanced and soothing look';
-  } else if ((color1 == 0xFFFFFFFF && color2 == 0xFF000000) || (color1 == 0xFF000000 && color2 == 0xFFFFFFFF)) {
+  } else if ((color1 == 0xFFFFFFFF && color2 == 0xFF000000) ||
+      (color1 == 0xFF000000 && color2 == 0xFFFFFFFF)) {
     return 'High contrast creates a clean and professional look. Black makes white stand out';
-  } else if ((color1 == 0xFFFFFFFF && color2 == 0xFF808080) || (color1 == 0xFF808080 && color2 == 0xFFFFFFFF)) {
+  } else if ((color1 == 0xFFFFFFFF && color2 == 0xFF808080) ||
+      (color1 == 0xFF808080 && color2 == 0xFFFFFFFF)) {
     return 'Gray is a neutral tone that pairs simply with white, making the outfit look soft and modern';
-  } else if ((color1 == 0xFFFFFFFF && color2 == 0xFF0000FF) || (color1 == 0xFF0000FF && color2 == 0xFFFFFFFF)) {
+  } else if ((color1 == 0xFFFFFFFF && color2 == 0xFF0000FF) ||
+      (color1 == 0xFF0000FF && color2 == 0xFFFFFFFF)) {
     return 'Blue adds a refreshing and formal touch, making the outfit look lively';
-  } else if ((color1 == 0xFFFFFFFF && color2 == 0xFF4B0082) || (color1 == 0xFF4B0082 && color2 == 0xFFFFFFFF)) {
+  } else if ((color1 == 0xFFFFFFFF && color2 == 0xFF4B0082) ||
+      (color1 == 0xFF4B0082 && color2 == 0xFFFFFFFF)) {
     return 'Dark purple adds depth and luxury to the outfit, making white look sophisticated';
-  } else if ((color1 == 0xFFFFFFFF && color2 == 0xFF32CD32) || (color1 == 0xFF32CD32 && color2 == 0xFFFFFFFF)) {
+  } else if ((color1 == 0xFFFFFFFF && color2 == 0xFF32CD32) ||
+      (color1 == 0xFF32CD32 && color2 == 0xFFFFFFFF)) {
     return 'Lime green adds brightness and freshness, making the outfit look energetic and fun';
-  } else if ((color1 == 0xFFFFFFFF && color2 == 0xFFFF4081) || (color1 == 0xFFFF4081 && color2 == 0xFFFFFFFF)) {
+  } else if ((color1 == 0xFFFFFFFF && color2 == 0xFFFF4081) ||
+      (color1 == 0xFFFF4081 && color2 == 0xFFFFFFFF)) {
     return 'Pink makes white look soft and bright';
-  } else if ((color1 == 0xFFFFFFFF && color2 == 0xFFFFA500) || (color1 == 0xFFFFA500 && color2 == 0xFFFFFFFF)) {
+  } else if ((color1 == 0xFFFFFFFF && color2 == 0xFFFFA500) ||
+      (color1 == 0xFFFFA500 && color2 == 0xFFFFFFFF)) {
     return 'Orange makes white look bright and interesting';
-  } else if ((color1 == 0xFF621C8D && color2 == 0xFFFFFFFF) || (color1 == 0xFFFFFFFF && color2 == 0xFF621C8D)) {
+  } else if ((color1 == 0xFF621C8D && color2 == 0xFFFFFFFF) ||
+      (color1 == 0xFFFFFFFF && color2 == 0xFF621C8D)) {
     return 'White makes purple stand out and look clean, adding brightness to a purple outfit';
-  } else if ((color1 == 0xFF621C8D && color2 == 0xFF000000) || (color1 == 0xFF000000 && color2 == 0xFF621C8D)) {
+  } else if ((color1 == 0xFF621C8D && color2 == 0xFF000000) ||
+      (color1 == 0xFF000000 && color2 == 0xFF621C8D)) {
     return 'Black adds depth and mystery to the outfit, making it look more dimensional';
-  } else if ((color1 == 0xFF621C8D && color2 == 0xFFFFFF00) || (color1 == 0xFFFFFF00 && color2 == 0xFF621C8D)) {
+  } else if ((color1 == 0xFF621C8D && color2 == 0xFFFFFF00) ||
+      (color1 == 0xFFFFFF00 && color2 == 0xFF621C8D)) {
     return 'Yellow creates an interesting and bright contrast, making the outfit stand out and look lively';
-  } else if ((color1 == 0xFF621C8D && color2 == 0xFF32CD32) || (color1 == 0xFF32CD32 && color2 == 0xFF621C8D)) {
+  } else if ((color1 == 0xFF621C8D && color2 == 0xFF32CD32) ||
+      (color1 == 0xFF32CD32 && color2 == 0xFF621C8D)) {
     return 'Lime green adds freshness and vibrancy, making the outfit look fun and energetic';
-  } else if ((color1 == 0xFF4B0082 && color2 == 0xFFFFFFFF) || (color1 == 0xFFFFFFFF && color2 == 0xFF4B0082)) {
+  } else if ((color1 == 0xFF4B0082 && color2 == 0xFFFFFFFF) ||
+      (color1 == 0xFFFFFFFF && color2 == 0xFF4B0082)) {
     return 'White helps dark purple stand out without being too dark, making the outfit look clean and modern';
-  } else if ((color1 == 0xFF4B0082 && color2 == 0xFF808080) || (color1 == 0xFF808080 && color2 == 0xFF4B0082)) {
+  } else if ((color1 == 0xFF4B0082 && color2 == 0xFF808080) ||
+      (color1 == 0xFF808080 && color2 == 0xFF4B0082)) {
     return 'Gray adds luxury and formality to the outfit, making it more dimensional';
-  } else if ((color1 == 0xFF4B0082 && color2 == 0xFF0000FF) || (color1 == 0xFF0000FF && color2 == 0xFF4B0082)) {
+  } else if ((color1 == 0xFF4B0082 && color2 == 0xFF0000FF) ||
+      (color1 == 0xFF0000FF && color2 == 0xFF4B0082)) {
     return 'Blue adds a professional touch without being too much, making the outfit balanced';
-  } else if ((color1 == 0xFF4B0082 && color2 == 0xFFFF4081) || (color1 == 0xFFFF4081 && color2 == 0xFF4B0082)) {
+  } else if ((color1 == 0xFF4B0082 && color2 == 0xFFFF4081) ||
+      (color1 == 0xFFFF4081 && color2 == 0xFF4B0082)) {
     return 'Pink adds softness and romance to the outfit, making it warm and friendly';
-  } else if ((color1 == 0xFF4B0082 && color2 == 0xFFFFFF00) || (color1 == 0xFFFFFF00 && color2 == 0xFF4B0082)) {
+  } else if ((color1 == 0xFF4B0082 && color2 == 0xFFFFFF00) ||
+      (color1 == 0xFFFFFF00 && color2 == 0xFF4B0082)) {
     return 'Yellow makes dark purple look bright and lively';
-  } else if ((color1 == 0xFF0000FF && color2 == 0xFFFFFFFF) || (color1 == 0xFFFFFFFF && color2 == 0xFF0000FF)) {
+  } else if ((color1 == 0xFF0000FF && color2 == 0xFFFFFFFF) ||
+      (color1 == 0xFFFFFFFF && color2 == 0xFF0000FF)) {
     return 'White makes the outfit look clean and fresh, making blue stand out';
-  } else if ((color1 == 0xFF0000FF && color2 == 0xFF000000) || (color1 == 0xFF000000 && color2 == 0xFF0000FF)) {
+  } else if ((color1 == 0xFF0000FF && color2 == 0xFF000000) ||
+      (color1 == 0xFF000000 && color2 == 0xFF0000FF)) {
     return 'Black adds contrast and formality to the outfit, making blue look powerful';
-  } else if ((color1 == 0xFF0000FF && color2 == 0xFFFFFF00) || (color1 == 0xFFFFFF00 && color2 == 0xFF0000FF)) {
+  } else if ((color1 == 0xFF0000FF && color2 == 0xFFFFFF00) ||
+      (color1 == 0xFFFFFF00 && color2 == 0xFF0000FF)) {
     return 'Yellow adds brightness and vibrancy, making the outfit fun and interesting';
-  } else if ((color1 == 0xFF0000FF && color2 == 0xFFFF4081) || (color1 == 0xFFFF4081 && color2 == 0xFF0000FF)) {
+  } else if ((color1 == 0xFF0000FF && color2 == 0xFFFF4081) ||
+      (color1 == 0xFFFF4081 && color2 == 0xFF0000FF)) {
     return 'Pink adds softness and friendliness, making blue look warmer';
-  } else if ((color1 == 0xFF0000FF && color2 == 0xFF30B0E8) || (color1 == 0xFF30B0E8 && color2 == 0xFF0000FF)) {
+  } else if ((color1 == 0xFF0000FF && color2 == 0xFF30B0E8) ||
+      (color1 == 0xFF30B0E8 && color2 == 0xFF0000FF)) {
     return 'Light blue makes blue look balanced and easy on the eyes';
-  } else if ((color1 == 0xFF30B0E8 && color2 == 0xFFFFFFFF) || (color1 == 0xFFFFFFFF && color2 == 0xFF30B0E8)) {
+  } else if ((color1 == 0xFF30B0E8 && color2 == 0xFFFFFFFF) ||
+      (color1 == 0xFFFFFFFF && color2 == 0xFF30B0E8)) {
     return 'White makes the outfit look clean and fresh, making light blue stand out';
-  } else if ((color1 == 0xFF30B0E8 && color2 == 0xFF000000) || (color1 == 0xFF000000 && color2 == 0xFF30B0E8)) {
+  } else if ((color1 == 0xFF30B0E8 && color2 == 0xFF000000) ||
+      (color1 == 0xFF000000 && color2 == 0xFF30B0E8)) {
     return 'Black adds contrast and formality, making light blue look powerful';
-  } else if ((color1 == 0xFF30B0E8 && color2 == 0xFFFFFF00) || (color1 == 0xFFFFFF00 && color2 == 0xFF30B0E8)) {
+  } else if ((color1 == 0xFF30B0E8 && color2 == 0xFFFFFF00) ||
+      (color1 == 0xFFFFFF00 && color2 == 0xFF30B0E8)) {
     return 'Yellow adds brightness and vibrancy, making the outfit fun and interesting';
-  } else if ((color1 == 0xFF30B0E8 && color2 == 0xFF17770F) || (color1 == 0xFF17770F && color2 == 0xFF30B0E8)) {
+  } else if ((color1 == 0xFF30B0E8 && color2 == 0xFF17770F) ||
+      (color1 == 0xFF17770F && color2 == 0xFF30B0E8)) {
     return 'Green adds freshness and vibrancy, making the outfit bright and energetic';
-  } else if ((color1 == 0xFF30B0E8 && color2 == 0xFF62CF2F) || (color1 == 0xFF62CF2F && color2 == 0xFF30B0E8)) {
+  } else if ((color1 == 0xFF30B0E8 && color2 == 0xFF62CF2F) ||
+      (color1 == 0xFF62CF2F && color2 == 0xFF30B0E8)) {
     return 'Lime green makes light blue look bright and vibrant';
-  } else if ((color1 == 0xFF30B0E8 && color2 == 0xFFFFA500) || (color1 == 0xFFFFA500 && color2 == 0xFF30B0E8)) {
+  } else if ((color1 == 0xFF30B0E8 && color2 == 0xFFFFA500) ||
+      (color1 == 0xFFFFA500 && color2 == 0xFF30B0E8)) {
     return 'Orange makes light blue look energetic and fun';
-  } else if ((color1 == 0xFF53CDBF && color2 == 0xFFFFFFFF) || (color1 == 0xFFFFFFFF && color2 == 0xFF53CDBF)) {
+  } else if ((color1 == 0xFF53CDBF && color2 == 0xFFFFFFFF) ||
+      (color1 == 0xFFFFFFFF && color2 == 0xFF53CDBF)) {
     return 'White makes the outfit look clean and fresh, making sky blue stand out';
-  } else if ((color1 == 0xFF53CDBF && color2 == 0xFF000000) || (color1 == 0xFF000000 && color2 == 0xFF53CDBF)) {
+  } else if ((color1 == 0xFF53CDBF && color2 == 0xFF000000) ||
+      (color1 == 0xFF000000 && color2 == 0xFF53CDBF)) {
     return 'Black adds contrast and formality, making sky blue look powerful';
-  } else if ((color1 == 0xFF53CDBF && color2 == 0xFFFF4081) || (color1 == 0xFFFF4081 && color2 == 0xFF53CDBF)) {
+  } else if ((color1 == 0xFF53CDBF && color2 == 0xFFFF4081) ||
+      (color1 == 0xFFFF4081 && color2 == 0xFF53CDBF)) {
     return 'Pink adds softness and romance, making sky blue look warmer';
-  } else if ((color1 == 0xFF53CDBF && color2 == 0xFFFFFF00) || (color1 == 0xFFFFFF00 && color2 == 0xFF53CDBF)) {
+  } else if ((color1 == 0xFF53CDBF && color2 == 0xFFFFFF00) ||
+      (color1 == 0xFFFFFF00 && color2 == 0xFF53CDBF)) {
     return 'Yellow adds brightness and vibrancy, making the outfit fun and interesting';
-  } else if ((color1 == 0xFF53CDBF && color2 == 0xFF62CF2F) || (color1 == 0xFF62CF2F && color2 == 0xFF53CDBF)) {
+  } else if ((color1 == 0xFF53CDBF && color2 == 0xFF62CF2F) ||
+      (color1 == 0xFF62CF2F && color2 == 0xFF53CDBF)) {
     return 'Lime green makes sky blue look bright and vibrant';
-  } else if ((color1 == 0xFF53CDBF && color2 == 0xFFFFA500) || (color1 == 0xFFFFA500 && color2 == 0xFF53CDBF)) {
+  } else if ((color1 == 0xFF53CDBF && color2 == 0xFFFFA500) ||
+      (color1 == 0xFFFFA500 && color2 == 0xFF53CDBF)) {
     return 'Orange makes sky blue look energetic and fun';
-  } else if ((color1 == 0xFF17770F && color2 == 0xFFFFFFFF) || (color1 == 0xFFFFFFFF && color2 == 0xFF17770F)) {
+  } else if ((color1 == 0xFF17770F && color2 == 0xFFFFFFFF) ||
+      (color1 == 0xFFFFFFFF && color2 == 0xFF17770F)) {
     return 'White makes green look bright && clean, making green stand out';
-  } else if ((color1 == 0xFF17770F && color2 == 0xFF000000) || (color1 == 0xFF000000 && color2 == 0xFF17770F)) {
+  } else if ((color1 == 0xFF17770F && color2 == 0xFF000000) ||
+      (color1 == 0xFF000000 && color2 == 0xFF17770F)) {
     return 'Black adds contrast and mystery, making green look more dimensional';
-  } else if ((color1 == 0xFF17770F && color2 == 0xFFFFFF00) || (color1 == 0xFFFFFF00 && color2 == 0xFF17770F)) {
+  } else if ((color1 == 0xFF17770F && color2 == 0xFFFFFF00) ||
+      (color1 == 0xFFFFFF00 && color2 == 0xFF17770F)) {
     return 'Yellow adds brightness and vibrancy, making the outfit fun and interesting';
-  } else if ((color1 == 0xFF17770F && color2 == 0xFFFF4081) || (color1 == 0xFFFF4081 && color2 == 0xFF17770F)) {
+  } else if ((color1 == 0xFF17770F && color2 == 0xFFFF4081) ||
+      (color1 == 0xFFFF4081 && color2 == 0xFF17770F)) {
     return 'Pink adds softness and friendliness, making green look warmer';
-  } else if ((color1 == 0xFF17770F && color2 == 0xFFFFA500) || (color1 == 0xFFFFA500 && color2 == 0xFF17770F)) {
+  } else if ((color1 == 0xFF17770F && color2 == 0xFFFFA500) ||
+      (color1 == 0xFFFFA500 && color2 == 0xFF17770F)) {
     return 'Orange makes green look bright and energetic';
-  } else if ((color1 == 0xFF62CF2F && color2 == 0xFFFFFFFF) || (color1 == 0xFFFFFFFF && color2 == 0xFF62CF2F)) {
+  } else if ((color1 == 0xFF62CF2F && color2 == 0xFFFFFFFF) ||
+      (color1 == 0xFFFFFFFF && color2 == 0xFF62CF2F)) {
     return 'White makes lime green look bright && clean, making lime green stand out';
-  } else if ((color1 == 0xFF62CF2F && color2 == 0xFF000000) || (color1 == 0xFF000000 && color2 == 0xFF62CF2F)) {
+  } else if ((color1 == 0xFF62CF2F && color2 == 0xFF000000) ||
+      (color1 == 0xFF000000 && color2 == 0xFF62CF2F)) {
     return 'Black adds contrast and mystery, making lime green look more dimensional';
-  } else if ((color1 == 0xFF62CF2F && color2 == 0xFFFFFF00) || (color1 == 0xFFFFFF00 && color2 == 0xFF62CF2F)) {
+  } else if ((color1 == 0xFF62CF2F && color2 == 0xFFFFFF00) ||
+      (color1 == 0xFFFFFF00 && color2 == 0xFF62CF2F)) {
     return 'Yellow makes lime green look bright and vibrant';
-  } else if ((color1 == 0xFF62CF2F && color2 == 0xFFFF0000) || (color1 == 0xFFFF0000 && color2 == 0xFF62CF2F)) {
+  } else if ((color1 == 0xFF62CF2F && color2 == 0xFFFF0000) ||
+      (color1 == 0xFFFF0000 && color2 == 0xFF62CF2F)) {
     return 'Red makes lime green look bright and interesting';
-  } else if ((color1 == 0xFF62CF2F && color2 == 0xFFFFA500) || (color1 == 0xFFFFA500 && color2 == 0xFF62CF2F)) {
+  } else if ((color1 == 0xFF62CF2F && color2 == 0xFFFFA500) ||
+      (color1 == 0xFFFFA500 && color2 == 0xFF62CF2F)) {
     return 'Orange makes lime green look bright and energetic';
-  } else if ((color1 == 0xFF202FB3 && color2 == 0xFFFF4081) || (color1 == 0xFFFF4081 && color2 == 0xFF202FB3)) {
+  } else if ((color1 == 0xFF202FB3 && color2 == 0xFFFF4081) ||
+      (color1 == 0xFFFF4081 && color2 == 0xFF202FB3)) {
     return 'Blue and pink make a bright and lively combination. Pink makes blue look warm && cute';
-  } else if ((color1 == 0xFF202FB3 && color2 == 0xFFFFFF00) || (color1 == 0xFFFFFF00 && color2 == 0xFF202FB3)) {
+  } else if ((color1 == 0xFF202FB3 && color2 == 0xFFFFFF00) ||
+      (color1 == 0xFFFFFF00 && color2 == 0xFF202FB3)) {
     return 'Blue and yellow make a bright and lively combination. Yellow makes blue look energetic and interesting';
-  } else if ((color1 == 0xFF202FB3 && color2 == 0xFF53CDBF) || (color1 == 0xFF53CDBF && color2 == 0xFF202FB3)) {
+  } else if ((color1 == 0xFF202FB3 && color2 == 0xFF53CDBF) ||
+      (color1 == 0xFF53CDBF && color2 == 0xFF202FB3)) {
     return 'Blue and sky blue make a bright and modern combination. Sky blue makes blue look more interesting and balanced';
-  } else if ((color1 == 0xFF202FB3 && color2 == 0xFFFF0000) || (color1 == 0xFFFF0000 && color2 == 0xFF202FB3)) {
+  } else if ((color1 == 0xFF202FB3 && color2 == 0xFFFF0000) ||
+      (color1 == 0xFFFF0000 && color2 == 0xFF202FB3)) {
     return 'Blue and red make a bright and powerful combination. Red makes blue stand out and look lively';
-  } else if ((color1 == 0xFF202FB3 && color2 == 0xFF621C8D) || (color1 == 0xFF621C8D && color2 == 0xFF202FB3)) {
+  } else if ((color1 == 0xFF202FB3 && color2 == 0xFF621C8D) ||
+      (color1 == 0xFF621C8D && color2 == 0xFF202FB3)) {
     return 'Blue and purple make a deep and interesting combination. Purple makes blue look complex and soft';
   } else if (color1 == 0xFF202FB3 && color2 == 0xFF202FB3) {
     return 'Blue makes blue look balanced and easy on the eyes, creating a modern and interesting combination';
-  } else if ((color1 == 0xFF202FB3 && color2 == 0xFF30B0E8) || (color1 == 0xFF30B0E8 && color2 == 0xFF202FB3)) {
+  } else if ((color1 == 0xFF202FB3 && color2 == 0xFF30B0E8) ||
+      (color1 == 0xFF30B0E8 && color2 == 0xFF202FB3)) {
     return 'Light blue makes blue look bright and easy on the eyes';
-  } else if ((color1 == 0xFF202FB3 && color2 == 0xFF62CF2F) || (color1 == 0xFF62CF2F && color2 == 0xFF202FB3)) {
+  } else if ((color1 == 0xFF202FB3 && color2 == 0xFF62CF2F) ||
+      (color1 == 0xFF62CF2F && color2 == 0xFF202FB3)) {
     return 'Lime green makes blue look bright and lively';
-  } else if ((color1 == 0xFF202FB3 && color2 == 0xFFFFA500) || (color1 == 0xFFFFA500 && color2 == 0xFF202FB3)) {
+  } else if ((color1 == 0xFF202FB3 && color2 == 0xFFFFA500) ||
+      (color1 == 0xFFFFA500 && color2 == 0xFF202FB3)) {
     return 'Orange makes blue look energetic and interesting';
-  } else if ((color1 == 0xFFFFE4C4 && color2 == 0xFFFFFFFF) || (color1 == 0xFFFFFFFF && color2 == 0xFFFFE4C4)) {
+  } else if ((color1 == 0xFFFFE4C4 && color2 == 0xFFFFFFFF) ||
+      (color1 == 0xFFFFFFFF && color2 == 0xFFFFE4C4)) {
     return 'Cream and white make a clean and polite combination. White makes cream look soft and bright';
-  } else if ((color1 == 0xFFFFE4C4 && color2 == 0xFF808080) || (color1 == 0xFF808080 && color2 == 0xFFFFE4C4)) {
+  } else if ((color1 == 0xFFFFE4C4 && color2 == 0xFF808080) ||
+      (color1 == 0xFF808080 && color2 == 0xFFFFE4C4)) {
     return 'Cream and gray make a soft and polite combination. Gray makes cream look modern and easy on the eyes';
-  } else if ((color1 == 0xFFFFE4C4 && color2 == 0xFF793A1F) || (color1 == 0xFF793A1F && color2 == 0xFFFFE4C4)) {
+  } else if ((color1 == 0xFFFFE4C4 && color2 == 0xFF793A1F) ||
+      (color1 == 0xFF793A1F && color2 == 0xFFFFE4C4)) {
     return 'Cream and brown make a warm and soft combination. Brown makes cream look subtle and polite';
-  } else if ((color1 == 0xFFFFE4C4 && color2 == 0xFF000000) || (color1 == 0xFF000000 && color2 == 0xFFFFE4C4)) {
+  } else if ((color1 == 0xFFFFE4C4 && color2 == 0xFF000000) ||
+      (color1 == 0xFF000000 && color2 == 0xFFFFE4C4)) {
     return 'Cream and black make a contrasting and interesting combination. Black makes cream stand out and look polite';
-  } else if ((color1 == 0xFFFFE4C4 && color2 == 0xFFFFFF00) || (color1 == 0xFFFFFF00 && color2 == 0xFFFFE4C4)) {
+  } else if ((color1 == 0xFFFFE4C4 && color2 == 0xFFFFFF00) ||
+      (color1 == 0xFFFFFF00 && color2 == 0xFFFFE4C4)) {
     return 'Cream and yellow make a bright and lively combination. Yellow makes cream look energetic and interesting';
-  } else if ((color1 == 0xFFFFE4C4 && color2 == 0xFF202FB3) || (color1 == 0xFF202FB3 && color2 == 0xFFFFE4C4)) {
+  } else if ((color1 == 0xFFFFE4C4 && color2 == 0xFF202FB3) ||
+      (color1 == 0xFF202FB3 && color2 == 0xFFFFE4C4)) {
     return 'Cream and blue make a modern and bright combination. Blue makes cream look balanced and soft';
-  } else if ((color1 == 0xFFFFE4C4 && color2 == 0xFF17770F) || (color1 == 0xFF17770F && color2 == 0xFFFFE4C4)) {
+  } else if ((color1 == 0xFFFFE4C4 && color2 == 0xFF17770F) ||
+      (color1 == 0xFF17770F && color2 == 0xFFFFE4C4)) {
     return 'Cream and green make a fresh and soft combination. Green makes cream look energetic and polite';
-  } else if ((color1 == 0xFFFFE4C4 && color2 == 0xFFFF4081) || (color1 == 0xFFFF4081 && color2 == 0xFFFFE4C4)) {
+  } else if ((color1 == 0xFFFFE4C4 && color2 == 0xFFFF4081) ||
+      (color1 == 0xFFFF4081 && color2 == 0xFFFFE4C4)) {
     return 'Cream and pink make a cute and bright combination. Pink makes cream look warm and lively';
-  } else if ((color1 == 0xFFFFE4C4 && color2 == 0xFFFF0000) || (color1 == 0xFFFF0000 && color2 == 0xFFFFE4C4)) {
+  } else if ((color1 == 0xFFFFE4C4 && color2 == 0xFFFF0000) ||
+      (color1 == 0xFFFF0000 && color2 == 0xFFFFE4C4)) {
     return 'Cream and red make a standout and powerful combination. Red makes cream look interesting and lively';
-  } else if ((color1 == 0xFF793A1F && color2 == 0xFFFFFFFF) || (color1 == 0xFFFFFFFF && color2 == 0xFF793A1F)) {
+  } else if ((color1 == 0xFF793A1F && color2 == 0xFFFFFFFF) ||
+      (color1 == 0xFFFFFFFF && color2 == 0xFF793A1F)) {
     return 'Brown and white make a clean and polite combination. White makes brown look soft and bright';
-  } else if ((color1 == 0xFF793A1F && color2 == 0xFF808080) || (color1 == 0xFF808080 && color2 == 0xFF793A1F)) {
+  } else if ((color1 == 0xFF793A1F && color2 == 0xFF808080) ||
+      (color1 == 0xFF808080 && color2 == 0xFF793A1F)) {
     return 'Brown and gray make a soft and polite combination. Gray makes brown look modern and easy on the eyes';
-  } else if ((color1 == 0xFF793A1F && color2 == 0xFF202FB3) || (color1 == 0xFF202FB3 && color2 == 0xFF793A1F)) {
+  } else if ((color1 == 0xFF793A1F && color2 == 0xFF202FB3) ||
+      (color1 == 0xFF202FB3 && color2 == 0xFF793A1F)) {
     return 'Brown and blue make a modern and bright combination. Blue makes brown look balanced and soft';
-  } else if ((color1 == 0xFF793A1F && color2 == 0xFF17770F) || (color1 == 0xFF17770F && color2 == 0xFF793A1F)) {
+  } else if ((color1 == 0xFF793A1F && color2 == 0xFF17770F) ||
+      (color1 == 0xFF17770F && color2 == 0xFF793A1F)) {
     return 'Brown and green make a fresh and soft combination. Green makes brown look energetic and polite';
-  } else if ((color1 == 0xFF793A1F && color2 == 0xFFFFFF00) || (color1 == 0xFFFFFF00 && color2 == 0xFF793A1F)) {
+  } else if ((color1 == 0xFF793A1F && color2 == 0xFFFFFF00) ||
+      (color1 == 0xFFFFFF00 && color2 == 0xFF793A1F)) {
     return 'Brown and yellow make a bright and lively combination. Yellow makes brown look energetic and interesting';
-  } else if ((color1 == 0xFFFF0000 && color2 == 0xFF621C8D) || (color1 == 0xFF621C8D && color2 == 0xFFFF0000)) {
+  } else if ((color1 == 0xFFFF0000 && color2 == 0xFF621C8D) ||
+      (color1 == 0xFF621C8D && color2 == 0xFFFF0000)) {
     return 'Red and purple make a deep and interesting combination. Purple makes red look complex and soft';
-  } else if ((color1 == 0xFFFF0000 && color2 == 0xFF793A1F) || (color1 == 0xFF793A1F && color2 == 0xFFFF0000)) {
+  } else if ((color1 == 0xFFFF0000 && color2 == 0xFF793A1F) ||
+      (color1 == 0xFF793A1F && color2 == 0xFFFF0000)) {
     return 'Red and brown make a warm and polite combination. Brown makes red look interesting and lively';
   } else if ((color1 == 0xFFFF0000 && color2 == 0xFFFF4081) || (color1 == 0xFFFF4081 && color2 == 0xFFFF0000)) {
     return 'Red and pink make a cute and bright combination. Pink makes red look warm and lively';
