@@ -280,6 +280,134 @@ class NewsScreen extends StatelessWidget {
                           )
                         ],
                       ),
+                      30.heightBox,
+                      Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              'TOP10 POPULAR MATCHING'
+                                  .text
+                                  .fontFamily(bold)
+                                  .color(blackColor)
+                                  .size(20)
+                                  .make(),
+                              InkWell(
+                                onTap: () {
+                                  Get.to(() => AllStoreScreen());
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Text('See All')
+                                        .text
+                                        .fontFamily(medium)
+                                        .size(16)
+                                        .color(blackColor)
+                                        .make(),
+                                    10.widthBox,
+                                    Image.asset(
+                                      icSeeAll,
+                                      width: 14,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          20.heightBox,
+                          GridView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              mainAxisSpacing: 12,
+                              crossAxisSpacing: 12,
+                              childAspectRatio: 1.3,
+                            ),
+                            itemCount: 6,
+                            itemBuilder: (context, index) {
+                              List<Map<String, String>> cardData = [
+                                {
+                                  'image': 'assets/icons/Icon/Formal.png',
+                                  'name': 'Formal Attire'
+                                },
+                                {
+                                  'image': 'assets/icons/Icon/Semi-Formal.png',
+                                  'name': 'Semi-Formal Attire'
+                                },
+                                {
+                                  'image': 'assets/icons/Icon/Casual.png',
+                                  'name': 'Casual Attire'
+                                },
+                                {
+                                  'image': 'assets/icons/Icon/Vector.png',
+                                  'name': 'Seasonal Attire'
+                                },
+                                {
+                                  'image': 'assets/icons/Icon/Special.png',
+                                  'name': 'Special Activity Attire'
+                                },
+                                {
+                                  'image': 'assets/icons/Icon/Special.png',
+                                  'name': 'Work from Home'
+                                }
+                              ];
+
+                              return GestureDetector(
+                                onTap: () {
+                                  print("Tapped on item $index");
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.fromLTRB(10, 20, 10,
+                                      10), // เพิ่ม padding รอบรูปภาพ
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment
+                                        .start, // จัดให้อยู่ด้านบน
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(0),
+                                        child: SizedBox(
+                                          width: 30,
+                                          height: 30,
+                                          child: Image.asset(
+                                            cardData[index]['image']!,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(height: 5),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 0, horizontal: 5),
+                                        child: Text(
+                                          cardData[index]['name']!,
+                                          style: const TextStyle(
+                                            fontFamily: medium,
+                                            fontSize: 15,
+                                            color: Colors.black,
+                                            height:
+                                                1.0, // ปรับระยะห่างระหว่างบรรทัดให้น้อยลง
+                                          ),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                                    .box
+                                    .white
+                                    .roundedSM
+                                    .border(color: greyLine)
+                                    .make(),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
