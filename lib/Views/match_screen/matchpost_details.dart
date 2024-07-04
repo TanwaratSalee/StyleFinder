@@ -607,7 +607,8 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                               ),
                             ),
                           ),
-                        )
+                        ),
+                        50.heightBox
                       ],
                     ).paddingSymmetric(horizontal: 12),
                   ],

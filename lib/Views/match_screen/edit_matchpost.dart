@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_finalproject/Views/match_screen/matchpost_details.dart';
+import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -41,6 +42,15 @@ class _EditMatchProductState extends State<EditMatchProduct> {
     pIdLower = widget.document.docId; // Adjust this if needed
     fetchItemsDetails(widget.document.docId);
   }
+
+  Map<String, String> situationNames = {
+    'formal': 'Formal Attire',
+    'semi-formal': 'Semi-Formal Attire',
+    'casual': 'Casual Attire',
+    'special-activity': 'Special Activity Attire',
+    'seasonal': 'Seasonal Attire',
+    'work-from-home': 'Work from Home',
+  };
 
   Future<void> fetchItemsDetails(String docId) async {
     try {
@@ -98,15 +108,27 @@ class _EditMatchProductState extends State<EditMatchProduct> {
             .size(24)
             .fontFamily(medium)
             .make(),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () async {
-              await onSaveButtonPressed(context);
-              Get.back();
-            },
-            child: const Text('Save', style: TextStyle(color: primaryApp)),
-          ),
-        ],
+        // actions: <Widget>[
+        //   TextButton(
+        //     onPressed: () async {
+        //       await onSaveButtonPressed(context);
+        //       Get.back();
+        //     },
+        //     child: const Text('Save', style: TextStyle(color: primaryApp)),
+        //   ),
+        // ],
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.fromLTRB(24,10,24,22),
+        child: tapButton(
+          onPress: () async {
+                await onSaveButtonPressed(context);
+                Get.back();
+              },
+              color: primaryApp,
+              title: 'Save',
+              textColor: whiteColor
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -179,7 +201,6 @@ class _EditMatchProductState extends State<EditMatchProduct> {
                             fit: BoxFit.cover,
                           ),
                         ),
-                      const SizedBox(height: 8),
                       SizedBox(
                         width: 130,
                         child: Text(
@@ -203,13 +224,13 @@ class _EditMatchProductState extends State<EditMatchProduct> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  15.heightBox,
                   const Text("Suitable for gender")
                       .text
                       .size(16)
                       .color(blackColor)
                       .fontFamily(medium)
                       .make(),
-                  const SizedBox(height: 8),
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
@@ -246,34 +267,32 @@ class _EditMatchProductState extends State<EditMatchProduct> {
                       );
                     }).toList(),
                   ).box.makeCentered(),
-                  const SizedBox(height: 15),
-                  const Text("Situations")
+                  15.heightBox,
+                  const Text("Suitable for work and situations")
                       .text
                       .size(16)
                       .color(blackColor)
                       .fontFamily(medium)
                       .make(),
-                  const SizedBox(height: 8),
                   Wrap(
-                    spacing: 6,
+                    spacing: 8,
                     runSpacing: 1,
                     children: [
                       'formal',
                       'semi-formal',
                       'casual',
-                      'special-activity'
+                      'special-activity',
                       'seasonal',
                       'work-from-home'
-                    ].map((situration) {
-                      bool isSelected =
-                          selectedSituations.contains(situration);
+                    ].map((situation) {
+                      bool isSelected = selectedSituations.contains(situation);
                       return ChoiceChip(
                         showCheckmark: false,
                         label: Container(
-                          width: 75,
+                          width: 130,
                           alignment: Alignment.center,
                           child: Text(
-                            capitalize(situration),
+                            capitalize(situationNames[situation] ?? ''),
                             style: TextStyle(
                               color: isSelected ? primaryApp : greyColor,
                               fontFamily: isSelected ? semiBold : regular,
@@ -284,9 +303,9 @@ class _EditMatchProductState extends State<EditMatchProduct> {
                         onSelected: (selected) {
                           setState(() {
                             if (isSelected) {
-                              selectedSituations.remove(situration);
+                              selectedSituations.remove(situation);
                             } else {
-                              selectedSituations.add(situration);
+                              selectedSituations.add(situation);
                             }
                           });
                         },
@@ -298,15 +317,15 @@ class _EditMatchProductState extends State<EditMatchProduct> {
                       );
                     }).toList(),
                   ).box.makeCentered(),
-                  const Text("Collection")
+                  15.heightBox,
+                  const Text("Suitable for seasons")
                       .text
                       .size(16)
                       .color(blackColor)
                       .fontFamily(medium)
                       .make(),
-                  const SizedBox(height: 8),
                   Wrap(
-                    spacing: 6,
+                    spacing: 8,
                     runSpacing: 1,
                     children: [
                       'summer',
@@ -319,7 +338,7 @@ class _EditMatchProductState extends State<EditMatchProduct> {
                       return ChoiceChip(
                         showCheckmark: false,
                         label: Container(
-                          width: 75,
+                          width: 130,
                           alignment: Alignment.center,
                           child: Text(
                             capitalize(collection),
@@ -353,7 +372,7 @@ class _EditMatchProductState extends State<EditMatchProduct> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 10),
+                        
                         Text(
                           "Explain clothing matching",
                           style: TextStyle(
@@ -384,7 +403,7 @@ class _EditMatchProductState extends State<EditMatchProduct> {
                   ),
                 ],
               ).paddingSymmetric(horizontal: 12),
-              const SizedBox(height: 100),
+              const SizedBox(height: 30),
             ],
           ),
         ),
@@ -409,7 +428,7 @@ class _EditMatchProductState extends State<EditMatchProduct> {
 
     await FirebaseFirestore.instance
         .collection('usermixandmatch')
-        .doc(widget.document.docId) // เปลี่ยนเป็น widget.document
+        .doc(widget.document.docId)
         .update(userData)
         .then((_) {
       VxToast.show(context, msg: "Match updated successfully.");
