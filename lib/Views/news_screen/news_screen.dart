@@ -361,7 +361,7 @@ class NewsScreen extends StatelessWidget {
                                 },
                                 child: Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                                      const EdgeInsets.fromLTRB(10, 10, 10, 10),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
@@ -377,7 +377,7 @@ class NewsScreen extends StatelessWidget {
                                         ),
                                       ),
                                       SizedBox(
-                                        height: 5,
+                                        height: 0,
                                       ),
                                       Container(
                                         padding: const EdgeInsets.symmetric(
