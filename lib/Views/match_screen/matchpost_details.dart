@@ -204,6 +204,15 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
     });
   }
 
+  Map<String, String> situationNames = {
+    'formal': 'Formal Attire',
+    'semi-formal': 'Semi-Formal Attire',
+    'casual': 'Casual Attire',
+    'special-activity': 'Special Activity Attire',
+    'seasonal': 'Seasonal Attire',
+    'work-from-home': 'Work from Home',
+  };
+
   @override
   Widget build(BuildContext context) {
     bool isCurrentUser =
@@ -465,7 +474,13 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                             ),
                           ),
                         ],
-                      ).box.white.roundedSM.border(color: greyLine).outerShadowSm.make(),
+                      )
+                          .box
+                          .white
+                          .roundedSM
+                          .border(color: greyLine)
+                          .outerShadowSm
+                          .make(),
                     ),
                     20.heightBox,
                     Column(
@@ -474,7 +489,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                           alignment: Alignment.centerLeft,
                           child: const Text(
                             'Suitable for gender',
-                          ).text.fontFamily(regular).size(16).make(),
+                          ).text.fontFamily(medium).size(14).make(),
                         ),
                         Column(
                           children: [
@@ -513,7 +528,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                           alignment: Alignment.centerLeft,
                           child: const Text(
                             'Suitable for work and situations',
-                          ).text.fontFamily(regular).size(16).make(),
+                          ).text.fontFamily(medium).size(14).make(),
                         ),
                         Column(
                           children: [
@@ -521,13 +536,13 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                               height: 40,
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
-                                itemCount: widget.situations.length, 
+                                itemCount: widget.situations.length,
                                 itemBuilder: (context, index) {
-                                  String item = widget.situations[index].toString(); 
+                                  String item =widget.situations[index].toString();
+                                  String fullName =situationNames[item] ?? item;
                                   return Container(
                                     alignment: Alignment.center,
-                                    child: Text(
-                                      "${item[0].toUpperCase()}${item.substring(1)}",
+                                    child: Text(fullName,
                                     ).text.size(14).color(greyDark).fontFamily(medium).make(),
                                   ).box.color(thinPrimaryApp).margin(const EdgeInsets.symmetric(horizontal: 6)).roundedLg.padding(const EdgeInsets.symmetric(horizontal: 24, vertical: 12)).make();
                                 },
@@ -539,8 +554,8 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: const Text(
-                            'Opportunity suitable for',
-                          ).text.fontFamily(regular).size(16).make(),
+                            'Suitable for seasons',
+                          ).text.fontFamily(medium).size(14).make(),
                         ),
                         Column(
                           children: [
@@ -581,17 +596,13 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                           alignment: Alignment.centerLeft,
                           child: const Text(
                             'The reason for match',
-                            style: TextStyle(
-                              fontFamily: regular,
-                              fontSize: 16,
-                            ),
-                          ),
+                          ).text.fontFamily(medium).size(14).make(),
                         ),
                         Container(
                           width: double.infinity,
                           // height: 100,
                           decoration: BoxDecoration(
-                            color: greyThin,
+                            color: greyMessage,
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Align(

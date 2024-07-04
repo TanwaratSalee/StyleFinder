@@ -262,7 +262,7 @@ class _ProfileScreenState extends State<ProfileScreen>
             crossAxisCount: 2,
             crossAxisSpacing: 7,
             mainAxisSpacing: 8,
-            childAspectRatio: 9.5 / 11,
+            childAspectRatio: 9 / 11,
           ),
           itemCount: filteredData.length,
           itemBuilder: (context, index) {
