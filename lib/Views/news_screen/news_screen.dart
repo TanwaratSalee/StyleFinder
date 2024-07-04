@@ -332,7 +332,11 @@ class NewsScreen extends StatelessWidget {
                                 {'image': '', 'name': 'Formal Attire'},
                                 {'image': '', 'name': 'Semi-Formal Attire'},
                                 {'image': '', 'name': 'Casual Attire'},
-                                {'image': '', 'name': 'Seasonal Attire'},
+                                {
+                                  'image':
+                                      'assets/icons/iconPopMatch/Vector.jpg',
+                                  'name': 'Seasonal Attire'
+                                },
                                 {
                                   'image': '',
                                   'name': 'Special Activity Attire'
