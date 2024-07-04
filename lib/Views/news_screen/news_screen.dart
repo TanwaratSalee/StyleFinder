@@ -324,48 +324,46 @@ class NewsScreen extends StatelessWidget {
                               crossAxisCount: 3,
                               mainAxisSpacing: 12,
                               crossAxisSpacing: 12,
-                              childAspectRatio: 1.3,
+                              childAspectRatio: 1.3, // อัตราส่วนของแต่ละการ์ด
                             ),
                             itemCount: 6,
                             itemBuilder: (context, index) {
                               List<Map<String, dynamic>> cardData = [
-                                {'image': '', 'name': 'Formal Attire'},
-                                {'image': '', 'name': 'Semi-Formal Attire'},
-                                {'image': '', 'name': 'Casual Attire'},
                                 {
                                   'image':
-                                      'assets/icons/iconPopMatch/Vector.jpg',
-                                  'name': 'Seasonal Attire'
+                                      '/Users/kangjinju/Downloads/user_finder_app/assets/icons/iconPopMatch/Formal.png',
+                                  'title': 'Formal Attire'
                                 },
                                 {
-                                  'image': '',
-                                  'name': 'Special Activity Attire'
+                                  'image':
+                                      '/Users/kangjinju/Downloads/user_finder_app/assets/icons/iconPopMatch/Semi-Formal.png',
+                                  'title': 'Semi-Formal Attire'
                                 },
-                                {'image': '', 'name': 'Work from Home'}
+                                {
+                                  'image':
+                                      '/Users/kangjinju/Downloads/user_finder_app/assets/icons/iconPopMatch/Casual.png',
+                                  'title': 'Casual Attire'
+                                },
+                                {
+                                  'image':
+                                      '/Users/kangjinju/Downloads/user_finder_app/assets/icons/iconPopMatch/Vector.jpg',
+                                  'title': 'Seasonal Attire'
+                                },
+                                {
+                                  'image':
+                                      '/Users/kangjinju/Downloads/user_finder_app/assets/icons/iconPopMatch/Special.png',
+                                  'title': 'Special Activity Attire'
+                                },
+                                {
+                                  'image':
+                                      '/Users/kangjinju/Downloads/user_finder_app/assets/icons/iconPopMatch/Home.png',
+                                  'title': 'Work from Home'
+                                }
                               ];
 
                               return GestureDetector(
                                 onTap: () {
-                                  switch (index) {
-                                    case 0:
-                                      Get.to(() => AllStoreScreen());
-                                      break;
-                                    case 1:
-                                      Get.to(() => AllStoreScreen());
-                                      break;
-                                    case 2:
-                                      Get.to(() => AllStoreScreen());
-                                      break;
-                                    case 3:
-                                      Get.to(() => AllStoreScreen());
-                                      break;
-                                    case 4:
-                                      Get.to(() => AllStoreScreen());
-                                      break;
-                                    case 5:
-                                      Get.to(() => AllStoreScreen());
-                                      break;
-                                  }
+                                  Get.to(() => AllStoreScreen());
                                 },
                                 child: Container(
                                   padding:
@@ -384,15 +382,17 @@ class NewsScreen extends StatelessWidget {
                                           ),
                                         ),
                                       ),
-                                      SizedBox(height: 5),
+                                      SizedBox(
+                                        height: 0.1,
+                                      ),
                                       Container(
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 0, horizontal: 5),
                                         child: Text(
-                                          cardData[index]['name']!,
+                                          cardData[index]['title']!,
                                           style: const TextStyle(
                                             fontFamily: medium,
-                                            fontSize: 15,
+                                            fontSize: 13,
                                             color: Colors.black,
                                             height: 1.0,
                                           ),

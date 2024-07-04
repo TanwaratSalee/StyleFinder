@@ -19,10 +19,14 @@ const String icHome = "assets/icons/iconsNavbarinapp/Home.png";
 const String icNews = "assets/icons/iconsNavbarinapp/News.png";
 const String icMatch = "assets/icons/iconsNavbarinapp/match.png";
 const String icPerson = "assets/icons/iconsNavbarinapp/me.png";
-const String icHomeSelected = "assets/icons/iconsNavbarinapp/icHomeSelected.png";
-const String icNewsSelected = "assets/icons/iconsNavbarinapp/icNewsSelected.png";
-const String icMatchSelected = "assets/icons/iconsNavbarinapp/icMatchSelected.png";
-const String icPersonSelected = "assets/icons/iconsNavbarinapp/icPersonSelected.png";
+const String icHomeSelected =
+    "assets/icons/iconsNavbarinapp/icHomeSelected.png";
+const String icNewsSelected =
+    "assets/icons/iconsNavbarinapp/icNewsSelected.png";
+const String icMatchSelected =
+    "assets/icons/iconsNavbarinapp/icMatchSelected.png";
+const String icPersonSelected =
+    "assets/icons/iconsNavbarinapp/icPersonSelected.png";
 
 //other
 const String icLogoApp = "assets/images/LogoOnApp.png";
@@ -78,7 +82,8 @@ const String product5 = "assets/images/product5.png";
 
 // Profile Screen
 const String icTapProfileFav = "assets/icons/iconsAccount/icTapFavProfile.png";
-const String icTapPostProfile = "assets/icons/iconsAccount/icTapPostProfile.png";
+const String icTapPostProfile =
+    "assets/icons/iconsAccount/icTapPostProfile.png";
 const String icEyes = "assets/icons/icNormal/EYEs.png";
 
 const String imgProfile = "assets/images/Profile.png";
