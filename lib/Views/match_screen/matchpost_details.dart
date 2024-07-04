@@ -465,7 +465,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                             ),
                           ),
                         ],
-                      ).box.white.roundedSM.outerShadow.make(),
+                      ).box.white.roundedSM.border(color: greyLine).outerShadowSm.make(),
                     ),
                     20.heightBox,
                     Column(
@@ -478,7 +478,6 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                         ),
                         Column(
                           children: [
-                            const SizedBox(height: 10),
                             Container(
                               height: 40,
                               child: ListView.builder(
@@ -509,7 +508,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                             ),
                           ],
                         ),
-                        10.heightBox,
+                        15.heightBox,
                         Align(
                           alignment: Alignment.centerLeft,
                           child: const Text(
@@ -518,7 +517,6 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                         ),
                         Column(
                           children: [
-                            const SizedBox(height: 10),
                             Container(
                               height: 40,
                               child: ListView.builder(
@@ -537,7 +535,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                             ),
                           ],
                         ),
-                        10.heightBox,
+                        15.heightBox,
                         Align(
                           alignment: Alignment.centerLeft,
                           child: const Text(
@@ -546,7 +544,6 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                         ),
                         Column(
                           children: [
-                            const SizedBox(height: 10),
                             Container(
                               height: 40,
                               child: ListView.builder(
@@ -579,7 +576,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                             ),
                           ],
                         ),
-                        10.heightBox,
+                        15.heightBox,
                         Align(
                           alignment: Alignment.centerLeft,
                           child: const Text(
