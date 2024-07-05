@@ -159,3 +159,17 @@ const String icTrash = "assets/icons/icTrash.png";
 const String imgPaymentSuccful = 'assets/images/imgPaymentsuccful.png';
 const String imgVerify = 'assets/images/imgVerify.png';
 const String icInfo = 'assets/images/icInfo.png';
+
+//------------- popmatch
+const String imgcasual =
+    '/Users/kangjinju/Downloads/user_finder_app/assets/icons/Icons_popmath/Icons_popmath/casual.png';
+const String imgFormal =
+    '/Users/kangjinju/Downloads/user_finder_app/assets/icons/Icons_popmath/Icons_popmath/Formal.png';
+const String imgseasonal =
+    '/Users/kangjinju/Downloads/user_finder_app/assets/icons/Icons_popmath/Icons_popmath/seasonal.png';
+const String imgHome =
+    '/Users/kangjinju/Downloads/user_finder_app/assets/icons/Icons_popmath/Icons_popmath/Home.png';
+const String imgsemi =
+    '/Users/kangjinju/Downloads/user_finder_app/assets/icons/Icons_popmath/Icons_popmath/semi.png';
+const String imgspecail =
+    '/Users/kangjinju/Downloads/user_finder_app/assets/icons/Icons_popmath/Icons_popmath/specail.png';

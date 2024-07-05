@@ -329,30 +329,21 @@ class NewsScreen extends StatelessWidget {
                             itemCount: 6,
                             itemBuilder: (context, index) {
                               List<Map<String, dynamic>> cardData = [
+                                {'image': imgFormal, 'title': 'Formal Attire'},
                                 {
-                                  'image': imgPopupEmail,
-                                  'title': 'Formal Attire'
-                                },
-                                {
-                                  'image': imgPopupEmail,
+                                  'image': imgsemi,
                                   'title': 'Semi-Formal Attire'
                                 },
+                                {'image': imgcasual, 'title': 'Casual Attire'},
                                 {
-                                  'image': imgPopupEmail,
-                                  'title': 'Casual Attire'
-                                },
-                                {
-                                  'image': imgPopupEmail,
+                                  'image': imgseasonal,
                                   'title': 'Seasonal Attire'
                                 },
                                 {
-                                  'image': imgPopupEmail,
+                                  'image': imgspecail,
                                   'title': 'Special Activity Attire'
                                 },
-                                {
-                                  'image': imgPopupEmail,
-                                  'title': 'Work from Home'
-                                }
+                                {'image': imgHome, 'title': 'Work from Home'}
                               ];
 
                               return GestureDetector(
@@ -361,15 +352,15 @@ class NewsScreen extends StatelessWidget {
                                 },
                                 child: Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                      const EdgeInsets.fromLTRB(10, 15, 10, 10),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       ClipRRect(
                                         borderRadius: BorderRadius.circular(0),
                                         child: SizedBox(
-                                          width: 40,
-                                          height: 40,
+                                          width: 30,
+                                          height: 30,
                                           child: Image.asset(
                                             cardData[index]['image']!,
                                             fit: BoxFit.contain,
@@ -377,7 +368,7 @@ class NewsScreen extends StatelessWidget {
                                         ),
                                       ),
                                       SizedBox(
-                                        height: 0,
+                                        height: 5,
                                       ),
                                       Container(
                                         padding: const EdgeInsets.symmetric(
