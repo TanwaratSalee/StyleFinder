@@ -286,7 +286,7 @@ class NewsScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              'TOP10 POPULAR MATCHING'
+                              'TOP 10 POPULAR MATCHING'
                                   .text
                                   .fontFamily(bold)
                                   .color(blackColor)
@@ -329,43 +329,30 @@ class NewsScreen extends StatelessWidget {
                             itemCount: 6,
                             itemBuilder: (context, index) {
                               List<Map<String, dynamic>> cardData = [
-                                {'image': '', 'name': 'Formal Attire'},
-                                {'image': '', 'name': 'Semi-Formal Attire'},
-                                {'image': '', 'name': 'Casual Attire'},
-                                {'image': '', 'name': 'Seasonal Attire'},
+                                {'image': imgformal, 'title': 'Formal Attire'},
                                 {
-                                  'image': '',
-                                  'name': 'Special Activity Attire'
+                                  'image': imgsemi,
+                                  'title': 'Semi-Formal Attire'
                                 },
-                                {'image': '', 'name': 'Work from Home'}
+                                {'image': imgcasual, 'title': 'Casual Attire'},
+                                {
+                                  'image': imgseasonal,
+                                  'title': 'Seasonal Attire'
+                                },
+                                {
+                                  'image': imgspecail,
+                                  'title': 'Special Activity Attire'
+                                },
+                                {'image': imgHome, 'title': 'Work from Home'}
                               ];
 
                               return GestureDetector(
                                 onTap: () {
-                                  switch (index) {
-                                    case 0:
-                                      Get.to(() => AllStoreScreen());
-                                      break;
-                                    case 1:
-                                      Get.to(() => AllStoreScreen());
-                                      break;
-                                    case 2:
-                                      Get.to(() => AllStoreScreen());
-                                      break;
-                                    case 3:
-                                      Get.to(() => AllStoreScreen());
-                                      break;
-                                    case 4:
-                                      Get.to(() => AllStoreScreen());
-                                      break;
-                                    case 5:
-                                      Get.to(() => AllStoreScreen());
-                                      break;
-                                  }
+                                  Get.to(() => AllStoreScreen());
                                 },
                                 child: Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                                      const EdgeInsets.fromLTRB(10, 15, 10, 10),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
@@ -380,15 +367,17 @@ class NewsScreen extends StatelessWidget {
                                           ),
                                         ),
                                       ),
-                                      SizedBox(height: 5),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
                                       Container(
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 0, horizontal: 5),
                                         child: Text(
-                                          cardData[index]['name']!,
+                                          cardData[index]['title']!,
                                           style: const TextStyle(
                                             fontFamily: medium,
-                                            fontSize: 15,
+                                            fontSize: 13,
                                             color: Colors.black,
                                             height: 1.0,
                                           ),

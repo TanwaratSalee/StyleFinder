@@ -74,10 +74,7 @@ class StoreScreen extends StatelessWidget {
                             shape: BoxShape.circle,
                             border: Border.all(color: greyLine, width: 3),
                           ),
-                          child: ClipOval(
-                              child:
-                                  loadingIndicator() 
-                              ),
+                          child: ClipOval(child: loadingIndicator()),
                         );
                       } else if (snapshot.hasData) {
                         return Container(
@@ -213,10 +210,50 @@ class StoreScreen extends StatelessWidget {
   }
 
   Widget buildMatchTab() {
+    return DefaultTabController(
+      length: 7,
+      child: Column(
+        children: <Widget>[
+          const TabBar(
+            isScrollable: true,
+            indicatorColor: primaryApp,
+            labelStyle:
+                TextStyle(fontSize: 13, fontFamily: regular, color: greyDark),
+            unselectedLabelStyle:
+                TextStyle(fontSize: 12, fontFamily: regular, color: greyDark),
+            tabs: [
+              Tab(text: 'All'),
+              Tab(text: 'Formal Attire'),
+              Tab(text: 'Semi-Formal Attire'),
+              Tab(text: 'Casual Attire'),
+              Tab(text: 'Seasonal Attire'),
+              Tab(text: 'Special Activity Attire'),
+              Tab(text: 'Work from Home'),
+            ],
+          ).box.color(thinPrimaryApp).make(),
+          Expanded(
+            child: TabBarView(
+              children: [
+                buildMatchGrid('All'),
+                buildMatchGrid('Tops'),
+                buildMatchGrid('Bottoms'),
+                buildMatchGrid('Full Sets'),
+                buildMatchGrid('Accessories'),
+                buildMatchGrid('Others'),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildMatchGrid(String category) {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection('storemixandmatchs')
           .where('vendor_id', isEqualTo: vendorId)
+          .where('category', isEqualTo: category == 'All' ? null : category)
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
@@ -241,7 +278,6 @@ class StoreScreen extends StatelessWidget {
           );
         }
 
-        // Shuffle data to randomize
         data.shuffle(Random());
 
         return GridView.builder(
