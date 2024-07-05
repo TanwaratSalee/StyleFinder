@@ -163,7 +163,7 @@ const String icInfo = 'assets/images/icInfo.png';
 //------------- popmatch
 const String imgcasual = "assets/icons/casual.png";
 const String imgformal = "assets/icons/formal.png";
-const String imgseasonal = 'assets/icons/seasonal.png';
-const String imgHome = 'assets/icons/Home.png';
-const String imgsemi = 'assets/icons/semi.png';
-const String imgspecail = 'assets/icons/specail.png';
+const String imgseasonal = "assets/icons/seasonal.png";
+const String imgHome = "assets/icons/home.png";
+const String imgsemi = "assets/icons/semi.png";
+const String imgspecail = "assets/icons/specail.png";
