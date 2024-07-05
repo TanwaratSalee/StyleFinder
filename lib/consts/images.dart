@@ -161,15 +161,9 @@ const String imgVerify = 'assets/images/imgVerify.png';
 const String icInfo = 'assets/images/icInfo.png';
 
 //------------- popmatch
-const String imgcasual =
-    '/Users/kangjinju/Downloads/user_finder_app/assets/icons/Icons_popmath/Icons_popmath/casual.png';
-const String imgFormal =
-    '/Users/kangjinju/Downloads/user_finder_app/assets/icons/Icons_popmath/Icons_popmath/Formal.png';
-const String imgseasonal =
-    '/Users/kangjinju/Downloads/user_finder_app/assets/icons/Icons_popmath/Icons_popmath/seasonal.png';
-const String imgHome =
-    '/Users/kangjinju/Downloads/user_finder_app/assets/icons/Icons_popmath/Icons_popmath/Home.png';
-const String imgsemi =
-    '/Users/kangjinju/Downloads/user_finder_app/assets/icons/Icons_popmath/Icons_popmath/semi.png';
-const String imgspecail =
-    '/Users/kangjinju/Downloads/user_finder_app/assets/icons/Icons_popmath/Icons_popmath/specail.png';
+const String imgcasual = "assets/icons/casual.png";
+const String imgformal = "assets/icons/formal.png";
+const String imgseasonal = 'assets/icons/seasonal.png';
+const String imgHome = 'assets/icons/Home.png';
+const String imgsemi = 'assets/icons/semi.png';
+const String imgspecail = 'assets/icons/specail.png';

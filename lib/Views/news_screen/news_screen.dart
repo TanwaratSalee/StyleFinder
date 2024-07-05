@@ -329,7 +329,7 @@ class NewsScreen extends StatelessWidget {
                             itemCount: 6,
                             itemBuilder: (context, index) {
                               List<Map<String, dynamic>> cardData = [
-                                {'image': imgFormal, 'title': 'Formal Attire'},
+                                {'image': imgformal, 'title': 'Formal Attire'},
                                 {
                                   'image': imgsemi,
                                   'title': 'Semi-Formal Attire'
