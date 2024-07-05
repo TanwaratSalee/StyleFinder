@@ -356,6 +356,43 @@ class _ItemDetailsState extends State<ItemDetails> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        "Situations"
+                            .text
+                            .color(blackColor)
+                            .size(16)
+                            .fontFamily(medium)
+                            .make(),
+                        5.heightBox,
+                        Container(
+                          height: 40,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: widget.data['situations'] != null
+                                ? widget.data['situations'].length
+                                : 0,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                child: Text(
+                                  "${widget.data['situations'][index].toString()[0].toUpperCase()}${widget.data['situations'][index].toString().substring(1)}",
+                                )
+                                    .text
+                                    .size(26)
+                                    .color(blackColor)
+                                    .fontFamily(medium)
+                                    .make(),
+                              )
+                                  .box
+                                  .white
+                                  .color(thinPrimaryApp)
+                                  .margin(EdgeInsets.symmetric(horizontal: 3))
+                                  .roundedLg
+                                  .padding(EdgeInsets.symmetric(
+                                      horizontal: 24, vertical: 12))
+                                  .make();
+                            },
+                          ),
+                        ),
+                        SizedBox(height: 10),
                         "Collection"
                             .text
                             .color(blackColor)

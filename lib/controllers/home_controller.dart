@@ -12,6 +12,7 @@ class HomeController extends GetxController {
   var selectedColors = <int>[].obs;
   var selectedTypes = <String>[].obs;
   var selectedCollections = <String>[].obs;
+  var selectedSituations = <String>[].obs;
   var selectedVendorIds = <String>[].obs;
 
   void onClose() {
@@ -25,6 +26,7 @@ class HomeController extends GetxController {
     List<int>? colors,
     List<String>? types,
     List<String>? collections,
+    List<String>? situations,
     List<String>? vendorIds,
   }) {
     if (gender != null) selectedGender.value = gender;
@@ -32,6 +34,7 @@ class HomeController extends GetxController {
     if (colors != null) selectedColors.value = colors;
     if (types != null) selectedTypes.value = types;
     if (collections != null) selectedCollections.value = collections;
+    if (situations != null) selectedSituations.value = situations;
     if (vendorIds != null) selectedVendorIds.value = vendorIds;
   }
 
@@ -42,6 +45,7 @@ class HomeController extends GetxController {
     selectedTypes.clear();
     selectedCollections.clear();
     selectedVendorIds.clear();
+    selectedSituations.clear();
   }
 
   @override

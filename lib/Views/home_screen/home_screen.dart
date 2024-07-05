@@ -43,6 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ever(controller.selectedColors, (_) => fetchFilteredProducts());
     ever(controller.selectedTypes, (_) => fetchFilteredProducts());
     ever(controller.selectedCollections, (_) => fetchFilteredProducts());
+    ever(controller.selectedSituations, (_) => fetchFilteredProducts());
     ever(controller.selectedVendorIds, (_) => fetchFilteredProducts());
   }
 
@@ -227,6 +228,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     selectedColors: controller.selectedColors,
                     selectedTypes: controller.selectedTypes,
                     selectedCollections: controller.selectedCollections,
+                    selectedSituations: controller.selectedSituations,
                     vendorIds: controller.selectedVendorIds,
                   ),
                   builder: (context, snapshot) {

@@ -360,7 +360,7 @@ class NewsScreen extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(0),
                                         child: SizedBox(
                                           width: 30,
-                                          height: 30,
+                                          height: 40,
                                           child: Image.asset(
                                             cardData[index]['image']!,
                                             fit: BoxFit.contain,
@@ -377,7 +377,7 @@ class NewsScreen extends StatelessWidget {
                                           cardData[index]['title']!,
                                           style: const TextStyle(
                                             fontFamily: medium,
-                                            fontSize: 13,
+                                            fontSize: 15,
                                             color: Colors.black,
                                             height: 1.0,
                                           ),

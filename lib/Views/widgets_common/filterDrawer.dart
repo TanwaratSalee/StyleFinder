@@ -25,10 +25,19 @@ class _FilterDrawerState extends State<FilterDrawer> {
   bool isSelectedSummer = false;
   bool isSelectedWinter = false;
   bool isSelectedAutumn = false;
-  bool isSelectedSpring  = false;
+  bool isSelectedSpring = false;
+
+  bool isSelectedFormal = false;
+  bool isSelectedCasual = false;
+  bool isSelectedSeasonal = false;
+  bool isSelectedSemiFormal = false;
+  bool isSelectedSpecialActivity = false;
+  bool isSelectedWorkFromHome = false;
+
   // bool isSelectedEveryday = false;
 
   var collectionsvalue = ''.obs;
+  var situationsvalue = ''.obs;
   var vendors = <Map<String, dynamic>>[];
   var selectedVendorIds = <String>[].obs;
 
@@ -110,7 +119,17 @@ class _FilterDrawerState extends State<FilterDrawer> {
     isSelectedSummer = controller.selectedCollections.contains('summer');
     isSelectedWinter = controller.selectedCollections.contains('winter');
     isSelectedAutumn = controller.selectedCollections.contains('autumn');
-    isSelectedSpring  = controller.selectedCollections.contains('spring ');
+    isSelectedSpring = controller.selectedCollections.contains('spring');
+
+    isSelectedFormal = controller.selectedSituations.contains('formal');
+    isSelectedCasual = controller.selectedSituations.contains('semi-formal');
+    isSelectedSeasonal = controller.selectedSituations.contains('casual');
+    isSelectedSemiFormal =
+        controller.selectedSituations.contains('special-activity');
+    isSelectedSpecialActivity =
+        controller.selectedSituations.contains('seasonal');
+    isSelectedWorkFromHome =
+        controller.selectedSituations.contains('work-from-home');
     // isSelectedEveryday = controller.selectedCollections.contains('everydaylook');
   }
 
@@ -174,11 +193,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
-              child: Text("Official Store")
-                  .text
-                  .fontFamily(regular)
-                  .size(14)
-                  .make(),
+              child: Text("Store").text.fontFamily(regular).size(14).make(),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -373,8 +388,74 @@ class _FilterDrawerState extends State<FilterDrawer> {
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
-              child:
-                  Text("Collection").text.fontFamily(regular).size(14).make(),
+              child: Text(
+                      "Suitable for work and situations ยังไม่เสร็จแก้ดึง selected")
+                  .text
+                  .fontFamily(regular)
+                  .size(14)
+                  .make(),
+            ),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Wrap(
+                  spacing: 6,
+                  children: [
+                    buildFilterChip("Formal Attire", isSelectedFormal,
+                        (isSelected) {
+                      setState(() {
+                        isSelectedFormal = isSelected;
+                        updateFilterSituations();
+                      });
+                    }),
+                    buildFilterChip("Semi-Formal Attire", isSelectedSemiFormal,
+                        (isSelected) {
+                      setState(() {
+                        isSelectedSemiFormal = isSelected;
+                        updateFilterSituations();
+                      });
+                    }),
+                    buildFilterChip("Casual Attire", isSelectedCasual,
+                        (isSelected) {
+                      setState(() {
+                        isSelectedCasual = isSelected;
+                        updateFilterSituations();
+                      });
+                    }),
+                    buildFilterChip(
+                        "Special Activity Attire", isSelectedSpecialActivity,
+                        (isSelected) {
+                      setState(() {
+                        isSelectedSpecialActivity = isSelected;
+                        updateFilterSituations();
+                      });
+                    }),
+                    buildFilterChip("Seasonal Attire", isSelectedSeasonal,
+                        (isSelected) {
+                      setState(() {
+                        isSelectedSeasonal = isSelected;
+                        updateFilterSituations();
+                      });
+                    }),
+                    buildFilterChip("Work from Home", isSelectedWorkFromHome,
+                        (isSelected) {
+                      setState(() {
+                        isSelectedWorkFromHome = isSelected;
+                        updateFilterSituations();
+                      });
+                    }),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
+              child: Text("Suitable for seasons")
+                  .text
+                  .fontFamily(regular)
+                  .size(14)
+                  .make(),
             ),
             Center(
               child: Padding(
@@ -400,9 +481,9 @@ class _FilterDrawerState extends State<FilterDrawer> {
                         updateFilterCollections();
                       });
                     }),
-                    buildFilterChip("Spring ", isSelectedSpring , (isSelected) {
+                    buildFilterChip("Spring ", isSelectedSpring, (isSelected) {
                       setState(() {
-                        isSelectedSpring  = isSelected;
+                        isSelectedSpring = isSelected;
                         updateFilterCollections();
                       });
                     }),
@@ -442,7 +523,16 @@ class _FilterDrawerState extends State<FilterDrawer> {
                           if (isSelectedSummer) 'summer',
                           if (isSelectedWinter) 'winter',
                           if (isSelectedAutumn) 'autumn',
-                          if (isSelectedSpring ) 'spring ',
+                          if (isSelectedSpring) 'spring ',
+                          // if (isSelectedEveryday) 'everydaylook',
+                        ],
+                        situations: [
+                          if (isSelectedFormal) 'formal',
+                          if (isSelectedCasual) 'casual',
+                          if (isSelectedSeasonal) 'seasonal',
+                          if (isSelectedSemiFormal) 'semi-formal',
+                          if (isSelectedSpecialActivity) 'special-activity',
+                          if (isSelectedWorkFromHome) 'work-from-home ',
                           // if (isSelectedEveryday) 'everydaylook',
                         ],
                         vendorIds: selectedVendorIds,
@@ -489,12 +579,25 @@ class _FilterDrawerState extends State<FilterDrawer> {
     controller.updateFilters(types: types);
   }
 
+  void updateFilterSituations() {
+    List<String> situations = [];
+    if (isSelectedFormal) situations.add('formal');
+    if (isSelectedCasual) situations.add('semi-formal');
+    if (isSelectedSeasonal) situations.add('casual');
+    if (isSelectedSemiFormal) situations.add('special-activity');
+    if (isSelectedSpecialActivity) situations.add('seasonal');
+    if (isSelectedWorkFromHome) situations.add('work-from-home ');
+    // if (isSelectedEveryday) collections.add('everydaylook');
+
+    controller.updateFilters(situations: situations);
+  }
+
   void updateFilterCollections() {
     List<String> collections = [];
     if (isSelectedSummer) collections.add('summer');
     if (isSelectedWinter) collections.add('winter');
     if (isSelectedAutumn) collections.add('autumn');
-    if (isSelectedSpring ) collections.add('spring ');
+    if (isSelectedSpring) collections.add('spring ');
     // if (isSelectedEveryday) collections.add('everydaylook');
 
     controller.updateFilters(collections: collections);
@@ -507,6 +610,7 @@ Future<List<Map<String, dynamic>>> fetchProducts({
   List<int>? selectedColors,
   List<String>? selectedTypes,
   List<String>? selectedCollections,
+  List<String>? selectedSituations,
   List<String>? vendorIds,
 }) async {
   Query<Map<String, dynamic>> query =
@@ -557,6 +661,15 @@ Future<List<Map<String, dynamic>>> fetchProducts({
         List<dynamic> productCollections = product['collection'];
         return selectedCollections
             .any((collection) => productCollections.contains(collection));
+      }).toList();
+    }
+
+// Filter by Situations
+    if (selectedSituations != null && selectedSituations.isNotEmpty) {
+      products = products.where((product) {
+        List<dynamic> productSituations = product['situations'] ?? [];
+        return selectedSituations
+            .any((situation) => productSituations.contains(situation));
       }).toList();
     }
 
