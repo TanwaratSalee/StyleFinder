@@ -286,7 +286,7 @@ class NewsScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              'TOP10 POPULAR MATCHING'
+                              'TOP 10 POPULAR MATCHING'
                                   .text
                                   .fontFamily(bold)
                                   .color(blackColor)
