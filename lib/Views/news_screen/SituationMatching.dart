@@ -3,21 +3,50 @@ import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 
 class SituationMatching extends StatefulWidget {
+  final int initialTabIndex;
+  final String title;
+
+  const SituationMatching(
+      {Key? key, required this.initialTabIndex, required this.title})
+      : super(key: key);
+
   @override
-  _SituationMatchingState createState() =>
-      _SituationMatchingState();
+  _SituationMatchingState createState() => _SituationMatchingState();
 }
 
-class _SituationMatchingState
-    extends State<SituationMatching> {
+class _SituationMatchingState extends State<SituationMatching> {
   Future<List<Widget>>? _futureContent;
   String _selectedSituation = '';
-  String _title = 'Popular Situation Matching';
+  String _title = '';
 
   @override
   void initState() {
     super.initState();
+    _selectedSituation = getSelectedSituation(widget.initialTabIndex);
+    _title = widget.title; // ตั้งค่า _title ด้วยค่าเริ่มต้นจาก widget.title
     _futureContent = fetchData();
+  }
+
+  String getSelectedSituation(int index) {
+    switch (index) {
+      case 0:
+        _title = 'Popular Situation Matching'; // ตั้งค่า title สำหรับหน้า All
+        return ''; // สำหรับหน้า All
+      case 1:
+        return 'formal';
+      case 2:
+        return 'semi-formal';
+      case 3:
+        return 'casual';
+      case 4:
+        return 'seasonal';
+      case 5:
+        return 'special-activity';
+      case 6:
+        return 'work-from-home';
+      default:
+        return '';
+    }
   }
 
   Future<List<Widget>> fetchData() async {
@@ -266,37 +295,12 @@ class _SituationMatchingState
     );
   }
 
-  Widget buildButton(String text, String situation) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: primaryfigma,
-          elevation: 0,
-        ),
-        onPressed: () {
-          setState(() {
-            _selectedSituation = situation; // อัปเดตสถานการณ์ที่เลือก
-            _title = text.isEmpty
-                ? 'Popular Situation Matching'
-                : text; // อัปเดต title
-            _futureContent = fetchData();
-          });
-        },
-        child: Text(
-          text,
-          style: TextStyle(fontFamily: medium, color: greyDark),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          _title, // ใช้ตัวแปร _title
+          _title, // ใช้ตัวแปร _title แทน widget.title
           style: TextStyle(fontFamily: medium),
         ),
       ),
@@ -308,13 +312,13 @@ class _SituationMatchingState
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                buildButton('All', ''),
-                buildButton('Formal Attire', 'formal'),
-                buildButton('Semi-Formal Attire', 'semi-formal'),
-                buildButton('Casual Attire', 'casual'),
-                buildButton('Seasonal Attire', 'seasonal'),
-                buildButton('Special Activity Attire', 'special-activity'),
-                buildButton('Work from Home', 'work-from-home'),
+                buildButton('All', '', 0),
+                buildButton('Formal Attire', 'formal', 1),
+                buildButton('Semi-Formal Attire', 'semi-formal', 2),
+                buildButton('Casual Attire', 'casual', 3),
+                buildButton('Seasonal Attire', 'seasonal', 4),
+                buildButton('Special Activity Attire', 'special-activity', 5),
+                buildButton('Work from Home', 'work-from-home', 6),
               ],
             ),
           ),
@@ -340,6 +344,33 @@ class _SituationMatchingState
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget buildButton(String text, String situation, int tabIndex) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: primaryfigma,
+          elevation: 0,
+        ),
+        onPressed: () {
+          setState(() {
+            _selectedSituation = situation;
+            _futureContent = fetchData();
+            _title = tabIndex == 0
+                ? 'Popular Situation Matching'
+                : text; // อัปเดต _title สำหรับ All
+          });
+        },
+        child: Text(
+          text.isEmpty
+              ? 'Popular Situation Matching'
+              : text, // กำหนดค่าเริ่มต้นให้กับปุ่ม All
+          style: TextStyle(fontFamily: medium, color: greyDark),
+        ),
       ),
     );
   }

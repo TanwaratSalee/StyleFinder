@@ -295,8 +295,10 @@ class NewsScreen extends StatelessWidget {
                                   .make(),
                               InkWell(
                                 onTap: () {
-                                  Get.to(
-                                      () => SituationMatching());
+                                  Get.to(() => SituationMatching(
+                                        initialTabIndex: 0,
+                                        title: 'Popular Situation Matching',
+                                      ));
                                 },
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -331,34 +333,56 @@ class NewsScreen extends StatelessWidget {
                             itemCount: 6,
                             itemBuilder: (context, index) {
                               List<Map<String, dynamic>> cardData = [
-                                {'image': imgformal, 'title': 'Formal Attire'},
+                                {
+                                  'image': imgformal,
+                                  'title': 'Formal Attire',
+                                  'situation': 'formal',
+                                  'tabIndex': 0
+                                },
                                 {
                                   'image': imgsemi,
-                                  'title': 'Semi-Formal Attire'
+                                  'title': 'Semi-Formal Attire',
+                                  'situation': 'semi-formal',
+                                  'tabIndex': 1
                                 },
-                                {'image': imgcasual, 'title': 'Casual Attire'},
+                                {
+                                  'image': imgcasual,
+                                  'title': 'Casual Attire',
+                                  'situation': 'casual',
+                                  'tabIndex': 2
+                                },
                                 {
                                   'image': imgseasonal,
-                                  'title': 'Seasonal Attire'
+                                  'title': 'Seasonal Attire',
+                                  'situation': 'seasonal',
+                                  'tabIndex': 3
                                 },
                                 {
                                   'image': imgspecail,
-                                  'title': 'Special Activity Attire'
+                                  'title': 'Special Activity Attire',
+                                  'situation': 'special-activity',
+                                  'tabIndex': 4
                                 },
-                                {'image': imgHome, 'title': 'Work from Home'}
+                                {
+                                  'image': imgHome,
+                                  'title': 'Work from Home',
+                                  'situation': 'work-from-home',
+                                  'tabIndex': 5
+                                },
                               ];
 
                               return GestureDetector(
                                 onTap: () {
-                                  Get.to(
-                                      () => SituationMatching());
+                                  Get.to(() => SituationMatching(
+                                        initialTabIndex: cardData[index]
+                                            ['tabIndex'],
+                                        title: cardData[index]['title'],
+                                      ));
                                 },
                                 child: Container(
-                                  padding:
-                                      const EdgeInsets.only(top: 12),
+                                  padding: const EdgeInsets.only(top: 12),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    // crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       ClipRRect(
                                         borderRadius: BorderRadius.circular(0),
@@ -374,10 +398,10 @@ class NewsScreen extends StatelessWidget {
                                                           : index == 4
                                                               ? 25
                                                               : index == 5
-                                                              ? 20
-                                                              : 60, 
+                                                                  ? 20
+                                                                  : 60,
                                           height: index == 0
-                                              ?25
+                                              ? 25
                                               : index == 1
                                                   ? 28
                                                   : index == 2
@@ -388,16 +412,14 @@ class NewsScreen extends StatelessWidget {
                                                               ? 30
                                                               : index == 5
                                                                   ? 30
-                                                                  : 40, 
+                                                                  : 40,
                                           child: Image.asset(
                                             cardData[index]['image']!,
                                             fit: BoxFit.contain,
                                           ),
                                         ),
                                       ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
+                                      SizedBox(height: 5),
                                       Container(
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 0, horizontal: 5),
@@ -407,7 +429,6 @@ class NewsScreen extends StatelessWidget {
                                             fontFamily: medium,
                                             fontSize: 14,
                                             color: Colors.black,
-                                            // height: 1.0,
                                           ),
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
