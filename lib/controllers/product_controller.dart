@@ -834,11 +834,11 @@ String getSkinToneDescription(int skinTone) {
   switch (skinTone) {
     case 4294961114:
       return 'Fair Skin';
-    case 4289672092:
+    case 4294494620:
       return 'Medium Skin';
-    case 4280391411:
+    case 4290348898:
       return 'Tan Skin';
-    case 4278215680:
+    case 4285812284:
       return 'Dark Skin';
     default:
       return 'Unknown Skin Tone';

@@ -462,39 +462,31 @@ void showMatchReasonModal(
     additionalReason = getAdditionalReason(topPrimaryColor, lowerPrimaryColor);
 
     Map<int, String> recommendedColors = getRecommendedColors(dayOfWeek.value);
-    if (topPrimaryColor == lowerPrimaryColor &&
-        recommendedColors.containsKey(topPrimaryColor)) {
+
+    if (recommendedColors.containsKey(topPrimaryColor)) {
       colorReasonsWidgets.addAll([
         Text(
-          'You were born on ${dayOfWeek.value} and the top and lower color is:',
-          style: TextStyle(fontSize: 14, fontFamily: medium),
+          'You were born on ${dayOfWeek.value}',
+          style: TextStyle(fontSize: 16, fontFamily: medium),
         ),
         Text(
-          recommendedColors[topPrimaryColor]!,
-          style: TextStyle(fontSize: 12),
+          'The top color is: ${recommendedColors[topPrimaryColor]}!',
+          style: TextStyle(fontSize: 14, fontFamily: regular),
         ),
       ]);
-    } else {
-      if (recommendedColors.containsKey(lowerPrimaryColor)) {
-        colorReasonsWidgets.addAll([
-          Text(
-            'You were born on ${dayOfWeek.value} ',
-            style: TextStyle(fontSize: 16, fontFamily: medium),
-          ),
-          Text(
-            'The top color is: ${recommendedColors[topPrimaryColor]}!',
-            style: TextStyle(fontSize: 14, fontFamily: regular),
-          ),
-        ]);
-      }
-      if (recommendedColors.containsKey(lowerPrimaryColor)) {
-        colorReasonsWidgets.addAll([
-          Text(
-            'The lower color is: ${recommendedColors[lowerPrimaryColor]}!',
-            style: TextStyle(fontSize: 14, fontFamily: regular),
-          ),
-        ]);
-      }
+    }
+
+    if (recommendedColors.containsKey(lowerPrimaryColor)) {
+      colorReasonsWidgets.addAll([
+        Text(
+          'You were born on ${dayOfWeek.value}',
+          style: TextStyle(fontSize: 16, fontFamily: medium),
+        ),
+        Text(
+          'The lower color is: ${recommendedColors[lowerPrimaryColor]}!',
+          style: TextStyle(fontSize: 14, fontFamily: regular),
+        ),
+      ]);
     }
   }
 
