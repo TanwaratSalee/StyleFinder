@@ -952,13 +952,13 @@ final Map<int, Map<String, List<int>>> skinToneMatchMap = {
     'brightColors': [0xFFFFA500, 0xFF32CD32, 0xFFFF0000, 0xFFFFFF00],
     'darkColors': [0xFF0000FF, 0xFF4B0082, 0xFF808080],
   },
-  4280391411: {
+  4286943330: {
     // Tan Skin
     'lightColors': [0xFFFFFFFF, 0xFFFF4081, 0xFFADD8E6],
     'brightColors': [0xFFFFFF00, 0xFFFFA500, 0xFF008000, 0xFF9370DB],
     'darkColors': [0xFF0000FF, 0xFF8B4513, 0xFF808080, 0xFF006400],
   },
-  4278215680: {
+  4284008252: {
     // Dark Skin
     'lightColors': [0xFFFFFFFF, 0xFFD3D3D3, 0xFFFFA500],
     'brightColors': [0xFFFF0000, 0xFFFFFF00, 0xFFFFA500, 0xFF9370DB],
