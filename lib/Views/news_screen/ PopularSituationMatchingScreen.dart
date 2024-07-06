@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/consts/colors.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
@@ -11,150 +12,95 @@ class PopularSituationMatchingScreen extends StatefulWidget {
 
 class _PopularSituationMatchingScreenState
     extends State<PopularSituationMatchingScreen> {
-  List<Widget> selectedContent = [];
-  final ScrollController _scrollController = ScrollController();
-  final Map<String, GlobalKey> _buttonKeys = {};
+  Future<List<Widget>>? _futureContent;
 
   @override
   void initState() {
     super.initState();
-    String initialTitle = Get.arguments ?? 'Formal Attire';
-    switch (initialTitle) {
-      case 'Semi-Formal Attire':
-        updateContent([
-          buildCard('3', 'Charlie', 'Semi-Formal Product 1', '109.99 Bath',
-              'Semi-Formal Product 2', '69.99 Bath', '45'),
-          buildCard('4', 'David', 'Semi-Formal Product 3', '99.99 Bath',
-              'Semi-Formal Product 4', '79.99 Bath', '12'),
-        ], 'Semi-Formal Attire');
-        break;
-      case 'Casual Attire':
-        updateContent([
-          buildCard('5', 'Eve', 'Casual Product 1', '89.99 Bath',
-              'Casual Product 2', '59.99 Bath', '56'),
-          buildCard('6', 'Frank', 'Casual Product 3', '109.99 Bath',
-              'Casual Product 4', '69.99 Bath', '38'),
-        ], 'Casual Attire');
-        break;
-      case 'Seasonal Attire':
-        updateContent([
-          buildCard('7', 'Grace', 'Seasonal Product 1', '99.99 Bath',
-              'Seasonal Product 2', '79.99 Bath', '20'),
-          buildCard('8', 'Hank', 'Seasonal Product 3', '89.99 Bath',
-              'Seasonal Product 4', '59.99 Bath', '41'),
-        ], 'Seasonal Attire');
-        break;
-      case 'Special Activity Attire':
-        updateContent([
-          buildCard('1', 'Alice', 'Special Product 1', '99.99 Bath',
-              'Special Product 2', '79.99 Bath', '32'),
-          buildCard('2', 'Bob', 'Special Product 3', '89.99 Bath',
-              'Special Product 4', '59.99 Bath', '24'),
-        ], 'Special Activity Attire');
-        break;
-      case 'Work from Home':
-        updateContent([
-          buildCard('3', 'Charlie', 'WFH Product 1', '109.99 Bath',
-              'WFH Product 2', '69.99 Bath', '45'),
-          buildCard('4', 'David', 'WFH Product 3', '99.99 Bath',
-              'WFH Product 4', '79.99 Bath', '12'),
-        ], 'Work from Home');
-        break;
-      default:
-        updateContent([
-          buildCard('1', 'Alice', 'Formal Product 1', '99.99 Bath',
-              'Formal Product 2', '79.99 Bath', '32'),
-          buildCard('2', 'Bob', 'Formal Product 3', '89.99 Bath',
-              'Formal Product 4', '59.99 Bath', '24'),
-        ], 'Formal Attire');
-        break;
+    _futureContent = fetchData();
+  }
+
+  Future<List<Widget>> fetchData() async {
+    List<Widget> content = [];
+    final querySnapshot =
+        await FirebaseFirestore.instance.collection('usermixandmatch').get();
+
+    for (var index = 0; index < querySnapshot.docs.length; index++) {
+      var doc = querySnapshot.docs[index];
+      var docData = doc.data() as Map<String, dynamic>;
+      var productIdTop = docData['product_id_top'] ?? '';
+      var productIdLower = docData['product_id_lower'] ?? '';
+      var userId = docData['user_id'] ?? '';
+
+      var userSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
+      var userData = userSnapshot.data() as Map<String, dynamic>;
+      var userName = userData['name'] ?? '';
+      var userImage = userData['imageUrl'] ?? '';
+
+      var productTopSnapshot = await FirebaseFirestore.instance
+          .collection('products')
+          .doc(productIdTop)
+          .get();
+      var productTopData = productTopSnapshot.data() as Map<String, dynamic>;
+      var productNameTop = productTopData['name'] ?? '';
+      var productPriceTop = productTopData['price']?.toString() ?? '0';
+      var productImageTop =
+          (productTopData['imgs'] as List<dynamic>?)?.first ?? '';
+
+      var productLowerSnapshot = await FirebaseFirestore.instance
+          .collection('products')
+          .doc(productIdLower)
+          .get();
+      var productLowerData =
+          productLowerSnapshot.data() as Map<String, dynamic>;
+      var productNameLower = productLowerData['name'] ?? '';
+      var productPriceLower = productLowerData['price']?.toString() ?? '0';
+      var productImageLower =
+          (productLowerData['imgs'] as List<dynamic>?)?.first ?? '';
+
+      var favoriteCount = docData['favorite_count']?.toString() ?? '0';
+
+      content.add(buildCard(
+        index + 1,
+        userImage,
+        userName,
+        productNameTop,
+        productPriceTop,
+        productImageTop,
+        productNameLower,
+        productPriceLower,
+        productImageLower,
+        favoriteCount,
+      ));
     }
-  }
 
-  void updateContent(List<Widget> content, String buttonKey) {
-    setState(() {
-      selectedContent = content;
-    });
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      scrollToButton(buttonKey);
-    });
-  }
-
-  void scrollToButton(String buttonKey) {
-    final keyContext = _buttonKeys[buttonKey]?.currentContext;
-    if (keyContext != null) {
-      Scrollable.ensureVisible(
-        keyContext,
-        duration: Duration(milliseconds: 300),
-        alignment: 0.5,
-      );
-    }
-  }
-
-  Widget buildButton(String text, List<Widget> content) {
-    _buttonKeys[text] = GlobalKey();
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: ElevatedButton(
-        key: _buttonKeys[text],
-        style: ElevatedButton.styleFrom(
-          backgroundColor: primaryfigma,
-          elevation: 0,
-        ),
-        onPressed: () {
-          updateContent(content, text);
-        },
-        child: Text(
-          text,
-          style: TextStyle(fontFamily: medium, color: greyDark),
-        ),
-      ),
-    );
-  }
-
-  Widget buildCircleAvatar(String text) {
-    return Padding(
-      padding: const EdgeInsets.all(9.0),
-      child: CircleAvatar(
-        radius: 10,
-        backgroundColor: greyLine,
-        child: Text(
-          text,
-          style: TextStyle(color: blackColor, fontSize: 14),
-        ),
-      ),
-    );
-  }
-
-  Widget buildProductInfo(String name, String price) {
-    return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            name,
-            style: TextStyle(fontSize: 13, color: greyDark, fontFamily: medium),
-          ),
-          Text(
-            price,
-            style: TextStyle(fontSize: 13, color: greyDark, fontFamily: medium),
-          ),
-        ],
-      ),
-    );
+    return content;
   }
 
   Widget buildCard(
-      String avatarText,
+      int index,
+      String userImage,
       String userName,
       String productName1,
       String productPrice1,
+      String productImageTop,
       String productName2,
       String productPrice2,
+      String productImageLower,
       String likes) {
     return Row(
       children: [
-        buildCircleAvatar(avatarText),
+        CircleAvatar(
+          radius: 14,
+          backgroundColor: greysituations, // เพิ่ม background color
+          child: Text(
+            index.toString(),
+            style: TextStyle(color: Colors.black), // เพิ่มสีของข้อความ
+          ),
+        ),
         Expanded(
           child: Padding(
             padding: const EdgeInsets.only(right: 10),
@@ -177,9 +123,7 @@ class _PopularSituationMatchingScreenState
                           children: [
                             CircleAvatar(
                               radius: 14,
-                              backgroundImage: NetworkImage(
-                                'https://via.placeholder.com/150',
-                              ),
+                              backgroundImage: NetworkImage(userImage),
                             ),
                             SizedBox(width: 8.0),
                             Text(userName),
@@ -211,11 +155,7 @@ class _PopularSituationMatchingScreenState
                           width: 56,
                           height: 65,
                           color: Colors.grey[300],
-                          child: Icon(
-                            Icons.image,
-                            size: 40,
-                            color: Colors.grey,
-                          ),
+                          child: Image.network(productImageTop),
                         ),
                         SizedBox(width: 8.0),
                         buildProductInfo(productName1, productPrice1),
@@ -234,11 +174,7 @@ class _PopularSituationMatchingScreenState
                           width: 56,
                           height: 65,
                           color: Colors.grey[300],
-                          child: Icon(
-                            Icons.image,
-                            size: 40,
-                            color: Colors.grey,
-                          ),
+                          child: Image.network(productImageLower),
                         ),
                         SizedBox(width: 8.0),
                         buildProductInfo(productName2, productPrice2),
@@ -251,6 +187,46 @@ class _PopularSituationMatchingScreenState
           ),
         ),
       ],
+    );
+  }
+
+  Widget buildProductInfo(String name, String price) {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            name,
+            style: TextStyle(fontSize: 13, color: greyDark, fontFamily: medium),
+          ),
+          Text(
+            price,
+            style: TextStyle(fontSize: 13, color: greyDark, fontFamily: medium),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildButton(String text) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: primaryfigma,
+          elevation: 0,
+        ),
+        onPressed: () {
+          setState(() {
+            // เรียก fetchData ใหม่เมื่อกดปุ่ม เพื่ออัปเดตเนื้อหา
+            _futureContent = fetchData();
+          });
+        },
+        child: Text(
+          text,
+          style: TextStyle(fontFamily: medium, color: greyDark),
+        ),
+      ),
     );
   }
 
@@ -268,95 +244,41 @@ class _PopularSituationMatchingScreenState
         children: [
           SizedBox(height: 20.0),
           SingleChildScrollView(
-            controller: _scrollController,
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                buildButton('Formal Attire', [
-                  buildCard('1', 'Alice', 'Formal Product 1', '99.99 Bath',
-                      'Formal Product 2', '79.99 Bath', '32'),
-                  buildCard('2', 'Bob', 'Formal Product 3', '89.99 Bath',
-                      'Formal Product 4', '59.99 Bath', '24'),
-                ]),
-                buildButton('Semi-Formal Attire', [
-                  buildCard(
-                      '3',
-                      'Charlie',
-                      'Semi-Formal Product 1',
-                      '109.99 Bath',
-                      'Semi-Formal Product 2',
-                      '69.99 Bath',
-                      '45'),
-                  buildCard('4', 'David', 'Semi-Formal Product 3', '99.99 Bath',
-                      'Semi-Formal Product 4', '79.99 Bath', '12'),
-                ]),
-                buildButton('Casual Attire', [
-                  buildCard('5', 'Eve', 'Casual Product 1', '89.99 Bath',
-                      'Casual Product 2', '59.99 Bath', '56'),
-                  buildCard('6', 'Frank', 'Casual Product 3', '109.99 Bath',
-                      'Casual Product 4', '69.99 Bath', '38'),
-                ]),
-                buildButton('Seasonal Attire', [
-                  buildCard('7', 'Grace', 'Seasonal Product 1', '99.99 Bath',
-                      'Seasonal Product 2', '79.99 Bath', '20'),
-                  buildCard('8', 'Hank', 'Seasonal Product 3', '89.99 Bath',
-                      'Seasonal Product 4', '59.99 Bath', '41'),
-                ]),
-                buildButton('Special Activity Attire', [
-                  buildCard('1', 'Alice', 'Special Product 1', '99.99 Bath',
-                      'Special Product 2', '79.99 Bath', '32'),
-                  buildCard('2', 'Bob', 'Special Product 3', '89.99 Bath',
-                      'Special Product 4', '59.99 Bath', '24'),
-                ]),
-                buildButton('Work from Home', [
-                  buildCard('3', 'Charlie', 'WFH Product 1', '109.99 Bath',
-                      'WFH Product 2', '69.99 Bath', '45'),
-                  buildCard('4', 'David', 'WFH Product 3', '99.99 Bath',
-                      'WFH Product 4', '79.99 Bath', '12'),
-                ]),
+                buildButton('Formal Attire'),
+                buildButton('Semi-Formal Attire'),
+                buildButton('Casual Attire'),
+                buildButton('Seasonal Attire'),
+                buildButton('Special Activity Attire'),
+                buildButton('Work from Home'),
               ],
             ),
           ),
-          SizedBox(height: 8.0), // ลดระยะห่างระหว่างการ์ด
+          SizedBox(height: 8.0),
           Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: selectedContent,
-              ),
+            child: FutureBuilder<List<Widget>>(
+              future: _futureContent,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Center(child: Text('No data available'));
+                } else {
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: snapshot.data!,
+                    ),
+                  );
+                }
+              },
             ),
           ),
         ],
       ),
     );
-  }
-}
-
-class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
-  _SliverAppBarDelegate({
-    required this.minHeight,
-    required this.maxHeight,
-    required this.child,
-  });
-
-  final double minHeight;
-  final double maxHeight;
-  final Widget child;
-
-  @override
-  double get minExtent => minHeight;
-  @override
-  double get maxExtent => maxHeight;
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return SizedBox.expand(child: child);
-  }
-
-  @override
-  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
-    return maxHeight != oldDelegate.maxHeight ||
-        minHeight != oldDelegate.minHeight ||
-        child != oldDelegate.child;
   }
 }

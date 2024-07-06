@@ -449,6 +449,7 @@ void showMatchReasonModal(
   String reason;
   String additionalReason = '';
   List<Widget> colorReasonsWidgets = [];
+  bool dayOfWeekTextAdded = false;
 
   if (topPrimaryColor == null || lowerPrimaryColor == null) {
     reason = 'Unknown colors selected';
@@ -464,29 +465,39 @@ void showMatchReasonModal(
     Map<int, String> recommendedColors = getRecommendedColors(dayOfWeek.value);
 
     if (recommendedColors.containsKey(topPrimaryColor)) {
-      colorReasonsWidgets.addAll([
-        Text(
-          'You were born on ${dayOfWeek.value}',
-          style: TextStyle(fontSize: 16, fontFamily: medium),
-        ),
+      if (!dayOfWeekTextAdded) {
+        colorReasonsWidgets.add(
+          Text(
+            'You were born on ${dayOfWeek.value}',
+            style: TextStyle(fontSize: 16, fontFamily: medium),
+          ),
+        );
+        dayOfWeekTextAdded = true;
+      }
+      colorReasonsWidgets.add(
         Text(
           'The top color is: ${recommendedColors[topPrimaryColor]}!',
           style: TextStyle(fontSize: 14, fontFamily: regular),
         ),
-      ]);
+      );
     }
 
     if (recommendedColors.containsKey(lowerPrimaryColor)) {
-      colorReasonsWidgets.addAll([
-        Text(
-          'You were born on ${dayOfWeek.value}',
-          style: TextStyle(fontSize: 16, fontFamily: medium),
-        ),
+      if (!dayOfWeekTextAdded) {
+        colorReasonsWidgets.add(
+          Text(
+            'You were born on ${dayOfWeek.value}',
+            style: TextStyle(fontSize: 16, fontFamily: medium),
+          ),
+        );
+        dayOfWeekTextAdded = true;
+      }
+      colorReasonsWidgets.add(
         Text(
           'The lower color is: ${recommendedColors[lowerPrimaryColor]}!',
           style: TextStyle(fontSize: 14, fontFamily: regular),
         ),
-      ]);
+      );
     }
   }
 

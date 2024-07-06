@@ -350,8 +350,8 @@ class NewsScreen extends StatelessWidget {
 
                               return GestureDetector(
                                 onTap: () {
-                                  Get.to(() => PopularSituationMatchingScreen(),
-                                      arguments: cardData[index]['title']);
+                                  Get.to(
+                                      () => PopularSituationMatchingScreen());
                                 },
                                 child: Container(
                                   padding:
