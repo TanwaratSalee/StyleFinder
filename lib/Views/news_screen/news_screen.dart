@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/Views/match_screen/matchpost_details.dart';
-import 'package:flutter_finalproject/Views/news_screen/%20PopularSituationMatchingScreen.dart';
+import 'package:flutter_finalproject/Views/news_screen/SituationMatching.dart';
 import 'package:flutter_finalproject/Views/news_screen/allstore_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
@@ -296,7 +296,7 @@ class NewsScreen extends StatelessWidget {
                               InkWell(
                                 onTap: () {
                                   Get.to(
-                                      () => PopularSituationMatchingScreen());
+                                      () => SituationMatching());
                                 },
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -351,7 +351,7 @@ class NewsScreen extends StatelessWidget {
                               return GestureDetector(
                                 onTap: () {
                                   Get.to(
-                                      () => PopularSituationMatchingScreen());
+                                      () => SituationMatching());
                                 },
                                 child: Container(
                                   padding:

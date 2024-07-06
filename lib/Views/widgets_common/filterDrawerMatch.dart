@@ -1,4 +1,4 @@
-import 'package:flutter_finalproject/Views/widgets_common/situationEx.dart';
+import 'package:flutter_finalproject/Views/widgets_common/infosituation.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
 import 'package:get/get.dart';

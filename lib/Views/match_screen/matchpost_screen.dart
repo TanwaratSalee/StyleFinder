@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_finalproject/Views/widgets_common/situationEx.dart';
+import 'package:flutter_finalproject/Views/widgets_common/infosituation.dart';
 import 'package:get/get.dart';
 import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:flutter_finalproject/consts/consts.dart';

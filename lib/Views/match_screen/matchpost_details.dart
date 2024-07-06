@@ -4,7 +4,7 @@ import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.d
 import 'package:flutter_finalproject/Views/match_screen/edit_matchpost.dart';
 import 'package:flutter_finalproject/Views/profile_screen/userprofile_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
-import 'package:flutter_finalproject/Views/widgets_common/situationEx.dart';
+import 'package:flutter_finalproject/Views/widgets_common/infosituation.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/matchproduct_controller.dart';
 import 'package:get/get.dart';

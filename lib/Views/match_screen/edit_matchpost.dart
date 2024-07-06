@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_finalproject/Views/match_screen/matchpost_details.dart';
-import 'package:flutter_finalproject/Views/widgets_common/situationEx.dart';
+import 'package:flutter_finalproject/Views/widgets_common/infosituation.dart';
 import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
