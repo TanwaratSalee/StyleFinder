@@ -185,7 +185,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                                 ? "Confirm"
                                 : "Pending",
                             style: TextStyle(
-                              color: Colors.white,
+                              color: whiteColor,
                               fontFamily: medium,
                               fontSize: 12,
                             ),
@@ -331,7 +331,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                                 ? "Confirm"
                                 : "Pending",
                             style: TextStyle(
-                              color: Colors.white,
+                              color: whiteColor,
                               fontFamily: medium,
                               fontSize: 12,
                             ),

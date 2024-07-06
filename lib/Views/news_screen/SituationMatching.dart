@@ -156,7 +156,7 @@ class _SituationMatchingState
           backgroundColor: greysituations, // เพิ่ม background color
           child: Text(
             index.toString(),
-            style: TextStyle(color: Colors.black), // เพิ่มสีของข้อความ
+            style: TextStyle(color: blackColor), // เพิ่มสีของข้อความ
           ),
         ),
         Expanded(
@@ -191,7 +191,7 @@ class _SituationMatchingState
                           children: [
                             Icon(
                               Icons.favorite,
-                              color: Colors.red,
+                              color: redColor,
                               size: 15.0,
                             ),
                             SizedBox(width: 5.0),
@@ -212,7 +212,7 @@ class _SituationMatchingState
                         Container(
                           width: 56,
                           height: 65,
-                          color: Colors.grey[300],
+                          color: greyColor,
                           child: Image.network(productImageTop),
                         ),
                         SizedBox(width: 8.0),
@@ -224,14 +224,14 @@ class _SituationMatchingState
                           child: Icon(
                             Icons.add,
                             size: 13,
-                            color: Colors.white,
+                            color: whiteColor,
                           ),
                         ),
                         SizedBox(width: 8.0),
                         Container(
                           width: 56,
                           height: 65,
-                          color: Colors.grey[300],
+                          color: greyColor,
                           child: Image.network(productImageLower),
                         ),
                         SizedBox(width: 8.0),

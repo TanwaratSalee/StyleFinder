@@ -30,7 +30,7 @@ List<Widget> iconsActionButtons() {
         .make(),
     25.widthBox,
     IconButton(
-      icon: const Icon(Icons.favorite, color: Colors.red),
+      icon: const Icon(Icons.favorite, color: redColor),
       onPressed: () {
         // Code to execute when this button is pressed
       },

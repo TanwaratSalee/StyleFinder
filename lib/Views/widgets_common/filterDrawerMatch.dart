@@ -80,7 +80,7 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
     {'name': 'Yellow', 'color': Colors.yellow, 'value': 0xFFFFFF00},
     {'name': 'Orange', 'color': Colors.orange, 'value': 0xFFFFA500},
     {'name': 'Pink', 'color': Colors.pinkAccent, 'value': 0xFFFF4081},
-    {'name': 'Red', 'color': Colors.red, 'value': 0xFFFF0000},
+    {'name': 'Red', 'color': redColor, 'value': 0xFFFF0000},
     {
       'name': 'Brown',
       'color': Color.fromARGB(255, 121, 58, 31),
