@@ -13,6 +13,8 @@ class PopularSituationMatchingScreen extends StatefulWidget {
 class _PopularSituationMatchingScreenState
     extends State<PopularSituationMatchingScreen> {
   Future<List<Widget>>? _futureContent;
+  String _selectedSituation = '';
+  String _title = 'Popular Situation Matching';
 
   @override
   void initState() {
@@ -25,55 +27,113 @@ class _PopularSituationMatchingScreenState
     final querySnapshot =
         await FirebaseFirestore.instance.collection('usermixandmatch').get();
 
+    final userIds =
+        querySnapshot.docs.map((doc) => doc.data()['user_id']).toList();
+    final productIdsTop =
+        querySnapshot.docs.map((doc) => doc.data()['product_id_top']).toList();
+    final productIdsLower = querySnapshot.docs
+        .map((doc) => doc.data()['product_id_lower'])
+        .toList();
+
+    final usersFuture = FirebaseFirestore.instance
+        .collection('users')
+        .where(FieldPath.documentId, whereIn: userIds)
+        .get();
+    final productsTopFuture = FirebaseFirestore.instance
+        .collection('products')
+        .where(FieldPath.documentId, whereIn: productIdsTop)
+        .get();
+    final productsLowerFuture = FirebaseFirestore.instance
+        .collection('products')
+        .where(FieldPath.documentId, whereIn: productIdsLower)
+        .get();
+
+    final usersSnapshot = await usersFuture;
+    final productsTopSnapshot = await productsTopFuture;
+    final productsLowerSnapshot = await productsLowerFuture;
+
+    final userDataMap = {
+      for (var doc in usersSnapshot.docs) doc.id: doc.data()
+    };
+    final productTopDataMap = {
+      for (var doc in productsTopSnapshot.docs) doc.id: doc.data()
+    };
+    final productLowerDataMap = {
+      for (var doc in productsLowerSnapshot.docs) doc.id: doc.data()
+    };
+
+    // เก็บข้อมูลพร้อม favorite_count เพื่อใช้ในการจัดเรียง
+    List<Map<String, dynamic>> dataWithFavoriteCount = [];
+
     for (var index = 0; index < querySnapshot.docs.length; index++) {
       var doc = querySnapshot.docs[index];
       var docData = doc.data() as Map<String, dynamic>;
       var productIdTop = docData['product_id_top'] ?? '';
       var productIdLower = docData['product_id_lower'] ?? '';
       var userId = docData['user_id'] ?? '';
+      var situations = List<String>.from(
+          docData['situations'] ?? []); // ดึงข้อมูลสถานการณ์ที่เป็น array
 
-      var userSnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId)
-          .get();
-      var userData = userSnapshot.data() as Map<String, dynamic>;
+      // กรองข้อมูลตามสถานการณ์ที่เลือก
+      if (_selectedSituation.isNotEmpty &&
+          !situations.contains(_selectedSituation)) {
+        continue;
+      }
+
+      var userData = userDataMap[userId] as Map<String, dynamic>;
       var userName = userData['name'] ?? '';
       var userImage = userData['imageUrl'] ?? '';
 
-      var productTopSnapshot = await FirebaseFirestore.instance
-          .collection('products')
-          .doc(productIdTop)
-          .get();
-      var productTopData = productTopSnapshot.data() as Map<String, dynamic>;
+      var productTopData =
+          productTopDataMap[productIdTop] as Map<String, dynamic>;
       var productNameTop = productTopData['name'] ?? '';
       var productPriceTop = productTopData['price']?.toString() ?? '0';
       var productImageTop =
           (productTopData['imgs'] as List<dynamic>?)?.first ?? '';
 
-      var productLowerSnapshot = await FirebaseFirestore.instance
-          .collection('products')
-          .doc(productIdLower)
-          .get();
       var productLowerData =
-          productLowerSnapshot.data() as Map<String, dynamic>;
+          productLowerDataMap[productIdLower] as Map<String, dynamic>;
       var productNameLower = productLowerData['name'] ?? '';
       var productPriceLower = productLowerData['price']?.toString() ?? '0';
       var productImageLower =
           (productLowerData['imgs'] as List<dynamic>?)?.first ?? '';
 
-      var favoriteCount = docData['favorite_count']?.toString() ?? '0';
+      var favoriteCount = docData['favorite_count'] ?? 0;
 
+      dataWithFavoriteCount.add({
+        'index': index,
+        'userImage': userImage,
+        'userName': userName,
+        'productNameTop': productNameTop,
+        'productPriceTop': productPriceTop,
+        'productImageTop': productImageTop,
+        'productNameLower': productNameLower,
+        'productPriceLower': productPriceLower,
+        'productImageLower': productImageLower,
+        'favoriteCount': favoriteCount
+      });
+    }
+
+    // จัดเรียงข้อมูลตาม favorite_count
+    dataWithFavoriteCount
+        .sort((a, b) => b['favoriteCount'].compareTo(a['favoriteCount']));
+
+    // จำกัดจำนวนข้อมูลที่ต้องการแสดงเป็น 10 อันดับแรก
+    final top10Data = dataWithFavoriteCount.take(10).toList();
+
+    for (var i = 0; i < top10Data.length; i++) {
+      var item = top10Data[i];
       content.add(buildCard(
-        index + 1,
-        userImage,
-        userName,
-        productNameTop,
-        productPriceTop,
-        productImageTop,
-        productNameLower,
-        productPriceLower,
-        productImageLower,
-        favoriteCount,
+        i + 1,
+        item['userImage'],
+        item['userName'],
+        item['productNameTop'],
+        item['productPriceTop'],
+        item['productImageTop'],
+        item['productNameLower'],
+        item['productPriceLower'],
+        item['productImageLower'],
+        item['favoriteCount'].toString(),
       ));
     }
 
@@ -208,7 +268,7 @@ class _PopularSituationMatchingScreenState
     );
   }
 
-  Widget buildButton(String text) {
+  Widget buildButton(String text, String situation) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: ElevatedButton(
@@ -218,7 +278,8 @@ class _PopularSituationMatchingScreenState
         ),
         onPressed: () {
           setState(() {
-            // เรียก fetchData ใหม่เมื่อกดปุ่ม เพื่ออัปเดตเนื้อหา
+            _selectedSituation = situation; // อัปเดตสถานการณ์ที่เลือก
+            _title = text; // อัปเดต title
             _futureContent = fetchData();
           });
         },
@@ -235,7 +296,7 @@ class _PopularSituationMatchingScreenState
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Popular Situation Matching',
+          _title, // ใช้ตัวแปร _title
           style: TextStyle(fontFamily: medium),
         ),
       ),
@@ -247,12 +308,12 @@ class _PopularSituationMatchingScreenState
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                buildButton('Formal Attire'),
-                buildButton('Semi-Formal Attire'),
-                buildButton('Casual Attire'),
-                buildButton('Seasonal Attire'),
-                buildButton('Special Activity Attire'),
-                buildButton('Work from Home'),
+                buildButton('Formal Attire', 'formal'),
+                buildButton('Semi-Formal Attire', 'semi-formal'),
+                buildButton('Casual Attire', 'casual'),
+                buildButton('Seasonal Attire', 'seasonal'),
+                buildButton('Special Activity Attire', 'special-activity'),
+                buildButton('Work from Home', 'work-from-home'),
               ],
             ),
           ),
