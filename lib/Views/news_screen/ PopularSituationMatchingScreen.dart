@@ -279,7 +279,9 @@ class _PopularSituationMatchingScreenState
         onPressed: () {
           setState(() {
             _selectedSituation = situation; // อัปเดตสถานการณ์ที่เลือก
-            _title = text; // อัปเดต title
+            _title = text.isEmpty
+                ? 'Popular Situation Matching'
+                : text; // อัปเดต title
             _futureContent = fetchData();
           });
         },
@@ -308,6 +310,7 @@ class _PopularSituationMatchingScreenState
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
+                buildButton('All', ''),
                 buildButton('Formal Attire', 'formal'),
                 buildButton('Semi-Formal Attire', 'semi-formal'),
                 buildButton('Casual Attire', 'casual'),

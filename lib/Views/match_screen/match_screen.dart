@@ -527,9 +527,12 @@ void showMatchReasonModal(
             SizedBox(height: 10),
             Text(
               skinTone == null
-                  ? 'Skin Tone'
-                  : 'Skin Tone ${getSkinToneDescription(skinTone)}',
-              style: TextStyle(fontSize: 14),
+                  ? 'Your Skin Tone  :'
+                  : 'Your Skin Tone  : ${getSkinToneDescription(skinTone)}',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             SizedBox(height: 10),
             Text(reason, style: TextStyle(fontSize: 14)),
