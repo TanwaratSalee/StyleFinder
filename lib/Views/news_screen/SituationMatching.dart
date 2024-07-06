@@ -1,17 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_finalproject/consts/colors.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 
-class PopularSituationMatchingScreen extends StatefulWidget {
+class SituationMatching extends StatefulWidget {
   @override
-  _PopularSituationMatchingScreenState createState() =>
-      _PopularSituationMatchingScreenState();
+  _SituationMatchingState createState() =>
+      _SituationMatchingState();
 }
 
-class _PopularSituationMatchingScreenState
-    extends State<PopularSituationMatchingScreen> {
+class _SituationMatchingState
+    extends State<SituationMatching> {
   Future<List<Widget>>? _futureContent;
   String _selectedSituation = '';
   String _title = 'Popular Situation Matching';
