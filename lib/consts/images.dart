@@ -161,9 +161,9 @@ const String imgVerify = 'assets/images/imgVerify.png';
 const String icInfo = 'assets/images/icInfo.png';
 
 //------------- popmatch
-const String imgcasual = "assets/icons/casual.png";
-const String imgformal = "assets/icons/formal.png";
-const String imgseasonal = "assets/icons/seasonal.png";
-const String imgHome = "assets/icons/home.png";
-const String imgsemi = "assets/icons/semi.png";
-const String imgspecail = "assets/icons/specail.png";
+const String imgcasual = "assets/icons/icNews/casual.png";
+const String imgformal = "assets/icons/icNews/formal.png";
+const String imgseasonal = "assets/icons/icNews/seasonal.png";
+const String imgHome = "assets/icons/icNews/home.png";
+const String imgsemi = "assets/icons/icNews/semi.png";
+const String imgspecail = "assets/icons/icNews/specail.png";

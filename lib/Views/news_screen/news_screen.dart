@@ -324,9 +324,9 @@ class NewsScreen extends StatelessWidget {
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 3,
-                              mainAxisSpacing: 12,
-                              crossAxisSpacing: 12,
-                              childAspectRatio: 1.3,
+                              mainAxisSpacing: 8,
+                              crossAxisSpacing: 8,
+                              childAspectRatio: 2.4 / 2,
                             ),
                             itemCount: 6,
                             itemBuilder: (context, index) {
@@ -355,15 +355,40 @@ class NewsScreen extends StatelessWidget {
                                 },
                                 child: Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(10, 15, 10, 10),
+                                      const EdgeInsets.only(top: 12),
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    // crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       ClipRRect(
                                         borderRadius: BorderRadius.circular(0),
                                         child: SizedBox(
-                                          width: 30,
-                                          height: 40,
+                                          width: index == 0
+                                              ? 25
+                                              : index == 1
+                                                  ? 18
+                                                  : index == 2
+                                                      ? 22
+                                                      : index == 3
+                                                          ? 30
+                                                          : index == 4
+                                                              ? 25
+                                                              : index == 5
+                                                              ? 20
+                                                              : 60, 
+                                          height: index == 0
+                                              ?25
+                                              : index == 1
+                                                  ? 28
+                                                  : index == 2
+                                                      ? 25
+                                                      : index == 3
+                                                          ? 25
+                                                          : index == 4
+                                                              ? 30
+                                                              : index == 5
+                                                                  ? 30
+                                                                  : 40, 
                                           child: Image.asset(
                                             cardData[index]['image']!,
                                             fit: BoxFit.contain,
@@ -380,9 +405,9 @@ class NewsScreen extends StatelessWidget {
                                           cardData[index]['title']!,
                                           style: const TextStyle(
                                             fontFamily: medium,
-                                            fontSize: 15,
+                                            fontSize: 14,
                                             color: Colors.black,
-                                            height: 1.0,
+                                            // height: 1.0,
                                           ),
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,

@@ -103,6 +103,7 @@ flutter:
     - assets/icons/iconsPayment/
     - assets/icons/iconsOtherApp/
     - assets/icons/iconsNavbar/
+    - assets/icons/icNews/
     - assets/icons/icHomePage/
     - assets/icons/iconsNavbarinapp/
     - lib/services/collection_model.json
