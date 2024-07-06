@@ -1107,7 +1107,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                         },
                         child: Text(
                           "Delete",
-                          style: TextStyle(color: Colors.red),
+                          style: TextStyle(color: redColor),
                         ),
                       ),
                     ],

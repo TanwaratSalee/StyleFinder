@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/Views/match_screen/matchpost_details.dart';
-import 'package:flutter_finalproject/Views/news_screen/SituationMatching.dart';
+import 'package:flutter_finalproject/Views/news_screen/situationMatching.dart';
 import 'package:flutter_finalproject/Views/news_screen/allstore_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
@@ -428,7 +428,8 @@ class NewsScreen extends StatelessWidget {
                                           style: const TextStyle(
                                             fontFamily: medium,
                                             fontSize: 14,
-                                            color: Colors.black,
+                                            color: blackColor,
+                                            // height: 1.0,
                                           ),
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,

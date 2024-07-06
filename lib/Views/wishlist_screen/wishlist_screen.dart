@@ -96,7 +96,7 @@ class WishlistScreen extends StatelessWidget {
                         ),
                       ),
                       IconButton(
-                        icon: const Icon(Icons.favorite, color: Colors.red),
+                        icon: const Icon(Icons.favorite, color: redColor),
                         onPressed: () async {
                           await FirebaseFirestore.instance
                               .collection(productsCollection)

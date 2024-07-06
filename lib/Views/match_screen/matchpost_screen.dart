@@ -458,8 +458,8 @@ class _MatchPostProductState extends State<MatchPostProduct> {
     Get.snackbar(
       'Error',
       message,
-      backgroundColor: Colors.red,
-      colorText: Colors.white,
+      backgroundColor: redColor,
+      colorText: whiteColor,
       snackPosition: SnackPosition.BOTTOM,
     );
   }

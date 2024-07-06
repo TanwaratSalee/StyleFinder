@@ -515,7 +515,7 @@ void showMatchReasonModal(
               child: Text(
                 isGreatMatch ? 'Great Match!' : 'Not a Match',
                 style: TextStyle(
-                  color: isGreatMatch ? Colors.green : Colors.red,
+                  color: isGreatMatch ? Colors.green : redColor,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
@@ -573,7 +573,7 @@ void showModalRightSheet({
     context: context,
     barrierDismissible: true,
     barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-    barrierColor: Colors.black.withOpacity(0.5),
+    barrierColor: blackColor.withOpacity(0.5),
     transitionDuration: const Duration(milliseconds: 200),
     pageBuilder: (BuildContext context, Animation<double> animation,
         Animation<double> secondaryAnimation) {
@@ -589,7 +589,7 @@ void showModalRightSheet({
             child: Container(
               height: MediaQuery.of(context).size.height * 0.85,
               width: MediaQuery.of(context).size.width,
-              color: Colors.white,
+              color: whiteColor,
               child: builder(context),
             ),
           ),
