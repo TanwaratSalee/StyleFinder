@@ -438,10 +438,11 @@ class _MatchScreenState extends State<MatchScreen> {
 
 void showMatchReasonModal(
     BuildContext context, Map<String, dynamic> matchResult, int? skinTone) {
-  final bool isGreatMatch = matchResult['isGreatMatch'];
+  final bool isGreatMatch = matchResult['isGreatMatch'] ?? false;
   final int? topPrimaryColor = matchResult['topClosestColor'];
   final int? lowerPrimaryColor = matchResult['lowerClosestColor'];
 
+  // Debug prints
   print('Top Colors: ${matchResult['topClosestColor']}');
   print('Lower Colors: ${matchResult['lowerClosestColor']}');
 
@@ -484,10 +485,6 @@ void showMatchReasonModal(
             'The top color is: ${recommendedColors[topPrimaryColor]}!',
             style: TextStyle(fontSize: 14, fontFamily: regular),
           ),
-          // Text(
-          //   recommendedColors[lowerPrimaryColor]!,
-          //   style: TextStyle(fontSize: 12),
-          // ),
         ]);
       }
       if (recommendedColors.containsKey(lowerPrimaryColor)) {
@@ -496,10 +493,6 @@ void showMatchReasonModal(
             'The lower color is: ${recommendedColors[lowerPrimaryColor]}!',
             style: TextStyle(fontSize: 14, fontFamily: regular),
           ),
-          // Text(
-          //   recommendedColors[lowerPrimaryColor]!,
-          //   style: TextStyle(fontSize: 12),
-          // ),
         ]);
       }
     }
@@ -581,7 +574,7 @@ void showModalRightSheet({
       return Align(
         alignment: Alignment.bottomCenter,
         child: Material(
-          color: Colors.transparent, 
+          color: Colors.transparent,
           child: ClipRRect(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20),
@@ -590,7 +583,7 @@ void showModalRightSheet({
             child: Container(
               height: MediaQuery.of(context).size.height * 0.85,
               width: MediaQuery.of(context).size.width,
-              color: Colors.white, 
+              color: Colors.white,
               child: builder(context),
             ),
           ),

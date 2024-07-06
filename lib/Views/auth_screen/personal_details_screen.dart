@@ -79,17 +79,17 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
     {
       'name': 'Yellow',
       'color': Color(0xFFF8C99C),
-      'value': 0xFFF8C99C // จะถูกบันทึกเป็น 4289672092
+      'value': 0xFFF8C99C // จะถูกบันทึกเป็น 4294494620
     }, // ผิวสีเหลืองอ่อน
     {
       'name': 'Brown',
       'color': Color(0xFFB98762),
-      'value': 0xFFB98762 // จะถูกบันทึกเป็น 4286943330
+      'value': 0xFFB98762 // จะถูกบันทึกเป็น 4290348898
     }, // ผิวสีน้ำตาลอ่อน
     {
       'name': 'Dark',
       'color': Color(0xFF744E3C),
-      'value': 0xFF744E3C // จะถูกบันทึกเป็น 4284008252
+      'value': 0xFF744E3C // จะถูกบันทึกเป็น 4285812284
     }, // ผิวสีน้ำตาลเข้ม
   ];
 
