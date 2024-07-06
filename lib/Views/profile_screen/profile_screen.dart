@@ -82,7 +82,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                       icTapPostProfile,
                       color: _mainTabController?.index == 0
                           ? primaryApp
-                          : greyColor,
+                          : greyLine,
                       width: 22,
                       height: 22,
                     ),
@@ -92,7 +92,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                       icTapProfileFav,
                       color: _mainTabController?.index == 1
                           ? primaryApp
-                          : greyColor,
+                          : greyLine,
                       width: 22,
                       height: 22,
                     ),
