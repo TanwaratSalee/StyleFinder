@@ -333,6 +333,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                               setState(() {
                                 selectedSkinTone = tone['color'];
                               });
+                              // print('Selected skin tone: ${tone['name']} - ${tone['value']}');
                             }
                           },
                           child: Container(
