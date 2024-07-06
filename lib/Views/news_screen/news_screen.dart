@@ -342,7 +342,7 @@ class NewsScreen extends StatelessWidget {
                                   'title': 'Seasonal Attire'
                                 },
                                 {
-                                  'image': imgspecail,
+                                  'image': imgspecial,
                                   'title': 'Special Activity Attire'
                                 },
                                 {'image': imgHome, 'title': 'Work from Home'}

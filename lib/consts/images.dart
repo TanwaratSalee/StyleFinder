@@ -166,4 +166,4 @@ const String imgformal = "assets/icons/formal.png";
 const String imgseasonal = "assets/icons/seasonal.png";
 const String imgHome = "assets/icons/home.png";
 const String imgsemi = "assets/icons/semi.png";
-const String imgspecail = "assets/icons/specail.png";
+const String imgspecial = "assets/icons/special.png";
