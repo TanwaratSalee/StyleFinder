@@ -446,17 +446,35 @@ void showMatchReasonModal(
   print('Top Colors: ${matchResult['topClosestColor']}');
   print('Lower Colors: ${matchResult['lowerClosestColor']}');
 
-  String reason;
+  List<Widget> reasonWidgets = [];
   String additionalReason = '';
   List<Widget> colorReasonsWidgets = [];
   bool dayOfWeekTextAdded = false;
 
   if (topPrimaryColor == null || lowerPrimaryColor == null) {
-    reason = 'Unknown colors selected';
+    reasonWidgets
+        .add(Text('Unknown colors selected', style: TextStyle(fontSize: 14)));
   } else {
-    reason = isGreatMatch
-        ? '✓ ${getColorName(topPrimaryColor)} matches with ${getColorName(lowerPrimaryColor)} and suits your skin tone.'
-        : '✗ ${getColorName(topPrimaryColor)} does not match with ${getColorName(lowerPrimaryColor)} or does not suit your skin tone.';
+    reasonWidgets.add(
+      Row(
+        children: [
+          Icon(
+            isGreatMatch ? Icons.check : Icons.close,
+            size: 20,
+            color: isGreatMatch ? Colors.green : Colors.red,
+          ),
+          SizedBox(width: 5),
+          Expanded(
+            child: Text(
+              isGreatMatch
+                  ? '${getColorName(topPrimaryColor)} matches with ${getColorName(lowerPrimaryColor)} and suits your skin tone.'
+                  : '${getColorName(topPrimaryColor)} does not match with ${getColorName(lowerPrimaryColor)} or does not suit your skin tone.',
+              style: TextStyle(fontSize: 14),
+            ),
+          ),
+        ],
+      ),
+    );
 
     additionalReason = getAdditionalReason(topPrimaryColor, lowerPrimaryColor);
 
@@ -476,9 +494,23 @@ void showMatchReasonModal(
         dayOfWeekTextAdded = true;
       }
       colorReasonsWidgets.add(
-        Text(
-          'The top color is: ${recommendedColors[topPrimaryColor]}!',
-          style: TextStyle(fontSize: 14, fontFamily: regular),
+        Row(
+          children: [
+            Icon(
+              Icons.check,
+              size: 20,
+              color: Colors.green,
+            ),
+            SizedBox(width: 5),
+            Text(
+              'The top color is: ',
+              style: TextStyle(fontSize: 14, fontFamily: regular),
+            ),
+            Text(
+              recommendedColors[topPrimaryColor]!,
+              style: TextStyle(fontSize: 14, fontFamily: regular),
+            ),
+          ],
         ),
       );
     }
@@ -494,9 +526,23 @@ void showMatchReasonModal(
         dayOfWeekTextAdded = true;
       }
       colorReasonsWidgets.add(
-        Text(
-          'The lower color is: ${recommendedColors[lowerPrimaryColor]}!',
-          style: TextStyle(fontSize: 14, fontFamily: regular),
+        Row(
+          children: [
+            Icon(
+              Icons.check,
+              size: 20,
+              color: Colors.green,
+            ),
+            Text(
+              'The lower color is: ',
+              style: TextStyle(fontSize: 14, fontFamily: regular),
+            ),
+            SizedBox(width: 5),
+            Text(
+              recommendedColors[lowerPrimaryColor]!,
+              style: TextStyle(fontSize: 14, fontFamily: regular),
+            ),
+          ],
         ),
       );
     }
@@ -536,7 +582,7 @@ void showMatchReasonModal(
               ),
             ),
             SizedBox(height: 10),
-            Text(reason, style: TextStyle(fontSize: 14)),
+            ...reasonWidgets,
             if (colorReasonsWidgets.isNotEmpty) ...[
               SizedBox(height: 10),
               ...colorReasonsWidgets.map((widget) => Padding(
@@ -544,16 +590,36 @@ void showMatchReasonModal(
                     child: widget,
                   )),
             ],
-            Text(
-              'The color of the top and bottoms match',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-              ),
+            Row(
+              children: [
+                SizedBox(width: 5),
+                Text(
+                  'The color of the top and bottoms match',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
             if (additionalReason.isNotEmpty) ...[
               SizedBox(height: 10),
-              Text(additionalReason, style: TextStyle(fontSize: 14)),
+              Row(
+                children: [
+                  Icon(
+                    Icons.info,
+                    size: 20,
+                    color: Colors.blue,
+                  ),
+                  SizedBox(width: 5),
+                  Expanded(
+                    child: Text(
+                      additionalReason,
+                      style: TextStyle(fontSize: 14),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ],
         ),
