@@ -235,11 +235,12 @@ class StoreScreen extends StatelessWidget {
             child: TabBarView(
               children: [
                 buildMatchGrid('All'),
-                buildMatchGrid('Tops'),
-                buildMatchGrid('Bottoms'),
-                buildMatchGrid('Full Sets'),
-                buildMatchGrid('Accessories'),
-                buildMatchGrid('Others'),
+                buildMatchGrid('Formal Attire'),
+                buildMatchGrid('Semi-Formal Attire'),
+                buildMatchGrid('Casual Attire'),
+                buildMatchGrid('Seasonal Attire'),
+                buildMatchGrid('Special Activity Attire'),
+                buildMatchGrid('Work from Home'),
               ],
             ),
           ),
@@ -249,11 +250,23 @@ class StoreScreen extends StatelessWidget {
   }
 
   Widget buildMatchGrid(String category) {
+    final categoryMap = {
+      'Formal Attire': 'formal',
+      'Semi-Formal Attire': 'semi-formal',
+      'Casual Attire': 'casual',
+      'Seasonal Attire': 'seasonal',
+      'Special Activity Attire': 'special-activity',
+      'Work from Home': 'work-from-home',
+    };
+    final selectedCategory = categoryMap[category] ?? 'All';
+
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection('storemixandmatchs')
           .where('vendor_id', isEqualTo: vendorId)
-          .where('category', isEqualTo: category == 'All' ? null : category)
+          .where('situations',
+              arrayContains:
+                  selectedCategory == 'All' ? null : selectedCategory)
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {

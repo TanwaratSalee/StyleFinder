@@ -454,12 +454,10 @@ void showMatchReasonModal(
   if (topPrimaryColor == null || lowerPrimaryColor == null) {
     reason = 'Unknown colors selected';
   } else {
-    reason =
-        '${getColorName(topPrimaryColor)} matches with ${getColorName(lowerPrimaryColor)} and suits your skin tone.';
-    if (!isGreatMatch) {
-      reason =
-          '${getColorName(topPrimaryColor)} does not match with ${getColorName(lowerPrimaryColor)} or does not suit your skin tone.';
-    }
+    reason = isGreatMatch
+        ? '✓ ${getColorName(topPrimaryColor)} matches with ${getColorName(lowerPrimaryColor)} and suits your skin tone.'
+        : '✗ ${getColorName(topPrimaryColor)} does not match with ${getColorName(lowerPrimaryColor)} or does not suit your skin tone.';
+
     additionalReason = getAdditionalReason(topPrimaryColor, lowerPrimaryColor);
 
     Map<int, String> recommendedColors = getRecommendedColors(dayOfWeek.value);
@@ -469,7 +467,10 @@ void showMatchReasonModal(
         colorReasonsWidgets.add(
           Text(
             'You were born on ${dayOfWeek.value}',
-            style: TextStyle(fontSize: 16, fontFamily: medium),
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         );
         dayOfWeekTextAdded = true;
@@ -486,7 +487,7 @@ void showMatchReasonModal(
       if (!dayOfWeekTextAdded) {
         colorReasonsWidgets.add(
           Text(
-            'You were born on ${dayOfWeek.value}',
+            'You were born on : ${dayOfWeek.value}',
             style: TextStyle(fontSize: 16, fontFamily: medium),
           ),
         );
@@ -529,7 +530,7 @@ void showMatchReasonModal(
               skinTone == null
                   ? 'Your Skin Tone  :'
                   : 'Your Skin Tone  : ${getSkinToneDescription(skinTone)}',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
               ),
@@ -543,6 +544,13 @@ void showMatchReasonModal(
                     child: widget,
                   )),
             ],
+            Text(
+              'The color of the top and bottoms match',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             if (additionalReason.isNotEmpty) ...[
               SizedBox(height: 10),
               Text(additionalReason, style: TextStyle(fontSize: 14)),
