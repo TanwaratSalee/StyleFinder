@@ -50,6 +50,9 @@ class _MatchScreenState extends State<MatchScreen> {
     } else if (index == itemCount + 1) {
       _pageControllerTop.jumpToPage(1);
     }
+    setState(() {
+      _currentPageIndexTop = index;
+    });
   }
 
   void handlePageChangeLower(int index, int itemCount) {
@@ -58,6 +61,9 @@ class _MatchScreenState extends State<MatchScreen> {
     } else if (index == itemCount + 1) {
       _pageControllerLower.jumpToPage(1);
     }
+    setState(() {
+      _currentPageIndexLower = index;
+    });
   }
 
   int getActualIndex(int index, int itemCount) {

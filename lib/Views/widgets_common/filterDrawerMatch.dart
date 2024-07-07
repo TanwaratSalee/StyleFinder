@@ -305,32 +305,38 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
                   selectedGender = 'women';
                 }
 
+                List<String> selectedTypes = [
+                  if (isSelectedDress) 'dresses',
+                  if (isSelectedSkirts) 'skirts',
+                  if (isSelectedTShirts) 't-shirts',
+                  if (isSelectedPants) 'pants',
+                  if (isSelectedJackets) 'jackets',
+                  if (isSelectedSuits) 'suits',
+                ];
+
+                List<String> selectedCollections = [
+                  if (isSelectedSummer) 'summer',
+                  if (isSelectedWinter) 'winter',
+                  if (isSelectedAutumn) 'autumn',
+                  if (isSelectedSpring) 'spring',
+                ];
+
+                List<String> selectedSituations = [
+                  if (isSelectedFormal) 'formal',
+                  if (isSelectedCasual) 'casual',
+                  if (isSelectedSeasonal) 'seasonal',
+                  if (isSelectedSemiFormal) 'semi-formal',
+                  if (isSelectedSpecialActivity) 'specialactivity',
+                  if (isSelectedWorkFromHome) 'workfromhome',
+                ];
+
                 controller.updateFilters(
                   gender: selectedGender,
                   price: _currentSliderValue,
                   colors: selectedColorIndexes,
-                  types: [
-                    if (isSelectedDress) 'dresses',
-                    if (isSelectedSkirts) 'skirts',
-                    if (isSelectedTShirts) 't-shirts',
-                    if (isSelectedPants) 'pants',
-                    if (isSelectedJackets) 'jackets',
-                    if (isSelectedSuits) 'suits',
-                  ],
-                  collections: [
-                    if (isSelectedSummer) 'summer',
-                    if (isSelectedWinter) 'winter',
-                    if (isSelectedAutumn) 'autumn',
-                    if (isSelectedSpring) 'spring',
-                  ],
-                  situations: [
-                    if (isSelectedFormal) 'formal',
-                    if (isSelectedCasual) 'casual',
-                    if (isSelectedSeasonal) 'seasonal',
-                    if (isSelectedSemiFormal) 'semi-formal',
-                    if (isSelectedSpecialActivity) 'specialactivity',
-                    if (isSelectedWorkFromHome) 'workfromhome',
-                  ],
+                  types: selectedTypes,
+                  collections: selectedCollections,
+                  situations: selectedSituations,
                 );
 
                 final selectedVendor = controller.vendors.firstWhere(
@@ -338,10 +344,14 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
                         vendor['vendor_id'] ==
                         controller.selectedVendorId.value,
                     orElse: () => {'vendor_name': 'Unknown'});
-                print("Selected vendor name: ${selectedVendor['vendor_name']}");
-                print(
-                    "Selected Vendor ID: ${controller.selectedVendorId.value}");
 
+                print('Saved Filters:');
+                print('Gender: $selectedGender');
+                print('Price: $_currentSliderValue');
+                print('Colors: $selectedColorIndexes');
+                print('Types: $selectedTypes');
+                print('Collections: $selectedCollections');
+                print('Situations: $selectedSituations');
                 controller.fetchFilteredTopProducts();
                 controller.fetchFilteredLowerProducts();
 

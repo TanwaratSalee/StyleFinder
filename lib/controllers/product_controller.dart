@@ -141,29 +141,36 @@ class ProductController extends GetxController {
 
       if (selectedColors.isNotEmpty) {
         products = products
-            .where((product) => selectedColors
-                .any((color) => product['colors'].contains(color)))
+            .where((product) =>
+                product['colors'] != null &&
+                selectedColors
+                    .any((color) => product['colors'].contains(color)))
             .toList();
       }
 
       if (selectedTypes.isNotEmpty) {
         products = products
-            .where(
-                (product) => selectedTypes.contains(product['subcollection']))
+            .where((product) =>
+                product['subcollection'] != null &&
+                selectedTypes.contains(product['subcollection']))
             .toList();
       }
 
       if (selectedCollections.isNotEmpty) {
         products = products
-            .where((product) => selectedCollections.any(
-                (collection) => product['collection'].contains(collection)))
+            .where((product) =>
+                product['collection'] != null &&
+                selectedCollections.any(
+                    (collection) => product['collection'].contains(collection)))
             .toList();
       }
 
       if (selectedSituations.isNotEmpty) {
         products = products
-            .where((product) => selectedSituations
-                .any((situation) => product['situations'].contains(situation)))
+            .where((product) =>
+                product['situations'] != null &&
+                selectedSituations.any(
+                    (situation) => product['situations'].contains(situation)))
             .toList();
       }
 
@@ -224,22 +231,36 @@ class ProductController extends GetxController {
 
       if (selectedColors.isNotEmpty) {
         products = products
-            .where((product) => selectedColors
-                .any((color) => product['colors'].contains(color)))
+            .where((product) =>
+                product['colors'] != null &&
+                selectedColors
+                    .any((color) => product['colors'].contains(color)))
             .toList();
       }
 
       if (selectedTypes.isNotEmpty) {
         products = products
-            .where(
-                (product) => selectedTypes.contains(product['subcollection']))
+            .where((product) =>
+                product['subcollection'] != null &&
+                selectedTypes.contains(product['subcollection']))
             .toList();
       }
 
       if (selectedCollections.isNotEmpty) {
         products = products
-            .where((product) => selectedCollections.any(
-                (collection) => product['collection'].contains(collection)))
+            .where((product) =>
+                product['collection'] != null &&
+                selectedCollections.any(
+                    (collection) => product['collection'].contains(collection)))
+            .toList();
+      }
+
+      if (selectedSituations.isNotEmpty) {
+        products = products
+            .where((product) =>
+                product['situations'] != null &&
+                selectedSituations.any(
+                    (situation) => product['situations'].contains(situation)))
             .toList();
       }
 
@@ -287,7 +308,6 @@ class ProductController extends GetxController {
           .map((doc) => {'vendor_id': doc.id, 'name': doc['name']})
           .toList();
       vendors.assignAll(vendorList);
-      print("Vendors fetched: $vendorList");
     } catch (e) {
       print("Error fetching vendors: $e");
     }
