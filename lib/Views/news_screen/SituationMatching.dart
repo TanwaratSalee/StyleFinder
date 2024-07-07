@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_finalproject/Views/match_screen/matchpost_details.dart';
+import 'package:flutter_finalproject/Views/store_screen/matchstore_detail.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
 
@@ -23,15 +25,15 @@ class _SituationMatchingState extends State<SituationMatching> {
   void initState() {
     super.initState();
     _selectedSituation = getSelectedSituation(widget.initialTabIndex);
-    _title = widget.title; // ตั้งค่า _title ด้วยค่าเริ่มต้นจาก widget.title
+    _title = widget.title;
     _futureContent = fetchData();
   }
 
   String getSelectedSituation(int index) {
     switch (index) {
       case 0:
-        _title = 'Popular Situation Matching'; // ตั้งค่า title สำหรับหน้า All
-        return ''; // สำหรับหน้า All
+        _title = 'Popular Situation Matching';
+        return '';
       case 1:
         return 'formal';
       case 2:
@@ -51,20 +53,45 @@ class _SituationMatchingState extends State<SituationMatching> {
 
   Future<List<Widget>> fetchData() async {
     List<Widget> content = [];
-    final querySnapshot =
-        await FirebaseFirestore.instance.collection('usermixandmatch').get();
 
-    final userIds =
-        querySnapshot.docs.map((doc) => doc.data()['user_id']).toList();
-    final productIdsTop =
-        querySnapshot.docs.map((doc) => doc.data()['product_id_top']).toList();
-    final productIdsLower = querySnapshot.docs
+    final userMixAndMatchQuery =
+        FirebaseFirestore.instance.collection('usermixandmatch').get();
+    final storeMixAndMatchQuery =
+        FirebaseFirestore.instance.collection('storemixandmatchs').get();
+
+    final querySnapshots =
+        await Future.wait([userMixAndMatchQuery, storeMixAndMatchQuery]);
+
+    final combinedDocs = [...querySnapshots[0].docs, ...querySnapshots[1].docs];
+
+    final userIds = combinedDocs
+        .map((doc) => doc.data()['user_id'])
+        .where((userId) => userId != null)
+        .toSet()
+        .toList();
+    final vendorIds = combinedDocs
+        .map((doc) => doc.data()['vendor_id'])
+        .where((vendorId) => vendorId != null)
+        .toSet()
+        .toList();
+    final productIdsTop = combinedDocs
+        .map((doc) => doc.data()['product_id_top'])
+        .where((productIdTop) => productIdTop != null)
+        .toSet()
+        .toList();
+    final productIdsLower = combinedDocs
         .map((doc) => doc.data()['product_id_lower'])
+        .where((productIdLower) => productIdLower != null)
+        .toSet()
         .toList();
 
     final usersFuture = FirebaseFirestore.instance
         .collection('users')
         .where(FieldPath.documentId, whereIn: userIds)
+        .get();
+    final vendorsFuture = FirebaseFirestore.instance
+        .collection('vendors')
+        .where(FieldPath.documentId, whereIn: vendorIds)
         .get();
     final productsTopFuture = FirebaseFirestore.instance
         .collection('products')
@@ -75,12 +102,19 @@ class _SituationMatchingState extends State<SituationMatching> {
         .where(FieldPath.documentId, whereIn: productIdsLower)
         .get();
 
-    final usersSnapshot = await usersFuture;
-    final productsTopSnapshot = await productsTopFuture;
-    final productsLowerSnapshot = await productsLowerFuture;
+    final snapshots = await Future.wait(
+        [usersFuture, vendorsFuture, productsTopFuture, productsLowerFuture]);
+
+    final usersSnapshot = snapshots[0];
+    final vendorsSnapshot = snapshots[1];
+    final productsTopSnapshot = snapshots[2];
+    final productsLowerSnapshot = snapshots[3];
 
     final userDataMap = {
       for (var doc in usersSnapshot.docs) doc.id: doc.data()
+    };
+    final vendorDataMap = {
+      for (var doc in vendorsSnapshot.docs) doc.id: doc.data()
     };
     final productTopDataMap = {
       for (var doc in productsTopSnapshot.docs) doc.id: doc.data()
@@ -89,37 +123,47 @@ class _SituationMatchingState extends State<SituationMatching> {
       for (var doc in productsLowerSnapshot.docs) doc.id: doc.data()
     };
 
-    // เก็บข้อมูลพร้อม favorite_count เพื่อใช้ในการจัดเรียง
     List<Map<String, dynamic>> dataWithFavoriteCount = [];
 
-    for (var index = 0; index < querySnapshot.docs.length; index++) {
-      var doc = querySnapshot.docs[index];
+    for (var doc in combinedDocs) {
       var docData = doc.data() as Map<String, dynamic>;
       var productIdTop = docData['product_id_top'] ?? '';
       var productIdLower = docData['product_id_lower'] ?? '';
       var userId = docData['user_id'] ?? '';
-      var situations = List<String>.from(
-          docData['situations'] ?? []); // ดึงข้อมูลสถานการณ์ที่เป็น array
+      var vendorId = docData['vendor_id'] ?? '';
+      var situations = List<String>.from(docData['situations'] ?? []);
 
-      // กรองข้อมูลตามสถานการณ์ที่เลือก
       if (_selectedSituation.isNotEmpty &&
           !situations.contains(_selectedSituation)) {
         continue;
       }
 
-      var userData = userDataMap[userId] as Map<String, dynamic>;
-      var userName = userData['name'] ?? '';
-      var userImage = userData['imageUrl'] ?? '';
+      var userName = '';
+      var userImage = '';
+
+      if (userId.isNotEmpty) {
+        var userData = userDataMap[userId] as Map<String, dynamic>?;
+        if (userData == null) continue;
+        userName = userData['name'] ?? '';
+        userImage = userData['imageUrl'] ?? '';
+      } else if (vendorId.isNotEmpty) {
+        var vendorData = vendorDataMap[vendorId] as Map<String, dynamic>?;
+        if (vendorData == null) continue;
+        userName = vendorData['name'] ?? '';
+        userImage = vendorData['imageUrl'] ?? '';
+      }
 
       var productTopData =
-          productTopDataMap[productIdTop] as Map<String, dynamic>;
+          productTopDataMap[productIdTop] as Map<String, dynamic>?;
+      if (productTopData == null) continue;
       var productNameTop = productTopData['name'] ?? '';
       var productPriceTop = productTopData['price']?.toString() ?? '0';
       var productImageTop =
           (productTopData['imgs'] as List<dynamic>?)?.first ?? '';
 
       var productLowerData =
-          productLowerDataMap[productIdLower] as Map<String, dynamic>;
+          productLowerDataMap[productIdLower] as Map<String, dynamic>?;
+      if (productLowerData == null) continue;
       var productNameLower = productLowerData['name'] ?? '';
       var productPriceLower = productLowerData['price']?.toString() ?? '0';
       var productImageLower =
@@ -128,7 +172,6 @@ class _SituationMatchingState extends State<SituationMatching> {
       var favoriteCount = docData['favorite_count'] ?? 0;
 
       dataWithFavoriteCount.add({
-        'index': index,
         'userImage': userImage,
         'userName': userName,
         'productNameTop': productNameTop,
@@ -137,15 +180,16 @@ class _SituationMatchingState extends State<SituationMatching> {
         'productNameLower': productNameLower,
         'productPriceLower': productPriceLower,
         'productImageLower': productImageLower,
-        'favoriteCount': favoriteCount
+        'favoriteCount': favoriteCount,
+        'documentId': doc.id,
+        'isStoreMatch': doc.reference.parent.id == 'storemixandmatchs',
+        'matchedData': docData, // เพิ่ม matchedData
       });
     }
 
-    // จัดเรียงข้อมูลตาม favorite_count
     dataWithFavoriteCount
         .sort((a, b) => b['favoriteCount'].compareTo(a['favoriteCount']));
 
-    // จำกัดจำนวนข้อมูลที่ต้องการแสดงเป็น 10 อันดับแรก
     final top10Data = dataWithFavoriteCount.take(10).toList();
 
     for (var i = 0; i < top10Data.length; i++) {
@@ -161,6 +205,9 @@ class _SituationMatchingState extends State<SituationMatching> {
         item['productPriceLower'],
         item['productImageLower'],
         item['favoriteCount'].toString(),
+        item['documentId'],
+        item['isStoreMatch'],
+        item['matchedData'], // ส่ง matchedData
       ));
     }
 
@@ -177,103 +224,134 @@ class _SituationMatchingState extends State<SituationMatching> {
       String productName2,
       String productPrice2,
       String productImageLower,
-      String likes) {
-    return Row(
-      children: [
-        CircleAvatar(
-          radius: 14,
-          backgroundColor: greysituations, // เพิ่ม background color
-          child: Text(
-            index.toString(),
-            style: TextStyle(color: blackColor), // เพิ่มสีของข้อความ
+      String likes,
+      String documentId,
+      bool isStoreMatch,
+      Map<String, dynamic> matchedData) {
+    return GestureDetector(
+      onTap: () {
+        if (isStoreMatch) {
+          Get.to(() => MatchStoreDetailScreen(documentId: documentId));
+        } else {
+          Get.to(() => MatchPostsDetails(
+                docId: documentId,
+                productName1: productName1,
+                productName2: productName2,
+                price1: productPrice1,
+                price2: productPrice2,
+                productImage1: productImageTop,
+                productImage2: productImageLower,
+                totalPrice:
+                    (double.parse(productPrice1) + double.parse(productPrice2))
+                        .toString(),
+                vendorName1: 'Vendor Name 1',
+                vendorName2: 'Vendor Name 2',
+                vendor_id: matchedData['vendor_id'] ?? '',
+                collection: matchedData['collection'] ?? [],
+                situations: matchedData['situations'] ?? [],
+                description: matchedData['description'] ?? '',
+                gender: matchedData['gender'] ?? '',
+                user_id: matchedData['user_id'] ?? '',
+              ));
+        }
+      },
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: 14,
+            backgroundColor: greysituations,
+            child: Text(
+              index.toString(),
+              style: TextStyle(color: blackColor),
+            ),
           ),
-        ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: Card(
-              margin: EdgeInsets.symmetric(vertical: 5.0),
-              shape: RoundedRectangleBorder(
-                side: BorderSide(color: greyLine),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              elevation: 0,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            CircleAvatar(
-                              radius: 14,
-                              backgroundImage: NetworkImage(userImage),
-                            ),
-                            SizedBox(width: 8.0),
-                            Text(userName),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.favorite,
-                              color: redColor,
-                              size: 15.0,
-                            ),
-                            SizedBox(width: 5.0),
-                            Text(
-                              likes,
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  fontFamily: medium,
-                                  color: greyDark),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                    SizedBox(height: 8.0),
-                    Row(
-                      children: [
-                        Container(
-                          width: 56,
-                          height: 65,
-                          color: greyColor,
-                          child: Image.network(productImageTop),
-                        ),
-                        SizedBox(width: 8.0),
-                        buildProductInfo(productName1, productPrice1),
-                        SizedBox(width: 8.0),
-                        CircleAvatar(
-                          radius: 7,
-                          backgroundColor: primaryApp,
-                          child: Icon(
-                            Icons.add,
-                            size: 13,
-                            color: whiteColor,
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: Card(
+                margin: EdgeInsets.symmetric(vertical: 5.0),
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(color: greyLine),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                elevation: 0,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 14,
+                                backgroundImage: NetworkImage(userImage),
+                              ),
+                              SizedBox(width: 8.0),
+                              Text(userName),
+                            ],
                           ),
-                        ),
-                        SizedBox(width: 8.0),
-                        Container(
-                          width: 56,
-                          height: 65,
-                          color: greyColor,
-                          child: Image.network(productImageLower),
-                        ),
-                        SizedBox(width: 8.0),
-                        buildProductInfo(productName2, productPrice2),
-                      ],
-                    ),
-                  ],
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.favorite,
+                                color: redColor,
+                                size: 15.0,
+                              ),
+                              SizedBox(width: 5.0),
+                              Text(
+                                likes,
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontFamily: medium,
+                                    color: greyDark),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 8.0),
+                      Row(
+                        children: [
+                          Container(
+                            width: 56,
+                            height: 65,
+                            color: greyColor,
+                            child: Image.network(productImageTop),
+                          ),
+                          SizedBox(width: 8.0),
+                          buildProductInfo(productName1, productPrice1),
+                          SizedBox(width: 8.0),
+                          CircleAvatar(
+                            radius: 7,
+                            backgroundColor: primaryApp,
+                            child: Icon(
+                              Icons.add,
+                              size: 13,
+                              color: whiteColor,
+                            ),
+                          ),
+                          SizedBox(width: 8.0),
+                          Container(
+                            width: 56,
+                            height: 65,
+                            color: greyColor,
+                            child: Image.network(productImageLower),
+                          ),
+                          SizedBox(width: 8.0),
+                          buildProductInfo(productName2, productPrice2),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -300,7 +378,7 @@ class _SituationMatchingState extends State<SituationMatching> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          _title, // ใช้ตัวแปร _title แทน widget.title
+          _title,
           style: TextStyle(fontFamily: medium),
         ),
       ),
@@ -360,15 +438,11 @@ class _SituationMatchingState extends State<SituationMatching> {
           setState(() {
             _selectedSituation = situation;
             _futureContent = fetchData();
-            _title = tabIndex == 0
-                ? 'Popular Situation Matching'
-                : text; // อัปเดต _title สำหรับ All
+            _title = tabIndex == 0 ? 'Popular Situation Matching' : text;
           });
         },
         child: Text(
-          text.isEmpty
-              ? 'Popular Situation Matching'
-              : text, // กำหนดค่าเริ่มต้นให้กับปุ่ม All
+          text.isEmpty ? 'Popular Situation Matching' : text,
           style: TextStyle(fontFamily: medium, color: greyDark),
         ),
       ),

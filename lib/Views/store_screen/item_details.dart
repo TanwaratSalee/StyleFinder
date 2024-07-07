@@ -367,8 +367,8 @@ class _ItemDetailsState extends State<ItemDetails> {
                           height: 40,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
-                            itemCount: widget.data['situations'] != null
-                                ? widget.data['situations'].length
+                            itemCount: widget.data['situations' ?? ''] != null
+                                ? widget.data['situations' ?? ''].length
                                 : 0,
                             itemBuilder: (context, index) {
                               return Container(

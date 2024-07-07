@@ -26,7 +26,7 @@ class MatchPostsDetails extends StatefulWidget {
   final List<dynamic> situations;
   final String description;
   final String gender;
-  final String posted_by;
+  final String user_id;
 
   const MatchPostsDetails({
     required this.docId,
@@ -44,7 +44,7 @@ class MatchPostsDetails extends StatefulWidget {
     required this.situations,
     required this.description,
     required this.gender,
-    required this.posted_by,
+    required this.user_id,
   });
 
   @override
@@ -150,17 +150,22 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
   }
 
   void fetchPostedUserDetails() async {
-    DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
-        .collection(usersCollection)
-        .doc(widget.posted_by)
-        .get();
+    if (widget.user_id.isNotEmpty) {
+      // ใช้ user_id แทน
+      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection(usersCollection)
+          .doc(widget.user_id) // ใช้ user_id แทน
+          .get();
 
-    if (userSnapshot.exists) {
-      var userData = userSnapshot.data() as Map<String, dynamic>;
-      setState(() {
-        postedUserName = userData['name'];
-        postedUserImageUrl = userData['imageUrl'];
-      });
+      if (userSnapshot.exists) {
+        var userData = userSnapshot.data() as Map<String, dynamic>;
+        setState(() {
+          postedUserName = userData['name'];
+          postedUserImageUrl = userData['imageUrl'];
+        });
+      }
+    } else {
+      print("user_id is empty or null");
     }
   }
 
@@ -217,7 +222,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
   @override
   Widget build(BuildContext context) {
     bool isCurrentUser =
-        widget.posted_by == FirebaseAuth.instance.currentUser?.uid;
+        widget.user_id == FirebaseAuth.instance.currentUser?.uid;
 
     return Scaffold(
       backgroundColor: whiteColor,
@@ -457,7 +462,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                           const SizedBox(width: 10),
                           GestureDetector(
                             onTap: () {
-                              navigateToUserProfile(widget.posted_by);
+                              navigateToUserProfile(widget.user_id);
                             },
                             child: Container(
                               margin: const EdgeInsets.only(right: 12),

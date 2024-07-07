@@ -1001,7 +1001,7 @@ class NewsScreen extends StatelessWidget {
                           collection: collections,
                           description: description,
                           gender: gender,
-                          posted_by: postedBy,
+                          user_id: postedBy,
                           situations: situations,
                         ));
                   },

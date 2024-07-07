@@ -337,7 +337,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                           collection: collections,
                           description: description,
                           gender: gender,
-                          posted_by: postedBy,
+                          user_id: postedBy,
                           situations: situations, // ตรวจสอบ situations
                         ));
                   },
@@ -906,7 +906,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                             situations: situations,
                             description: description,
                             gender: gender,
-                            posted_by: postedBy,
+                            user_id: postedBy,
                           ),
                         ),
                       );

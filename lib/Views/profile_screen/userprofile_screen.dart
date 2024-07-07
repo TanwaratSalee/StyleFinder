@@ -202,7 +202,7 @@ class UserProfileScreen extends StatelessWidget {
                           situations: situations,
                           description: description,
                           gender: gender,
-                          posted_by: postedBy,
+                          user_id: postedBy,
                         ));
                   },
                   child: Container(

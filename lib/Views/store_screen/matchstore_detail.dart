@@ -46,6 +46,15 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
     fetchDocumentData();
   }
 
+  final Map<String, String> situationMap = {
+    'formal': 'Formal Attire',
+    'semi-formal': 'Semi-Formal Attire',
+    'casual': 'Casual Attire',
+    'seasonal': 'Seasonal Attire',
+    'special-activity': 'Special Activity Attire',
+    'work-from-home': 'Work from Home',
+  };
+
   void fetchDocumentData() async {
     try {
       DocumentSnapshot doc = await FirebaseFirestore.instance
@@ -58,35 +67,41 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
         var productIdTop = data['product_id_top'];
         var productIdLower = data['product_id_lower'];
 
-        var productTopDoc = await FirebaseFirestore.instance
+        // ใช้ Future.wait เพื่อโหลดข้อมูลแบบขนาน
+        var productTopDoc = FirebaseFirestore.instance
             .collection('products')
             .doc(productIdTop)
             .get();
 
-        var productLowerDoc = await FirebaseFirestore.instance
+        var productLowerDoc = FirebaseFirestore.instance
             .collection('products')
             .doc(productIdLower)
             .get();
 
-        if (productTopDoc.exists && productLowerDoc.exists) {
-          setState(() {
-            nameTop = productTopDoc.data()?['name'] ?? 'Unknown Product';
-            imageTop = productTopDoc.data()?['imgs']?.isNotEmpty ?? false
-                ? productTopDoc.data()!['imgs'][0]
-                : '';
-            priceTop = productTopDoc.data()?['price']?.toString() ?? '0';
+        var results = await Future.wait([productTopDoc, productLowerDoc]);
 
-            nameLower = productLowerDoc.data()?['name'] ?? 'Unknown Product';
-            imageLower = productLowerDoc.data()?['imgs']?.isNotEmpty ?? false
-                ? productLowerDoc.data()!['imgs'][0]
+        var productTop = results[0];
+        var productLower = results[1];
+
+        if (productTop.exists && productLower.exists) {
+          setState(() {
+            nameTop = productTop.data()?['name'] ?? 'Unknown Product';
+            imageTop = productTop.data()?['imgs']?.isNotEmpty ?? false
+                ? productTop.data()!['imgs'][0]
                 : '';
-            priceLower = productLowerDoc.data()?['price']?.toString() ?? '0';
+            priceTop = productTop.data()?['price']?.toString() ?? '0';
+
+            nameLower = productLower.data()?['name'] ?? 'Unknown Product';
+            imageLower = productLower.data()?['imgs']?.isNotEmpty ?? false
+                ? productLower.data()!['imgs'][0]
+                : '';
+            priceLower = productLower.data()?['price']?.toString() ?? '0';
 
             totalPrice =
                 (double.parse(priceTop) + double.parse(priceLower)).toString();
 
-            vendorIdTop = productTopDoc.data()?['vendor_id'] ?? '';
-            vendorIdLower = productLowerDoc.data()?['vendor_id'] ?? '';
+            vendorIdTop = productTop.data()?['vendor_id'] ?? '';
+            vendorIdLower = productLower.data()?['vendor_id'] ?? '';
 
             // Fetch vendor data
             controller.fetchVendorData(vendorIdTop);
@@ -95,6 +110,7 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
             description = data['description'] ?? '';
             gender = data['gender'] ?? '';
             collection = data['collection'] ?? [];
+            situations = data['situations'] ?? [];
           });
 
           listenToFavoriteStatus();
@@ -123,33 +139,6 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
     });
   }
 
-/*   void checkIsInWishlist() async {
-    String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
-
-    try {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('storemixandmatchs')
-          .where('favorite_userid', isEqualTo: currentUserUID)
-          .where('vendor_id', isEqualTo: widget.documentId)
-          .get();
-
-      if (querySnapshot.docs.isNotEmpty) {
-        bool hasBothProducts = querySnapshot.docs.any((doc) {
-          Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-          return data['product1']['name'] == nameTop &&
-              data['product2']['name'] == nameLower;
-        });
-
-        controller.isFav.value = hasBothProducts;
-      } else {
-        controller.isFav.value = false;
-      }
-    } catch (error) {
-      controller.isFav.value = false;
-      print('Error fetching document for checking wishlist status: $error');
-    }
-  }
- */
   void navigateToItemDetails(String productName) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('products')
@@ -160,7 +149,6 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
       var productData = querySnapshot.docs.first.data();
       Get.to(() => ItemDetails(title: productName, data: productData));
     } else {
-      // Handle product not found
       print('Product not found');
     }
   }
@@ -493,28 +481,27 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                               Align(
                                 alignment: Alignment.centerLeft,
                                 child: Row(
-                          children: [
-                            Text(
-                              "Suitable for work and situations",
-                              
-                            ).text.fontFamily(medium).size(14).make(),
-                            10.widthBox,
-                            GestureDetector(
-                              onTap: () {
-                                showModalBottomSheet(
-                                  context: context,
-                                  builder: (context) {
-                                    return SituationsList();
-                                  },
-                                );
-                              },
-                              child: Image.asset(
-                                icInfo,
-                                width: 15,
-                              ),
-                            ),
-                          ],
-                        ),
+                                  children: [
+                                    Text(
+                                      "Suitable for work and situations",
+                                    ).text.fontFamily(medium).size(14).make(),
+                                    10.widthBox,
+                                    GestureDetector(
+                                      onTap: () {
+                                        showModalBottomSheet(
+                                          context: context,
+                                          builder: (context) {
+                                            return SituationsList();
+                                          },
+                                        );
+                                      },
+                                      child: Image.asset(
+                                        icInfo,
+                                        width: 15,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                               Column(
                                 children: [
@@ -523,11 +510,12 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                                     height: 40,
                                     child: ListView.builder(
                                       scrollDirection: Axis.horizontal,
-                                      itemCount:
-                                          situations.length, // แก้ไขตรงนี้
+                                      itemCount: situations.length,
                                       itemBuilder: (context, index) {
-                                        String item = situations[index]
-                                            .toString(); // แก้ไขตรงนี้
+                                        String key =
+                                            situations[index].toString();
+                                        String item = situationMap[key] ?? key;
+
                                         return Container(
                                           alignment: Alignment.center,
                                           child: Text(
@@ -629,6 +617,35 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
     );
   }
 
+  void updateFavoriteCount() async {
+    await FirebaseFirestore.instance
+        .collection('storemixandmatchs')
+        .doc(widget.documentId)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        var doc = documentSnapshot.data() as Map<String, dynamic>;
+        List<dynamic> favoriteUsers = doc['favorite_userid'];
+        int favoriteCount = favoriteUsers.length;
+
+        FirebaseFirestore.instance
+            .collection('storemixandmatchs')
+            .doc(widget.documentId)
+            .update({
+          'favorite_count': favoriteCount,
+        }).then((_) {
+          print('Favorite count updated successfully.');
+        }).catchError((error) {
+          print('Error updating favorite count: $error');
+        });
+      } else {
+        print('Document not found for updating favorite count');
+      }
+    }).catchError((error) {
+      print('Error fetching document for updating favorite count: $error');
+    });
+  }
+
   void addToFavorites() async {
     String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
     print('Current User ID: $currentUserUID');
@@ -640,6 +657,7 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
     }).then((_) {
       VxToast.show(context, msg: "Match updated successfully.");
       print('Match updated successfully.');
+      updateFavoriteCount();
     }).catchError((error) {
       print('Error adding to favorites: $error');
     });
@@ -656,6 +674,7 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
     }).then((_) {
       VxToast.show(context, msg: "Removed from favorites successfully.");
       print('Removed from favorites successfully.');
+      updateFavoriteCount();
     }).catchError((error) {
       print('Error removing from favorites: $error');
     });
