@@ -359,7 +359,7 @@ class NewsScreen extends StatelessWidget {
                                 },
                                 {
                                   'image': imgspecail,
-                                  'title': 'Special Activity Attire',
+                                  'title': 'Activity Attire',
                                   'situation': 'special-activity',
                                   'tabIndex': 4
                                 },

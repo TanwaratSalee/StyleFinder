@@ -243,7 +243,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                                   updateSituations('casual', isSelected);
                                 });
                               }),
-                              buildFilterChip("Special Activity Attire",
+                              buildFilterChip("Activity Attire",
                                   isSelectedSpecialActivity, (isSelected) {
                                 setState(() {
                                   isSelectedSpecialActivity = isSelected;
@@ -497,7 +497,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
       String label, bool isSelected, Function(bool) onSelected) {
     final BorderSide borderSide = BorderSide(
       color: isSelected ? primaryApp : greyLine,
-      width: 2.0,
+      width: 1,
     );
 
     return SizedBox(

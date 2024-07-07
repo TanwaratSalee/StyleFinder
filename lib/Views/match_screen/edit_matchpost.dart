@@ -48,7 +48,7 @@ class _EditMatchProductState extends State<EditMatchProduct> {
     'formal': 'Formal Attire',
     'semi-formal': 'Semi-Formal Attire',
     'casual': 'Casual Attire',
-    'special-activity': 'Special Activity Attire',
+    'special-activity': 'Activity Attire',
     'seasonal': 'Seasonal Attire',
     'work-from-home': 'Work from Home',
   };

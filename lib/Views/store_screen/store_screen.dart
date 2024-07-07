@@ -227,7 +227,7 @@ class StoreScreen extends StatelessWidget {
               Tab(text: 'Semi-Formal Attire'),
               Tab(text: 'Casual Attire'),
               Tab(text: 'Seasonal Attire'),
-              Tab(text: 'Special Activity Attire'),
+              Tab(text: 'Activity Attire'),
               Tab(text: 'Work from Home'),
             ],
           ).box.color(thinPrimaryApp).make(),

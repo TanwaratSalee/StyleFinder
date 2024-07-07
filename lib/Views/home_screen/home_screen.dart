@@ -429,14 +429,14 @@ void showModalRightSheet({
     barrierDismissible: true,
     barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
     barrierColor: blackColor.withOpacity(0.5),
-    transitionDuration: Duration(milliseconds: 200),
+    // transitionDuration: Duration(milliseconds: 200),
     pageBuilder: (BuildContext context, Animation<double> animation,
         Animation<double> secondaryAnimation) {
       return Align(
         alignment: Alignment.centerRight,
         child: Material(
           child: Container(
-            width: MediaQuery.of(context).size.width * 0.7,
+            width: MediaQuery.of(context).size.width * 0.75,
             child: builder(context),
           ),
         ),

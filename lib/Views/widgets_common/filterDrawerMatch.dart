@@ -257,7 +257,7 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
                     setState(() => isSelectedSemiFormal = isSelected);
                   }),
                   buildFilterChip(
-                      "Special Activity Attire ", isSelectedSpecialActivity,
+                      "Activity Attire ", isSelectedSpecialActivity,
                       (isSelected) {
                     setState(() => isSelectedSpecialActivity = isSelected);
                   }),

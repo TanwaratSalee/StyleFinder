@@ -153,11 +153,11 @@ class _FilterDrawerState extends State<FilterDrawer> {
             Center(
               child: Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 18, vertical: 3),
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
                 child: Row(
                   children: [
                     SizedBox(width: 5),
-                    buildFilterChip("All", isSelectedAll, (isSelected) {
+                    buildFilterChipGender("All", isSelectedAll, (isSelected) {
                       setState(() {
                         isSelectedAll = isSelected;
                         if (isSelected) {
@@ -167,7 +167,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                       });
                     }),
                     SizedBox(width: 5),
-                    buildFilterChip("Men", isSelectedMen, (isSelected) {
+                    buildFilterChipGender("Men", isSelectedMen, (isSelected) {
                       setState(() {
                         isSelectedMen = isSelected;
                         if (isSelected) {
@@ -177,7 +177,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
                       });
                     }),
                     SizedBox(width: 5),
-                    buildFilterChip("Women", isSelectedWomen, (isSelected) {
+                    buildFilterChipGender("Women", isSelectedWomen,
+                        (isSelected) {
                       setState(() {
                         isSelectedWomen = isSelected;
                         if (isSelected) {
@@ -190,52 +191,52 @@ class _FilterDrawerState extends State<FilterDrawer> {
                 ),
               ),
             ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
-              child: Text("Store").text.fontFamily(regular).size(14).make(),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Wrap(
-                spacing: 10,
-                children: vendors.map((vendor) {
-                  final isSelected =
-                      selectedVendorIds.contains(vendor['vendor_id']);
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        if (isSelected) {
-                          selectedVendorIds.remove(vendor['vendor_id']);
-                        } else {
-                          selectedVendorIds.add(vendor['vendor_id']);
-                        }
-                        controller.updateFilters(vendorIds: selectedVendorIds);
-                      });
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8),
-                      margin: EdgeInsets.symmetric(vertical: 4),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: isSelected ? primaryApp : greyLine,
-                        ),
-                        color: isSelected ? thinPrimaryApp : Colors.transparent,
-                      ),
-                      child: Text(
-                        vendor['name'] ?? 'Unknown',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: isSelected ? blackColor : blackColor,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  );
-                }).toList(),
-              ),
-            ),
+            // Padding(
+            //   padding:
+            //       const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
+            //   child: Text("Store").text.fontFamily(regular).size(14).make(),
+            // ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 24),
+            //   child: Wrap(
+            //     spacing: 10,
+            //     children: vendors.map((vendor) {
+            //       final isSelected =
+            //           selectedVendorIds.contains(vendor['vendor_id']);
+            //       return GestureDetector(
+            //         onTap: () {
+            //           setState(() {
+            //             if (isSelected) {
+            //               selectedVendorIds.remove(vendor['vendor_id']);
+            //             } else {
+            //               selectedVendorIds.add(vendor['vendor_id']);
+            //             }
+            //             controller.updateFilters(vendorIds: selectedVendorIds);
+            //           });
+            //         },
+            //         child: Container(
+            //           padding: EdgeInsets.all(8),
+            //           margin: EdgeInsets.symmetric(vertical: 4),
+            //           decoration: BoxDecoration(
+            //             borderRadius: BorderRadius.circular(8),
+            //             border: Border.all(
+            //               color: isSelected ? primaryApp : greyLine,
+            //             ),
+            //             color: isSelected ? thinPrimaryApp : Colors.transparent,
+            //           ),
+            //           child: Text(
+            //             vendor['name'] ?? 'Unknown',
+            //             style: TextStyle(
+            //               fontSize: 12,
+            //               color: isSelected ? blackColor : blackColor,
+            //             ),
+            //             textAlign: TextAlign.center,
+            //           ),
+            //         ),
+            //       );
+            //     }).toList(),
+            //   ),
+            // ),
             5.heightBox,
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -337,115 +338,107 @@ class _FilterDrawerState extends State<FilterDrawer> {
                   .size(14)
                   .make(),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 6),
-              child: Center(
-                child: Wrap(
-                  spacing: 8,
-                  children: [
-                    buildFilterChip("Dress", isSelectedDress, (isSelected) {
-                      setState(() {
-                        isSelectedDress = isSelected;
-                        updateFilterTypes();
-                      });
-                    }),
-                    buildFilterChip("T-Shirts", isSelectedTShirts,
-                        (isSelected) {
-                      setState(() {
-                        isSelectedTShirts = isSelected;
-                        updateFilterTypes();
-                      });
-                    }),
-                    buildFilterChip("Suits", isSelectedSuits, (isSelected) {
-                      setState(() {
-                        isSelectedSuits = isSelected;
-                        updateFilterTypes();
-                      });
-                    }),
-                    buildFilterChip("Jackets", isSelectedJackets, (isSelected) {
-                      setState(() {
-                        isSelectedJackets = isSelected;
-                        updateFilterTypes();
-                      });
-                    }),
-                    buildFilterChip("Pants", isSelectedPants, (isSelected) {
-                      setState(() {
-                        isSelectedPants = isSelected;
-                        updateFilterTypes();
-                      });
-                    }),
-                    buildFilterChip("Skirts", isSelectedSkirts, (isSelected) {
-                      setState(() {
-                        isSelectedSkirts = isSelected;
-                        updateFilterTypes();
-                      });
-                    }),
-                  ],
-                ),
+            Center(
+              child: Wrap(
+                spacing: 8,
+                children: [
+                  buildFilterChip("Dress", isSelectedDress, (isSelected) {
+                    setState(() {
+                      isSelectedDress = isSelected;
+                      updateFilterTypes();
+                    });
+                  }),
+                  buildFilterChip("T-Shirts", isSelectedTShirts,
+                      (isSelected) {
+                    setState(() {
+                      isSelectedTShirts = isSelected;
+                      updateFilterTypes();
+                    });
+                  }),
+                  buildFilterChip("Suits", isSelectedSuits, (isSelected) {
+                    setState(() {
+                      isSelectedSuits = isSelected;
+                      updateFilterTypes();
+                    });
+                  }),
+                  buildFilterChip("Jackets", isSelectedJackets, (isSelected) {
+                    setState(() {
+                      isSelectedJackets = isSelected;
+                      updateFilterTypes();
+                    });
+                  }),
+                  buildFilterChip("Pants", isSelectedPants, (isSelected) {
+                    setState(() {
+                      isSelectedPants = isSelected;
+                      updateFilterTypes();
+                    });
+                  }),
+                  buildFilterChip("Skirts", isSelectedSkirts, (isSelected) {
+                    setState(() {
+                      isSelectedSkirts = isSelected;
+                      updateFilterTypes();
+                    });
+                  }),
+                ],
               ),
             ),
             5.heightBox,
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
-              child: Text(
-                      "Suitable for work and situations ยังไม่เสร็จแก้ดึง selected")
+              child: Text("Suitable for work and situations")
                   .text
                   .fontFamily(regular)
                   .size(14)
                   .make(),
             ),
             Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Wrap(
-                  spacing: 6,
-                  children: [
-                    buildFilterChip("Formal Attire", isSelectedFormal,
-                        (isSelected) {
-                      setState(() {
-                        isSelectedFormal = isSelected;
-                        updateFilterSituations();
-                      });
-                    }),
-                    buildFilterChip("Semi-Formal Attire", isSelectedSemiFormal,
-                        (isSelected) {
-                      setState(() {
-                        isSelectedSemiFormal = isSelected;
-                        updateFilterSituations();
-                      });
-                    }),
-                    buildFilterChip("Casual Attire", isSelectedCasual,
-                        (isSelected) {
-                      setState(() {
-                        isSelectedCasual = isSelected;
-                        updateFilterSituations();
-                      });
-                    }),
-                    buildFilterChip(
-                        "Special Activity Attire", isSelectedSpecialActivity,
-                        (isSelected) {
-                      setState(() {
-                        isSelectedSpecialActivity = isSelected;
-                        updateFilterSituations();
-                      });
-                    }),
-                    buildFilterChip("Seasonal Attire", isSelectedSeasonal,
-                        (isSelected) {
-                      setState(() {
-                        isSelectedSeasonal = isSelected;
-                        updateFilterSituations();
-                      });
-                    }),
-                    buildFilterChip("Work from Home", isSelectedWorkFromHome,
-                        (isSelected) {
-                      setState(() {
-                        isSelectedWorkFromHome = isSelected;
-                        updateFilterSituations();
-                      });
-                    }),
-                  ],
-                ),
+              child: Wrap(
+                spacing: 6,
+                children: [
+                  buildFilterChip("Formal Attire", isSelectedFormal,
+                      (isSelected) {
+                    setState(() {
+                      isSelectedFormal = isSelected;
+                      updateFilterSituations();
+                    });
+                  }),
+                  buildFilterChip("Semi-Formal Attire", isSelectedSemiFormal,
+                      (isSelected) {
+                    setState(() {
+                      isSelectedSemiFormal = isSelected;
+                      updateFilterSituations();
+                    });
+                  }),
+                  buildFilterChip("Casual Attire", isSelectedCasual,
+                      (isSelected) {
+                    setState(() {
+                      isSelectedCasual = isSelected;
+                      updateFilterSituations();
+                    });
+                  }),
+                  buildFilterChip("Activity Attire", isSelectedSpecialActivity,
+                      (isSelected) {
+                    setState(() {
+                      isSelectedSpecialActivity = isSelected;
+                      updateFilterSituations();
+                    });
+                  }),
+                  buildFilterChip("Seasonal Attire", isSelectedSeasonal,
+                      (isSelected) {
+                    setState(() {
+                      isSelectedSeasonal = isSelected;
+                      updateFilterSituations();
+                    });
+                  }),
+                  buildFilterChip("Work from Home", isSelectedWorkFromHome,
+                      (isSelected) {
+                    setState(() {
+                      isSelectedWorkFromHome = isSelected;
+                      updateFilterSituations();
+                    });
+                  }),
+                ],
               ),
             ),
             Padding(
@@ -551,7 +544,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
               ),
             ),
           ],
-        ).box.white.padding(EdgeInsets.symmetric(vertical: 8)).make(),
+        ).box.white.padding(EdgeInsets.only(top: 8)).make(),
       ),
     );
   }
@@ -698,14 +691,76 @@ bool isInWishlist(Map<String, dynamic> product, String currentUid) {
   return wishlist.contains(currentUid);
 }
 
+// Widget buildFilterChip(
+//     String label, bool isSelected, Function(bool) onSelected) {
+//   return FilterChip(
+//     label: Text(label),
+//     selected: isSelected,
+//     onSelected: onSelected,
+//     showCheckmark: false,
+//     side: BorderSide(color: isSelected ? primaryApp : greyLine),
+//     selectedColor: thinPrimaryApp,
+//   );
+// }
+
 Widget buildFilterChip(
     String label, bool isSelected, Function(bool) onSelected) {
-  return FilterChip(
-    label: Text(label),
-    selected: isSelected,
-    onSelected: onSelected,
-    showCheckmark: false,
-    side: BorderSide(color: isSelected ? primaryApp : greyLine),
-    selectedColor: thinPrimaryApp,
+  final BorderSide borderSide = BorderSide(
+    color: isSelected ? primaryApp : greyLine,
+    width: 1,
+  );
+
+  return SizedBox(
+    width: 128,
+    child: TextButton(
+      onPressed: () => onSelected(!isSelected),
+      style: TextButton.styleFrom(
+        backgroundColor: isSelected ? thinPrimaryApp : whiteColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+          side: borderSide,
+        ),
+        splashFactory: NoSplash.splashFactory,
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 12,
+          fontFamily: isSelected ? medium : regular,
+          color: greyColor,
+        ),
+      ),
+    ),
+  );
+}
+
+Widget buildFilterChipGender(
+    String label, bool isSelected, Function(bool) onSelected) {
+  final BorderSide borderSide = BorderSide(
+    color: isSelected ? primaryApp : greyLine,
+    width: 1.0,
+  );
+
+  return SizedBox(
+    width: 80,
+    child: TextButton(
+      onPressed: () => onSelected(!isSelected),
+      style: TextButton.styleFrom(
+        backgroundColor: isSelected ? thinPrimaryApp : whiteColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+          side: borderSide,
+        ),
+        // padding: EdgeInsets.symmetric(horizontal: 6, vertical: 5),
+        splashFactory: NoSplash.splashFactory,
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontFamily: isSelected ? medium : regular,
+          color: greyColor,
+        ),
+      ),
+    ),
   );
 }

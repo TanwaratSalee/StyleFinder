@@ -7,7 +7,7 @@ class SituationsList extends StatelessWidget {
     'formal': 'Formal Attire',
     'semi-formal': 'Semi-Formal Attire',
     'casual': 'Casual Attire',
-    'special-activity': 'Special Activity Attire',
+    'special-activity': 'Activity Attire',
     'seasonal': 'Seasonal Attire',
     'work-from-home': 'Work from Home',
   };
