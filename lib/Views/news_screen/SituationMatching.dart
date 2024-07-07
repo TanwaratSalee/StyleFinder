@@ -317,7 +317,7 @@ class _SituationMatchingState extends State<SituationMatching> {
                 buildButton('Semi-Formal Attire', 'semi-formal', 2),
                 buildButton('Casual Attire', 'casual', 3),
                 buildButton('Seasonal Attire', 'seasonal', 4),
-                buildButton('Special Activity Attire', 'special-activity', 5),
+                buildButton('Activity Attire', 'special-activity', 5),
                 buildButton('Work from Home', 'work-from-home', 6),
               ],
             ),
