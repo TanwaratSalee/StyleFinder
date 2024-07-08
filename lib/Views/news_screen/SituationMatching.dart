@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/match_screen/matchpost_details.dart';
 import 'package:flutter_finalproject/Views/store_screen/matchstore_detail.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class SituationMatching extends StatefulWidget {
   final int initialTabIndex;
@@ -255,24 +257,25 @@ class _SituationMatchingState extends State<SituationMatching> {
               ));
         }
       },
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 14,
-            backgroundColor: greysituations,
-            child: Text(
-              index.toString(),
-              style: TextStyle(color: blackColor),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: 14,
+              backgroundColor: greysituations,
+              child: Text(
+                index.toString(),
+                style: TextStyle(color: blackColor),
+              ),
             ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(right: 10),
+            5.widthBox,
+            Expanded(
               child: Card(
-                margin: EdgeInsets.symmetric(vertical: 5.0),
+                // margin: EdgeInsets.symmetric(vertical: 1),
                 shape: RoundedRectangleBorder(
                   side: BorderSide(color: greyLine),
-                  borderRadius: BorderRadius.circular(8.0),
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 elevation: 0,
                 child: Padding(
@@ -289,18 +292,18 @@ class _SituationMatchingState extends State<SituationMatching> {
                                 radius: 14,
                                 backgroundImage: NetworkImage(userImage),
                               ),
-                              SizedBox(width: 8.0),
+                              SizedBox(width: 8),
                               Text(userName),
                             ],
                           ),
                           Row(
                             children: [
-                              Icon(
-                                Icons.favorite,
+                              Image.asset(
+                                icTapFavoriteButton,
                                 color: redColor,
-                                size: 15.0,
+                                width: 15,
                               ),
-                              SizedBox(width: 5.0),
+                              SizedBox(width: 5),
                               Text(
                                 likes,
                                 style: TextStyle(
@@ -312,18 +315,19 @@ class _SituationMatchingState extends State<SituationMatching> {
                           )
                         ],
                       ),
-                      SizedBox(height: 8.0),
+                      SizedBox(height: 8),
                       Row(
                         children: [
                           Container(
-                            width: 56,
+                            color: greyThin,
+                            width: 60,
                             height: 65,
-                            color: greyColor,
-                            child: Image.network(productImageTop),
-                          ),
-                          SizedBox(width: 8.0),
+                            child: Image.network(productImageTop,
+                                fit: BoxFit.cover),
+                          ).box.white.make(),
+                          SizedBox(width: 8),
                           buildProductInfo(productName1, productPrice1),
-                          SizedBox(width: 8.0),
+                          SizedBox(width: 8),
                           CircleAvatar(
                             radius: 7,
                             backgroundColor: primaryApp,
@@ -333,14 +337,15 @@ class _SituationMatchingState extends State<SituationMatching> {
                               color: whiteColor,
                             ),
                           ),
-                          SizedBox(width: 8.0),
+                          SizedBox(width: 8),
                           Container(
-                            width: 56,
+                            color: greyThin,
+                            width: 60,
                             height: 65,
-                            color: greyColor,
-                            child: Image.network(productImageLower),
-                          ),
-                          SizedBox(width: 8.0),
+                            child: Image.network(productImageLower,
+                                fit: BoxFit.cover),
+                          ).box.white.make(),
+                          SizedBox(width: 8),
                           buildProductInfo(productName2, productPrice2),
                         ],
                       ),
@@ -349,8 +354,8 @@ class _SituationMatchingState extends State<SituationMatching> {
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -361,13 +366,21 @@ class _SituationMatchingState extends State<SituationMatching> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            name,
-            style: TextStyle(fontSize: 13, color: greyDark, fontFamily: medium),
+            "${name}",
+            style: const TextStyle(
+              fontFamily: medium,
+              fontSize: 14,
+              color: greyDark,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
-          Text(
-            price,
-            style: TextStyle(fontSize: 13, color: greyDark, fontFamily: medium),
-          ),
+          "${NumberFormat('#,##0').format(double.parse(price).toInt())} Bath"
+              .text
+              .color(greyColor)
+              .fontFamily(regular)
+              .size(12)
+              .make()
         ],
       ),
     );
@@ -385,7 +398,7 @@ class _SituationMatchingState extends State<SituationMatching> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 20.0),
+          SizedBox(height: 20),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -400,7 +413,7 @@ class _SituationMatchingState extends State<SituationMatching> {
               ],
             ),
           ),
-          SizedBox(height: 8.0),
+          SizedBox(height: 8),
           Expanded(
             child: FutureBuilder<List<Widget>>(
               future: _futureContent,
@@ -428,7 +441,7 @@ class _SituationMatchingState extends State<SituationMatching> {
 
   Widget buildButton(String text, String situation, int tabIndex) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: primaryfigma,

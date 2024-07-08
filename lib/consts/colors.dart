@@ -8,6 +8,7 @@ const Color blackColor = Color.fromRGBO(24, 24, 24, 1);
 const Color golden = Color.fromRGBO(245, 214, 50, 1);
 const Color redThinColor = Color.fromRGBO(255, 193, 193, 1);
 const Color redColor = Color.fromRGBO(235, 94, 94, 1);
+const Color greenColor = Color.fromRGBO(57, 165, 100, 1);
 const Color greyThin = Color.fromARGB(240, 236, 232, 232);
 const Color greyLine = Color.fromRGBO(213, 216, 225, 1);
 const Color greyColor = Color.fromRGBO(135, 138, 141, 1);

@@ -869,23 +869,29 @@ Map<int, String> getRecommendedColors(String dayOfWeek) {
   switch (dayOfWeek) {
     case 'Sunday':
       return {
-        0xFFFF0000:
-            'Red: Represents power and confidence. As Sunday is associated with the sun, red is a symbol',
-        0xFFFFFFFF:
-            'White: Represents purity and tranquility, enhancing creativity',
-        0xFFFFC0CB:
-            'Pink: Represents love and kindness, fostering good relationships',
+        0xFFFF0000: 'Red: Represents power and confidence. As Sunday is associated with the sun, red is a symbol',
+        0xFFFFFFFF: 'White: Represents purity and tranquility, enhancing creativity',
+        0xFFFFC0CB: 'Pink: Represents love and kindness, fostering good relationships',
         0xFF17770F: 'Green: Represents balance and calmness',
         0xFF000000: 'Black: Represents stability and strength',
         0xFF621C8D: 'Purple: Represents luxury and intelligence',
         0xFFFFA500: 'Orange: Represents happiness and warmth',
-        0xFF808080: 'Gray: Represents calmness and composure'
+        0xFF808080: 'Gray: Represents calmness and composure',
+        0xFFCA93EB: '',
+        0xFF202FB3: '',
+        0xFF30B0E8: '',
+        0xFF53CDBF: '',
+        0xFF62CF2F: '',
+        0xFFFFFF00: '',
+        0xFFFF4081: '',
+        0xFF793A1F: '',
       };
     case 'Monday':
       return {
         0xFFFFFF00: 'Yellow: Represents warmth and brightness',
         0xFFFFFFFF: 'White: Represents purity and tranquility',
         0xFF17770F: 'Green: Represents balance and calmness',
+        0xFF62CF2F: 'Kuy tung',
         0xFF621C8D: 'Purple: Represents luxury and intelligence',
         0xFFFFA500: 'Orange: Represents happiness and warmth',
         0xFF30B0E8: 'Light Blue: Represents calmness and coolness',
@@ -990,41 +996,13 @@ final List<Map<String, dynamic>> allColors = [
   {'name': 'Black', 'color': blackColor, 'value': 0xFF000000},
   {'name': 'Grey', 'color': greyColor, 'value': 0xFF808080},
   {'name': 'White', 'color': whiteColor, 'value': 0xFFFFFFFF},
-  {
-    'name': 'Purple',
-    'color': const Color.fromRGBO(98, 28, 141, 1),
-    'value': 0xFF621C8D
-  },
-  {
-    'name': 'Deep Purple',
-    'color': const Color.fromRGBO(202, 147, 235, 1),
-    'value': 0xFFCA93EB
-  },
-  {
-    'name': 'Blue',
-    'color': Color.fromRGBO(32, 47, 179, 1),
-    'value': 0xFF202FB3
-  },
-  {
-    'name': 'Light blue',
-    'color': const Color.fromRGBO(48, 176, 232, 1),
-    'value': 0xFF30B0E8
-  },
-  {
-    'name': 'Blue Grey',
-    'color': const Color.fromRGBO(83, 205, 191, 1),
-    'value': 0xFF53CDBF
-  },
-  {
-    'name': 'Green',
-    'color': const Color.fromRGBO(23, 119, 15, 1),
-    'value': 0xFF17770F
-  },
-  {
-    'name': 'Lime Green',
-    'color': Color.fromRGBO(98, 207, 47, 1),
-    'value': 0xFF62CF2F
-  },
+  {'name': 'Purple','color': const Color.fromRGBO(98, 28, 141, 1),'value': 0xFF621C8D},
+  {'name': 'Deep Purple','color': const Color.fromRGBO(202, 147, 235, 1),'value': 0xFFCA93EB},
+  {'name': 'Blue','color': Color.fromRGBO(32, 47, 179, 1),'value': 0xFF202FB3},
+  {'name': 'Light blue','color': const Color.fromRGBO(48, 176, 232, 1),'value': 0xFF30B0E8},
+  {'name': 'Blue Grey','color': const Color.fromRGBO(83, 205, 191, 1),'value': 0xFF53CDBF},
+  {'name': 'Green','color': const Color.fromRGBO(23, 119, 15, 1),'value': 0xFF17770F},
+  {'name': 'Lime Green','color': Color.fromRGBO(98, 207, 47, 1),'value': 0xFF62CF2F },
   {'name': 'Yellow', 'color': Colors.yellow, 'value': 0xFFFFFF00},
   {'name': 'Orange', 'color': Colors.orange, 'value': 0xFFFFA500},
   {'name': 'Pink', 'color': Colors.pinkAccent, 'value': 0xFFFF4081},

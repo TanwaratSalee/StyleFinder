@@ -495,7 +495,7 @@ class StoreScreen extends StatelessWidget {
             crossAxisCount: 2,
             crossAxisSpacing: 12,
             mainAxisSpacing: 8.5,
-            childAspectRatio: 5.7 / 7,
+            childAspectRatio: 5.2 / 7,
           ),
           itemCount: products.length,
           itemBuilder: (BuildContext context, int index) {
@@ -590,8 +590,8 @@ class StoreScreen extends StatelessWidget {
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             crossAxisSpacing: 12,
-            mainAxisSpacing: 0,
-            childAspectRatio: 5.5 / 7,
+            mainAxisSpacing: 8,
+            childAspectRatio: 5.2 / 7,
           ),
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (BuildContext context, int index) {

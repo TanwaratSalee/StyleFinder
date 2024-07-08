@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/orders_screen/orders_details.dart';
 import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
@@ -9,7 +8,6 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:intl/intl.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 class OrdersScreen extends StatefulWidget {
   const OrdersScreen({Key? key}) : super(key: key);
@@ -176,7 +174,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                               EdgeInsets.symmetric(horizontal: 12, vertical: 3),
                           decoration: BoxDecoration(
                             color: orderData['order_confirmed']
-                                ? Colors.green
+                                ? greenColor
                                 : Colors.orange,
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -322,7 +320,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                               EdgeInsets.symmetric(horizontal: 12, vertical: 3),
                           decoration: BoxDecoration(
                             color: orderData['order_confirmed']
-                                ? Colors.green
+                                ? greenColor
                                 : Colors.orange,
                             borderRadius: BorderRadius.circular(8),
                           ),

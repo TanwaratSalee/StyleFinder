@@ -273,7 +273,7 @@ class _ProductScreenState extends State<ProductScreen> {
 
   Widget buildMatchTab() {
     return DefaultTabController(
-      length: 7, // เพิ่มจำนวน tab เป็น 7
+      length: 7, 
       child: Column(
         children: <Widget>[
           const TabBar(
@@ -423,12 +423,12 @@ class _ProductScreenState extends State<ProductScreen> {
                 var combinedProductData = snapshot.data!;
 
                 return GridView.builder(
-                  padding: EdgeInsets.all(12),
+                  // padding: EdgeInsets.all(12),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 12,
                     mainAxisSpacing: 12,
-                    childAspectRatio: 5.3 / 6,
+                    childAspectRatio: 4.8 / 6,
                   ),
                   itemCount: combinedProductData.length,
                   itemBuilder: (context, index) {

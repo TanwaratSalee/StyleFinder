@@ -347,7 +347,7 @@ class _MatchScreenState extends State<MatchScreen> {
                           .text
                           .fontFamily(semiBold)
                           .color(matchResult['isGreatMatch']
-                              ? Colors.green
+                              ? greenColor
                               : redColor)
                           .size(20)
                           .make(),
@@ -463,11 +463,12 @@ void showMatchReasonModal(
   } else {
     reasonWidgets.add(
       Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(
             isGreatMatch ? Icons.check : Icons.close,
             size: 20,
-            color: isGreatMatch ? Colors.green : Colors.red,
+            color: isGreatMatch ? greenColor : redColor,
           ),
           SizedBox(width: 5),
           Expanded(
@@ -489,33 +490,53 @@ void showMatchReasonModal(
     if (recommendedColors.containsKey(topPrimaryColor)) {
       if (!dayOfWeekTextAdded) {
         colorReasonsWidgets.add(
-          Text(
-            'You were born on ${dayOfWeek.value}',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-            ),
+          Row(
+            children: [
+              Text(
+                'You were born on :',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontFamily: medium,
+                ),
+              ),
+              Text(
+                 ' ${dayOfWeek.value}',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontFamily: regular,
+                ),
+              ),
+            ],
           ),
         );
         dayOfWeekTextAdded = true;
       }
       colorReasonsWidgets.add(
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Icon(
               Icons.check,
               size: 20,
-              color: Colors.green,
+              color: greenColor,
             ),
             SizedBox(width: 5),
-            Text(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
               'The top color is: ',
               style: TextStyle(fontSize: 14, fontFamily: regular),
             ),
-            Text(
-              recommendedColors[topPrimaryColor]!,
-              style: TextStyle(fontSize: 14, fontFamily: regular),
+            SizedBox(
+              width: 200,
+              child: Text(
+                recommendedColors[topPrimaryColor]!,
+                style: TextStyle(fontSize: 14, fontFamily: regular),
+              ),
             ),
+              ],
+            )
           ],
         ),
       );
@@ -526,28 +547,36 @@ void showMatchReasonModal(
         colorReasonsWidgets.add(
           Text(
             'You were born on : ${dayOfWeek.value}',
-            style: TextStyle(fontSize: 16, fontFamily: medium),
+            style: TextStyle(fontSize: 14, fontFamily: medium),
           ),
         );
         dayOfWeekTextAdded = true;
       }
       colorReasonsWidgets.add(
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Icon(
               Icons.check,
               size: 20,
-              color: Colors.green,
+              color: greenColor,
             ),
-            Text(
+           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+             Text(
               'The lower color is: ',
               style: TextStyle(fontSize: 14, fontFamily: regular),
             ),
             SizedBox(width: 5),
-            Text(
-              recommendedColors[lowerPrimaryColor]!,
-              style: TextStyle(fontSize: 14, fontFamily: regular),
+            SizedBox(
+              width: 200,
+              child: Text(
+                recommendedColors[lowerPrimaryColor]!,
+                style: TextStyle(fontSize: 14, fontFamily: regular),
+              ),
             ),
+           ],)
           ],
         ),
       );
@@ -568,9 +597,9 @@ void showMatchReasonModal(
               child: Text(
                 isGreatMatch ? 'Great Match!' : 'Not a Match',
                 style: TextStyle(
-                  color: isGreatMatch ? Colors.green : redColor,
+                  color: isGreatMatch ? greenColor : redColor,
                   fontSize: 20,
-                  fontWeight: FontWeight.bold,
+                  fontFamily: regular,
                 ),
               ),
             ),
@@ -578,24 +607,34 @@ void showMatchReasonModal(
               color: greyLine,
             ),
             SizedBox(height: 10),
-            Text(
-              skinTone == null
-                  ? 'Your Skin Tone  :'
-                  : 'Your Skin Tone  : ${getSkinToneDescription(skinTone)}',
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-              ),
+            Row(
+              children: [
+                Text('Your Skin Tone : ',
+                 style: const TextStyle(
+                    fontSize: 14,
+                    fontFamily: medium,
+                  ),),
+                
+                Text(
+                  skinTone == null
+                      ? 'Error'
+                      : '${getSkinToneDescription(skinTone)}',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontFamily: regular,
+                  ),
+                ),
+              ],
             ),
-            SizedBox(height: 10),
             ...reasonWidgets,
             if (colorReasonsWidgets.isNotEmpty) ...[
-              SizedBox(height: 10),
+             
               ...colorReasonsWidgets.map((widget) => Padding(
                     padding: const EdgeInsets.only(bottom: 5),
                     child: widget,
                   )),
             ],
+            SizedBox(height: 15),
             Row(
               children: [
                 SizedBox(width: 5),
@@ -603,19 +642,20 @@ void showMatchReasonModal(
                   'The color of the top and bottoms match',
                   style: TextStyle(
                     fontSize: 14,
-                    fontWeight: FontWeight.bold,
+                    fontFamily: semiBold,
                   ),
                 ),
               ],
             ),
             if (additionalReason.isNotEmpty) ...[
-              SizedBox(height: 10),
+              // SizedBox(height: 10),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Icon(
                     Icons.info,
                     size: 20,
-                    color: Colors.blue,
+                    color: primaryApp,
                   ),
                   SizedBox(width: 5),
                   Expanded(
