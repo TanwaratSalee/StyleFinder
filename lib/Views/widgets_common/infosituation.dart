@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
-import 'package:flutter_finalproject/consts/styles.dart';
 
 class SituationsList extends StatelessWidget {
   final Map<String, String> situationNames = {

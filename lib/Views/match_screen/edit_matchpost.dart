@@ -120,16 +120,15 @@ class _EditMatchProductState extends State<EditMatchProduct> {
         // ],
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.fromLTRB(24,10,24,22),
+        padding: const EdgeInsets.fromLTRB(24, 10, 24, 22),
         child: tapButton(
-          onPress: () async {
-                await onSaveButtonPressed(context);
-                Get.back();
-              },
-              color: primaryApp,
-              title: 'Save',
-              textColor: whiteColor
-        ),
+            onPress: () async {
+              await onSaveButtonPressed(context);
+              Get.back();
+            },
+            color: primaryApp,
+            title: 'Save',
+            textColor: whiteColor),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -269,31 +268,29 @@ class _EditMatchProductState extends State<EditMatchProduct> {
                     }).toList(),
                   ).box.makeCentered(),
                   15.heightBox,
-                 Row(
-                          children: [
-                            Text(
-                              "Suitable for work and situations",
-                              style:
-                                  TextStyle(fontSize: 16, fontFamily: medium),
-                            ),
-                            10.widthBox,
-                            GestureDetector(
-                              onTap: () {
-                                showModalBottomSheet(
-                                  context: context,
-                                  builder: (context) {
-                                    return SituationsList();
-                                  },
-                                );
-                              },
-                              child: Image.asset(
-                                icInfo,
-                                width: 15,
-                              ),
-                            ),
-                          ],
+                  Row(
+                    children: [
+                      Text(
+                        "Suitable for work and situations",
+                        style: TextStyle(fontSize: 16, fontFamily: medium),
+                      ),
+                      10.widthBox,
+                      GestureDetector(
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (context) {
+                              return SituationsList();
+                            },
+                          );
+                        },
+                        child: Image.asset(
+                          icInfo,
+                          width: 15,
                         ),
-                        
+                      ),
+                    ],
+                  ),
                   Wrap(
                     spacing: 8,
                     runSpacing: 1,
@@ -392,7 +389,6 @@ class _EditMatchProductState extends State<EditMatchProduct> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        
                         Text(
                           "Explain clothing matching",
                           style: TextStyle(

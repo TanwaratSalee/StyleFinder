@@ -16,9 +16,8 @@ const Color greyDark = Color.fromRGBO(77, 76, 76, 1);
 
 const Color whiteOpacity = Color.fromRGBO(237, 235, 235, 0.918);
 
-const Color greysituations = Color.fromRGBO(231, 231, 232, 1);
+const Color greysituations = Color.fromRGBO(76, 197, 196, 0.1);
 const Color greyMessage = Color.fromRGBO(225, 225, 225, 1);
 const Color primaryMessage = Color.fromRGBO(94, 213, 212, 1);
-// const Color primaryMessage = Color.fromRGBO(121, 211, 211, 1);
 
 const Color primaryfigma = Color.fromRGBO(199, 249, 249, 1);

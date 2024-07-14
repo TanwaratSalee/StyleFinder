@@ -5,7 +5,6 @@ import 'package:flutter_finalproject/Views/widgets_common/filterDrawerMatch.dart
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 class MatchScreen extends StatefulWidget {
   const MatchScreen({Key? key}) : super(key: key);
@@ -707,7 +706,7 @@ void showModalRightSheet({
               topRight: Radius.circular(20),
             ),
             child: Container(
-              height: MediaQuery.of(context).size.height * 0.85,
+              height: MediaQuery.of(context).size.height * 0.75,
               width: MediaQuery.of(context).size.width,
               color: whiteColor,
               child: builder(context),

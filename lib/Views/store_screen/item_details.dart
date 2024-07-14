@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/reviews_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
+import 'package:flutter_finalproject/Views/widgets_common/infosituation.dart';
+import 'package:flutter_finalproject/Views/widgets_common/infosituation.dart';
 import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
@@ -158,7 +160,7 @@ class _ItemDetailsState extends State<ItemDetails> {
   Widget build(BuildContext context) {
     List<String> sizeOrder = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
     List<String> sizes =
-        (widget.data['selectsize'] ?? []).cast<String>().toList();
+        (widget.data['productsize'] ?? []).cast<String>().toList();
     sizes.sort((a, b) => sizeOrder.indexOf(a).compareTo(sizeOrder.indexOf(b)));
 
     return WillPopScope(
@@ -356,12 +358,28 @@ class _ItemDetailsState extends State<ItemDetails> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        "Situations"
-                            .text
-                            .color(blackColor)
-                            .size(16)
-                            .fontFamily(medium)
-                            .make(),
+                        Row(
+                            children: [
+                              Text(
+                                "Suitable for work and situations",
+                              ).text.fontFamily(medium).size(14).make(),
+                              10.widthBox,
+                              GestureDetector(
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    builder: (context) {
+                                      return SituationsList();
+                                    },
+                                  );
+                                },
+                                child: Image.asset(
+                                  icInfo,
+                                  width: 15,
+                                ),
+                              ),
+                            ],
+                          ),
                         5.heightBox,
                         Container(
                           height: 40,
@@ -813,10 +831,10 @@ class _ItemDetailsState extends State<ItemDetails> {
                           onPress: () {
                             if (controller.quantity.value > 0 &&
                                 selectedSizeIndex != null &&
-                                widget.data['selectsize'] != null &&
-                                widget.data['selectsize'].isNotEmpty) {
+                                widget.data['productsize'] != null &&
+                                widget.data['productsize'].isNotEmpty) {
                               String selectedSize =
-                                  widget.data['selectsize'][selectedSizeIndex!];
+                                  widget.data['productsize'][selectedSizeIndex!];
                               controller.addToCart(
                                 context: context,
                                 vendorID: widget.data['vendor_id'],

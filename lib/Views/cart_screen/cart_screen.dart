@@ -187,7 +187,7 @@ class _CartScreenState extends State<CartScreen> {
 
                                 String productId = data?['product_id'] ?? '';
                                 int qty = data?['qty'] ?? 0;
-                                String selectSize = data?['select_size'] ?? '';
+                                String productsize = data?['select_size'] ?? '';
                                 double totalPrice = (data?['total_price']
                                         is String)
                                     ? double.tryParse(data?['total_price']) ??
@@ -293,7 +293,7 @@ class _CartScreenState extends State<CartScreen> {
                                                             .ellipsis,
                                                         maxLines: 1,
                                                       ).box.width(170).make(),
-                                                      Text('Size: $selectSize')
+                                                      Text('Size: $productsize')
                                                           .text
                                                           .color(greyDark)
                                                           .size(14)

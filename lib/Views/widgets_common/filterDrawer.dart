@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_finalproject/Views/widgets_common/infosituation.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/home_controller.dart';
 import 'package:get/get.dart';
@@ -386,11 +387,28 @@ class _FilterDrawerState extends State<FilterDrawer> {
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
-              child: Text("Suitable for work and situations")
-                  .text
-                  .fontFamily(regular)
-                  .size(14)
-                  .make(),
+              child: Row(
+                            children: [
+                              Text(
+                                "Suitable for work and situations",
+                              ).text.fontFamily(medium).size(14).make(),
+                              10.widthBox,
+                              GestureDetector(
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    builder: (context) {
+                                      return SituationsList();
+                                    },
+                                  );
+                                },
+                                child: Image.asset(
+                                  icInfo,
+                                  width: 15,
+                                ),
+                              ),
+                            ],
+                          ),
             ),
             Center(
               child: Wrap(

@@ -185,7 +185,7 @@ class _SituationMatchingState extends State<SituationMatching> {
         'favoriteCount': favoriteCount,
         'documentId': doc.id,
         'isStoreMatch': doc.reference.parent.id == 'storemixandmatchs',
-        'matchedData': docData, // เพิ่ม matchedData
+        'matchedData': docData, 
       });
     }
 
@@ -209,7 +209,7 @@ class _SituationMatchingState extends State<SituationMatching> {
         item['favoriteCount'].toString(),
         item['documentId'],
         item['isStoreMatch'],
-        item['matchedData'], // ส่ง matchedData
+        item['matchedData'],
       ));
     }
 
