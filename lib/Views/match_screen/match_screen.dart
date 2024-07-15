@@ -443,7 +443,6 @@ class _MatchScreenState extends State<MatchScreen> {
 
 void showMatchReasonModal(
     BuildContext context, Map<String, dynamic> matchResult, int? skinTone) {
-  final bool isGreatMatch = matchResult['isGreatMatch'] ?? false;
   final int? topPrimaryColor = matchResult['topClosestColor'];
   final int? lowerPrimaryColor = matchResult['lowerClosestColor'];
 
@@ -452,29 +451,41 @@ void showMatchReasonModal(
   print('Lower Colors: ${matchResult['lowerClosestColor']}');
 
   List<Widget> reasonWidgets = [];
-  String additionalReason = '';
   List<Widget> colorReasonsWidgets = [];
   bool dayOfWeekTextAdded = false;
+  int nonMatchingConditions = 0; // Initialize as 0
+  final String additionalReason =
+      (topPrimaryColor != null && lowerPrimaryColor != null)
+          ? getAdditionalReason(topPrimaryColor!, lowerPrimaryColor!)
+          : '';
 
   if (topPrimaryColor == null || lowerPrimaryColor == null) {
     reasonWidgets
         .add(Text('Unknown colors selected', style: TextStyle(fontSize: 14)));
+    nonMatchingConditions++; // Increment if any color is unknown
   } else {
+    final topColorName = getColorName(topPrimaryColor);
+    final lowerColorName = getColorName(lowerPrimaryColor);
+
     reasonWidgets.add(
       Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(
-            isGreatMatch ? Icons.check : Icons.close,
+            colorMatchMap[topPrimaryColor]?.contains(lowerPrimaryColor) == true
+                ? Icons.check
+                : Icons.close,
             size: 20,
-            color: isGreatMatch ? greenColor : redColor,
+            color:
+                colorMatchMap[topPrimaryColor]?.contains(lowerPrimaryColor) ==
+                        true
+                    ? greenColor
+                    : redColor,
           ),
           SizedBox(width: 5),
           Expanded(
             child: Text(
-              isGreatMatch
-                  ? '${getColorName(topPrimaryColor)} matches with ${getColorName(lowerPrimaryColor)} and suits your skin tone.'
-                  : '${getColorName(topPrimaryColor)} does not match with ${getColorName(lowerPrimaryColor)} or does not suit your skin tone.',
+              '${topColorName} ${colorMatchMap[topPrimaryColor]?.contains(lowerPrimaryColor) == true ? "matches" : "does not match"} with ${lowerColorName}.',
               style: TextStyle(fontSize: 14),
             ),
           ),
@@ -482,8 +493,68 @@ void showMatchReasonModal(
       ),
     );
 
-    additionalReason = getAdditionalReason(topPrimaryColor, lowerPrimaryColor);
+    // Increment non-matching conditions if the colors do not match
+    if (colorMatchMap[topPrimaryColor]?.contains(lowerPrimaryColor) != true) {
+      nonMatchingConditions++;
+    }
 
+    // Check skin tone matching
+    final topMatchesSkinTone =
+        isColorMatchingSkinTone(topPrimaryColor, skinTone);
+    final lowerMatchesSkinTone =
+        isColorMatchingSkinTone(lowerPrimaryColor, skinTone);
+
+    reasonWidgets.add(
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            topMatchesSkinTone ? Icons.check : Icons.close,
+            size: 20,
+            color: topMatchesSkinTone ? greenColor : redColor,
+          ),
+          SizedBox(width: 5),
+          Expanded(
+            child: Text(
+              '${topColorName} ${topMatchesSkinTone ? "suits" : "does not suit"} your skin tone.',
+              style: TextStyle(fontSize: 14),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    // Increment non-matching conditions if the top color does not match skin tone
+    if (!topMatchesSkinTone) {
+      nonMatchingConditions++;
+    }
+
+    reasonWidgets.add(
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            lowerMatchesSkinTone ? Icons.check : Icons.close,
+            size: 20,
+            color: lowerMatchesSkinTone ? greenColor : redColor,
+          ),
+          SizedBox(width: 5),
+          Expanded(
+            child: Text(
+              '${lowerColorName} ${lowerMatchesSkinTone ? "suits" : "does not suit"} your skin tone.',
+              style: TextStyle(fontSize: 14),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    // Increment non-matching conditions if the lower color does not match skin tone
+    if (!lowerMatchesSkinTone) {
+      nonMatchingConditions++;
+    }
+
+    // Check recommended colors based on day of the week
     Map<int, String> recommendedColors = getRecommendedColors(dayOfWeek.value);
 
     if (recommendedColors.containsKey(topPrimaryColor)) {
@@ -499,7 +570,7 @@ void showMatchReasonModal(
                 ),
               ),
               Text(
-                 ' ${dayOfWeek.value}',
+                ' ${dayOfWeek.value}',
                 style: TextStyle(
                   fontSize: 14,
                   fontFamily: regular,
@@ -524,16 +595,16 @@ void showMatchReasonModal(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-              'The top color is: ',
-              style: TextStyle(fontSize: 14, fontFamily: regular),
-            ),
-            SizedBox(
-              width: 200,
-              child: Text(
-                recommendedColors[topPrimaryColor]!,
-                style: TextStyle(fontSize: 14, fontFamily: regular),
-              ),
-            ),
+                  'The top color is: ',
+                  style: TextStyle(fontSize: 14, fontFamily: regular),
+                ),
+                SizedBox(
+                  width: 200,
+                  child: Text(
+                    recommendedColors[topPrimaryColor]!,
+                    style: TextStyle(fontSize: 14, fontFamily: regular),
+                  ),
+                ),
               ],
             )
           ],
@@ -560,22 +631,47 @@ void showMatchReasonModal(
               size: 20,
               color: greenColor,
             ),
-           Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-             Text(
-              'The lower color is: ',
-              style: TextStyle(fontSize: 14, fontFamily: regular),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'The lower color is: ',
+                  style: TextStyle(fontSize: 14, fontFamily: regular),
+                ),
+                SizedBox(width: 5),
+                SizedBox(
+                  width: 200,
+                  child: Text(
+                    recommendedColors[lowerPrimaryColor]!,
+                    style: TextStyle(fontSize: 14, fontFamily: regular),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      );
+    }
+
+    // Check non-matching colors based on the day of the week
+    final nonMatchingColors = getNonMatchingColors(dayOfWeek.value);
+    if (nonMatchingColors.isNotEmpty) {
+      colorReasonsWidgets.add(
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(
+              Icons.info,
+              size: 20,
+              color: primaryApp,
             ),
             SizedBox(width: 5),
-            SizedBox(
-              width: 200,
+            Expanded(
               child: Text(
-                recommendedColors[lowerPrimaryColor]!,
-                style: TextStyle(fontSize: 14, fontFamily: regular),
+                'According to your birth day (${dayOfWeek.value}), the following colors are considered non-matching: ${nonMatchingColors.join(', ')}',
+                style: TextStyle(fontSize: 14),
               ),
             ),
-           ],)
           ],
         ),
       );
@@ -594,9 +690,11 @@ void showMatchReasonModal(
           children: [
             Center(
               child: Text(
-                isGreatMatch ? 'Great Match!' : 'Not a Match',
+                nonMatchingConditions == 0
+                    ? 'Great Match!'
+                    : 'There are ${nonMatchingConditions} conditions that do not match',
                 style: TextStyle(
-                  color: isGreatMatch ? greenColor : redColor,
+                  color: nonMatchingConditions == 0 ? greenColor : redColor,
                   fontSize: 20,
                   fontFamily: regular,
                 ),
@@ -608,12 +706,13 @@ void showMatchReasonModal(
             SizedBox(height: 10),
             Row(
               children: [
-                Text('Your Skin Tone : ',
-                 style: const TextStyle(
+                Text(
+                  'Your Skin Tone : ',
+                  style: const TextStyle(
                     fontSize: 14,
                     fontFamily: medium,
-                  ),),
-                
+                  ),
+                ),
                 Text(
                   skinTone == null
                       ? 'Error'
@@ -627,7 +726,6 @@ void showMatchReasonModal(
             ),
             ...reasonWidgets,
             if (colorReasonsWidgets.isNotEmpty) ...[
-             
               ...colorReasonsWidgets.map((widget) => Padding(
                     padding: const EdgeInsets.only(bottom: 5),
                     child: widget,
@@ -647,9 +745,7 @@ void showMatchReasonModal(
               ],
             ),
             if (additionalReason.isNotEmpty) ...[
-              // SizedBox(height: 10),
               Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Icon(
                     Icons.info,

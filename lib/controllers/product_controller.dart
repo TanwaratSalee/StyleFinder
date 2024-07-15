@@ -960,6 +960,25 @@ Map<int, String> getRecommendedColors(String dayOfWeek) {
   }
 }
 
+List<String> getNonMatchingColors(String dayOfWeek) {
+  switch (dayOfWeek) {
+    case 'Sunday':
+      return ['Blue'];
+    case 'Monday':
+      return ['Red'];
+    case 'Tuesday':
+      return ['Yellow'];
+    case 'Wednesday':
+      return ['Pink'];
+    case 'Friday':
+      return ['Brown'];
+    case 'Saturday':
+      return ['Green'];
+    default:
+      return [];
+  }
+}
+
 final Map<int, Map<String, List<int>>> skinToneMatchMap = {
   4294961114: {
     'lightColors': [0xFFFF4081, 0xFFADD8E6, 0xFFFFFFFF, 0xFF32CD32],

@@ -12,10 +12,12 @@ class MobileBankingScreenextends extends StatefulWidget {
   const MobileBankingScreenextends({Key? key}) : super(key: key);
 
   @override
-  _MobileBankingScreenextendsState createState() => _MobileBankingScreenextendsState();
+  _MobileBankingScreenextendsState createState() =>
+      _MobileBankingScreenextendsState();
 }
 
-class _MobileBankingScreenextendsState extends State<MobileBankingScreenextends> {
+class _MobileBankingScreenextendsState
+    extends State<MobileBankingScreenextends> {
   final controller = Get.find<CartController>();
   String? downloadUri;
 
@@ -26,9 +28,10 @@ class _MobileBankingScreenextendsState extends State<MobileBankingScreenextends>
   }
 
   Future<void> createChargeWithMobileBanking() async {
-    const String secretKey = 'skey_test_5yzhwpoh5cu85yb4qrr'; 
+    const String secretKey = 'skey_test_5yzhwpoh5cu85yb4qrr';
     const String urlAPI = 'https://api.omise.co/charges';
-    final String basicAuth = 'Basic ' + base64Encode(utf8.encode('$secretKey:'));
+    final String basicAuth =
+        'Basic ' + base64Encode(utf8.encode('$secretKey:'));
 
     final Map<String, String> headerMap = {
       'authorization': basicAuth,
@@ -45,7 +48,8 @@ class _MobileBankingScreenextendsState extends State<MobileBankingScreenextends>
 
     final Uri uri = Uri.parse(urlAPI);
 
-    final http.Response response = await http.post(uri, headers: headerMap, body: data);
+    final http.Response response =
+        await http.post(uri, headers: headerMap, body: data);
 
     if (response.statusCode == 200) {
       final resultCharge = jsonDecode(response.body);
@@ -63,7 +67,8 @@ class _MobileBankingScreenextendsState extends State<MobileBankingScreenextends>
           if (updatedResultCharge['status'] == 'successful') {
             timer.cancel();
             _showSuccessDialog(context);
-          } else if (updatedResultCharge['status'] == 'failed' || updatedResultCharge['status'] == 'expired') {
+          } else if (updatedResultCharge['status'] == 'failed' ||
+              updatedResultCharge['status'] == 'expired') {
             timer.cancel();
             print('Transaction failed or expired');
           }
@@ -73,7 +78,7 @@ class _MobileBankingScreenextendsState extends State<MobileBankingScreenextends>
       });
 
       Timer(Duration(seconds: 3), () {
-       Get.offAll(() => MainHome());
+        Get.offAll(() => MainHome());
       });
     } else {
       print('Failed to create charge: ${response.body}');
@@ -91,7 +96,10 @@ class _MobileBankingScreenextendsState extends State<MobileBankingScreenextends>
             child: ListBody(
               children: <Widget>[
                 SizedBox(height: 50),
-                Image.asset(imgSuccessful, height: 60,),
+                Image.asset(
+                  imgSuccessful,
+                  height: 60,
+                ),
                 SizedBox(height: 40),
                 Text(
                   'Payment was successful!',
@@ -118,11 +126,11 @@ class _MobileBankingScreenextendsState extends State<MobileBankingScreenextends>
       },
     );
 
-    String selectedPaymentMethod = textpaymentMethods[controller.paymentIndex.value];
+    String selectedPaymentMethod =
+        textpaymentMethods[controller.paymentIndex.value];
     await controller.placeMyOrder(
-      orderPaymentMethod: selectedPaymentMethod,
-      totalAmount: controller.totalP.value.toDouble()
-    );
+        orderPaymentMethod: selectedPaymentMethod,
+        totalAmount: controller.totalP.value.toDouble());
 
     await controller.clearCart();
     VxToast.show(context, msg: "Order placed successfully");
@@ -135,7 +143,8 @@ class _MobileBankingScreenextendsState extends State<MobileBankingScreenextends>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mobile Banking').text
+        title: Text('Mobile Banking')
+            .text
             .size(26)
             .fontFamily(semiBold)
             .color(blackColor)
@@ -145,7 +154,10 @@ class _MobileBankingScreenextendsState extends State<MobileBankingScreenextends>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.asset(imgPaymentSuccful, height: 300,),
+            Image.asset(
+              imgPaymentSuccful,
+              height: 300,
+            ),
             SizedBox(height: 20),
             Text('Loading', style: TextStyle(fontSize: 24)),
             SizedBox(height: 10),
