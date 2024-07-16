@@ -138,7 +138,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            buildFilterChipGender("All", isSelectedAll,
+                            buildFilterChipSmall("All", isSelectedAll,
                                 (isSelected) {
                               setState(() {
                                 isSelectedAll = isSelected;
@@ -151,8 +151,8 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                                 }
                               });
                             }),
-                            SizedBox(width: 5),
-                            buildFilterChipGender("Men", isSelectedMen,
+                            SizedBox(width: 10),
+                            buildFilterChipSmall("Men", isSelectedMen,
                                 (isSelected) {
                               setState(() {
                                 isSelectedMen = isSelected;
@@ -165,8 +165,8 @@ class _MatchPostProductState extends State<MatchPostProduct> {
                                 }
                               });
                             }),
-                            SizedBox(width: 5),
-                            buildFilterChipGender("Women", isSelectedWomen,
+                            SizedBox(width: 10),
+                            buildFilterChipSmall("Women", isSelectedWomen,
                                 (isSelected) {
                               setState(() {
                                 isSelectedWomen = isSelected;
@@ -464,11 +464,11 @@ class _MatchPostProductState extends State<MatchPostProduct> {
     );
   }
 
-  Widget buildFilterChipGender(
+  Widget buildFilterChipSmall(
       String label, bool isSelected, Function(bool) onSelected) {
     final BorderSide borderSide = BorderSide(
       color: isSelected ? primaryApp : greyLine,
-      width: 2.0,
+      width: isSelected ? 2 : 1,
     );
 
     return TextButton(
@@ -497,7 +497,7 @@ class _MatchPostProductState extends State<MatchPostProduct> {
       String label, bool isSelected, Function(bool) onSelected) {
     final BorderSide borderSide = BorderSide(
       color: isSelected ? primaryApp : greyLine,
-      width: 1,
+      width: isSelected ? 2 : 1,
     );
 
     return SizedBox(

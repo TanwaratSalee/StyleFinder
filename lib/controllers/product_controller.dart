@@ -982,12 +982,7 @@ List<String> getNonMatchingColors(String dayOfWeek) {
 final Map<int, Map<String, List<int>>> skinToneMatchMap = {
   4294961114: {
     'lightColors': [0xFFFF4081, 0xFFADD8E6, 0xFFFFFFFF, 0xFF32CD32],
-    'brightColors': [
-      0xFFFF0000,
-      0xFFFF69B4,
-      0xFF0000FF,
-      0xFF008000,
-      0xFFFFFF00
+    'brightColors': [0xFFFF0000,0xFFFF69B4,0xFF0000FF,0xFF008000,0xFFFFFF00
     ],
     'darkColors': [0xFF000000, 0xFF4B0082, 0xFF808080],
   },
@@ -1026,11 +1021,7 @@ final List<Map<String, dynamic>> allColors = [
   {'name': 'Orange', 'color': Colors.orange, 'value': 0xFFFFA500},
   {'name': 'Pink', 'color': Colors.pinkAccent, 'value': 0xFFFF4081},
   {'name': 'Red', 'color': redColor, 'value': 0xFFFF0000},
-  {
-    'name': 'Brown',
-    'color': Color.fromARGB(255, 121, 58, 31),
-    'value': 0xFF793A1F
-  },
+  {'name': 'Brown','color': Color.fromARGB(255, 121, 58, 31),'value': 0xFF793A1F},
 ];
 
 final Map<int, List<int>> colorMatchMap = {

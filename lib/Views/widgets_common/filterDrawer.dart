@@ -49,12 +49,12 @@ class _FilterDrawerState extends State<FilterDrawer> {
     {'name': 'White', 'color': whiteColor, 'value': 0xFFFFFFFF},
     {
       'name': 'Purple',
-      'color': const Color.fromRGBO(98, 28, 141, 1),
+      'color': const Color.fromRGBO(98, 28, 161, 1),
       'value': 0xFF621C8D
     },
     {
       'name': 'Deep Purple',
-      'color': const Color.fromRGBO(202, 147, 235, 1),
+      'color': const Color.fromRGBO(202, 167, 235, 1),
       'value': 0xFFCA93EB
     },
     {
@@ -149,7 +149,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text("Gender").text.fontFamily(regular).size(14).make(),
+              child: Text("Gender").text.fontFamily(regular).size(16).make(),
             ),
             Center(
               child: Padding(
@@ -157,8 +157,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
                 child: Row(
                   children: [
-                    SizedBox(width: 5),
-                    buildFilterChipGender("All", isSelectedAll, (isSelected) {
+                    SizedBox(width: 15),
+                    buildFilterChipSmall("All", isSelectedAll, (isSelected) {
                       setState(() {
                         isSelectedAll = isSelected;
                         if (isSelected) {
@@ -168,7 +168,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                       });
                     }),
                     SizedBox(width: 5),
-                    buildFilterChipGender("Men", isSelectedMen, (isSelected) {
+                    buildFilterChipSmall("Men", isSelectedMen, (isSelected) {
                       setState(() {
                         isSelectedMen = isSelected;
                         if (isSelected) {
@@ -178,7 +178,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                       });
                     }),
                     SizedBox(width: 5),
-                    buildFilterChipGender("Women", isSelectedWomen,
+                    buildFilterChipSmall("Women", isSelectedWomen,
                         (isSelected) {
                       setState(() {
                         isSelectedWomen = isSelected;
@@ -195,7 +195,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
             // Padding(
             //   padding:
             //       const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
-            //   child: Text("Store").text.fontFamily(regular).size(14).make(),
+            //   child: Text("Store").text.fontFamily(regular).size(16).make(),
             // ),
             // Padding(
             //   padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -238,18 +238,18 @@ class _FilterDrawerState extends State<FilterDrawer> {
             //     }).toList(),
             //   ),
             // ),
-            5.heightBox,
+            10.heightBox,
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Price").text.fontFamily(regular).size(14).make(),
+                  Text("Price").text.fontFamily(regular).size(16).make(),
                   Text(
                     "${NumberFormat('#,###').format(_currentSliderValue.round())} Bath",
                     style: TextStyle(
                       fontFamily: regular,
-                      fontSize: 14,
+                      fontSize: 16,
                     ),
                   ),
                 ],
@@ -286,13 +286,13 @@ class _FilterDrawerState extends State<FilterDrawer> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text("Color").text.fontFamily(regular).size(14).make(),
+              child: Text("Color").text.fontFamily(regular).size(16).make(),
             ),
-            5.heightBox,
+            10.heightBox,
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 28),
               child: Wrap(
-                spacing: 12,
+                spacing: 16,
                 runSpacing: 5,
                 children: List.generate(
                   allColors.length,
@@ -313,8 +313,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
                         });
                       },
                       child: Container(
-                        width: 32,
-                        height: 32,
+                        width: 40,
+                        height: 40,
                         decoration: BoxDecoration(
                           color: color['color'],
                           borderRadius: BorderRadius.circular(4),
@@ -329,52 +329,54 @@ class _FilterDrawerState extends State<FilterDrawer> {
                 ),
               ),
             ),
-            5.heightBox,
+            10.heightBox,
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
               child: Text("Type of product")
                   .text
                   .fontFamily(regular)
-                  .size(14)
+                  .size(16)
                   .make(),
             ),
             Center(
               child: Wrap(
-                spacing: 8,
+                spacing: 5,
                 children: [
-                  buildFilterChip("Dress", isSelectedDress, (isSelected) {
+                  buildFilterChipSmall("Dress", isSelectedDress, (isSelected) {
                     setState(() {
                       isSelectedDress = isSelected;
                       updateFilterTypes();
                     });
                   }),
-                  buildFilterChip("T-Shirts", isSelectedTShirts,
+                  buildFilterChipSmall("T-Shirts", isSelectedTShirts,
                       (isSelected) {
                     setState(() {
                       isSelectedTShirts = isSelected;
                       updateFilterTypes();
                     });
                   }),
-                  buildFilterChip("Suits", isSelectedSuits, (isSelected) {
+                  buildFilterChipSmall("Suits", isSelectedSuits, (isSelected) {
                     setState(() {
                       isSelectedSuits = isSelected;
                       updateFilterTypes();
                     });
                   }),
-                  buildFilterChip("Jackets", isSelectedJackets, (isSelected) {
+                  buildFilterChipSmall("Jackets", isSelectedJackets,
+                      (isSelected) {
                     setState(() {
                       isSelectedJackets = isSelected;
                       updateFilterTypes();
                     });
                   }),
-                  buildFilterChip("Pants", isSelectedPants, (isSelected) {
+                  buildFilterChipSmall("Pants", isSelectedPants, (isSelected) {
                     setState(() {
                       isSelectedPants = isSelected;
                       updateFilterTypes();
                     });
                   }),
-                  buildFilterChip("Skirts", isSelectedSkirts, (isSelected) {
+                  buildFilterChipSmall("Skirts", isSelectedSkirts,
+                      (isSelected) {
                     setState(() {
                       isSelectedSkirts = isSelected;
                       updateFilterTypes();
@@ -383,32 +385,33 @@ class _FilterDrawerState extends State<FilterDrawer> {
                 ],
               ),
             ),
-            5.heightBox,
+            10.heightBox,
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 5.0),
               child: Row(
-                            children: [
-                              Text(
-                                "Suitable for work and situations",
-                              ).text.fontFamily(medium).size(14).make(),
-                              10.widthBox,
-                              GestureDetector(
-                                onTap: () {
-                                  showModalBottomSheet(
-                                    context: context,
-                                    builder: (context) {
-                                      return SituationsList();
-                                    },
-                                  );
-                                },
-                                child: Image.asset(
-                                  icInfo,
-                                  width: 15,
-                                ),
-                              ),
-                            ],
-                          ),
+                children: [
+                  Text(
+                    "Suitable for work and situations",
+                  ).text.fontFamily(medium).size(16).make(),
+                  10.widthBox,
+                  GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return SituationsList();
+                        },
+                      );
+                    },
+                    child: Image.asset(
+                      icInfo,
+                      width: 15,
+                      color: greyColor,
+                    ),
+                  ),
+                ],
+              ),
             ),
             Center(
               child: Wrap(
@@ -465,7 +468,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
               child: Text("Suitable for seasons")
                   .text
                   .fontFamily(regular)
-                  .size(14)
+                  .size(16)
                   .make(),
             ),
             Center(
@@ -752,7 +755,7 @@ Widget buildFilterChip(
   );
 }
 
-Widget buildFilterChipGender(
+Widget buildFilterChipSmall(
     String label, bool isSelected, Function(bool) onSelected) {
   final BorderSide borderSide = BorderSide(
     color: isSelected ? primaryApp : greyLine,
@@ -760,7 +763,7 @@ Widget buildFilterChipGender(
   );
 
   return SizedBox(
-    width: 80,
+    width: 85,
     child: TextButton(
       onPressed: () => onSelected(!isSelected),
       style: TextButton.styleFrom(

@@ -3,7 +3,6 @@ import 'package:flutter_finalproject/Views/cart_screen/cart_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/reviews_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/store_screen.dart';
 import 'package:flutter_finalproject/Views/widgets_common/infosituation.dart';
-import 'package:flutter_finalproject/Views/widgets_common/infosituation.dart';
 import 'package:flutter_finalproject/Views/widgets_common/tapButton.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:flutter_finalproject/controllers/product_controller.dart';
@@ -59,6 +58,20 @@ class _ItemDetailsState extends State<ItemDetails> {
       }
     });
   }
+
+  Map<String, String> situationNames = {
+  'formal': 'Formal Attire',
+  'semi-formal': 'Semi-Formal Attire',
+  'casual': 'Casual Attire',
+  'special-activity': 'Activity Attire',
+  'seasonal': 'Seasonal Attire',
+  'work-from-home': 'Work from Home',
+  };
+
+  String getSituationName(String key) {
+    return situationNames[key] ?? key;
+  }
+
 
   void fetchReviews() {
     FirebaseFirestore.instance
@@ -362,7 +375,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                             children: [
                               Text(
                                 "Suitable for work and situations",
-                              ).text.fontFamily(medium).size(14).make(),
+                              ).text.fontFamily(medium).size(16).make(),
                               10.widthBox,
                               GestureDetector(
                                 onTap: () {
@@ -375,6 +388,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                                 },
                                 child: Image.asset(
                                   icInfo,
+                                  color: greyColor,
                                   width: 15,
                                 ),
                               ),
@@ -391,7 +405,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                             itemBuilder: (context, index) {
                               return Container(
                                 child: Text(
-                                  "${widget.data['situations'][index].toString()[0].toUpperCase()}${widget.data['situations'][index].toString().substring(1)}",
+                                  getSituationName(widget.data['situations'][index].toString()),
                                 )
                                     .text
                                     .size(26)
@@ -410,8 +424,8 @@ class _ItemDetailsState extends State<ItemDetails> {
                             },
                           ),
                         ),
-                        SizedBox(height: 10),
-                        "Collection"
+                        15.heightBox,
+                        " Suitable for seasons"
                             .text
                             .color(blackColor)
                             .size(16)
@@ -720,6 +734,8 @@ class _ItemDetailsState extends State<ItemDetails> {
                 ),
               ),
             ),
+
+            //For placing an order.
             Obx(
               () => Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -748,12 +764,12 @@ class _ItemDetailsState extends State<ItemDetails> {
                             )
                                 .box
                                 .padding(EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 6))
+                                    horizontal: 12, vertical: 8))
                                 .make(),
                           )
                               .box
                               .padding(EdgeInsets.symmetric(
-                                  horizontal: 4, vertical: 10))
+                                  horizontal: 4, vertical: 8))
                               .make(),
                         );
                       },
@@ -854,6 +870,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                           title: "Add to your cart",
                         )),
                   ),
+                  
                 ],
               ).box.white.outerShadow.make(),
             ),

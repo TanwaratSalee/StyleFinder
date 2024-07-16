@@ -1,4 +1,3 @@
-import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/Views/news_screen/component/search_screen.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
 import 'package:get/get.dart';
@@ -16,7 +15,8 @@ class SearchScreenPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: Text(title ?? 'Search').text
+        title: Text(title ?? 'Search')
+            .text
             .size(26)
             .fontFamily(semiBold)
             .color(blackColor)
@@ -70,8 +70,8 @@ class SearchScreenPage extends StatelessWidget {
                       title: Text(controller.searchHistory[index]),
                       leading: const Icon(Icons.history),
                       onTap: () {
-                        final searchQuery = controller.searchHistory[index]; 
-                        Get.to(() => SearchScreen(title: searchQuery)); 
+                        final searchQuery = controller.searchHistory[index];
+                        Get.to(() => SearchScreen(title: searchQuery));
                       },
                       trailing: IconButton(
                         icon: const Icon(Icons.clear),
@@ -79,7 +79,7 @@ class SearchScreenPage extends StatelessWidget {
                           controller.searchHistory.removeAt(index);
                         },
                       ),
-                    );
+                    ).paddingOnly(left: 16);
                   },
                 ),
               );

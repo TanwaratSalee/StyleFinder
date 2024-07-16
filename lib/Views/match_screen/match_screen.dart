@@ -459,39 +459,41 @@ void showMatchReasonModal(
           ? getAdditionalReason(topPrimaryColor!, lowerPrimaryColor!)
           : '';
 
+  final String topColorName =
+      topPrimaryColor != null ? getColorName(topPrimaryColor) : 'Unknown';
+  final String lowerColorName =
+      lowerPrimaryColor != null ? getColorName(lowerPrimaryColor) : 'Unknown';
+
   if (topPrimaryColor == null || lowerPrimaryColor == null) {
     reasonWidgets
         .add(Text('Unknown colors selected', style: TextStyle(fontSize: 14)));
     nonMatchingConditions++; // Increment if any color is unknown
   } else {
-    final topColorName = getColorName(topPrimaryColor);
-    final lowerColorName = getColorName(lowerPrimaryColor);
-
-    reasonWidgets.add(
-      Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(
-            colorMatchMap[topPrimaryColor]?.contains(lowerPrimaryColor) == true
-                ? Icons.check
-                : Icons.close,
-            size: 20,
-            color:
-                colorMatchMap[topPrimaryColor]?.contains(lowerPrimaryColor) ==
-                        true
-                    ? greenColor
-                    : redColor,
-          ),
-          SizedBox(width: 5),
-          Expanded(
-            child: Text(
-              '${topColorName} ${colorMatchMap[topPrimaryColor]?.contains(lowerPrimaryColor) == true ? "matches" : "does not match"} with ${lowerColorName}.',
-              style: TextStyle(fontSize: 14),
-            ),
-          ),
-        ],
-      ),
-    );
+    // reasonWidgets.add(
+    // Row(
+    //   crossAxisAlignment: CrossAxisAlignment.start,
+    //   children: [
+    //     Icon(
+    //       colorMatchMap[topPrimaryColor]?.contains(lowerPrimaryColor) == true
+    //           ? Icons.check
+    //           : Icons.close,
+    //       size: 20,
+    //       color:
+    //           colorMatchMap[topPrimaryColor]?.contains(lowerPrimaryColor) ==
+    //                   true
+    //               ? greenColor
+    //               : redColor,
+    //     ),
+    //     SizedBox(width: 5),
+    // Expanded(
+    //   child: Text(
+    //     '${topColorName} ${colorMatchMap[topPrimaryColor]?.contains(lowerPrimaryColor) == true ? "matches" : "does not match"} with ${lowerColorName}.',
+    //     style: TextStyle(fontSize: 14),
+    //   ),
+    // ),
+    // ],
+    // ),
+    // );
 
     // Increment non-matching conditions if the colors do not match
     if (colorMatchMap[topPrimaryColor]?.contains(lowerPrimaryColor) != true) {
@@ -692,11 +694,11 @@ void showMatchReasonModal(
               child: Text(
                 nonMatchingConditions == 0
                     ? 'Great Match!'
-                    : 'There are ${nonMatchingConditions} conditions that do not match',
+                    : '${nonMatchingConditions} condition not matching',
                 style: TextStyle(
                   color: nonMatchingConditions == 0 ? greenColor : redColor,
-                  fontSize: 20,
-                  fontFamily: regular,
+                  fontSize: 18,
+                  fontFamily: medium,
                 ),
               ),
             ),
@@ -704,33 +706,7 @@ void showMatchReasonModal(
               color: greyLine,
             ),
             SizedBox(height: 10),
-            Row(
-              children: [
-                Text(
-                  'Your Skin Tone : ',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontFamily: medium,
-                  ),
-                ),
-                Text(
-                  skinTone == null
-                      ? 'Error'
-                      : '${getSkinToneDescription(skinTone)}',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontFamily: regular,
-                  ),
-                ),
-              ],
-            ),
-            ...reasonWidgets,
-            if (colorReasonsWidgets.isNotEmpty) ...[
-              ...colorReasonsWidgets.map((widget) => Padding(
-                    padding: const EdgeInsets.only(bottom: 5),
-                    child: widget,
-                  )),
-            ],
+            buildSkinToneRow(skinTone, reasonWidgets, colorReasonsWidgets),
             SizedBox(height: 15),
             Row(
               children: [
@@ -740,6 +716,30 @@ void showMatchReasonModal(
                   style: TextStyle(
                     fontSize: 14,
                     fontFamily: semiBold,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(
+                  colorMatchMap[topPrimaryColor]?.contains(lowerPrimaryColor) ==
+                          true
+                      ? Icons.check
+                      : Icons.close,
+                  size: 20,
+                  color: colorMatchMap[topPrimaryColor]
+                              ?.contains(lowerPrimaryColor) ==
+                          true
+                      ? greenColor
+                      : redColor,
+                ),
+                SizedBox(width: 5),
+                Expanded(
+                  child: Text(
+                    '${topColorName} ${colorMatchMap[topPrimaryColor]?.contains(lowerPrimaryColor) == true ? "matches" : "does not match"} with ${lowerColorName}.',
+                    style: TextStyle(fontSize: 14),
                   ),
                 ),
               ],
@@ -766,6 +766,40 @@ void showMatchReasonModal(
         ),
       );
     },
+  );
+}
+
+Widget buildSkinToneRow(int? skinTone, List<Widget> reasonWidgets,
+    List<Widget> colorReasonsWidgets) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Row(
+        children: [
+          Text(
+            'Your Skin Tone : ',
+            style: const TextStyle(
+              fontSize: 14,
+              fontFamily: medium,
+            ),
+          ),
+          Text(
+            skinTone == null ? 'Error' : '${getSkinToneDescription(skinTone)}',
+            style: const TextStyle(
+              fontSize: 14,
+              fontFamily: regular,
+            ),
+          ),
+        ],
+      ),
+      ...reasonWidgets,
+      if (colorReasonsWidgets.isNotEmpty) ...[
+        ...colorReasonsWidgets.map((widget) => Padding(
+              padding: const EdgeInsets.only(bottom: 5),
+              child: widget,
+            )),
+      ],
+    ],
   );
 }
 

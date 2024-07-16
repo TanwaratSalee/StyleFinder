@@ -1,5 +1,6 @@
 // ignore_for_file: use_super_parameters
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_finalproject/Views/store_screen/item_details.dart';
 import 'package:flutter_finalproject/consts/consts.dart';
@@ -67,15 +68,12 @@ class SearchScreen extends StatelessWidget {
                   .size(14)
                   .make(),
             ],
-          ).box.padding(EdgeInsets.symmetric(horizontal: 12, vertical: 5)).make(),
+          )
+              .box
+              .padding(EdgeInsets.symmetric(horizontal: 12, vertical: 5))
+              .make(),
         ],
-      )
-          .box
-          .white
-          .roundedSM
-          .border(color: greyLine)
-          .make()
-          .onTap(() {
+      ).box.white.roundedSM.border(color: greyLine).make().onTap(() {
         Get.to(() => ItemDetails(
               title: currentValue['name'],
               data: currentValue,
@@ -89,8 +87,16 @@ class SearchScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title:
-            title!.text.size(26).fontFamily(semiBold).color(blackColor).make(),
+        title: AutoSizeText(
+          title!,
+          style: TextStyle(
+            fontSize: 24,
+            fontFamily: medium,
+            color: blackColor,
+          ),
+          maxLines: 1, 
+          minFontSize: 10, 
+        ),
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: fetchProducts(),
