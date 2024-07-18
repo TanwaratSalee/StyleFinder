@@ -891,7 +891,7 @@ Map<int, String> getRecommendedColors(String dayOfWeek) {
         0xFFFFFF00: 'Yellow: Represents warmth and brightness',
         0xFFFFFFFF: 'White: Represents purity and tranquility',
         0xFF17770F: 'Green: Represents balance and calmness',
-        0xFF62CF2F: 'Kuy tung',
+        0xFF62CF2F: 'Lime Green: Represents balance and calmness',
         0xFF621C8D: 'Purple: Represents luxury and intelligence',
         0xFFFFA500: 'Orange: Represents happiness and warmth',
         0xFF30B0E8: 'Light Blue: Represents calmness and coolness',
@@ -960,24 +960,37 @@ Map<int, String> getRecommendedColors(String dayOfWeek) {
   }
 }
 
-List<String> getNonMatchingColors(String dayOfWeek) {
+Map<int, String> getNonMatchingColors(String dayOfWeek) {
   switch (dayOfWeek) {
     case 'Sunday':
-      return ['Blue'];
+      return {
+        0xFF202FB3: 'Blue: This color is considered non-matching for Sunday.',
+      };
     case 'Monday':
-      return ['Red'];
+      return {
+        0xFFFF0000: 'Red: This color is considered non-matching for Monday.',
+      };
     case 'Tuesday':
-      return ['Yellow'];
+      return {
+        0xFFFFFF00: 'Yellow: This color is considered non-matching for Tuesday.',
+      };
     case 'Wednesday':
-      return ['Pink'];
+      return {
+        0xFFFFC0CB: 'Pink: This color is considered non-matching for Wednesday.',
+      };
     case 'Friday':
-      return ['Brown'];
+      return {
+        0xFF793A1F: 'Brown: This color is considered non-matching for Friday.',
+      };
     case 'Saturday':
-      return ['Green'];
+      return {
+        0xFF17770F: 'Green: This color is considered non-matching for Saturday.',
+      };
     default:
-      return [];
+      return {};
   }
 }
+
 
 final Map<int, Map<String, List<int>>> skinToneMatchMap = {
   4294961114: {

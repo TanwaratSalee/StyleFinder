@@ -469,32 +469,6 @@ void showMatchReasonModal(
         .add(Text('Unknown colors selected', style: TextStyle(fontSize: 14)));
     nonMatchingConditions++; // Increment if any color is unknown
   } else {
-    // reasonWidgets.add(
-    // Row(
-    //   crossAxisAlignment: CrossAxisAlignment.start,
-    //   children: [
-    //     Icon(
-    //       colorMatchMap[topPrimaryColor]?.contains(lowerPrimaryColor) == true
-    //           ? Icons.check
-    //           : Icons.close,
-    //       size: 20,
-    //       color:
-    //           colorMatchMap[topPrimaryColor]?.contains(lowerPrimaryColor) ==
-    //                   true
-    //               ? greenColor
-    //               : redColor,
-    //     ),
-    //     SizedBox(width: 5),
-    // Expanded(
-    //   child: Text(
-    //     '${topColorName} ${colorMatchMap[topPrimaryColor]?.contains(lowerPrimaryColor) == true ? "matches" : "does not match"} with ${lowerColorName}.',
-    //     style: TextStyle(fontSize: 14),
-    //   ),
-    // ),
-    // ],
-    // ),
-    // );
-
     // Increment non-matching conditions if the colors do not match
     if (colorMatchMap[topPrimaryColor]?.contains(lowerPrimaryColor) != true) {
       nonMatchingConditions++;
@@ -558,6 +532,7 @@ void showMatchReasonModal(
 
     // Check recommended colors based on day of the week
     Map<int, String> recommendedColors = getRecommendedColors(dayOfWeek.value);
+    Map<int, String> nonMatchingColors = getNonMatchingColors(dayOfWeek.value);
 
     if (recommendedColors.containsKey(topPrimaryColor)) {
       if (!dayOfWeekTextAdded) {
@@ -568,7 +543,7 @@ void showMatchReasonModal(
                 'You were born on :',
                 style: TextStyle(
                   fontSize: 14,
-                  fontFamily: medium,
+                  fontFamily: bold,
                 ),
               ),
               Text(
@@ -619,7 +594,7 @@ void showMatchReasonModal(
         colorReasonsWidgets.add(
           Text(
             'You were born on : ${dayOfWeek.value}',
-            style: TextStyle(fontSize: 14, fontFamily: medium),
+            style: TextStyle(fontSize: 14, fontFamily: bold),
           ),
         );
         dayOfWeekTextAdded = true;
@@ -656,24 +631,92 @@ void showMatchReasonModal(
     }
 
     // Check non-matching colors based on the day of the week
-    final nonMatchingColors = getNonMatchingColors(dayOfWeek.value);
-    if (nonMatchingColors.isNotEmpty) {
+    if (nonMatchingColors.containsKey(topPrimaryColor) ||
+        nonMatchingColors.containsKey(lowerPrimaryColor)) {
+      if (!dayOfWeekTextAdded) {
+        colorReasonsWidgets.add(
+          Row(
+            children: [
+              Text(
+                'You were born on :',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontFamily: bold,
+                ),
+              ),
+              Text(
+                ' ${dayOfWeek.value}',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontFamily: regular,
+                ),
+              ),
+            ],
+          ),
+        );
+        dayOfWeekTextAdded = true;
+      }
+    }
+
+    if (nonMatchingColors.containsKey(topPrimaryColor)) {
       colorReasonsWidgets.add(
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Icon(
-              Icons.info,
+              Icons.close,
               size: 20,
-              color: primaryApp,
+              color: redColor,
             ),
-            SizedBox(width: 5),
-            Expanded(
-              child: Text(
-                'According to your birth day (${dayOfWeek.value}), the following colors are considered non-matching: ${nonMatchingColors.join(', ')}',
-                style: TextStyle(fontSize: 14),
-              ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'The top color is: ',
+                  style: TextStyle(fontSize: 14, fontFamily: regular),
+                ),
+                SizedBox(width: 5),
+                SizedBox(
+                  width: 200,
+                  child: Text(
+                    nonMatchingColors[topPrimaryColor]!,
+                    style: TextStyle(fontSize: 14, fontFamily: regular),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      );
+    }
+
+    if (nonMatchingColors.containsKey(lowerPrimaryColor)) {
+      colorReasonsWidgets.add(
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(
+              Icons.close,
+              size: 20,
+              color: redColor,
             ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'The lower color is: ',
+                  style: TextStyle(fontSize: 14, fontFamily: regular),
+                ),
+                SizedBox(width: 5),
+                SizedBox(
+                  width: 200,
+                  child: Text(
+                    nonMatchingColors[lowerPrimaryColor]!,
+                    style: TextStyle(fontSize: 14, fontFamily: regular),
+                  ),
+                ),
+              ],
+            )
           ],
         ),
       );
@@ -694,7 +737,7 @@ void showMatchReasonModal(
               child: Text(
                 nonMatchingConditions == 0
                     ? 'Great Match!'
-                    : '${nonMatchingConditions} condition not matching',
+                    : '${nonMatchingConditions} condition(s) not matching',
                 style: TextStyle(
                   color: nonMatchingConditions == 0 ? greenColor : redColor,
                   fontSize: 18,
@@ -780,7 +823,7 @@ Widget buildSkinToneRow(int? skinTone, List<Widget> reasonWidgets,
             'Your Skin Tone : ',
             style: const TextStyle(
               fontSize: 14,
-              fontFamily: medium,
+              fontFamily: bold,
             ),
           ),
           Text(

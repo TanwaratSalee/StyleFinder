@@ -43,18 +43,46 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
     {'name': 'Black', 'color': blackColor, 'value': 0xFF000000},
     {'name': 'Grey', 'color': greyColor, 'value': 0xFF808080},
     {'name': 'White', 'color': whiteColor, 'value': 0xFFFFFFFF},
-    {'name': 'Purple','color': const Color.fromRGBO(98, 28, 141, 1),'value': 0xFF621C8D},
-    {'name': 'Deep Purple','color': const Color.fromRGBO(202, 147, 235, 1),'value': 0xFFCA93EB},
-    {'name': 'Blue','color': Color.fromRGBO(32, 47, 179, 1),'value': 0xFF202FB3},
-    {'name': 'Light blue','color': const Color.fromRGBO(48, 176, 232, 1),'value': 0xFF30B0E8},
+    {
+      'name': 'Purple',
+      'color': const Color.fromRGBO(98, 28, 141, 1),
+      'value': 0xFF621C8D
+    },
+    {
+      'name': 'Deep Purple',
+      'color': const Color.fromRGBO(202, 147, 235, 1),
+      'value': 0xFFCA93EB
+    },
+    {
+      'name': 'Blue',
+      'color': Color.fromRGBO(32, 47, 179, 1),
+      'value': 0xFF202FB3
+    },
+    {
+      'name': 'Light blue',
+      'color': const Color.fromRGBO(48, 176, 232, 1),
+      'value': 0xFF30B0E8
+    },
     // {'name': 'Blue Grey','color': const Color.fromRGBO(83, 205, 191, 1),'value': 0xFF53CDBF},
-    {'name': 'Green','color': const Color.fromRGBO(23, 119, 15, 1),'value': 0xFF17770F},
-    {'name': 'Lime Green','color': Color.fromRGBO(98, 207, 47, 1),'value': 0xFF62CF2F},
+    {
+      'name': 'Green',
+      'color': const Color.fromRGBO(23, 119, 15, 1),
+      'value': 0xFF17770F
+    },
+    {
+      'name': 'Lime Green',
+      'color': Color.fromRGBO(98, 207, 47, 1),
+      'value': 0xFF62CF2F
+    },
     {'name': 'Yellow', 'color': Colors.yellow, 'value': 0xFFFFFF00},
     {'name': 'Orange', 'color': Colors.orange, 'value': 0xFFFFA500},
     {'name': 'Pink', 'color': Colors.pinkAccent, 'value': 0xFFFF4081},
     {'name': 'Red', 'color': redColor, 'value': 0xFFFF0000},
-    {'name': 'Brown','color': Color.fromARGB(255, 121, 58, 31),'value': 0xFF793A1F},
+    {
+      'name': 'Brown',
+      'color': Color.fromARGB(255, 121, 58, 31),
+      'value': 0xFF793A1F
+    },
   ];
 
   @override
@@ -128,7 +156,7 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
                           });
                           print(
                               "Selected price: ${NumberFormat('#,###').format(_currentSliderValue.round())} Bath");
-                  },
+                        },
                       ),
                     ),
                   ),
@@ -273,78 +301,80 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(50,30,50,0),
+              padding: const EdgeInsets.fromLTRB(50, 30, 50, 0),
               child: tapButton(
-                onPress: () {
-                  String selectedGender = '';
-                  if (isSelectedMen) {
-                    selectedGender = 'men';
-                  } else if (isSelectedWomen) {
-                    selectedGender = 'women';
-                  }
-              
-                  List<String> selectedTypes = [
-                    if (isSelectedDress) 'dresses',
-                    if (isSelectedSkirts) 'skirts',
-                    if (isSelectedTShirts) 't-shirts',
-                    if (isSelectedPants) 'pants',
-                    if (isSelectedJackets) 'jackets',
-                    if (isSelectedSuits) 'suits',
-                  ];
-              
-                  List<String> selectedCollections = [
-                    if (isSelectedSummer) 'summer',
-                    if (isSelectedWinter) 'winter',
-                    if (isSelectedAutumn) 'autumn',
-                    if (isSelectedSpring) 'spring',
-                  ];
-              
-                  List<String> selectedSituations = [
-                    if (isSelectedFormal) 'formal',
-                    if (isSelectedCasual) 'casual',
-                    if (isSelectedSeasonal) 'seasonal',
-                    if (isSelectedSemiFormal) 'semi-formal',
-                    if (isSelectedSpecialActivity) 'specialactivity',
-                    if (isSelectedWorkFromHome) 'workfromhome',
-                  ];
-              
-                  controller.updateFilters(
-                    gender: selectedGender,
-                    price: _currentSliderValue,
-                    colors: selectedColorIndexes,
-                    types: selectedTypes,
-                    collections: selectedCollections,
-                    situations: selectedSituations,
-                  );
-              
-                  final selectedVendor = controller.vendors.firstWhere(
-                      (vendor) =>
-                          vendor['vendor_id'] ==
-                          controller.selectedVendorId.value,
-                      orElse: () => {'vendor_name': 'Unknown'});
-              
-                  print('Saved Filters:');
-                  print('Gender: $selectedGender');
-                  print('Price: $_currentSliderValue');
-                  print('Colors: $selectedColorIndexes');
-                  print('Types: $selectedTypes');
-                  print('Collections: $selectedCollections');
-                  print('Situations: $selectedSituations');
-                  controller.fetchFilteredTopProducts();
-                  controller.fetchFilteredLowerProducts();
-              
-                  Navigator.pop(context);
-                },
-                title: 'Save',
-                color: primaryApp,
-                textColor: whiteColor
-                // style: ElevatedButton.styleFrom(
-                //   backgroundColor: primaryApp,
-                //   shape: RoundedRectangleBorder(
-                //     borderRadius: BorderRadius.circular(8),
-                //   ),
-                // ),
-              ).box.makeCentered(),
+                      onPress: () {
+                        String selectedGender = '';
+                        if (isSelectedMen) {
+                          selectedGender = 'men';
+                        } else if (isSelectedWomen) {
+                          selectedGender = 'women';
+                        }
+
+                        List<String> selectedTypes = [
+                          if (isSelectedDress) 'dresses',
+                          if (isSelectedSkirts) 'skirts',
+                          if (isSelectedTShirts) 't-shirts',
+                          if (isSelectedPants) 'pants',
+                          if (isSelectedJackets) 'jackets',
+                          if (isSelectedSuits) 'suits',
+                        ];
+
+                        List<String> selectedCollections = [
+                          if (isSelectedSummer) 'summer',
+                          if (isSelectedWinter) 'winter',
+                          if (isSelectedAutumn) 'autumn',
+                          if (isSelectedSpring) 'spring',
+                        ];
+
+                        List<String> selectedSituations = [
+                          if (isSelectedFormal) 'formal',
+                          if (isSelectedCasual) 'casual',
+                          if (isSelectedSeasonal) 'seasonal',
+                          if (isSelectedSemiFormal) 'semi-formal',
+                          if (isSelectedSpecialActivity) 'specialactivity',
+                          if (isSelectedWorkFromHome) 'workfromhome',
+                        ];
+
+                        controller.updateFilters(
+                          gender: selectedGender,
+                          price: _currentSliderValue,
+                          colors: selectedColorIndexes,
+                          types: selectedTypes,
+                          collections: selectedCollections,
+                          situations: selectedSituations,
+                        );
+
+                        final selectedVendor = controller.vendors.firstWhere(
+                            (vendor) =>
+                                vendor['vendor_id'] ==
+                                controller.selectedVendorId.value,
+                            orElse: () => {'vendor_name': 'Unknown'});
+
+                        print('Saved Filters:');
+                        print('Gender: $selectedGender');
+                        print('Price: $_currentSliderValue');
+                        print('Colors: $selectedColorIndexes');
+                        print('Types: $selectedTypes');
+                        print('Collections: $selectedCollections');
+                        print('Situations: $selectedSituations');
+                        controller.fetchFilteredTopProducts();
+                        controller.fetchFilteredLowerProducts();
+
+                        Navigator.pop(context);
+                      },
+                      title: 'Save',
+                      color: primaryApp,
+                      textColor: whiteColor
+                      // style: ElevatedButton.styleFrom(
+                      //   backgroundColor: primaryApp,
+                      //   shape: RoundedRectangleBorder(
+                      //     borderRadius: BorderRadius.circular(8),
+                      //   ),
+                      // ),
+                      )
+                  .box
+                  .makeCentered(),
             )
           ],
         ).box.white.padding(EdgeInsets.symmetric(vertical: 12)).make(),
@@ -352,34 +382,34 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
     );
   }
 
- Widget buildFilterChip(
-    String label, bool isSelected, Function(bool) onSelected) {
-  final BorderSide borderSide = BorderSide(
-    color: isSelected ? primaryApp : greyLine,
-    width: 1,
-  );
+  Widget buildFilterChip(
+      String label, bool isSelected, Function(bool) onSelected) {
+    final BorderSide borderSide = BorderSide(
+      color: isSelected ? primaryApp : greyLine,
+      width: 1,
+    );
 
-  return SizedBox(
-    width: 165,
-    child: TextButton(
-      onPressed: () => onSelected(!isSelected),
-      style: TextButton.styleFrom(
-        backgroundColor: isSelected ? thinPrimaryApp : whiteColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-          side: borderSide,
+    return SizedBox(
+      width: 165,
+      child: TextButton(
+        onPressed: () => onSelected(!isSelected),
+        style: TextButton.styleFrom(
+          backgroundColor: isSelected ? thinPrimaryApp : whiteColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+            side: borderSide,
+          ),
+          splashFactory: NoSplash.splashFactory,
         ),
-        splashFactory: NoSplash.splashFactory,
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          fontSize: 12,
-          fontFamily: isSelected ? medium : regular,
-          color: greyColor,
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            fontFamily: isSelected ? medium : regular,
+            color: greyColor,
+          ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 }
