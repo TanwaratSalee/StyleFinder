@@ -737,7 +737,7 @@ void showMatchReasonModal(
               child: Text(
                 nonMatchingConditions == 0
                     ? 'Great Match!'
-                    : '${nonMatchingConditions} condition(s) not matching',
+                    : '${nonMatchingConditions} Condition not matching',
                 style: TextStyle(
                   color: nonMatchingConditions == 0 ? greenColor : redColor,
                   fontSize: 18,

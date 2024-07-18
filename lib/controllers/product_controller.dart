@@ -869,91 +869,81 @@ Map<int, String> getRecommendedColors(String dayOfWeek) {
   switch (dayOfWeek) {
     case 'Sunday':
       return {
-        0xFFFF0000: 'Red: Represents power and confidence. As Sunday is associated with the sun, red is a symbol',
-        0xFFFFFFFF: 'White: Represents purity and tranquility, enhancing creativity',
-        0xFFFFC0CB: 'Pink: Represents love and kindness, fostering good relationships',
-        0xFF17770F: 'Green: Represents balance and calmness',
-        0xFF000000: 'Black: Represents stability and strength',
-        0xFF621C8D: 'Purple: Represents luxury and intelligence',
-        0xFFFFA500: 'Orange: Represents happiness and warmth',
-        0xFF808080: 'Gray: Represents calmness and composure',
-        0xFFCA93EB: '',
-        0xFF202FB3: '',
-        0xFF30B0E8: '',
-        0xFF53CDBF: '',
-        0xFF62CF2F: '',
-        0xFFFFFF00: '',
-        0xFFFF4081: '',
-        0xFF793A1F: '',
+        0xFFFF0000: 'Red: Wearing red can help solve problems for couples and attract luck in love for singles.',
+        0xFFFFC0CB: 'Pink: Helps you stay determined and confident.',
+        0xFFFFFFFF: 'White: Stands for purity and calm, boosting creativity.',
+        0xFF17770F: 'Green: Represents balance and calmness.',
+        0xFF000000: 'Black: Can help overcome financial difficulties.',
+        0xFF621C8D: 'Purple: Symbolizes luxury and intelligence.',
+        0xFFFFA500: 'Orange: Stands for happiness and warmth.',
+        0xFF808080: 'Gray: Can help overcome financial difficulties.',
+        0xFF202FB3: 'Blue: Not suitable for this day, may bring bad luck.',
+        0xFF30B0E8: 'Light Blue: Not suitable for this day, may bring bad luck.'
       };
     case 'Monday':
       return {
-        0xFFFFFF00: 'Yellow: Represents warmth and brightness',
-        0xFFFFFFFF: 'White: Represents purity and tranquility',
-        0xFF17770F: 'Green: Represents balance and calmness',
-        0xFF62CF2F: 'Lime Green: Represents balance and calmness',
-        0xFF621C8D: 'Purple: Represents luxury and intelligence',
-        0xFFFFA500: 'Orange: Represents happiness and warmth',
-        0xFF30B0E8: 'Light Blue: Represents calmness and coolness',
-        0xFF202FB3: 'Blue: Represents stability and trust'
+        0xFFFFFFFF: 'White: Represents purity and tranquility.',
+        0xFF17770F: 'Green: Boosts confidence and stability.',
+        0xFFFFA500: 'Orange: Enhances financial luck.',
+        0xFF808080: 'Gray: Represents balance and calmness.',
+        0xFF30B0E8: 'Light Blue: Represents calmness and coolness.',
+        0xFF202FB3: 'Blue: Represents stability and trust.',
+        0xFFFF0000: 'Red: Not suitable for this day, may bring bad luck.'
       };
     case 'Tuesday':
       return {
-        0xFFFFC0CB: 'Pink: Represents love and kindness',
-        0xFF17770F: 'Green: Represents balance and calmness',
-        0xFF621C8D: 'Purple: Represents luxury and intelligence',
-        0xFFFFA500: 'Orange: Represents happiness and warmth',
-        0xFF808080: 'Gray: Represents calmness and composure',
-        0xFF30B0E8: 'Light Blue: Represents calmness and coolness',
-        0xFF202FB3: 'Blue: Represents stability and trust',
-        0xFFFF0000: 'Red: Represents power and confidence'
+        0xFFFF0000: 'Red: Represents power and confidence.',
+        0xFF17770F: 'Green: Represents balance and calmness.',
+        0xFF621C8D: 'Purple: Enhances work success and reduces stress.',
+        0xFFFFA500: 'Orange: Represents happiness and warmth.',
+        0xFF808080: 'Gray: Enhances work success and reduces stress.',
+        0xFF30B0E8: 'Light Blue: Represents calmness and coolness.',
+        0xFF202FB3: 'Blue: Represents stability and trust.'
       };
     case 'Wednesday':
       return {
-        0xFF17770F: 'Green: Represents balance and calmness',
-        0xFF621C8D: 'Purple: Represents luxury and intelligence',
-        0xFFFFD700: 'Gold: Represents prosperity and wealth',
-        0xFF808080: 'Gray: Represents calmness and composure',
-        0xFF202FB3: 'Blue: Represents stability and trust',
-        0xFF30B0E8: 'Light Blue: Represents calmness and coolness',
-        0xFFFF0000: 'Red: Represents power and confidence',
-        0xFFFFFF00: 'Yellow: Represents warmth and brightness',
-        0xFFFFFFFF: 'White: Represents purity and tranquility',
-        0xFFFFC0CB: 'Pink: Represents love and kindness'
+        0xFF17770F: 'Green: Enhances creativity and design work.',
+        0xFF621C8D: 'Purple: Attracts wealth and luck.',
+        0xFFFFD700: 'Gold: Represents prosperity and wealth.',
+        0xFF808080: 'Gray: Attracts wealth and luck.',
+        0xFF202FB3: 'Blue: Represents stability and trust.',
+        0xFF30B0E8: 'Light Blue: Attracts wealth and luck.',
+        0xFFFF0000: 'Red: Represents power and confidence.',
+        0xFFFFFF00: 'Yellow: Represents warmth and brightness.',
+        0xFFFFFFFF: 'White: Represents purity and tranquility.'
       };
     case 'Thursday':
       return {
-        0xFFFFA500: 'Orange: Represents happiness and warmth',
-        0xFF808080: 'Gray: Represents calmness and composure',
-        0xFF202FB3: 'Blue: Represents stability and trust',
-        0xFFFF0000: 'Red: Represents power and confidence',
-        0xFFFFFF00: 'Yellow: Represents warmth and brightness',
-        0xFFFFFFFF: 'White: Represents purity and tranquility',
-        0xFFFFC0CB: 'Pink: Represents love and kindness',
-        0xFF17770F: 'Green: Represents balance and calmness'
+        0xFFFFFF00: 'Yellow: Enhances financial luck.',
+        0xFFFFA500: 'Orange: Boosts success in tasks and challenges.',
+        0xFF808080: 'Gray: Represents calmness and composure.',
+        0xFF202FB3: 'Blue: Represents stability and trust.',
+        0xFFFF0000: 'Red: Represents power and confidence.',
+        0xFFFFFFFF: 'White: Represents purity and tranquility.',
+        0xFF30B0E8: 'Light Blue: Overcomes obstacles.',
+        0xFF8B4513: 'Brown: Enhances love and relationships.',
+        0xFF621C8D: 'Purple: Not suitable for this day, may bring bad luck.',
+        0xFF000000: 'Black: Not suitable for this day, may bring bad luck.'
       };
     case 'Friday':
       return {
-        0xFF202FB3: 'Blue: Represents stability and trust',
-        0xFFFF0000: 'Red: Represents power and confidence',
-        0xFFFFFF00: 'Yellow: Represents warmth and brightness',
-        0xFFFFFFFF: 'White: Represents purity and tranquility',
-        0xFFFFC0CB: 'Pink: Represents love and kindness',
-        0xFF17770F: 'Green: Represents balance and calmness',
-        0xFF621C8D: 'Purple: Represents luxury and intelligence',
-        0xFFFFA500: 'Orange: Represents happiness and warmth',
-        0xFF808080: 'Gray: Represents calmness and composure'
+        0xFFFFFFFF: 'White: Enhances love and relationships.',
+        0xFFFFC0CB: 'Pink: Represents love and kindness.',
+        0xFF17770F: 'Green: Represents balance and calmness.',
+        0xFF30B0E8: 'Light Blue: Enhances creativity.',
+        0xFF202FB3: 'Blue: Represents stability and trust.',
+        0xFFFF0000: 'Red: Represents power and confidence.',
+        0xFFFFA500: 'Orange: Represents happiness and warmth.'
       };
     case 'Saturday':
       return {
-        0xFF000000: 'Black: Represents stability and strength',
-        0xFF621C8D: 'Purple: Represents luxury and intelligence',
-        0xFF808080: 'Gray: Represents calmness and composure',
-        0xFF202FB3: 'Blue: Represents stability and trust',
-        0xFFFF0000: 'Red: Represents power and confidence',
-        0xFFFFFF00: 'Yellow: Represents warmth and brightness',
-        0xFFFFFFFF: 'White: Represents purity and tranquility',
-        0xFFFFC0CB: 'Pink: Represents love and kindness'
+        0xFF000000: 'Black: Enhances charm and attractiveness.',
+        0xFF621C8D: 'Purple: Enhances charm and attractiveness.',
+        0xFF808080: 'Gray: Enhances charm and attractiveness.',
+        0xFF202FB3: 'Blue: Represents stability and trust.',
+        0xFFFF0000: 'Red: Increases luck and financial fortune.',
+        0xFFFFFF00: 'Yellow: Represents warmth and brightness.',
+        0xFFFFFFFF: 'White: Represents purity and tranquility.'
       };
     default:
       return {};
