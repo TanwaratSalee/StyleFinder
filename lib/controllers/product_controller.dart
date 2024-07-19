@@ -869,7 +869,8 @@ Map<int, String> getRecommendedColors(String dayOfWeek) {
   switch (dayOfWeek) {
     case 'Sunday':
       return {
-        0xFFFF0000: 'Red: Wearing red can help solve problems for couples and attract luck in love for singles.',
+        0xFFFF0000:
+            'Red: Wearing red can help solve problems for couples and attract luck in love for singles.',
         0xFFFFC0CB: 'Pink: Helps you stay determined and confident.',
         0xFFFFFFFF: 'White: Stands for purity and calm, boosting creativity.',
         0xFF17770F: 'Green: Represents balance and calmness.',
@@ -877,8 +878,6 @@ Map<int, String> getRecommendedColors(String dayOfWeek) {
         0xFF621C8D: 'Purple: Symbolizes luxury and intelligence.',
         0xFFFFA500: 'Orange: Stands for happiness and warmth.',
         0xFF808080: 'Gray: Can help overcome financial difficulties.',
-        0xFF202FB3: 'Blue: Not suitable for this day, may bring bad luck.',
-        0xFF30B0E8: 'Light Blue: Not suitable for this day, may bring bad luck.'
       };
     case 'Monday':
       return {
@@ -888,7 +887,6 @@ Map<int, String> getRecommendedColors(String dayOfWeek) {
         0xFF808080: 'Gray: Represents balance and calmness.',
         0xFF30B0E8: 'Light Blue: Represents calmness and coolness.',
         0xFF202FB3: 'Blue: Represents stability and trust.',
-        0xFFFF0000: 'Red: Not suitable for this day, may bring bad luck.'
       };
     case 'Tuesday':
       return {
@@ -922,8 +920,6 @@ Map<int, String> getRecommendedColors(String dayOfWeek) {
         0xFFFFFFFF: 'White: Represents purity and tranquility.',
         0xFF30B0E8: 'Light Blue: Overcomes obstacles.',
         0xFF8B4513: 'Brown: Enhances love and relationships.',
-        0xFF621C8D: 'Purple: Not suitable for this day, may bring bad luck.',
-        0xFF000000: 'Black: Not suitable for this day, may bring bad luck.'
       };
     case 'Friday':
       return {
@@ -954,38 +950,44 @@ Map<int, String> getNonMatchingColors(String dayOfWeek) {
   switch (dayOfWeek) {
     case 'Sunday':
       return {
-        0xFF202FB3: 'Blue: This color is considered non-matching for Sunday.',
+        0xFF202FB3: 'Blue: Not suitable for Sunday, may bring bad luck.',
+        0xFF30B0E8: 'Light Blue: Not suitable for Sunday, may bring bad luck.'
       };
     case 'Monday':
       return {
-        0xFFFF0000: 'Red: This color is considered non-matching for Monday.',
+        0xFFFF0000: 'Red: Not suitable for Monday, may bring bad luck.',
       };
     case 'Tuesday':
       return {
-        0xFFFFFF00: 'Yellow: This color is considered non-matching for Tuesday.',
+        0xFF621C8D: 'Purple: Not suitable for Tuesday, may bring bad luck.',
+        0xFF000000: 'Black: Not suitable for Tuesday, may bring bad luck.'
       };
     case 'Wednesday':
       return {
-        0xFFFFC0CB: 'Pink: This color is considered non-matching for Wednesday.',
+        0xFFFFC0CB: 'Pink: Not suitable for Wednesday, may bring bad luck.',
       };
     case 'Friday':
       return {
-        0xFF793A1F: 'Brown: This color is considered non-matching for Friday.',
+        0xFF793A1F: 'Brown: Not suitable for Friday, may bring bad luck.',
       };
     case 'Saturday':
       return {
-        0xFF17770F: 'Green: This color is considered non-matching for Saturday.',
+        0xFF17770F: 'Green: Not suitable for Saturday, may bring bad luck.',
       };
     default:
       return {};
   }
 }
 
-
 final Map<int, Map<String, List<int>>> skinToneMatchMap = {
   4294961114: {
     'lightColors': [0xFFFF4081, 0xFFADD8E6, 0xFFFFFFFF, 0xFF32CD32],
-    'brightColors': [0xFFFF0000,0xFFFF69B4,0xFF0000FF,0xFF008000,0xFFFFFF00
+    'brightColors': [
+      0xFFFF0000,
+      0xFFFF69B4,
+      0xFF0000FF,
+      0xFF008000,
+      0xFFFFFF00
     ],
     'darkColors': [0xFF000000, 0xFF4B0082, 0xFF808080],
   },
@@ -1013,18 +1015,50 @@ final List<Map<String, dynamic>> allColors = [
   {'name': 'Black', 'color': blackColor, 'value': 0xFF000000},
   {'name': 'Grey', 'color': greyColor, 'value': 0xFF808080},
   {'name': 'White', 'color': whiteColor, 'value': 0xFFFFFFFF},
-  {'name': 'Purple','color': const Color.fromRGBO(98, 28, 141, 1),'value': 0xFF621C8D},
-  {'name': 'Deep Purple','color': const Color.fromRGBO(202, 147, 235, 1),'value': 0xFFCA93EB},
-  {'name': 'Blue','color': Color.fromRGBO(32, 47, 179, 1),'value': 0xFF202FB3},
-  {'name': 'Light blue','color': const Color.fromRGBO(48, 176, 232, 1),'value': 0xFF30B0E8},
-  {'name': 'Blue Grey','color': const Color.fromRGBO(83, 205, 191, 1),'value': 0xFF53CDBF},
-  {'name': 'Green','color': const Color.fromRGBO(23, 119, 15, 1),'value': 0xFF17770F},
-  {'name': 'Lime Green','color': Color.fromRGBO(98, 207, 47, 1),'value': 0xFF62CF2F },
+  {
+    'name': 'Purple',
+    'color': const Color.fromRGBO(98, 28, 141, 1),
+    'value': 0xFF621C8D
+  },
+  {
+    'name': 'Deep Purple',
+    'color': const Color.fromRGBO(202, 147, 235, 1),
+    'value': 0xFFCA93EB
+  },
+  {
+    'name': 'Blue',
+    'color': Color.fromRGBO(32, 47, 179, 1),
+    'value': 0xFF202FB3
+  },
+  {
+    'name': 'Light blue',
+    'color': const Color.fromRGBO(48, 176, 232, 1),
+    'value': 0xFF30B0E8
+  },
+  {
+    'name': 'Blue Grey',
+    'color': const Color.fromRGBO(83, 205, 191, 1),
+    'value': 0xFF53CDBF
+  },
+  {
+    'name': 'Green',
+    'color': const Color.fromRGBO(23, 119, 15, 1),
+    'value': 0xFF17770F
+  },
+  {
+    'name': 'Lime Green',
+    'color': Color.fromRGBO(98, 207, 47, 1),
+    'value': 0xFF62CF2F
+  },
   {'name': 'Yellow', 'color': Colors.yellow, 'value': 0xFFFFFF00},
   {'name': 'Orange', 'color': Colors.orange, 'value': 0xFFFFA500},
   {'name': 'Pink', 'color': Colors.pinkAccent, 'value': 0xFFFF4081},
   {'name': 'Red', 'color': redColor, 'value': 0xFFFF0000},
-  {'name': 'Brown','color': Color.fromARGB(255, 121, 58, 31),'value': 0xFF793A1F},
+  {
+    'name': 'Brown',
+    'color': Color.fromARGB(255, 121, 58, 31),
+    'value': 0xFF793A1F
+  },
 ];
 
 final Map<int, List<int>> colorMatchMap = {

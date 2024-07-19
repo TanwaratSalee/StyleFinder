@@ -340,7 +340,7 @@ class _MatchScreenState extends State<MatchScreen> {
                       },
                       child: Text(
                         matchResult['isGreatMatch']
-                            ? 'Great Match!'
+                            ? 'Perfect Match!'
                             : 'Not a Match',
                       )
                           .text
@@ -463,6 +463,10 @@ void showMatchReasonModal(
       topPrimaryColor != null ? getColorName(topPrimaryColor) : 'Unknown';
   final String lowerColorName =
       lowerPrimaryColor != null ? getColorName(lowerPrimaryColor) : 'Unknown';
+
+  Map<int, String> recommendedColors = getRecommendedColors(dayOfWeek.value);
+  Map<int, String> nonMatchingColors =
+      getNonMatchingColors(dayOfWeek.value); // กำหนดค่าที่นี่
 
   if (topPrimaryColor == null || lowerPrimaryColor == null) {
     reasonWidgets
@@ -729,86 +733,137 @@ void showMatchReasonModal(
       return AlertDialog(
         backgroundColor: whiteColor,
         contentPadding: EdgeInsets.all(16.0),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Text(
-                nonMatchingConditions == 0
-                    ? 'Great Match!'
-                    : '${nonMatchingConditions} Condition not matching',
-                style: TextStyle(
-                  color: nonMatchingConditions == 0 ? greenColor : redColor,
-                  fontSize: 18,
-                  fontFamily: medium,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Text(
+                  nonMatchingConditions == 0
+                      ? 'Perfect Match!'
+                      : '$nonMatchingConditions Conditions Not Matching',
+                  style: TextStyle(
+                    color: nonMatchingConditions == 0 ? greenColor : redColor,
+                    fontSize: 20,
+                    fontFamily: bold,
+                  ),
                 ),
               ),
-            ),
-            Divider(
-              color: greyLine,
-            ),
-            SizedBox(height: 10),
-            buildSkinToneRow(skinTone, reasonWidgets, colorReasonsWidgets),
-            SizedBox(height: 15),
-            Row(
-              children: [
-                SizedBox(width: 5),
-                Text(
-                  'The color of the top and bottoms match',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontFamily: semiBold,
+
+              // --- เหตุผลเกี่ยวกับโทนสีผิว ---
+              buildReasonSection(
+                '',
+                Icons.person,
+                [
+                  Row(
+                    children: [
+                      Text(
+                        'Your skin tone :',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: bold,
+                        ),
+                      ),
+                      Text(
+                        ' ${getSkinToneDescription(skinTone!)}',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: regular,
+                        ),
+                      ),
+                    ],
                   ),
+                  ...reasonWidgets,
+                ],
+              ),
+
+              // --- เหตุผลเกี่ยวกับสีที่แนะนำ/ไม่แนะนำตามวัน ---
+              if (colorReasonsWidgets.isNotEmpty)
+                buildReasonSection(
+                  '',
+                  Icons.calendar_today,
+                  colorReasonsWidgets,
                 ),
-              ],
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(
-                  colorMatchMap[topPrimaryColor]?.contains(lowerPrimaryColor) ==
-                          true
-                      ? Icons.check
-                      : Icons.close,
-                  size: 20,
-                  color: colorMatchMap[topPrimaryColor]
-                              ?.contains(lowerPrimaryColor) ==
-                          true
-                      ? greenColor
-                      : redColor,
-                ),
-                SizedBox(width: 5),
-                Expanded(
-                  child: Text(
-                    '${topColorName} ${colorMatchMap[topPrimaryColor]?.contains(lowerPrimaryColor) == true ? "matches" : "does not match"} with ${lowerColorName}.',
-                    style: TextStyle(fontSize: 14),
-                  ),
-                ),
-              ],
-            ),
-            if (additionalReason.isNotEmpty) ...[
-              Row(
-                children: [
-                  Icon(
-                    Icons.info,
-                    size: 20,
-                    color: primaryApp,
-                  ),
-                  SizedBox(width: 5),
-                  Expanded(
-                    child: Text(
-                      additionalReason,
-                      style: TextStyle(fontSize: 14),
-                    ),
+              SizedBox(height: 15),
+
+              // --- เหตุผลเกี่ยวกับการจับคู่สีเสื้อ ---
+              buildReasonSection(
+                'The color of the top and bottoms match',
+                Icons.color_lens,
+                [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(
+                        colorMatchMap[topPrimaryColor]
+                                    ?.contains(lowerPrimaryColor) ==
+                                true
+                            ? Icons.check
+                            : Icons.close,
+                        size: 20,
+                        color: colorMatchMap[topPrimaryColor]
+                                    ?.contains(lowerPrimaryColor) ==
+                                true
+                            ? greenColor
+                            : redColor,
+                      ),
+                      SizedBox(width: 5),
+                      Expanded(
+                        child: Text(
+                          '${topColorName} ${colorMatchMap[topPrimaryColor]?.contains(lowerPrimaryColor) == true ? "matches" : "does not match"} with ${lowerColorName}.',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
+              if (additionalReason.isNotEmpty) ...[
+                SizedBox(height: 15),
+                Row(
+                  children: [
+                    Icon(Icons.info, size: 20, color: primaryApp),
+                    SizedBox(width: 5),
+                    Expanded(
+                      child: Text(
+                        additionalReason,
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       );
     },
+  );
+}
+
+// สร้าง Widget สำหรับส่วนของเหตุผล
+Widget buildReasonSection(String title, IconData icon, List<Widget> children) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Row(
+        children: [
+          /* Icon(icon, size: 24, color: primaryApp), */
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 14,
+              fontFamily: bold,
+            ),
+          ),
+        ],
+      ),
+      ...children,
+    ],
   );
 }
 
