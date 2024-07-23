@@ -446,28 +446,30 @@ void showMatchReasonModal(
   final int? topPrimaryColor = matchResult['topClosestColor'];
   final int? lowerPrimaryColor = matchResult['lowerClosestColor'];
 
-  // Debug prints
-  print('Top Colors: ${matchResult['topClosestColor']}');
-  print('Lower Colors: ${matchResult['lowerClosestColor']}');
+  // Debug prints (Consider using a logging mechanism if this is for production)
+  print('Top Colors: $topPrimaryColor');
+  print('Lower Colors: $lowerPrimaryColor');
 
-  List<Widget> reasonWidgets = [];
-  List<Widget> colorReasonsWidgets = [];
-  bool dayOfWeekTextAdded = false;
-  int nonMatchingConditions = 0; // Initialize as 0
-  final String additionalReason =
-      (topPrimaryColor != null && lowerPrimaryColor != null)
-          ? getAdditionalReason(topPrimaryColor!, lowerPrimaryColor!)
-          : '';
-
+  // Color Names
   final String topColorName =
       topPrimaryColor != null ? getColorName(topPrimaryColor) : 'Unknown';
   final String lowerColorName =
       lowerPrimaryColor != null ? getColorName(lowerPrimaryColor) : 'Unknown';
 
-  Map<int, String> recommendedColors = getRecommendedColors(dayOfWeek.value);
-  Map<int, String> nonMatchingColors =
-      getNonMatchingColors(dayOfWeek.value); // กำหนดค่าที่นี่
+  // --- Data Preparation ---
+  int nonMatchingConditions = 0;
+  List<Widget> reasonWidgets = [];
+  List<Widget> colorReasonsWidgets = [];
+  bool dayOfWeekTextAdded = false;
+  final String additionalReason =
+      (topPrimaryColor != null && lowerPrimaryColor != null)
+          ? getAdditionalReason(topPrimaryColor, lowerPrimaryColor)
+          : '';
 
+  Map<int, String> recommendedColors = getRecommendedColors(dayOfWeek.value);
+  Map<int, String> nonMatchingColors = getNonMatchingColors(dayOfWeek.value);
+
+  // --- Evaluation Logic ---
   if (topPrimaryColor == null || lowerPrimaryColor == null) {
     reasonWidgets
         .add(Text('Unknown colors selected', style: TextStyle(fontSize: 14)));
@@ -533,10 +535,6 @@ void showMatchReasonModal(
     if (!lowerMatchesSkinTone) {
       nonMatchingConditions++;
     }
-
-    // Check recommended colors based on day of the week
-    Map<int, String> recommendedColors = getRecommendedColors(dayOfWeek.value);
-    Map<int, String> nonMatchingColors = getNonMatchingColors(dayOfWeek.value);
 
     if (recommendedColors.containsKey(topPrimaryColor)) {
       if (!dayOfWeekTextAdded) {

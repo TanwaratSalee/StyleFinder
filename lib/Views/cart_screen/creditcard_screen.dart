@@ -353,14 +353,15 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
       String secreKey = 'skey_test_5yzhwpoh5cu85yb4qrr';
       String urlAPI = 'https://api.omise.co/charges';
       String basicAuth = 'Basic ' + base64Encode(utf8.encode(secreKey + ":"));
-
       Map<String, String> headerMap = {};
       headerMap['authorization'] = basicAuth;
       headerMap['Cache-Control'] = 'no-cache';
       headerMap['Content-Type'] = 'application/x-www-form-urlencoded';
 
+      final int amountInSmallestUnit = (controller.totalP.value * 100).toInt();
+
       Map<String, dynamic> data = {};
-      data['amount'] = controller.totalP.value.toString();
+      data['amount'] = amountInSmallestUnit.toString();
       data['currency'] = 'thb';
       data['card'] = token;
 

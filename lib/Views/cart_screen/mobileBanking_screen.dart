@@ -39,8 +39,10 @@ class _MobileBankingScreenextendsState
       'Content-Type': 'application/x-www-form-urlencoded',
     };
 
+    final int amountInSmallestUnit = (controller.totalP.value * 100).toInt();
+
     final Map<String, dynamic> data = {
-      'amount': controller.totalP.value.toString(),
+      'amount': amountInSmallestUnit.toString(),
       'currency': 'thb',
       'return_uri': 'myapp://payments',
       'source[type]': 'mobile_banking_kbank',
@@ -75,10 +77,6 @@ class _MobileBankingScreenextendsState
         } else {
           print('Failed to fetch charge status: ${statusResponse.body}');
         }
-      });
-
-      Timer(Duration(seconds: 3), () {
-        Get.offAll(() => MainHome());
       });
     } else {
       print('Failed to create charge: ${response.body}');
