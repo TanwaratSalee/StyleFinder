@@ -1771,7 +1771,8 @@ bool isColorMatchingSkinTone(int colorValue, int? skinTone) {
 }
 
 Map<String, dynamic> checkMatch(
-    List<dynamic> topColors, List<dynamic> lowerColors) {
+    List<dynamic> topColors, List<dynamic> lowerColors,
+    {int? skinTone}) {
   if (topColors.isEmpty || lowerColors.isEmpty) {
     return {
       'isGreatMatch': false,
@@ -1780,7 +1781,6 @@ Map<String, dynamic> checkMatch(
     };
   }
 
-  // Ensure that topColors and lowerColors are lists of integers
   final List<int> topColorsList = List<int>.from(topColors);
   final List<int> lowerColorsList = List<int>.from(lowerColors);
 
@@ -1789,40 +1789,17 @@ Map<String, dynamic> checkMatch(
 
   bool isGreatMatch =
       colorMatchMap[topPrimaryColor]?.contains(lowerPrimaryColor) ?? false;
+
+  if (skinTone != null) {
+    bool topMatchesSkinTone =
+        isColorMatchingSkinTone(topPrimaryColor, skinTone);
+    bool lowerMatchesSkinTone =
+        isColorMatchingSkinTone(lowerPrimaryColor, skinTone);
+    isGreatMatch = isGreatMatch && topMatchesSkinTone && lowerMatchesSkinTone;
+  }
 
   return {
     'isGreatMatch': isGreatMatch,
-    'topClosestColor': topPrimaryColor,
-    'lowerClosestColor': lowerPrimaryColor,
-  };
-}
-
-Map<String, dynamic> checkMatchWithSkinTone(
-    List<dynamic> topColors, List<dynamic> lowerColors, int? skinTone) {
-  if (topColors.isEmpty || lowerColors.isEmpty) {
-    return {
-      'isGreatMatch': false,
-      'topClosestColor': null,
-      'lowerClosestColor': null,
-    };
-  }
-
-  final List<int> topColorsList = List<int>.from(topColors);
-  final List<int> lowerColorsList = List<int>.from(lowerColors);
-
-  final topPrimaryColor = findClosestColor(topColorsList[0]);
-  final lowerPrimaryColor = findClosestColor(lowerColorsList[0]);
-
-  bool isGreatMatch =
-      colorMatchMap[topPrimaryColor]?.contains(lowerPrimaryColor) ?? false;
-
-  // Check if the colors match the user's skin tone preferences
-  bool topMatchesSkinTone = isColorMatchingSkinTone(topPrimaryColor, skinTone);
-  bool lowerMatchesSkinTone =
-      isColorMatchingSkinTone(lowerPrimaryColor, skinTone);
-
-  return {
-    'isGreatMatch': isGreatMatch && topMatchesSkinTone && lowerMatchesSkinTone,
     'topClosestColor': topPrimaryColor,
     'lowerClosestColor': lowerPrimaryColor,
   };

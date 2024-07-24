@@ -316,7 +316,7 @@ class _MatchScreenState extends State<MatchScreen> {
           }
           final skinTone = snapshot.data;
           final matchResult =
-              checkMatchWithSkinTone(topColors, lowerColors, skinTone);
+              checkMatch(topColors, lowerColors, skinTone: skinTone);
 
           return Container(
             child: Column(
