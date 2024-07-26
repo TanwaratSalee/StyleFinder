@@ -544,8 +544,8 @@ void showMatchReasonModal(
               Text(
                 'You were born on :',
                 style: TextStyle(
-                  fontSize: 14,
-                  fontFamily: bold,
+                  fontSize: 16,
+                  fontFamily: medium,
                 ),
               ),
               Text(
@@ -746,12 +746,12 @@ void showMatchReasonModal(
                       : '$nonMatchingConditions Conditions Not Matching',
                   style: TextStyle(
                     color: nonMatchingConditions == 0 ? greenColor : redColor,
-                    fontSize: 20,
+                    fontSize: 24,
                     fontFamily: bold,
                   ),
                 ),
               ),
-
+                Divider(color: greyLine,),
               // --- เหตุผลเกี่ยวกับโทนสีผิว ---
               buildReasonSection(
                 '',
@@ -762,8 +762,8 @@ void showMatchReasonModal(
                       Text(
                         'Your skin tone :',
                         style: TextStyle(
-                          fontSize: 14,
-                          fontFamily: bold,
+                          fontSize: 16,
+                          fontFamily: medium,
                         ),
                       ),
                       Text(
@@ -855,7 +855,7 @@ Widget buildReasonSection(String title, IconData icon, List<Widget> children) {
             title,
             style: TextStyle(
               fontSize: 14,
-              fontFamily: bold,
+              fontFamily: medium,
             ),
           ),
         ],
@@ -875,8 +875,8 @@ Widget buildSkinToneRow(int? skinTone, List<Widget> reasonWidgets,
           Text(
             'Your Skin Tone : ',
             style: const TextStyle(
-              fontSize: 14,
-              fontFamily: bold,
+              fontSize: 16,
+              fontFamily: medium,
             ),
           ),
           Text(

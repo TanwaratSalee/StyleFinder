@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_finalproject/Views/auth_screen/login_screen.dart';
-import 'package:flutter_finalproject/Views/auth_screen/welcome_screen.dart';
 import 'package:flutter_finalproject/Views/splash_screen/splash_screen.dart';
 import 'package:flutter_finalproject/consts/colors.dart';
 import 'package:flutter_finalproject/consts/styles.dart';
