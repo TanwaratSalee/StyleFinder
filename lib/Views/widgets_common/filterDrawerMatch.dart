@@ -37,6 +37,9 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
   bool isSelectedSpecialActivity = false;
   bool isSelectedWorkFromHome = false;
 
+  bool isSelectedAllProduct = false;
+  bool isSelectedFavorite = false;
+
   final selectedColorIndexes = <int>[].obs;
 
   final List<Map<String, dynamic>> allColors = [
@@ -84,6 +87,18 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
       'value': 0xFF793A1F
     },
   ];
+
+  void updateFilterTypes() {
+    List<String> types = [];
+    if (isSelectedTShirts) types.add('t-shirts');
+    if (isSelectedSkirts) types.add('skirts');
+    if (isSelectedDress) types.add('dresses');
+    if (isSelectedPants) types.add('pants');
+    if (isSelectedJackets) types.add('jackets');
+    if (isSelectedSuits) types.add('suits');
+
+    controller.updateFilters(types: types);
+  }
 
   @override
   void initState() {
@@ -158,6 +173,93 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
                               "Selected price: ${NumberFormat('#,###').format(_currentSliderValue.round())} Bath");
                         },
                       ),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text("Show Products")
+                            .text
+                            .fontFamily(regular)
+                            .size(14)
+                            .make(),
+                      ),
+                    ],
+                  ),
+                  Center(
+                    child: Wrap(
+                      spacing: 15,
+                      children: [
+                        buildFilterChip("All Products", isSelectedAllProduct,
+                            (isSelected) {
+                          setState(() => isSelectedAllProduct = isSelected);
+                        }),
+                        buildFilterChip("Favorite", isSelectedFavorite,
+                            (isSelected) {
+                          setState(() => isSelectedFavorite = isSelected);
+                        }),
+                      ],
+                    ),
+                  ),
+                  15.heightBox,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text("Type of product")
+                            .text
+                            .fontFamily(regular)
+                            .size(14)
+                            .make(),
+                      ),
+                    ],
+                  ),
+                  Center(
+                    child: Wrap(
+                      spacing: 5,
+                      children: [
+                        buildFilterChipSmall("Dress", isSelectedDress,
+                            (isSelected) {
+                          setState(() {
+                            isSelectedDress = isSelected;
+                            updateFilterTypes();
+                          });
+                        }),
+                        buildFilterChipSmall("T-Shirts", isSelectedTShirts,
+                            (isSelected) {
+                          setState(() {
+                            isSelectedTShirts = isSelected;
+                            updateFilterTypes();
+                          });
+                        }),
+                        buildFilterChipSmall("Suits", isSelectedSuits,
+                            (isSelected) {
+                          setState(() {
+                            isSelectedSuits = isSelected;
+                            updateFilterTypes();
+                          });
+                        }),
+                        buildFilterChipSmall("Jackets", isSelectedJackets,
+                            (isSelected) {
+                          setState(() {
+                            isSelectedJackets = isSelected;
+                            updateFilterTypes();
+                          });
+                        }),
+                        buildFilterChipSmall("Pants", isSelectedPants,
+                            (isSelected) {
+                          setState(() {
+                            isSelectedPants = isSelected;
+                            updateFilterTypes();
+                          });
+                        }),
+                        buildFilterChipSmall("Skirts", isSelectedSkirts,
+                            (isSelected) {
+                          setState(() {
+                            isSelectedSkirts = isSelected;
+                            updateFilterTypes();
+                          });
+                        }),
+                      ],
                     ),
                   ),
                   15.heightBox,
@@ -343,6 +445,7 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
                           types: selectedTypes,
                           collections: selectedCollections,
                           situations: selectedSituations,
+                          isFavorite: isSelectedFavorite,
                         );
 
                         final selectedVendor = controller.vendors.firstWhere(
@@ -357,6 +460,7 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
                         print('Colors: $selectedColorIndexes');
                         print('Types: $selectedTypes');
                         print('Collections: $selectedCollections');
+                        print('Favorite: $isSelectedFavorite');
                         print('Situations: $selectedSituations');
                         controller.fetchFilteredTopProducts();
                         controller.fetchFilteredLowerProducts();
@@ -412,4 +516,35 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
       ),
     );
   }
+}
+
+Widget buildFilterChipSmall(
+    String label, bool isSelected, Function(bool) onSelected) {
+  final BorderSide borderSide = BorderSide(
+    color: isSelected ? primaryApp : greyLine,
+    width: 1.0,
+  );
+
+  return SizedBox(
+    width: 85,
+    child: TextButton(
+      onPressed: () => onSelected(!isSelected),
+      style: TextButton.styleFrom(
+        backgroundColor: isSelected ? thinPrimaryApp : whiteColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+          side: borderSide,
+        ),
+        // padding: EdgeInsets.symmetric(horizontal: 6, vertical: 5),
+        splashFactory: NoSplash.splashFactory,
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontFamily: isSelected ? medium : regular,
+          color: greyColor,
+        ),
+      ),
+    ),
+  );
 }

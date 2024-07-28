@@ -44,6 +44,83 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
     super.initState();
     controller = Get.put(ProductController());
     fetchDocumentData();
+    fetchUserDetails();
+  }
+
+  void fetchUserDetails() async {
+    await fetchUserSkinTone();
+    await fetchUserBirthday();
+  }
+
+  var dayOfWeek = ''.obs;
+  var userSkinTone = 0.obs;
+
+  Future<void> fetchUserBirthday() async {
+    try {
+      User? currentUser = FirebaseAuth.instance.currentUser;
+
+      if (currentUser != null) {
+        String userId = currentUser.uid;
+        DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userId)
+            .get();
+
+        if (userSnapshot.exists) {
+          Map<String, dynamic>? userData =
+              userSnapshot.data() as Map<String, dynamic>?;
+
+          if (userData != null && userData.containsKey('birthday')) {
+            String birthdayString = userData['birthday'];
+
+            // แยกวันที่ออกจากวันในสัปดาห์
+            List<String> parts = birthdayString.split(', ');
+            if (parts.length == 2) {
+              String dateString = parts[1];
+
+              // แปลงวันที่เป็น DateTime
+              DateTime birthday = DateFormat('dd/MM/yyyy').parse(dateString);
+
+              String formattedDate =
+                  DateFormat('dd MMMM yyyy').format(birthday);
+              String day = DateFormat('EEEE').format(birthday);
+
+              dayOfWeek.value = day; // เก็บค่า dayOfWeek ใน state
+
+              print('User was born on: $formattedDate');
+              print('Day of the week: $dayOfWeek');
+            } else {
+              print('Invalid birthday format for user $userId');
+            }
+          } else {
+            print('Birthday field is missing for user $userId');
+          }
+        } else {
+          print('User not found');
+        }
+      } else {
+        print('No current user signed in');
+      }
+    } catch (e) {
+      print('Error fetching user birthday: $e');
+    }
+  }
+
+  Future<int?> fetchUserSkinTone() async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser.uid)
+          .get();
+      if (userDoc.exists) {
+        var skinTone = userDoc.data()?['skinTone'];
+        print('Fetched skinTone from Firestore: $skinTone'); // เพิ่มการพิมพ์ค่า
+        userSkinTone.value = skinTone ?? 0;
+        return userSkinTone.value;
+      }
+    }
+    return null;
   }
 
   final Map<String, String> situationMap = {
@@ -153,8 +230,557 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
     }
   }
 
+  Widget buildMatchReasonSection(
+    Map<String, dynamic> matchResult,
+    int? skinTone,
+  ) {
+    final int? topPrimaryColor = matchResult['topClosestColor'];
+    final int? lowerPrimaryColor = matchResult['lowerClosestColor'];
+
+    if (topPrimaryColor == null || lowerPrimaryColor == null) {
+      return Text('Unknown colors selected', style: TextStyle(fontSize: 14));
+    }
+
+    final String topColorName =
+        topPrimaryColor != null ? getColorName(topPrimaryColor) : 'Unknown';
+    final String lowerColorName =
+        lowerPrimaryColor != null ? getColorName(lowerPrimaryColor) : 'Unknown';
+
+    final topMatchesSkinTone = topPrimaryColor != null && skinTone != null
+        ? isColorMatchingSkinTone(topPrimaryColor, skinTone)
+        : false;
+    final lowerMatchesSkinTone = lowerPrimaryColor != null && skinTone != null
+        ? isColorMatchingSkinTone(lowerPrimaryColor, skinTone)
+        : false;
+    final isColorsMatch = topPrimaryColor != null && lowerPrimaryColor != null
+        ? colorMatchMap[topPrimaryColor]?.contains(lowerPrimaryColor) == true
+        : false;
+
+    Map<int, String> recommendedColors = getRecommendedColors(dayOfWeek.value);
+    Map<int, String> nonMatchingColors = getNonMatchingColors(dayOfWeek.value);
+
+    final topIsRecommended = recommendedColors.containsKey(topPrimaryColor);
+    final lowerIsRecommended = recommendedColors.containsKey(lowerPrimaryColor);
+    final topIsNonMatching = nonMatchingColors.containsKey(topPrimaryColor);
+    final lowerIsNonMatching = nonMatchingColors.containsKey(lowerPrimaryColor);
+
+    List<Map<String, dynamic>> matchReasons = [
+      {
+        'text': 'Your Skin Tone',
+        'match': topMatchesSkinTone && lowerMatchesSkinTone,
+      },
+      {
+        'text': 'Enhance your birthday',
+        'match': !topIsNonMatching && !lowerIsNonMatching,
+      },
+      {
+        'text': 'The color of the top and bottoms match',
+        'match': isColorsMatch,
+      }
+    ];
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: matchReasons.map((reason) {
+        return Row(
+          children: [
+            Icon(
+              reason['match'] ? Icons.check : Icons.close,
+              color: reason['match'] ? Colors.green : Colors.red,
+            ),
+            SizedBox(width: 8),
+            Text(reason['text']).text.fontFamily(semiBold).size(12).make(),
+          ],
+        );
+      }).toList(),
+    );
+  }
+
+  void showMatchReasonModalMatchPost(
+      BuildContext context, Map<String, dynamic> matchResult, int? skinTone) {
+    final int? topPrimaryColor = matchResult['topClosestColor'];
+    final int? lowerPrimaryColor = matchResult['lowerClosestColor'];
+
+    final String topColorName =
+        topPrimaryColor != null ? getColorName(topPrimaryColor) : 'Unknown';
+    final String lowerColorName =
+        lowerPrimaryColor != null ? getColorName(lowerPrimaryColor) : 'Unknown';
+
+    print('Top Colors: $topPrimaryColor');
+    print('Lower Colors: $lowerPrimaryColor');
+
+    int nonMatchingConditions = 0;
+    List<Widget> reasonWidgets = [];
+    List<Widget> colorReasonsWidgets = [];
+    bool dayOfWeekTextAdded = false;
+    final String additionalReason =
+        (topPrimaryColor != null && lowerPrimaryColor != null)
+            ? getAdditionalReason(topPrimaryColor, lowerPrimaryColor)
+            : '';
+
+    Map<int, String> recommendedColors = getRecommendedColors(dayOfWeek.value);
+    Map<int, String> nonMatchingColors = getNonMatchingColors(dayOfWeek.value);
+
+    if (topPrimaryColor == null || lowerPrimaryColor == null) {
+      reasonWidgets
+          .add(Text('Unknown colors selected', style: TextStyle(fontSize: 14)));
+      nonMatchingConditions++;
+    } else {
+      if (colorMatchMap[topPrimaryColor]?.contains(lowerPrimaryColor) != true) {
+        nonMatchingConditions++;
+      }
+
+      final topMatchesSkinTone =
+          isColorMatchingSkinTone(topPrimaryColor, skinTone);
+      final lowerMatchesSkinTone =
+          isColorMatchingSkinTone(lowerPrimaryColor, skinTone);
+
+      reasonWidgets.add(
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(
+              topMatchesSkinTone ? Icons.check : Icons.close,
+              size: 20,
+              color: topMatchesSkinTone ? greenColor : redColor,
+            ),
+            SizedBox(width: 5),
+            Expanded(
+              child: Text(
+                '${topColorName} ${topMatchesSkinTone ? "suits" : "does not suit"} your skin tone.',
+                style: TextStyle(fontSize: 14),
+              ),
+            ),
+          ],
+        ),
+      );
+
+      if (!topMatchesSkinTone) {
+        nonMatchingConditions++;
+      }
+
+      reasonWidgets.add(
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(
+              lowerMatchesSkinTone ? Icons.check : Icons.close,
+              size: 20,
+              color: lowerMatchesSkinTone ? greenColor : redColor,
+            ),
+            SizedBox(width: 5),
+            Expanded(
+              child: Text(
+                '${lowerColorName} ${lowerMatchesSkinTone ? "suits" : "does not suit"} your skin tone.',
+                style: TextStyle(fontSize: 14),
+              ),
+            ),
+          ],
+        ),
+      );
+
+      if (!lowerMatchesSkinTone) {
+        nonMatchingConditions++;
+      }
+
+      if (recommendedColors.containsKey(topPrimaryColor)) {
+        if (!dayOfWeekTextAdded) {
+          colorReasonsWidgets.add(
+            Row(
+              children: [
+                Text(
+                  'You were born on :',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontFamily: medium,
+                  ),
+                ),
+                Text(
+                  ' ${dayOfWeek.value}',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontFamily: regular,
+                  ),
+                ),
+              ],
+            ),
+          );
+          dayOfWeekTextAdded = true;
+        }
+        colorReasonsWidgets.add(
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(
+                Icons.check,
+                size: 20,
+                color: greenColor,
+              ),
+              SizedBox(width: 5),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'The top color is: ',
+                    style: TextStyle(fontSize: 14, fontFamily: regular),
+                  ),
+                  SizedBox(
+                    width: 200,
+                    child: Text(
+                      recommendedColors[topPrimaryColor]!,
+                      style: TextStyle(fontSize: 14, fontFamily: regular),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        );
+      }
+
+      if (recommendedColors.containsKey(lowerPrimaryColor)) {
+        if (!dayOfWeekTextAdded) {
+          colorReasonsWidgets.add(
+            Text(
+              'You were born on : ${dayOfWeek.value}',
+              style: TextStyle(fontSize: 14, fontFamily: bold),
+            ),
+          );
+          dayOfWeekTextAdded = true;
+        }
+        colorReasonsWidgets.add(
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(
+                Icons.check,
+                size: 20,
+                color: greenColor,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'The lower color is: ',
+                    style: TextStyle(fontSize: 14, fontFamily: regular),
+                  ),
+                  SizedBox(width: 5),
+                  SizedBox(
+                    width: 200,
+                    child: Text(
+                      recommendedColors[lowerPrimaryColor]!,
+                      style: TextStyle(fontSize: 14, fontFamily: regular),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        );
+      }
+
+      if (nonMatchingColors.containsKey(topPrimaryColor) ||
+          nonMatchingColors.containsKey(lowerPrimaryColor)) {
+        if (!dayOfWeekTextAdded) {
+          colorReasonsWidgets.add(
+            Row(
+              children: [
+                Text(
+                  'You were born on :',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontFamily: bold,
+                  ),
+                ),
+                Text(
+                  ' ${dayOfWeek.value}',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontFamily: regular,
+                  ),
+                ),
+              ],
+            ),
+          );
+          dayOfWeekTextAdded = true;
+        }
+      }
+
+      if (nonMatchingColors.containsKey(topPrimaryColor)) {
+        colorReasonsWidgets.add(
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(
+                Icons.close,
+                size: 20,
+                color: redColor,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'The top color is: ',
+                    style: TextStyle(fontSize: 14, fontFamily: regular),
+                  ),
+                  SizedBox(width: 5),
+                  SizedBox(
+                    width: 200,
+                    child: Text(
+                      nonMatchingColors[topPrimaryColor]!,
+                      style: TextStyle(fontSize: 14, fontFamily: regular),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        );
+        nonMatchingConditions++;
+      }
+
+      if (nonMatchingColors.containsKey(lowerPrimaryColor)) {
+        colorReasonsWidgets.add(
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(
+                Icons.close,
+                size: 20,
+                color: redColor,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'The lower color is: ',
+                    style: TextStyle(fontSize: 14, fontFamily: regular),
+                  ),
+                  SizedBox(width: 5),
+                  SizedBox(
+                    width: 200,
+                    child: Text(
+                      nonMatchingColors[lowerPrimaryColor]!,
+                      style: TextStyle(fontSize: 14, fontFamily: regular),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        );
+        nonMatchingConditions++;
+      }
+    }
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: whiteColor,
+          contentPadding: EdgeInsets.all(16.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Text(
+                    nonMatchingConditions == 0
+                        ? 'Perfect Match!'
+                        : '$nonMatchingConditions Conditions Not Matching',
+                    style: TextStyle(
+                      color: nonMatchingConditions == 0 ? greenColor : redColor,
+                      fontSize: 24,
+                      fontFamily: bold,
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: greyLine,
+                ),
+                buildReasonSection(
+                  '',
+                  Icons.person,
+                  [
+                    Row(
+                      children: [
+                        Text(
+                          'Your skin tone :',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontFamily: medium,
+                          ),
+                        ),
+                        Text(
+                          ' ${getSkinToneDescription(skinTone!)}',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: regular,
+                          ),
+                        ),
+                      ],
+                    ),
+                    ...reasonWidgets,
+                  ],
+                ),
+                if (colorReasonsWidgets.isNotEmpty)
+                  buildReasonSection(
+                    '',
+                    Icons.calendar_today,
+                    colorReasonsWidgets,
+                  ),
+                SizedBox(height: 15),
+                buildReasonSection(
+                  'The color of the top and bottoms match',
+                  Icons.color_lens,
+                  [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          colorMatchMap[topPrimaryColor]
+                                      ?.contains(lowerPrimaryColor) ==
+                                  true
+                              ? Icons.check
+                              : Icons.close,
+                          size: 20,
+                          color: colorMatchMap[topPrimaryColor]
+                                      ?.contains(lowerPrimaryColor) ==
+                                  true
+                              ? greenColor
+                              : redColor,
+                        ),
+                        SizedBox(width: 5),
+                        Expanded(
+                          child: Text(
+                            '${topColorName} ${colorMatchMap[topPrimaryColor]?.contains(lowerPrimaryColor) == true ? "matches" : "does not match"} with ${lowerColorName}.',
+                            style: TextStyle(fontSize: 14),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                if (additionalReason.isNotEmpty) ...[
+                  SizedBox(height: 15),
+                  Row(
+                    children: [
+                      Icon(Icons.info, size: 20, color: primaryApp),
+                      SizedBox(width: 5),
+                      Expanded(
+                        child: Text(
+                          additionalReason,
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<List<int>> getColorFromProduct(String productName) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('products')
+        .where('name', isEqualTo: productName)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      var productDoc = querySnapshot.docs.first.data() as Map<String, dynamic>;
+      List<int> colors = List<int>.from(productDoc['colors'] ?? []);
+
+      // พิมพ์สีที่ได้จากฐานข้อมูล
+      print('Colors for $productName: $colors');
+
+      return colors;
+    }
+
+    return [];
+  }
+
+  Widget buildReasonSection(
+      String title, IconData icon, List<Widget> children) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            /* Icon(icon, size: 24, color: primaryApp), */
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 14,
+                fontFamily: medium,
+              ),
+            ),
+          ],
+        ),
+        ...children,
+      ],
+    );
+  }
+
+  Widget buildSkinToneRow(int? skinTone, List<Widget> reasonWidgets,
+      List<Widget> colorReasonsWidgets) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(
+              'Your Skin Tone : ',
+              style: const TextStyle(
+                fontSize: 16,
+                fontFamily: medium,
+              ),
+            ),
+            Text(
+              skinTone == null
+                  ? 'Error'
+                  : '${getSkinToneDescription(skinTone)}',
+              style: const TextStyle(
+                fontSize: 14,
+                fontFamily: regular,
+              ),
+            ),
+          ],
+        ),
+        ...reasonWidgets,
+        if (colorReasonsWidgets.isNotEmpty) ...[
+          ...colorReasonsWidgets.map((widget) => Padding(
+                padding: const EdgeInsets.only(bottom: 5),
+                child: widget,
+              )),
+        ],
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    Future<Map<String, dynamic>> getMatchResult() async {
+      List<int> topColors = await getColorFromProduct(nameTop);
+      List<int> lowerColors = await getColorFromProduct(nameLower);
+
+      // พิมพ์สีที่ได้
+      print('Top Colors: $topColors');
+      print('Lower Colors: $lowerColors');
+
+      return {
+        'topClosestColor': topColors.isNotEmpty ? topColors[0] : null,
+        'lowerClosestColor': lowerColors.isNotEmpty ? lowerColors[0] : null,
+      };
+    }
+
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
@@ -434,6 +1060,46 @@ class _MatchStoreDetailScreenState extends State<MatchStoreDetailScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: const Text(
+                                  'Your match with this outfit',
+                                ).text.fontFamily(medium).size(14).make(),
+                              ),
+                              Container(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                decoration: BoxDecoration(
+                                  color: greyMessage,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    final matchResult = await getMatchResult();
+                                    final skinTone = userSkinTone.value;
+                                    showMatchReasonModalMatchPost(
+                                        context, matchResult, skinTone);
+                                  },
+                                  child: FutureBuilder<Map<String, dynamic>>(
+                                    future: getMatchResult(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return Center(
+                                            child: CircularProgressIndicator());
+                                      } else if (snapshot.hasError) {
+                                        return Text('Error: ${snapshot.error}');
+                                      } else {
+                                        final matchResult = snapshot.data ?? {};
+                                        final skinTone = userSkinTone.value;
+                                        return buildMatchReasonSection(
+                                            matchResult, skinTone);
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
+                              15.heightBox,
                               Row(
                                 children: [
                                   Text(

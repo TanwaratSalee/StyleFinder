@@ -318,16 +318,13 @@ class _MatchScreenState extends State<MatchScreen> {
           final matchResult =
               checkMatch(topColors, lowerColors, skinTone: skinTone);
 
-          return Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Row(
+          return Column(
+            children: [
+              Container(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    const Text(
-                      'Feedback:',
-                    )
+                    const Text('Feedback:')
                         .text
                         .fontFamily(regular)
                         .color(blackColor)
@@ -359,86 +356,148 @@ class _MatchScreenState extends State<MatchScreen> {
                         vertical: 12, horizontal: 32))
                     .margin(const EdgeInsets.only(bottom: 12))
                     .make(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        debugPrints(topProduct, lowerProduct);
-                        Get.to(() => MatchPostProduct(
-                              topProduct: topProduct,
-                              lowerProduct: lowerProduct,
-                            ));
-                      },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Image.asset(icPost, width: 22, height: 22),
-                          const SizedBox(width: 8),
-                          Text('Post')
-                              .text
-                              .fontFamily(semiBold)
-                              .color(const Color.fromARGB(255, 28, 73, 45))
-                              .size(14)
-                              .make(),
-                        ],
-                      )
-                          .box
-                          .color(const Color.fromRGBO(177, 234, 199, 1))
-                          .padding(const EdgeInsets.symmetric(
-                              vertical: 12, horizontal: 58))
-                          .border(color: const Color.fromRGBO(35, 101, 60, 1))
-                          .rounded
-                          .make(),
-                    ),
-                    InkWell(
-                      onTap: () async {
-                        if (topProduct != null && lowerProduct != null) {
-                          print(
-                              'Top Product: ${getColorName(topProduct['colors'][0])}, Lower Product: ${getColorName(lowerProduct['colors'][0])}');
-                          controller.addToWishlistUserMatch(
-                            topProduct['name'],
-                            lowerProduct['name'],
-                            context,
-                          );
-                        } else {
-                          VxToast.show(
-                            context,
-                            msg:
-                                'Unable to add to favorites, Because the information is not available',
-                          );
-                        }
-                      },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Image.asset(icLikematch, width: 22, height: 22),
-                          const SizedBox(width: 8),
-                          Text('Add to favorite')
-                              .text
-                              .fontFamily(semiBold)
-                              .color(const Color.fromRGBO(87, 12, 12, 1))
-                              .size(14)
-                              .make(),
-                        ],
-                      )
-                          .box
-                          .color(const Color.fromRGBO(255, 203, 203, 1))
-                          .padding(const EdgeInsets.symmetric(
-                              vertical: 12, horizontal: 18))
-                          .border(color: const Color.fromRGBO(160, 84, 84, 1))
-                          .rounded
-                          .make(),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+              ),
+              buildMatchReasonSection(matchResult, skinTone),
+              15.heightBox,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      debugPrints(topProduct, lowerProduct);
+                      Get.to(() => MatchPostProduct(
+                            topProduct: topProduct,
+                            lowerProduct: lowerProduct,
+                          ));
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Image.asset(icPost, width: 22, height: 22),
+                        const SizedBox(width: 8),
+                        Text('Post')
+                            .text
+                            .fontFamily(semiBold)
+                            .color(const Color.fromARGB(255, 28, 73, 45))
+                            .size(14)
+                            .make(),
+                      ],
+                    )
+                        .box
+                        .color(const Color.fromRGBO(177, 234, 199, 1))
+                        .padding(const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 58))
+                        .border(color: const Color.fromRGBO(35, 101, 60, 1))
+                        .rounded
+                        .make(),
+                  ),
+                  InkWell(
+                    onTap: () async {
+                      if (topProduct != null && lowerProduct != null) {
+                        print(
+                            'Top Product: ${getColorName(topProduct['colors'][0])}, Lower Product: ${getColorName(lowerProduct['colors'][0])}');
+                        controller.addToWishlistUserMatch(
+                          topProduct['name'],
+                          lowerProduct['name'],
+                          context,
+                        );
+                      } else {
+                        VxToast.show(
+                          context,
+                          msg:
+                              'Unable to add to favorites, Because the information is not available',
+                        );
+                      }
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Image.asset(icLikematch, width: 22, height: 22),
+                        const SizedBox(width: 8),
+                        Text('Add to favorite')
+                            .text
+                            .fontFamily(semiBold)
+                            .color(const Color.fromRGBO(87, 12, 12, 1))
+                            .size(14)
+                            .make(),
+                      ],
+                    )
+                        .box
+                        .color(const Color.fromRGBO(255, 203, 203, 1))
+                        .padding(const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 18))
+                        .border(color: const Color.fromRGBO(160, 84, 84, 1))
+                        .rounded
+                        .make(),
+                  ),
+                ],
+              ),
+            ],
           );
         },
       );
     });
   }
+}
+
+Widget buildMatchReasonSection(
+    Map<String, dynamic> matchResult, int? skinTone) {
+  final int? topPrimaryColor = matchResult['topClosestColor'];
+  final int? lowerPrimaryColor = matchResult['lowerClosestColor'];
+
+  final String topColorName =
+      topPrimaryColor != null ? getColorName(topPrimaryColor) : 'Unknown';
+  final String lowerColorName =
+      lowerPrimaryColor != null ? getColorName(lowerPrimaryColor) : 'Unknown';
+
+  final topMatchesSkinTone = topPrimaryColor != null && skinTone != null
+      ? isColorMatchingSkinTone(topPrimaryColor, skinTone)
+      : false;
+  final lowerMatchesSkinTone = lowerPrimaryColor != null && skinTone != null
+      ? isColorMatchingSkinTone(lowerPrimaryColor, skinTone)
+      : false;
+  final isColorsMatch = topPrimaryColor != null && lowerPrimaryColor != null
+      ? colorMatchMap[topPrimaryColor]?.contains(lowerPrimaryColor) == true
+      : false;
+
+  Map<int, String> recommendedColors = getRecommendedColors(dayOfWeek.value);
+  Map<int, String> nonMatchingColors = getNonMatchingColors(dayOfWeek.value);
+
+  final topIsRecommended = recommendedColors.containsKey(topPrimaryColor);
+  final lowerIsRecommended = recommendedColors.containsKey(lowerPrimaryColor);
+  final topIsNonMatching = nonMatchingColors.containsKey(topPrimaryColor);
+  final lowerIsNonMatching = nonMatchingColors.containsKey(lowerPrimaryColor);
+
+  List<Map<String, dynamic>> matchReasons = [
+    {
+      'text': 'Your Skin Tone',
+      'match': topMatchesSkinTone && lowerMatchesSkinTone,
+    },
+    {
+      'text': 'Enhance your birthday',
+      'match': !topIsNonMatching && !lowerIsNonMatching,
+    },
+    {
+      'text': 'The color of the top and bottoms match',
+      'match': isColorsMatch,
+    }
+  ];
+
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.start,
+    children: matchReasons.map((reason) {
+      return Row(
+        children: [
+          Icon(
+            reason['match'] ? Icons.check : Icons.close,
+            color: reason['match'] ? Colors.green : Colors.red,
+          ),
+          SizedBox(width: 8),
+          Text(reason['text']).text.fontFamily(semiBold).size(12).make(),
+        ],
+      );
+    }).toList(),
+  );
 }
 
 void showMatchReasonModal(
@@ -751,7 +810,9 @@ void showMatchReasonModal(
                   ),
                 ),
               ),
-                Divider(color: greyLine,),
+              Divider(
+                color: greyLine,
+              ),
               // --- เหตุผลเกี่ยวกับโทนสีผิว ---
               buildReasonSection(
                 '',
@@ -843,7 +904,6 @@ void showMatchReasonModal(
   );
 }
 
-// สร้าง Widget สำหรับส่วนของเหตุผล
 Widget buildReasonSection(String title, IconData icon, List<Widget> children) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,

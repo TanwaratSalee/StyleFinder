@@ -83,6 +83,7 @@ class ProductController extends GetxController {
     List<String>? collections,
     List<String>? situations,
     String? vendorId,
+    bool? isFavorite,
   }) {
     selectedGender.value = gender ?? '';
     maxPrice.value = price?.toStringAsFixed(0) ?? '0';
@@ -93,12 +94,17 @@ class ProductController extends GetxController {
     if (vendorId != null) {
       selectedVendorId.value = vendorId;
     }
+
+    if (isFavorite != null) {
+      isSelectedFavorite.value = isFavorite;
+    }
   }
 
   var topFilteredProducts = <Map<String, dynamic>>[].obs;
   var lowerFilteredProducts = <Map<String, dynamic>>[].obs;
   var isFetchingTopProducts = false.obs;
   var isFetchingLowerProducts = false.obs;
+  var isSelectedFavorite = false.obs;
 
   void fetchInitialTopProducts() async {
     try {
@@ -116,6 +122,7 @@ class ProductController extends GetxController {
   }
 
   void fetchFilteredTopProducts() async {
+    String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
     isFetchingTopProducts.value = true;
     try {
       QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
@@ -130,6 +137,14 @@ class ProductController extends GetxController {
       if (selectedGender.value.isNotEmpty) {
         products = products
             .where((product) => product['gender'] == selectedGender.value)
+            .toList();
+      }
+
+      if (isSelectedFavorite.value) {
+        products = products
+            .where((product) =>
+                product['favorite_uid'] != null &&
+                (product['favorite_uid'] as List).contains(currentUserUID))
             .toList();
       }
 
@@ -206,6 +221,7 @@ class ProductController extends GetxController {
   }
 
   void fetchFilteredLowerProducts() async {
+    String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
     isFetchingLowerProducts.value = true;
     try {
       QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
@@ -220,6 +236,14 @@ class ProductController extends GetxController {
       if (selectedGender.value.isNotEmpty) {
         products = products
             .where((product) => product['gender'] == selectedGender.value)
+            .toList();
+      }
+
+      if (isSelectedFavorite.value) {
+        products = products
+            .where((product) =>
+                product['favorite_uid'] != null &&
+                (product['favorite_uid'] as List).contains(currentUserUID))
             .toList();
       }
 
@@ -532,7 +556,455 @@ class ProductController extends GetxController {
     });
   }
 
-  void addPostByUserMatch(
+  Future<bool> containsProfanity(String text) async {
+    // Assuming you have a function or service to check for profanity
+    // Replace this with actual implementation
+    List<String> profanityList = [
+      "abbo",
+      "abo",
+      "abortion",
+      "abuse",
+      "addict",
+      "addicts",
+      "adult",
+      "africa",
+      "african",
+      "alla",
+      "allah",
+      "alligatorbait",
+      "amateur",
+      "american",
+      "anal",
+      "analannie",
+      "analsex",
+      "angie",
+      "angry",
+      "anus",
+      "arab",
+      "arabs",
+      "areola",
+      "argie",
+      "aroused",
+      "arse",
+      "arsehole",
+      "asian",
+      "ass",
+      "assassin",
+      "assassinate",
+      "assassination",
+      "assault",
+      "assbagger",
+      "assblaster",
+      "assclown",
+      "asscowboy",
+      "asses",
+      "assfuck",
+      "assfucker",
+      "asshat",
+      "asshole",
+      "assholes",
+      "asshore",
+      "assjockey",
+      "asskiss",
+      "asskisser",
+      "assklown",
+      "asslick",
+      "asslicker",
+      "asslover",
+      "assman",
+      "assmonkey",
+      "assmunch",
+      "assmuncher",
+      "asspacker",
+      "asspirate",
+      "asspuppies",
+      "assranger",
+      "asswhore",
+      "asswipe",
+      "athletesfoot",
+      "attack",
+      "australian",
+      "babe",
+      "babies",
+      "backdoor",
+      "backdoorman",
+      "backseat",
+      "badfuck",
+      "balllicker",
+      "balls",
+      "ballsack",
+      "banging",
+      "baptist",
+      "barelylegal",
+      "barf",
+      "barface",
+      "barfface",
+      "bast",
+      "bastard",
+      "bazongas",
+      "bazooms",
+      "beaner",
+      "beast",
+      "beastality",
+      "beastial",
+      "beastiality",
+      "beatoff",
+      "beat-off",
+      "beatyourmeat",
+      "beaver",
+      "bestial",
+      "bestiality",
+      "bi",
+      "biatch",
+      "bible",
+      "bicurious",
+      "bigass",
+      "bigbastard",
+      "bigbutt",
+      "bigger",
+      "bisexual",
+      "bi-sexual",
+      "bitch",
+      "bitcher",
+      "bitches",
+      "bitchez",
+      "bitchin",
+      "bitching",
+      "bitchslap",
+      "bitchy",
+      "biteme",
+      "black",
+      "blackman",
+      "blackout",
+      "blacks",
+      "blind",
+      "blow",
+      "blowjob",
+      "boang",
+      "bogan",
+      "bohunk",
+      "bollick",
+      "bollock",
+      "bomb",
+      "bombers",
+      "bombing",
+      "bombs",
+      "bomd",
+      "bondage",
+      "boner",
+      "bong",
+      "boob",
+      "boobies",
+      "boobs",
+      "booby",
+      "boody",
+      "boom",
+      "boong",
+      "boonga",
+      "boonie",
+      "booty",
+      "bootycall",
+      "bountybar",
+      "bra",
+      "brea5t",
+      "breast",
+      "breastjob",
+      "breastlover",
+      "breastman",
+      "brothel",
+      "bugger",
+      "buggered",
+      "buggery",
+      "bullcrap",
+      "bulldike",
+      "bulldyke",
+      "bullshit",
+      "bumblefuck",
+      "bumfuck",
+      "bunga",
+      "bunghole",
+      "buried",
+      "burn",
+      "butchbabes",
+      "butchdike",
+      "butchdyke",
+      "butt",
+      "buttbang",
+      "butt-bang",
+      "buttface",
+      "buttfuck",
+      "butt-fuck",
+      "buttfucker",
+      "butt-fucker",
+      "buttfuckers",
+      "butt-fuckers",
+      "butthead",
+      "buttman",
+      "buttmunch",
+      "buttmuncher",
+      "buttpirate",
+      "buttplug",
+      "buttstain",
+      "byatch",
+      "cacker",
+      "cameljockey",
+      "cameltoe",
+      "canadian",
+      "cancer",
+      "carpetmuncher",
+      "carruth",
+      "catholic",
+      "catholics",
+      "cemetery",
+      "chav",
+      "cherrypopper",
+      "chickslick",
+      "children's",
+      "chin",
+      "chinaman",
+      "chinamen",
+      "chinese",
+      "chink",
+      "chinky",
+      "choad",
+      "chode",
+      "christ",
+      "christian",
+      "church",
+      "cigarette",
+      "cigs",
+      "clamdigger",
+      "clamdiver",
+      "clit",
+      "clitoris",
+      "clogwog",
+      "cocaine",
+      "cock",
+      "cockblock",
+      "cockblocker",
+      "cockcowboy",
+      "cockfight",
+      "cockhead",
+      "cockknob",
+      "cocklicker",
+      "cocklover",
+      "cocknob",
+      "cockqueen",
+      "cockrider",
+      "cocksman",
+      "cocksmith",
+      "cocksmoker",
+      "cocksucer",
+      "cocksuck",
+      "cocksucked",
+      "cocksucker",
+      "cocksucking",
+      "cocktail",
+      "cocktease",
+      "cocky",
+      "cohee",
+      "coitus",
+      "color",
+      "colored",
+      "coloured",
+      "commie",
+      "communist",
+      "condom",
+      "conservative",
+      "conspiracy",
+      "coolie",
+      "cooly",
+      "coon",
+      "coondog",
+      "copulate",
+      "cornhole",
+      "corruption",
+      "cra5h",
+      "crabs",
+      "crack",
+      "crackpipe",
+      "crackwhore",
+      "crack-whore",
+      "crap",
+      "crapola",
+      "crapper",
+      "crappy",
+      "crash",
+      "creamy",
+      "crime",
+      "crimes",
+      "criminal",
+      "criminals",
+      "crotch",
+      "crotchjockey",
+      "crotchmonkey",
+      "crotchrot",
+      "cum",
+      "cumbubble",
+      "cumfest",
+      "cumjockey",
+      "cumm",
+      "cummer",
+      "cumming",
+      "cumquat",
+      "cumqueen",
+      "cumshot",
+      "cunilingus",
+      "cunillingus",
+      "cunn",
+      "cunnilingus",
+      "cunntt",
+      "cunt",
+      "cunteyed",
+      "cuntfuck",
+      "cuntfucker",
+      "cuntlick",
+      "cuntlicker",
+      "cuntlicking",
+      "cuntsucker",
+      "cybersex",
+      "cyberslimer",
+      "dago",
+      "dahmer",
+      "dammit",
+      "damn",
+      "damnation",
+      "damnit",
+      "darkie",
+      "darky",
+      "datnigga",
+      "dead",
+      "deapthroat",
+      "death",
+      "deepthroat",
+      "defecate",
+      "dego",
+      "demon",
+      "deposit",
+      "desire",
+      "destroy",
+      "deth",
+      "devil",
+      "devilworshipper",
+      "dick",
+      "dickbrain",
+      "dickforbrains",
+      "dickhead",
+      "dickless",
+      "dicklick",
+      "dicklicker",
+      "dickman",
+      "dickwad",
+      "dickweed",
+      "diddle",
+      "die",
+      "died",
+      "dies",
+      "dike",
+      "dildo",
+      "dingleberry",
+      "dink",
+      "dipshit",
+      "dipstick",
+      "dirty",
+      "disease",
+      "diseases",
+      "disturbed",
+      "dive",
+      "dix",
+      "dixiedike",
+      "dixiedyke",
+      "doggiestyle",
+      "doggystyle",
+      "dong",
+      "doodoo",
+      "doo-doo",
+      "doom",
+      "dope",
+      "dragqueen",
+      "dragqween",
+      "dripdick",
+      "drug",
+      "drunk",
+      "drunken",
+      "dumb",
+      "dumbass",
+      "dumbbitch",
+      "dumbfuck",
+      "dyefly",
+      "dyke",
+      "easyslut",
+      "กระแดะ",
+      "กระหรี่",
+      "กระเทย",
+      "กระจอก",
+      "กาก",
+      "กู",
+      "ขี้เกียจ",
+      "ขี้โกง",
+      "ขี้เหร่",
+      "ควย",
+      "โคตร",
+      "จัญไร",
+      "จังไร",
+      "เจ๊ก",
+      "เจี้ย",
+      "ชิบหาย",
+      "ดอกทอง",
+      "ตอแหล",
+      "เตี้ย",
+      "นรก",
+      "บ้า",
+      "บ้าบอ",
+      "ปัญญาอ่อน",
+      "ปากหมา",
+      "เปรต",
+      "ผี",
+      "พ่อมึง",
+      "พ่อง",
+      "ฟาย",
+      "ฟาย",
+      "มึง",
+      "มารดา",
+      "มหา",
+      "ยาจก",
+      "ยำ",
+      "รถคัน",
+      "ร่าน",
+      "ลาว",
+      "เลว",
+      "สวะ",
+      "ส้นตีน",
+      "หนีหนี้",
+      "หมา",
+      "หมอย",
+      "ห่า",
+      "ห่วย",
+      "หี",
+      "เหี้ย",
+      "เอดส์",
+      "เอี้ย",
+      "ไอ้บ้า",
+      "ไอ้ควาย",
+      "ไอ้โง่",
+      "ไอ้ฟาย",
+      "ไอ้สัตว์",
+      "ไอ้สัส",
+      "ไอ้ห่า",
+      "ไอ้เหี้ย",
+      "ไอ้แหม่ง",
+      "ไอ้โง่",
+    ];
+
+    for (String word in profanityList) {
+      if (text.contains(word)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  Future<void> addPostByUserMatch(
       String productNameTop,
       String productNameLower,
       BuildContext context,
@@ -541,10 +1013,17 @@ class ProductController extends GetxController {
       List<String> selectedSituations,
       String explanation,
       String productIdTop,
-      String productIdLower) {
+      String productIdLower) async {
     List<String> productNames = [productNameTop, productNameLower];
     String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
 
+    // Validate for profanity
+    bool hasProfanity = await containsProfanity(explanation);
+    if (hasProfanity) {
+      VxToast.show(context,
+          msg: "Description contains inappropriate language.");
+      return;
+    }
     // Retrieve user details
     FirebaseFirestore.instance
         .collection('users')
@@ -807,6 +1286,7 @@ Future<int?> fetchUserSkinTone() async {
         .doc(currentUser.uid)
         .get();
     if (userDoc.exists) {
+      
       return userDoc.data()?['skinTone'];
     }
   }
