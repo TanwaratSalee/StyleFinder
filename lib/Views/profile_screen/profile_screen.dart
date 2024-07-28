@@ -1,5 +1,6 @@
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/match_screen/matchpost_details.dart';
+import 'package:flutter_finalproject/Views/match_screen/matchpost_screen.dart';
 import 'package:flutter_finalproject/Views/profile_screen/menu_setting_screen.dart';
 import 'package:flutter_finalproject/Views/store_screen/matchstore_detail.dart';
 import 'package:get/get.dart';
@@ -646,6 +647,9 @@ class _ProfileScreenState extends State<ProfileScreen>
                 var priceTop = productTopData?['price']?.toString() ?? '0';
                 var priceLower = productLowerData?['price']?.toString() ?? '0';
 
+                totalPrice:
+                (int.parse(priceTop) + int.parse(priceLower)).toString();
+
                 return Container(
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -749,6 +753,27 @@ class _ProfileScreenState extends State<ProfileScreen>
                                   ),
                                 ],
                               ),
+                            ),
+                            10.heightBox,
+                            Padding(
+                              padding: const EdgeInsets.only(right: 200),
+                              child: Text(
+                                "Total ${NumberFormat('#,##0').format(int.parse(priceTop) + int.parse(priceLower))} Bath",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: medium,
+                                  color: blackColor,
+                                ),
+                              ),
+                            ),
+                            buttonPost(
+                              text: "Post",
+                              onTap: () {
+                                Get.to(() => MatchPostProduct(
+                                      topProduct: productTopData!,
+                                      lowerProduct: productLowerData!,
+                                    ));
+                              },
                             ),
                           ],
                         ),
@@ -1148,4 +1173,25 @@ class _ProfileScreenState extends State<ProfileScreen>
       }
     });
   }
+}
+
+Widget buttonPost({required String text, required VoidCallback onTap}) {
+  return GestureDetector(
+    onTap: onTap,
+    child: Container(
+      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+      decoration: BoxDecoration(
+        color: Color(0xFF96F7D2), // สีเขียวมินต์
+        borderRadius: BorderRadius.circular(30), // ขอบมน
+      ),
+      child: Text(
+        text,
+        style: TextStyle(
+          color: Colors.white, // สีข้อความเป็นสีขาว
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ),
+  );
 }
