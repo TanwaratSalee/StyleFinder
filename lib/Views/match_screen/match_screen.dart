@@ -490,7 +490,7 @@ Widget buildMatchReasonSection(
         children: [
           Icon(
             reason['match'] ? Icons.check : Icons.close,
-            color: reason['match'] ? Colors.green : Colors.red,
+            color: reason['match'] ? greenColor : redColor,
           ),
           SizedBox(width: 8),
           Text(reason['text']).text.fontFamily(semiBold).size(12).make(),

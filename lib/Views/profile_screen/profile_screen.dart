@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_finalproject/Views/collection_screen/loading_indicator.dart';
 import 'package:flutter_finalproject/Views/match_screen/matchpost_details.dart';
 import 'package:flutter_finalproject/Views/match_screen/matchpost_screen.dart';
@@ -671,38 +672,72 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 );
                               },
                               child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Image.network(
-                                      topImage,
-                                      height: 60,
-                                      width: 55,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                  Row(
                                     children: [
-                                      Text(
-                                        nameTop,
-                                        style: const TextStyle(
-                                          fontFamily: medium,
-                                          fontSize: 16,
+                                      Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Image.network(
+                                          topImage,
+                                          height: 60,
+                                          width: 55,
+                                          fit: BoxFit.cover,
                                         ),
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                      ).box.width(180).make(),
-                                      Text(
-                                        "${NumberFormat('#,##0').format(double.parse(priceTop).toInt())} Bath",
-                                        style: const TextStyle(
-                                            fontSize: 14,
-                                            fontFamily: regular,
-                                            color: greyDark),
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            nameTop,
+                                            style: const TextStyle(
+                                              fontFamily: medium,
+                                              fontSize: 16,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                          ).box.width(180).make(),
+                                          Text(
+                                            "${NumberFormat('#,##0').format(double.parse(priceTop).toInt())} Bath",
+                                            style: const TextStyle(
+                                                fontSize: 14,
+                                                fontFamily: regular,
+                                                color: greyDark),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
+                                  IconButton(
+                        icon: Image.asset(icTapFavoriteButton, width: 20),
+                        onPressed: () async {
+                          String documentId = data[index].id;
+                          DocumentSnapshot docSnapshot = await FirebaseFirestore
+                              .instance
+                              .collection(userfavmatchCollection)
+                              .doc(documentId)
+                              .get();
+
+                          if (docSnapshot.exists) {
+                            await FirebaseFirestore.instance
+                                .collection(userfavmatchCollection)
+                                .doc(documentId)
+                                .update({
+                              'favorite_uid': FieldValue.arrayRemove(
+                                  [FirebaseAuth.instance.currentUser!.uid])
+                            });
+                            VxToast.show(context,
+                                msg: "Removed favorited match successfully");
+                            print(
+                                "Document updated successfully for ID: $documentId");
+                          } else {
+                            print("Document not found for ID: $documentId");
+                            VxToast.show(context, msg: "Product not found");
+                          }
+                        },
+                      ),
                                 ],
                               ),
                             ),
@@ -754,57 +789,43 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 ],
                               ),
                             ),
-                            10.heightBox,
-                            Padding(
-                              padding: const EdgeInsets.only(right: 200),
-                              child: Text(
-                                "Total ${NumberFormat('#,##0').format(int.parse(priceTop) + int.parse(priceLower))} Bath",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontFamily: medium,
-                                  color: blackColor,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Total ${NumberFormat('#,##0').format(int.parse(priceTop) + int.parse(priceLower))} Bath",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: medium,
+                                    color: blackColor,
+                                  ),
                                 ),
-                              ),
-                            ),
-                            buttonPost(
-                              text: "Post",
-                              onTap: () {
-                                Get.to(() => MatchPostProduct(
-                                      topProduct: productTopData!,
-                                      lowerProduct: productLowerData!,
-                                    ));
-                              },
-                            ),
+                                Spacer(),
+                                TextButton(
+                                  onPressed: () {
+                                    if (productTopData != null &&
+                                        productLowerData != null) {
+                                      Get.to(() => MatchPostProduct(
+                                            topProduct: productTopData,
+                                            lowerProduct: productLowerData,
+                                          ));
+                                    } else {
+                                      print('Product data is null');
+                                    }
+                                  },
+                                  child: SizedBox(
+                                          child: Text("Post").text.white.make())
+                                      .box
+                                      .color(primaryApp)
+                                      .roundedSM
+                                      .padding(EdgeInsets.symmetric(
+                                          horizontal: 20, vertical: 8))
+                                      .make(),
+                                )
+                              ],
+                            ).marginOnly(left: 20)
                           ],
                         ),
-                      ),
-                      IconButton(
-                        icon: Image.asset(icTapFavoriteButton, width: 20),
-                        onPressed: () async {
-                          String documentId = data[index].id;
-                          DocumentSnapshot docSnapshot = await FirebaseFirestore
-                              .instance
-                              .collection(userfavmatchCollection)
-                              .doc(documentId)
-                              .get();
-
-                          if (docSnapshot.exists) {
-                            await FirebaseFirestore.instance
-                                .collection(userfavmatchCollection)
-                                .doc(documentId)
-                                .update({
-                              'favorite_uid': FieldValue.arrayRemove(
-                                  [FirebaseAuth.instance.currentUser!.uid])
-                            });
-                            VxToast.show(context,
-                                msg: "Removed favorited match successfully");
-                            print(
-                                "Document updated successfully for ID: $documentId");
-                          } else {
-                            print("Document not found for ID: $documentId");
-                            VxToast.show(context, msg: "Product not found");
-                          }
-                        },
                       ),
                     ],
                   )
@@ -1175,23 +1196,24 @@ class _ProfileScreenState extends State<ProfileScreen>
   }
 }
 
-Widget buttonPost({required String text, required VoidCallback onTap}) {
-  return GestureDetector(
-    onTap: onTap,
-    child: Container(
-      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
-      decoration: BoxDecoration(
-        color: Color(0xFF96F7D2), // สีเขียวมินต์
-        borderRadius: BorderRadius.circular(30), // ขอบมน
-      ),
-      child: Text(
-        text,
-        style: TextStyle(
-          color: Colors.white, // สีข้อความเป็นสีขาว
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    ),
+Widget buildPostButton(Map<String, dynamic>? productTopData,
+    Map<String, dynamic>? productLowerData) {
+  return TextButton(
+    onPressed: () {
+      if (productTopData != null && productLowerData != null) {
+        Get.to(() => MatchPostProduct(
+              topProduct: productTopData,
+              lowerProduct: productLowerData,
+            ));
+      } else {
+        print('Product data is null');
+      }
+    },
+    child: SizedBox(child: Text("Post").text.white.make())
+        .box
+        .color(primaryApp)
+        .roundedSM
+        .padding(EdgeInsets.symmetric(horizontal: 20, vertical: 8))
+        .make(),
   );
 }

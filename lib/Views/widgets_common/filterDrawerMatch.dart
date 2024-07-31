@@ -112,376 +112,396 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            15.heightBox,
-            ListTile(
-              title: Center(
-                child: Text(
-                  "Please choose clothing that matches your needs",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            15.heightBox,
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32),
+    return Scaffold(
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15), // เพิ่มระยะห่างด้านล่าง
+            child: SingleChildScrollView(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Price").text.fontFamily(regular).size(14).make(),
-                      Text(
-                        "${NumberFormat('#,###').format(_currentSliderValue.round())} Bath",
+                  15.heightBox,
+                  ListTile(
+                    title: Center(
+                      child: Text(
+                        "Please choose clothing that matches your needs",
                         style: TextStyle(
-                          fontFamily: regular,
-                          fontSize: 14,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
                         ),
+                        textAlign: TextAlign.center,
                       ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: SliderTheme(
-                      data: SliderTheme.of(context).copyWith(
-                        activeTrackColor: primaryApp,
-                        inactiveTrackColor: greyLine,
-                        thumbColor: greyDark,
-                        overlayColor: thinPrimaryApp,
-                        trackHeight: 4.0,
-                      ),
-                      child: Slider(
-                        value: _currentSliderValue,
-                        min: 0,
-                        max: 999999,
-                        divisions: 100,
-                        label:
-                            "${NumberFormat('#,###').format(_currentSliderValue.round())} Bath",
-                        onChanged: (value) {
-                          setState(() {
-                            _currentSliderValue = value;
-                          });
-                          print(
-                              "Selected price: ${NumberFormat('#,###').format(_currentSliderValue.round())} Bath");
-                        },
-                      ),
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text("Show Products")
-                            .text
-                            .fontFamily(regular)
-                            .size(14)
-                            .make(),
-                      ),
-                    ],
-                  ),
-                  Center(
-                    child: Wrap(
-                      spacing: 15,
-                      children: [
-                        buildFilterChip("All Products", isSelectedAllProduct,
-                            (isSelected) {
-                          setState(() => isSelectedAllProduct = isSelected);
-                        }),
-                        buildFilterChip("Favorite", isSelectedFavorite,
-                            (isSelected) {
-                          setState(() => isSelectedFavorite = isSelected);
-                        }),
-                      ],
                     ),
                   ),
                   15.heightBox,
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text("Type of product")
-                            .text
-                            .fontFamily(regular)
-                            .size(14)
-                            .make(),
-                      ),
-                    ],
-                  ),
-                  Center(
-                    child: Wrap(
-                      spacing: 5,
-                      children: [
-                        buildFilterChipSmall("Dress", isSelectedDress,
-                            (isSelected) {
-                          setState(() {
-                            isSelectedDress = isSelected;
-                            updateFilterTypes();
-                          });
-                        }),
-                        buildFilterChipSmall("T-Shirts", isSelectedTShirts,
-                            (isSelected) {
-                          setState(() {
-                            isSelectedTShirts = isSelected;
-                            updateFilterTypes();
-                          });
-                        }),
-                        buildFilterChipSmall("Suits", isSelectedSuits,
-                            (isSelected) {
-                          setState(() {
-                            isSelectedSuits = isSelected;
-                            updateFilterTypes();
-                          });
-                        }),
-                        buildFilterChipSmall("Jackets", isSelectedJackets,
-                            (isSelected) {
-                          setState(() {
-                            isSelectedJackets = isSelected;
-                            updateFilterTypes();
-                          });
-                        }),
-                        buildFilterChipSmall("Pants", isSelectedPants,
-                            (isSelected) {
-                          setState(() {
-                            isSelectedPants = isSelected;
-                            updateFilterTypes();
-                          });
-                        }),
-                        buildFilterChipSmall("Skirts", isSelectedSkirts,
-                            (isSelected) {
-                          setState(() {
-                            isSelectedSkirts = isSelected;
-                            updateFilterTypes();
-                          });
-                        }),
-                      ],
-                    ),
-                  ),
-                  15.heightBox,
-                  Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text("Color")
-                          .text
-                          .fontFamily(regular)
-                          .size(14)
-                          .make()),
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: Wrap(
-                      spacing: 15,
-                      runSpacing: 10,
-                      children: List.generate(
-                        allColors.length,
-                        (index) {
-                          final color = allColors[index];
-                          final isSelected =
-                              selectedColorIndexes.contains(color['value']);
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                if (isSelected) {
-                                  selectedColorIndexes.remove(color['value']);
-                                } else {
-                                  selectedColorIndexes.add(color['value']);
-                                }
-                              });
-                            },
-                            child: Container(
-                              width: 35,
-                              height: 35,
-                              decoration: BoxDecoration(
-                                color: color['color'],
-                                borderRadius: BorderRadius.circular(4),
-                                border: Border.all(
-                                  color: isSelected ? primaryApp : greyThin,
-                                  width: isSelected ? 2 : 1,
-                                ),
+                    padding: const EdgeInsets.fromLTRB(22,5,22,100),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Price")
+                                .text
+                                .fontFamily(regular)
+                                .size(14)
+                                .make(),
+                            Text(
+                              "${NumberFormat('#,###').format(_currentSliderValue.round())} Bath",
+                              style: TextStyle(
+                                fontFamily: regular,
+                                fontSize: 14,
                               ),
                             ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                  15.heightBox,
-                  Row(
-                    children: [
-                      Text(
-                        "Suitable for work and situations",
-                        style: TextStyle(fontSize: 14, fontFamily: regular),
-                      ),
-                      10.widthBox,
-                      GestureDetector(
-                        onTap: () {
-                          showModalBottomSheet(
-                            context: context,
-                            builder: (context) {
-                              return SituationsList();
-                            },
-                          );
-                        },
-                        child: Image.asset(
-                          icInfo,
-                          width: 15,
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                  Center(
-                    child: Wrap(
-                      spacing: 15,
-                      children: [
-                        buildFilterChip("Formal Attire", isSelectedFormal,
-                            (isSelected) {
-                          setState(() => isSelectedFormal = isSelected);
-                        }),
-                        buildFilterChip("Casual Attire", isSelectedCasual,
-                            (isSelected) {
-                          setState(() => isSelectedCasual = isSelected);
-                        }),
-                        buildFilterChip("Seasonal Attire", isSelectedSeasonal,
-                            (isSelected) {
-                          setState(() => isSelectedSeasonal = isSelected);
-                        }),
-                        buildFilterChip(
-                            "Semi-Formal Attire ", isSelectedSemiFormal,
-                            (isSelected) {
-                          setState(() => isSelectedSemiFormal = isSelected);
-                        }),
-                        buildFilterChip(
-                            "Activity Attire ", isSelectedSpecialActivity,
-                            (isSelected) {
-                          setState(
-                              () => isSelectedSpecialActivity = isSelected);
-                        }),
-                        buildFilterChip(
-                            "Work from Home ", isSelectedWorkFromHome,
-                            (isSelected) {
-                          setState(() => isSelectedWorkFromHome = isSelected);
-                        }),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: SliderTheme(
+                            data: SliderTheme.of(context).copyWith(
+                              activeTrackColor: primaryApp,
+                              inactiveTrackColor: greyLine,
+                              thumbColor: greyDark,
+                              overlayColor: thinPrimaryApp,
+                              trackHeight: 4.0,
+                            ),
+                            child: Slider(
+                              value: _currentSliderValue,
+                              min: 0,
+                              max: 999999,
+                              divisions: 100,
+                              label:
+                                  "${NumberFormat('#,###').format(_currentSliderValue.round())} Bath",
+                              onChanged: (value) {
+                                setState(() {
+                                  _currentSliderValue = value;
+                                });
+                                print(
+                                    "Selected price: ${NumberFormat('#,###').format(_currentSliderValue.round())} Bath");
+                              },
+                            ),
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text("Show Products")
+                                  .text
+                                  .fontFamily(regular)
+                                  .size(14)
+                                  .make(),
+                            ),
+                          ],
+                        ),
+                        Center(
+                          child: Wrap(
+                            spacing: 10,
+                            children: [
+                              buildFilterChip(
+                                  "All Products", isSelectedAllProduct,
+                                  (isSelected) {
+                                setState(() =>
+                                    isSelectedAllProduct = isSelected);
+                              }),
+                              buildFilterChip("Favorite", isSelectedFavorite,
+                                  (isSelected) {
+                                setState(() => isSelectedFavorite = isSelected);
+                              }),
+                            ],
+                          ),
+                        ),
+                        15.heightBox,
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text("Type of product")
+                                  .text
+                                  .fontFamily(regular)
+                                  .size(14)
+                                  .make(),
+                            ),
+                          ],
+                        ),
+                        Center(
+                          child: Wrap(
+                            spacing: 10,
+                            children: [
+                              buildFilterChipSmall(
+                                  "Dress", isSelectedDress, (isSelected) {
+                                setState(() {
+                                  isSelectedDress = isSelected;
+                                  updateFilterTypes();
+                                });
+                              }),
+                              buildFilterChipSmall(
+                                  "T-Shirts", isSelectedTShirts, (isSelected) {
+                                setState(() {
+                                  isSelectedTShirts = isSelected;
+                                  updateFilterTypes();
+                                });
+                              }),
+                              buildFilterChipSmall(
+                                  "Suits", isSelectedSuits, (isSelected) {
+                                setState(() {
+                                  isSelectedSuits = isSelected;
+                                  updateFilterTypes();
+                                });
+                              }),
+                              buildFilterChipSmall(
+                                  "Jackets", isSelectedJackets,
+                                  (isSelected) {
+                                setState(() {
+                                  isSelectedJackets = isSelected;
+                                  updateFilterTypes();
+                                });
+                              }),
+                              buildFilterChipSmall(
+                                  "Pants", isSelectedPants, (isSelected) {
+                                setState(() {
+                                  isSelectedPants = isSelected;
+                                  updateFilterTypes();
+                                });
+                              }),
+                              buildFilterChipSmall(
+                                  "Skirts", isSelectedSkirts, (isSelected) {
+                                setState(() {
+                                  isSelectedSkirts = isSelected;
+                                  updateFilterTypes();
+                                });
+                              }),
+                            ],
+                          ),
+                        ),
+                        15.heightBox,
+                        Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text("Color")
+                                .text
+                                .fontFamily(regular)
+                                .size(14)
+                                .make()),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Wrap(
+                            spacing: 15,
+                            runSpacing: 10,
+                            children: List.generate(
+                              allColors.length,
+                              (index) {
+                                final color = allColors[index];
+                                final isSelected = selectedColorIndexes
+                                    .contains(color['value']);
+                                return GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      if (isSelected) {
+                                        selectedColorIndexes
+                                            .remove(color['value']);
+                                      } else {
+                                        selectedColorIndexes.add(color['value']);
+                                      }
+                                    });
+                                  },
+                                  child: Container(
+                                    width: 35,
+                                    height: 35,
+                                    decoration: BoxDecoration(
+                                      color: color['color'],
+                                      borderRadius: BorderRadius.circular(4),
+                                      border: Border.all(
+                                        color: isSelected
+                                            ? primaryApp
+                                            : greyThin,
+                                        width: isSelected ? 2 : 1,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                        15.heightBox,
+                        Row(
+                          children: [
+                            Text(
+                              "Suitable for work and situations",
+                              style: TextStyle(
+                                  fontSize: 14, fontFamily: regular),
+                            ),
+                            10.widthBox,
+                            GestureDetector(
+                              onTap: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (context) {
+                                    return SituationsList();
+                                  },
+                                );
+                              },
+                              child: Image.asset(
+                                icInfo,
+                                width: 15,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Center(
+                          child: Wrap(
+                            spacing: 10,
+                            children: [
+                              buildFilterChip("Formal Attire", isSelectedFormal,
+                                  (isSelected) {
+                                setState(
+                                    () => isSelectedFormal = isSelected);
+                              }),
+                              buildFilterChip("Casual Attire", isSelectedCasual,
+                                  (isSelected) {
+                                setState(
+                                    () => isSelectedCasual = isSelected);
+                              }),
+                              buildFilterChip(
+                                  "Seasonal Attire", isSelectedSeasonal,
+                                  (isSelected) {
+                                setState(
+                                    () => isSelectedSeasonal = isSelected);
+                              }),
+                              buildFilterChip(
+                                  "Semi-Formal Attire ", isSelectedSemiFormal,
+                                  (isSelected) {
+                                setState(() =>
+                                    isSelectedSemiFormal = isSelected);
+                              }),
+                              buildFilterChip("Activity Attire ",
+                                  isSelectedSpecialActivity, (isSelected) {
+                                setState(() =>
+                                    isSelectedSpecialActivity = isSelected);
+                              }),
+                              buildFilterChip("Work from Home ",
+                                  isSelectedWorkFromHome, (isSelected) {
+                                setState(() =>
+                                    isSelectedWorkFromHome = isSelected);
+                              }),
+                            ],
+                          ),
+                        ),
+                        15.heightBox,
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(" Suitable for seasons")
+                              .text
+                              .fontFamily(regular)
+                              .size(14)
+                              .make(),
+                        ),
+                        Center(
+                          child: Wrap(
+                            spacing: 10,
+                            children: [
+                              buildFilterChip("Summer", isSelectedSummer,
+                                  (isSelected) {
+                                setState(() => isSelectedSummer = isSelected);
+                              }),
+                              buildFilterChip("Winter", isSelectedWinter,
+                                  (isSelected) {
+                                setState(() => isSelectedWinter = isSelected);
+                              }),
+                              buildFilterChip("Autumn", isSelectedAutumn,
+                                  (isSelected) {
+                                setState(() => isSelectedAutumn = isSelected);
+                              }),
+                              buildFilterChip("Spring ", isSelectedSpring,
+                                  (isSelected) {
+                                setState(() => isSelectedSpring = isSelected);
+                              }),
+                            ],
+                          ),
+                        )
                       ],
                     ),
                   ),
-                  15.heightBox,
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(" Suitable for seasons")
-                        .text
-                        .fontFamily(regular)
-                        .size(14)
-                        .make(),
-                  ),
-                  Center(
-                    child: Wrap(
-                      spacing: 15,
-                      children: [
-                        buildFilterChip("Summer", isSelectedSummer,
-                            (isSelected) {
-                          setState(() => isSelectedSummer = isSelected);
-                        }),
-                        buildFilterChip("Winter", isSelectedWinter,
-                            (isSelected) {
-                          setState(() => isSelectedWinter = isSelected);
-                        }),
-                        buildFilterChip("Autumn", isSelectedAutumn,
-                            (isSelected) {
-                          setState(() => isSelectedAutumn = isSelected);
-                        }),
-                        buildFilterChip("Spring ", isSelectedSpring,
-                            (isSelected) {
-                          setState(() => isSelectedSpring = isSelected);
-                        }),
-                      ],
-                    ),
-                  )
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(50, 30, 50, 0),
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              color: Colors.white,
+              padding: const EdgeInsets.fromLTRB(20,10,20,30),
               child: tapButton(
-                      onPress: () {
-                        String selectedGender = '';
-                        if (isSelectedMen) {
-                          selectedGender = 'men';
-                        } else if (isSelectedWomen) {
-                          selectedGender = 'women';
-                        }
+                onPress: () {
+                  String selectedGender = '';
+                  if (isSelectedMen) {
+                    selectedGender = 'men';
+                  } else if (isSelectedWomen) {
+                    selectedGender = 'women';
+                  }
 
-                        List<String> selectedTypes = [
-                          if (isSelectedDress) 'dresses',
-                          if (isSelectedSkirts) 'skirts',
-                          if (isSelectedTShirts) 't-shirts',
-                          if (isSelectedPants) 'pants',
-                          if (isSelectedJackets) 'jackets',
-                          if (isSelectedSuits) 'suits',
-                        ];
+                  List<String> selectedTypes = [
+                    if (isSelectedDress) 'dresses',
+                    if (isSelectedSkirts) 'skirts',
+                    if (isSelectedTShirts) 't-shirts',
+                    if (isSelectedPants) 'pants',
+                    if (isSelectedJackets) 'jackets',
+                    if (isSelectedSuits) 'suits',
+                  ];
 
-                        List<String> selectedCollections = [
-                          if (isSelectedSummer) 'summer',
-                          if (isSelectedWinter) 'winter',
-                          if (isSelectedAutumn) 'autumn',
-                          if (isSelectedSpring) 'spring',
-                        ];
+                  List<String> selectedCollections = [
+                    if (isSelectedSummer) 'summer',
+                    if (isSelectedWinter) 'winter',
+                    if (isSelectedAutumn) 'autumn',
+                    if (isSelectedSpring) 'spring',
+                  ];
 
-                        List<String> selectedSituations = [
-                          if (isSelectedFormal) 'formal',
-                          if (isSelectedCasual) 'casual',
-                          if (isSelectedSeasonal) 'seasonal',
-                          if (isSelectedSemiFormal) 'semi-formal',
-                          if (isSelectedSpecialActivity) 'specialactivity',
-                          if (isSelectedWorkFromHome) 'workfromhome',
-                        ];
+                  List<String> selectedSituations = [
+                    if (isSelectedFormal) 'formal',
+                    if (isSelectedCasual) 'casual',
+                    if (isSelectedSeasonal) 'seasonal',
+                    if (isSelectedSemiFormal) 'semi-formal',
+                    if (isSelectedSpecialActivity) 'specialactivity',
+                    if (isSelectedWorkFromHome) 'workfromhome',
+                  ];
 
-                        controller.updateFilters(
-                          gender: selectedGender,
-                          price: _currentSliderValue,
-                          colors: selectedColorIndexes,
-                          types: selectedTypes,
-                          collections: selectedCollections,
-                          situations: selectedSituations,
-                          isFavorite: isSelectedFavorite,
-                        );
+                  controller.updateFilters(
+                    gender: selectedGender,
+                    price: _currentSliderValue,
+                    colors: selectedColorIndexes,
+                    types: selectedTypes,
+                    collections: selectedCollections,
+                    situations: selectedSituations,
+                    isFavorite: isSelectedFavorite,
+                  );
 
-                        final selectedVendor = controller.vendors.firstWhere(
-                            (vendor) =>
-                                vendor['vendor_id'] ==
-                                controller.selectedVendorId.value,
-                            orElse: () => {'vendor_name': 'Unknown'});
+                  final selectedVendor = controller.vendors.firstWhere(
+                      (vendor) =>
+                          vendor['vendor_id'] ==
+                          controller.selectedVendorId.value,
+                      orElse: () => {'vendor_name': 'Unknown'});
 
-                        print('Saved Filters:');
-                        print('Gender: $selectedGender');
-                        print('Price: $_currentSliderValue');
-                        print('Colors: $selectedColorIndexes');
-                        print('Types: $selectedTypes');
-                        print('Collections: $selectedCollections');
-                        print('Favorite: $isSelectedFavorite');
-                        print('Situations: $selectedSituations');
-                        controller.fetchFilteredTopProducts();
-                        controller.fetchFilteredLowerProducts();
+                  print('Saved Filters:');
+                  print('Gender: $selectedGender');
+                  print('Price: $_currentSliderValue');
+                  print('Colors: $selectedColorIndexes');
+                  print('Types: $selectedTypes');
+                  print('Collections: $selectedCollections');
+                  print('Favorite: $isSelectedFavorite');
+                  print('Situations: $selectedSituations');
+                  controller.fetchFilteredTopProducts();
+                  controller.fetchFilteredLowerProducts();
 
-                        Navigator.pop(context);
-                      },
-                      title: 'Save',
-                      color: primaryApp,
-                      textColor: whiteColor
-                      // style: ElevatedButton.styleFrom(
-                      //   backgroundColor: primaryApp,
-                      //   shape: RoundedRectangleBorder(
-                      //     borderRadius: BorderRadius.circular(8),
-                      //   ),
-                      // ),
-                      )
-                  .box
-                  .makeCentered(),
-            )
-          ],
-        ).box.white.padding(EdgeInsets.symmetric(vertical: 12)).make(),
+                  Navigator.pop(context);
+                },
+                title: 'Save',
+                color: primaryApp,
+                textColor: whiteColor,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -494,7 +514,7 @@ class _FilterDrawerMatchState extends State<FilterDrawerMatch> {
     );
 
     return SizedBox(
-      width: 165,
+      width: 170,
       child: TextButton(
         onPressed: () => onSelected(!isSelected),
         style: TextButton.styleFrom(
@@ -526,7 +546,7 @@ Widget buildFilterChipSmall(
   );
 
   return SizedBox(
-    width: 85,
+    width: 105,
     child: TextButton(
       onPressed: () => onSelected(!isSelected),
       style: TextButton.styleFrom(

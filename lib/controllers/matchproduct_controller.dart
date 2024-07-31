@@ -194,9 +194,9 @@ class MatchProductController extends GetxController {
   String getSkinToneDescription(int skinTone) {
     switch (skinTone) {
       case 4294961114:
-        return 'Fair Skin';
+        return 'White Skin';
       case 4294494620:
-        return 'Medium Skin';
+        return 'Yellow Skin';
       case 4290348898:
         return 'Tan Skin';
       case 4285812284:
@@ -333,7 +333,7 @@ class MatchProductController extends GetxController {
       'darkColors': [0xFF000000, 0xFF4B0082, 0xFF808080],
     },
     4294494620: {
-      // Medium Skin
+      // Yellow Skin
       'lightColors': [0xFFFFFFFF, 0xFFFFA500, 0xFFADD8E6, 0xFF9370DB],
       'brightColors': [0xFFFFA500, 0xFF32CD32, 0xFFFF0000, 0xFFFFFF00],
       'darkColors': [0xFF0000FF, 0xFF4B0082, 0xFF808080],

@@ -13,47 +13,27 @@ import 'package:path/path.dart';
 
 class ProfileController extends GetxController {
   var profileImgPath = ''.obs;
-
   var profileImageLink = '';
-
   var isloading = false.obs;
 
   var nameController = TextEditingController();
   var emailController = TextEditingController();
-
   var heightController = TextEditingController();
   var weightController = TextEditingController();
-
   var oldpassController = TextEditingController();
   var newpassController = TextEditingController();
-
   var birthdayController = TextEditingController();
   var genderController = TextEditingController();
   var selectedGender = ''.obs;
+  var selectedSkinToneColor = 4294961114.obs; // ค่าเริ่มต้นเป็นตัวเลข
 
   void selectGender(String gender) {
-  selectedGender.value = gender;
-  genderController.text = gender; 
-}
-
-  changeImage(context) async {
-    try {
-      final img = await ImagePicker()
-          .pickImage(source: ImageSource.gallery, imageQuality: 70);
-      if (img == null) return;
-      profileImgPath.value = img.path;
-    } on PlatformException catch (e) {
-      VxToast.show(context, msg: e.toString());
-    }
+    selectedGender.value = gender;
+    genderController.text = gender;
   }
 
-  // Upload the selected profile picture to Firebase Storage.
-  uploadProfileImage() async {
-    var filename = basename(profileImgPath.value);
-    var destination = 'images/${currentUser!.uid}/$filename';
-    Reference ref = FirebaseStorage.instance.ref().child(destination);
-    await ref.putFile(File(profileImgPath.value));
-    profileImageLink = await ref.getDownloadURL();
+  void selectSkinTone(int colorValue) {
+    selectedSkinToneColor.value = colorValue;
   }
 
   Future<void> updateProfile({
@@ -75,6 +55,9 @@ class ProfileController extends GetxController {
       if (birthday != null) dataToUpdate['birthday'] = birthday;
       if (gender != null) dataToUpdate['gender'] = gender;
 
+      // อัปเดต skinTone ใน users collection
+      dataToUpdate['skinTone'] = selectedSkinToneColor.value;
+
       await FirebaseFirestore.instance
           .collection(usersCollection)
           .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -87,17 +70,46 @@ class ProfileController extends GetxController {
     }
   }
 
-  Future<bool> changeAuthPassword(
-      {required String oldPassword, required String newPassword}) async {
+  void checkAndSetSkinTone(String skinToneValue) {
+    final skinToneMap = {
+      4294961114: 4294961114, // Pink
+      4294494620: 4294494620, // Yellow
+      4290348898: 4290348898, // Brown
+      4285812284: 4285812284, // Dark
+    };
+
+    final int skinToneInt = int.tryParse(skinToneValue) ?? 4294961114;
+
+    selectedSkinToneColor.value = skinToneMap[skinToneInt] ?? 4294961114; // Default to Pink
+  }
+
+  Future<void> changeImage(context) async {
+    try {
+      final img = await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 70);
+      if (img == null) return;
+      profileImgPath.value = img.path;
+    } on PlatformException catch (e) {
+      VxToast.show(context, msg: e.toString());
+    }
+  }
+
+  // Upload the selected profile picture to Firebase Storage.
+  Future<void> uploadProfileImage() async {
+    var filename = basename(profileImgPath.value);
+    var destination = 'images/${FirebaseAuth.instance.currentUser!.uid}/$filename';
+    Reference ref = FirebaseStorage.instance.ref().child(destination);
+    await ref.putFile(File(profileImgPath.value));
+    profileImageLink = await ref.getDownloadURL();
+  }
+
+  Future<bool> changeAuthPassword({required String oldPassword, required String newPassword}) async {
     User? user = FirebaseAuth.instance.currentUser;
     String email = user!.email!;
 
     try {
-      AuthCredential credential =
-          EmailAuthProvider.credential(email: email, password: oldPassword);
+      AuthCredential credential = EmailAuthProvider.credential(email: email, password: oldPassword);
 
       await user.reauthenticateWithCredential(credential);
-
       await user.updatePassword(newPassword);
       return true; // คืนค่า true หากการเปลี่ยนรหัสผ่านสำเร็จ
     } catch (error) {

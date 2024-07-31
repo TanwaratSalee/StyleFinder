@@ -135,10 +135,10 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
           children: [
             Icon(
               reason['match'] ? Icons.check : Icons.close,
-              color: reason['match'] ? Colors.green : Colors.red,
+              color: reason['match'] ? greenColor : redColor,
             ),
-            SizedBox(width: 8),
-            Text(reason['text']).text.fontFamily(semiBold).size(12).make(),
+            SizedBox(width: 3),
+            Text(reason['text']).text.fontFamily(regular).size(12).make(),
           ],
         );
       }).toList(),
@@ -521,7 +521,7 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                   ],
                 ),
                 if (additionalReason.isNotEmpty) ...[
-                  SizedBox(height: 15),
+                  SizedBox(height: 5),
                   Row(
                     children: [
                       Icon(Icons.info, size: 20, color: primaryApp),
@@ -1041,45 +1041,72 @@ class _MatchPostsDetailsState extends State<MatchPostsDetails> {
                     20.heightBox,
                     Column(
                       children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: const Text(
-                            'Your match with this outfit',
-                          ).text.fontFamily(medium).size(14).make(),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          decoration: BoxDecoration(
-                            color: greyMessage,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: GestureDetector(
-                            onTap: () async {
-                              final matchResult = await getMatchResult();
-                              final skinTone = controller.userSkinTone.value;
-                              showMatchReasonModalMatchPost(
-                                  context, matchResult, skinTone);
-                            },
-                            child: FutureBuilder<Map<String, dynamic>>(
-                              future: getMatchResult(),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return Center(
-                                      child: CircularProgressIndicator());
-                                } else if (snapshot.hasError) {
-                                  return Text('Error: ${snapshot.error}');
-                                } else {
-                                  final matchResult = snapshot.data ?? {};
-                                  final skinTone =
-                                      controller.userSkinTone.value;
-                                  return buildMatchReasonSection(
-                                      matchResult, skinTone);
-                                }
-                              },
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: const Text(
+                                'Your match with this outfit',
+                              ).text.fontFamily(medium).size(14).make(),
                             ),
-                          ),
+                            GestureDetector(
+                              onTap: () async {
+                                final matchResult = await getMatchResult();
+                                final skinTone = controller.userSkinTone.value;
+                                showMatchReasonModalMatchPost(
+                                    context, matchResult, skinTone);
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text('See All')
+                                      .text
+                                      .fontFamily(medium)
+                                      .size(14)
+                                      .color(blackColor)
+                                      .make(),
+                                  5.widthBox,
+                                  Image.asset(
+                                    icSeeAll,
+                                    width: 10,
+                                  )
+                                ],
+                              ).marginOnly(right: 15),
+                            ),
+                          ],
                         ),
+                        GestureDetector(
+                          onTap: () async {
+                            final matchResult = await getMatchResult();
+                            final skinTone = controller.userSkinTone.value;
+                            showMatchReasonModalMatchPost(
+                                context, matchResult, skinTone);
+                          },
+                          child: FutureBuilder<Map<String, dynamic>>(
+                            future: getMatchResult(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Center(
+                                    child: CircularProgressIndicator());
+                              } else if (snapshot.hasError) {
+                                return Text('Error: ${snapshot.error}');
+                              } else {
+                                final matchResult = snapshot.data ?? {};
+                                final skinTone = controller.userSkinTone.value;
+                                return buildMatchReasonSection(
+                                    matchResult, skinTone);
+                              }
+                            },
+                          ),
+                        )
+                            .box
+                            .color(thinPrimaryApp)
+                            .roundedLg
+                            .padding(EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 12))
+                            .make(),
                         15.heightBox,
                         Align(
                           alignment: Alignment.centerLeft,
