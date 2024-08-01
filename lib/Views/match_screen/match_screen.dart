@@ -277,7 +277,7 @@ class _MatchScreenState extends State<MatchScreen> {
         .make();
   }
 
-  Widget matchWithYouContainer() {
+/*   Widget matchWithYouContainer() {
     return Obx(() {
       if (controller.isFetchingTopProducts.value ||
           controller.isFetchingLowerProducts.value) {
@@ -332,9 +332,8 @@ class _MatchScreenState extends State<MatchScreen> {
                         .make(),
                     8.widthBox,
                     InkWell(
-                      onTap: () {
-                        showMatchReasonModal(context, matchResult, skinTone);
-                      },
+                      onTap: () =>
+                          showMatchReasonModal(context, matchResult, skinTone),
                       child: Text(
                         matchResult['isGreatMatch']
                             ? 'Perfect Match!'
@@ -348,6 +347,184 @@ class _MatchScreenState extends State<MatchScreen> {
                           .size(20)
                           .make(),
                     ),
+                    buildMatchReasonSection(matchResult, skinTone),
+                  ],
+                )
+                    .box
+                    .border(color: greyLine, width: 1)
+                    /* .padding(const EdgeInsets.symmetric(
+                        vertical: 12, horizontal: 32))
+                    .margin(const EdgeInsets.only(bottom: 12)) */
+                    .make(),
+              ),
+              15.heightBox,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      debugPrints(topProduct, lowerProduct);
+                      Get.to(() => MatchPostProduct(
+                            topProduct: topProduct,
+                            lowerProduct: lowerProduct,
+                          ));
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Image.asset(icPost, width: 22, height: 22),
+                        const SizedBox(width: 8),
+                        Text('Post')
+                            .text
+                            .fontFamily(semiBold)
+                            .color(const Color.fromARGB(255, 28, 73, 45))
+                            .size(14)
+                            .make(),
+                      ],
+                    )
+                        .box
+                        .color(const Color.fromRGBO(177, 234, 199, 1))
+                        .padding(const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 58))
+                        .border(color: const Color.fromRGBO(35, 101, 60, 1))
+                        .rounded
+                        .make(),
+                  ),
+                  InkWell(
+                    onTap: () async {
+                      if (topProduct != null && lowerProduct != null) {
+                        print(
+                            'Top Product: ${getColorName(topProduct['colors'][0])}, Lower Product: ${getColorName(lowerProduct['colors'][0])}');
+                        controller.addToWishlistUserMatch(
+                          topProduct['name'],
+                          lowerProduct['name'],
+                          context,
+                        );
+                      } else {
+                        VxToast.show(
+                          context,
+                          msg:
+                              'Unable to add to favorites, Because the information is not available',
+                        );
+                      }
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Image.asset(icLikematch, width: 22, height: 22),
+                        const SizedBox(width: 8),
+                        Text('Add to favorite')
+                            .text
+                            .fontFamily(semiBold)
+                            .color(const Color.fromRGBO(87, 12, 12, 1))
+                            .size(14)
+                            .make(),
+                      ],
+                    )
+                        .box
+                        .color(const Color.fromRGBO(255, 203, 203, 1))
+                        .padding(const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 18))
+                        .border(color: const Color.fromRGBO(160, 84, 84, 1))
+                        .rounded
+                        .make(),
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
+      );
+    });
+  }
+} */
+
+  Widget matchWithYouContainer() {
+    return Obx(() {
+      if (controller.isFetchingTopProducts.value ||
+          controller.isFetchingLowerProducts.value) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+
+      if (controller.topFilteredProducts.isEmpty ||
+          controller.lowerFilteredProducts.isEmpty) {
+        return const Center(child: Text('No matching products available'));
+      }
+
+      final topProductIndex = getActualIndex(
+          _currentPageIndexTop, controller.topFilteredProducts.length);
+      final lowerProductIndex = getActualIndex(
+          _currentPageIndexLower, controller.lowerFilteredProducts.length);
+
+      if (topProductIndex < 0 ||
+          lowerProductIndex < 0 ||
+          topProductIndex >= controller.topFilteredProducts.length ||
+          lowerProductIndex >= controller.lowerFilteredProducts.length) {
+        return const Center(child: Text('No matching products available'));
+      }
+
+      final topProduct = controller.topFilteredProducts[topProductIndex];
+      final lowerProduct = controller.lowerFilteredProducts[lowerProductIndex];
+      final topColors = topProduct['colors'] ?? [];
+      final lowerColors = lowerProduct['colors'] ?? [];
+
+      return FutureBuilder<int?>(
+        future: fetchUserSkinTone(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+          final skinTone = snapshot.data;
+          final matchResult =
+              checkMatch(topColors, lowerColors, skinTone: skinTone);
+
+          return Column(
+            children: [
+              Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      children: [
+                        const Text('Feedback:')
+                            .text
+                            .fontFamily(regular)
+                            .color(blackColor)
+                            .size(14)
+                            .make(),
+                        8.widthBox,
+                        InkWell(
+                          onTap: () => showMatchReasonModal(
+                              context, matchResult, skinTone),
+                          child: Text(
+                            matchResult['isGreatMatch']
+                                ? 'Perfect Match!'
+                                : 'Not a Match',
+                          )
+                              .text
+                              .fontFamily(semiBold)
+                              .color(matchResult['isGreatMatch']
+                                  ? greenColor
+                                  : redColor)
+                              .size(20)
+                              .make(),
+                        ),
+                        Spacer(),
+                        InkWell(
+                          onTap: () => showMatchReasonModal(
+                              context, matchResult, skinTone),
+                          child: Text('See Reason >')
+                              .text
+                              .fontFamily(semiBold)
+                              .color(greyDark)
+                              .size(14)
+                              .make(),
+                        ),
+                      ],
+                    ),
+                    buildMatchReasonSection(matchResult, skinTone),
                   ],
                 )
                     .box
@@ -357,8 +534,6 @@ class _MatchScreenState extends State<MatchScreen> {
                     .margin(const EdgeInsets.only(bottom: 12))
                     .make(),
               ),
-              buildMatchReasonSection(matchResult, skinTone),
-              15.heightBox,
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -485,6 +660,7 @@ Widget buildMatchReasonSection(
 
   return Column(
     mainAxisAlignment: MainAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.start,
     children: matchReasons.map((reason) {
       return Row(
         children: [
