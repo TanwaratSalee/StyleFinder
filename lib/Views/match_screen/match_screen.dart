@@ -143,7 +143,7 @@ class _MatchScreenState extends State<MatchScreen> {
 
     double containerHeight = MediaQuery.of(context).size.height < 855
         ? MediaQuery.of(context).size.height * 0.23
-        : MediaQuery.of(context).size.height * 0.25;
+        : MediaQuery.of(context).size.height * 0.235;
 
     return Container(
       height: containerHeight,
@@ -176,7 +176,7 @@ class _MatchScreenState extends State<MatchScreen> {
 
     double containerHeight = MediaQuery.of(context).size.height < 855
         ? MediaQuery.of(context).size.height * 0.23
-        : MediaQuery.of(context).size.height * 0.25;
+        : MediaQuery.of(context).size.height * 0.235;
 
     return Container(
       height: containerHeight,
@@ -257,16 +257,16 @@ class _MatchScreenState extends State<MatchScreen> {
               },
             ),
           ),
-          Positioned(
-            bottom: 10,
-            child: Text(colorName,
-                    style: TextStyle(color: whiteColor, fontSize: 16))
-                .box
-                .color(blackColor.withOpacity(0.7))
-                .padding(EdgeInsets.symmetric(horizontal: 8, vertical: 4))
-                .rounded
-                .make(),
-          ),
+          // Positioned(
+          //   bottom: 10,
+          //   child: Text(colorName,
+          //           style: TextStyle(color: whiteColor, fontSize: 16))
+          //       .box
+          //       .color(blackColor.withOpacity(0.7))
+          //       .padding(EdgeInsets.symmetric(horizontal: 8, vertical: 4))
+          //       .rounded
+          //       .make(),
+          // ),
         ],
       ),
     )
@@ -515,7 +515,7 @@ class _MatchScreenState extends State<MatchScreen> {
                         InkWell(
                           onTap: () => showMatchReasonModal(
                               context, matchResult, skinTone),
-                          child: Text('See Reason >')
+                          child: Text('See More >')
                               .text
                               .fontFamily(semiBold)
                               .color(greyDark)
@@ -530,7 +530,7 @@ class _MatchScreenState extends State<MatchScreen> {
                     .box
                     .border(color: greyLine, width: 1)
                     .padding(const EdgeInsets.symmetric(
-                        vertical: 12, horizontal: 32))
+                        vertical: 6, horizontal: 28))
                     .margin(const EdgeInsets.only(bottom: 12))
                     .make(),
               ),
@@ -660,7 +660,7 @@ Widget buildMatchReasonSection(
 
   return Column(
     mainAxisAlignment: MainAxisAlignment.start,
-    crossAxisAlignment: CrossAxisAlignment.start,
+    // crossAxisAlignment: CrossAxisAlignment.start,
     children: matchReasons.map((reason) {
       return Row(
         children: [
@@ -668,7 +668,7 @@ Widget buildMatchReasonSection(
             reason['match'] ? Icons.check : Icons.close,
             color: reason['match'] ? greenColor : redColor,
           ),
-          SizedBox(width: 8),
+          SizedBox(width: 10),
           Text(reason['text']).text.fontFamily(semiBold).size(12).make(),
         ],
       );
@@ -965,7 +965,7 @@ void showMatchReasonModal(
     builder: (BuildContext context) {
       return AlertDialog(
         backgroundColor: whiteColor,
-        contentPadding: EdgeInsets.all(16.0),
+        contentPadding: EdgeInsets.all(14),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
         ),

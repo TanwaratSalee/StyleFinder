@@ -70,18 +70,27 @@ class ProfileController extends GetxController {
     }
   }
 
-  void checkAndSetSkinTone(String skinToneValue) {
-    final skinToneMap = {
-      4294961114: 4294961114, // Pink
-      4294494620: 4294494620, // Yellow
-      4290348898: 4290348898, // Brown
-      4285812284: 4285812284, // Dark
-    };
+  void checkAndSetSkinTone(dynamic skinToneValue) {
+  final skinToneMap = {
+    4294961114: 4294961114, // Pink
+    4294494620: 4294494620, // Yellow
+    4290348898: 4290348898, // Brown
+    4285812284: 4285812284, // Dark
+  };
 
-    final int skinToneInt = int.tryParse(skinToneValue) ?? 4294961114;
-
-    selectedSkinToneColor.value = skinToneMap[skinToneInt] ?? 4294961114; // Default to Pink
+  final int skinToneInt;
+  
+  // ตรวจสอบว่า skinToneValue เป็น int หรือไม่
+  if (skinToneValue is int) {
+    skinToneInt = skinToneValue;
+  } else {
+    // ถ้าไม่ใช่ ให้แปลงเป็น int ถ้าแปลงไม่ได้ให้ใช้ค่าเริ่มต้น
+    skinToneInt = int.tryParse(skinToneValue.toString()) ?? 4294961114;
   }
+
+  selectedSkinToneColor.value = skinToneMap[skinToneInt] ?? 4294961114; // Default to Pink
+}
+
 
   Future<void> changeImage(context) async {
     try {
